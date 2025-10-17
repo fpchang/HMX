@@ -1,0 +1,27 @@
+{
+  "name": "",
+  "description": "可渲染文字样式、图片、超链接，支持部分HTML标签",
+  "tutorial": "https://www.uxframe.cn/component/richtext.html",
+  "attributes": [
+    {
+      "name": "[event]click",
+      "description": "Function |  被点击时触发",
+      "type": "Function"
+    },
+    {
+      "name": "nodes",
+      "description": "UTSJSONObject[] | 节点列表",
+      "type": "{\n\t\t\ttype: Array as PropType<UTSJSONObject[]>,\n\t\t\tdefault: (): UTSJSONObject[] => {\n\t\t\t\treturn [] as UTSJSONObject[]\n\t\t\t},\n\t\t}"
+    },
+    {
+      "name": "html",
+      "description": "String | HTML标签",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '',\n\t\t}"
+    },
+    {
+      "name": "selectable",
+      "description": "Boolean | 文本是否可选，Android设置selectable属性为 true 时，click事件不触发（默认 false ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    }
+  ]
+}

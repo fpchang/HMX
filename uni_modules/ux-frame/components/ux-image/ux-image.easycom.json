@@ -1,0 +1,157 @@
+{
+  "name": "",
+  "description": "支持SVG格式，支持淡入动画、加载中、加载失败提示、圆角值和形状等功能",
+  "tutorial": "https://www.uxframe.cn/component/image.html",
+  "attributes": [
+    {
+      "name": "[event]error",
+      "description": "Function | 图片加载失败时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]load",
+      "description": "Function | 图片加载成功时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]click",
+      "description": "Function | 被点击时触发",
+      "type": "Function"
+    },
+    {
+      "name": "default",
+      "description": "Slot | default Slot",
+      "type": "String"
+    },
+    {
+      "name": "loading",
+      "description": "Slot | loading Slot",
+      "type": "String"
+    },
+    {
+      "name": "error",
+      "description": "Slot | error Slot",
+      "type": "String"
+    },
+    {
+      "name": "src",
+      "description": "String | 图片地址",
+      "type": "{\n\t\t    type: String,\n\t\t    default: ''\n\t\t}"
+    },
+    {
+      "name": "previewList",
+      "description": "Array | 图片预览列表",
+      "type": "{\n\t\t    type: Array as PropType<Array<string>>,\n\t\t    default: ():string[] => {\n\t\t\t\treturn [] as string[]\n\t\t\t}\n\t\t}"
+    },
+    {
+      "name": "previewMode",
+      "description": "String | 预览模式（默认 normal ）",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'normal'\n\t\t}"
+    },
+    {
+      "name": "mode",
+      "description": "String | 裁剪模式 （默认 aspectFill）",
+      "type": "{\n\t\t    type: String,\n\t\t    default: 'aspectFill'\n\t\t}"
+    },
+    {
+      "name": "width",
+      "description": "Any | 宽度（默认 75 ）",
+      "type": "{\n\t\t    default: 75\n\t\t}"
+    },
+    {
+      "name": "height",
+      "description": "Any | 高度 （默认 75 ）",
+      "type": "{\n\t\t    default: 75\n\t\t}"
+    },
+    {
+      "name": "shape",
+      "description": "String | 图片形状 （默认 square ）",
+      "type": "{\n\t\t    type: String,\n\t\t    default: ''\n\t\t}"
+    },
+    {
+      "name": "radius",
+      "description": "Any | 圆角值（默认 0 ）",
+      "type": "{\n\t\t    default: 0\n\t\t}"
+    },
+    {
+      "name": "fade",
+      "description": "Boolean | 是否需要淡入效果 （默认 true ）",
+      "type": "{\n\t\t    type: Boolean,\n\t\t    default: true\n\t\t}"
+    },
+    {
+      "name": "showLoading",
+      "description": "Boolean | 是否显示加载中的图标或者自定义的slot （默认 true ）",
+      "type": "{\n\t\t    type: Boolean,\n\t\t    default: true\n\t\t}"
+    },
+    {
+      "name": "showError",
+      "description": "Boolean | 是否显示加载错误的图标或者自定义的slot （默认 true ）",
+      "type": "{\n\t\t    type: Boolean,\n\t\t    default: true\n\t\t}"
+    },
+    {
+      "name": "errorIcon",
+      "description": "String | 加载失败的图标或者图片 （默认 pic-outline ）",
+      "type": "{\n\t\t    type: String,\n\t\t    default: 'pic-outline'\n\t\t}"
+    },
+    {
+      "name": "iconSize",
+      "description": "Any | 图标大小 （默认 25 ）",
+      "type": "{\n\t\t\tdefault: 25\n\t\t}"
+    },
+    {
+      "name": "margin",
+      "description": "Array | 边距 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "mt",
+      "description": "Any | 距上 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "mr",
+      "description": "Any | 距右 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "mb",
+      "description": "Any | 距下 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "ml",
+      "description": "Any | 距左 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "padding",
+      "description": "Array | 填充 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "pt",
+      "description": "Any | 上内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pr",
+      "description": "Any | 右内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pb",
+      "description": "Any | 下内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pl",
+      "description": "Any | 左内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "xstyle",
+      "description": "Array<any> | 自定义样式",
+      "type": "Array"
+    }
+  ]
+}

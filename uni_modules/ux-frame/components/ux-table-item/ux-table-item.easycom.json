@@ -1,0 +1,101 @@
+{
+  "name": "",
+  "description": "Table Item",
+  "tutorial": "https://www.uxframe.cn/component/table.html",
+  "attributes": [
+    {
+      "name": "[event]click",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]input",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "fixed",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "index",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "cell",
+      "type": "{\n\t\t\ttype: Object as PropType<UTSJSONObject>,\n\t\t\tdefault: (): UTSJSONObject => {\n\t\t\t\treturn {} as UTSJSONObject\n\t\t\t}\n\t\t}"
+    },
+    {
+      "name": "columns",
+      "type": "{\n\t\t\ttype: Array as PropType<UxTableColumn[]>,\n\t\t\tdefault: () : UxTableColumn[] => [] as UxTableColumn[]\n\t\t}"
+    },
+    {
+      "name": "tableWidth",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "totalWidth",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "cellHeight",
+      "type": "{\n\t\t\tdefault: 40\n\t\t}"
+    },
+    {
+      "name": "color",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: \"#333333\"\n\t\t}"
+    },
+    {
+      "name": "fontSize",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "background",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: \"#fafafa\"\n\t\t}"
+    },
+    {
+      "name": "highlight",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: \"#ecf5ff\"\n\t\t}"
+    },
+    {
+      "name": "borderColor",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: \"#e8e8e8\"\n\t\t}"
+    },
+    {
+      "name": "border",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "ripple",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "rippleColor",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: \"#f5f5f5\"\n\t\t}"
+    },
+    {
+      "name": "inputColor",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: \"transparent\"\n\t\t}"
+    },
+    {
+      "name": "nums",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "numSort",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "selection",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "edit",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "len",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0\n\t\t}"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title></title>
+	</head>
+	<style>
+		body,
+		html {
+			padding: 0;
+			margin: 0;
+			overflow-y: hidden;
+			background-color: transparent;
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+	<body>
+		<div id="echart"></div>
+		<script type="text/javascript" src="./js/uni.webview.1.5.5.js"></script>
+		<script type="text/javascript" src="./js/echarts.min.js"></script>
+
+		<script type="text/javascript">
+			var chart = null
+
+			if (window.frameElement) {
+				let iframeId = window.frameElement.getAttribute('id') ?? ''
+				document.addEventListener('UniAppJSBridgeReady', () => {
+					window.parent.postMessage({
+						action: 'onJSBridgeReady',
+						iframeId: iframeId,
+					}, '*');
+				})
+			}
+
+			function init(data) {
+				if (!data) {
+					return emit({
+						error: 'option error'
+					})
+				}
+				
+				let dom = document.getElementById('echart');
+				dom.style.width = `${window.innerWidth}px`
+				dom.style.height = `${window.innerHeight}px`
+
+				try {
+					chart = echarts.init(dom)
+					chart.setOption(parse(data))
+				} catch(err) {
+					emit({
+						error: err.toString()
+					})
+				}
+			}
+
+			function change(data) {
+				chart && chart.setOption(parse(data))
+			}
+
+			function clear() {
+				chart && chart.clear()
+			}
+
+			function emit(data) {
+				uni.postMessage({
+					data: data
+				});
+			}
+
+			function parse(obj) {
+				return JSON.parse(JSON.stringify(obj), function(key, value) {
+					if (typeof value == 'string' && value.startsWith('function')) {
+						return eval('(' + value + ')')
+					}
+
+					return value
+				})
+			}
+		</script>
+	</body>
+</html>

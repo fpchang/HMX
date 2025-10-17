@@ -1,65 +1,30 @@
 <template>
-	<view>
-		<image class="logo" src="/static/logo.png"></image>
-		<text class="title">{{title}}</text>
-		<view style="min-width:260px">
-			
-			<uni-data-picker  placeholder="请选择区域地址" self-field="code"
-				v-model="hotelAddressCode" parent-field="parent_code"
-				collection="opendb-city-china" orderby="value asc"
-				field="code as value, name as text, eq(type, 2) as isleaf"
-				@change="onchange"></uni-data-picker>
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1">
+	<!-- #endif -->
+		<view>
+		<ux-button theme="primary" text="主要" :mr="10"></ux-button>
 		</view>
-		
-		<view class="example-body">
-		  <uni-datetime-picker
-		    v-model="dateRangeArray"
-		    type="daterange"
-		    :start="startDate"
-		    return-type="timestamp"
-		    @change="dateConfim"
-		  />
-		</view>
-	</view>
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
 </template>
 
-<script>
-	export default {
-		data() {
-			return {
-				title: 'Hello',
-				
-				hotelAddressArea:null,
-				hotelAddressCode:null,
-				startDate: '2025/10/14',
-				dateRangeArray:null
-			}
-		},
-		onLoad() {
-
-		},
-		methods: {
-			onchange(e){
-				console.log(e,this.hotelAddressArea,this.hotelAddressCode)
-			},
-			dateConfim(e){
-				console.log(e)
-			}
-			
+<script setup>
+		const onDoc=()=>{
+			console.log("1")
 		}
-	}
 </script>
 
 <style>
-	.logo {
-		height: 100px;
-		width: 100px;
-		margin: 100px auto 25px auto;
-	}
+		
+</style>
 
-	.title {
-		font-size: 18px;
-		color: #8f8f94;
-    text-align: center;
-	}
+
+<script setup>
+		
+</script>
+
+<style>
+		
 </style>

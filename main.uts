@@ -1,8 +1,28 @@
 import App from './App.uvue'
-import {CF} from './static/utils/CF';
 import { createSSRApp } from 'vue'
+import { uxframe, UxFrameInstallOptions } from '@/uni_modules/ux-frame';
+import zhCN from './locales/zh_CN'
+import enUS from './locales/en_US'
 export function createApp() {
-	const app = createSSRApp(App)
+	const app = createSSRApp(App);
+	    app.use(uxframe({
+	        conf: {
+	            // false 可关闭插件内部日志打印
+	            debugLog: true,
+	            // 默认字体大小
+	            fontSize: 16,
+	            // 更多...
+	        },
+	        // 可选 i18n安装
+	        i18n: {
+	            locale: 'zh-CN',
+	            messages: {
+	                'zh-CN': zhCN,
+	                'en-US': enUS,
+	            }
+	        },
+	    } as UxFrameInstallOptions))
+	  
 	return {
 		app
 	}

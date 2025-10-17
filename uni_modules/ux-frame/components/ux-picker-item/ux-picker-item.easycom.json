@@ -1,0 +1,37 @@
+{
+  "name": "",
+  "description": "内部使用",
+  "tutorial": "https://www.uxframe.cn/component/picker.html",
+  "attributes": [
+    {
+      "name": "text",
+      "description": "String | 文本",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "size",
+      "description": "Any | 字体大小",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "color",
+      "description": "String | 字体颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "selectColor",
+      "description": "String | 选择颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "index",
+      "description": "Number | 下标",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "selectedIndex",
+      "description": "Number | 已选择下标",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0\n\t\t}"
+    }
+  ]
+}

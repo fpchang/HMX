@@ -1,0 +1,67 @@
+{
+  "name": "",
+  "description": "支持任何位置弹出并且自动计算在适当的位置显示",
+  "tutorial": "https://www.uxframe.cn/component/popover.html",
+  "attributes": [
+    {
+      "name": "[event]change",
+      "description": "Function | 显示状态改变时触发",
+      "type": "Function"
+    },
+    {
+      "name": "targetId",
+      "description": "String | 目标id",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "width",
+      "description": "Any | 宽度",
+      "type": "{\n\t\t\tdefault: 150\n\t\t}"
+    },
+    {
+      "name": "offset",
+      "description": "Any | 偏移 (默认 10)",
+      "type": "{\n\t\t\tdefault: 10\n\t\t}"
+    },
+    {
+      "name": "align",
+      "description": "Boolean | 与目标水平对齐 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false,\n\t\t}"
+    },
+    {
+      "name": "backgroundColor",
+      "description": "String | 背景色 (默认 #000000)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#000000'\n\t\t}"
+    },
+    {
+      "name": "showMask",
+      "description": "Boolean | 显示遮罩 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true,\n\t\t}"
+    },
+    {
+      "name": "showBlur",
+      "description": "Boolean | 开启模糊背景 (默认 false )",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "blurRadius",
+      "description": "Number | 模糊半径 (默认 10 )",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 10\n\t\t}"
+    },
+    {
+      "name": "blurColor",
+      "description": "String | 模糊颜色  (默认 rgba(10, 10, 10, 0.3) )",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'rgba(10, 10, 10, 0.3)'\n\t\t}"
+    },
+    {
+      "name": "opacity",
+      "description": "Number | 遮罩透明度 0-1 (默认 $ux.Conf.maskAlpha)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0.2\n\t\t}"
+    },
+    {
+      "name": "zIndex",
+      "description": "Number | 层级z-index (默认 10001)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 10001\n\t\t}"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "name": "",
+  "description": "支持透明度、遮罩点击关闭",
+  "tutorial": "https://www.uxframe.cn/component/overlay.html",
+  "attributes": [
+    {
+      "name": "[event]close",
+      "description": "Function | 点击遮罩关闭时触发",
+      "type": "Function"
+    },
+    {
+      "name": "show",
+      "description": "Boolean | 显隐状态 (默认 fasle)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "showBlur",
+      "description": "Boolean | 开启模糊背景 (默认 false )",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "blurRadius",
+      "description": "Number | 模糊半径 (默认 10 )",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 10\n\t\t}"
+    },
+    {
+      "name": "blurColor",
+      "description": "String | 模糊颜色  (默认 rgba(10, 10, 10, 0.3) )",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'rgba(10, 10, 10, 0.3)'\n\t\t}"
+    },
+    {
+      "name": "maskClose",
+      "description": "Boolean | 点击遮罩是否关闭 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "opacity",
+      "description": "Number | 遮罩透明度 0-1 (默认 $ux.Conf.maskAlpha)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: -1\n\t\t}"
+    },
+    {
+      "name": "fixedOpacity",
+      "description": "Boolean | 固定透明度  (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "zIndex",
+      "description": "Number | 层级z-index (默认 10001)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 10001\n\t\t}"
+    }
+  ]
+}

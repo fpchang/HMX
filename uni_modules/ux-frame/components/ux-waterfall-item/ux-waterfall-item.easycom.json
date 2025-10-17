@@ -1,0 +1,27 @@
+{
+  "name": "",
+  "description": "WaterFall 子项",
+  "tutorial": "https://www.uxframe.cn/component/waterfall.html",
+  "attributes": [
+    {
+      "name": "[event]click",
+      "description": "Function | 点击时触发",
+      "type": "Function"
+    },
+    {
+      "name": "type",
+      "description": "Number | 对应flow-item的类型 waterflow 将对同类型条目进行复用，所以合理的类型拆分，可以很好地提升 waterflow 性能",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "index",
+      "description": "Number | 下标",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "height",
+      "description": "Any | 高度",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    }
+  ]
+}

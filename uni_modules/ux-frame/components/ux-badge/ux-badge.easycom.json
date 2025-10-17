@@ -1,0 +1,106 @@
+{
+  "name": "",
+  "description": "支持多种形状、支持圆点、反转显示，可配置超出显示样式",
+  "tutorial": "https://www.uxframe.cn/component/badge.html",
+  "attributes": [
+    {
+      "name": "theme",
+      "description": "String | 主题 (默认 primary)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'primary'\n\t\t}"
+    },
+    {
+      "name": "value",
+      "description": "Number | 角标数量",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "max",
+      "description": "Number | 最大值 (默认 99)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 99\n\t\t}"
+    },
+    {
+      "name": "overflow",
+      "description": "String | 超出显示样式 (默认 normal)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'normal'\n\t\t}"
+    },
+    {
+      "name": "shape",
+      "description": "String | 形状 (默认 normal)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'normal'\n\t\t}"
+    },
+    {
+      "name": "dot",
+      "description": "Boolean | 显示圆点 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "inverted",
+      "description": "Boolean | 反转色 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "fixed",
+      "description": "Boolean | 固定定位 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "size",
+      "description": "Any | 字体大小（默认 $ux.Conf.fontSize ）",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "color",
+      "description": "String | 字体色（默认 $ux.Conf.fontColor ）",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#ffffff'\n\t\t}"
+    },
+    {
+      "name": "darkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "backgroundColor",
+      "description": "String | 背景色（默认 $ux.Conf.backgroundColor ）",
+      "type": "String"
+    },
+    {
+      "name": "backgroundDark",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "top",
+      "description": "Any | 距上 (默认 0)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "right",
+      "description": "Any | 距右 (默认 0)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "left",
+      "description": "Any | 距左 (默认 0)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "bottom",
+      "description": "Any | 距下 (默认 0)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "padding",
+      "description": "Any[] | 自定义角标padding",
+      "type": "{\n\t\t\tdefault: () : number[] => [2, 6] as number[]\n\t\t}"
+    },
+    {
+      "name": "xstyle",
+      "description": "Array<any> | 自定义样式",
+      "type": "{\n\t\t\ttype: Array as PropType<Array<any>>,\n\t\t\tdefault: () : Array<any> => [] as Array<any>\n\t\t}"
+    },
+    {
+      "name": "background",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    }
+  ]
+}

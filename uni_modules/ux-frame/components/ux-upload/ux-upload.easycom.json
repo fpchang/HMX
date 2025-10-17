@@ -1,0 +1,200 @@
+{
+  "name": "",
+  "description": "支持图片视频，支持删除、排序功能，支持进度显示",
+  "tutorial": "https://www.uxframe.cn/component/upload.html",
+  "attributes": [
+    {
+      "name": "[event]click",
+      "description": "Function | 点击时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]change",
+      "description": "Function | 值改变时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]error",
+      "description": "Function | 发生错误时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]update:modelValue",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "list",
+      "description": "UTSJSONObject[] | 默认列表",
+      "type": "{\n\t\t\ttype: Array as PropType<UTSJSONObject[]>,\n\t\t\tdefault: (): UTSJSONObject[] => [] as UTSJSONObject[]\n\t\t}"
+    },
+    {
+      "name": "name",
+      "description": "String | 文件对应的 key , 开发者在服务器端通过这个 key 可以获取到文件二进制内容 (默认 file)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'file'\n\t\t}"
+    },
+    {
+      "name": "url",
+      "description": "String | 上传地址",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "header",
+      "description": "UTSJSONObject | HTTP 请求 Header, header 中不能设置 Referer",
+      "type": "{\n\t\t\ttype: Object as PropType<UTSJSONObject>,\n\t\t}"
+    },
+    {
+      "name": "formData",
+      "description": "UTSJSONObject | HTTP 请求中其他额外的 form data",
+      "type": "{\n\t\t\ttype: Object as PropType<UTSJSONObject>,\n\t\t}"
+    },
+    {
+      "name": "timeout",
+      "description": "Number | 超时时间，单位 ms (默认 120000)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 120000\n\t\t}"
+    },
+    {
+      "name": "retry",
+      "description": "Number | 重试次数 (默认 3)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 3\n\t\t}"
+    },
+    {
+      "name": "successCode",
+      "description": "Number | 上传成功状态码 (默认 200)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 200\n\t\t}"
+    },
+    {
+      "name": "mode",
+      "description": "String | 模式 (默认 image)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'image',\n\t\t}"
+    },
+    {
+      "name": "count",
+      "description": "Number | 最大数量  (默认 9)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 9\n\t\t}"
+    },
+    {
+      "name": "sizeType",
+      "description": "String[] | original 原图，compressed 压缩图 Web不支持 (默认 ['original', 'compressed'])",
+      "type": "{\n\t\t\ttype: Array as PropType<string[]>,\n\t\t\tdefault: (): string[] => {\n\t\t\t\treturn ['original','compressed']\n\t\t\t}\n\t\t}"
+    },
+    {
+      "name": "sourceType",
+      "description": "String[] | album 从相册选图，camera 使用相机 (默认 ['album','camera'])",
+      "type": "{\n\t\t\ttype: Array as PropType<string[]>,\n\t\t\tdefault:(): string[] => {\n\t\t\t\treturn ['album','camera']\n\t\t\t}\n\t\t}"
+    },
+    {
+      "name": "extension",
+      "description": "String[] | 文件拓展名过滤 仅Web支持",
+      "type": "{\n\t\t\ttype: Array as PropType<string[]>,\n\t\t}"
+    },
+    {
+      "name": "align",
+      "description": "String | 对齐方向（默认 left ）",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'left'\n\t\t}"
+    },
+    {
+      "name": "rows",
+      "description": "Boolean | 多行（默认 true ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "col",
+      "description": "Number | 列数，rows=true时生效（默认 4 ）",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 5\n\t\t}"
+    },
+    {
+      "name": "gutter",
+      "description": "Any | 间隔 默认 5 ）",
+      "type": "{\n\t\t\tdefault: 5\n\t\t}"
+    },
+    {
+      "name": "width",
+      "description": "Any | 文件宽，rows=false时生效（默认 65 ）",
+      "type": "{\n\t\t\tdefault: 65\n\t\t}"
+    },
+    {
+      "name": "height",
+      "description": "Any | 文件高，rows=false时生效（默认 65 ）",
+      "type": "{\n\t\t\tdefault: 65\n\t\t}"
+    },
+    {
+      "name": "radius",
+      "description": "Any | 圆角（默认 8 ）",
+      "type": "{\n\t\t\tdefault: 8\n\t\t}"
+    },
+    {
+      "name": "background",
+      "description": "String | 按钮背景色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#eaeaea',\n\t\t}"
+    },
+    {
+      "name": "backgroundDark",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#d0d0d0',\n\t\t}"
+    },
+    {
+      "name": "borderColor",
+      "description": "String | 按钮边框色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#dadada',\n\t\t}"
+    },
+    {
+      "name": "borderColorDark",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#888888',\n\t\t}"
+    },
+    {
+      "name": "waitingText",
+      "description": "String | 等待上传文案（ 默认 等待上传 ）",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '等待上传',\n\t\t}"
+    },
+    {
+      "name": "failText",
+      "description": "String | 等待失败文案（ 默认 上传失败 ）",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '上传失败',\n\t\t}"
+    },
+    {
+      "name": "frontBtn",
+      "description": "Boolean | 前置上传按钮（默认 false ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "showDel",
+      "description": "Boolean | 显示删除按钮（默认 true ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "beforeDel",
+      "description": "Function | 删除钩子",
+      "type": "{\n\t\t\ttype: Function as PropType<DelCallback | null>,\n\t\t\tdefault: null\n\t\t}"
+    },
+    {
+      "name": "beforeUpload",
+      "description": "Function | 上传前钩子",
+      "type": "{\n\t\t\ttype: Function as PropType<BeforeUploadCallback | null>,\n\t\t\tdefault: null\n\t\t}"
+    },
+    {
+      "name": "afterUpload",
+      "description": "Function | 上传完成钩子",
+      "type": "{\n\t\t\ttype: Function as PropType<UploadCallback | null>,\n\t\t\tdefault: null\n\t\t}"
+    },
+    {
+      "name": "autoUpload",
+      "description": "Boolean | 自动上传（默认 true ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "disabled",
+      "description": "Boolean | 禁用（默认 false ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "modelValue",
+      "type": "{\n\t\t\tdefault: null\n\t\t}"
+    },
+    {
+      "name": "imageMode",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'aspectFill',\n\t\t}"
+    }
+  ]
+}

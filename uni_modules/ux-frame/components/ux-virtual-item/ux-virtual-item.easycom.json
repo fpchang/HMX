@@ -1,0 +1,17 @@
+{
+  "name": "",
+  "description": "虚拟列表子项",
+  "tutorial": "https://www.uxframe.cn/component/virtual-list.html",
+  "attributes": [
+    {
+      "name": "item",
+      "description": "Any | 当前组件渲染的列表项",
+      "type": "{\r\n\t\t\t\ttype: Object as PropType<any | null>,\r\n\t\t\t}"
+    },
+    {
+      "name": "height",
+      "description": "Number | 子项高度，如果指定，内部不再计算高度，提升性能",
+      "type": "{\n\t\t\t\ttype: Number,\n\t\t\t\tdefault: 0\n\t\t\t}"
+    }
+  ]
+}

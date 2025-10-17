@@ -1,0 +1,52 @@
+{
+  "name": "",
+  "description": "支持局部水印，支持全屏水印",
+  "tutorial": "https://www.uxframe.cn/component/watermark.html",
+  "attributes": [
+    {
+      "name": "mode",
+      "description": "String | 模式 (默认 text)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'text'\n\t\t}"
+    },
+    {
+      "name": "content",
+      "description": "String | 水印文字",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "color",
+      "description": "String | 水印颜色 (默认 rgba(0, 0, 0, 0.2))",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'rgba(0, 0, 0, 0.2)'\n\t\t}"
+    },
+    {
+      "name": "darkColor",
+      "description": "String | 深色 (默认 rrgba(255, 255, 255, 0.8))",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'rgba(255, 255, 255, 0.8)'\n\t\t}"
+    },
+    {
+      "name": "size",
+      "description": "Any | 文字大小 (默认 16)",
+      "type": "{\n\t\t\tdefault: 16\n\t\t}"
+    },
+    {
+      "name": "imgWidth",
+      "description": "Any | 图片宽 (默认 60)",
+      "type": "{\n\t\t\tdefault: 60\n\t\t}"
+    },
+    {
+      "name": "imgHeight",
+      "description": "Any | 图片高 (默认 30)",
+      "type": "{\n\t\t\tdefault: 30\n\t\t}"
+    },
+    {
+      "name": "gutter",
+      "description": "Any | 间隙 (默认 25)",
+      "type": "{\n\t\t\tdefault: 25\n\t\t}"
+    },
+    {
+      "name": "fullscreen",
+      "description": "Boolean | 全屏",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    }
+  ]
+}

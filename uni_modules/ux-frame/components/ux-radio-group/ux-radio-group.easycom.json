@@ -1,0 +1,166 @@
+{
+  "name": "",
+  "description": "RadioGroup 单选组",
+  "tutorial": "https://www.uxframe.cn/component/radio.html",
+  "attributes": [
+    {
+      "name": "[event]change",
+      "description": "Function | 值改变时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]update:modelValue",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "direction",
+      "description": "String | 方向 (默认 row )",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'row'\n\t\t}"
+    },
+    {
+      "name": "theme",
+      "description": "String | 主题颜色 (默认 primary)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "mode",
+      "description": "String | 单选模式 (默认 radio )",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'radio'\n\t\t}"
+    },
+    {
+      "name": "shape",
+      "description": "String | 形状，mode=radio时有效 (默认 circle )",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "size",
+      "description": "Any | 字体大小（默认 $ux.Conf.fontSize ）",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "color",
+      "description": "String | 文本颜色（默认 $ux.Conf.fontColor ）",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "darkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "checkedColor",
+      "description": "String | 选择颜色（默认 #ffffff ）",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "checkedColorDark",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "backgroundColor",
+      "description": "String | radio背景色（默认 $ux.Conf.backgroundColor ）",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "backgroundDark",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "activeBackgroundColor",
+      "description": "String | radio背景选择颜色（默认 $ux.Conf.primaryColor ）",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "activeBackgroundDark",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "borderColor",
+      "description": "String | radio边框色（默认 $ux.Conf.borderColor ）",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "activeBorderColor",
+      "description": "String | radio边框选择颜色（默认 $ux.Conf.primaryColor ）",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "inverse",
+      "description": "Boolean | 反选（默认 true ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "readonly",
+      "description": "Boolean | 只读（默认 false ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "disabled",
+      "description": "Boolean | 是否禁用（默认 false ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "margin",
+      "description": "Array | 边距 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "mt",
+      "description": "Any | 距上 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "mr",
+      "description": "Any | 距右 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "mb",
+      "description": "Any | 距下 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "ml",
+      "description": "Any | 距左 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "padding",
+      "description": "Array | 填充 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "pt",
+      "description": "Any | 上内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pr",
+      "description": "Any | 右内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pb",
+      "description": "Any | 下内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pl",
+      "description": "Any | 左内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "xstyle",
+      "description": "Array<any> | 自定义样式",
+      "type": "Array"
+    },
+    {
+      "name": "modelValue",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    }
+  ]
+}

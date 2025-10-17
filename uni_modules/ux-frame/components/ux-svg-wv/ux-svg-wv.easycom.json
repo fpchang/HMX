@@ -1,0 +1,26 @@
+{
+  "name": "",
+  "description": "SVG加载组件",
+  "tutorial": "https://www.uxframe.cn/component/svg.html",
+  "attributes": [
+    {
+      "name": "[event]change",
+      "description": "Function | svg生成时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]load",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]error",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "src",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    }
+  ]
+}

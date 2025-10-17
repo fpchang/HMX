@@ -1,0 +1,171 @@
+{
+  "name": "",
+  "description": "支持日历、年月日、年月日时分秒、年月日时分、时分秒、年月、年、周等日期选择，可限制选择范围",
+  "tutorial": "https://www.uxframe.cn/component/datepicker.html",
+  "attributes": [
+    {
+      "name": "[event]change",
+      "description": "Function(UxDatePickerEvent) | 确定选择时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]close",
+      "description": "Function | 关闭时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]update:modelValue",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "name",
+      "description": "String | 标识符，在回调事件中返回",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "theme",
+      "description": "String | 主题颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'primary',\n\t\t}"
+    },
+    {
+      "name": "mode",
+      "description": "String | 模式 (默认 date)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'date'\n\t\t}"
+    },
+    {
+      "name": "format",
+      "description": "String | 格式化规则",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "value",
+      "description": "string[] | 值 (默认 now)",
+      "type": "{\n\t\t\ttype: Array as PropType<Array<string>>,\n\t\t\tdefault: () : string[] => {\n\t\t\t\treturn [] as string[]\n\t\t\t}\n\t\t}"
+    },
+    {
+      "name": "range",
+      "description": "String[] | 范围 (例如 ['2000-01-01', '2023-12-10'])",
+      "type": "{\n\t\t\ttype: Array as PropType<Array<string>>,\n\t\t\tdefault: () : string[] => {\n\t\t\t\treturn [] as string[]\n\t\t\t}\n\t\t}"
+    },
+    {
+      "name": "max",
+      "description": "Number | 默认年份最大值 (默认 +1)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 1\n\t\t}"
+    },
+    {
+      "name": "min",
+      "description": "Number | 默认年份最小值 (默认 -10)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 10\n\t\t}"
+    },
+    {
+      "name": "selectMode",
+      "description": "String | 选择模式 仅calendar有效 (默认 single)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'single'\n\t\t}"
+    },
+    {
+      "name": "lunar",
+      "description": "Boolean | 显示农历 仅calendar有效 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "touchable",
+      "description": "Boolean | 滑动翻页 仅calendar有效 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "title",
+      "description": "String | 标题",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "titleColor",
+      "description": "String | 标题颜色 (默认 $ux.Conf.titleColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "size",
+      "description": "Any | 内容大小 (默认 $ux.Conf.fontSize)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "color",
+      "description": "String | 内容颜色 (默认 $ux.Conf.fontColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#999999'\n\t\t}"
+    },
+    {
+      "name": "darkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#c5c5c5'\n\t\t}"
+    },
+    {
+      "name": "selectColor",
+      "description": "String | 内容选中颜色 (默认 $ux.Conf.fontColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "selectDarkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "selectStyle",
+      "description": "Boolean | 选择区域遮罩样式 (默认 border)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'border'\n\t\t}"
+    },
+    {
+      "name": "confirm",
+      "description": "String | 确定文字 (默认 确定)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '确定'\n\t\t}"
+    },
+    {
+      "name": "confirmColor",
+      "description": "Strng | 确定文字颜色 (默认 $ux.Conf.primaryColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "btnSize",
+      "description": "Any | 按钮大小 (默认 $ux.Conf.fontSize)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "btnType",
+      "description": "String | 按钮类型 (默认 normal)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'normal'\n\t\t}"
+    },
+    {
+      "name": "btnPositon",
+      "description": "String | 按钮位置 (默认 bottom)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'bottom'\n\t\t}"
+    },
+    {
+      "name": "radius",
+      "description": "Any | 圆角 (默认 $ux.Conf.radius)",
+      "type": "{\n\t\t\tdefault: -1\n\t\t}"
+    },
+    {
+      "name": "opacity",
+      "description": "Number | 遮罩透明度 0-1 (默认 $ux.Conf.maskAlpha)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: -1\n\t\t}"
+    },
+    {
+      "name": "touchClose",
+      "description": "Boolean | 允许滑动关闭 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "maskClose",
+      "description": "Boolean | 遮罩层关闭 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "disabled",
+      "description": "Boolean | 是否禁用 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "modelValue",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    }
+  ]
+}

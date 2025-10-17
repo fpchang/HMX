@@ -1,0 +1,150 @@
+{
+  "name": "",
+  "description": "支持单列、多列、联动选择，主题样式可配置",
+  "tutorial": "https://www.uxframe.cn/component/picker.html",
+  "attributes": [
+    {
+      "name": "[event]change",
+      "description": "Function(UxPickerEvent) | 确定选择时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]close",
+      "description": "Function | 关闭时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]update:modelValue",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]update:value",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "name",
+      "description": "String | 标识符，在回调事件中返回",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "theme",
+      "description": "String | 主题颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'primary',\n\t\t}"
+    },
+    {
+      "name": "data",
+      "description": "UxPickerData[][] | 二维数组",
+      "type": "{\n\t\t\ttype: Array as PropType<UxPickerData[][]>,\n\t\t\tdefault: () : UxPickerData[][] => {\n\t\t\t\treturn [] as UxPickerData[][]\n\t\t\t}\n\t\t}"
+    },
+    {
+      "name": "value",
+      "description": "any[] | 值",
+      "type": "{\n\t\t\ttype: Array as PropType<number[]>,\n\t\t\tdefault: () : number[] => {\n\t\t\t\treturn [] as number[]\n\t\t\t}\n\t\t}"
+    },
+    {
+      "name": "link",
+      "description": "Boolean | 是否联动 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "title",
+      "description": "String | 标题",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "titleColor",
+      "description": "String | 标题颜色 (默认 $ux.Conf.titleColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "size",
+      "description": "Any | 内容大小 (默认 $ux.Conf.fontSize)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "color",
+      "description": "String | 内容颜色 (默认 $ux.Conf.fontColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#999999'\n\t\t}"
+    },
+    {
+      "name": "darkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#c5c5c5'\n\t\t}"
+    },
+    {
+      "name": "selectColor",
+      "description": "String | 内容选中颜色 (默认 $ux.Conf.fontColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "selectDarkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "selectStyle",
+      "description": "Boolean | 选择区域遮罩样式 (默认 border)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'border'\n\t\t}"
+    },
+    {
+      "name": "confirm",
+      "description": "String | 确定文字 (默认 确定)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '确定'\n\t\t}"
+    },
+    {
+      "name": "confirmColor",
+      "description": "Strng | 确定文字颜色 (默认 $ux.Conf.primaryColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "tnSize",
+      "description": "Any | 按钮大小 (默认 $ux.Conf.fontSize)",
+      "type": "Any"
+    },
+    {
+      "name": "btnType",
+      "description": "String | 按钮类型 (默认 normal)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'normal'\n\t\t}"
+    },
+    {
+      "name": "btnPositon",
+      "description": "String | 按钮位置 (默认 bottom)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'bottom'\n\t\t}"
+    },
+    {
+      "name": "radius",
+      "description": "Any | 圆角 (默认 $ux.Conf.radius)",
+      "type": "{\n\t\t\tdefault: -1\n\t\t}"
+    },
+    {
+      "name": "opacity",
+      "description": "Number | 遮罩透明度 0-1 (默认 $ux.Conf.maskAlpha)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: -1\n\t\t}"
+    },
+    {
+      "name": "touchable",
+      "description": "Boolean | 允许滑动关闭 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "maskClose",
+      "description": "Boolean | 遮罩层关闭 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "disabled",
+      "description": "Boolean | 是否禁用 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "modelValue",
+      "type": "{\n\t\t\ttype: Array as PropType<any[]>,\n\t\t\tdefault: () : any[] => {\n\t\t\t\treturn [] as any[]\n\t\t\t}\n\t\t}"
+    },
+    {
+      "name": "btnSize",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    }
+  ]
+}

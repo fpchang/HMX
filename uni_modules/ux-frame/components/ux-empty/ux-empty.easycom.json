@@ -1,0 +1,47 @@
+{
+  "name": "",
+  "description": "内置多种情景下的空状态，支持自定义",
+  "tutorial": "https://www.uxframe.cn/component/empty.html",
+  "attributes": [
+    {
+      "name": "image",
+      "description": "String | 占位图 (默认 empty)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'empty',\n\t\t}"
+    },
+    {
+      "name": "width",
+      "description": "Any | 图片宽 高度自适应 (默认 200)",
+      "type": "{\n\t\t\tdefault: 200\n\t\t}"
+    },
+    {
+      "name": "description",
+      "description": "String | 描述文字",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "color",
+      "description": "String | 文字颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#c8c8c8'\n\t\t}"
+    },
+    {
+      "name": "darkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#b8b8b8'\n\t\t}"
+    },
+    {
+      "name": "size",
+      "description": "Any | 文字大小 (默认 $ux.Conf.fontSize)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "bold",
+      "description": "Boolean | 文字加粗 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "space",
+      "description": "Any | 间隔 (默认 24)",
+      "type": "{\n\t\t\tdefault: 24\n\t\t}"
+    }
+  ]
+}

@@ -4,6 +4,11 @@
 	<!-- #endif -->
 		<view>
 		<ux-button theme="primary" text="主要" :mr="10"></ux-button>
+	
+		</view>
+		<view> 
+		
+			<l-icon name="streamline-flex:projector-board" size="50px"></l-icon>
 		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>

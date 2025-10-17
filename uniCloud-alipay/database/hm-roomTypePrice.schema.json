@@ -1,0 +1,51 @@
+{
+	"bsonType": "object",
+	"required": ["createTime","hotel_id","roomType_id","startTime","endTime","price","price_type"],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"createTime":{
+			"bsonType": "timestamp",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		},
+		"hotel_id":{
+			"bsonType": "string",
+			"foreignKey": "hm-hotel._id"
+		},
+		"roomType_id":{
+			"bsonType": "string",
+			"foreignKey": "hm-roomType._id"
+		},
+		"startTime":{
+			"bsonType": "timestamp"
+		},
+		"endTime":{
+			"bsonType": "timestamp"
+		},
+		"priceBase":{
+					"description": "价格1",
+					"bsonType": "double",
+					"defaultValue":0
+		},
+		"priceA":{
+					"description": "价格2",
+					"bsonType": "double",
+					"defaultValue":0
+		},
+		"priceB":{
+					"description": "价格3",
+					"bsonType": "double",
+					"defaultValue":0
+		}
+		//new Date("2024-12-15 14:00:00").getTime(),hotel_id:"h01",roomType_id:"r01",startTime:new Date("2024-12-24 14:00:00").getTime(),endTime:new Date("2024-12-29 14:00:00").getTime(),price:380,price_title:"base"
+	}
+}

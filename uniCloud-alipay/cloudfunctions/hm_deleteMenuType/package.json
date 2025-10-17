@@ -1,0 +1,7 @@
+{
+  "name": "hm_deleteMenuType",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

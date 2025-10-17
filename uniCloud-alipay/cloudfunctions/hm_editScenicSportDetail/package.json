@@ -1,0 +1,7 @@
+{
+  "name": "hm_editScenicSportDetail",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

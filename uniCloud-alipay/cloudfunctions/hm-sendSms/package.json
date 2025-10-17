@@ -1,0 +1,10 @@
+{
+  "name": "hm-sendSms",
+  "dependencies": {
+    "tokenEvent": "file:../common/tokenEvent"
+  },
+  "extensions": {
+    "uni-cloud-jql": {},
+    "uni-cloud-sms": {}
+  }
+}

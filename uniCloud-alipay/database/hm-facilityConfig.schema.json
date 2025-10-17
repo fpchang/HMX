@@ -1,0 +1,1 @@
+{"bsonType":"object","required":["name","type"],"permission":{"read":true,"create":true,"update":true,"delete":true},"properties":{"_id":{"description":"ID，系统自动生成，酒店设施配置"},"name":{"description":"名称","bsonType":"string"},"type":{"description":"分类-基础设施， 房型，餐饮，休闲，运动,商务","bsonType":"string","enum":["base","roomType","catering","recreation","athleticFacility","business"]}}}

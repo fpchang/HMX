@@ -2,6 +2,24 @@
 	<view>
 		<image class="logo" src="/static/logo.png"></image>
 		<text class="title">{{title}}</text>
+		<view style="min-width:260px">
+			
+			<uni-data-picker  placeholder="请选择区域地址" self-field="code"
+				v-model="hotelAddressCode" parent-field="parent_code"
+				collection="opendb-city-china" orderby="value asc"
+				field="code as value, name as text, eq(type, 2) as isleaf"
+				@change="onchange"></uni-data-picker>
+		</view>
+		
+		<view class="example-body">
+		  <uni-datetime-picker
+		    v-model="dateRangeArray"
+		    type="daterange"
+		    :start="startDate"
+		    return-type="timestamp"
+		    @change="dateConfim"
+		  />
+		</view>
 	</view>
 </template>
 
@@ -9,14 +27,25 @@
 	export default {
 		data() {
 			return {
-				title: 'Hello'
+				title: 'Hello',
+				
+				hotelAddressArea:null,
+				hotelAddressCode:null,
+				startDate: '2025/10/14',
+				dateRangeArray:null
 			}
 		},
 		onLoad() {
 
 		},
 		methods: {
-
+			onchange(e){
+				console.log(e,this.hotelAddressArea,this.hotelAddressCode)
+			},
+			dateConfim(e){
+				console.log(e)
+			}
+			
 		}
 	}
 </script>

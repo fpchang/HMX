@@ -1,0 +1,10 @@
+{
+  "name": "hm_validToken",
+  "dependencies": {
+    "tokenEvent": "file:../common/tokenEvent",
+    "errorEvent": "file:../common/errorEvent"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

@@ -1,0 +1,141 @@
+{
+	"bsonType": "object",
+	"required": ["blong", "hotelName","dataStatus"],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	 // "fieldRules": [{
+  //   "rule": "end_date == null || end_date != null && create_date < end_date", // 校验规则
+  //   "errorMessage": "创建时间和结束时间不匹配", // 错误提示信息（仅在新增时生效，更新数据时不会提示此信息）
+  //   "client": false // schema2code时，当前规则是否带到前端也进行校验。目前此属性暂不生效，fieldRules不会在客户端校验数据，仅会在云端进行校验
+  // }],
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"belong": {
+			"description": "所属账号",
+			"bsonType": "string",
+			"foreignKey": "hm-user.phone"
+		},
+		"hotelName": {
+			"description": "酒店名称",
+			"bsonType": "string"
+		},
+		"hotelAddressArea": {
+			"description": "酒店区域(省市县)",
+			"bsonType": "string"
+		},
+		"hotelAddress": {
+			"description": "酒店地址",
+			"bsonType": "string"
+		},
+		"hotelAddressCode":{
+			"description": "地址码（县code）",
+			"foreignKey": "opendb-city-china.schema.code"
+		},
+		"serviceTel":{
+			"description": "客服电话",
+			"bsonType": "string",
+			"defaultValue":""
+		},
+		"wechat":{
+			"description": "客服电话",
+			"bsonType": "string",
+			"defaultValue":""
+		},
+		"hotelCoordinate": {
+			"description": "酒店坐标",
+			"bsonType": "array"
+		},
+		"contactPhone":{
+			"description": "联系电话",
+			"bsonType": "string"
+		},
+		"hotelIntroduction": {
+			"description": "酒店简介",
+			"bsonType": "string"
+		},
+		"firstImages":{
+			"description": "首图",
+			"bsonType": "string",
+			"defaultValue":"https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/images/app.png"
+		},
+		"imagesList":{
+			"description": "图片列表",
+			"bsonType": "array",
+			"defaultValue":[]
+		},
+		"feature":{
+			"description": "特色",
+			"bsonType": "array",
+			"defaultValue":[]
+		},
+		"cateringServices":{
+			"description": "餐饮服务",
+			"bsonType": "array",
+			"defaultValue":[]
+		},
+		"baseFacility":{
+			"description": "公共设施",
+			"bsonType": "array",
+			"defaultValue":[]
+		},
+		"recreationFacility":{
+			"description": "休闲设施",
+			"bsonType": "array",
+			"defaultValue":[]
+		},
+		"athleticFacility":{
+			"description": "运动设施",
+			"bsonType": "array",
+			"defaultValue":[]
+		},
+		"onlineReserve":{
+			"description": "开通在线预定",
+			"bsonType": "bool",
+			"defaultValue":false
+		},
+		"onlinePayment":{
+			"description": "开通在线付款订房，开通后可支持在线支付，未开通只能线下支付",
+			"bsonType": "bool",
+			"defaultValue":false
+		},		
+		"dataStatus":{
+			"description": "数据状态 0待上线，1上线 10删除",
+			"bsonType": "int",
+			"defaultValue":0,
+			"enum":[0,1,2,3,4,5,6,7,8,9,10]
+		}
+		//,
+		// "employee": {
+		// 	"description": "员工",
+		// 	"bsonType": "array",
+		// 	"required": [
+		// 		"role","phone"
+		// 	],
+		// 	"properties": {
+		// 		"role": {
+		// 			"description": "manager：管理员，normal：员工",
+		// 			"bsonType": "string",
+		// 			"enum": ["manager", "normal"]
+		// 		},
+		// 		"phone": {
+		// 			"description": "手机号",
+		// 			"title": "手机号",
+		// 			"bsonType": "string",
+		// 			"minLength": 11,
+		// 			"pattern": "^[1][3,4,5,6,7,8,9][0-9]{9}$",
+		// 			"errorMessage": {
+		// 				"required": "{title}不能为空",
+		// 				"minLength": "{title}不能小于 {minLength} 个字符",
+		// 				"pattern": "{title}格式不正确"
+		// 			}
+		// 		}
+		// 	}
+		// }
+	}
+}

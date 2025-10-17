@@ -1,0 +1,9 @@
+{
+  "name": "hm_createRechargeOrder",
+  "dependencies": {
+    "tokenEvent": "file:../common/tokenEvent"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

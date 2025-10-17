@@ -1,0 +1,7 @@
+{
+  "name": "hm_checkLogin",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

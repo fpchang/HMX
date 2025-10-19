@@ -2,24 +2,10 @@
 	<view>
 		<image class="logo" src="/static/logo.png"></image>
 		<text class="title">{{title}}</text>
-		<view style="min-width:260px">
-			
-			<uni-data-picker  placeholder="请选择区域地址" self-field="code"
-				v-model="hotelAddressCode" parent-field="parent_code"
-				collection="opendb-city-china" orderby="value asc"
-				field="code as value, name as text, eq(type, 2) as isleaf"
-				@change="onchange"></uni-data-picker>
-		</view>
-		
-		<view class="example-body">
-		  <uni-datetime-picker
-		    v-model="dateRangeArray"
-		    type="daterange"
-		    :start="startDate"
-		    return-type="timestamp"
-		    @change="dateConfim"
-		  />
-		</view>
+		<navigator url="/pages/indexAdvise/indexAdvise">
+			<view style="height:40px;background-color: #eee;">indexadvidse</view>
+			</navigator>
+			<rice-input v-model="value" placeholder="请输入内容"/>
 	</view>
 </template>
 
@@ -28,7 +14,7 @@
 		data() {
 			return {
 				title: 'Hello',
-				
+				value:'tttt',
 				hotelAddressArea:null,
 				hotelAddressCode:null,
 				startDate: '2025/10/14',
@@ -39,11 +25,11 @@
 
 		},
 		methods: {
-			onchange(e){
-				console.log(e,this.hotelAddressArea,this.hotelAddressCode)
+			onchange(){
+				console.log(this.hotelAddressArea,this.hotelAddressCode)
 			},
-			dateConfim(e){
-				console.log(e)
+			dateConfim(){
+				console.log()
 			}
 			
 		}

@@ -5,8 +5,22 @@
 			"style": {
 				"navigationBarTitleText": "uni-app x"
 			}
+		},
+		{
+			"path" : "pages/indexAdvise/indexAdvise",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
 		}
-	],
+
+,{
+    "path": "uni_modules/rice-ui/pages/action-sheet/action-sheet"
+}
+,{
+    "path": "uni_modules/rice-ui/pages/dialog/dialog"
+}
+],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app x",

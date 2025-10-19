@@ -37,6 +37,7 @@
 </script>
 
 <style>
+	@import "@/uni_modules/rice-ui/libs/style/index.css";
 	/*每个页面公共css */
 	.uni-row {
 		flex-direction: row;

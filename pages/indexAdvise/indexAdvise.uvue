@@ -1,0 +1,377 @@
+<template>
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1" :refresher-enabled="true">
+	<!-- #endif -->
+		<view class="introduce">
+			<view class="card glass" style="padding:0">
+				<view class="video-content">
+				</view>
+
+			</view>
+			<view class="card glass">
+				<view class="title">简介</view>
+				<view class="txt-content">
+					议宿是一款基于酒店民宿日常事务管理开发的工具类软件，提供基础的房型房间管理，收入与支出的财务管理，财务统计图表。订单与房态管理，并自动生成店铺个性化信息展示，并且能分享给微信好友，方便快速预览。提供app与小程序支持，酒店管理员随身管理类必备工具。
+				</view>
+			</view>
+			<view class="card glass">
+				<view class="title">功能</view>
+				<view class="content">
+					<view class="control-item-group">
+						<view><l-icon name="solar:reorder-bold" size="80px" color="#4f99fd" /></view>
+						<view><text style="color: #fff">订单管理</text></view>
+					</view>
+					<view class="control-item-group">
+						<view><l-icon name="solar:calendar-date-bold-duotone" size="80px" color="#34ce84" /></view>
+						<view><text style="color: #fff">房态管理</text></view>
+					</view>
+					<view class="control-item-group">
+						<view><l-icon name="ic:sharp-maps-home-work" size="80px" color="#905d3e" /></view>
+						<view><text style="color: #fff">房型管理</text></view>
+					</view>
+					<view class="control-item-group">
+						<view><l-icon name="material-symbols:bar-chart-4-bars" size="80px" color="orange" /></view>
+						<view><text style="color: #fff">财务管理</text></view>
+					</view>
+					<view class="control-item-group">
+						<view><l-icon name="icon-park-solid:people-plus-one" size="80px" color="green" /></view>
+						<view><text style="color: #fff">员工账号</text></view>
+					</view>
+					<view class="control-item-group">
+						<view><l-icon name="majesticons:monitor" size="80px" color="#fff" /></view>
+						<view><text style="color: #fff">店铺信息展示</text></view>
+					</view>
+					<view class="cs"></view>
+					<view class="cs"></view>
+					<view class="cs"></view>
+					<view class="cs"></view>
+				</view>
+			</view>
+		</view>
+		<view style="height: 120px"></view>
+		<view class="control">
+			<button class="btn glass" @click="toLoginEvent()">登录体验</button>
+		</view>
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+	<l-popup v-model="showPopu">
+		<view class="popup-con">
+			<view class="tit">议宿申请</view>
+			<view class="txt-content">此系统需要使用手机号登录后才能使用全部功能，确认是否手机号登录</view>
+			<view class="control">
+				<view class="btn-style" @click="agreeGetPhoneEvent(false)">拒绝</view>
+				<view class="btn-style btn-confirm" @click="agreeGetPhoneEvent(true)">允许</view>
+			</view>
+		</view>
+	</l-popup>
+
+</template>
+
+<script setup>
+	import { ref, onMounted, computed } from "vue";
+	import { useStore } from "vuex";
+	//import { AccountService } from "@/services/AccountService";
+	// const props = defineProps({
+	//   message: {
+	//     type: String,
+	//     required: true
+	//   }
+	// });
+
+	let isReading = ref(false);
+	let refresher_triggered = ref(false);
+	let submitLoading = ref(false);
+	let agreeGetPhone = ref(false);
+	let showPopu = ref(true);
+	const accessin = () => {
+		uni.redirectTo({
+			url: "/pages/index/index",
+		});
+	};
+	const popup_confirm = ref(null);
+	const toLogin = () => {
+		uni.navigateTo({
+			url: "/pages/login/login",
+		});
+	};
+	const toLoginEvent = () => {
+		//#ifdef MP
+		popup_confirm.value.open();
+		return;
+		//#endif
+		toLogin();
+	};
+
+	const agreeGetPhoneEvent = (flag:boolean) => {
+		if (flag) {
+			showPopu.value = false;
+			toLogin();
+
+			return;
+		}
+		showPopu.value = false;
+	};
+
+	const start = (async () => {
+		try {
+			console.log("验证token");
+			//const res = await store.dispatch("loginEvent");
+			//console.log("验证token结果", res);
+			accessin();
+		} catch (error) {
+			console.log("err", error);
+
+			isReading.value = true;
+		}
+	})();
+	const list = [
+		{
+			title: "首页",
+			img: "https://cdn.hotelsys.fun/HM/images/advise/1.png",
+			info: "酒店管理",
+		},
+		{
+			title: "房态",
+			img: "https://cdn.hotelsys.fun/HM/images/advise/2.png",
+			info: "酒店管理",
+		},
+		{
+			title: "财务",
+			img: "https://cdn.hotelsys.fun/HM/images/advise/3.png",
+			info: "酒店管理",
+		},
+		{
+			title: "功能",
+			img: "https://cdn.hotelsys.fun/HM/images/advise/4.png",
+			info: "酒店管理",
+		},
+		{
+			title: "收入",
+			img: "https://cdn.hotelsys.fun/HM/images/advise/5.png",
+			info: "酒店管理",
+		},
+		{
+			title: "房型",
+			img: "https://cdn.hotelsys.fun/HM/images/advise/6.png",
+			info: "酒店管理",
+		},
+		{
+			title: "员工管理",
+			img: "https://cdn.hotelsys.fun/HM/images/advise/7.png",
+			info: "酒店管理",
+		},
+		{
+			title: "房间管理",
+			img: "https://cdn.hotelsys.fun/HM/images/advise/8.png",
+			info: "酒店管理",
+		},
+		{
+			title: "财务统计",
+			img: "https://cdn.hotelsys.fun/HM/images/advise/9.png",
+			info: "酒店管理",
+		},
+		{
+			title: "收入管理",
+			img: "https://cdn.hotelsys.fun/HM/images/advise/10.png",
+			info: "酒店管理",
+		},
+		{
+			title: "订单管理",
+			img: "https://cdn.hotelsys.fun/HM/images/advise/11.png",
+			info: "酒店管理",
+		},
+		{
+			title: "店铺展示",
+			img: "https://cdn.hotelsys.fun/HM/images/advise/12.png",
+			info: "酒店管理",
+		},
+		{
+			title: "房型展示",
+			img: "https://cdn.hotelsys.fun/HM/images/advise/13.png",
+			info: "酒店管理",
+		},
+	];
+
+	onLoad(() => {
+
+	});
+	const navTopHeight = computed(() => {
+		// #ifdef MP-WEIXIN
+		return "100px";
+		// #endif
+
+		//return this.isPcShow? "0px" : "70px";
+		return "70px";
+	});
+	const refrush = (e) => {
+		console.log(e);
+		refresher_triggered.value = true;
+		setTimeout(() => {
+			refresher_triggered.value = false;
+		}, 1000);
+	};
+	onMounted(() => { });
+</script>
+
+
+<style lang="scss">
+	.indexAdvise {
+		background: #eee;
+		height: 100%;
+		background: #0765ae;
+
+		/*background: url("https://cdn.hotelsys.fun/HM/images/advise/bg9.png");*/
+		/*background-repeat: no-repeat;*/
+		/* background-size: cover;*/
+		.introduce {
+			margin-top: 10px;
+			max-width: 800px;
+			padding: 0 10px;
+			margin: auto;
+			display: flex;
+			flex-direction: column;
+			/*gap: 15px;*/
+
+			.card {
+				/*background: rgba(255, 255, 255, 0.15);
+      -webkit-backdrop-filter: blur(5px);
+      backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2),inset 0 4px 20px rgba(255, 255, 255, 0.3);*/
+				padding: 0 15px 15px 15px;
+				box-sizing: border-box;
+				border-radius: 12px;
+				background: rgba(0, 0, 0, 0.48);
+				overflow: hidden;
+
+				.title {
+					font-weight: 400;
+					font-size: 24px;
+					padding: 20px 0;
+					color: #fff;
+				}
+
+				.txt-content {
+					font-size: 15px;
+					color: #e6e6e6;
+					/*text-indent: 20px;*/
+					letter-spacing: 2px;
+					/*text-align: justify;*/
+				}
+
+				.content {
+					display: flex;
+					/*gap: 18px;*/
+					flex-flow: wrap;
+					justify-content: space-around;
+
+					.cs {
+						height: 0;
+					}
+
+					.control-item-group {
+						display: flex;
+						align-items: center;
+
+						justify-content: center;
+						font-size: 12px;
+						flex-direction: column;
+						font-weight: 400;
+						font-size: 15px;
+					}
+
+					.img-area {
+						width: 140px;
+					}
+
+
+				}
+
+				.video-content {
+					display: flex;
+					justify-content: center;
+					position: relative;
+					/*height:fit-content;*/
+					padding: 0;
+				}
+			}
+		}
+
+		.control {
+			position: fixed;
+			bottom: 20px;
+			/*width: 100vw;*/
+			padding: 0 20px 20px 20px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			box-sizing: border-box;
+
+			.btn {
+				padding: 10px 100px;
+				color: #fff;
+				font-size: 16px;
+				letter-spacing: 2px;
+				background-color: rgba(0, 0, 0, 0.48);
+			}
+		}
+	}
+
+	.glass {
+		position: relative;
+		background: rgba(255, 255, 255, 0.15);
+		/*backdrop-filter: blur(2px) saturate(180%);*/
+		border: 1px solid rgba(255, 255, 255, 0.8);
+		border-radius: 4px;
+		box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2),
+			inset 0 4px 20px rgba(255, 255, 255, 0.3);
+	}
+
+	.popup-con {
+		height: 150px;
+		padding: 15px;
+		background: #fafafa;
+		display: flex;
+		flex-direction: column;
+		/* gap: 10px;*/
+		font-size: 16px;
+		border-top-left-radius: 12px;
+		border-top-right-radius: 12px;
+
+		.tit {
+			font-weight: 400;
+			font-size: 18px;
+			color: #666;
+		}
+
+		.txt-content {
+			font-size: 16px;
+			/*text-indent: 16px;*/
+			color: #999;
+		}
+
+		.control {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			/* gap: 15px;*/
+			.btn-style {
+				background: #fff;
+				width: 100px;
+				height: 35px;
+				border: 1px solid #eee;
+				text-align: center;
+				line-height: 35px;
+				border-radius: 5px;
+				color: #007aff;
+			}
+
+			.btn-confirm {
+				color: #fff;
+				background: #007aff;
+			}
+		}
+	}
+</style>

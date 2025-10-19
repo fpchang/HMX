@@ -1,0 +1,76 @@
+<template>
+	<slot 
+		:days="current.days"
+		:hours="current.hours"	
+		:total="current.total"	
+		:minutes="current.minutes"	
+		:seconds="current.seconds"	
+		:milliseconds="current.milliseconds">
+		<text class="l-count-down">{{timeText}}</text>
+	</slot>
+</template>
+<script setup lang="uts">
+	/**
+	 * CountDown 倒计时组件
+	 * @description 用于展示倒计时场景，支持自定义时间格式和毫秒级渲染
+	 * <br> 插件类型：LCountDownComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-count-down
+	 * 
+	 * @property {number} time 倒计时时长（单位：毫秒）
+	 * @property {string} format 时间格式（默认：'HH:mm:ss'）
+	 * @value 'HH:mm:ss'      显示时分秒
+	 * @value 'HH:mm'         显示时分
+	 * @value 'mm:ss'         显示分秒
+	 * @value 'HH:mm:ss.SSS'  显示毫秒（需开启millisecond）
+	 * @property {boolean} autoStart 是否自动开始倒计时
+	 * @property {boolean} millisecond 是否启用毫秒级渲染
+	 * @event {Function} finish 倒计时完成时触发
+	 * @event {Function} change 倒计时变化时触发（每秒/每毫秒触发）
+	 */
+	
+	import { CountDownProps } from './types'
+	import { useCountDown, CurrentTime, UseCountDownOptions } from './useCountDown'
+	import { parseFormat } from './utils'
+	const emits = defineEmits(['change', 'finish'])
+	const props = withDefaults(defineProps<CountDownProps>(), {
+		time: 0,
+		format: 'HH:mm:ss',
+		autoStart: true,
+		millisecond: false
+	})
+
+	const { start, pause, reset, current } = useCountDown({
+		time: props.time,
+		millisecond: props.millisecond,
+		onChange: (current : CurrentTime) => { emits('change', current) },
+		onFinish: () => { emits('finish') },
+	} as UseCountDownOptions);
+
+	const timeText = computed(() : string => parseFormat(props.format, current.value));
+	const resetTime = () => {
+		reset(props.time);
+
+		if (props.autoStart) {
+			start();
+		}
+	};
+	const stopWatch = watch(() : number => props.time, resetTime, { immediate: true });
+	
+	onUnmounted(() => {
+		stopWatch()
+	})
+	const _start = () => {
+		start()
+	}
+	const _pause = () => {
+		pause()
+	}
+	defineExpose({
+		start: _start,
+		pause: _pause,
+		reset: resetTime,
+	});
+</script>
+<style lang="scss">
+	@import './index';
+</style>

@@ -1,0 +1,240 @@
+<template>
+	<view class="l-image-wrapper" ref="drawbleRef" :class="rootClass" :style="[isLoading || isFailed ? sizeStyle : {} ]">
+		<image 
+			class="l-image" 
+			ref="imageRef" 
+			:hidden="isLoading || isFailed" 
+			:src="src" 
+			:style="[sizeStyle]" 
+			@load="onload" 
+			@error="onerror" 
+			:mode="mode">
+		</image>
+		<view class="l-image__state" v-show="isLoading || isFailed">
+			<template v-if="isLoading && !isFailed">
+				<slot name="loading">
+					<!-- #ifndef APP -->
+					<view class="l-image__loading"></view>
+					<!-- #endif -->
+				</slot>
+			</template>
+			<template v-if="!isLoading && isFailed">
+				<slot name="error">
+					<!-- #ifndef APP -->
+					<view class="l-image__error"></view>
+					<!-- #endif -->
+				</slot>
+			</template>
+		</view>
+	</view>
+</template>
+
+<script lang="uts" setup>
+	/**
+	 * LimeImage 图片
+	 * @description 加强版image插件
+	 * <br> 插件类型：LImageComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?id=12228
+	 * @property {String} mode 缩放的模式
+	 * @value scaleToFill	不保持纵横比缩放图片，使图片的宽高完全拉伸至填满 image 元素
+	 * @value aspectFit	保持纵横比缩放图片，使图片的长边能完全显示出来。也就是说，可以完整地将图片显示出来。
+	 * @value aspectFill	保持纵横比缩放图片，只保证图片的短边能完全显示出来。也就是说，图片通常只在水平或垂直方向是完整的，另一个方向将会发生截取。
+	 * @value widthFix	宽度不变，高度自动变化，保持原图宽高比不变
+	 * @value heightFix	高度不变，宽度自动变化，保持原图宽高比不变 App 和 H5 平台 HBuilderX 2.9.3+ 支持、微信小程序需要基础库 2.10.3
+	 * @value top	不缩放图片，只显示图片的顶部区域
+	 * @value bottom	不缩放图片，只显示图片的底部区域
+	 * @value center	不缩放图片，只显示图片的中间区域
+	 * @value left	不缩放图片，只显示图片的左边区域
+	 * @value right	不缩放图片，只显示图片的右边区域
+	 * @value top left	不缩放图片，只显示图片的左上边区域
+	 * @value top right	不缩放图片，只显示图片的右上边区域
+	 * @value bottom left	不缩放图片，只显示图片的左下边区域
+	 * @value bottom right	不缩放图片，只显示图片的右下边区域
+	 * @property {String} src 图片地址
+	 * @property {Boolean} lazyLoad 懒加载
+	 * @property {Boolean} fadeShow 
+	 * @property {Boolean} webp 
+	 * @property {Boolean} showMenuByLongpress 
+	 * @property {Boolean} draggable 
+	 * @property {String} height 图片高度
+	 * @property {String} width 图片宽度
+	 * @property {String} shape = [square|round|circle]  形状
+	 * @value square	shape 方形
+	 * @value round	    shape 圆角方形
+	 * @value circle	shape 圆形
+	 * @property {String} parentId 
+	 * @property {String} injectId 
+	 * @property {String} color Nvue Svg 使用 
+	 * @event {Function} load 加载完成触发
+	 * @event {Function} error 加载失败触发
+	 * //后期对APP端重构 使用new Image
+	 */
+	
+	import { addUnit } from '@/uni_modules/lime-shared/addUnit'
+	import { unitConvert } from '@/uni_modules/lime-shared/unitConvert'
+	// #ifdef APP
+	import { useLoading } from '@/uni_modules/lime-loading'
+	// #endif
+	
+	type PicSize = {
+		width: number,
+		height: number
+	}
+	
+	const name = "l-image"
+	// defineOptions({name: 'l-image'})
+	const emits = defineEmits(['load', 'error'])
+	const props = defineProps({
+		src: {
+			type: String
+		},
+		mode: {
+			type: String,
+			default: 'scaleToFill'
+		},
+		lazyLoad: {
+			type: Boolean,
+			default: false
+		},
+		fadeShow: {
+			type: Boolean,
+			default: true
+		},
+		webp: {
+			type: Boolean,
+			default: false
+		},
+		showMenuByLongpress: {
+			type: Boolean,
+			default: false
+		},
+		draggable: {
+			type: Boolean,
+			default: true
+		},
+		height: {
+			type: [String, Number]
+		},
+		width: {
+			type: [String, Number]
+		},
+		shape: {
+			type: String,
+			default: 'round'
+		},
+	})
+	const context = getCurrentInstance()
+	const slots = defineSlots()
+	const isLoading = ref(true)
+	const isFailed = ref(false)
+	const imageRef = ref<UniImageElement|null>(null)
+	
+	const rootClass = computed<Map<string,any>>(():Map<string,any> => {
+		const cls = new Map<string,any>()
+		cls.set(`${name}--shape-${props.shape}`, true)
+		if(isLoading.value||isFailed.value){
+			cls.set(`${name}__mask`, true)
+		}
+		return cls
+	})
+	
+	const sizeStyle = computed<Map<string,any>>(():Map<string,any> => {
+		const style = new Map<string,any>();
+		if(!isNaN(parseFloat(`${props.width}`))){
+			style.set('width', addUnit(props.width)!)	
+		}
+		if(!isNaN(parseFloat(`${props.height}`))){
+			style.set('height', addUnit(props.height)!)
+		}
+		return style 
+	})
+
+	
+	// #ifdef APP
+	const drawbleRef = ref<UniElement|null>(null)
+	
+	const resizeObserver = new UniResizeObserver((entries : Array<UniResizeObserverEntry>) => {
+		imageRef.value?.getBoundingClientRectAsync()?.then(res => {
+			if(isLoading.value || isFailed.value) {
+				drawbleRef.value?.style.setProperty('width', sizeStyle.value.get('width') ?? 'auto')
+				drawbleRef.value?.style.setProperty('height', sizeStyle.value.get('height') ?? 'auto')
+			} else {
+				drawbleRef.value?.style.setProperty('width', res.width)
+				drawbleRef.value?.style.setProperty('height', res.height)
+			}
+			
+		})
+	}) 
+
+	
+	watchEffect(()=>{
+		if(imageRef.value != null) {
+			resizeObserver.observe(imageRef.value!)
+		}
+	})
+	
+	onBeforeUnmount(()=>{
+		resizeObserver.disconnect()
+	})
+	
+	const loading = useLoading(drawbleRef);
+	loading.type = 'circular'
+	loading.color = 'rgba(0,0,0,0.24)'
+	loading.ratio = 0.3
+	// #endif
+	
+	const onload = (e: UniImageLoadEvent) => {
+		isLoading.value = false
+		isFailed.value  = false
+	
+		emits('load', e);
+		// #ifdef APP
+		loading.clear()
+		// #endif
+	}
+	const onerror = (e: UniImageErrorEvent) => {
+		isLoading.value = false
+		isFailed.value  = true
+		emits('error', e)
+		// #ifdef APP
+		loading.failed()
+		if(slots['error'] != null){
+			loading.clear()
+		}
+		// #endif
+	}
+	
+
+	
+	const stopWatch = watch(():string|null => props.src, (src: string|null) =>{
+		if(src == ''){
+			isLoading.value = false
+			isFailed.value  = true
+			// #ifdef APP
+			loading.failed()
+			if(slots['error'] != null){
+				loading.clear()
+			}
+			// #endif
+		} else {
+			isLoading.value = true
+			isFailed.value = false
+			// #ifdef APP
+			loading.play()
+			
+			if(slots['loading'] != null){
+				loading.clear()
+			}
+			// #endif
+		}
+	}, {immediate: true})
+	
+	
+	onUnmounted(() => {
+		stopWatch()
+	})
+</script>
+
+<style lang="scss">
+	@import './index';
+</style>

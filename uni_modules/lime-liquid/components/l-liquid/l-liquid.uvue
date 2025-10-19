@@ -1,0 +1,224 @@
+<template>
+	<view class="l-liquid" :class="classes" :style="styles">
+		<!-- #ifdef APP -->
+		<view class="l-liquid__inner" :style="[innerStyle]">
+			<view ref="drawRef" class="l-liquid__inner-drawable">
+				<!-- #ifndef APP-HARMONY -->
+				<slot></slot>
+				<!-- #endif -->
+			</view>
+			<!-- #ifdef APP-HARMONY -->
+			<view class="l-liquid__value">
+				<slot></slot>
+			</view>
+			<!-- #endif -->
+		</view>
+		<!-- #endif -->
+		<!-- #ifndef APP -->
+		<view class="l-liquid__inner" :style="[innerStyle]">
+			<view class="l-liquid__waves" :style="[wavesStyle]">
+				<view class="wave" :style="[waveStyle]"></view>
+				<view class="wave two" :style="[waveStyle]"></view>
+			</view>
+		</view>
+		<view class="l-liquid__value">
+			<slot></slot>
+		</view>
+		<!-- #endif -->
+	</view>
+</template>
+<script lang="uts" setup>
+	/**
+	 * Liquid 水球图组件
+	 * @description 用于展示百分比进度，具有动态波浪效果
+	 * <br> 插件类型：LLiquidComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-liquid
+	 * 
+	 * @property {number} percent 当前进度百分比（0-100，默认0）
+	 * @property {string} size 组件尺寸（支持rpx/px单位，例：'200rpx'）
+	 * @property {boolean} outline 是否显示外边框（默认false）
+	 * @property {string} radius 圆角半径（支持CSS单位，例：'20rpx'）
+	 * @property {string} waveColor 波浪颜色（默认使用主题色）
+	 * @property {string} innerColor 内部背景色（默认：#ffffff）
+	 * @property {number} duration 动画时长（单位：毫秒）
+	 * @event {Function} update:current 过度值
+	 */
+	import { addUnit } from "@/uni_modules/lime-shared/addUnit";
+	import { useTransition, UseTransitionOptions } from "@/uni_modules/lime-shared/animation/useTransition";
+	import { toRgba } from './utils'
+
+	// defineOptions({
+	// 	name: 'l-liquid'
+	// })
+	const emits = defineEmits(['update:current'])
+	const props = defineProps({
+		percent: {
+			type: Number,
+			default: 10
+		},
+		size: {
+			type: String,
+			default: '250rpx'
+		},
+		outline: {
+			type: Boolean,
+			default: false
+		},
+		radius: {
+			type: String,
+			// default: null
+		},
+		waveColor: {
+			type: String,
+			default: '#007aff'
+		},
+		innerColor: {
+			type: String,
+			// default: null
+		},
+		duration: {
+			type: Number
+		}
+	})
+	const drawRef = ref<UniElement | null>(null)
+	const target = ref(0)
+	const current = useTransition(target, {
+		duration: props.duration ?? 500,
+		immediate: true
+	} as UseTransitionOptions) //ref(props.percent)
+	
+	const classes = computed(() : Map<string, any> => {
+		const cls = new Map<string, any>()
+		if (props.outline) {
+			cls.set('l-liquid--outline', true)
+		}
+		return cls
+	})
+	const styles = computed(() : Map<string, any> => {
+		const style = new Map<string, any>()
+		const size = addUnit(props.size)
+		if (size != null) {
+			style.set('width', size!)
+			style.set('height', size!)
+		}
+		if(props.duration != null) {
+			style.set('--l-liquid-duration', `${props.duration}ms`)
+		}
+		return style
+	})
+	
+	const innerStyle = computed(() : Map<string, any> => {
+		const style = new Map<string, any>()
+		if (props.radius != null) {
+			style.set('border-radius', props.radius!)
+		}
+		if (props.innerColor != null) {
+			style.set('background', props.innerColor!)
+		}
+		return style
+	})
+	const wavesStyle = computed(() : UTSJSONObject => {
+		return {
+			'--l-liquid-percent': current.value * -1 + '%'
+		}
+	})
+	const waveStyle = computed(() : UTSJSONObject => {
+		return {
+			background: props.waveColor
+		}
+	})
+	let step : (() => void) | null = null
+	const stopPercent = watch(current, (v : number) => {
+		emits('update:current', Math.round(v))
+	})
+	
+	let animationFrameId: number = 0;
+	onMounted(() => {
+		nextTick(() => {
+			// #ifdef APP
+			const size = drawRef.value?.getBoundingClientRect()?.width!
+			const ctx = drawRef.value?.getDrawableContext();
+			if (ctx == null) return
+			const render = (ctx : DrawableContext, size : number) => {
+				// let sinX = 0 // x轴
+				// let offsetY = 0.3 // 高度  -- 越大高度越高
+				let sinX : number, offsetY : number;
+				let speed = 0.2 // x轴 移动距离
+				
+				let lastTimestamp: number = 0;
+				/**
+				* 波浪线
+				* @param sinX -- 波浪线 sin坐标中 x轴的位置
+				* @param offsetY -- 波浪线 在画布中的 高度比 画布垂直距离
+				* @param waveW -- 波浪宽度
+				* @param waveH -- 波浪深度
+				* @param color -- 波浪颜色
+				* */
+				function drawWave(sinX : number, offsetY : number, waveW : number, waveH : number, color : string) {
+					let canvasW = size
+					let canvasH = size
+					let offsetX = 0 // 波浪线 初始x轴坐标
+					ctx.beginPath()
+					ctx.lineWidth = 1
+					for (let x = offsetX; x < canvasW; x += 20 / canvasW) {
+						// 正弦曲线公式：y = Asin(ωx+φ) + k
+						let y = waveH * Math.sin((offsetX + x) * waveW + sinX) + (1 - offsetY) * canvasH
+						ctx.lineTo(x, y)
+					}
+					// 填充背景
+					ctx.lineTo(canvasW, canvasH)
+					ctx.lineTo(offsetX, canvasH)
+					ctx.closePath()
+					ctx.fillStyle = color
+					ctx.fill()
+				}
+
+
+				// 绘制 波浪
+				const lightColor = toRgba(props.waveColor, 0.4)
+				function draw(count : number) {
+					ctx.reset()
+					offsetY = current.value / 100
+					sinX = count * speed
+					drawWave(sinX + 3, offsetY - 0.01, 0.08, 6, lightColor)
+					drawWave(sinX, offsetY, 0.08, 4, props.waveColor)
+					ctx.update()
+				}
+
+				let count : number = 0
+				let animate: ((timestamp : number) => void)|null = null
+				animate = (timestamp : number) {
+					if (lastTimestamp == 0) {
+						lastTimestamp = timestamp;
+					}
+
+					// Calculate time delta for consistent animation speed
+					const deltaTime = timestamp - lastTimestamp;
+					lastTimestamp = timestamp;
+
+					// Update count based on time delta to maintain consistent speed
+					count += 0.3 * (deltaTime / (1000 / 60)); // Adjust for 60fps baseline
+
+					draw(count);
+					animationFrameId = requestAnimationFrame(animate!);
+				}
+				 animationFrameId = requestAnimationFrame(animate!);
+			}
+			render(ctx, size)
+			// #endif
+			
+			target.value = props.percent
+		})
+	})
+	
+	watch(():number => props.percent, (v:number)=>{
+		target.value = v
+	})
+	onUnmounted(() => {
+		stopPercent()
+		 cancelAnimationFrame(animationFrameId);
+	})
+</script>
+<style lang="scss">
+	@import './index-u';
+</style>

@@ -1,0 +1,9 @@
+import { OpenSchema, CanOpenURL } from './interface.uts'
+
+export const openSchema : OpenSchema = function (url : string) : void {
+  console.warn('【openSchema】: 当前环境不支持')
+}
+
+export const canOpenURL : CanOpenURL = function (url : string) : boolean {
+  return false;
+}

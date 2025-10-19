@@ -1,0 +1,160 @@
+@import '~@/uni_modules/lime-style/index.scss';
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+$avatar: #{$prefix}-avatar;
+
+$avatar-bg-color: create-var(avatar-bg-color, $primary-color-1);
+$avatar-text-color: create-var(avatar-text-color, $primary-color);
+$avatar-circle-border-radius: create-var(avatar-circle-border-radius, $border-radius-hg);
+$avatar-square-border-radius: create-var(avatar-square-border-radius, $border-radius-md);
+
+$avatar-small-size: create-var(avatar-small-size, 36px);
+$avatar-medium-size: create-var(avatar-medium-size, 48px);
+$avatar-large-size: create-var(avatar-large-size, 64px);
+
+$avatar-small-font-size: create-var(avatar-small-font-size, 14px);
+$avatar-medium-font-size: create-var(avatar-medium-font-size, 18px);
+$avatar-large-font-size: create-var(avatar-large-font-size, 30px);
+
+$avatar-small-icon-size: create-var(avatar-small-icon-size, 20px);
+$avatar-medium-icon-size: create-var(avatar-medium-icon-size, 24px);
+$avatar-large-icon-size: create-var(avatar-large-icon-size,32px);
+
+$avatar-small-border-width: create-var(avatar-small-border-width, 1px);
+$avatar-medium-border-width: create-var(avatar-medium-border-width, 2px);
+$avatar-large-border-width: create-var(avatar-large-border-width, 3px);
+$avatar-border-color: create-var(avatar-border-color, #fff);
+
+$avatar-group-overlapping: create-var(avatar-group-overlapping, -8px);
+
+/* #ifndef UNI-APP-X */
+:host {
+	display: inline-flex;
+	vertical-align: middle;
+}
+/* #endif */
+.#{$avatar} {
+	/* #ifndef UNI-APP-X */
+	display: inline-flex;
+	white-space: nowrap;
+	text-align: center;
+	vertical-align: middle;
+	/* #endif */
+	position: relative;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	background-color: $avatar-bg-color;
+	/* #ifndef APP-ANDROID || APP-IOS || APP-HARMONY  */
+	color: $avatar-text-color;
+	/* #endif */
+	/* #ifdef APP-ANDROID || APP-IOS || APP-HARMONY  */
+	// 给APP获取颜色用
+	// border-left-color: $avatar-text-color;
+	// border-left-width: 0;
+	/* #endif */
+	width: $avatar-medium-size;
+	height: $avatar-medium-size;
+	
+	&__icon {
+		color: $avatar-text-color;
+		font-size: $avatar-medium-icon-size;
+		/* #ifndef UNI-APP-X */
+		display: inline-flex;
+		/* #endif */
+	}
+	&__text {
+		font-size: $avatar-medium-font-size;
+		/* #ifdef APP-ANDROID || APP-IOS || APP-HARMONY */
+		color: $avatar-text-color;
+		/* #endif */
+	}
+	&__image {
+	    width: 100%;
+	    height: 100%;
+	}
+	
+	&--small {
+		width: $avatar-small-size;
+		height: $avatar-small-size;
+		
+		.#{$avatar} {
+			&__icon {
+				font-size: $avatar-small-icon-size;
+			}
+			&__text {
+				font-size: $avatar-small-font-size;
+			}
+		}
+	}
+	// &--medium {
+	// 	width: $avatar-medium-size;
+	// 	height: $avatar-medium-size;
+		
+	// 	.#{$avatar} {
+	// 		&__icon {
+	// 			font-size: $avatar-medium-icon-size;
+	// 		}
+	// 		&__text {
+	// 			font-size: $avatar-medium-font-size;
+	// 		}
+	// 	}
+	// }
+	&--large {
+		width: $avatar-large-size;
+		height: $avatar-large-size;
+		
+		.#{$avatar} {
+			&__icon {
+				font-size: $avatar-large-icon-size;
+			}
+			&__text {
+				font-size: $avatar-large-font-size;
+			}
+		}
+	}
+	
+	&--circle {
+		// border-radius: $avatar-circle-border-radius;
+		@include border-radius($avatar-circle-border-radius);
+		overflow: hidden;
+		.#{$avatar} {
+			&__image {
+				// border-radius: $avatar-circle-border-radius;
+				@include border-radius($avatar-circle-border-radius);
+			}
+		}
+	}
+	
+	&--square {
+		// border-radius: $avatar-square-border-radius;
+		@include border-radius($avatar-square-border-radius);
+		overflow: hidden;
+		.#{$avatar} {
+			&__image {
+				// border-radius: $avatar-square-border-radius;
+				@include border-radius($avatar-square-border-radius);
+			}
+		}
+	}
+	
+	&--border {
+		border-color: $avatar-border-color;
+		border-style: solid;
+		&.#{$avatar} {
+			&--small {
+				border-width: $avatar-small-border-width;
+			}
+			&--medium {
+				border-width: $avatar-medium-border-width;
+			}
+			&--large {
+				border-width: $avatar-large-border-width;
+			}
+		}
+	}
+	&--overlapping {
+		margin-left: $avatar-group-overlapping;
+	}
+}

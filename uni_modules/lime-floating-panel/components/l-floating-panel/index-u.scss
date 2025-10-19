@@ -1,0 +1,63 @@
+@import '~@/uni_modules/lime-style/index.scss';
+
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+
+$floating-panel-border-radius: create-var(floating-panel-border-radius, $border-radius-xl);
+$floating-panel-header-height: create-var(floating-panel-header-height, 30px);
+$floating-panel-z-index: create-var(floating-panel-z-index, 999);
+$floating-panel-bg-color: create-var(floating-panel-bg-color, $bg-color-elevated);
+$floating-panel-bar-width: create-var(floating-panel-bar-width, 30px);
+$floating-panel-bar-height: create-var(floating-panel-bar-height, 3px);
+$floating-panel-bar-color: create-var(floating-panel-bar-color, $fill-1);
+$floating-panel-bar-radius: create-var(floating-panel-bar-radius, 3px);
+
+
+
+.l-floating-panel {
+	position: fixed;
+	left: 0;
+	// bottom: -150rpx;
+	bottom: 0;
+	width: 100%;
+	z-index: $floating-panel-z-index;
+	display: flex;
+	flex-direction: column;
+	// touch-action: none;
+	border-top-left-radius: $floating-panel-border-radius;
+	border-top-right-radius: $floating-panel-border-radius;
+	background-color: $floating-panel-bg-color;
+	transition-property: transform;
+	// transition-duration: 10ms;
+	transition-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+	// pointer-events: auto;
+	// padding-bottom: 150rpx;
+	box-sizing: content-box;
+	&--safe {
+		padding-bottom: var(--uni-safe-area-inset-bottom)
+	}
+	&__header {
+		height: $floating-panel-header-height;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		// #ifndef APP-ANDROID || APP-IOS || APP-HARMONY
+		cursor: grab;
+		user-select: none;
+		// #endif
+		&-bar {
+			height: $floating-panel-bar-height;
+			width: $floating-panel-bar-width;
+			// border-radius: $floating-panel-bar-radius;
+			@include border-radius($floating-panel-bar-radius);
+			background-color: $floating-panel-bar-color;
+		}
+	}
+	
+	&__content {
+		flex: 1;
+		background-color: $floating-panel-bg-color;
+	}
+	
+}

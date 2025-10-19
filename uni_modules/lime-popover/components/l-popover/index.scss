@@ -1,0 +1,348 @@
+@import '~@/uni_modules/lime-style/index.scss';
+
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+
+
+$popover: #{$prefix}-popover;
+// 间距
+$popover-border-radius: create-var(popover-border-radius, 6px);
+$popover-padding: create-var(popover-padding, 12px);
+$popover-line-height: create-var(popover-line-height, 24px);
+$popover-arrow-size: create-var(popover-arrow-size, 8px);
+$popover-margin: create-var(popover-margin, 8px);
+$popover-font-size: create-var(popover-font-size, $font-size);
+
+
+$popover-shadow: $shadow-3;
+
+// 动画
+$popover-flow: #{$popover}-animation;
+$popover-flow-duration: 150ms;//$anim-duration-base;
+
+
+// 主题颜色
+$popover-light-color: create-var(popover-color, $text-color-1);
+$popover-light-bg-color: create-var(popover-bg-color, $bg-color-container);
+
+$popover-dark-color: create-var(popover-color, #fff);
+$popover-dark-bg-color: create-var(popover-bg-color, $bg-color-spotlight);
+
+
+
+$popover-theme-dark-map:(
+	color: $popover-dark-color,
+	bg-color: $popover-dark-bg-color
+);
+
+$popover-theme-light-map:(
+	color: $popover-light-color,
+	bg-color: $popover-light-bg-color
+);
+
+$popover-theme-map:(
+	dark: $popover-theme-dark-map,
+	light: $popover-theme-light-map,
+);
+
+@mixin popover-theme($theme) {
+	$theme-map: map-get($popover-theme-map, $theme);
+	$color: map-get($theme-map, color);
+	$bgColor:  map-get($theme-map, bg-color);
+	
+	.#{$popover}--#{$theme} {
+		/* #ifndef UNI-APP-X && APP  */
+		color: $color;
+		/* #endif */
+		
+		.#{$popover}__text {
+			color: $color;
+		}
+		
+		.#{$popover}__content  {
+			background-color: $bgColor;
+		} 
+		
+		.#{$popover}__arrow  {
+			&--top,&--top-left,&--top-right  {
+				border-top-color: $bgColor;
+			}
+			&--bottom,&--bottom-left,&--bottom-right  {
+				border-bottom-color: $bgColor;
+			}
+			&--left,&--left-top,&--left-bottom  {
+				border-left-color: $bgColor;
+			}
+			&--right,&--right-top,&--right-bottom  {
+				border-right-color: $bgColor;
+			}
+		}  
+	}
+}
+
+
+.#{$popover} {
+	/* #ifndef UNI-APP-X && APP */
+	// display: inline-block;
+	color: $popover-light-color;
+	top: 0;
+	right: auto;
+	bottom: auto;
+	left: 0;
+	/* #endif */
+	z-index: 1500;
+	position: fixed;
+	overflow: visible;
+	max-width: 650rpx;
+	opacity: 0;
+	
+	
+	&__wrapper {
+		position: relative;
+		overflow: visible;
+		/* #ifndef UNI-APP-X && APP */
+		width: max-content;
+		/* #endif */
+	}
+	
+	&__content { 
+		overflow: visible;
+		position: relative;
+		border-radius: 6px;
+		@include border-radius($popover-border-radius);
+		@include padding($popover-padding);
+		
+		// #ifndef APP-IOS
+		box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+		/* #endif */
+		
+		/* #ifndef UNI-APP-X && APP */
+		box-shadow: $popover-shadow;
+		font-size: $popover-font-size;
+		line-height: $popover-line-height;
+		box-sizing: border-box;
+		word-break: break-all;
+		/* #endif */
+		
+		background-color: $popover-light-bg-color;
+		
+		&--top,&--top-left, &--top-right {
+			margin: 0;
+			margin-bottom: $popover-margin;
+		}
+		&--bottom,&--bottom-left, &--bottom-right {
+			margin: 0;
+			margin-top: $popover-margin;
+		}
+		&--left,&--left-top,&--left-bottom {
+			margin: 0;
+			margin-right: $popover-margin;
+		}
+		&--right,&--right-top,&--right-bottom {
+			margin: 0;
+			margin-left: $popover-margin;
+		}
+	}
+	
+	&__text {
+		font-size: $popover-font-size;
+		line-height: $popover-line-height;
+		color: $popover-light-color;
+	}
+	
+	&__arrow {
+		position: absolute;
+		border-color: transparent;
+		border-style: solid;
+		border-width: $popover-arrow-size;
+		z-index: 1;
+		
+		&--top {
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+		&--top-left {
+			bottom: 0;
+			left: $popover-padding;
+		}
+		&--top-right {
+			bottom: 0;
+			right: $popover-padding;
+		}
+		&--top,&--top-left,&--top-right  {
+			/* #ifdef UNI-APP-X && APP */
+			border-top-color: $popover-light-bg-color;
+			border-right-color: transparent;
+			border-bottom-color: transparent;
+			border-left-color: transparent;
+			border-top-width: $popover-arrow-size;
+			border-right-width: $popover-arrow-size;
+			border-left-width: $popover-arrow-size;
+			/* #endif */
+			border-bottom-width: 0;
+			/* #ifndef UNI-APP-X && APP */
+			border-top-color: $popover-light-bg-color
+			/* #endif */
+		}
+		&--bottom {
+			top: 0;
+			left: 50%;
+			transform: translate(-50%, 0);
+		}
+		&--bottom-left {
+			top: 0;
+			left: $popover-padding;
+		}
+		&--bottom-right {
+			top: 0;
+			right: $popover-padding;
+		}
+		&--bottom,&--bottom-left,&--bottom-right  {
+			/* #ifdef UNI-APP-X && APP */
+			border-top-color: transparent;
+			border-right-color: transparent;
+			border-bottom-color: $popover-light-bg-color;
+			border-left-color: transparent;
+			border-bottom-width: $popover-arrow-size;
+			border-right-width: $popover-arrow-size;
+			border-left-width: $popover-arrow-size;
+			/* #endif */
+			border-top-width: 0;
+			/* #ifndef UNI-APP-X && APP */
+			border-bottom-color: $popover-light-bg-color
+			/* #endif */
+		}
+		&--left {
+			top: 50%;
+			right: 0;
+			transform: translateY(-50%)
+		}
+		&--left-top {
+			top: $popover-padding;
+			right: 0;
+		}
+		&--left-bottom {
+			bottom: $popover-padding;
+			right: 0;
+		}
+		&--left,&--left-top,&--left-bottom  {
+			/* #ifdef UNI-APP-X && APP */
+			border-top-color: transparent;
+			border-right-color: transparent;
+			border-bottom-color: transparent;
+			border-left-color: $popover-light-bg-color;
+			border-bottom-width: $popover-arrow-size;
+			border-top-width: $popover-arrow-size;
+			border-left-width: $popover-arrow-size;
+			/* #endif */
+			border-right-width: 0;
+			/* #ifndef UNI-APP-X && APP */
+			border-left-color: $popover-light-bg-color
+			/* #endif */
+		}
+		&--right {
+			top: 50%;
+			left: 0;
+			transform: translateY(-50%);
+		}
+		&--right-top {
+			top: $popover-padding;
+			left: 0;
+		}
+		&--right-bottom {
+			bottom: $popover-padding;
+			left: 0;
+		}
+		&--right,&--right-top,&--right-bottom  {
+			/* #ifdef UNI-APP-X && APP */
+			border-top-color: transparent;
+			border-right-color: $popover-light-bg-color;
+			border-bottom-color: transparent;
+			border-left-color: transparent;
+			border-bottom-width: $popover-arrow-size;
+			border-right-width: $popover-arrow-size;
+			border-top-width: $popover-arrow-size;
+			/* #endif */
+			border-left-width: 0;
+			/* #ifndef UNI-APP-X && APP */
+			border-right-color: $popover-light-bg-color
+			/* #endif */
+		}
+	}
+	
+	
+	&--top {
+		transform-origin: 50% 100%;
+	}
+	&--top-left {
+		transform-origin: 0 100%;
+	}
+	&--top-right {
+		transform-origin: 100% 100%;
+	}
+	&--bottom {
+		transform-origin: 50% 0%;
+	}
+	&--bottom-left {
+		 transform-origin: 0% 0%;
+	}
+	&--bottom-right {
+		transform-origin: 100% 0;
+	}
+	&--left {
+		 transform-origin: 100% 50%;
+	}
+	&--left-top {
+		transform-origin: 100% 0;
+	}
+	&--left-bottom {
+		transform-origin: 100% 100%;
+	}
+	&--right {
+		transform-origin: 0 50%;
+	}
+	&--right-top {
+		transform-origin: 0 0;
+	}
+	&--right-bottom {
+		transform-origin: 0 100%;
+	}
+	
+}
+
+@include popover-theme(dark);  
+@include popover-theme(light);  	
+
+
+
+// animation
+.#{$popover-flow}-enter,
+.#{$popover-flow}-enter-from,
+.#{$popover-flow}-exiting,
+.#{$popover-flow}-leave-to {
+	opacity: 0;
+	// visibility: hidden;
+    transform: scale(0.8);
+}
+
+.#{$popover-flow}-enter-to,
+.#{$popover-flow}-entering,
+.#{$popover-flow}-leave-from,
+.#{$popover-flow}-leave {
+  opacity: 1;
+  // visibility: visible;
+  transform: scale(1);
+}
+
+.#{$popover-flow}-enter-active {
+	transition-property: opacity, transform;
+	transition-duration: $popover-flow-duration;
+}
+
+.#{$popover-flow}-leave-active {
+	transition-property: opacity, transform;
+	transition-duration: $popover-flow-duration;
+	
+}

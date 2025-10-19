@@ -1,0 +1,225 @@
+<template>
+	<view class="demo-block">
+		<text class="demo-block__title-text ultra">Steps 步骤条</text>
+		<text class="demo-block__desc-text">用于任务步骤展示或任务进度展示，让用户了解当前的操作在整体流程中的位置</text>
+		<view class="demo-block__body">
+			<view class="demo-block card">
+				<text class="demo-block__title-text">基础</text>
+				<view class="demo-block__body">
+					<l-steps :current="current" @change="change">
+						<l-step title="买家下单" content="辅助信息"></l-step>
+						<l-step title="商家接单" content="辅助信息"></l-step>
+						<l-step title="买家提货" content="辅助信息"></l-step>
+						<l-step title="交易完成" content="辅助信息"></l-step>
+					</l-steps>
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">图标</text>
+				<view class="demo-block__body">
+					<l-steps :current="current2" @change="change2">
+						<l-step icon="cart" title="买家下单" content="辅助信息"></l-step>
+						<l-step icon="cart" title="商家接单" content="辅助信息"></l-step>
+						<l-step icon="cart" title="买家提货" content="辅助信息"></l-step>
+						<l-step icon="cart" title="交易完成" content="辅助信息"></l-step>
+					</l-steps>
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">简略</text>
+				<view class="demo-block__body">
+					<l-steps :current="current3" @change="change3" type="dot">
+						<l-step title="买家下单" content="辅助信息"></l-step>
+						<l-step title="商家接单" content="辅助信息" ></l-step>
+						<l-step title="买家提货" content="辅助信息"></l-step>
+						<l-step title="交易完成" content="辅助信息"></l-step>
+					</l-steps>
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">状态</text>
+				<view class="demo-block__body">
+					<l-steps :current="current" @change="change">
+						<l-step title="买家下单" content="辅助信息"></l-step>
+						<l-step title="商家接单" content="辅助信息" status="error"></l-step>
+						<l-step title="买家提货" content="辅助信息"></l-step>
+						<l-step title="交易完成" content="辅助信息"></l-step>
+					</l-steps>
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">自定义样式</text>
+				<view class="demo-block__body">
+					<l-steps :current="current" @change="change" activeColor="#FFB400" finishBgColor="rgba(255, 180, 0, 0.1)">
+						<l-step title="买家下单" content="辅助信息"></l-step>
+						<l-step title="商家接单" content="辅助信息"></l-step>
+						<l-step title="买家提货" content="辅助信息"></l-step>
+						<l-step title="交易完成" content="辅助信息"></l-step>
+					</l-steps>
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">垂直序号</text>
+				<view class="demo-block__body" style="padding-left: 20px;">
+					<l-steps :current="current4" @change="change4" layout="vertical" >
+						<l-step title="买家下单" content="辅助信息"></l-step>
+						<l-step title="商家接单" content="辅助信息"></l-step>
+						<l-step title="买家提货" content="辅助信息"></l-step>
+						<l-step title="交易完成" content="辅助信息"></l-step>
+					</l-steps>
+				</view>
+			</view>
+			
+			<view class="demo-block card">
+				<text class="demo-block__title-text">垂直图标</text>
+				<view class="demo-block__body" style="padding-left: 20px;">
+					<l-steps :current="current5" @change="change5" layout="vertical" >
+						<l-step icon="cart" title="买家下单" content="辅助信息"></l-step>
+						<l-step icon="cart" title="商家接单" content="辅助信息"></l-step>
+						<l-step icon="cart" title="买家提货" content="辅助信息"></l-step>
+						<l-step icon="cart" title="交易完成" content="辅助信息"></l-step>
+					</l-steps>
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">垂直简略</text>
+				<view class="demo-block__body" style="padding-left: 20px;">
+					<l-steps :current="current6" @change="change6" layout="vertical" type="dot">
+						<l-step title="买家下单" content="辅助信息"></l-step>
+						<l-step title="商家接单" content="辅助信息"></l-step>
+						<l-step title="买家提货" content="辅助信息"></l-step>
+						<l-step title="交易完成" content="辅助信息"></l-step>
+					</l-steps>
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">垂直自定义内容</text>
+				<view class="demo-block__body" style="padding-left: 20px;">
+					<l-steps :current="current7" @change="change7" layout="vertical" type="dot">
+						<l-step title="买家下单" content="辅助信息"></l-step>
+						<l-step title="商家接单" content="辅助信息" status="error">
+							<template #extra>
+							    <view>
+									<image
+									  src="https://gw.alipayobjects.com/mdn/rms_08e378/afts/img/A*P0S-QIRUbsUAAAAAAAAAAABkARQnAQ"
+									  alt="图标"
+									  style="width: 100%;"
+									  mode="widthFix"
+									/>
+								</view>
+							</template>
+						</l-step>
+						<l-step title="买家提货" content="辅助信息"></l-step>
+						<l-step title="交易完成" content="辅助信息"></l-step>
+					</l-steps>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script setup>
+	const current = ref(1)
+	const change = (value : number) => {
+		current.value = value;
+	}
+	
+	const current2 = ref(1)
+	const change2 = (value : number) => {
+		current2.value = value;
+	}
+	
+	const current3 = ref(1)
+	const change3 = (value : number) => {
+		current3.value = value;
+	}
+	
+	const current4 = ref(1)
+	const change4 = (value : number) => {
+		current4.value = value;
+	}
+	
+	const current5 = ref(1)
+	const change5 = (value : number) => {
+		current5.value = value;
+	}
+	
+	const current6 = ref(1)
+	const change6 = (value : number) => {
+		current6.value = value;
+	}
+	
+	const current7 = ref(1)
+	const change7 = (value : number) => {
+		current7.value = value;
+	}
+</script>
+
+<style lang="scss">
+	$card-bg-color: var(--doc-card-bg-color, white);
+	// $page-bg-color: var(--doc-page-bg-color, #f5f5f5);
+	$title-color: var(--doc-title-color, #000000E6);
+	$summary-color: var(--doc-summary-color, #00000099);
+	
+	.demo-block {
+		margin: 32px 0 0;
+	
+		// overflow: visible;
+		&.card {
+			background-color: $card-bg-color;
+			transition-property: background-color;
+			// transition-duration: 300ms;
+			padding: 30rpx 0;
+			margin-left: 10px !important;
+			margin-right: 10px !important;
+			margin-bottom: 20rpx !important;
+		}
+	
+		&__title {
+			margin: 0;
+			margin-top: 8px;
+	
+			&-text {
+				color: $summary-color;
+				font-weight: 400;
+				font-size: 14px;
+				line-height: 16px;
+				display: flex;
+				margin-left: 20px;
+	
+				&.large {
+					color: $title-color;
+					font-size: 18px;
+					font-weight: 700;
+					line-height: 26px;
+					margin-left: 20px;
+				}
+	
+				&.ultra {
+					color: $title-color;
+					font-size: 24px;
+					font-weight: 700;
+					line-height: 32px;
+				}
+			}
+		}
+	
+		&__desc-text {
+			color: $summary-color;
+			margin: 8px 16px 0 0;
+			font-size: 14px;
+			line-height: 22px;
+			margin-left: 20px;
+		}
+	
+		&__body {
+			margin: 16px 0;
+			overflow: visible;
+	
+			.demo-block {
+				// margin-top: 0px;
+				margin: 0;
+			}
+		}
+	}
+</style>

@@ -1,0 +1,85 @@
+<template>
+	<view class="l-radio-group" :class="'l-radio-group--'+ direction">
+		<slot />
+	</view>
+</template>
+<script lang="uts" setup>
+	/**
+	 * RadioGroup 单选框组容器
+	 * @description 用于管理一组 Radio 组件，提供统一的状态控制和布局
+	 * <br>插件类型：LRadioGroupComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-radio-group
+	 * 
+	 * @property {boolean} allowUncheck 允许取消选中（默认：false）
+	 * @property {boolean} disabled 禁用所有子项（默认：false，Radio.disabled优先级更高）
+	 * @property {string} name 表单字段名（用于原生表单提交）
+	 * @property {RadioValue} value 当前选中值（支持v-model）
+	 * @property {RadioValue} defaultValue 默认选中值（非受控属性）
+	 * @property {RadioValue} modelValue 模型值（推荐使用v-model）
+	 * @property {string} checkedColor 选中状态主色（默认：主题色）
+	 * @property {string} iconBgColor 图标背景色
+	 * @property {string} iconBorderColor 图标边框色
+	 * @property {string} iconDisabledColor 禁用图标颜色
+	 * @property {string} iconDisabledBgColor 禁用背景色
+	 * @property {'circle' | 'line' | 'dot'} icon 统一图标样式（覆盖子项设置）
+	 * @value circle
+	 * @value line
+	 * @value dot
+	 * @property {'small' | 'medium' | 'large'} size 统一尺寸（覆盖子项设置）
+	 * @value small
+	 * @value medium
+	 * @value large
+	 * @property {string} iconSize 统一图标尺寸（支持CSS单位）
+	 * @property {string} fontSize 统一文本字号（支持CSS单位）
+	 * @property {string} gap] 选项间距（默认：'20rpx'）
+	 * @property {'horizontal' | 'vertical'} direction 排列方向（默认：'horizontal'）
+	 * @value horizontal
+	 * @value vertical
+	 * @event {Function} change 选中值变化时触发（返回当前选中值）
+	 */
+	
+	import { RadioGroupProps } from './type';
+	
+	const emit = defineEmits(['change', 'update:modelValue'])
+	const props = withDefaults(defineProps<RadioGroupProps>(), {
+		allowUncheck: false,
+		disabled: false,
+		readonly: false,
+		direction: 'horizontal'
+		// size: 'medium'
+	})
+	const innerValue = ref<any|null>(props.defaultValue);
+	
+	const groupValue = computed({
+		set(value: any|null) {
+			innerValue.value = value
+			emit('update:modelValue', value)
+			emit('change', value)
+		},
+		get():any|null {
+			return props.value ?? props.modelValue ?? innerValue.value
+		}
+	} as WritableComputedOptions<any|null>)
+	
+	const handleRadioChange = (val: any) => {
+		if (props.allowUncheck && val == groupValue.value) {
+			groupValue.value = ''
+		} else {
+			groupValue.value = val
+		}
+	}
+	provide('limeRadioGroupProps', props)
+	provide('limeRadioGroupValue', groupValue)
+	provide('limeRadioGroupChange', handleRadioChange)
+	
+</script>
+<style lang="scss">
+	.l-radio-group {
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	.l-radio-group--vertical {
+		flex-direction: column;
+	}
+</style>

@@ -302,8 +302,8 @@
 	const actionSheetStyle = computed(() => {
 		const css = new Map<string, string | number>()
 		css.set('z-index', props.zIndex)
-		css.set('border-top-left-radius', addUnit(props.radius) as string)
-		css.set('border-top-right-radius', addUnit(props.radius) as string)
+		css.set('border-top-left-radius', addUnit(props.radius))
+		css.set('border-top-right-radius', addUnit(props.radius))
 		// #ifndef WEB
 		if (props.safeAreaInsetBottom) {
 			css.set('padding-bottom', safeBottom.value + 'px')

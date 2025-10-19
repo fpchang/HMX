@@ -1,0 +1,13 @@
+@import '@/uni_modules/lime-style/theme/dark.scss';
+
+.l-config-provider {
+	/* #ifndef UNI-APP-X && APP */
+	min-height: 100%;
+	/* #endif */
+	/* #ifdef UNI-APP-X && APP */
+	flex: 1
+	/* #endif */
+}
+.l-theme-dark {
+	@include theme-dark
+}

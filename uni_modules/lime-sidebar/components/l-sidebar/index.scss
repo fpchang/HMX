@@ -1,0 +1,27 @@
+@import '~@/uni_modules/lime-style/index.scss';
+
+$sidebar-width: create-var(sidebar-width, 103px);
+$sidebar-height: create-var(sidebar-height, 100%);
+$sidebar-background: create-var(sidebar-background, $fill-3);
+$sidebar-selected-border-radius: create-var(sidebar-selected-border-radius, 10px);
+
+.l-sidebar {
+	width:$sidebar-width;
+	height: $sidebar-height;
+	display: flex;
+    flex-direction: column;
+    // overflow-y: auto;
+	// -webkit-overflow-scrolling: touch;
+	&__content {
+		height: $sidebar-height;
+		display: flex;
+		flex-direction: column;
+	}
+	&__padding {
+	    flex: 1;
+	    background: $sidebar-background;
+	}
+	&--top {
+		border-top-right-radius: $sidebar-selected-border-radius;
+	}
+}

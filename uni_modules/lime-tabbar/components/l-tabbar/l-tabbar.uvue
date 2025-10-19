@@ -1,0 +1,131 @@
+<template>
+	<view ref="rootRef" :class="classes" :style="[styles, lStyle]">
+		<slot></slot>
+	</view>
+	<view v-if="fixed && placeholder" :style="{height: rootHeight + 'px'}"></view>
+</template>
+<script lang="uts" setup>
+	/**
+	 * Tabbar 底部导航栏组件
+	 * @description 用于实现应用底部导航功能，支持多种样式风格和交互效果
+	 * <br>插件类型：LTabbarComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-tabbar
+	 * 
+	 * @property {boolean} bordered 显示外边框（默认：true）
+	 * @property {boolean} fixed 固定在底部（默认：true）
+	 * @property {boolean} safeAreaInsetBottom 适配iPhoneX底部安全区（默认：true）
+	 * @property {'normal' | 'round'} shape 标签栏形状（默认："normal"）
+	 * @value normal
+	 * @value round
+	 * @property {boolean} split 显示分割线（默认：true）
+	 * @property {'normal' | 'tag'} theme 选项风格（默认："normal"）
+	 * @value normal
+	 * @value tag
+	 * @property {string} value 当前选中值（兼容旧版）
+	 * @property {string} defaultValue 默认选中值（非受控属性）
+	 * @property {string} modelValue 当前选中值（推荐使用v-model）
+	 * @property {boolean} placeholder 固定时生成占位元素（默认：false）
+	 * @property {string} activeColor 选中项颜色（默认：主题色）
+	 * @property {string} color 未选中项颜色（默认："#7d7e80"）
+	 * @property {string} lStyle 自定义样式（CSS字符串）
+	 * @property {string} activeBgColor 选中项背景色
+	 * @property {string} bgColor 背景颜色
+	 * @property {number} zIndex 层级（默认：100）
+	 * @property {string} iconSize 图标尺寸（支持CSS单位）
+	 * @property {string} fontSize 文字大小（支持CSS单位）
+	 * @event {Function} change 选项变化时触发（返回选中值）
+	 */
+	
+	import { addUnit } from '@/uni_modules/lime-shared/addUnit';
+	import { TabbarProps, TabbarProvide } from './type'
+
+	const name = 'l-tabbar'
+	const emit = defineEmits(['change', 'update:modelValue'])
+	const props = withDefaults(defineProps<TabbarProps>(), {
+		bordered: true,
+		fixed: true,
+		safeAreaInsetBottom: true,
+		shape: 'normal',
+		theme: 'normal',
+		split: true,
+		placeholder: true,
+		// #ifdef APP-ANDROID || APP-IOS
+		// color: 'rgba(0,0,0,0.8)',
+		// activeColor: '#3283ff'
+		// #endif
+	});
+	
+	const innerValue = ref('0');
+	const activeValue = computed({
+		set(value: string) {
+			emit('change', value)
+			emit('update:modelValue', value)
+			innerValue.value = value
+		},
+		get():string {
+			return props.value ?? props.modelValue ?? innerValue.value
+		}
+	} as WritableComputedOptions<string>);
+	
+	const defaultIndex = ref(-1)
+	// @ts-ignore
+	const children = ref<LTabbarItemComponentPublicInstance[]>([])
+	
+	const rootRef = ref<UniElement|null>(null)
+	const rootHeight = ref(0)
+	// const safeAreaBottom = uni.getWindowInfo().safeAreaInsets.bottom;
+	
+	const classes = computed(():Map<string, any>=>{
+		const cls = new Map<string, any>();
+		cls.set(`${name}`, true)
+		cls.set(`${name}--bordered`, props.bordered)
+		cls.set(`${name}--fixed`, props.fixed)
+		cls.set(`${name}--safe`, props.safeAreaInsetBottom)
+		cls.set(`${name}--${props.shape}`, true)
+		return cls
+	})
+	const styles = computed(():Map<string, any>=>{
+		const style = new Map<string, any>();
+		if(props.zIndex != null) {
+			style.set('z-index', props.zIndex!)
+		}
+		if(props.bgColor != null) {
+			style.set('background', props.bgColor!)
+		}
+		// if(props.safeAreaInsetBottom && safeAreaBottom > 0){
+		// 	const size = addUnit(safeAreaBottom)
+		// 	if (props.shape == 'normal') {
+		// 		style.set('padding-bottom', size)
+		// 	}
+		// 	if (props.fixed && props.shape == 'round') {
+		// 		style.set('bottom', size)
+		// 	}
+		// }
+		return style
+	})
+	
+	const updateChild = (currentValue: string)=>{
+		activeValue.value = currentValue
+	}
+	
+	provide('limeTabbar', { 
+		props,
+		defaultIndex, 
+		activeValue,
+		updateChild,
+		children
+	} as TabbarProvide)
+	
+	onMounted(()=>{
+		if (!props.placeholder) return;
+		nextTick(()=>{
+			rootRef.value?.getBoundingClientRectAsync()?.then(res => {
+				rootHeight.value = res.height
+			})
+			// rootHeight.value = rootRef.value?.offsetHeight??0
+		})
+	})
+</script>
+<style lang="scss">
+	@import './index-u';
+</style>

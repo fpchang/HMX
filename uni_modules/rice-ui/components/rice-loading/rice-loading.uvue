@@ -94,7 +94,7 @@
 
 	const circularStyle = computed(() => {
 		const css = new Map<string, string>()
-		const size = addUnit(props.size!) as string
+		const size = addUnit(props.size!)
 		css.set('height', size)
 		css.set('width', size)
 		return css
@@ -102,7 +102,7 @@
 
 	const semicircleStyle = computed(() => {
 		const css = new Map<string, string>()
-		const size = addUnit(props.size!) as string
+		const size = addUnit(props.size!)
 		css.set('height', size)
 		css.set('width', size)
 		const hasColor = hasStrValue(props.color)
@@ -134,7 +134,7 @@
 			css.set('color', props.textColor!)
 		}
 		if (hasStrValue(props.textSize)) {
-			css.set('font-size', addUnit(props.textSize!) as string)
+			css.set('font-size', addUnit(props.textSize!))
 		}
 		return css
 	})

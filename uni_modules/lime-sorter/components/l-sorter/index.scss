@@ -1,0 +1,78 @@
+@import '~@/uni_modules/lime-style/index.scss';
+$prefix: l !default;
+$sorter: #{$prefix}-sorter;
+
+$sorter-font-size: create-var(sorter-font-size, 15px);
+$sorter-color: create-var(sorter-color, $text-color-1);
+$sorter-arrow-size: create-var(sorter-arrow-size, 6px);
+$sorter-arrow-color: create-var(sorter-arrow-color, $gray-5);
+$sorter-arrow-active-color: create-var(sorter-arrow-active-color, $primary-color);
+
+
+.#{$sorter} {
+	/* #ifndef APP-ANDROID || APP-IOS || APP-HARMONY */
+	display: inline-flex;
+	font-size: $sorter-font-size;
+	color: $sorter-color;
+	/* #endif */
+	flex-direction: row;
+	align-items: center;
+	&__label {
+		font-size: $sorter-font-size;
+		color: $sorter-color;
+	}
+	&__inner {
+		margin-left: 8rpx;
+		margin-right: 8rpx;
+		/* #ifdef APP-ANDROID || APP-IOS || APP-HARMONY  */
+		// 用于给APP获取颜色用
+		border-left-color: $sorter-arrow-active-color;
+		border-left-width: 0;
+		border-right-color: $sorter-arrow-color;
+		border-right-width: 0;
+		/* #endif */
+		/* #ifndef APP-ANDROID || APP-IOS || APP-HARMONY  */
+		display: inline-flex;
+		align-items: center;
+		color: $sorter-arrow-color;
+		flex-direction: column;
+		&::before,&::after {
+			content: '';
+			border-color: transparent;
+			border-style: solid;
+			border-width: $sorter-arrow-size;
+		}
+		&::before {
+			border-right-width: calc($sorter-arrow-size * 0.8);
+			border-left-width: calc($sorter-arrow-size * 0.8);
+			border-top-width: 0;
+			border-bottom-color: currentColor
+			// content: '▲';
+		}
+		&::after {
+			border-right-width: calc($sorter-arrow-size * 0.8);
+			border-left-width: calc($sorter-arrow-size * 0.8);
+			border-bottom-width: 0;
+			border-top-color: currentColor;
+			margin-top: 4px;
+			// content: '▼';
+		}
+		/* #endif */
+	}
+	/* #ifndef APP-ANDROID || APP-IOS || APP-HARMONY */
+	&--up {
+		.#{$sorter}__inner {
+			&::before {
+				color: $sorter-arrow-active-color;
+			}
+		}
+	}
+	&--down {
+		.#{$sorter}__inner {
+			&::after {
+				color: $sorter-arrow-active-color;
+			}
+		}
+	}
+	/* #endif */
+}

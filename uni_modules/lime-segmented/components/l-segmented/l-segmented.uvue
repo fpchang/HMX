@@ -1,0 +1,214 @@
+<template>
+	<view ref="resizeRef" class="l-segmented" 
+		:style="[styles]"
+		:class="[
+			'l-segmented--' + shape,
+			'l-segmented--' + type,
+			disabled ? 'l-segmented--disabled' : '']" >
+		<text class="l-segmented__item" v-for="(text, index) in options" :key="text+key" 
+			:style="[
+				textStyle,
+				activeColor != null && index == activeValue ? 'color:' + activeColor : '',
+				sliderColor != null ? 
+					'background:' + ((index == activeValue && type == 'button') ? sliderColor : 'transparent')
+					: '']"
+			:class="[{
+				'l-segmented__item--first': index == 0,
+				'l-segmented__item--last': index == options.length - 1,
+				'l-segmented__item--active': index == activeValue,
+				'l-segmented__item--disabled': disabled},  
+				'l-segmented__item--' + size,
+				'l-segmented__item--' + shape,
+				]"
+			@click="handleClick(index)">{{text}}</text>
+		<view ref="sliderRef" class="l-segmented__slider" 
+			v-if="type != 'button'"
+			:style="[sliderStyle]"
+			:class="[{
+				'l-segmented__slider--transition': initialized && immediate || !immediate,
+				'l-segmented__slider--disabled':  disabled},
+				'l-segmented__slider--' + shape,
+				'l-segmented__slider--' + type]">
+		</view>
+	</view>
+</template>
+<script lang="uts" setup>
+	/**
+	 * Segmented 分段控制器组件
+	 * @description 用于在多个选项间快速切换，支持多种样式风格
+	 * <br>插件类型：LSegmentedComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-segmented
+	 * 
+	 * @property {string[]} options 选项列表（必填）
+	 * @property {number} value 当前选中索引（支持v-model）
+	 * @property {'small' | 'medium' | 'large'} size 组件尺寸（默认：'medium'）
+	 * @value small
+	 * @value medium
+	 * @value large
+	 * @property {'normal' | 'round'} shape 组件形状（默认：'normal'）
+	 * @value normal
+	 * @value round
+	 * @property {boolean} disabled 是否禁用（默认：false）
+	 * @property {'button' | 'card' | 'text'} type 显示类型（默认：'card'）
+	 * @value button
+	 * @value card
+	 * @value text
+	 * @property {string} bgColor 背景颜色
+	 * @property {string} activeColor 选中项颜色（默认：主题色）
+	 * @property {string} color 文字颜色
+	 * @property {string} sliderColor 滑块颜色（优先级高于activeColor）
+	 * @property {string} fontSize 文字大小（支持CSS单位）
+	 * @property {string} height 组件高度（支持CSS单位）
+	 * @property {string} padding 内边距（支持CSS简写）
+	 * @property {boolean} immediate 是否跳过首次动画（默认：false）
+	 * @event {Function} change 选项变化时触发（返回选中索引）
+	 * @event {Function} click 点击时触发
+	 */
+	import { SegmentedProps } from './type';
+	// #ifndef APP || WEB
+	import { getAllRect } from '@/uni_modules/lime-shared/getRect';
+	const instance = getCurrentInstance().proxy!
+	// #endif
+	
+	const emits = defineEmits(['change','click'])
+	const props = withDefaults(defineProps<SegmentedProps>(), {
+		shape: 'normal',
+		type: 'card',
+		size: 'medium',
+		disabled: false,
+		options: [] as string[],
+		immediate: false
+	})
+	
+	const modelValue = defineModel({type: Number, default: 0})
+	const activeValue = computed({
+		set(value: number) {
+			modelValue.value = value;
+			emits('change', value)
+		},
+		get():number {
+			return props.value ?? modelValue.value 
+		}
+	} as WritableComputedOptions<number>)
+	
+	
+	
+	const styles = computed(():Map<string, any> => {
+		const style = new Map<string, any>();
+		if(props.bgColor != null) {
+			style.set('background-color', props.bgColor!)
+		}
+		if(props.type == 'button' && props.sliderColor != null) {
+			style.set('border-color', props.sliderColor!)
+		}
+		if(props.padding != null) {
+			style.set('padding', props.padding!)
+		}
+		return style
+	})
+	
+	const textStyle = computed(():Map<string, any> =>{
+		const style = new Map<string, any>();
+		if(props.height != null) {
+			style.set('height', props.height!);
+			style.set('line-height', props.height!);
+		}
+		if(props.fontSize != null) {
+			style.set('font-size', props.fontSize!);
+		}
+		if(props.color != null) {
+			style.set('color', props.color!);
+		}
+		if(props.sliderColor != null && props.type == 'button') {
+			style.set('border-left-color', props.sliderColor!)
+		}
+		return style
+	})
+	const sliderStyle = computed(():Map<string, any> =>{
+		const style = new Map<string, any>();
+		if(props.sliderColor != null) {
+			style.set('background-color', props.sliderColor!);
+		}
+		return style
+	})
+	
+	const resizeRef = ref<UniElement|null>(null);
+	const sliderRef = ref<UniElement|null>(null);
+	const initialized = ref(false)
+	
+	const updateStyle = async ()=> {
+		if(props.options.length == 0 || props.type == 'button' || resizeRef.value == null) return;
+		// app children 存在空节点
+		const rect = await resizeRef.value!.getBoundingClientRectAsync()! as DOMRect
+		// const itemRect = await item.getBoundingClientRectAsync() as DOMRect
+		// #ifdef APP || WEB
+		const index = activeValue.value + (resizeRef.value!.children.length - props.options.length - 1) / 2;
+		const item = resizeRef.value!.children[index].getBoundingClientRect()
+		const offset = item.left - rect.left
+		// #endif
+		// #ifndef APP || WEB
+		const children = await getAllRect('.l-segmented__item', instance)
+		const item = children[activeValue.value]
+		const offset = item.left - rect.left ;
+		// #endif
+		const half = props.type == 'text' ? item.width / 2 : 0;
+		if(props.type == 'card') {
+			sliderRef.value?.style.setProperty('height', `${item.height}px`)
+		}
+		sliderRef.value?.style.setProperty('width', `${props.type == 'text' ? half : item.width}px`)
+		sliderRef.value?.style.setProperty('transform', `translateX(${offset + half / 2}px)`)
+		
+		if (!initialized.value && props.immediate) {
+			setTimeout(() => {
+				initialized.value = true
+			},10)
+		}		
+	}
+	
+	
+	
+	const stopValueWatch = watch(activeValue,(_v:number)=>{
+		updateStyle()
+	})
+		
+	const handleClick = (index: number) => {
+		if(props.disabled) return
+		activeValue.value = index;
+		emits('click', index)
+	}
+	// 由于ios 一开始v-show隐藏再显示时，文本样式不生效，故强制更新
+	const key = ref(0)
+	// #ifdef APP || WEB
+	const resizeObserver = new UniResizeObserver((entries : Array<UniResizeObserverEntry>) => {
+		updateStyle()
+	}) 
+	const stopWatch = watch(resizeRef, (el:UniElement|null) => {
+		if(el== null) return
+		resizeObserver.observe(el)
+		// #ifdef APP-IOS
+		requestAnimationFrame(updateStyle)
+		nextTick(()=>{
+			requestAnimationFrame(()=>{
+				key.value++
+			})
+			
+		})
+		// #endif
+	})
+	onUnmounted(()=>{
+		stopWatch()
+		stopValueWatch()
+		resizeObserver.disconnect()
+	})
+	// #endif
+	// #ifndef APP || WEB
+	onMounted(()=>{
+		updateStyle()
+	})
+	onUnmounted(stopValueWatch)
+	// #endif
+	
+</script>
+<style lang="scss">
+	@import './index';
+</style>

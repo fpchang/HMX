@@ -1,0 +1,168 @@
+@import '@/uni_modules/lime-style/index.scss';
+
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+
+$keyicon: keyicon;
+
+/* #ifndef APP-NVUE || APP-ANDROID || APP-IOS || APP-HARMONY */
+@font-face {
+  font-family: $keyicon;
+  src: url('https://at.alicdn.com/t/c/font_4741157_ul7wcp52yys.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+/* #endif */
+
+/* #ifdef APP-ANDROID || APP-IOS || APP-HARMONY */
+@import '../../../lime-icon/components/l-icon/icon.scss';
+@font-face {
+  font-family: $keyicon;
+  src: url('@/uni_modules/lime-keyboard/hybrid/html/key.ttf');
+}
+/* #endif */
+
+
+$keyboard: #{$prefix}-keyboard;
+$keyboard-bg-color: create-var(keyboard-bg-color, #E5E7EB);
+$keyboard-color: create-var(keyboard-color, $text-color-1);
+$keyboard-border-radius: create-var(keyboard-border-radius, $border-radius);
+$keyboard-key-bg-color: create-var(keyboard-key-bg-color, #fff);
+$keyboard-key-hover-bg-color: create-var(keyboard-key-hover-bg-color, rgba(255,255,255,0.6));
+$keyboard-key-border-radius: create-var(keyboard-key-border-radius, $border-radius);
+
+$keyboard-key-gap: create-var(keyboard-key-gap, 6px);
+
+$keyboard-close-bg-color: create-var(keyboard-close-bg-color, $primary-color);
+$keyboard-close-hover-bg-color: create-var(keyboard-close-hover-bg-color, $primary-color-7);
+
+$keyboard-key-height: create-var(keyboard-key-height, 55px);
+$keyboard-font-size: create-var(keyboard-font-size, $font-size-heading-3);
+
+$keyboard-mini-key-height: create-var(keyboard-mini-key-height, 42px);
+$keyboard-mini-font-size: create-var(keyboard-mini-font-size, $font-size-md);
+
+$keyboard-icon-size: create-var(keyboard-icon-size, $font-size-heading-2);
+$keyboard-icon-font-size: create-var(keyboard-icon-font-size, 18px);
+$keyboard-icon-bg-color: create-var(keyboard-icon-bg-color, white);
+$keyboard-icon-color: create-var(keyboard-icon-color, $text-color-3);
+
+
+.#{$keyboard} {
+	background-color: $keyboard-bg-color;
+	padding-bottom: 22px;
+	// border-radius: $keyboard-border-radius $keyboard-border-radius 0 0;
+	@include border-radius($keyboard-border-radius $keyboard-border-radius 0 0);
+	&__header {
+		display: flex;
+		flex-direction: row;
+		height: 60px;
+		align-items: center;
+	}
+	&__title {
+		flex: 1;
+		font-size: 18px;
+		color: $keyboard-color;
+		text-align: center;
+		font-weight: bold;
+	}
+	&__value {
+		flex: 1;
+		padding-left: $spacer-sm;
+		color: $keyboard-color;
+		font-size: 18px;
+		text-align: center;
+	}
+	&__icon {
+		font-family: $prefix;
+		color: $keyboard-icon-color !important;
+		font-size: $keyboard-icon-font-size;
+		&-right {
+			right: 0;
+		}
+		&-wrap {
+			display: flex;
+			width: $keyboard-icon-size;
+			height: $keyboard-icon-size;
+			background-color: $keyboard-icon-bg-color;
+			border-radius: 99px;
+			justify-content: center;
+			align-items: center;
+			margin: 0 $spacer-sm;
+			position: absolute;
+			z-index: 1;
+		}
+	}
+	&__body {
+		margin-left: $keyboard-key-gap;
+		flex-direction: row;
+	}
+	&__keys {
+		/* #ifndef APP-ANDROID || APP-IOS || APP-HARMONY */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		flex-wrap: wrap;
+		flex: 3;
+	}
+	&__sidebar {
+		flex: 1;
+	}
+	&__key {
+		&-wrap{
+			box-sizing: border-box;
+			flex-basis: 33.33%;
+			padding-right: $keyboard-key-gap;
+			padding-bottom: $keyboard-key-gap;
+			&--wider {
+				flex-basis: 66.66%;
+				flex-shrink: 1;
+				flex-grow: 1;
+			}
+		}
+		&--text {
+			font-size: $keyboard-font-size;
+			color: $keyboard-color;
+			font-family: $keyicon;
+			line-height: $keyboard-key-height;
+		}
+		display: flex;
+		background-color: $keyboard-key-bg-color;
+		// border-radius: $keyboard-key-border-radius;
+		@include border-radius($keyboard-key-border-radius);
+		padding: 0;
+		height: $keyboard-key-height;
+		border: 0rpx solid rgba(0, 0, 0, 0);//安卓在hbx4.51无法设置为none
+		// box-shadow: $shadow-1;
+		/* #ifndef APP-ANDROID || APP-IOS || APP-HARMONY */
+		justify-content: center;
+		align-items: center;
+		/* #endif */
+		&-close {
+			background-color: $keyboard-close-bg-color;
+			&--text,.l-keyboard__key--text {
+				color: white;
+				font-size: 20px;
+			}
+			&--hover {
+				background-color: $keyboard-close-hover-bg-color;
+			}
+		}
+		&--hover {
+			background-color: $keyboard-key-hover-bg-color;
+		}
+		&--mini {
+			line-height: $keyboard-mini-key-height;
+			height: $keyboard-mini-key-height;
+			font-size: $keyboard-mini-font-size;
+			border-radius: $spacer-tn;
+		}
+		/* #ifndef APP-ANDROID || APP-IOS || APP-HARMONY */
+		&:after {
+			display: none;
+		}
+		/* #endif */
+	}
+}
+

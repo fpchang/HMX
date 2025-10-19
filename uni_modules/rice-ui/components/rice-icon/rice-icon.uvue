@@ -58,7 +58,7 @@
 
 	const iconStyle = computed(() => {
 		const css = new Map<string, string>()
-		if (props.size != null) css.set('font-size', addUnit(props.size!) as string)
+		if (props.size != null) css.set('font-size', addUnit(props.size!))
 		if (hasStrValue(props.color)) css.set('color', props.color!)
 		if (props.fontFamily != null) css.set('font-family', props.fontFamily)
 		return css
@@ -67,9 +67,9 @@
 	const imageStyle = computed(() => {
 		const css = new Map<string, string>()
 		if (hasStrValue(props.size)) {
-			const size = addUnit(props.size!) as string
-			css.set('height', addUnit(size) as string)
-			css.set('width', addUnit(size) as string)
+			const size = addUnit(props.size!)
+			css.set('height', addUnit(size))
+			css.set('width', addUnit(size))
 		}
 		return css
 	})

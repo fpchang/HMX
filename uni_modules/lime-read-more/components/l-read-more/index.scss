@@ -1,0 +1,89 @@
+@import '@/uni_modules/lime-style/index.scss';
+// $prefix: l !default;
+$read-more: #{$prefix}-read-more;
+
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+
+$read-more-handle-color: create-var(read-more-handle-color, $text-color-3);
+$read-more-handle-disabled-color: create-var(read-more-handle-disabled-color, $text-color-3);
+$read-more-handle-padding: create-var(read-more-handle-padding, 10px);
+$read-more-handle-gap: create-var(read-more-handle-gap, 4px);
+
+$read-more-read-start: create-var(read-more-read-start, rgba(255, 255, 255, 0.9));
+$read-more-read-end: create-var(read-more-read-end, rgba(255, 255, 255, 0.3));
+
+$read-more-font-size: create-var(read-more-font-size, $font-size);
+$read-more-icon-size: create-var(read-more-icon-size, $font-size-md);
+
+$read-more-mask-bg-color: create-var(read-more-mask-bg-color, linear-gradient(
+					to top, 
+					rgba(255, 255, 255, 0.9), 
+					rgba(255, 255, 255, 0.3)
+				));
+
+
+.#{$read-more} {
+	position: relative;
+	&__content {
+		transition: height 300ms;
+		overflow: hidden;
+	}
+	&__mask {
+		position: absolute;
+		height: 100%;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		transition: opacity 300ms;
+		pointer-events: none;
+		/* #ifdef APP-IOS */
+		// 不生效
+		background: $read-more-mask-bg-color;
+		/* #endif */
+		/* #ifndef APP-IOS */
+		background-image: linear-gradient(
+					to top, 
+					$read-more-read-start, 
+					$read-more-read-end
+				);
+		/* #endif */
+		
+	}
+	&__handle {
+		/* #ifndef UNI-APP-X */
+		display: flex;
+		/* #endif */
+		z-index: 1;
+		position: relative;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		@include padding($read-more-handle-padding);
+		&--disabled {
+			opacity: 0.5;
+		}
+		/* #ifndef APP-ANDROID || APP-IOS || APP-HARMONY */
+		color: $read-more-handle-color;
+		font-size: $read-more-font-size;
+		&--disabled {
+			cursor: no-drop;
+		}
+		/* #endif */ 
+		/* #ifdef APP-ANDROID || APP-IOS || APP-HARMONY */
+		&-icon,&-text{
+			color: $read-more-handle-color;
+		}
+		&-text {
+			font-size: $read-more-font-size;
+		}
+		&-icon {
+			font-size: $read-more-icon-size;
+		}
+		/* #endif */ 
+		&-icon {
+			margin-left: $read-more-handle-gap;
+		}
+	}
+}

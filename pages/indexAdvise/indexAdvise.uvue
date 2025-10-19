@@ -18,28 +18,28 @@
 				<view class="title">功能</view>
 				<view class="content">
 					<view class="control-item-group">
-						<view><l-icon name="solar:reorder-bold" size="80px" color="#4f99fd" /></view>
-						<view><text style="color: #fff">订单管理</text></view>
+						<!-- <view><l-icon name="solar:reorder-bold" size="80px" color="#4f99fd" /></view>
+						 --><view><text style="color: #fff">订单管理</text></view>
 					</view>
 					<view class="control-item-group">
-						<view><l-icon name="solar:calendar-date-bold-duotone" size="80px" color="#34ce84" /></view>
-						<view><text style="color: #fff">房态管理</text></view>
+						<!-- <view><l-icon name="solar:calendar-date-bold-duotone" size="80px" color="#34ce84" /></view>
+						 --><view><text style="color: #fff">房态管理</text></view>
 					</view>
 					<view class="control-item-group">
-						<view><l-icon name="ic:sharp-maps-home-work" size="80px" color="#905d3e" /></view>
-						<view><text style="color: #fff">房型管理</text></view>
+						<!-- <view><l-icon name="ic:sharp-maps-home-work" size="80px" color="#905d3e" /></view>
+						 --><view><text style="color: #fff">房型管理</text></view>
 					</view>
 					<view class="control-item-group">
-						<view><l-icon name="material-symbols:bar-chart-4-bars" size="80px" color="orange" /></view>
-						<view><text style="color: #fff">财务管理</text></view>
+						<!-- <view><l-icon name="material-symbols:bar-chart-4-bars" size="80px" color="orange" /></view>
+						 --><view><text style="color: #fff">财务管理</text></view>
 					</view>
 					<view class="control-item-group">
-						<view><l-icon name="icon-park-solid:people-plus-one" size="80px" color="green" /></view>
-						<view><text style="color: #fff">员工账号</text></view>
+					<!-- 	<view><l-icon name="icon-park-solid:people-plus-one" size="80px" color="green" /></view>
+						 --><view><text style="color: #fff">员工账号</text></view>
 					</view>
 					<view class="control-item-group">
-						<view><l-icon name="majesticons:monitor" size="80px" color="#fff" /></view>
-						<view><text style="color: #fff">店铺信息展示</text></view>
+						<!-- <view><l-icon name="majesticons:monitor" size="80px" color="#fff" /></view>
+						 --><view><text style="color: #fff">店铺信息展示</text></view>
 					</view>
 					<view class="cs"></view>
 					<view class="cs"></view>
@@ -118,7 +118,7 @@
 			console.log("验证token");
 			//const res = await store.dispatch("loginEvent");
 			//console.log("验证token结果", res);
-			accessin();
+			//accessin();
 		} catch (error) {
 			console.log("err", error);
 
@@ -192,10 +192,6 @@
 			info: "酒店管理",
 		},
 	];
-
-	onLoad(() => {
-
-	});
 	const navTopHeight = computed(() => {
 		// #ifdef MP-WEIXIN
 		return "100px";
@@ -204,8 +200,8 @@
 		//return this.isPcShow? "0px" : "70px";
 		return "70px";
 	});
-	const refrush = (e) => {
-		console.log(e);
+	const refrush = () => {
+		console.log();
 		refresher_triggered.value = true;
 		setTimeout(() => {
 			refresher_triggered.value = false;

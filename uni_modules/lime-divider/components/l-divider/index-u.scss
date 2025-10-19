@@ -1,0 +1,131 @@
+@import '@/uni_modules/lime-style/index.scss';
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+$divider: l-divider;
+$divider-color: create-var(divider-color, $border-color-2) !default;
+$divider-text-color: create-var(divider-text-color, $text-color-3) !default;
+$divider-font-size: create-var(divider-font-size, 12px) !default;
+$divider-line-height: create-var(divider-line-height, 20px) !default;
+$divider-line-style: create-var(divider-line-style, solid);
+$divider-margin: create-var(divider-margin, 10px);
+
+
+/* #ifdef MP */
+:host {
+	align-self: stretch;
+	display: flex;
+}
+/* #endif*/
+
+
+.#{$divider} {
+	flex-direction: row;
+	/* #ifdef MP */
+	flex:1;
+	/* #endif*/
+	display: flex;
+	/* #ifdef APP-NVUE || UNI-APP-X && APP */
+	&__before,
+	&__after,
+	/* #endif */ 
+	/* #ifndef APP-NVUE || UNI-APP-X && APP */
+	&::before,
+	&::after
+	/* #endif */
+	{
+		/* #ifndef APP-NVUE || UNI-APP-X && APP */
+		content: '';
+		display: block;
+		/* #endif */
+		flex: 1;
+		box-sizing: border-box;
+	}
+	&--horizontal {
+		align-items: center;
+		margin-top: $divider-margin;
+		margin-bottom: $divider-margin;
+		/* #ifdef APP-NVUE || UNI-APP-X && APP */
+		.l-divider__before,
+		.l-divider__after,
+		/* #endif */
+		/* #ifndef APP-NVUE || UNI-APP-X && APP */
+		&::before,
+		&::after 
+		/* #endif */
+		{
+			border-top-color: $divider-color;
+			border-top-style: $divider-line-style;
+			border-top-width: 1px;
+			// transform: scaleY(0.6);
+		}
+		
+		.l-divider__content {
+			margin: 0 24rpx;
+		}
+	}
+	&--vertical {
+		align-self: stretch;
+		flex-direction: column;
+		@include margin(0 $divider-margin);
+		/* #ifdef APP-NVUE || UNI-APP-X && APP */
+		.l-divider__before,
+		.l-divider__after,
+		/* #endif */
+		/* #ifndef APP-NVUE || UNI-APP-X && APP */
+		&::before,
+		&::after 
+		/* #endif */
+		{
+			border-left-color: $divider-color;
+			border-left-style: $divider-line-style;
+			border-left-width: 1px;
+			// transform: scaleX(0.6);
+		}
+	
+		&-center {
+			align-items: center;
+			height: 100%;
+		}
+		.#{$divider}  {
+			&__content {
+				line-height: 1.2;
+				/* #ifndef UNI-APP-X && APP */
+				width: 1em;
+				/* #endif */
+			}
+		}
+	}
+	&--dashed {
+		--l-divider-line-style: dashed;
+		// border-style: dashed;
+	}
+	/* #ifdef APP-NVUE || UNI-APP-X && APP */
+	&--left .l-divider__before,
+	&--right .l-divider__after 
+	/* #endif */
+	/* #ifndef APP-NVUE || UNI-APP-X && APP */
+	&--left::before,
+	&--right::after 
+	/* #endif */
+	{
+		max-width: 60rpx;
+	}
+	
+	&__content {
+		font-size: $divider-font-size;
+		line-height: $divider-line-height;
+		color: $divider-text-color;
+	}
+	/* #ifdef UNI-APP-X && APP */
+	&--vertical {
+		align-self: stretch;
+		width: $divider-font-size;
+		.#{$divider}  {
+			&__content {
+				line-height: 1.2;
+			}
+		}
+	}
+	/* #endif */
+}

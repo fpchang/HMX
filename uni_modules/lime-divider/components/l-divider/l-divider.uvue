@@ -1,0 +1,99 @@
+<template>
+	<view class="l-divider" :class="classes" :style="[styles]" ref="resizeRef">
+		<!-- #ifdef APP-ANDROID || APP-IOS || APP-HARMONY -->
+		<view class="l-divider__before"></view>
+		
+		<text class="l-divider__content" v-if="content != null || $slots['default'] != null">
+			<slot>{{content}}</slot>
+		</text>
+		<view class="l-divider__after"></view>
+		<!-- #endif -->
+		
+		<!-- #ifndef APP-ANDROID || APP-IOS || APP-HARMONY -->
+		<view class="l-divider__content" v-if="hasContent">
+			<slot>{{content}}</slot>
+		</view>
+		<!-- #endif -->
+	</view>
+</template>
+<script lang="uts" setup>
+	/**
+	 * LimeDivider 分割线
+	 * @description 分割线
+	 * <br> 插件类型：LDividerComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-divider
+	 * @property {Boolean} dashed 是否使用虚线
+	 * @property {String} content 文本
+	 * @property {Boolean} align = [left|right|center] 内容位置
+	 * @value left	 align 靠左
+	 * @value right	 align 靠右
+	 * @value center align 居中
+	 */
+	import { DividerProps } from './type';
+	// #ifdef APP-ANDROID || APP-IOS || APP-HARMONY
+	// #endif
+	const props = withDefaults(defineProps<DividerProps>(),{
+		align: 'center',
+		dashed: false,
+		vertical: false
+	})
+	
+	const slots = defineSlots()
+	
+	const hasContent = computed(():boolean => slots['default'] != null || props.content != null)
+	const classes = computed(():Map<string, any> =>{
+		const cls = new Map<string, any>();
+		const direction = props.vertical ? 'vertical' : 'horizontal';
+		const borderStyle = props.dashed ? 'dashed' : 'solid';
+		const name = 'l-divider'
+		cls.set(`${name}--${direction}`, true)
+		cls.set(`${name}--${props.align}`, true)
+		cls.set(`${name}--${borderStyle}`, true)
+		return cls
+	})
+	const styles = computed(():Map<string, any> =>{
+		const style = new Map<string, any>();
+		if(props.color != null) {
+			style.set('--l-divider-color', props.color!)
+		}
+		if(props.textColor != null) {
+			style.set('--l-divider-text-color', props.textColor!)
+		}
+		return style
+	})
+	
+	
+	// #ifdef APP-ANDROID || APP-IOS || APP-HARMONY
+	// const resizeRef = ref<UniElement|null>(null)
+	// const resizeInnerRef = ref<UniElement|null>(null)
+	// const init = ref(false)
+	// let drawKey = ''
+	// const resizeObserver = new UniResizeObserver((entries : Array<UniResizeObserverEntry>) => {
+	// 	const _drawKey = `${hasContent.value}${props.color}${props.align}${props.dashed}${props.vertical}`
+	// 	if(drawKey == _drawKey) return
+	// 	drawKey = _drawKey
+	// 	drawLine(resizeRef.value, resizeInnerRef.value, hasContent.value, props.color, props.align, props.dashed, props.vertical)
+	// })
+	
+	// watchEffect(()=>{
+	// 	if(!init.value) return
+	// 	drawLine(resizeRef.value, resizeInnerRef.value, hasContent.value, props.color, props.align, props.dashed, props.vertical)
+	// })
+	
+	// onMounted(()=>{
+	// 	nextTick(()=>{
+	// 		if(resizeRef.value == null) return
+	// 		resizeObserver.observe(resizeRef.value!)
+	// 		if(resizeInnerRef.value != null) {resizeObserver.observe(resizeInnerRef.value!)}
+	// 		drawKey = `${hasContent.value}${props.color}${props.align}${props.dashed}${props.vertical}`
+	// 		init.value = true
+	// 	})
+	// })
+	// onUnmounted(()=>{
+	// 	resizeObserver.disconnect()
+	// })
+	// #endif
+</script>
+<style lang="scss">
+	@import './index-u';
+</style>

@@ -1,0 +1,119 @@
+@import '@/uni_modules/lime-style/index.scss';
+
+$image-color: create-var(image-color, $text-color-3);
+$image-loading-bg-color: create-var(image-loading-bg-color, $fill-3);
+$image-loading-color: create-var(image-loading-color, $text-color-4);
+$image-round-radius: create-var(image-round-radius, $border-radius) ;
+$image-circle-radius: create-var(image-circle-radius, $border-radius-hg);
+
+
+
+.l-image {
+	/* #ifndef APP-ANDROID || APP-IOS || APP-NVUE || APP-HARMONY */
+	will-change: transform;
+	/* #endif */
+	&-wrapper {
+		transition: width,height 200ms linear;
+		/* #ifndef APP-ANDROID || APP-IOS || APP-NVUE || APP-HARMONY */
+		display: inline-flex;
+		color: $image-color;
+		/* #endif */
+		/* #ifdef APP-ANDROID || APP-IOS || APP-NVUE || APP-HARMONY */
+		border-color: $image-color;
+		/* #endif */
+	}
+	/* #ifndef APP-ANDROID || APP-IOS || APP-NVUE || APP-HARMONY */
+	&__loading {
+		// height: 16rpx;
+		height: 54rpx;
+		width: 54rpx;
+		border-radius: 50%;
+		background-image: conic-gradient(transparent 0%, transparent 25%, currentColor);
+		mask: radial-gradient(closest-side, transparent calc(80% - 1px), #fff 80%);
+		animation: loading 1500ms linear infinite;
+	}
+	&__error {
+		width: 50rpx;
+		height: 50rpx;
+		transform: rotate(45deg);
+		border: 4rpx solid currentColor;
+		border-radius: 99px;
+		position: relative;
+		&:after,&:before{
+			position: absolute;
+			content: '';
+			background: currentColor;
+			--size: 4rpx;
+			--offset: 20%;
+		}
+		&:before {
+			top: 50%;
+			left: var(--offset);
+			right: var(--offset);
+			
+			height: var(--size);
+			transform: translateY(-50%);
+		}
+		&:after {
+			left: 50%;
+			top: var(--offset);
+			bottom: var(--offset);
+			width: var(--size);
+			transform: translateX(-50%);
+		}
+		
+	}
+	
+	/* #endif */
+	/* #ifdef APP-NVUE */
+	&__loading {
+		width: 60rpx;
+		height: 60rpx;
+		color: $image-color;
+	}
+	&__error {
+		width: 60rpx;
+		height: 60rpx;
+	}
+	/* #endif */
+	&__mask {
+		background-color: $image-loading-bg-color;
+	}
+	&--shape {
+	    &-circle {
+			border-radius: $image-circle-radius;
+			overflow: hidden;
+	    }
+	
+	    &-round {
+			border-radius: $image-round-radius;
+			border-top-right-radius: $image-round-radius;
+			overflow: hidden;
+	    }
+	
+	    &-square {
+			border-radius: 0;
+			overflow: hidden;
+	    }
+	}
+	&__state {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+}
+
+
+/* #ifndef APP-ANDROID || APP-IOS || APP-NVUE || APP-HARMONY */
+@keyframes loading {
+	to {
+		transform: rotate(1turn);
+		// background-position-x: 96rpx;
+	}
+}
+/* #endif */

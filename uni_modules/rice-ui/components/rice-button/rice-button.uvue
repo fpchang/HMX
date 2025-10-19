@@ -181,8 +181,8 @@
 		const textColor = getTextColor()
 		if (textColor != "") css.set('color', textColor)
 		// #endif
-		if (props.height != null) css.set('height', addUnit(props.height!) as string)
-		if (props.width != null) css.set('width', addUnit(props.width!) as string)
+		if (props.height != null) css.set('height', addUnit(props.height!))
+		if (props.width != null) css.set('width', addUnit(props.width!))
 		return css
 	})
 
@@ -209,7 +209,7 @@
 		const css = new Map<string, string>()
 		const textColor = getTextColor()
 		if (textColor != "") css.set('color', textColor)
-		if (props.textSize != null) css.set('font-size', addUnit(props.textSize!) as string)
+		if (props.textSize != null) css.set('font-size', addUnit(props.textSize!))
 		if (hasStrValue(props.icon) || props.loading) css.set('margin-left', '4px')
 		return css
 	})

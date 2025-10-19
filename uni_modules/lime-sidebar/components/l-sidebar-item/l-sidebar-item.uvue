@@ -1,0 +1,138 @@
+<template>
+	<view
+		class="l-sidebar-item"
+		:class="classes"
+		:aria-selected="selected"
+		ref="sidebarItemRef"
+		:style="[styles]"
+		@click="onClick">
+			<l-badge v-if="badge != null" :content="badge" :dot="dot" :max="badgeMax">
+				<slot name="title"><text class="l-sidebar-item__text" :class="textClasses" :style="[textStyle]">{{title}}</text></slot>
+			</l-badge>
+			<slot v-else name="title"><text class="l-sidebar-item__text" :class="textClasses" :style="[textStyle]">{{title}}</text></slot>
+			<!-- #ifdef APP -->
+			<view class="l-sidebar-item--line" v-if="useLine" :style="{opacity:selected ? 1 : 0}"></view>
+			<!-- #endif -->
+	</view>
+</template>
+<script lang="uts" setup>
+	/**
+	 * LimeSidebarItem 侧边栏项
+	 * @description 配合侧边栏
+	 * @tutorial https://ext.dcloud.net.cn/plugin?id=13617
+	 * @property {String} title 标题
+	 * @property {String,Number} badge 图标右上角徽标的内容
+	 * @property {Boolean} disabled 是否禁用该项
+	 * @property {Boolean} dot 是否显示右上角小红点
+	 * @event {Function} click 点击时触发
+	 */
+	import {unitConvert} from '@/uni_modules/lime-shared/unitConvert'
+	import { SidebarItemProps , SidebarProvide} from './type'
+	const emit = defineEmits(['click'])
+	const props = withDefaults(defineProps<SidebarItemProps>(), {
+		dot: false,
+		disabled: false
+	})
+	const instance = getCurrentInstance()
+	const sidebarItemRef = ref<UniElement|null>(null)
+	const parent = inject<SidebarProvide>('LimeSidebar');	
+	const index = computed(():number => {
+		const _index = parent?.children.value.indexOf(instance!.proxy!) ?? 0
+		return _index == -1 ? 0 : _index
+	})
+	const useLine = computed(():boolean => parent?.props.line == true)
+	const useRound = computed(():boolean => parent?.props.round == true)
+	const currentValue = computed((): number=> parent?.modelValue.value ?? 0)
+	const selected = computed(():boolean => {
+		return index.value == parent?.modelValue.value
+	})
+	const badgeMax = computed(():number => {
+		if(props.badgeProps == null) return 99
+		return props.badgeProps?.getNumber('max') ?? 99
+	})
+	
+	
+	const classes = computed(():Map<string, any> => {
+		const cls = new Map<string, any>()
+		// #ifndef APP
+		cls.set(`l-sidebar-item--line`, useLine.value)
+		// #endif
+		cls.set(`l-sidebar-item--select`, selected.value)
+		cls.set(`l-sidebar-item--top`,    useRound.value && index.value - currentValue.value == 1)
+		cls.set(`l-sidebar-item--bottom`, useRound.value && index.value - currentValue.value == -1)
+		
+		return cls
+	})
+	const textClasses = computed(():Map<string, any>=>{
+		const cls = new Map<string, any>()
+		cls.set(`is-selected`, selected.value)
+		cls.set(`is-disabled`, props.disabled)
+		return cls
+	})
+	
+	const styles = computed(():Map<string, any> => {
+		const style = new Map<string, any>()
+		if(parent?.props.lineHeight != null) {
+			style.set('line-height', parent.props.lineHeight!)
+		}
+		if(parent?.props.selectedBgColor != null && selected.value) {
+			style.set('background-color', parent.props.selectedBgColor!)
+		}
+		
+		// #ifndef APP-ANDROID || APP-IOS || APP-HARMONY
+		if(parent?.props.selectedBorderWidth && selected.value) {
+			style.set('--l-sidebar-selected-border-width', parent.props.selectedBorderWidth!)
+		}
+		if(parent?.props.selectedBorderHeight != null && selected.value) {
+			style.set('--l-sidebar-selected-border-height', parent.props.selectedBorderHeight!)
+		}
+		if(parent?.props.selectedBorderColor != null && selected.value) {
+			style.set('--l-sidebar-selected-border-color', parent.props.selectedBorderColor!)
+		}
+		// #endif
+		return style
+		
+	})
+	
+	const textStyle = computed(():Map<string, any> => {
+		const style = new Map<string, any>()
+		if(parent?.props.fontSize != null) {
+			style.set('font-size', parent.props.fontSize!)
+		}
+		if(parent?.props.textColor != null) {
+			style.set('color', parent.props.textColor!)
+		}
+		if(parent?.props.selectedTextColor != null && selected.value) {
+			style.set('color', parent.props.selectedTextColor!)
+		}
+		if(parent?.props.disabledTextColor != null && props.disabled) {
+			style.set('color', parent.props.disabledTextColor!)
+		}
+		if(parent?.props.selectedFontWeight != null && selected.value) {
+			style.set('font-weight', parent.props.selectedFontWeight!)
+		}
+		return style
+	})
+	
+	
+	const onClick = (e: UniPointerEvent) => {
+		if(props.disabled || parent == null) return
+		emit('click', index.value)
+		parent.modelValue.value = index.value
+	}
+	
+	onMounted(()=>{
+		if(parent != null && instance != null) {
+			parent.updateChildNode(instance.proxy!, true)
+		}
+	})
+	onBeforeUnmount(()=>{
+		if(parent != null && instance != null) {
+			parent.updateChildNode(instance.proxy!, false)
+		}
+	})
+	
+</script>
+<style lang="scss">
+	@import './index-u';
+</style>

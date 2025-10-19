@@ -1,0 +1,18 @@
+@import '~@/uni_modules/lime-style/index.scss';
+
+
+$row: #{$prefix}-row;
+
+/* #ifndef UNI-APP-X && APP */
+:host {
+	// display: flex;
+}
+/* #endif */
+.#{$row} {
+	display: flex;
+	flex-direction: row;
+	&--wrap {
+		flex-wrap: wrap;
+	}
+	
+}

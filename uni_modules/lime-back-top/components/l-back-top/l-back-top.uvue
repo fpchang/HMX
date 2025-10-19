@@ -1,0 +1,158 @@
+<template>
+	<!-- #ifndef APP || WEB -->
+	<view ref="l-back-top__anchor" class="l-back-top__anchor" v-if="offset && !scrollTop" :style="{bottom: (offset||0)*-1 + 'px'}"></view>
+	<!-- #endif -->
+	<view ref="backtopRef" class="l-back-top" :class="classes" :style="[styles, lStyle]" :aria-role="ariaRole" @click="toTop">
+		<slot name="icon">
+			<l-icon class="l-back-top__icon" v-if="icon" :name="icon" :size="iconSize"></l-icon>
+		</slot>
+		<slot>
+			<text v-if="text" class="l-back-top__text">{{text}}</text>
+		</slot>
+	</view>
+</template>
+
+<script lang="uts" setup>
+	// @ts-nocheck
+	/**
+	 * BackTop 返回顶部组件
+	 * @description 用于快速返回页面顶部的操作按钮，支持自定义位置和滚动行为
+	 * <br> 插件类型：LBackTopComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-back-top
+	 * 
+	 * @property {string} ariaRole ARIA角色标识（用于无障碍访问）
+	 * @property {boolean} fixed 是否固定定位在视窗右下
+	 * @property {string} icon 图标名称/路径（默认内置图标）
+	 * @property {string} text 显示文本内容
+	 * @property {'primary' | 'success' | 'warning' | 'danger' | 'default'} type 预设样式类型（预留字段）
+	 * @value primary
+	 * @value success
+	 * @value warning
+	 * @value danger
+	 * @value default
+	 * @property {number} offset 显示触发滚动高度（单位：px）
+	 * @property {number} scrollTop 手动传入页面滚动高度（自动检测失效时使用）
+	 * @property {number} duration 滚动动画时长（单位：ms）
+	 * @property {'circle' | 'square'} shape 按钮形状
+	 * @value circle	圆形状
+	 * @value square 方形
+	 * @property {number | string} iconSize 图标尺寸（支持数值/字符串单位）
+	 * @property {number | string} right 右侧距离（默认16px）
+	 * @property {UTSJSONObject | string} lStyle 自定义样式
+	 * @property {number | string} bottom 底部距离（默认66px）
+	 * @event {Function} click 点击按钮时触发
+	 */
+	
+	import { addUnit } from '@/uni_modules/lime-shared/addUnit';
+	import { BackTopProps } from './type'
+	// #ifndef APP || WEB
+	import { useIntersectionObserver } from './utils'
+	// #endif
+	
+	const props = withDefaults(defineProps<BackTopProps>(), {
+		ariaRole: 'button',
+		// target: '',
+		fixed: true,
+		icon: 'backtop',
+		// text: '',
+		type: 'default',
+		offset: 200,
+		// scrollTop: 0,
+		duration: 100,
+		iconSize: '20px',
+		right: '16px',
+		bottom: '66px',
+		shape: 'square',
+		lStyle: ''
+	})
+
+	const emits = defineEmits(['click'])
+	const backtopRef = ref<UniElement|null>(null)
+	const show = ref(false)
+	const classes = computed< Map<string, any>>((): Map<string, any> =>{
+		const cls = new Map<string, any>()
+		// cls.set(`is-${props.shape}`, props.shape)
+		cls.set(`is-${props.shape}`, props.shape)
+		cls.set(`is-fixed`, props.fixed)
+		// #ifndef APP
+		cls.set(`is-show`, show.value)
+		// #endif
+		return cls
+	})
+	const styles = computed< Map<string, any>>((): Map<string, any> => {
+		const style = new Map<string, any>()
+		if(props.bottom !='') {
+			style.set('bottom', addUnit(props.bottom)!)
+		}
+		if(props.right !='') {
+			style.set('right', addUnit(props.right)!)
+		}
+		return style
+	})
+	
+	
+	const toTop = () =>{
+		uni.pageScrollTo({
+			scrollTop: 0,
+			duration: props.duration,
+			success() {
+				
+			}
+		})
+		show.value = false
+		// #ifdef APP
+		backtopRef.value?.style.setProperty('opacity', `${show.value ? 1 : 0}`)
+		backtopRef.value?.style.setProperty('transform', `scale(${show.value ? 1: 0})`)
+		// #endif
+		emits('click')
+	}
+	// #ifdef APP
+	onPageScroll((options: OnPageScrollOptions) =>{
+		show.value = options.scrollTop > props.offset
+		backtopRef.value?.style.setProperty('opacity', `${show.value ? 1 : 0}`)
+		backtopRef.value?.style.setProperty('transform', `scale(${show.value ? 1: 0})`)
+	})
+	// #endif
+	// #ifdef H5
+	const onScoll = () => {
+		const {scrollTop} = document.documentElement
+		show.value = scrollTop > props.offset
+	}
+	window.addEventListener('scroll', onScoll);
+	
+	onBeforeUnmount(()=>{
+		window.removeEventListener('scroll', onScoll);
+	})
+	// #endif
+	
+	// #ifndef APP || WEB
+	const context = getCurrentInstance()!.proxy!
+	const target = ref(null)
+	const wrapCallback = (res: UniApp.ObserveResult) => {
+		if (props.offset && !props.scrollTop) {
+			show.value = res.boundingClientRect.top - res.relativeRect.top < 0 || res.intersectionRatio > 0;
+		}
+	};
+	const { stop } = useIntersectionObserver(target, wrapCallback, { context })
+	watchEffect(()=>{
+		show.value = props.scrollTop > props.offset 
+	})
+	
+	onMounted(() => {
+		target.value = '.l-back-top__anchor'
+		if(props.offset == 0) {
+			show.value = true;
+			stop()
+		} 
+	})
+	// #endif
+	onMounted(()=>{
+		if(props.offset == 0) {
+			show.value = true;
+		} 
+	})
+</script>
+
+<style lang="scss">
+	@import './index';
+</style>

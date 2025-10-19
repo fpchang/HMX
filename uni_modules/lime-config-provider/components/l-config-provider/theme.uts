@@ -1,0 +1,185 @@
+// @ts-nocheck
+import { themeTokenMaps } from '@/uni_modules/lime-style'
+// #ifndef UNI-APP-X
+type UTSJSONObject = Record<string, string>
+// #endif
+
+/**
+ * 根据主题获取对应的颜色值
+ * @param theme 当前主题 ('light' | 'dark')
+ * @param lightKey 浅色主题下的颜色键名
+ * @param darkKey 深色主题下的颜色键名
+ * @returns 对应的颜色值
+ */
+export function getThemeColor(theme : string, lightKey : string, darkKey : string) : string {
+	return theme === 'dark'
+		? `${themeTokenMaps.dark[darkKey]}`
+		: `${themeTokenMaps.light[lightKey]}`;
+}
+
+// 缓存对象
+const themeTokensCache = {
+	light: new Map<string, UTSJSONObject>(),
+	dark: new Map<string, UTSJSONObject>()
+}
+export function getThemeTokens(theme : string, vars : UTSJSONObject) : UTSJSONObject {
+	// 生成缓存键（基于vars的字符串化）
+	const cacheKey = JSON.stringify(vars)
+	const cache = themeTokensCache[theme] as Map<string, UTSJSONObject>
+	
+	// 检查缓存
+	if (cache.has(cacheKey)) {
+		return cache.get(cacheKey)!
+	}
+	
+	// 计算新值
+	// typing-dot-idle-color
+	const typingDotIdleColor = getThemeColor(theme, 'gray3', 'gray5')
+	const typingDotActiveColor = getThemeColor(theme, 'primaryColor6', 'primaryColor6')
+		
+	// progress
+	const progressTrailColor = getThemeColor(theme, 'gray3', 'gray5')
+	const progressStrokeColor = getThemeColor(theme, 'primaryColor6', 'primaryColor6')
+	const progressTextColor = getThemeColor(theme, 'textColor2', 'textColor2')
+	
+	//image
+	const imageLoadingColor = getThemeColor(theme, 'textColor4', 'textColor4')
+	
+	// checkbox
+	const checkboxIconCheckedColor = getThemeColor(theme, 'primaryColor6', 'primaryColor6')
+	const checkboxIconDisabledColor = getThemeColor(theme, 'gray5', 'gray5')
+	
+	// radio
+	const radioIconCheckedColor = getThemeColor(theme, 'primaryColor6', 'primaryColor6')
+	const radioIconDisabledColor = getThemeColor(theme, 'gray5', 'gray5')
+	// rate
+	// const rateSelectedColor = getThemeColor(theme, 'textColor4', 'textColor4')
+	const rateUnselectedColor = getThemeColor(theme, 'gray3', 'gray5')
+	const rateDisabledColor = getThemeColor(theme, 'gray5', 'gray3')
+	
+	// search
+	const searchPlaceholderTextColor = getThemeColor(theme, 'textColor4', 'textColor4')
+	
+	// switch 
+	const switchCheckedColor = getThemeColor(theme, 'primaryColor6', 'primaryColor6')
+	// input
+	const inputPlaceholderTextColor = getThemeColor(theme, 'textColor4', 'textColor4')
+	
+	// tabbar
+	const tabbarColor = getThemeColor(theme, 'textColor1', 'textColor1')
+	const tabbarActiveColor = getThemeColor(theme, 'primaryColor6', 'primaryColor6')
+	
+	
+	// daily-punch
+	const dailyPunchColor = getThemeColor(theme, 'primaryColor6', 'primaryColor6')
+	const dailyPunchArrowColor = getThemeColor(theme, 'gray3', 'gray5')
+	const dailyPunchWeekColor = getThemeColor(theme, 'textColor3', 'gray8')
+	const dailyPunchSelectedDayBgColor = getThemeColor(theme, 'fill2', 'fill2')
+	const dailyPunchTextColor = getThemeColor(theme, 'textColor1', 'textColor1')
+	const dailyPunchDisabledColor = getThemeColor(theme, 'textColor4', 'gray6')
+	// const dailyPunchUnsignedColor = getThemeColor(theme, 'textColor4', 'textColor4')
+	
+	// slider
+	const sliderTrailColor = getThemeColor(theme, 'gray3', 'gray5')
+	const sliderTrackColor = getThemeColor(theme, 'primaryColor6', 'primaryColor6')
+	
+	// ruler
+	const rulerLineColor = getThemeColor(theme, 'gray6', 'gray8')
+	const rulerTextColor = getThemeColor(theme, 'gray6', 'gray8')
+	const rulerOutRangeLineColor = getThemeColor(theme, 'gray4', 'gray6')
+	const rulerOutRangeTextColor = getThemeColor(theme, 'gray4', 'gray6')
+	
+	
+	// calendar
+	const calendarActiveColor = getThemeColor(theme, 'primaryColor6', 'primaryColor6')
+	const calendarSelectedColor = 'white'//getThemeColor(theme, 'primaryColor6', 'primaryColor6')
+	const calendarDaysColor = getThemeColor(theme, 'textColor2', 'textColor2')
+	const calendarItemSuffixColor = getThemeColor(theme, 'textColor3', 'textColor3')
+	const calendarItemCentreColor = getThemeColor(theme, 'primaryColor1', 'primaryColor1')
+	const calendarItemDisabledColor = getThemeColor(theme, 'textColor4', 'textColor4')
+	const calendarMonthMarkColor = getThemeColor(theme, 'gray1', 'gray3')
+	const calendarTitleColor = getThemeColor(theme, 'textColor1', 'textColor1')
+	const calendarItemColor = getThemeColor(theme, 'textColor1', 'textColor1')
+	// loading
+	const loadingColor = getThemeColor(theme, 'primaryColor6', 'primaryColor6')
+	// load-more
+	const loadMoreColor = getThemeColor(theme, 'textColor4', 'textColor4')
+	
+	// action-sheet 存在bug 自定义组件无法给自定义组件icon设置颜色
+	const actionSheetColor  = getThemeColor(theme, 'textColor1', 'textColor1')
+	// sorter
+	const sorterArrowColor = getThemeColor(theme, 'gray5', 'gray5')
+	const sorterArrowActiveColor = getThemeColor(theme, 'primaryColor6', 'primaryColor6')
+	
+	// circles
+	const circleTrailColor = getThemeColor(theme, 'gray3', 'gray5')
+	const circleStrokeColor = getThemeColor(theme, 'primaryColor6', 'primaryColor6')
+	
+	const themeVars = UTSJSONObject.assign(
+		{ 
+			typingDotIdleColor,
+			typingDotActiveColor,
+			
+			progressTrailColor,
+			progressStrokeColor,
+			progressTextColor,
+			
+			imageLoadingColor,
+			checkboxIconCheckedColor,
+			checkboxIconDisabledColor,
+			
+			radioIconCheckedColor,
+			radioIconDisabledColor,
+			
+			rateUnselectedColor,
+			rateDisabledColor,
+			
+			searchPlaceholderTextColor,
+			
+			switchCheckedColor,
+			
+			inputPlaceholderTextColor,
+			
+			tabbarColor,
+			tabbarActiveColor,
+			
+			dailyPunchColor,
+			dailyPunchArrowColor,
+			dailyPunchWeekColor,	
+			dailyPunchSelectedDayBgColor,
+			dailyPunchTextColor,
+			dailyPunchDisabledColor,
+			
+			sliderTrailColor,
+			sliderTrackColor,
+			
+			rulerLineColor,
+			rulerTextColor,
+			rulerOutRangeLineColor,
+			rulerOutRangeTextColor,
+			
+			calendarActiveColor,
+			calendarSelectedColor,
+			calendarDaysColor,
+			calendarItemSuffixColor,
+			calendarItemCentreColor,
+			calendarItemDisabledColor,
+			calendarMonthMarkColor,
+			calendarTitleColor,
+			calendarItemColor,
+			
+			loadingColor,
+			loadMoreColor,
+			actionSheetColor,
+			sorterArrowColor,
+			sorterArrowActiveColor,
+			circleTrailColor,
+			circleStrokeColor
+		}, 
+		theme == 'dark' ? themeTokenMaps.dark : themeTokenMaps.light , vars);
+
+	// 存入缓存
+	(themeTokensCache[theme] as Map<string, UTSJSONObject>).set(cacheKey, themeVars)
+	return themeVars
+	
+}

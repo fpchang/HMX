@@ -1,0 +1,119 @@
+<template>
+	<slot name="formatted" :value="formattedValue">
+		{{ formattedValue.integer }}{{formattedValue.decimal.length > 0 ? formattedValue.decimalSeparator : ''}}{{ formattedValue.decimal }}
+	</slot>
+</template>
+<script lang="uts" setup>
+	/**
+	 * CountTo 数字滚动组件
+	 * @description 用于展示数字动态变化效果，支持自定义格式和动画曲线
+	 * <br> 插件类型：LCountToComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-count-to
+	 * 
+	 * @property {number} from 起始数值（必填）
+	 * @property {number} to 目标数值（必填）
+	 * @property {number} precision 小数精度（默认：0）
+	 * @property {boolean} showSeparator 是否显示千位分隔符
+	 * @property {boolean} active 是否启用动画（默认：true）
+	 * @property {number} duration 动画持续时间（单位：毫秒，默认：1500）
+	 * @property {EasingFunction} timingFunction 自定义缓动函数（默认：cubicOut）
+	 * @property {'group3' | 'group4'} separator 分隔模式
+	 * @value 'group3' 千分位分隔（每3位，默认）
+	 * @value 'group4' 万分位分隔（每4位）
+	 * @property {number} fps 动画帧率（默认：60，建议30-120）
+	 * @event {Function} finish 动画完成时触发
+	 */
+	
+	import { tween, TweenProps, round } from './utils'
+	import { CountToProps, FormattedTypes } from './type';
+
+	const emit = defineEmits(['finish'])
+	const props = withDefaults(defineProps<CountToProps>(), {
+		to: 0,
+		from: 0,
+		precision: 0,
+		showSeparator: false,
+		active: true,
+		separator: 'group3',
+		duration: 2000,
+		fps: 0
+	})
+	
+	 defineSlots<{
+	    formatted(props : {value: FormattedTypes}) : any,
+	  }>()
+	
+	let animating = false
+
+	const displayedValueRef = ref(props.from)
+	const onUpdate = (currentValue : number) : void => {
+		displayedValueRef.value = currentValue
+	}
+	const onFinish = () : void => {
+		displayedValueRef.value = props.to
+		animating = false
+		emit('finish')
+	}
+	const animate = (from : number, to : number) => {
+		animating = true
+		displayedValueRef.value = props.from
+		if (from != to) {
+			tween({
+				from,
+				to,
+				fps: props.fps,
+				duration: props.duration,
+				onUpdate,
+				onFinish,
+				timingFunction: props.timingFunction
+			} as TweenProps)
+		}
+	}
+
+	const formattedValue = computed(() : FormattedTypes => {
+		const formatted : string = round(displayedValueRef.value, props.precision).toFixed(props.precision)
+		const splitValue = formatted.split('.')
+
+		// const numberFormatter = new Intl.NumberFormat(mergedLocaleRef.value)
+		// const decimalSeparator = numberFormatter
+		// 	.formatToParts(0.5)
+		// 	.find(part => part.type === 'decimal')
+		// 	?.value
+		// const integer = props.showSeparator
+		// 	? numberFormatter.format(Number(splitValue[0]))
+		// 	: splitValue[0]
+		// const decimal = splitValue[1]
+
+		const integer = props.showSeparator
+			? props.separator == 'group4'
+				? splitValue[0].replace(/(?!^)(?=(\d{4})+$)/g, ',')
+				: splitValue[0].replace(/(?!^)(?=(\d{3})+$)/g, ',')
+			: splitValue[0]
+
+		const decimal = splitValue.length > 1 ? splitValue[1] : ''
+
+		return {
+			integer,
+			decimal,
+			decimalSeparator: '.'
+		} as FormattedTypes
+	})
+
+
+	const play = () => {
+		if (animating) return
+		animate(props.from, props.to)
+	}
+	onMounted(() => {
+	    watchEffect(() => {
+	        if (!props.active) return
+	        animate(props.from, props.to)
+	    })
+	})
+	
+	defineExpose({
+		play
+	})
+</script>
+<style>
+</style>

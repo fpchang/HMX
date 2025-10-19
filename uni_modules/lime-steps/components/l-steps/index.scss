@@ -1,0 +1,32 @@
+@import '@/uni_modules/lime-style/index.scss';
+
+// $prefix: l !default;
+$steps: #{$prefix}-steps;
+
+/* #ifdef MP */
+:host {
+  display: flex;
+}
+/* #endif */
+
+
+.#{$steps} {
+	/* #ifndef UNI-APP-X */
+	display: flex;
+	/* #endif */
+	width: 100%;
+
+	&--vertical {
+		flex-direction: column;
+	}
+	&--horizontal {
+		flex-direction: row;
+	}
+	&--reverse {
+		flex-direction: row-reverse;
+	}
+
+	&--vertical#{&}--reverse {
+		flex-direction: column-reverse;
+	}
+}

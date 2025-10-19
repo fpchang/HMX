@@ -1,0 +1,297 @@
+<template>
+	<view ref="radioRef" class="l-radio" :class="classes" :style="[styles]" @click="onClick">
+		<slot name="radio" :checked="radioChecked" :disabled="isDisabled">
+			<slot name="icon" :checked="radioChecked" :disabled="isDisabled">
+				<view class="l-radio__icon" ref="iconRef" :class="iconClasses" :style="[iconStyle]"></view>
+			</slot>
+			<text class="l-radio__label" :style="labelStyles" :class="labelClass" v-if="label != null || $slots['default'] != null">
+				<slot>{{label}}</slot>
+			</text>
+		</slot>
+	</view>
+</template>
+<script lang="uts" setup>
+	/**
+	 * Radio 单选框组件
+	 * @description 用于在多个选项中选择单个结果，支持自定义图标和样式配置
+	 * <br>插件类型：LRadioComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-radio
+	 * 
+	 * @property {boolean} allowUncheck 允许取消选中（默认：false）
+	 * @property {boolean} checked 当前选中状态（支持v-model）
+	 * @property {boolean} defaultChecked 默认选中状态（非受控属性）
+	 * @property {boolean} disabled 禁用状态（优先级高于RadioGroup）
+	 * @property {boolean} readonly 只读状态（优先级高于RadioGroup）
+	 * @property {'circle' | 'line' | 'dot'} icon 单选图标样式
+	 * @value circle 实心圆形图标（默认）
+	 * @value line   空心环形图标
+	 * @value dot    中心圆点图标
+	 * @property {string} label 选项显示文本
+	 * @property {string} name 表单字段名称
+	 * @property {string | number | boolean} value 选项值
+	 * @property {'small' | 'medium' | 'large'} size 组件尺寸
+	 * @property {string} fontSize 文本字号（支持CSS单位）
+	 * @property {string} iconSize 图标尺寸（支持CSS单位）
+	 * @property {string} checkedColor 选中状态主色（默认：主题色）
+	 * @property {string} iconBgColor 图标背景色
+	 * @property {string} iconBorderColor 图标边框色
+	 * @property {string} iconDisabledColor 禁用图标颜色
+	 * @property {string} iconDisabledBgColor 禁用背景色
+	 * @property {string | UTSJSONObject} labelStyle 文本自定义样式
+	 * @event {Function} change 选中状态变化时触发（返回value和checked状态）
+	 */
+	
+	import type { RadioProps } from './type';
+	const themeVars = inject('limeConfigProviderThemeVars', computed(()=> ({})))
+	// #ifndef APP
+	import type { ComputedRef } from 'vue';
+	type ComputedRefImpl<T> = ComputedRef<T>
+	// #endif
+	const emit = defineEmits(['change', 'update:checked', 'update:modelValue'])
+	const props = withDefaults(defineProps<RadioProps>(), {
+		allowUncheck: false,
+		checked: null,
+		modelValue: null,
+		disabled: false,
+		readonly: false,
+		// icon: 'circle',
+		// size: 'medium'
+	})
+	
+	defineSlots<{
+	    radio(props : { checked : boolean,  disabled: boolean}) : any,
+	    icon(props : { checked : boolean,  disabled: boolean}) : any,
+	    default(props : { checked : boolean,  disabled: boolean}) : any,
+	  }>()
+	
+	const name = 'l-radio'
+	const formDisabled = inject<Ref<boolean|null>|null>('formDisabled', null)
+	const formReadonly = inject<Ref<boolean|null>|null>('formReadonly', null)
+		const radioGroupProps = inject<LRadioGroupComponentPublicInstance|null>('limeRadioGroupProps', null);	const radioGroupValue = inject<ComputedRefImpl<any>|null>('limeRadioGroupValue', null);	const radioGroupChange = inject<((value: any|null) => void)|null>('limeRadioGroupChange', null);
+	// const modelValue = defineModel({type: Boolean, default: false});
+	const modelValue = ref(props.checked ?? props.modelValue ?? props.defaultChecked ?? false)
+	const innerChecked = computed({
+		set(value: boolean){
+			modelValue.value = value;
+			emit('change', value)
+			emit('update:modelValue', value)
+		},
+		get(): boolean{
+			return props.checked ?? props.modelValue ?? modelValue.value
+		},
+	} as WritableComputedOptions<boolean>)
+	
+	const isDisabled = computed(():boolean => (props.disabled || (formDisabled?.value ?? radioGroupProps?.disabled ?? false)))
+	const isReadonly= computed(():boolean=>{
+		if (props.readonly) return props.readonly;
+		return formReadonly?.value ?? radioGroupProps?.readonly ?? false;
+	})
+	
+	const groupDisabled = computed(():boolean|null => radioGroupProps?.disabled);
+	const radioChecked = computed(():boolean => innerChecked.value || (props.name != null && props.name == radioGroupValue?.value) || (props.value != null && props.value == radioGroupValue?.value));
+	
+	const finalAllowUncheck = computed(():boolean => props.allowUncheck || (radioGroupProps?.allowUncheck ?? false));
+	
+	const innerIcon = computed(():string => props.icon ?? radioGroupProps?.icon ?? 'circle')
+	const innerSize = computed(():string => props.size ?? radioGroupProps?.size ?? 'medium')
+	const innerIconSize = computed(():string|null => props.iconSize ?? radioGroupProps?.iconSize)
+	const innerFontSize = computed(():string|null => props.fontSize ?? radioGroupProps?.fontSize)
+	const innerCheckedColor = computed(():string|null => props.checkedColor ?? radioGroupProps?.checkedColor)
+	const innerIconBgColor = computed(():string|null => props.iconBgColor ?? radioGroupProps?.iconBgColor)
+	const innerIconBorderColor = computed(():string|null => props.iconBorderColor ?? radioGroupProps?.iconBorderColor)
+	const innerIconDisabledColor = computed(():string|null => props.iconDisabledColor ?? radioGroupProps?.iconDisabledColor)
+	const innerIconDisabledBgColor = computed(():string|null => props.iconDisabledBgColor ?? radioGroupProps?.iconDisabledBgColor)
+	
+	const classes = computed(():Map<string, boolean>=>{
+		const cls = new Map<string, boolean>();
+		cls.set(`${name}--disabled`, isDisabled.value)
+		return cls
+	})
+	
+	const iconClasses = computed(():Map<string, boolean>=>{
+		const cls = new Map<string, boolean>();
+		// #ifdef APP
+		// && innerCheckedColor.value == null
+		cls.set(`${name}__icon--checked`, radioChecked.value)
+		cls.set(`${name}__icon--${innerIcon.value}`, true)
+		cls.set(`${name}__icon--disabled`, isDisabled.value)
+		// #endif
+		// #ifndef APP
+		cls.set(`${name}__icon--checked`, radioChecked.value)
+		cls.set(`${name}__icon--${innerIcon.value}`, true)
+		cls.set(`${name}__icon--disabled`, isDisabled.value)
+		// #endif
+		return cls
+	})
+	
+	const labelClass = computed(():Map<string, boolean>=>{
+		const cls = new Map<string, boolean>();
+		cls.set(`${name}__label--disabled`, isDisabled.value)
+		return cls
+	})
+	
+	const styles = computed(():Map<string, any>=>{
+		const style = new Map<string, any>();
+		if(radioGroupProps != null && radioGroupProps.gap != null) {
+			style.set(radioGroupProps.direction == 'horizontal' ? 'margin-right' : 'margin-bottom', radioGroupProps.gap!)
+		}
+		
+		if(innerCheckedColor.value != null) {
+			style.set('--l-radio-icon-checked-color', innerCheckedColor.value!)
+		}
+		if(innerIconBorderColor.value != null) {
+			style.set('--l-radio-icon-border-color', innerIconBorderColor.value!) 
+		}
+		if(innerIconDisabledColor.value != null) {
+			style.set('--l-radio-icon-disabled-color', innerIconDisabledColor.value!)
+		}
+		if(innerIconDisabledBgColor.value != null) {
+			style.set('--l-radio-icon-disabled-bg-color', innerIconDisabledBgColor.value!)
+		}
+		if(innerFontSize.value != null) {
+			style.set('--l-radio-font-size', innerFontSize.value!)
+		}
+		if(innerIconSize.value != null) {
+			style.set('--l-radio-icon-size', innerIconSize.value!)
+		}
+		
+		return style
+	})
+	
+	const iconStyle = computed(():Map<string, any>=>{
+		const style = new Map<string, any>();
+	
+		return style
+	})
+	
+	const labelStyles = computed(():any => {
+		if(typeof props.labelStyle == 'string') {
+			return `${props.labelStyle};` + (innerFontSize.value != null ? `font-size: ${innerFontSize.value}`: '')
+		}
+		if(typeof props.labelStyle == 'object') {
+			return UTSJSONObject.assign({}, (props.labelStyle??{}) as UTSJSONObject, innerFontSize.value != null ? {'font-size': innerFontSize.value}: {})
+		}
+		return {}
+	})
+	
+	const onClick = (e: UniPointerEvent) => {
+		if(isDisabled.value || isReadonly.value) return;
+		const _name = props.value ?? props.name
+		if(radioGroupChange != null && _name != null) {
+			const value = finalAllowUncheck.value && radioChecked.value ? null : _name;
+			radioGroupChange(value);
+		} else {
+			const value = finalAllowUncheck.value ? !radioChecked.value : true;
+			innerChecked.value = value
+		}
+	}
+	// #ifdef APP
+	const iconRef = ref<UniElement|null>(null)
+	const radioRef = ref<UniElement|null>(null)
+	const update = () => {
+		if(iconRef.value == null) return
+		const ctx = iconRef.value!.getDrawableContext()!;
+		const rect = iconRef.value!.getBoundingClientRect();
+		
+		// #ifndef APP-HARMONY
+		const iconSize = rect.width
+		// #endif
+		// #ifdef APP-HARMONY
+		const iconSize = rect.width - 1.5
+		// #endif
+		
+		const x = iconSize / 2;
+		const y = iconSize / 2;
+		
+		const primaryColor  = `${themeVars.value['radioIconCheckedColor'] ?? '#3283ff'}`
+		const disabledColor = `${themeVars.value['radioIconDisabledColor'] ?? '#c5c5c5'}`
+		
+		ctx.reset();
+		if(innerIcon.value == 'circle') {
+			if(radioChecked.value) {
+				ctx.strokeStyle = isDisabled.value 
+					? innerIconDisabledColor.value  ?? disabledColor
+					: 'white';
+				ctx.lineWidth = iconSize * 0.12;
+				ctx.lineCap = 'round';
+				// #ifndef APP-HARMONY
+				ctx.moveTo(iconSize * 0.2967, iconSize * 0.53);
+				ctx.lineTo(iconSize * 0.4342, iconSize * 0.6675);
+				ctx.lineTo(iconSize * 0.7092, iconSize * 0.3925);
+				// #endif
+				
+				// #ifdef APP-HARMONY
+				// 鸿蒙不支持lineCap
+				ctx.moveTo(iconSize * 0.23, iconSize * 0.45);
+				ctx.lineTo(iconSize * 0.44, iconSize * 0.6675);
+				ctx.lineTo(iconSize * 0.73, iconSize * 0.3);
+				// #endif
+				ctx.stroke()
+			}
+		} else if(innerIcon.value == 'line') {
+			if(radioChecked.value) {
+				ctx.strokeStyle = isDisabled.value 
+					? innerIconDisabledColor.value ?? disabledColor
+					: props.checkedColor ?? primaryColor
+					
+					
+				ctx.lineWidth = iconSize * 0.16;
+				ctx.lineCap = 'round';
+				ctx.moveTo(iconSize * 0.10, iconSize * 0.5466)
+				ctx.lineTo(iconSize * 0.3666, iconSize * 0.8134)
+				ctx.lineTo(iconSize * 0.90, iconSize * 0.28)
+				ctx.stroke()
+			}
+		} else if(innerIcon.value == 'dot'){
+			if(radioChecked.value) {
+				ctx.fillStyle = isDisabled.value 
+					? innerIconDisabledColor.value ?? disabledColor
+					: 'white';
+				ctx.arc(x, y, iconSize * 0.22, 0, Math.PI * 2)
+				ctx.fill()
+			}
+		}
+		ctx.update();
+	}
+	
+	
+	
+	const resizeObserver = new UniResizeObserver((entries : Array<UniResizeObserverEntry>) => {
+		update()
+	}) 
+	
+	const stopWatch = watch(():UniElement|null => iconRef.value, (el:UniElement|null) => {
+		if(el== null) return
+		resizeObserver.observe(el)
+	})
+	
+	let init = ref(false)
+	// 在list-view里一开始没有尺寸
+	watchEffect(()=>{
+		if(iconRef.value == null) return
+		if(init.value) {
+			update()
+			return
+		}
+		iconRef.value?.getBoundingClientRectAsync()?.then(res=>{
+			requestAnimationFrame(update)
+			init.value = true
+		});
+	})
+	
+
+	
+	// onMounted(()=>{
+	// 	nextTick(update)
+	// })
+	
+	onUnmounted(()=>{
+		stopWatch()
+		resizeObserver.disconnect()
+	})
+	// #endif
+	
+</script>
+<style lang="scss">
+	@import './index-u';
+</style>

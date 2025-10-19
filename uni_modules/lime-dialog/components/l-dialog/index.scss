@@ -1,0 +1,185 @@
+@import '~@/uni_modules/lime-style/index.scss';
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+$dialog: #{$prefix}-dialog;
+
+// size
+$dialog-width: create-var(dialog-width, 322px);
+$dialog-body-max-height: create-var(dialog-body-max-height, 456px);
+
+// color
+$dialog-title-font-size: create-var(dialog-title-font-size, 18px);
+$dialog-title-color: create-var(dialog-title-color, $text-color-1);
+$dialog-title-line-height: create-var(dialog-title-line-height, 26px);
+
+$dialog-content-font-size: create-var(dialog-content-font-size, 16px);
+$dialog-content-color: create-var(dialog-content-color, $text-color-2);
+$dialog-content-line-height: create-var(dialog-content-line-height, 24px);
+
+$dialog-close-color: create-var(dialog-close-color, $text-color-3);
+$dialog-bg-color: create-var(dialog-bg-color, $bg-color-container);
+$dialog-split-color: create-var(dialog-split-color, $border-color-2);
+
+$dialog-close-position-top: create-var(dialog-close-position-top, 8px);
+$dialog-close-position-right: create-var(dialog-close-position-right, 8px);
+$dialog-content-padding-y: create-var(dialog-content-padding-y, $spacer-lg);
+$dialog-content-padding-x: create-var(dialog-content-padding-x, $spacer-md);
+$dialog-footer-padding-y: create-var(dialog-footer-padding-y, 24px);
+$dialog-footer-padding-x: create-var(dialog-footer-padding-x, 24px);
+$dialog-body-gap: create-var(dialog-body-gap, 8px);
+$dialog-footer-margin-top: create-var(dialog-footer-margin-top, 32px);
+
+// 间距相关变量
+$dialog-button-gap: create-var(dialog-button-gap, 12px);  // 间距
+
+$dialog-border-radius: create-var(dialog-border-radius, $border-radius);
+$dialog-button-border-radius: create-var(dialog-button-border-radius, 0);
+$dialog-button-border-width: create-var(dialog-button-border-width, 1px);
+
+$dialog-button-height: create-var(dialog-button-height, 56px);
+
+.#{$dialog} {
+	overflow: hidden;
+	width: $dialog-width;
+	border-radius: $border-radius;
+	background-color: $dialog-bg-color;
+	
+	
+	 &__close {
+	    position: absolute;
+	    top: $dialog-close-position-top;
+	    right: $dialog-close-position-right;
+	    z-index: 1; /* skyline适配新增 */
+		/* #ifndef UNI-APP-X && APP */
+		color: $dialog-close-color;
+		/* #endif */
+		/* #ifdef UNI-APP-X && APP */
+		&-icon {
+			color: $dialog-close-color;
+		}
+		/* #endif */
+	}
+	&__content {
+		@include padding($dialog-content-padding-y $dialog-content-padding-x 0);
+	   
+	    max-height: $dialog-body-max-height;
+	    box-sizing: border-box;
+	    display: flex;
+	    flex-direction: column;
+	    // justify-content: center;
+	    // font-size: $font-size-md;
+	}
+	&__header {
+		width: 100%;
+	    text-align: center;
+	    font-weight: bold;
+	    font-size: $dialog-title-font-size;
+	    line-height: $dialog-title-line-height;
+	    color: $dialog-title-color;
+	}
+	
+	&__body {
+		/* #ifndef UNI-APP-X && APP */
+		text-align: center;
+		font-size: $dialog-content-font-size;
+		color: $dialog-content-color;
+		line-height: $dialog-content-line-height;
+		// overflow-y: scroll;
+		// -webkit-overflow-scrolling: touch;
+	    /* #endif */
+	    &-text {
+			text-align: center;
+			font-size: $dialog-content-font-size;
+			color: $dialog-content-color;
+			line-height: $dialog-content-line-height;
+			// font-size: $font-size-md;
+			// word-wrap: break-word;
+	    }
+	
+	    &--left {
+	      text-align: left;
+	    }
+	
+	    &--right {
+	      text-align: right;
+	    }
+		&--gap {
+			margin-top: $dialog-body-gap;
+		}
+	}
+	&__footer {
+	    display: flex;
+		@include padding($dialog-footer-padding-y $dialog-footer-padding-x);
+	    // padding: $dialog-footer-padding;
+		
+		&--horizontal {
+			flex-direction: row;
+			flex-flow: row;
+		}
+		&--vertical {
+			flex-direction: column;
+			flex-flow: column-reverse;
+			.#{$dialog}__button {
+				width: 100%;
+			}
+		}
+		
+	    &--full {
+			// padding: 32px 0 0;
+			margin-top: $dialog-footer-margin-top;
+			padding: 0;
+			/* #ifdef UNI-APP-X && APP */
+			border-top-style: solid;
+			border-top-width: 1px;
+			border-top-color: $dialog-split-color;
+			/* #endif */
+	    }
+	}
+	&__button {
+	    position: relative;
+	    flex: 1;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+		
+	    &--horizontal + &--horizontal {
+	      margin-left: $dialog-button-gap;
+	    }
+	
+	    &--vertical + &--vertical {
+	      margin-bottom: $dialog-button-gap;
+	    }
+	
+	    &--text {
+			flex: 1;
+			border-radius: 0;
+			/* #ifdef UNI-APP-X && APP */
+			// border-top: 1px solid $border-color-2;
+			// border-left: 1px solid $border-color-2;
+			// 好像无效
+			border-left-style: solid;
+			border-left-width: 1px;
+			border-left-color: $dialog-split-color;
+			/* #endif */
+			/* #ifndef UNI-APP-X && APP */
+			--l-button-border-radius: 0;
+			--l-button-medium-height: $dialog-button-height;
+			&:before {
+				content: ' ';
+				position: absolute;
+				box-sizing: border-box;
+				top: 0;
+				left: 0;
+				border-top: 1px solid $dialog-split-color;
+				border-left: 1px solid $dialog-split-color;
+				// transform: scale(0.8);
+				transform-origin: 0 0;
+				width: 100%;
+				height: 100%;
+				border-radius: 0;
+			}
+			/* #endif */
+	    }
+	}
+}

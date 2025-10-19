@@ -1,0 +1,130 @@
+<template>
+		<view class="demo-block">
+			<text class="demo-block__title-text ultra">DailyPunch 日期签到</text>
+			<text class="demo-block__desc-text">基于canvas实现的日期打卡。</text>
+			<view class="demo-block__body">
+				<view class="demo-block card">
+					<text class="demo-block__title-text">基础用法</text>
+					<view class="demo-block__body">
+						<l-daily-punch :day-height="58" :signedDates="checkIns" @select="select" @streak="streak"></l-daily-punch>
+					</view>
+				</view>
+			</view>
+		</view>
+</template>
+<script setup>
+	import { LimeDailyPunchDay } from '@/uni_modules/lime-daily-punch'
+	const checkIns = ref(['2024-09-12', '2024-09-02', '2024-09-10', '2024-09-03'])
+
+
+	const streak = (num : number) => {
+		console.log('已经连续签到：', num)
+	}
+	const select = (day : LimeDailyPunchDay) => {
+		// console.log('day', day)
+		if (day.canSupplement) {
+			console.log('可补签')
+			uni.showModal({
+				title: '补签',
+				content: '是否补签？',
+				success: (res) => {
+					//ShowModalSuccess
+					if (!res.confirm) return
+					// this.checkIns.value = [...checkIns.value,day.fullDate]
+					checkIns.value.push(day.fullDate)
+				}
+			})
+		} else if (day.isCheckedIn) {
+			console.log('已签')
+			uni.showModal({
+				title: '退签',
+				content: '是否退签？',
+				success: (res) => {
+					//ShowModalSuccess
+					if (!res.confirm) return
+					checkIns.value = checkIns.value.filter((date) : boolean => date != day.fullDate)
+				}
+			})
+		} else if (!day.isCheckedIn && day.isToday) {
+			console.log('这是今天？并且未签到')
+			uni.showModal({
+				title: '签到',
+				content: '是否签到？',
+				success: (res) => {
+					//ShowModalSuccess
+					if (!res.confirm) return
+
+					checkIns.value.push(day.fullDate)
+					console.log('这是今天？并且未签到???????????', checkIns.value)
+				}
+			})
+		}
+	}
+</script>
+<style lang="scss">
+	$card-bg-color: var(--doc-card-bg-color, white);
+	// $page-bg-color: var(--doc-page-bg-color, #f5f5f5);
+	$title-color: var(--doc-title-color, #000000E6);
+	$summary-color: var(--doc-summary-color, #00000099);
+	
+	.demo-block {
+		margin: 32px 0 0;
+
+		// overflow: visible;
+		&.card {
+			background-color: $card-bg-color;
+			transition-property: background-color;
+			// transition-duration: 300ms;
+			padding: 30rpx;
+			margin-bottom: 20rpx !important;
+		}
+
+		&__title {
+			margin: 0;
+			margin-top: 8px;
+
+			&-text {
+				color: $summary-color;
+				font-weight: 400;
+				font-size: 14px;
+				line-height: 16px;
+				display: flex;
+				margin-left: 20px;
+
+				&.large {
+					color: $title-color;
+					font-size: 18px;
+					font-weight: 700;
+					line-height: 26px;
+					margin-left: 20px;
+				}
+
+				&.ultra {
+					color: $title-color;
+					font-size: 24px;
+					font-weight: 700;
+					line-height: 32px;
+				}
+			}
+		}
+
+		&__desc-text {
+			color: $summary-color;
+			margin: 8px 16px 0 0;
+			font-size: 14px;
+			line-height: 22px;
+			margin-left: 20px;
+		}
+
+		&__body {
+			margin: 16px 0;
+			overflow: visible;
+
+			.demo-block {
+				// margin-top: 0px;
+				margin: 0;
+				overflow: visible;
+			}
+		}
+	}
+</style>

@@ -1,0 +1,28 @@
+@import '~@/uni_modules/lime-style/index.scss';
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+
+$grid: #{$prefix}-grid;
+
+// $grid-bg-color: create-var(grid-bg-color, white);
+
+.#{$grid} {
+	/* #ifndef UNI-APP-X */
+	display: flex;
+	// flex-wrap: wrap;
+	/* #endif */
+	position: relative;
+	// overflow: hidden;
+	overflow: visible;
+	// background-color: $grid-bg-color;
+	flex-direction: row;
+	&--wrap {
+		flex-wrap: wrap;
+	}
+	&--inset {
+		@include margin(0 $spacer);
+		@include border-radius($border-radius-lg);
+		overflow: hidden;
+	}
+}

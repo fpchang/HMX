@@ -1,0 +1,87 @@
+<template>
+	<scroll-view class="l-sidebar" :scroll-y="true" direction="vertical" :style="[styles]">
+		<slot></slot>
+		<view class="l-sidebar__padding" :class="lastItemRoundClass"></view>
+	</scroll-view>
+</template>
+<script lang="uts" setup>
+	/**
+	 * Sidebar 侧边导航组件
+	 * @description 用于实现垂直导航菜单，支持高亮选中状态和自定义样式
+	 * <br>插件类型：LSidebarComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-sidebar
+	 * 
+	 * @property {string} width 侧边栏宽度
+	 * @property {string} fontSize 文字大小
+	 * @property {string} lineHeight 行高
+	 * @property {string} textColor 文字颜色
+	 * @property {string} disabledTextColor 禁用状态文字颜色
+	 * @property {string} bgColor 背景颜色
+	 * @property {string} selectedFontWeight 选中项字重
+	 * @property {string} selectedTextColor 选中项文字颜色
+	 * @property {string} selectedBorderWidth 选中项指示条宽度
+	 * @property {string} selectedBorderHeight 选中项指示条高度
+	 * @property {string} selectedBorderColor 选中项指示条颜色
+	 * @property {string} selectedBgColor 选中项背景色
+	 * @property {boolean} line 线条
+	 * @property {boolean} round 圆角
+	 * @event {Function} change 选项变化时触发（返回选中项索引）
+	 */
+
+
+	import type { SidebarProps } from './type'
+	import type { SidebarProvide } from '../l-sidebar-item/type'
+	const emits = defineEmits(['change'])
+	const props = withDefaults(defineProps<SidebarProps>(), {
+		round: false,
+		line: false
+		// #ifdef APP
+		// selectedBorderWidth: '4px',
+		// selectedBorderHeight: '16px',
+		// selectedBorderColor: '#3283ff'
+		// #endif
+	}) 
+	
+	const modelValue = defineModel({type: Number, default: 0})
+	
+	const children = ref<ComponentPublicInstance[]>([])
+	const lastItemRoundClass  = computed(():string => {
+		return children.value.length - modelValue.value == 1 && props.round ? `l-sidebar--top` : ''
+	})
+	const styles = computed(():Map<string, any> => {
+		const style = new Map<string, any>()
+		
+		if(props.width != null) {
+			style.set('width', props.width!)
+		}
+		if(props.bgColor != null) {
+			style.set('background-color', props.bgColor!)
+		}
+		return style
+	})
+	
+	const updateChildNode = (child: ComponentPublicInstance, add : boolean) => {
+		if(add) {
+			children.value.push(child)
+		} else {
+			const index = children.value.indexOf(child);
+			children.value.splice(index, 1);
+		}
+	}
+	
+	
+	watch(():number=> modelValue.value, (v:number, o:number) => {
+		if(v == o) return
+		emits('change', v);
+	})
+	
+	provide('LimeSidebar', {
+		modelValue,
+		children,
+		updateChildNode,
+		props
+	} as SidebarProvide)
+</script>
+<style lang="scss">
+	@import './index-u';
+</style>

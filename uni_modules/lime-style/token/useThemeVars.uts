@@ -115,7 +115,8 @@ export function useThemeVars(options : UTSJSONObject | null = null) {
 
 		// #ifndef UNI-APP-X && APP
 		Object.entries(options).forEach(([key, value]) => {
-			currentTheme.set(key, value);
+			// currentTheme.set(key, value);
+			currentTheme[key] = value
 		});
 		// #endif
 	}

@@ -1,0 +1,219 @@
+@import '~@/uni_modules/lime-style/index.scss';
+@import '~@/uni_modules/lime-style/mixins/hairline.scss';
+
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+// $pre: '--';
+$cell: #{$prefix}-cell;
+
+
+$cell-height: create-var(cell-height, auto);
+$cell-line-height: create-var(cell-line-height, $line-height-md);
+$cell-padding-y: create-var(cell-padding-y, $spacer);
+$cell-padding-x: create-var(cell-padding-x, $spacer);
+$cell-bg-color: create-var(cell-bg-color, $bg-color-container);
+$cell-hover-color: create-var(cell-hover-color, $gray-1);
+$cell-border-color: create-var(cell-border-color, $border-color-2);
+$cell-border-left-space: create-var(cell-border-left-space, $spacer);
+$cell-border-right-space: create-var(cell-border-right-space, 0);
+$cell-description-color: create-var(cell-description-color, $text-color-2);
+
+$cell-description-font-size: create-var(cell-description-font-size, $font-size);
+$cell-description-small-font-size: create-var(cell-description-font-size, $font-size-sm);
+
+$cell-description-line-height: create-var(cell-description-line-height, $line-height);
+$cell-note-color: create-var(cell-note-color, $text-color-3);
+
+$cell-note-font-size: create-var(cell-note-font-size, $font-size-md);
+$cell-note-small-font-size: create-var(cell-note-font-size, $font-size);
+
+$cell-title-color: create-var(cell-title-color, $text-color-1);
+
+$cell-title-font-size: create-var(cell-title-font-size, $font-size-md);
+$cell-title-small-font-size: create-var(cell-title-font-size, $font-size);
+
+$cell-left-icon-color: create-var(cell-left-icon-color, $primary-color);
+$cell-left-icon-size: create-var(cell-left-icon-size, 24px);
+$cell-left-small-icon-size: create-var(cell-left-icon-size, 20px);
+$cell-right-icon-color: create-var(cell-right-icon-color, $text-color-3);
+$cell-right-icon-size: create-var(cell-right-icon-size, 22px);
+$cell-required-color: create-var(cell-required-color, $error-color-6);
+$cell-required-font-size: create-var(cell-required-font-size, $font-size-md);
+$cell-image-width: create-var(cell-image-width, 48px);
+$cell-image-height: create-var(cell-image-height, 48px);
+
+
+
+.#{$cell} {
+	/* #ifndef UNI-APP-X */
+	display: flex;
+	box-sizing: border-box;
+	/* #endif */
+	flex-direction: row;
+	position: relative;
+	width: 100%;
+	overflow: hidden;
+	// padding: $cell-padding-y $cell-padding-x;
+	@include padding($cell-padding-y $cell-padding-x);
+	height: $cell-height;
+	background-color: $cell-bg-color;
+	
+	/* #ifdef UNI-APP-X && APP */
+	&--after {
+		position: absolute;
+		left: $cell-border-left-space;
+		right: $cell-border-right-space;
+		bottom: 0;
+		background-color: $cell-border-color;
+		height: 1px;
+		transform: scaleY(0.5);
+	}
+	/* #endif */
+	/* #ifndef UNI-APP-X && APP */
+	line-height: $cell-line-height;
+	&::after {
+	    @include hairline-bottom($cell-border-color, $cell-border-left-space, $cell-border-right-space);
+	}
+	&--borderless::after {
+	    display: none;
+	}
+	/* #endif */
+	
+	&__description {
+		/* #ifndef UNI-APP-X && APP */
+	    font-size: $cell-description-font-size;
+	    line-height: $cell-description-line-height;
+	    color: $cell-description-color;
+		/* #endif */
+		
+		&--spacer {
+			margin-top: $spacer-tn;
+		}
+	    &-text {
+			font-size: $cell-description-font-size;
+			line-height: $cell-description-line-height;
+			color: $cell-description-color;
+	    }
+	}
+	
+	&__note {
+		/* #ifndef UNI-APP-X */
+	    display: flex;
+		/* #endif */
+		flex-direction: row;
+	    align-items: center;
+	    justify-content: flex-end;
+		
+		/* #ifndef UNI-APP-X && APP */
+	    color: $cell-note-color;
+	    font-size: $cell-note-font-size;
+		/* #endif */
+		
+		&-text {
+			color: $cell-note-color;
+			font-size: $cell-note-font-size;
+		}
+	}
+	
+	&__title,
+	&__note {
+		flex: 1 1 auto;
+		/* #ifndef UNI-APP-X && APP */
+		&:empty {
+			display: none;
+	    }
+		/* #endif */
+	}
+	
+	&__title-text {
+		/* #ifndef UNI-APP-X */
+	    display: flex;
+		/* #endif */
+		line-height: $cell-line-height;
+	    font-size: $cell-title-font-size;
+	    color: $cell-title-color;
+	    font-weight: 400;
+	}
+	  
+	&__left,
+	&__right {
+		/* #ifndef UNI-APP-X */
+		display: flex;
+		/* #endif */
+		align-items: center;
+	}
+	  
+	&__left {
+		/* #ifndef UNI-APP-X && APP */
+	    &:not(:empty) {
+			margin-right: $spacer-xs;
+	    }
+		/* #endif */
+		/* #ifdef UNI-APP-X && APP */
+		margin-right: $spacer-xs;
+		/* #endif */
+	    &-icon {
+			/* #ifndef UNI-APP-X */
+			display: inline-flex;
+			/* #endif */
+			color: $cell-left-icon-color;
+			font-size: $cell-left-icon-size;
+	    }
+	
+	    &-image {
+			height: $cell-image-height;
+			width: $cell-image-width;
+	    }
+	}
+	
+	&__right {
+	    margin-left: $spacer-tn;
+	
+	    &-icon {
+			/* #ifndef UNI-APP-X */
+			display: inline-flex;
+			/* #endif */
+			color: $cell-right-icon-color;
+			font-size: $cell-right-icon-size;
+	    }
+	}  
+	
+	&--hover {
+		background-color: $cell-hover-color;
+	}
+	  
+	&--required {
+	    font-size: $cell-required-font-size;
+	    color: $cell-required-color;
+	}
+	
+	&--middle {
+	    align-items: center;
+	}
+	
+	&--top {
+	    align-items: flex-start;
+	}
+	
+	&--bottom {
+	    align-items: flex-end;
+	}
+	 
+	&--small {
+		.#{$cell} {
+			&__title-text {
+				font-size: $cell-title-small-font-size;
+			}
+			&__note-text {
+				font-size: $cell-note-small-font-size;
+			}
+			&__description-text {
+				font-size: $cell-description-small-font-size;
+			}
+			&__left-icon {
+				font-size: $cell-left-small-icon-size
+			}
+		}
+	}  
+}

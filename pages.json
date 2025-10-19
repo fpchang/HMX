@@ -23,6 +23,29 @@
 				"navigationBarTitleText" : ""
 			}
 		}
+,{
+    "path": "uni_modules/lime-action-sheet/pages/index"
+},
+{
+	"path" : "pages/home/home",
+	"style" : 
+	{
+		"navigationBarTitleText" : ""
+	}
+}
+,{
+    "path": "uni_modules/rice-ui/pages/action-sheet/action-sheet"
+}
+,{
+    "path": "uni_modules/rice-ui/pages/dialog/dialog"
+},
+{
+	"path" : "pages/login/login",
+	"style" : 
+	{
+		"navigationBarTitleText" : ""
+	}
+}
 ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

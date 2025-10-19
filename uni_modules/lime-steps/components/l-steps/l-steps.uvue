@@ -1,0 +1,92 @@
+<template>
+	<view class="l-steps" :class="classes">
+		<slot></slot>
+	</view>
+</template>
+<script lang="uts" setup>
+	/**
+	 * Steps 步骤条组件
+	 * @description 用于展示操作流程的步骤进度，支持水平和垂直方向
+	 * <br>插件类型：LStepsComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-steps
+	 * 
+	 * @property {number} current 当前步骤索引（支持v-model）
+	 * @property {number} defaultCurrent 默认当前步骤（非受控属性）
+	 * @property {'wait' | 'process' | 'finish' | 'error'} status 当前步骤状态（默认："process"）
+	 * @value wait
+	 * @value process
+	 * @value finish
+	 * @value error
+	 * @property {'horizontal' | 'vertical'} layout 步骤条方向（默认："horizontal"）
+	 * @value horizontal
+	 * @value vertical
+	 * @property {boolean} readonly 只读模式（默认：false）
+	 * @property {'positive' | 'reverse'} sequence 步骤顺序（默认："positive"）
+	 * @property {'default' | 'dot'} type 步骤条风格（默认："default"）
+	 * @value default
+	 * @value dot
+	 * @property {string} activeColor 激活状态颜色（默认：主题色）
+	 * @property {string} finishBgColor 已完成步骤背景色
+	 * @property {string} waitColor 未开始步骤文字颜色（默认："#999"）
+	 * @property {string} waitBgColor 未开始步骤背景色
+	 * @event {Function} change 步骤变化时触发（返回当前步骤索引）
+	 */
+	
+	
+	import { StepsProps, StepsProvide } from './type';
+	
+	const emit = defineEmits(['change'])
+	const props = withDefaults(defineProps<StepsProps>(),{
+		// current: 0,
+		status: 'process',
+		layout: 'horizontal',
+		readonly: false,
+		sequence: 'positive',
+		type: 'default'
+	})
+	const name = 'l-steps'
+	const modelValue = defineModel({type: Number, default: 0})
+	const current = computed({
+		set(value: number) {
+			modelValue.value = value;
+			emit('change', value)
+		},
+		get():number {
+			return props.current ?? modelValue.value
+		}
+	} as WritableComputedOptions<number>)
+	
+	const classes = computed(():Map<string, any>=>{
+		const cls = new Map<string, any>();
+		
+		cls.set(`${name}--${props.layout}`, true);
+		cls.set(`${name}--${props.sequence}`, true);
+		cls.set(`${name}--readonly`, props.readonly);
+		
+		return cls
+	})
+	
+	const children = ref<number[]>([])
+	const relation = (child: number) =>{
+		children.value.push(child)
+	}
+	const removeRelation = (child: number) => {
+		children.value = children.value.filter((item):boolean => item != child)
+	}
+	const onClickItem = (cur: number) =>{
+		current.value = cur
+	}
+	
+	provide('limeSteps', {
+		props,
+		current,
+		children,
+		onClickItem,
+		relation,
+		removeRelation
+	} as StepsProvide)
+	
+</script>
+<style lang="scss">
+	@import './index';
+</style>

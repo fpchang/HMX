@@ -1,0 +1,139 @@
+<template>
+	<view class="demo-block">
+		<text class="demo-block__title-text ultra">NoticeBar 通知栏</text>
+		<text class="demo-block__desc-text">用于循环播放展示一组消息通知。</text>
+		<view class="demo-block__body">
+			<view class="demo-block card">
+				<text class="demo-block__title-text">基础用法</text>
+				<view class="demo-block__body">
+					<l-notice-bar text="这是一条普通的通知信息"></l-notice-bar>
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">纯文字</text>
+				<view class="demo-block__body">
+					<l-notice-bar text="这是一条普通的通知信息" left-icon=""></l-notice-bar>
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">右侧图标</text>
+				<view class="demo-block__body">
+					<l-notice-bar text="这是一条普通的通知信息" right-icon="close" @click="handleClick"></l-notice-bar>
+					<view style="height: 10px;"></view>
+					<l-notice-bar text="这是一条普通的通知信息" right-icon="arrow-right" @click="handleClick"></l-notice-bar>
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">滚动播放</text>
+				<view class="demo-block__body">
+					<l-notice-bar marquee
+						:text="['1这是一条普通的通知信息这是一条普通的通知信息1','2这是一条普通的通知信息这是一条普通的通知信息2']"></l-notice-bar>
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">垂直播放</text>
+				<view class="demo-block__body">
+					<l-notice-bar marquee vertical
+						:text="['1这是一条普通的通知信息这是一条普通的通知信息1','2这是一条普通的通知信息这是一条普通的通知信息2']"></l-notice-bar>
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">类型</text>
+				<view class="demo-block__body">
+					<l-notice-bar type="info" text="这是一条普通的通知信息这是一条普通的通知信息"></l-notice-bar>
+					<view style="height: 10px;"></view>
+					<l-notice-bar type="success" text="这是一条普通的通知信息这是一条普通的通知信息"></l-notice-bar>
+					<view style="height: 10px;"></view>
+					<l-notice-bar type="danger" text="这是一条普通的通知信息这是一条普通的通知信息"></l-notice-bar>
+					<view style="height: 10px;"></view>
+					<l-notice-bar type="warning" text="这是一条普通的通知信息这是一条普通的通知信息"></l-notice-bar>
+				</view>
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">自定义样式</text>
+				<view class="demo-block__body">
+					<l-notice-bar wrapable bg-color="#3283ff" color="white" left-icon-color="white"
+						text="这是一条普通的通知信息这是一条普通的通知信息"></l-notice-bar>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		methods: {
+			handleClick() {
+				console.log('点击了右侧图标')
+			}
+		}
+	}
+</script>
+
+<style lang="scss">
+	.row {
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	.btn {
+		margin-bottom: 20rpx;
+		margin-right: 20rpx;
+		align-self: center;
+	}
+
+	.demo-block {
+		margin: 32px 10px 0;
+
+		// overflow: visible;
+		&.card {
+			background-color: white;
+			padding: 30rpx;
+			margin-bottom: 20rpx !important;
+		}
+
+		&__title {
+			margin: 0;
+			margin-top: 8px;
+
+			&-text {
+				color: rgba(0, 0, 0, 0.6);
+				font-weight: 400;
+				font-size: 14px;
+				line-height: 16px;
+				display: flex;
+
+				&.large {
+					color: rgba(0, 0, 0, 0.9);
+					font-size: 18px;
+					font-weight: 700;
+					line-height: 26px;
+				}
+
+				&.ultra {
+					color: rgba(0, 0, 0, 0.9);
+					font-size: 24px;
+					font-weight: 700;
+					line-height: 32px;
+				}
+			}
+		}
+
+		&__desc-text {
+			color: rgba(0, 0, 0, 0.6);
+			margin: 8px 16px 0 0;
+			font-size: 14px;
+			line-height: 22px;
+		}
+
+		&__body {
+			margin: 16px 0;
+			overflow: visible;
+
+			.demo-block {
+				// margin-top: 0px;
+				margin: 0;
+			}
+		}
+	}
+</style>

@@ -1,0 +1,209 @@
+<template>
+	<view class="l-notice-bar" :class="classes" :style="[styles, lStyle]">
+		<view class="l-notice-bar__left" v-if="$slots['leftIcon'] != null || prefixIcon != null">
+			<slot name="leftIcon">
+				<l-icon class="l-notice-bar__icon" :color="leftIconColor ?? color" :size="leftIconSize ?? fontSize" :name="prefixIcon" />
+			</slot>
+		</view>
+		<view ref="listRef" class="l-notice-bar__wrap " v-if="!vertical">
+			<!-- 安卓会被拦截，多包一层 -->
+			<view style="justify-content: center;">
+				<view class="l-notice-bar__content-scroll" v-if="marquee">
+					<slot>
+						<text ref="itemRef" 
+							class="l-notice-bar__content" 
+							:style="[textStyle]"
+							@transitionend="handleTransitionend"
+							:class="contentClass">{{texts.join('　')}}</text>
+					</slot>
+				</view>
+				<slot v-else>
+					<text ref="itemRef" 
+						class="l-notice-bar__content" 
+						:style="[textStyle]"
+						@transitionend="handleTransitionend"
+						:class="contentClass">{{texts.join('　')}}</text>
+				</slot>
+			</view>
+		</view>
+		<swiper class="l-notice-bar__wrap" v-if="vertical && marquee" :vertical="true" :autoplay="true" :interval="interval">
+			<swiper-item v-for="text in texts" :key="text" style="align-items: center; flex-direction: row;">
+				<text class="l-notice-bar__content" :style="[textStyle]" :class="contentClass">{{text}}</text>
+			</swiper-item>
+		</swiper>
+		<view class="l-notice-bar__right" v-if="$slots['rightIcon'] != null || rightIcon != null"
+			@click="clickSuffixIcon">
+			<slot name="rightIcon">
+				<l-icon class="l-notice-bar__icon" :color="rightIconColor ?? color" :size="rightIconSize ?? fontSize" :name="rightIcon" />
+			</slot>
+		</view>
+	</view>
+</template>
+<script lang="uts" setup>
+	/**
+	 * NoticeBar 公告通知组件
+	 * @description 用于显示滚动公告、系统提示等信息，支持多种主题样式和动画效果
+	 * <br>插件类型：LNoticeBarComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-notice-bar
+	 * 
+	 * @property {string|string[]} text 通知文本内容（支持HTML）
+	 * @property {string} leftIcon 左侧图标名称/路径
+	 * @property {string} rightIcon 右侧图标名称/路径
+	 * @property {'info' | 'success' | 'warning' | 'danger'} type 主题类型
+	 * @value info    信息通知（默认）
+	 * @value success 成功通知
+	 * @value warning 警告通知
+	 * @value danger  危险通知
+	 * @property {number} interval 滚动间隔时间（单位ms，默认：2000）
+	 * @property {number} delay 动画初始延迟（单位ms，默认：0）
+	 * @property {number} speed 横向滚动速率（单位px/s，默认：50）
+	 * @property {number} loop 循环次数（0表示无限，默认：0）
+	 * @property {string} color 文字颜色（默认跟随主题）
+	 * @property {string} bgColor 背景颜色（默认跟随主题）
+	 * @property {boolean} marquee 启用横向无缝滚动（默认：false）
+	 * @property {boolean} vertical 垂直方向排列（图标在上方，默认：false）
+	 * @property {boolean} wrapable 允许文本换行（默认：false）
+	 * @property {string} leftIconColor 左侧图标颜色
+	 * @property {string} leftIconSize 左侧图标尺寸（支持CSS单位）
+	 * @property {string} fontSize 文字字号（支持CSS单位，默认：14px）
+	 * @property {string} rightIconColor 右侧图标颜色
+	 * @property {string} rightIconSize 右侧图标尺寸（支持CSS单位）
+	 * @property {string} lStyle 自定义样式
+	 * @event {Function} click 点击通知时触发
+	 */
+	
+	import { NoticeProps } from './type';
+
+	const emits = defineEmits(['click'])
+	const props = withDefaults(defineProps<NoticeProps>(), {
+		marquee: false,
+		wrapable: false,
+		vertical: false,
+		interval: 2000,
+		speed: 50,
+		loop: -1,
+		delay: 0,
+		type: 'info'
+	})
+
+	// 主题图标
+	const THEME_ICON = new Map<string, string>([
+		['info', 'info-circle-filled'],
+		['success', 'check-circle-filled'],
+		['warning', 'info-circle-filled'],
+		['danger', 'error-circle-filled'],
+	])
+
+	const prefixIcon = computed(() : string | null => {
+		if (props.leftIcon == '') return null
+		return props.leftIcon ?? THEME_ICON.get(props.type)
+	})
+
+	const texts = computed(() : string[] => {
+		let _texts : string[] = []
+		if (typeof props.text == 'string') {
+			_texts.push(props.text as string)
+		} else if (Array.isArray(props.text)) {
+			(props.text as any[]).forEach(text => {
+				if (typeof text == 'string') {
+					_texts.push(text as string)
+				}
+			})
+		}
+		return _texts
+	})
+
+	const classes = computed(() : Map<string, any> => {
+		const cls = new Map<string, any>()
+		cls.set(`l-notice-bar--${props.type}`, true)
+		return cls
+	})
+
+	const contentClass = computed(() : Map<string, any> => {
+		const cls = new Map<string, any>()
+		const name = 'l-notice-bar__content'
+		cls.set(`${name}-ellipsis`, !props.wrapable && !props.marquee || props.marquee && props.vertical)
+		cls.set(`${name}-wrapable`, props.wrapable && !props.marquee )
+		cls.set(`${name}-marquee`, props.marquee && !props.vertical)
+		return cls
+	})
+	
+	const textStyle = computed(():Map<string, any> => {
+		const style = new Map<string, any>()
+		if(props.color != null) {
+			style.set('color', props.color!)
+		}
+		if(props.fontSize != null) {
+			style.set('fontSize', props.fontSize!)
+		}
+		return style
+	})
+	const styles = computed(():Map<string, any> => {
+		const style = new Map<string, any>()
+		if(props.bgColor != null) {
+			style.set('background', props.bgColor!)
+		}
+		
+		return style
+	})
+	const listRef = ref<UniElement | null>(null)
+	const itemRef = ref<UniElement | null>(null)
+	const loop = ref(props.loop)
+	const setTransform = (offset : number, duration : number) => {
+		if(itemRef.value == null) return
+		itemRef.value?.style.setProperty('transition-timing-function', 'linear');
+		itemRef.value?.style.setProperty('transition-duration', `${duration}s`);
+		// 安卓需要延时一下才有动画
+		nextTick(()=>{
+			itemRef.value?.style.setProperty('transform', `translateX(${offset}px)`);
+		})
+	};
+	const getDimensions = async ():Promise<number[]> => {
+		if (listRef.value == null || itemRef.value == null) return [0, 0];
+		const listRect = await listRef.value!.getBoundingClientRectAsync() as DOMRect | null
+		const itemRect = await itemRef.value!.getBoundingClientRectAsync() as DOMRect | null
+		
+		const listWidth = listRect?.width ?? 0;
+		const itemWidth = itemRect?.width ?? 0;
+		
+		return [listWidth, itemWidth];
+	};
+	const handleScrolling = () => {
+		if (!props.marquee || loop.value == 0) return;
+		setTimeout(() => {
+			getDimensions().then(([listWidth, itemWidth])=>{
+				if (itemWidth >= listWidth) {
+					setTransform(-itemWidth, itemWidth / props.speed)
+				}
+			})
+		}, props.delay)
+
+	}
+	const handleTransitionend = async () => {
+		if (loop.value == 0) return
+		loop.value = --loop.value;
+		const [listWidth, itemWidth] = await getDimensions()
+		if (loop.value == 0) {
+			setTransform(listWidth, 0)
+			setTimeout(() => {
+				setTransform(0, listWidth / props.speed)
+			},0)
+			return;
+		}
+		setTransform(listWidth, 0)
+		setTimeout(() => {
+			setTransform(-itemWidth, (itemWidth + listWidth) / props.speed)
+		},props.interval);
+	}
+	const clickSuffixIcon = (_e : UniPointerEvent) => {
+		emits('click')
+	}
+	onMounted(() => {
+		nextTick(() => {
+			handleScrolling();
+		});
+	});
+</script>
+<style lang="scss">
+	@import './index';
+</style>

@@ -1,39 +1,33 @@
 <template>
 	<view>
 		<image class="logo" src="/static/logo.png"></image>
-		<text class="title">{{title}}</text>
+		<text class="title">uniappx test </text>
 		<navigator url="/pages/indexAdvise/indexAdvise">
 			<view style="height:40px;background-color: #eee;">indexadvidse</view>
 			</navigator>
-			<rice-input v-model="value" placeholder="请输入内容"/>
+		<view style="height: 200px;background-color: aliceblue;"> 
+			<l-icon name="solar:accessibility-bold" size="180px" color="#000" />
+		</view>
+			<rice-button type="primary" text="选择日期" @click="showPickTime"></rice-button>
+			<rice-calendar v-model:show="showRange" mode="range" :date="dateRange" @confirm="rangeConfirm"></rice-calendar>
+			
+		
 	</view>
 </template>
 
-<script>
-	export default {
-		data() {
-			return {
-				title: 'Hello',
-				value:'tttt',
-				hotelAddressArea:null,
-				hotelAddressCode:null,
-				startDate: '2025/10/14',
-				dateRangeArray:null
-			}
-		},
-		onLoad() {
-
-		},
-		methods: {
-			onchange(){
-				console.log(this.hotelAddressArea,this.hotelAddressCode)
-			},
-			dateConfim(){
-				console.log()
-			}
-			
-		}
+<script setup>
+	import {ref} from "vue";
+	const showRange=ref(false);
+	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"])
+	const rangeConfirm = (e : string[]) => {
+	  console.log(e)
 	}
+	const showPickTime=()=>{
+	  showRange.value=true;
+	}
+	uni.navigateTo({
+		url:"/pages/login/login"
+	})
 </script>
 
 <style>
@@ -47,6 +41,9 @@
 		font-size: 18px;
 		color: #8f8f94;
     text-align: center;
+	}
+	.l-icon--image{
+		    z-index: 1!important;
 	}
 </style>
 

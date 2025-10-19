@@ -1,0 +1,35 @@
+// @ts-nocheck
+// 有空再实现
+class KeyboardKey {
+	x: number;
+	y: number;
+	color: string;
+	width: number;
+	height: number;
+	fill: string;
+	borderRadius: number;
+	text: string;
+	type: 'text' | 'delete' | 'extra' | 'close';
+	constructor(){
+		
+	}
+	isCoordinateInside(x : number, y : number) : boolean {
+		return x >= this.x && x <= this.x + this.width && y >= this.y && y <= this.y + this.height;
+	}
+	draw(ctx: DrawableContext){}
+}
+export class Keyboard {
+	ctx: DrawableContext;
+	keyGap: number;
+	el: UniElement;
+	constructor(el: UniElement){
+		this.el = el;
+		this.ctx = el.getDrawableContext()
+	}
+	
+	private draw(keys:KeyboardKey[], type: string){
+		keys.forEach(key =>{
+			key.draw(this.ctx)
+		})
+	}
+}

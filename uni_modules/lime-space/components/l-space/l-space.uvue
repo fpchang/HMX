@@ -1,0 +1,176 @@
+<template>
+	<view ref="spaceRef" class="l-space" :class="classes" :style="[styles]">
+		<slot></slot>
+	</view>
+</template>
+<script lang="uts" setup>
+	// #ifdef APP
+	import { unitConvert } from '@/uni_modules/lime-shared/unitConvert';
+	// #endif
+	
+	// #ifndef APP
+	import { addUnit } from '@/uni_modules/lime-shared/addUnit';
+	// #endif
+	import { SpaceProps } from './type';
+	
+	const props = withDefaults(defineProps<SpaceProps>(), {
+		direction: 'horizontal',
+		size: 8,
+		wrap: false,
+		fill: false,
+	})
+	
+	
+	const classes = computed(():Map<string, any>=>{
+		const cls = new Map<string, any>();
+		const name = 'l-space'
+		cls.set(`${name}--${props.direction}`, true);
+		cls.set(`${name}--align-${props.align}`, props.align != null ? ['start', 'center', 'end', 'baseline'].includes(props.align!) : false);
+		cls.set(`${name}--wrap`, props.wrap);
+		cls.set(`${name}--fill`, props.fill);
+		
+		return cls
+	})
+	
+	const styles = computed(():Map<string, any>=>{
+		const style = new Map<string, any>();
+		
+		// #ifndef APP
+		const gap = props.size ? Array.isArray(props.size) ? `${addUnit(props.size[0])} ${addUnit(props.size[1])}` : addUnit(props.size) : '8px';
+		style.set('gap', gap)
+		// #endif
+		
+		return style
+	})
+	// #ifdef APP
+	const getGap = ():number[] => {
+		if(Array.isArray(props.size) ){
+			const _size = props.size as any[]
+			if(_size.length == 0){
+				return [8, 8]
+			} else if(_size.length == 1){
+				const size = unitConvert(_size[0])
+				return [size, size]
+			} else {
+				return [unitConvert(_size[0]), unitConvert(_size[1])]
+			}	
+		} else if(['string', 'number', 'Int'].includes(typeof props.size)){
+			const size = unitConvert(props.size)
+			return [size, size]
+		} 
+		return [8, 8]
+	}
+	
+	const spaceRef = ref<UniElement|null>(null);
+	
+	const layout = async () => {
+		const [rowGap, columnGap] = getGap();
+		const root =  spaceRef.value!
+		const rect = await root.getBoundingClientRectAsync()!;
+		const rootWidth = rect.width
+		const nodes:UniElement[] = [];
+		let totalWidth = 0;
+		for (let i = 0; i < root.children.length; i++){
+			const child = root.children[i]
+			if(child.tagName != 'COMMENT'){
+				nodes.push(child)
+				totalWidth += (child.getBoundingClientRect().width + columnGap)
+			}
+		}
+		const length = nodes.length
+		
+		if(length == 0 || rootWidth == 0) return
+		
+		
+		const maxRows = Math.floor(totalWidth / rootWidth)
+		let currentWidth = 0
+		let currentRows = 0
+		nodes.forEach((child, index) =>{
+			const isLast = index == length - 1;
+			if(props.direction =='vertical'){
+				if(!isLast){
+					child.style.setProperty('margin-bottom', `${rowGap}px`)
+				}
+			} else {
+				if(props.wrap){
+					const nextWidth = isLast ? 0 : nodes[index + 1].getBoundingClientRect().width
+					const currentSize = currentWidth + child.getBoundingClientRect().width + columnGap + nextWidth 
+					if(currentSize > rootWidth) {
+						currentWidth = 0
+						currentRows++
+					} else {
+						currentWidth = currentSize - nextWidth
+						child.style.setProperty('margin-right', `${columnGap}px`)
+					}
+					if(currentRows<maxRows){
+						child.style.setProperty('margin-bottom', `${rowGap}px`)
+					}
+				} else {
+					if(!isLast){
+						child.style.setProperty('margin-right', `${columnGap}px`)
+					}
+				}
+			}
+		})
+		
+	}
+	
+	const resizeObserver = new UniResizeObserver((entries : Array<UniResizeObserverEntry>) => {
+		layout()
+	}) 
+	
+	watchEffect(()=>{
+		if(spaceRef.value == null) return;
+		resizeObserver.observe(spaceRef.value!)
+		// #ifdef APP-IOS || APP-ANDROID || APP-HARMONY
+		// 安卓在list-view里首次也不执行
+		layout()
+		// #endif
+	})
+	// const stopWatch = watch(spaceRef, (el:UniElement|null) => {
+	// 	if(el== null) return
+	// 	resizeObserver.observe(el)
+	// })
+	
+	onUnmounted(()=>{
+		// stopWatch()
+		resizeObserver.disconnect()
+	})
+	// #endif
+</script>
+<style lang="scss">
+	.l-space {
+		&--horizontal {
+			flex-direction: row;
+		}
+
+		&--vertical {
+			flex-direction: column;
+		}
+
+		&--align-baseline {
+			// align-items: baseline;
+		}
+
+		&--align-start {
+			align-items: flex-start;
+		}
+
+		&--align-end {
+			align-items: flex-end;
+		}
+
+		&--align-center {
+			align-items: center;
+		}
+
+		&--wrap {
+			flex-wrap: wrap;
+		}
+
+		&--fill {
+			display: flex;
+		}
+
+	}
+</style>

@@ -1,0 +1,211 @@
+@import '@/uni_modules/lime-style/index.scss';
+
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+$link: #{$prefix}-link;
+
+// 状态色 - 默认色
+$link-default-type-map:(
+	color: create-var(link-default-color,  $text-color-1),
+	active-color: create-var(link-default-active-color, rgba(0,0,0,1)),
+	disabled-color: create-var(link-default-disabled-color, $text-color-4)
+);
+// 状态色 - 主色
+$link-primary-type-map:(
+	color: create-var(link-primary-color,  $primary-color),
+	active-color: create-var(link-primary-active-color, $primary-color-7),
+	disabled-color: create-var(link-primary-disabled-color, $primary-color-3)
+);
+// 状态色 - 成功
+$link-success-type-map:(
+	color: create-var(link-success-color,  $success-color),
+	active-color: create-var(link-success-active-color, $success-color-7),
+	disabled-color: create-var(link-success-disabled-color, $success-color-3)
+);
+// 状态色 - 警告
+$link-warning-type-map:(
+	color: create-var(link-warning-color,  $warning-color),
+	active-color: create-var(link-warning-active-color, $warning-color-7),
+	disabled-color: create-var(link-warning-disabled-color, $warning-color-3)
+);
+// 状态色 - 危险
+$link-danger-type-map:(
+	color: create-var(link-danger-color, $error-color),
+	active-color: create-var(link-danger-active-color, $error-color-7),
+	disabled-color: create-var(link-danger-disabled-color, $error-color-3)
+);
+// 状态色 - 信息
+$link-info-type-map:(
+	color: create-var(link-info-color, $info-color),
+	active-color: create-var(link-info-active-color,$info-color-7),
+	disabled-color: create-var(link-info-disabled-color,$info-color-3)
+);
+
+
+$link-type-map:(
+	default: $link-default-type-map,
+	primary: $link-primary-type-map,
+	danger: $link-danger-type-map,
+	warning: $link-warning-type-map,
+	success: $link-success-type-map,
+	info: $link-info-type-map,
+);
+
+$link-icon-size-map:(
+	// mini: create-var(link-icon-size, 32rpx),
+	small: create-var(link-icon-size, 28rpx),
+	medium: create-var(link-icon-size, 32rpx),
+	large: create-var(link-icon-size, 36rpx),
+);
+
+$link-font-size-map:(
+	// mini: create-var(link-font-size, $font-size-sm),
+	small: create-var(link-font-size, $font-size-sm),
+	medium: create-var(link-font-size, $font-size),
+	large: create-var(link-font-size, $font-size-md),
+);
+
+$link-line-height-map:(
+	// mini: create-var(link-line-height, 36rpx),
+	small: create-var(link-line-height, 40rpx),
+	medium: create-var(link-line-height, 44rpx),
+	large: create-var(link-line-height, 48rpx),
+);
+
+@mixin link-size($size) {
+	$fontSize: map-get($link-font-size-map, $size);
+	$iconSize: map-get($link-icon-size-map, $size);
+	$lineHeight: map-get($link-line-height-map, $size);
+	
+	.#{$link}--#{$size} {
+		/* #ifndef UNI-APP-X && APP */
+		font-size: $iconSize;
+		/* #endif */ 
+		.#{$link}__content {
+		    font-size: $fontSize;
+		    line-height: $lineHeight;
+		}
+		.#{$link}__prefix-icon,
+		.#{$link}__suffix-icon {
+			box-sizing: content-box;
+			/* #ifdef UNI-APP-X && APP */
+		    font-size: $iconSize;
+			width: $iconSize;
+			/* #endif */ 
+			/* #ifndef UNI-APP-X && APP */
+			font-size: $iconSize
+			/* #endif */ 
+		}
+	}
+}
+
+@mixin link-type($type) {
+	$type-map: map-get($link-type-map, $type);
+	
+	$color: map-get($type-map, color);
+	$activeColor: map-get($type-map, active-color);
+	$disabledColor: map-get($type-map, disabled-color);
+	
+	// .#{$link}__icon--#{$type}{
+	// 	color: $color !important;
+	// }
+	.#{$link}--#{$type} {
+		/* #ifndef UNI-APP-X && APP */
+		color: $color;
+		/* #endif */ 
+		.#{$link}__content,
+		.#{$link}__prefix-icon,
+		.#{$link}__suffix-icon {
+			color: $color;
+		}
+	   
+		/* #ifndef UNI-APP-X && APP */
+	    &.#{$link}--underline::after {
+			border-color: $color;
+	    }
+		/* #endif */ 
+		/* #ifdef UNI-APP-X && APP */
+		&.#{$link}--underline {
+			// border-bottom: 1rpx solid $color;
+			border-bottom-width: 1rpx;
+			border-bottom-style: solid;
+			border-bottom-color: $color;
+		}
+		/* #endif */ 
+	  //   &.#{$link}--disabled {
+			// opacity: 0.6
+			// color: $disabledColor;
+	  //   }
+	
+	    &.#{$link}--hover {
+			/* #ifndef UNI-APP-X && APP */
+			color: $activeColor;
+			&.#{$link}--underline::after {
+				border-color: $activeColor;
+			}
+			/* #endif */ 
+	    }
+	}
+	
+}
+
+
+// @include link-size(mini);
+@include link-size(small);
+@include link-size(medium);
+@include link-size(large);
+
+@include link-type(default);
+@include link-type(primary);
+@include link-type(danger);
+@include link-type(info);
+@include link-type(warning);
+@include link-type(success);
+
+	
+.#{$link} {
+	position: relative;
+	
+	align-items: center;
+	box-sizing: content-box;
+	flex-direction: row;
+	/* #ifndef UNI-APP-X && APP */
+	display: inline-flex;
+	/* #endif */
+	/* #ifdef WEB */
+	:deep(.navigator-wrap){
+		display: flex;
+		align-items: center;
+		box-sizing: content-box;
+		flex-direction: row;
+	}
+	/* #endif */
+	&--disabled {
+		opacity: 0.6
+		// color: $disabledColor;
+	}
+	/* #ifndef UNI-APP-X && APP */
+	&__icon {
+		display: inline-flex;
+	}
+	&--underline::after {
+	    content: '';
+	    position: absolute;
+	    left: 0;
+	    right: 0;
+	    height: 0;
+	    bottom: 0;
+	    opacity: 1;
+	    border-bottom: 2rpx solid rgb(205, 11, 231);
+	}
+	
+	&__prefix-icon:not(:empty) + &__content:not(:empty) {
+	    padding-left: 8rpx;
+	}
+	
+	&__content:not(:empty) + &__suffix-icon:not(:empty) {
+	    padding-left: 8rpx;
+	}
+	/* #endif */ 
+}

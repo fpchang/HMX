@@ -247,14 +247,14 @@
 			css.set('background-color', props.bgColor!)
 		}
 
-		if (props.height != null) css.set('height', addUnit(props.height!) as string)
+		if (props.height != null) css.set('height', addUnit(props.height!))
 		return css
 	})
 
 	const customInputStyle = computed(() => {
 		const css = new Map<string, string>()
 		if (hasStrValue(props.color)) css.set('color', props.color!)
-		if (props.fontSize != null) css.set('font-size', addUnit(props.fontSize!) as string)
+		if (props.fontSize != null) css.set('font-size', addUnit(props.fontSize!))
 		return css
 	})
 

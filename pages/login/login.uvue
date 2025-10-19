@@ -1,0 +1,130 @@
+<template>
+	<view>
+		<view class="top-banar">
+			<view class="flex-center">
+				
+				<image style="width:200px;height:150px" src="https://cdn.hotelsys.fun/HM/images/blue-logo.jpg"/>
+			</view>
+			<view class="subtitle flex-center">酒店助手<text style="padding: 0 4px">/</text><text>经营管理</text><text
+					style="padding: 0 4px">/</text><text>宣传推广</text>
+			</view>
+			<view style="height: 40px"></view>
+		</view>
+	</view>
+</template>
+
+<script setup>
+
+</script>
+
+<style lang="scss">
+	.flex-center {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.flex-left {
+		display: flex;
+		align-items: center;
+	}
+
+	.flex-end {
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	.flex-between {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.flx-column {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.top-banar {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-content: center;
+		background-color: #0765ae;
+
+		.subtitle {
+			font-size: 16px;
+			color: #fff;
+		}
+	}
+
+	.input-area {
+		width: 298px;
+		background-color: #ebebeb70;
+		height: 45px;
+		padding: 15px;
+		border-radius: 8px;
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		font-size: $uni-font-size-sm;
+
+		input {
+			flex: 1;
+			font-size: $uni-font-size-sm;
+		}
+	}
+
+	.sms-btn {
+		border-radius: 22.5px;
+		color: #fff;
+		background-color: #0765ae;
+		cursor: pointer;
+	}
+
+	.smstext {
+		color: #0765ae;
+		margin-right: 6px;
+		cursor: pointer;
+	}
+
+	.smstext-disable {
+		color: #bbb;
+	}
+
+	.container {
+		width: 100vw;
+		padding-top: 120px;
+		/* background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%); */
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.panel {
+			width: 300px;
+
+			.title {
+				font-size: 25px;
+				padding: 15px 0;
+				color: #434343;
+			}
+
+			.subtitle {
+				font-size: 16px;
+				color: #424242;
+			}
+		}
+	}
+
+	.up {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 12px;
+
+		.ct {
+			font-size: 12px;
+			cursor: pointer;
+		}
+	}
+</style>

@@ -1,0 +1,123 @@
+<template>
+	<view ref="colRef" class="l-col" :class="classes" :style="[styles, lStyle]">
+		<slot></slot>
+	</view>
+</template>
+<script lang="uts" setup>
+	/**
+	 * Col 列布局组件
+	 * @description 用于创建弹性布局的列容器，必须作为 Row 的直接子元素使用
+	 * <br>插件类型：LColComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-layout
+	 * 
+	 * @property {number | string | 'auto' | 'none'} span 列宽度（默认：24）
+	 * @value auto
+	 * @value none
+	 * @value 1
+	 * @value 2
+	 * @value 3
+	 * @value 4
+	 * @value 5
+	 * @value 6
+	 * @value 7
+	 * @value 8
+	 * @value 9
+	 * @value 10
+	 * @value 11
+	 * @value 12
+	 * @value 13
+	 * @value 14
+	 * @value 15
+	 * @value 16
+	 * @value 17
+	 * @value 18
+	 * @value 19
+	 * @value 20
+	 * @value 21
+	 * @value 22
+	 * @value 23
+	 * @value 24
+	 * @property {number | string} offset 列偏移量（默认：0）
+	 * @property {number} order 排序优先级（默认：0）
+	 * @property {number} aspectRatio 宽高比
+	 * @property {string | UTSJSONObject} lStyle 自定义样式（支持CSS字符串或JSON对象）
+	 */
+	
+	
+	import { ColProps } from './type'
+	
+	const gutter = inject<Ref<number[]>|null>('limeRow', null)
+	const props = withDefaults(defineProps<ColProps>(), {
+		// span: 'none',
+		offset: 0,
+		order: 0
+	})
+	
+	const classes = computed(():Map<string, boolean>=>{
+		const cls = new Map<string, boolean>()
+		if(props.span != null){
+			cls.set(`l-col--${props.span}`, true)
+		}
+		
+		cls.set(`l-col--offset-${props.offset}`,  `${props.offset}` != '0')
+		
+		return cls
+	})
+	
+	const styles = computed(():Map<string, any>=> {
+		const style = new Map<string, any>()
+		if(props.order != 0) {
+			style.set('order', props.order)
+		}
+		const vertical = gutter != null ?  gutter.value[0] : 0
+		const horizontal =  gutter != null ? gutter.value[1] : 0
+		if(vertical != 0) {
+			style.set('padding-top', `${vertical}px`)
+			style.set('padding-bottom', `${vertical}px`)
+		}
+		if(horizontal != 0) {
+			style.set('padding-left', `${horizontal}px`)
+			style.set('padding-right', `${horizontal}px`)
+		}
+		// #ifndef APP
+		if(props.aspectRatio != null) {
+			style.set('aspect-ratio', props.aspectRatio!)
+		}
+		// #endif
+		// #ifdef APP
+		// 为了避免闪一下
+		if(props.aspectRatio != null) {
+			style.set('height', '0px')
+		}
+		// #endif
+		return style
+	})
+	
+
+	// #ifdef APP
+	const colRef = ref<UniElement|null>(null)
+	const setColHeight = async () => {
+		if(colRef.value == null || props.aspectRatio == null || props.aspectRatio == 0) return
+		const rect = await colRef.value!.getBoundingClientRectAsync() as DOMRect|null
+		if(rect == null) return
+		colRef.value!.style.setProperty('height', `${rect.width / props.aspectRatio!}px`)
+	}
+	
+	const resizeObserver = new UniResizeObserver((entries : Array<UniResizeObserverEntry>) => {
+		setColHeight()
+	}) 
+	
+	const stopWatch = watch(():UniElement|null => colRef.value, (el:UniElement|null) => {
+		if(el== null) return
+		resizeObserver.observe(el)
+	})
+	
+	onUnmounted(()=>{
+		stopWatch()
+		resizeObserver.disconnect()
+	})
+	// #endif
+</script>
+<style lang="scss">
+	@import './index';
+</style>

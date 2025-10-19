@@ -331,10 +331,10 @@
 		const css = new Map<string, string | number>()
 		css.set('z-index', props.zIndex)
 		if (props.width != null) {
-			css.set('width', addUnit(props.width!) as string)
+			css.set('width', addUnit(props.width!))
 		}
 		if (props.marginTop != null) {
-			css.set('margin-top', addUnit(props.marginTop!) as string)
+			css.set('margin-top', addUnit(props.marginTop!))
 		}
 		if (hasStrValue(props.bgColor)) {
 			css.set('background-color', props.bgColor!)

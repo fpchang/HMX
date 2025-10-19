@@ -1,0 +1,209 @@
+@import '@/uni_modules/lime-style/index.scss';
+@import '@/uni_modules/lime-style/functions.scss';
+
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+$switch: #{$prefix}-switch;
+
+
+
+$switch-checked-color: create-var(switch-checked-color, $primary-color);
+$switch-disabled-opacity: create-var(switch-disabled-opacity, 0.8);
+$switch-checked-disabled-color: create-var(switch-checked-disabled-color, $primary-color-3);
+$switch-unchecked-color: create-var(switch-unchecked-color, $gray-4);
+$switch-unchecked-disabled-color: create-var(switch-unchecked-disabled-color, $gray-2);
+
+
+$switch-width: create-var(switch-width, 46px);
+$switch-height: create-var(switch-height, 28px);
+$switch-square-radius: create-var(switch-radius, 4px);
+$switch-round-radius: create-var(switch-radius, 99px);
+
+$switch-dot-bg-color: create-var(switch-dot-bg-color, white);
+$switch-dot-size: create-var(switch-dot-size, 22px);
+// $switch-dot-size-pressed: create-var(switch-dot-size-pressed, 56rpx);
+// $switch-dot-size-pressed: create-var(switch-dot-size-pressed, calc($switch-dot-size * 1.25));
+$switch-dot-shadow: create-var(switch-dot-shadow, $shadow-1);
+$switch-dot-round-radius: create-var(switch-dot-radius, 99px);
+$switch-dot-square-radius: create-var(switch-dot-radius, 3px);
+
+$switch-font-size: create-var(swtich-font-size, 14px);
+$switch-text-color: create-var(swtich-text-color, white);
+
+/* #ifdef UNI-APP-X && APP */
+$switch-dot-size-pressed: create-var(switch-dot-size-pressed, 28px);
+// $switch-dot-offset: create-var(switch-dot-offset, divide($switch-height - $switch-dot-size, 2));
+$switch-dot-offset: create-var(switch-dot-offset, divide(28px - 22px, 2));
+$placeholder-offset: 1.20 * 28px - $switch-dot-offset;
+// #endif
+/* #ifndef UNI-APP-X && APP */
+$switch-dot-size-pressed: create-var(switch-dot-size-pressed, calc(#{$switch-dot-size} * 1.25));
+
+$switch-dot-offset: create-var(switch-dot-offset, calc((#{$switch-height} - #{$switch-dot-size}) / 2));
+$placeholder-offset: calc(1.20 * #{$switch-height} - #{$switch-dot-offset});
+// #endif
+
+.#{$switch} {
+	// font-size: $switch-font-size;
+	/* #ifndef UNI-APP-X && APP */
+	display: inline-flex;
+	/* #endif */
+	flex-direction: row;
+	align-items: center;
+	
+	&__rail {
+		/* #ifndef UNI-APP-X && APP */
+		position: relative;
+		/* #endif */
+		height: $switch-height;
+		min-width: $switch-width;
+		transition-duration: 300ms;
+		// css var 设置background-color 会导致尺寸没了
+		/* #ifndef UNI-APP-X && APP */
+		transition-property: width, background-color;
+		/* #endif */
+		/* #ifdef UNI-APP-X && APP */
+		transition-property: width;
+		/* #endif */
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	}
+	&--hover {
+		.#{$switch}__dot {
+			max-width: $switch-dot-size-pressed;
+		}
+	}
+	&--hover#{&}--checked{
+		/* #ifndef UNI-APP-X && APP */
+		.#{$switch}__dot {
+			left: calc(100% - #{$switch-dot-size-pressed} - #{$switch-dot-offset});
+		}
+		.#{$switch}__placeholder--unchecked {
+			padding-left: calc(1.25 * #{$switch-dot-size-pressed});
+		}
+		// #endif
+	}
+	&--hover#{&}--unchecked{
+		/* #ifndef UNI-APP-X && APP */
+		.#{$switch}__placeholder--checked {
+			padding-right: calc(1.25 * #{$switch-dot-size-pressed});
+		}
+		// #endif
+	}
+	&--checked {
+		background-color: $switch-checked-color;
+		/* #ifndef UNI-APP-X && APP */
+		.#{$switch}__dot {
+			left: calc(100% - #{$switch-dot-size} - #{$switch-dot-offset});
+		}
+		// #endif
+	}
+	&--disabled {
+		opacity: $switch-disabled-opacity
+	}
+	&--checked#{&}--disabled {
+		background-color: $switch-checked-disabled-color;
+	}
+	&--unchecked {
+		background-color: $switch-unchecked-color;
+	}
+	&--unchecked#{&}--disabled {
+		background-color: $switch-unchecked-disabled-color;
+	}
+	&--round {
+		// border-radius: $switch-round-radius;
+		@include border-radius($switch-round-radius);
+	}
+	&--square {
+		// border-radius: $switch-square-radius;
+		@include border-radius($switch-square-radius);
+	}
+	&__dot {
+		position: absolute;
+		background-color: $switch-dot-bg-color;
+		height: $switch-dot-size;
+		pointer-events: none;
+		
+		justify-content: center;
+		align-items: center;
+		
+		overflow: visible;
+		transition-duration: 300ms;
+		transition-property: background-color, opacity, left, max-width, width, box-shadow, transform;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		// transition: all cubic-bezier(0.4, 0, 0.2, 1);
+		// transition: background-color .3s var(--n-bezier), left .3s var(--n-bezier), opacity .3s var(--n-bezier), max-width .3s var(--n-bezier), box-shadow .3s var(--n-bezier);
+		/* #ifndef UNI-APP-X && APP */
+		display: flex;
+		width: $switch-dot-size-pressed;//$switch-dot-size;
+		max-width: $switch-dot-size;
+		left: $switch-dot-offset;
+		top: $switch-dot-offset;
+		
+		--l-loading-size: calc(#{$switch-dot-size} * 0.7);
+		--l-loading-color: #{$switch-checked-color};
+		/* #endif */
+		/* #ifdef UNI-APP-X && APP */
+		width: $switch-dot-size;
+		/* #endif */
+		&--round {
+			// border-radius: $switch-dot-round-radius;
+			@include border-radius($switch-dot-round-radius);
+		}
+		&--square {
+			// border-radius: $switch-dot-square-radius;
+			@include border-radius($switch-dot-square-radius);
+		}
+	}
+	
+	&__placeholder {
+		overflow: visible;
+		position: absolute;
+		white-space: nowrap;
+		pointer-events: none;
+		// top: 0;
+		// bottom: 0;
+		top: 50%;
+		/* #ifdef UNI-APP-X && APP */
+		transform: translateY(-50%);
+		/* #endif */
+		/* #ifndef UNI-APP-X && APP */
+		
+		transform: translateY(-53%);
+		line-height: 1;
+		/* #endif */
+		font-size: $switch-font-size;
+		color: $switch-text-color;
+		
+		// background-color: aqua;
+		// line-height: $switch-dot-size;
+		// height: $switch-dot-size;
+		box-sizing: content-box;
+		&--checked {
+			right: 0;
+			text-align: right;
+			padding-right: $placeholder-offset;
+		}
+		&--unchecked {
+			left: 0;
+			padding-left: $placeholder-offset;
+		}
+	}
+	&__loading {
+		// width: 100%;
+		// height: 100%;
+		flex: 1;
+	}
+	/* #ifndef UNI-APP-X && APP */
+	&__children-placeholder {
+		height: $switch-height;
+	}
+	&__rail {
+		&-placeholder {
+			opacity: 0;
+			padding-left: calc(1.75 * #{$switch-height});
+			font-size: $switch-font-size;
+		}
+	}
+	/* #endif */
+}

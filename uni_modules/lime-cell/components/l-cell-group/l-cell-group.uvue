@@ -1,0 +1,37 @@
+<template>
+	<text class="l-cell-group__title" v-if="title != null">{{title}}</text>
+	<view class="l-cell-group" :class="{'l-cell-group--inset': inset}">
+		<slot/>
+	</view>
+</template>
+<script lang="uts" setup>
+	/**
+	 * CellGroup 单元格分组容器
+	 * @description 用于包裹多个 Cell 组件，提供统一的组样式和布局
+	 * <br> 插件类型：LCellGroupComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-cell-group
+	 * 
+	 * @property {string} title 分组标题文本
+	 * @property {boolean} inset 是否采用内嵌式样式（带圆角和外边距）
+	 */
+	
+	import { CellGroupProps, CellGroupProvide } from './type';
+	
+	const props = withDefaults(defineProps<CellGroupProps>(), {
+		inset: false
+		// bordered: false
+	})
+	
+	const children = ref<number[]>([])
+	
+	
+	
+	provide('limeCellGroup', {
+		children,
+		props
+	} as CellGroupProvide)
+	
+</script>
+<style lang="scss">
+	@import './index';
+</style>

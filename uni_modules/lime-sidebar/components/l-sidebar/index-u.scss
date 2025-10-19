@@ -1,0 +1,39 @@
+@import '~@/uni_modules/lime-style/index.scss';
+
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+
+$sidebar: #{$prefix}-sidebar;
+$sidebar-width: create-var(sidebar-width, 104px);
+$sidebar-height: create-var(sidebar-height, 100%);
+$sidebar-bg-color: create-var(sidebar-bg-color, $gray-1);
+$sidebar-selected-border-radius: create-var(sidebar-selected-border-radius, 10px);
+$sidebar-selected-bg-color: create-var(sidebar-selected-bg-color, $bg-color-container);
+
+.#{$sidebar} {
+	display: flex;
+	flex-direction: column;
+	background-color: $sidebar-selected-bg-color;  
+	width:$sidebar-width;
+	height: $sidebar-height;
+	align-self: flex-start;
+	/* #ifndef APP-HARMONY || APP-HARMONY || APP-IOS */
+	::v-deep .uni-scroll-view-content, :deep(.uni-scroll-view-content) {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	&::-webkit-scrollbar {
+	    display: none;
+	}
+	/* #endif */ 
+	 
+	&__padding {
+	    flex: 1;
+	    background-color: $sidebar-bg-color;
+	}
+	&--top {
+		border-top-right-radius: $sidebar-selected-border-radius;
+	}
+}

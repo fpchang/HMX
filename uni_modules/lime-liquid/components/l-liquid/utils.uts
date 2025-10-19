@@ -1,0 +1,43 @@
+export function hex2rgb(hex : string) : number[] {
+	hex = hex.replace('#', '')
+	if (hex.length == 3) {
+		hex = hex.charAt(0).repeat(2) + hex.charAt(1).repeat(2) + hex.charAt(2).repeat(2)
+	}
+	let r = parseInt(hex.substring(0, 2), 16)
+	let g = parseInt(hex.substring(2, 4), 16)
+	let b = parseInt(hex.substring(4, 6), 16)
+	if (isNaN(r) || isNaN(g) || isNaN(b)) {
+		throw new Error('The param "hex" should be a hexadecimal digit.')
+	}
+
+	let a = 1;
+	if (hex.length == 8) {
+		a = parseInt(hex.substring(6, 8), 16) / 255
+	}
+	return [r, g, b, a]
+}
+
+const colorsMap = new Map<string, string>()
+export function toRgba(color : string, alpha : number) : string {
+	const key = `${color}-${alpha}`
+	if(colorsMap.has(key)) {
+		return colorsMap.get(key)!
+	}
+	if (color.startsWith('#')) {
+		const rgb = hex2rgb(color)
+		const __color = `rgba(${rgb[0]},${rgb[1]}, ${rgb[2]}, ${alpha})`
+		colorsMap.set(key, __color)
+		return __color
+	} else if (color.startsWith('rgb')) {
+		const rgb = color.match(/\d+/g)?.map((item) : number => parseInt(item ?? '0'))
+		if (Array.isArray(rgb) && rgb!.length > 2) {
+			const __color = `rgba(${rgb[0]},${rgb[1]}, ${rgb[2]}, ${alpha})`
+			colorsMap.set(key, __color)
+			return __color
+		} else {
+			throw new Error('不支持的颜色：' + color)
+		}
+	} else {
+		throw new Error('不支持的颜色：' + color)
+	}
+}

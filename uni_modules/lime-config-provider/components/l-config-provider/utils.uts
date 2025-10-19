@@ -1,0 +1,50 @@
+// @ts-nocheck
+// #ifndef UNI-APP-X
+type UTSJSONObject = Record<string, string>
+// #endif
+
+
+export function kebabCase(str : string) : string {
+	str = str.replace(str.charAt(0), str.charAt(0).toLocaleLowerCase())
+	return str.replace(/([a-z])([A-Z])/g, (_, p1, p2) => p1 + '-' + p2.toLowerCase())
+}
+
+export function colorRgb(str : string) : string | null {
+	if (str == '') return null
+	var sColor = str.toLowerCase()
+	//十六进制颜色值的正则表达式
+	var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/
+	// 如果是16进制颜色
+	if (sColor != ' ' && reg.test(sColor)) {
+		if (sColor.length == 4) {
+			var sColorNew = '#'
+			for (let i = 1; i < 4; i += 1) {
+				sColorNew += sColor.slice(i, i + 1).concat(sColor.slice(i, i + 1))
+			}
+			sColor = sColorNew
+		}
+		//处理六位的颜色值
+		var sColorChange : number[] = []
+		for (let i = 1; i < 7; i += 2) {
+			sColorChange.push(parseInt('0x' + sColor.slice(i, i + 2)))
+		}
+		return sColorChange.join(',')
+	}
+	return null
+}
+
+export function mapThemeVarsToCSSVars(themeVars : UTSJSONObject | null) : UTSJSONObject | null {
+	if (themeVars == null) return null
+	const cssVars = {}
+	// #ifdef APP-ANDROID
+	UTSJSONObject.keys(themeVars).forEach((key) => {
+		cssVars[`--l-${kebabCase(key)}`] = themeVars[key]
+	})
+	// #endif
+	// #ifndef APP-ANDROID
+	Object.keys(themeVars).forEach((key) => {
+		cssVars[`--l-${kebabCase(key)}`] = themeVars[key]
+	})
+	// #endif
+	return cssVars
+}

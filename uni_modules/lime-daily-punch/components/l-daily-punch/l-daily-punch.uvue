@@ -1,0 +1,253 @@
+<template>
+	<view>
+		<canvas ref="dailyRef" id="l-daily-punch" class="l-daily-punch" :style="[styles]" @click="onClick"></canvas>
+	</view>
+</template>
+<script setup lang="uts">
+	
+	/**
+	 * LimeDailyPunch 每日签到日历组件
+	 * @description 用于展示和操作签到日历的组件
+	 * <br> 插件类型：LDailyPunchComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-daily-punch
+	 * @property {Boolean} canSupplement 是否允许补充签到
+	 * @property {Boolean} isFullCalendar 是否显示完整日历
+	 * @property {String} yearMonth 当前显示的年月（格式 "YYYY-MM"）
+	 * @property {Array<String>} signedDates 已签到日期数组（格式 ["YYYY-MM-DD"]）
+	 * @property {(String|Number|Object)} dayHeight 单日高度（不同平台类型不同）
+	 * @property {Array<String>} week 星期数组（默认 ["日","一","二","三","四","五","六"]）
+	 * @property {Number} weekStartsOn 星期起始日
+	 * @value 0 从周日开始
+	 * @value 1 从周一开始
+	 * @value 2 从周二开始（类推至6）
+	 * @property {String} weekColor 星期文字颜色（十六进制/rgb）
+	 * @property {Number} weekFontSize 星期文字大小（单位px）
+	 * @property {Number} weekHeight 星期行高（单位px）
+	 * @property {String} selectedDayBgColor 选中日背景色（十六进制/rgb）
+	 * @property {Number} dayFontSize 日期文字大小（单位px）
+	 * @property {String} textColor 普通文字颜色（十六进制/rgb）
+	 * @property {String} disabledColor 禁用状态颜色（十六进制/rgb）
+	 * @property {Number} monthTitleHeight 月份标题高度（单位px）
+	 * @property {Number} monthTitleFontSize 月份标题文字大小（单位px）
+	 * @property {String} color 签到状态标记颜色（十六进制/rgb）
+	 * @property {String} unsignedColor 未签到状态标记颜色（十六进制/rgb）
+	 * @event {Function} select 选中时触发
+	 * @event {Function} panelChange 切换面板时触发
+	 * @event {Function} streak 统计日期时触发
+	 */
+	import { Calendar} from './calender'
+	import { PropType } from 'vue'
+	import { unitConvert } from '@/uni_modules/lime-shared/unitConvert';
+	// import { LimeDailyPunchDay } from '../../utssdk/interface';
+	import { LimeDailyPunchDay,  LimeDailyPunchOptions, LimeDailyPunchYearMonth } from '../../index';
+	
+	const themeVars = inject('limeConfigProviderThemeVars', computed(()=> ({})))
+	
+	const emits = defineEmits(['select', 'panelChange', 'streak'])
+	const props = defineProps({
+		canSupplement: {
+			type: Boolean,
+			default: true
+		},
+		isFullCalendar: {
+			type: Boolean,
+			default: true
+		},
+		yearMonth: {
+			type: String,
+			default: () : string => {
+				const date = new Date();
+				const year = date.getFullYear();
+				const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 确保月份是两位数
+				return `${year}-${month}`;
+			}
+		},
+		signedDates: {
+			type: Array as PropType<string[]>,
+			default: () : string[] => {
+				return [] as string[];
+			},
+			validator: (value : string[]):boolean => {
+				// 简单的验证函数，确保每个元素都是有效的日期字符串
+				return value.every((date : string) : boolean => /^\d{4}-\d{2}-\d{2}$/.test(date));
+			}
+		},
+		// #ifdef APP-ANDROID
+		dayHeight: {
+			type: Object,
+			default: 76
+		},
+		// #endif
+		// #ifndef APP-ANDROID
+		dayHeight: {
+			type: [String, Number],
+			default: 76
+		},
+		// #endif
+		week: {
+			type: Array as PropType<string[]>,
+			default: () : string[] => ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+		},
+		weekStartsOn: {
+			type: Number,
+			default: 6,
+			validator: (value:number):boolean => value <= 6
+		},
+		weekColor: {
+			type: String,
+			// default: '#BDC0C3'
+		},
+		weekFontSize: {
+			type: Number,
+			default: 14
+		},
+		weekHeight: {
+			type: Number,
+			default: 30
+		},
+		selectedDayBgColor: {
+			type: String,
+			// default: 'rgba(0,0,0,0.06)'
+		},
+		dayFontSize: {
+			type: Number,
+			default: 16
+		},
+		textColor: {
+			type: String,
+			// default: '#1A1F24'
+		},
+		disabledColor: {
+			type: String,
+			// default: '#BDC0C3'
+		},
+		monthTitleHeight: {
+			type: Number,
+			default: 50
+		},
+		monthTitleFontSize: {
+			type: Number,
+			default: 20
+		},
+		color: {
+			type: String,
+			default: '#3B87F6'
+		},
+		unsignedColor: {
+			type: String,
+			default: '#F1A33A'
+		},
+	})
+	let drawRef = ref<UniCanvasElement|null>(null)
+	let calender:Calendar|null = null
+	
+	const styles = computed(():Map<string, any> => {
+		const style = new Map<string, any>()
+		style.set('height', `${6 * unitConvert(props.dayHeight) + props.weekHeight + props.monthTitleHeight}px`)
+		return style
+	})
+	
+	const onClick = (e: UniPointerEvent) => {
+		calender?.touch(e)
+	}
+	
+	
+	const setOpt = () => {
+		const weekColor = themeVars.value['dailyPunchWeekColor'] ?? 'rgba(0,0,0,0.45)'
+		const selectedDayBgColor = themeVars.value['dailyPunchSelectedDayBgColor'] ?? 'rgba(0,0,0,0.15)'
+		const textColor = themeVars.value['dailyPunchTextColor'] ?? 'rgba(0,0,0,0.88)'
+		const disabledColor = themeVars.value['dailyPunchDisabledColor'] ?? 'rgba(0,0,0,0.25)'
+		// const unsignedColor = themeVars.value['dailyPunchUnsignedColor'] ?? '#F1A33A'
+		// const color = themeVars.value['dailyPunchColor'] ?? '#3B87F6'
+		
+		const opt:LimeDailyPunchOptions = {
+			canSupplement: props.canSupplement,
+			isFullCalendar: props.isFullCalendar,
+			yearMonth: props.yearMonth,
+			signedDates: [...props.signedDates],
+			dayHeight: unitConvert(props.dayHeight),
+			week: props.week as string[],
+			weekStartsOn: props.weekStartsOn,
+			weekColor: `${props.weekColor ?? weekColor}`,
+			weekFontSize: props.weekFontSize,
+			weekHeight: props.weekHeight,
+			selectedDayBgColor: `${props.selectedDayBgColor ?? selectedDayBgColor}`,
+			dayFontSize: props.dayFontSize,
+			textColor: `${props.textColor ?? textColor}`,
+			disabledColor: `${props.disabledColor ?? disabledColor}`,
+			monthTitleHeight: props.monthTitleHeight,
+			monthTitleFontSize: props.monthTitleFontSize,
+			color: `${props.color}`,
+			unsignedColor: `${props.unsignedColor}`,
+			select: (e: LimeDailyPunchDay) => {
+				emits('select', e)
+			},
+			panelChange: (e: LimeDailyPunchYearMonth) => {
+				emits('panelChange', e)
+			}
+		}
+		if(calender == null) return
+		calender!.setOptions(opt)
+	}
+	let checkinDays = 0;
+	watchEffect(() => {
+		// if(themeVars.value != {}){}
+		setOpt()
+		if(calender == null) return
+		calender!.render()
+		if(calender!.checkinDays != checkinDays) {
+			checkinDays = calender!.checkinDays
+			emits('streak', checkinDays)
+		}
+		
+	})
+	const instance = getCurrentInstance()!.proxy!
+	
+	// #ifndef APP-IOS || APP-HARMONY
+	// 异步调用方式, 跨平台写法
+	uni.createCanvasContextAsync({
+		id: 'l-daily-punch',
+		component: instance,
+		success: (context : CanvasContext) => {
+			const canvasContext = context.getContext('2d')!;
+			const canvas = canvasContext.canvas;
+			calender = new Calendar()
+			setOpt()
+			calender!.setCanvas(canvas)
+			calender!.render()
+			emits('streak', calender!.checkinDays)
+		},
+		fail(err) {
+			console.log(`【lime-daily-punch】createCanvasContextAsync`, err)
+		}
+	})
+	// #endif
+	// #ifdef APP-IOS || APP-HARMONY
+	// IOS hbx4.52 / HOS HBX4.63
+	const dailyRef = ref<UniElement|null>(null)
+	onMounted(()=> {
+		nextTick(()=> {
+			requestAnimationFrame(() =>{
+				// 在鸿蒙获取时机不能确定
+				setTimeout(() => {
+					dailyRef.value?.getBoundingClientRectAsync()?.then(res=>{
+						calender = new Calendar()
+						setOpt()
+						calender!.setCanvas(dailyRef.value)
+						calender!.render()
+						emits('streak', calender!.checkinDays)
+					})
+				}, 100);
+				
+			});
+			
+		})
+	})
+	// #endif
+</script>
+<style lang="scss">
+	.l-daily-punch {
+		width: 100%;
+		// height: 75 * 6 + 50px + 40px;
+	}
+</style>

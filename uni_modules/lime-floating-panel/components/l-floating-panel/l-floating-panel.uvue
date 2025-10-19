@@ -1,0 +1,357 @@
+<template>
+	<!-- #ifdef APP-ANDROID || APP-IOS || APP-HARMONY || WEB -->
+	<view class="l-floating-panel" :class="{ 'l-floating-panel--safe' : safeAreaInsetBottom}" :style="[styles]" ref="rootRef" @touchstart="onTouchstart"
+		@touchmove.stop="onTouchmove" 
+		@touchend="onTouchend" 
+		@touchcancel="onTouchend" 
+		@transitionend="onTransitionend">
+		<view class="l-floating-panel__header">
+			<view 
+				class="l-floating-panel__header-bar" 
+				:style="[barStyle]">
+			</view>
+		</view>
+		<slot></slot>
+	</view>
+	<!-- #endif -->
+	<!-- #ifndef APP-ANDROID || APP-IOS || APP-HARMONY || WEB -->
+	<movable-area class="l-floating-panel-area" :style="[areaStyles]" :data-initialized="initialized">
+		<movable-view 
+			class="l-floating-panel" 
+			direction="vertical" 
+			inertia 
+			out-of-bounds 
+			:damping="80" 
+			:friction="100"
+			:disabled="isDraggable"
+			:y="currentY"
+			:animation="isAnimation"
+			@change="onTouchmove"
+			@touchstart="onTouchstart"
+			@touchend="onTouchend"
+			@touchcancel="onTouchend"
+			:style="[styles]">
+			<view class="l-floating-panel__header" data-handle="true">
+				<view class="l-floating-panel__header-bar" :style="[barStyle]"></view>
+			</view>
+			<view class="l-floating-panel__content">
+				<slot></slot>
+			</view>
+		</movable-view>
+	</movable-area>
+	<!-- #endif -->
+</template>
+<script lang="uts" setup>
+	/**
+	 * FloatingPanel 浮动面板组件
+	 * @description 用于实现可拖拽交互的浮动内容区域（类似底部抽屉）
+	 * <br> 插件类型：LFloatingPanelComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-floating-panel
+	 * 
+	 * @property {number} height 面板最大高度（单位px，建议使用窗口高度百分比）
+	 * @property {number[]} anchors 停靠锚点位置数组（单位px）
+	 * @property {number} defaultAnchor 默认停靠位置索引
+	 * @property {boolean} animation 是否启用过渡动画
+	 * @property {number} duration 动画时长（单位ms）
+	 * @property {boolean} contentDraggable 是否允许通过拖拽内容区域控制面板
+	 * @property {boolean} safeAreaInsetBottom 是否启用底部安全区域适配
+	 * @property {string} [bgColor] 面板背景色（支持十六进制/rgba）
+	 * @property {string} [barColor] 顶部拖拽条颜色
+	 * 
+	 * @event {Function} heightChange 高度变化时触发
+	 * @event {Function} change 拖拽过程中触发
+	 */
+	
+	import { addUnit } from '@/uni_modules/lime-shared/addUnit';
+	import { closest } from '@/uni_modules/lime-shared/closest';
+	import { unitConvert } from '@/uni_modules/lime-shared/unitConvert';
+	import { LFloatingPanelBoundary , FloatingPanelProps} from './type'
+	// #ifdef APP-ANDROID || APP-IOS || APP-HARMONY || WEB
+	import { useTouch } from './useTouch'
+	// #endif
+	const emit = defineEmits(['heightChange', 'change', 'update:height'])
+	const props = withDefaults(defineProps<FloatingPanelProps>(), {
+		height: 0,
+		anchors: [] as number[],
+		defaultAnchor: 0,
+		animation: true,
+		duration: 300,
+		contentDraggable: true,
+		safeAreaInsetBottom: true
+	})
+	
+	let info = uni.getWindowInfo()
+	const windowHeight = ref(info.windowHeight)
+	const safeAreaInsets = ref(info.safeAreaInsets)
+	
+	let dragging = ref(false);
+	let initialized = ref(false)
+
+	const boundary = computed(() : LFloatingPanelBoundary => {
+		const _anchors = props.anchors;
+		const length = _anchors.length
+		return {
+			min: length > 0 ? _anchors[0] : 100,
+			max: length > 0 ? _anchors[length - 1] : Math.round(windowHeight.value * 0.6),
+		} as LFloatingPanelBoundary
+	})
+	
+	const anchors = computed(() : number[] => {
+		return props.anchors.length >= 2 ? props.anchors : [boundary.value.min, boundary.value.max]
+	})
+	
+	const styles = computed(() : Map<string, any> => {
+		const style = new Map<string, any>()
+		style.set('height', `${boundary.value.max}px`)
+		if(props.bgColor != null) {
+			style.set('background-color', props.bgColor!)
+		}
+		return style
+	})
+	
+	const barStyle = computed(() : Map<string, any> => {
+		const style = new Map<string, any>()
+		if(props.barColor != null) {
+			style.set('background-color', props.barColor!)
+		}
+		
+		return style
+	})
+	
+	// #ifdef APP-ANDROID || APP-IOS || APP-HARMONY || WEB
+	const touch = useTouch()
+	const rootRef = ref<UniElement | null>(null)
+	const contentRef = ref<UniElement | null>(null)
+	
+	const jumpAnchor = ref(0)
+	const DAMP = 0.2;
+	const height = ref(0);
+	
+	let startY = 0;
+	let maxScroll = -1;
+	
+	const ease = (moveY : number) : number => {
+		const absDistance = Math.abs(moveY);
+		const { min, max } = boundary.value;
+
+		if (absDistance > max) {
+			return -(max + (absDistance - max) * DAMP);
+		}
+
+		if (absDistance < min) {
+			return -(min - (min - absDistance) * DAMP);
+		}
+
+		return moveY;
+	};
+
+
+	const onTouchstart = (e : UniTouchEvent) => {
+		touch.start(e);
+		dragging.value = true;
+		startY = -height.value;
+		maxScroll = -1;
+	}
+	const onTouchmove = (e : UniTouchEvent) => {
+		touch.move(e);
+		const target = e.target!
+		const classNmae = target.classList.length > 0 ? target.classList[0] : '';
+		// ios 鸿蒙 无法捕找到点击区域的classList
+		// 只有拖动了内容区域才进行判断是否需要阻止滚动
+		if (!['l-floating-panel__header', 'l-floating-panel__header-bar'].includes(classNmae) && contentRef.value != null) {
+			let scrollTop = 0;
+			if(contentRef.value!.tagName != 'VIEW') {
+				scrollTop = contentRef.value!.scrollTop;
+			}
+			maxScroll = Math.max(maxScroll, scrollTop);
+			
+			if (!props.contentDraggable) return;
+			if (-startY < boundary.value.max) {
+				e.preventDefault()
+				e.stopPropagation()
+			}
+			else if (!(scrollTop <= 0 && touch.deltaY.value > 0) || maxScroll > 0) {
+				return;
+			}
+		}
+		//touch.deltaY.value 向上负 向下正
+		const moveY = touch.deltaY.value + startY;
+		height.value = -ease(moveY);
+	}
+	const onTouchend = (_ : UniTouchEvent) => {
+		maxScroll = -1;
+		dragging.value = false;
+		height.value = closest(anchors.value, height.value);
+
+		if (height.value != -startY) {
+			emit('heightChange', { height: height.value });
+		}
+	}
+	const onTransitionend = (_ : UniEvent) => {
+		const index = anchors.value.findIndex((item : number) : boolean => item == height.value)
+		if (index >= 0) {
+			jumpAnchor.value = index
+		}
+	}
+	
+	const update = (value: number) => {
+		if (rootRef.value == null) return
+		rootRef.value!.style.setProperty('transition-duration', !dragging.value && initialized.value ? `${props.duration}ms` : '0ms')
+		if(!dragging.value && initialized.value) {
+			// 安卓要延时一下
+			nextTick(() => {
+				rootRef.value!.style.setProperty('transform', `translateY(${addUnit(boundary.value.max - value)})`)
+			})
+		} else {
+			rootRef.value!.style.setProperty('transform', `translateY(${addUnit(boundary.value.max - value)})`)
+		}
+		emit('update:height', value)
+	}
+	const stopWatchHeight = watch(height, update)
+
+	const stopWatchJumpAnchor = watch(jumpAnchor, (index : number) => {
+		height.value = anchors.value[index]
+	})
+
+	onMounted(() => {
+		nextTick(() => {
+			// 鸿蒙无法在setup阶段获取到信息
+			const res = uni.getWindowInfo();
+			windowHeight.value = res.windowHeight
+			// 查找插槽中的元素节点
+			if (rootRef.value != null) {
+				const lastChild = rootRef.value!.children[rootRef.value!.children.length - 1]
+				if (lastChild.tagName != 'COMMENT') {
+					contentRef.value = lastChild
+				} else if (lastChild.previousSibling?.tagName != 'COMMENT') {
+					contentRef.value = lastChild.previousSibling
+				}
+			}
+			height.value = closest(anchors.value, props.defaultAnchor == 0 ? height.value : anchors.value[props.defaultAnchor]);
+			update(height.value)
+			nextTick(() => {
+				// 首次不使用动画
+				initialized.value = true
+			})
+		})
+	})
+	// #endif
+	
+	// #ifndef APP-ANDROID || APP-IOS || APP-HARMONY || WEB
+	const areaStyles = computed(() => {
+		return ({
+			height: addUnit(boundary.value.max * 2 - boundary.value.min),
+			bottom: addUnit(boundary.value.max * -1 + boundary.value.min +(props.safeAreaInsetBottom ? safeAreaInsets.value.bottom:0)),
+			opacity: initialized.value ? 1 : 0
+		}) 
+	})
+	const calcY = (y: number):number => boundary.value.max - y;
+	
+	let moveYs = []
+	let startY = 0
+	const isAnimation = ref(false)
+	const currentY = ref(calcY(props.anchors[props.defaultAnchor]) ?? calcY(boundary.value.min))
+	const isDraggable = ref(!props.contentDraggable)
+	
+	
+	
+	
+	const onTouchstart = (e:  WechatMiniprogram.TouchEvent) => {
+		startY = e.touches[0].clientY
+		dragging.value = true
+		moveYs.length = 0
+		const { handle } = e.target.dataset
+		if(!props.contentDraggable && Boolean(handle)) {
+			isDraggable.value = false
+			return
+		}
+	}
+	
+	const onTouchmove = (e: WechatMiniprogram.MovableViewChange) => {
+		const {y}  = e.detail
+		if(dragging.value) {
+			moveYs.push(y)
+		}
+		const height = calcY(y) 
+		emit('update:height',height)
+	}
+	
+	const setCurrentY = (target: number) => {
+		// currentY.value = target + 0.1;
+		currentY.value = target
+		const height = calcY(target)
+		let index = anchors.value.findIndex(item => item == height)
+		
+		emit('heightChange', { height });
+		emit('change', { height, index });
+	}
+	
+	const reDraggable = () => {
+		if(!props.contentDraggable) {
+			setTimeout(() => {
+				 isDraggable.value = true
+			}, 50);
+		}
+	}
+	const onTouchend = (e: WechatMiniprogram.TouchEvent) => {
+		let moveY = 0
+		dragging.value = false
+		const { handle } = e.target.dataset
+		const isClick = Math.abs(e.changedTouches[0].clientY - startY) < 10
+		if(isClick && !Boolean(handle)) {
+			reDraggable()
+			return
+		}
+		if(isClick) {
+			const index = anchors.value.findIndex(item => item == calcY(currentY.value)) + 1
+			// setCurrentY(calcY(anchors.value[index % anchors.value.length]))
+			toAnchor(index % anchors.value.length)
+			reDraggable()
+			return
+		} else if(moveYs.length) {
+			moveY = moveYs[moveYs.length-1]
+		}
+		moveYs.length = 0
+		reDraggable()
+		setCurrentY(calcY(closest(anchors.value, calcY(moveY))))
+	}
+	
+	const stopWatch = watch(() => props.anchors, () => {
+		const index = anchors.value.findIndex(item => item == calcY(currentY.value)) + 1
+		toAnchor(index)
+	})
+	onMounted(() => {
+		isAnimation.value = props.animation
+		setTimeout(() => {
+			initialized.value = true
+		}, 50);
+	})
+	
+	onUnmounted(() => {
+		stopWatch()
+	})
+	
+	
+	// #endif
+	defineExpose({
+		toAnchor: (index : number) => {
+			if(index >= 0 && index < anchors.value.length) {
+				// #ifndef APP-ANDROID || APP-IOS || APP-HARMONY || WEB
+				setCurrentY(calcY(anchors.value[index]))
+				// #endif
+				// #ifdef APP-ANDROID || APP-IOS || APP-HARMONY || WEB
+				jumpAnchor.value = index
+				// #endif
+			}
+			
+		}
+	})
+</script>
+<style lang="scss">
+	/* #ifdef APP-ANDROID || APP-IOS || APP-HARMONY || WEB */
+	@import './index-u.scss';
+	/* #endif */
+	/* #ifndef APP-ANDROID || APP-IOS || APP-HARMONY || WEB */
+	@import './index.scss';
+	/* #endif */
+</style>

@@ -1,0 +1,157 @@
+@import '~@/uni_modules/lime-style/index.scss';
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+$upload: #{$prefix}-upload;
+
+$upload-add-color: create-var(upload-add-color, $text-color-4);
+$upload-add-bg-color: create-var(upload-add-bg-color, $gray-1);
+
+$upload-add-disabled-bg-color: create-var(upload-add-disabled-bg-color, $gray-2);
+$upload-add-icon-font-size: create-var(upload-add-icon-font-size, 28px);
+// $upload-add-icon-disabled-color: create-var(upload-add-icon-disabled-color, $text-color-4);
+
+$upload-radius: create-var(upload-radius, $border-radius);
+$upload-width: create-var(upload-width, 80px);
+$upload-height: create-var(upload-height, 80px);
+$upload-bg-color: create-var(upload-bg-color, $gray-1);
+$upload-delete-bg-color: create-var(upload-delete-bg-color, $bg-color-mask);
+$upload-delete-icon-color: create-var(upload-delete-icon-color, white);
+$upload-gap: create-var(upload-gap, 8px);
+
+// $upload-disabled-mask: create-var(upload-disabled-mask, rgba(0, 0, 0, 0.6));
+// $upload-drag-z-index: create-var(upload-drag-z-index, 999);
+
+.#{$upload} {
+	/* #ifndef UNI-APP-X */
+	display: flex;
+	/* #endif */
+	flex: 1;
+	position: relative;
+	flex-direction: row;
+	flex-wrap: wrap;
+
+	&__item {
+	    position: relative;
+		display: flex;
+	    // flex: 1;
+		/* #ifdef UNI-APP-X && APP ||  UNI-APP-X && WEB */
+		width: $upload-width;
+	    height: $upload-height;
+		// border-radius: $upload-radius;
+		@include border-radius($upload-radius);
+		overflow: hidden;
+		align-items: center;
+		justify-content: center;
+		/* #endif */
+		/* #ifndef UNI-APP-X && APP || UNI-APP-X && WEB */
+		&-inner {
+			overflow: hidden;
+			display: flex;
+			border-radius: $upload-radius;
+			align-items: center;
+			justify-content: center;
+			min-width: $upload-width;
+			width: 100%;
+			// height: 100%;
+			// flex: 1;
+			height: $upload-height;
+			position: relative;
+			
+		}
+		
+		/* #endif */
+	    &--add {
+			/* #ifdef UNI-APP-X && APP ||  UNI-APP-X && WEB */
+			background-color: $upload-bg-color;
+			/* #endif */
+			
+			/* #ifndef UNI-APP-X && APP ||  UNI-APP-X && WEB */
+			& > view {
+				background: $upload-bg-color;
+			}
+			/* #endif */
+			
+			/* #ifndef UNI-APP-X && APP */
+			font-size: $upload-add-icon-font-size;
+			color: $upload-add-color;
+			// text {
+			// 	font-size: inherit;
+			// }
+			/* #endif*/
+	    }
+		&--disabled {
+			// background-color: $upload-add-disabled-bg-color;
+			// color: $upload-add-icon-disabled-color;
+			opacity: 0.5;
+			/* #ifndef UNI-APP-X && APP */
+			cursor: not-allowed;
+			/* #endif */
+		}
+	}
+	&__image {
+		width: 100%;
+		height: 100%;
+	}
+	&__add-icon {
+		font-size: $upload-add-icon-font-size;
+		color: $upload-add-color;
+	    // position: absolute;
+	    // top: 50%;
+	    // left: 50%;
+	    // transform: translate3d(-50%, -50%, 0);
+	}
+	&__delete-btn {
+	    position: absolute;
+	    top: 0;
+	    right: 0;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    width: 20px;
+	    height: 20px;
+	    
+	    border-top-right-radius: $upload-radius;
+	    border-bottom-left-radius: $upload-radius;
+	    background-color: $upload-delete-bg-color;
+		/* #ifndef UNI-APP-X && APP*/
+		color: $upload-delete-icon-color;
+		/* #endif */
+	}
+	 &__progress {
+	    &-mask {
+			position: absolute;
+			left: 0;
+			top: 0;
+			bottom: 0;
+			width: 100%;
+			background-color: $bg-color-mask;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			// border-radius: $upload-radius;
+			@include border-radius($upload-radius);
+			padding: 16px 0;
+			/* #ifndef UNI-APP-X && APP */
+			display: flex;
+			color: white;
+			/* #endif */
+	    }
+	
+	    &-text {
+			font-size: 12px;
+			line-height: 20px;
+			margin-top: 4px;
+			color: white;
+	    }
+	
+	    &-loading {
+			align-self: center;
+	    }
+		&-icon {
+			color: white;
+			font-size: 24px !important;
+			width: 24px!important;
+		}
+	}
+}

@@ -1,0 +1,67 @@
+{
+  "name": "",
+  "description": "支持动画效果，支持跳过和插槽自定义",
+  "tutorial": "https://www.uxframe.cn/component/guide.html",
+  "attributes": [
+    {
+      "name": "[event]scroll",
+      "description": "Function | 锚点无法触达需要滚动时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]change",
+      "description": "Function | 步骤改变时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]skip",
+      "description": "Function | 跳过时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]end",
+      "description": "Function | 结束时触发",
+      "type": "Function"
+    },
+    {
+      "name": "default",
+      "description": "Slot | 默认插槽",
+      "type": "Slot"
+    },
+    {
+      "name": "datas",
+      "description": "UxGuideItem[] | 数据",
+      "type": "{\n\t\t\ttype: Array as PropType<UxGuideItem[]>,\n\t\t\tdefault: (): UxGuideItem[] => {\n\t\t\t\treturn [] as UxGuideItem[]\n\t\t\t}\n\t\t}"
+    },
+    {
+      "name": "width",
+      "description": "Any | 宽度 (默认 300)",
+      "type": "{\n\t\t\tdefault: 300\n\t\t}"
+    },
+    {
+      "name": "skip",
+      "description": "Boolean | 跳过 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "offset",
+      "description": "Any | 偏移 (默认 5)",
+      "type": "{\n\t\t\tdefault: 5\n\t\t}"
+    },
+    {
+      "name": "opacity",
+      "description": "Number | 遮罩透明度 0-1 (默认 0.8)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0.8\n\t\t}"
+    },
+    {
+      "name": "confirmText",
+      "description": "String | 完成按钮文字 (默认 '完成')",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '完成'\n\t\t}"
+    },
+    {
+      "name": "autoscroll",
+      "description": "Boolean | 自动滚动到锚点 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    }
+  ]
+}

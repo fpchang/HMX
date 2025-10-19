@@ -1,0 +1,190 @@
+{
+  "name": "",
+  "description": "支持整数、小数步进，可长按快速步进",
+  "tutorial": "https://www.uxframe.cn/component/numberbox.html",
+  "attributes": [
+    {
+      "name": "[event]change",
+      "description": "Function | 值改变时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]update:modelValue",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "name",
+      "description": "String | 标识符，在回调事件中返回",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "theme",
+      "description": "String | 主题颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '',\n\t\t}"
+    },
+    {
+      "name": "color",
+      "description": "String | 颜色 (默认 $ux.Conf.placeholderColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#f0f0f0'\n\t\t}"
+    },
+    {
+      "name": "darkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#666666'\n\t\t}"
+    },
+    {
+      "name": "inputColor",
+      "description": "String | 输入框背景颜色 (默认 $ux.Conf.placeholderColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#f0f0f0'\n\t\t}"
+    },
+    {
+      "name": "inputDarkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#666666'\n\t\t}"
+    },
+    {
+      "name": "fontColor",
+      "description": "String | 输入框背景颜色 (默认 $ux.Conf.placeholderColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "fontDarkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "value",
+      "description": "Number | 值",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "min",
+      "description": "Number | 最小值  (默认 0)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "max",
+      "description": "Number | 最大值 (默认 999999999)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 1000\n\t\t}"
+    },
+    {
+      "name": "step",
+      "description": "Number | 步长 (默认 1)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 1\n\t\t}"
+    },
+    {
+      "name": "decimal",
+      "description": "Boolean | 允许输入小数 默认 false ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "precision",
+      "description": "Number | 小数点精度 (默认 1)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 1\n\t\t}"
+    },
+    {
+      "name": "width",
+      "description": "Any | 输入框宽度（默认 50 ）",
+      "type": "{\n\t\t\tdefault: 50\n\t\t}"
+    },
+    {
+      "name": "radius",
+      "description": "Boolean | 圆角按钮（默认 false ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "minus",
+      "description": "Boolean | 显示 - 按钮（默认 true ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "plus",
+      "description": "Boolean | 显示 + 按钮（默认 true ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "longpress",
+      "description": "Boolean | 开启长按加减手势（默认 true ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "disablePlus",
+      "description": "Boolean | 禁用 +（默认 false ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "disableMinus",
+      "description": "Boolean | 禁用 -（默认 false ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "disabled",
+      "description": "Boolean | 禁用（默认 false ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "margin",
+      "description": "Array | 边距 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "mt",
+      "description": "Any | 距上 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "mr",
+      "description": "Any | 距右 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "mb",
+      "description": "Any | 距下 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "ml",
+      "description": "Any | 距左 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "padding",
+      "description": "Array | 填充 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "pt",
+      "description": "Any | 上内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pr",
+      "description": "Any | 右内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pb",
+      "description": "Any | 下内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pl",
+      "description": "Any | 左内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "xstyle",
+      "description": "Array<any> | 自定义样式",
+      "type": "Array"
+    },
+    {
+      "name": "modelValue",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "disabledInput",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    }
+  ]
+}

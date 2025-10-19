@@ -1,0 +1,27 @@
+{
+  "name": "",
+  "description": "宫格布局 需搭配 ux-grid-item 使用",
+  "tutorial": "https://www.uxframe.cn/component/grid.html",
+  "attributes": [
+    {
+      "name": "col",
+      "description": "Number | 宫格的列数（默认 3 ）",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 3\n\t\t}"
+    },
+    {
+      "name": "border",
+      "description": "Boolean | 是否显示宫格的边框（默认 false ）",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "align",
+      "description": "String | 宫格对齐方式，表现为数量少的时候，靠左，居中，还是靠右 （默认 left ）",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'left'\n\t\t}"
+    },
+    {
+      "name": "background",
+      "description": "String | 背景色（默认 transparent ）",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'transparent'\n\t\t}"
+    }
+  ]
+}

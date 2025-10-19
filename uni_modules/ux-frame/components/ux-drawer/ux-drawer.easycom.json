@@ -1,0 +1,102 @@
+{
+  "name": "",
+  "description": "支持点击、触摸滑动打开关闭",
+  "tutorial": "https://www.uxframe.cn/component/drawer.html",
+  "attributes": [
+    {
+      "name": "[event]change",
+      "description": "Function | 状态改变时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]close",
+      "description": "Function | 关闭时触发",
+      "type": "Function"
+    },
+    {
+      "name": "drawer",
+      "description": "Slot | 侧边栏内容插槽",
+      "type": "Slot"
+    },
+    {
+      "name": "touchable",
+      "description": "Boolean | 触摸拖动 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "direction",
+      "description": "String | 方向 (默认 right)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'right'\n\t\t}"
+    },
+    {
+      "name": "fixed",
+      "description": "Boolean | 固定定位 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "width",
+      "description": "String | 宽度 (默认 85%)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '85%'\n\t\t}"
+    },
+    {
+      "name": "height",
+      "description": "String | 高度 (默认 40%)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '40%'\n\t\t}"
+    },
+    {
+      "name": "background",
+      "description": "String | 背景色 (默认 transparent)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'transparent'\n\t\t}"
+    },
+    {
+      "name": "border",
+      "description": "Boolean | 显示边框 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "opacity",
+      "description": "Number | 遮罩透明度 0-1 (默认 $ux.Conf.maskAlpha)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: -1\n\t\t}"
+    },
+    {
+      "name": "duration",
+      "description": "Number | 过渡时间 (默认 300ms)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 300\n\t\t}"
+    },
+    {
+      "name": "showBlur",
+      "description": "Boolean | 开启模糊背景 (默认 false )",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "blurRadius",
+      "description": "Number | 模糊半径 (默认 10 )",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 10\n\t\t}"
+    },
+    {
+      "name": "blurColor",
+      "description": "String | 模糊颜色  (默认 rgba(10, 10, 10, 0.3) )",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'rgba(10, 10, 10, 0.3)'\n\t\t}"
+    },
+    {
+      "name": "zIndex",
+      "description": "Number | 层级z-index (默认 20000)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 20000\n\t\t}"
+    },
+    {
+      "name": "maskClose",
+      "description": "Boolean | 遮罩层关闭 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "interceptBack",
+      "description": "Boolean | 拦截页面返回 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "disabled",
+      "description": "Boolean | 是否禁用 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    }
+  ]
+}

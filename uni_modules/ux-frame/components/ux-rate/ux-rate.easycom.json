@@ -1,0 +1,191 @@
+{
+  "name": "",
+  "description": "支持设置数量、最小选择、半星选择、触摸/鼠标拖动选择",
+  "tutorial": "https://www.uxframe.cn/component/rate.html",
+  "attributes": [
+    {
+      "name": "[event]change",
+      "description": "Function | 值改变时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]touchstart",
+      "description": "Function | 开始触摸时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]touchmove",
+      "description": "Function | 正在触摸时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]touchend",
+      "description": "Function | 触摸结束时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]update:modelValue",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "name",
+      "description": "String | 标识符，在回调事件中返回",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "theme",
+      "description": "String | 主题颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'primary',\n\t\t}"
+    },
+    {
+      "name": "value",
+      "description": "Number | 分数",
+      "type": "{\n\t\t    type: Number,\n\t\t    default: 0\n\t\t}"
+    },
+    {
+      "name": "count",
+      "description": "Number | 数量 (默认 5)",
+      "type": "{\n\t\t    type: Number,\n\t\t    default: 5\n\t\t}"
+    },
+    {
+      "name": "minCount",
+      "description": "Number | 最小选择数量 (默认 0)",
+      "type": "{\n\t\t    type: Number,\n\t\t    default: 0\n\t\t}"
+    },
+    {
+      "name": "color",
+      "description": "String | 颜色 (默认 $ux.Conf.placeholderColor)",
+      "type": "{\n\t\t    type: String,\n\t\t    default: ''\n\t\t}"
+    },
+    {
+      "name": "darkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t    type: String,\n\t\t    default: ''\n\t\t}"
+    },
+    {
+      "name": "activeColor",
+      "description": "String | 选中颜色 优先级高于主题 (默认 $ux.Conf.primaryColor)",
+      "type": "{\n\t\t    type: String,\n\t\t    default: ''\n\t\t}"
+    },
+    {
+      "name": "activeDarkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t    type: String,\n\t\t    default: ''\n\t\t}"
+    },
+    {
+      "name": "size",
+      "description": "Any | 字体大小（默认 $ux.Conf.fontSize ）",
+      "type": "{\n\t\t    default: 0\n\t\t}"
+    },
+    {
+      "name": "gutter",
+      "description": "Any | 间距（默认 5 ）",
+      "type": "{\n\t\t    default: 5\n\t\t}"
+    },
+    {
+      "name": "type",
+      "description": "String | 类型（默认 star ）",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'star'\n\t\t}"
+    },
+    {
+      "name": "icon",
+      "description": "String | 星星图标 优先级高于type",
+      "type": "{\n\t\t    type: String,\n\t\t    default: ''\n\t\t}"
+    },
+    {
+      "name": "half",
+      "description": "Boolean | 允许半星 halfIcon配置时有效（默认 false ）",
+      "type": "{\n\t\t    type: Boolean,\n\t\t    default: false\n\t\t}"
+    },
+    {
+      "name": "halfIcon",
+      "description": "String | 半星图标 half = true 时有效",
+      "type": "{\n\t\t    type: String,\n\t\t    default: ''\n\t\t}"
+    },
+    {
+      "name": "customFamily",
+      "description": "String | 字体family",
+      "type": "{\n\t\t    type: String,\n\t\t    default: ''\n\t\t}"
+    },
+    {
+      "name": "valueFormat",
+      "description": "String | 格式化文本，有则显示 (默认 __s1__分)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "touchable",
+      "description": "Boolean | 触摸滑动（默认 false ）",
+      "type": "{\n\t\t    type: Boolean,\n\t\t    default: false\n\t\t}"
+    },
+    {
+      "name": "disabled",
+      "description": "Boolean | 禁用（默认 false ）",
+      "type": "{\n\t\t    type: Boolean,\n\t\t    default: false\n\t\t}"
+    },
+    {
+      "name": "readonly",
+      "description": "Boolean | 只读（默认 false ）",
+      "type": "{\n\t\t    type: Boolean,\n\t\t    default: false\n\t\t}"
+    },
+    {
+      "name": "margin",
+      "description": "Array | 边距 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "mt",
+      "description": "Any | 距上 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "mr",
+      "description": "Any | 距右 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "mb",
+      "description": "Any | 距下 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "ml",
+      "description": "Any | 距左 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "padding",
+      "description": "Array | 填充 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "pt",
+      "description": "Any | 上内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pr",
+      "description": "Any | 右内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pb",
+      "description": "Any | 下内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pl",
+      "description": "Any | 左内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "xstyle",
+      "description": "Array<any> | 自定义样式",
+      "type": "Array"
+    },
+    {
+      "name": "modelValue",
+      "type": "{\n\t\t    type: Number,\n\t\t    default: 0\n\t\t}"
+    }
+  ]
+}

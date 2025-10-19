@@ -1,0 +1,147 @@
+{
+  "name": "",
+  "description": "支持横竖屏切换、支持背景色、笔触大小、笔触颜色、背景颜色配置",
+  "tutorial": "https://www.uxframe.cn/component/signature.html",
+  "attributes": [
+    {
+      "name": "[event]change",
+      "description": "Function | 生成签名时触发",
+      "type": "Function"
+    },
+    {
+      "name": "text",
+      "description": "String | 背景文字 （默认 签名区）",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '签字区'\n\t\t}"
+    },
+    {
+      "name": "size",
+      "description": "Number | 笔触大小 (默认 2)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 2\n\t\t}"
+    },
+    {
+      "name": "theme",
+      "description": "String | 主题 (默认 info)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'primary'\n\t\t}"
+    },
+    {
+      "name": "color",
+      "description": "String | 笔触颜色 (默认 $ux.Conf.infoColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "background",
+      "description": "String | 背景颜色 (默认 $ux.Conf.backgroundColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "confirm",
+      "description": "String | 确定文字 (默认 确定)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '确定'\n\t\t}"
+    },
+    {
+      "name": "confirmColor",
+      "description": "String | 确定文字颜色 (默认 $ux.Conf.primaryColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "minWidth",
+      "description": "Number | 最小宽度 (默认 2)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 2\n\t\t}"
+    },
+    {
+      "name": "maxWidth",
+      "description": "Number | 最大宽度 (默认 6)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 6\n\t\t}"
+    },
+    {
+      "name": "minSpeed",
+      "description": "Number | 最小速度 (默认 1.5)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 1.5\n\t\t}"
+    },
+    {
+      "name": "maxHistory",
+      "description": "Number | 最大可撤销记录 (默认 20)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 20\n\t\t}"
+    },
+    {
+      "name": "fullScreen",
+      "description": "Boolean | 全屏 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "format",
+      "description": "String | 图片格式 (默认 png)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'png'\n\t\t}"
+    },
+    {
+      "name": "showBtns",
+      "description": "Boolean | 显示操作按钮 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "disableScroll",
+      "description": "Boolean | 禁止屏幕滚动 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "disabled",
+      "description": "Boolean | 是否禁用 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "margin",
+      "description": "Array | 边距 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "mt",
+      "description": "Number | 距上 单位px",
+      "type": "Number"
+    },
+    {
+      "name": "mr",
+      "description": "Number | 距右 单位px",
+      "type": "Number"
+    },
+    {
+      "name": "mb",
+      "description": "Number | 距下 单位px",
+      "type": "Number"
+    },
+    {
+      "name": "ml",
+      "description": "Number | 距左 单位px",
+      "type": "Number"
+    },
+    {
+      "name": "padding",
+      "description": "Array | 填充 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "pt",
+      "description": "Number | 上内边距 单位px",
+      "type": "Number"
+    },
+    {
+      "name": "pr",
+      "description": "Number | 右内边距 单位px",
+      "type": "Number"
+    },
+    {
+      "name": "pb",
+      "description": "Number | 下内边距 单位px",
+      "type": "Number"
+    },
+    {
+      "name": "pl",
+      "description": "Number | 左内边距 单位px",
+      "type": "Number"
+    },
+    {
+      "name": "xstyle",
+      "description": "Array<any> | 自定义样式",
+      "type": "Array"
+    }
+  ]
+}

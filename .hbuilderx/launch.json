@@ -4,6 +4,7 @@
         {
             "app" : {
                 "launchtype" : "remote"
+
             },
             "default" : {
                 "launchtype" : "local"

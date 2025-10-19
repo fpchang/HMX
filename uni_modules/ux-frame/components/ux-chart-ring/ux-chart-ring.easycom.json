@@ -1,0 +1,27 @@
+{
+  "name": "",
+  "description": "canvas绘制的环形进度条图表",
+  "tutorial": "https://www.uxframe.cn/component/chart-ring.html",
+  "attributes": [
+    {
+      "name": "[event]changing",
+      "description": "Function | 进度发生改变时触发",
+      "type": "Function"
+    },
+    {
+      "name": "mode",
+      "description": "String | 模式 (默认 ring)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'ring'\n\t\t}"
+    },
+    {
+      "name": "data",
+      "description": "UxChartRingType | 数据",
+      "type": "{\r\n\t\t\ttype: Object as PropType<UxChartRingType>,\r\n\t\t\trequired: true\r\n\t\t}"
+    },
+    {
+      "name": "delay",
+      "description": "Number | 延迟初始化 (默认 0)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0\n\t\t}"
+    }
+  ]
+}

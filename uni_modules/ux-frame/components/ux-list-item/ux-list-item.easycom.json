@@ -1,0 +1,12 @@
+{
+  "name": "",
+  "description": "ListView 列表容器子项",
+  "tutorial": "https://www.uxframe.cn/component/list.html",
+  "attributes": [
+    {
+      "name": "type",
+      "description": "Number | 对应list-item的类型 list-view 将对同类型条目进行复用，所以合理的类型拆分，可以很好地提升 list-view 性能",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0\n\t\t}"
+    }
+  ]
+}

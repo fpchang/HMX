@@ -1,0 +1,87 @@
+{
+  "name": "",
+  "description": "Row 水平布局",
+  "tutorial": "https://www.uxframe.cn/component/row.html",
+  "attributes": [
+    {
+      "name": "[event]click",
+      "description": "Function | 被点击时触发",
+      "type": "Function"
+    },
+    {
+      "name": "flex",
+      "description": "Boolean | 弹性盒子 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "gutter",
+      "description": "Any | 栅格间隔 (默认 0 )",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "justify",
+      "description": "String | 水平排列方式  (默认 left )",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'start'\n\t\t}"
+    },
+    {
+      "name": "align",
+      "description": "String | 垂直对齐方式  (默认 center )",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'center'\n\t\t}"
+    },
+    {
+      "name": "margin",
+      "description": "Array | 边距 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "mt",
+      "description": "Any | 距上 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "mr",
+      "description": "Any | 距右 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "mb",
+      "description": "Any | 距下 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "ml",
+      "description": "Any | 距左 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "padding",
+      "description": "Array | 填充 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "pt",
+      "description": "Any | 上内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pr",
+      "description": "Any | 右内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pb",
+      "description": "Any | 下内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pl",
+      "description": "Any | 左内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "xstyle",
+      "description": "Array<any> | 自定义样式",
+      "type": "Array"
+    }
+  ]
+}

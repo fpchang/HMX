@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>color</title>
+		<style type="text/css">
+			html,
+			body,
+			div {
+				padding: 0;
+				margin: 0;
+				overflow-y: hidden;
+				background-color: transparent;
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="color"></div>
+		<script type="text/javascript" src="./js/uni.webview.1.5.5.js"></script>
+		<script type="text/javascript">
+			
+			const id = getQueryString('id')
+			
+			if(id == 'hue') {
+				document.getElementById('color').style.background = 'linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)'
+			} else if(id == 'alpha') {
+				document.getElementById('color').style.backgroundImage = 'linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee),linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee)'
+				document.getElementById('color').style.backgroundSize = '18px 18px'
+				document.getElementById('color').style.backgroundPosition = '0 0, 8px 8px'
+			}
+			
+			function getQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)")
+				var url = decodeURI(decodeURI(window.location.search))
+				var r = url.substr(1).match(reg)
+				if (r != null) return unescape(r[2])
+				return ''
+			}
+		</script>
+	</body>
+</html>

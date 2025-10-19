@@ -1,0 +1,27 @@
+{
+  "name": "",
+  "description": "DragItem 拖拽子项，需搭配 ux-drag 使用",
+  "tutorial": "https://www.uxframe.cn/component/drag.html",
+  "attributes": [
+    {
+      "name": "[event]click",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "itemId",
+      "description": "String | 唯一索引",
+      "type": "{\n\t\t\ttype: String,\n\t\t\trequired: true\n\t\t}"
+    },
+    {
+      "name": "index",
+      "description": "Number | 排序下标",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\trequired: true\n\t\t}"
+    },
+    {
+      "name": "border",
+      "description": "Boolean | 显示下边框 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "name": "",
+  "description": "支持修改尺寸、背景色、前景色、增加Logo",
+  "tutorial": "https://www.uxframe.cn/component/qr.html",
+  "attributes": [
+    {
+      "name": "[event]click",
+      "description": "Function | 被点击时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]change",
+      "description": "Function | 调用make生成二维码时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]error",
+      "description": "Function | 发生错误时触发",
+      "type": "Function"
+    },
+    {
+      "name": "text",
+      "description": "String | 二维码内容",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "size",
+      "description": "Any | 二维码尺寸 (默认 128)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 128\n\t\t}"
+    },
+    {
+      "name": "background",
+      "description": "String | 背景色 (默认 #fff)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#fff'\n\t\t}"
+    },
+    {
+      "name": "foreground",
+      "description": "String | 前景色 (默认 #000)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#000'\n\t\t}"
+    },
+    {
+      "name": "img",
+      "description": "String | 二维码图标，仅支持网络图片",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "imgSize",
+      "description": "Any | 二维码图标尺寸 (默认 45)",
+      "type": "{\n\t\t\tdefault: 35,\n\t\t}"
+    },
+    {
+      "name": "border",
+      "description": "Any | 边框 (默认 4)",
+      "type": "{\n\t\t\tdefault: 4\n\t\t}"
+    },
+    {
+      "name": "showLoading",
+      "description": "Boolean | 显示加载 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "loadingText",
+      "description": "String | 加载文案 (默认 加载中...)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '加载中...'\n\t\t}"
+    },
+    {
+      "name": "delay",
+      "description": "Number | 延迟生成 单位ms (默认 0)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "margin",
+      "description": "Array | 边距 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "mt",
+      "description": "Any | 距上 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "mr",
+      "description": "Any | 距右 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "mb",
+      "description": "Any | 距下 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "ml",
+      "description": "Any | 距左 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "padding",
+      "description": "Array | 填充 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "pt",
+      "description": "Any | 上内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pr",
+      "description": "Any | 右内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pb",
+      "description": "Any | 下内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pl",
+      "description": "Any | 左内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "xstyle",
+      "description": "Array<any> | 自定义样式",
+      "type": "Array"
+    }
+  ]
+}

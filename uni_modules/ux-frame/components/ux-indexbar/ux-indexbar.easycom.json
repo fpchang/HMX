@@ -1,0 +1,65 @@
+{
+  "name": "",
+  "description": "支持右侧索引联动滚动到锚点",
+  "tutorial": "https://www.uxframe.cn/component/tab/indexbar.html",
+  "attributes": [
+    {
+      "name": "[event]click",
+      "description": "Function | 点击时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]change",
+      "description": "Function | 当前选择下标改变时触发",
+      "type": "Function"
+    },
+    {
+      "name": "fixed",
+      "description": "Boolean | fixed定位 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "width",
+      "description": "Any | 宽度 (默认 auto)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "height",
+      "description": "Any | 高度 (默认 auto)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "right",
+      "description": "Any | slider右偏移距离 (默认 10px)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "activeColor",
+      "description": "String | 选中颜色 (默认 $ux.Conf.primaryColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "indicateColor",
+      "description": "String | 未选中颜色 (默认 $ux.Conf.primaryColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "opacity",
+      "description": "Number | 侧边栏背景透明度 (默认 0.2)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0.2\n\t\t}"
+    },
+    {
+      "name": "otherIcon",
+      "description": "String | 其他项图标",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "activeFontColor",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#ffffff'\n\t\t}"
+    },
+    {
+      "name": "indicateSize",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 18\n\t\t}"
+    }
+  ]
+}

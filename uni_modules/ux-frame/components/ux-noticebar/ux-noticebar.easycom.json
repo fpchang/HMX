@@ -1,0 +1,152 @@
+{
+  "name": "",
+  "description": "支持水平滚动、垂直翻页，可配置滚动速度、右侧按钮",
+  "tutorial": "https://www.uxframe.cn/component/noticebar.html",
+  "attributes": [
+    {
+      "name": "[event]click",
+      "description": "Function | 点击时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]handle",
+      "description": "Function | 点击右侧按钮时触发",
+      "type": "Function"
+    },
+    {
+      "name": "texts",
+      "description": "String[] | 通告内容",
+      "type": "{\n\t\t\ttype: Array as PropType<Array<string>>,\n\t\t\tdefault: () : string[] => {\n\t\t\t\treturn [] as string[]\n\t\t\t}\n\t\t}"
+    },
+    {
+      "name": "theme",
+      "description": "String | 主题颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "color",
+      "description": "String | 文字颜色 (默认 $ux.Conf.fontColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "darkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "size",
+      "description": "Any | 内容文字大小 (默认 $ux.Conf.fontSize)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "icon",
+      "description": "String | 左侧图标 (默认 volumenotice-filled)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'volumenotice-filled'\n\t\t}"
+    },
+    {
+      "name": "rightIcon",
+      "description": "String | 右侧图标",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "iconSize",
+      "description": "Any | 图标尺寸 (默认 $ux.Conf.fontSize)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "iconColor",
+      "description": "String | 图标颜色 (默认 $ux.Conf.fontColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "background",
+      "description": "String | 背景颜色 (默认 $ux.Conf.backgroundColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "backgroundDark",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "radius",
+      "description": "Any | 圆角 (默认 5)",
+      "type": "{\n\t\t\tdefault: 5\n\t\t}"
+    },
+    {
+      "name": "scrollable",
+      "description": "Boolean | 开启滚动 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "direction",
+      "description": "String | 滚动方向 (默认 row)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'row'\n\t\t}"
+    },
+    {
+      "name": "speed",
+      "description": "Number | 文字水平垂直滚动的速度 (默认 60 px/秒)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 60\n\t\t}"
+    },
+    {
+      "name": "mutiline",
+      "description": "Number | 是否多行显示，多行则无滚动效果",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "margin",
+      "description": "Array | 边距 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "mt",
+      "description": "Any | 距上 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "mr",
+      "description": "Any | 距右 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "mb",
+      "description": "Any | 距下 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "ml",
+      "description": "Any | 距左 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "padding",
+      "description": "Array | 填充 [上 右 下 左] [上下 左右] [上下左右]",
+      "type": "Array"
+    },
+    {
+      "name": "pt",
+      "description": "Any | 上内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pr",
+      "description": "Any | 右内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pb",
+      "description": "Any | 下内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "pl",
+      "description": "Any | 左内边距 单位px",
+      "type": "Any"
+    },
+    {
+      "name": "xstyle",
+      "description": "Array<any> | 自定义样式",
+      "type": "Array"
+    }
+  ]
+}

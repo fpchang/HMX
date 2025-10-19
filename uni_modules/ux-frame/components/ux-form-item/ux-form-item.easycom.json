@@ -1,0 +1,97 @@
+{
+  "name": "",
+  "description": "支持任何组件，只作为数据校验",
+  "tutorial": "https://www.uxframe.cn/component/form.html",
+  "attributes": [
+    {
+      "name": "label",
+      "description": "String | 表单名称",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "field",
+      "description": "String | 表单字段",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "verify",
+      "description": "Boolean | 开启校验 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "required",
+      "description": "Boolean | 必填项 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "showLabel",
+      "description": "Boolean | 显示表单名称 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "showError",
+      "description": "Boolean | 显示错误 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "rules",
+      "description": "UxFormRule[] | 校验规则",
+      "type": "{\n\t\t\ttype: Array as PropType<UxFormRule[]>,\n\t\t\tdefault: () : UxFormRule[] => [] as UxFormRule[]\n\t\t}"
+    },
+    {
+      "name": "direction",
+      "description": "String | 布局方向 (默认 horizontal)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "width",
+      "description": "Any | 宽度 (默认 自适应)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "size",
+      "description": "Any | 字体大小 (默认 $ux.Conf.fontSize)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "errorSize",
+      "description": "Any | 错误提示字体大小 (默认 12)",
+      "type": "{\n\t\t\tdefault: 0\n\t\t}"
+    },
+    {
+      "name": "color",
+      "description": "String | 字体颜色 (默认 $ux.Conf.fontColor)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "darkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "border",
+      "description": "Boolean | 下边框 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "padding",
+      "description": "Any | 内边距 (默认 8)",
+      "type": "{\n\t\t\tdefault: 8\n\t\t}"
+    },
+    {
+      "name": "vPadding",
+      "description": "Any | 垂直方法内边距 (默认 12)",
+      "type": "{\n\t\t\tdefault: 12\n\t\t}"
+    },
+    {
+      "name": "minHeight",
+      "description": "Any | 最小高度 (默认 50)",
+      "type": "{\n\t\t\tdefault: 50\n\t\t}"
+    },
+    {
+      "name": "disabled",
+      "description": "Boolean | 是否禁用 (默认 false)",
+      "type": "Boolean"
+    }
+  ]
+}

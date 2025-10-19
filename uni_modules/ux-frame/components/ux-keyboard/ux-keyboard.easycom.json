@@ -1,0 +1,206 @@
+{
+  "name": "",
+  "description": "支持数字键盘、字母键盘、计算器键盘、密码键盘、安全键盘、车牌键盘",
+  "tutorial": "https://www.uxframe.cn/component/keyboard.html",
+  "attributes": [
+    {
+      "name": "[event]change",
+      "description": "Function | 输入时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]confirm",
+      "description": "Function | 确定时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]close",
+      "description": "Function | 关闭时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]overlimit",
+      "description": "Function | 超出字数限制时触发",
+      "type": "Function"
+    },
+    {
+      "name": "[event]update:modelValue",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "theme",
+      "description": "String | 主题 (默认 primary)",
+      "type": "String"
+    },
+    {
+      "name": "mode",
+      "description": "String | 模式 (默认 number)",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'number'\n\t\t}"
+    },
+    {
+      "name": "showSub",
+      "description": "Boolean | 显示负号 数字键盘有效 (默认 true )",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "showPoint",
+      "description": "Boolean | 显示点 数字键盘有效 (默认 true )",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "showNum",
+      "description": "Boolean | 显示数字键盘 字母键盘有效 (默认 true )",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "showSymbol",
+      "description": "Boolean | 显示标点符号 字母键盘和密码键盘有效 (默认 true )",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "showSapce",
+      "description": "Boolean | 等于false时，空格不起作用，但是占位还在 (默认 true )",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "encrypt",
+      "description": "Boolean | 加密显示 安全键盘有效 (默认 true )",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "verify",
+      "description": "Boolean | 内容合理性校验 (默认 true )",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "upper",
+      "description": "Boolean | 保持字母大写显示 字母键盘有效 (默认 false )",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "scrollId",
+      "description": "String | scoll-view 或 list-view 的Id",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "adjustPosition",
+      "description": "String | 键盘弹起时滚动到目标Id 需配置父级ID scrollId",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "maxLength",
+      "description": "Number | 输入最大长度 (默认 -1 不限制)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: -1\n\t\t}"
+    },
+    {
+      "name": "inputSize",
+      "description": "Any | 输入内容大小 (默认 15)",
+      "type": "{\n\t\t\tdefault: 15\n\t\t}"
+    },
+    {
+      "name": "inputColor",
+      "description": "String | 输入内容颜色 (默认 #999 )",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "inputDarkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "placeholder",
+      "description": "String | 占位内容",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "size",
+      "description": "Any | 按钮文字大小 (默认 20)",
+      "type": "{\n\t\t\tdefault: 20\n\t\t}"
+    },
+    {
+      "name": "color",
+      "description": "String | 按钮文字颜色 (默认 #333 )",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#333'\n\t\t}"
+    },
+    {
+      "name": "darkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: 'auto'\n\t\t}"
+    },
+    {
+      "name": "btnColor",
+      "description": "String | 按钮背景颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#f6f6f6'\n\t\t}"
+    },
+    {
+      "name": "btnDarkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '#444'\n\t\t}"
+    },
+    {
+      "name": "confirmText",
+      "description": "String | 确定按钮文字",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '确定'\n\t\t}"
+    },
+    {
+      "name": "confirmColor",
+      "description": "String | 确定按钮背景颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "confirmDarkColor",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "spaceText",
+      "description": "String | 空格按钮文字",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: '空格'\n\t\t}"
+    },
+    {
+      "name": "background",
+      "description": "String | 背景颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "backgroundDark",
+      "description": "String | 深色 none - 不显示，auto - 自动适配深色模式，其他 - 颜色",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    },
+    {
+      "name": "showClose",
+      "description": "Boolean | 显示关闭按钮 (默认 true )",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "radius",
+      "description": "Any | 圆角 (默认 20)",
+      "type": "{\n\t\t\tdefault: 20\n\t\t}"
+    },
+    {
+      "name": "opacity",
+      "description": "Number | 遮罩透明度 0-1 (默认 0.2)",
+      "type": "{\n\t\t\ttype: Number,\n\t\t\tdefault: 0.2\n\t\t}"
+    },
+    {
+      "name": "touchable",
+      "description": "Boolean | 允许滑动关闭 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "maskClose",
+      "description": "Boolean | 遮罩层关闭 (默认 true)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: true\n\t\t}"
+    },
+    {
+      "name": "disabled",
+      "description": "Boolean | 是否禁用 (默认 false)",
+      "type": "{\n\t\t\ttype: Boolean,\n\t\t\tdefault: false\n\t\t}"
+    },
+    {
+      "name": "modelValue",
+      "type": "{\n\t\t\ttype: String,\n\t\t\tdefault: ''\n\t\t}"
+    }
+  ]
+}

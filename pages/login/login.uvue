@@ -17,7 +17,7 @@
 
 			</view>
 			<view style="height: 40px"></view>
-		</view>
+		</view> 
 
 		<view style="padding:20px">
 			<rice-form :model="userForm" :rules="loginRules" ref="loginFormRef" label-width="100px"
@@ -82,6 +82,7 @@
 <script setup>
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
 	import { ref, computed } from "vue";
+	import { AccountService } from "../../services/AccountService";
 	type userFormBean = {
 		tk : string,
 		smsCode : string,
@@ -134,25 +135,78 @@
 		]
 	])
 
-	const loginFormRef = ref<RiceFormComponentPublicInstance | null>(null)
-	const getCode = () => {
+	const loginFormRef = ref<RiceFormComponentPublicInstance | null>(null);
+	let canGetCode=ref(true);
+	const  sendSmsSuccess=()=> {
+      let t:number= 30;
+      tips.value = `${t}S`;
+      canGetCode.value = false;
+     let timevent: number=0;
+      timevent = setInterval(() => {
+        if (t < 1) {
+          clearInterval(timevent);
+          tips.value = `重新发送`;
+          canGetCode.value = true;
+          return;
+        }
+        t--;
+        tips.value = `${t}S`;
+      }, 1000);
+    }
+	const getCode = async() => {
 		console.log("getcode");
+		  if (!canGetCode.value) {
+		        uni.showToast({ title: "倒计时结束后再发送", icon: "none" });
+		        return;
+		      }
+		      if (sendSmsDisabled.value) {
+				  return;
+			  }
+		        uni.showLoading({title:""});
+				try{
+					const res = await AccountService.sendSmsCode(userForm.value.phone);
+					const data =res.result as UTSJSONObject;
+					console.log("res",res);
+					    userForm.value.tk = data.tk.toString();
+					    uni.setStorageSync("tk",data.tk.toString());
+					    uni.hideLoading();
+					   sendSmsSuccess();
+				}catch(error){
+					uni.showToast({
+						title:"发送短信失败"
+					})
+				}
+				
+		        // uniCloud
+		        //   .callFunction({
+		        //     name: "hm-sendSms",
+		        //     data: {
+		        //       phone: this.userForm.phone,
+		        //       templateId: "100",
+		        //     },
+		        //   })
+		        //   .then((res) => {
+		        //     //console.log("sendsms value", res);
+		        //     userForm.value.tk = res.result.tk;
+		        //     uni.setStorageSync("tk", res.result.tk);
+		        //     uni.hideLoading();
+		        //    sendSmsSuccess();
+		        //   });
+		      
 	}
-	const submit1 = async () => {
+	const submit = async () => {
 		const result = await loginFormRef.value!.validate()
 		//校验成功
-		if (result == true) {
+		if (result != true) {
 			uni.showToast({ title: "校验成功", icon: "none" });
-		} else {
 			//校验失败，返回校验失败的数组集合
 			const errsName = (result as FormValidateErrors[]).map(v => v.name)
 			console.log('校验失败的name合集', errsName)
+			return;
 		}
 	}
 
-const submit =()=>{
-	console.log("1111");
-}
+
 </script>
 
 <style lang="scss">
@@ -241,6 +295,7 @@ const submit =()=>{
 		color: #0765ae;
 		margin-right: 6px;
 		font-size: 14px;
+		text-align: right
 
 	}
 

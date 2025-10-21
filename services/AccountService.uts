@@ -1,0 +1,55 @@
+import{DB} from '../api/DB';
+class AccountServiceClass{
+	constructor(){
+       
+    }
+	/**
+	 * 发送短信验证吗
+	 */
+sendSmsCode(phone:string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+	const data:UTSJSONObject={phone};
+	return DB.callFunction("hm-sendSms",data);
+}
+  getConfig():Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
+	//  const data:UTSJSONObject={"a":1};
+    return DB.callFunction("hm_getConfig") ;
+  }
+  validToken():Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
+   // const token:string = uni.getStorageSync('hm_token').toString();
+    return DB.callFunction("hm_validToken") ;
+  }
+  login(userForm: UTSJSONObject):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
+	  const data:UTSJSONObject=userForm;
+	 return DB.callFunction("hm_login", data)
+  }
+  /**
+   * 注销账号
+   */
+  closeAccount():Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
+    return DB.callFunction("hm_closeAccount") ;
+  }
+  recoverAccount(_id:string):Promise<UniCloudDBUpdateResult>{
+    return DB.update("hm-user",_id,{accountStatus:1})
+  }
+  getuserByToken():Promise<UniCloudDBGetResult>{
+    return DB.getCollection("hm-user",{hm_token:uni.getStorageSync("hm_token")});
+  }
+  updateUserName(_id:string,userName:string):Promise<UniCloudDBUpdateResult>{
+    return DB.update("hm-user",_id,{userName} as UTSJSONObject);
+  }
+  getRechargeConfig():Promise<UniCloudDBGetResult>{
+	   return DB.getCollection("hm-rechargeConfig",{status:true});
+  }
+  createRechargeOrder(rechargeConfig_id:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
+	  return DB.callFunction("hm_createRechargeOrder",{rechargeConfig_id});
+  }
+
+  getMpPhoneNumber(code:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
+     return DB.callFunction("getMpPhoneNumber",{code} as UTSJSONObject);
+  }
+  loginMp(code:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
+    return DB.callFunction("hm_loginMp",{code} as UTSJSONObject);
+  }
+}
+//module.exports =new AccountService();
+export var AccountService=new AccountServiceClass();

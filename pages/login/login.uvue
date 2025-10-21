@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="login" >
 
 		<view class="top-banar">
 			<view class="flex-center">
@@ -7,19 +7,19 @@
 				<image style="width:200px;height:150px" src="https://cdn.hotelsys.fun/HM/images/blue-logo.jpg" />
 			</view>
 			<view class="subtitle flex-center">
-				<text class="txt-style">
+			
 					<text class="txt-style">酒店助手</text>
-					<text class="txt-style" style="padding: 0 4px">/</text>
+					<text class="txt-style" style="padding:4px">/</text>
 					<text class="txt-style">经营管理</text>
 					<text class="txt-style" style="padding: 0 4px">/</text>
 					<text class="txt-style">宣传推广</text>
-				</text>
+				
 
 			</view>
 			<view style="height: 40px"></view>
 		</view> 
 
-		<view style="padding:20px">
+		<view class="form-content-style">
 			<rice-form :model="userForm" :rules="loginRules" ref="loginFormRef" label-width="100px"
 				:border-bottom="false">
 				<rice-form-item name="phone">
@@ -28,7 +28,7 @@
 							<l-icon name="material-symbols:phone-android-rounded" size="25px" color="#0765ae" />
 						</view>
 						<view class="input-style">
-							 <input type="tel" maxlength="11" v-model="userForm.phone" placeholder="请输入手机号" />								
+							 <input type="tel" maxlength="11" inputmode="tel" v-model="userForm.phone" placeholder="请输入手机号"  style="font-size: 14px;"/>								
 						</view>
 
 					</view>
@@ -40,7 +40,7 @@
 							<l-icon name="material-symbols:lock" size="25px" color="#0765ae" />
 						</view>
 						<view  class="input-style">
-								 <input type="number" maxlength="4" v-model="userForm.smsCode" placeholder="请输入验证码" />
+								 <input type="number" maxlength="4" v-model="userForm.smsCode" placeholder="请输入验证码"  style="font-size: 14px;"/>
 						</view>
 						<view style="width: 80px; text-align: right">
 							<text @click="getCode"
@@ -75,6 +75,7 @@
 				</view>
 				</rice-form-item>
 			</rice-form>
+			<view> {{userForm.tk}}</view>
 		</view>
 	</view>
 </template>
@@ -239,21 +240,7 @@
 	.btn {
 		flex: 1;
 	}
-	.top-banar {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-content: center;
-		background-color: #0765ae;
-
-		.subtitle {
-			.txt-style {
-				font-size: 16px;
-				color: #fff;
-			}
-
-		}
-	}
+	
 .btn-area{
 	width: 298px;
 	margin:auto;
@@ -261,6 +248,35 @@
 	height: 45px;
 
 }
+.login{
+	flex:1 ;
+	background-color: #0765ae;
+	.top-banar {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-content: center;
+		
+	
+		.subtitle {
+			display: flex;
+			flex-direction: row;
+			.txt-style {
+				font-size: 16px;
+				color: #fff;
+			}
+	
+		}
+	}
+	.form-content-style{
+		flex: 1;
+		background-color:#fff;
+		padding:20px;
+		border-top-left-radius: 15px;
+		border-top-right-radius: 15px;
+	}
+}
+
 	.input-area {
 		width: 298px;
 		margin:auto;

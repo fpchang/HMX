@@ -48,15 +48,15 @@
 	"path" : "pages/login/login",
 	"style" : 
 	{
-		"navigationBarTitleText" : "",
-		"navigationStyle": "custom"
+		"navigationBarTitleText" : ""
 	}
 }
 ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app x",
-		"navigationBarBackgroundColor": "#F8F8F8",
+		"navigationBarTitleText": "",
+		"navigationBarTextStyle":"white",
+		"navigationBarBackgroundColor": "#0765ae",
 		"backgroundColor": "#F8F8F8"
 	},
 	"uniIdRouter": {}

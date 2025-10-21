@@ -1,20 +1,158 @@
 <template>
 	<view>
+
 		<view class="top-banar">
 			<view class="flex-center">
-				
-				<image style="width:200px;height:150px" src="https://cdn.hotelsys.fun/HM/images/blue-logo.jpg"/>
+
+				<image style="width:200px;height:150px" src="https://cdn.hotelsys.fun/HM/images/blue-logo.jpg" />
 			</view>
-			<view class="subtitle flex-center">酒店助手<text style="padding: 0 4px">/</text><text>经营管理</text><text
-					style="padding: 0 4px">/</text><text>宣传推广</text>
+			<view class="subtitle flex-center">
+				<text class="txt-style">
+					<text class="txt-style">酒店助手</text>
+					<text class="txt-style" style="padding: 0 4px">/</text>
+					<text class="txt-style">经营管理</text>
+					<text class="txt-style" style="padding: 0 4px">/</text>
+					<text class="txt-style">宣传推广</text>
+				</text>
+
 			</view>
 			<view style="height: 40px"></view>
+		</view>
+
+		<view style="padding:20px">
+			<rice-form :model="userForm" :rules="loginRules" ref="loginFormRef" label-width="100px"
+				:border-bottom="false">
+				<rice-form-item name="phone">
+					<view class="input-area">
+						<view style="padding-right: 15px">
+							<l-icon name="material-symbols:phone-android-rounded" size="25px" color="#0765ae" />
+						</view>
+						<view class="input-style">
+							 <input type="tel" maxlength="11" v-model="userForm.phone" placeholder="请输入手机号" />								
+						</view>
+
+					</view>
+
+				</rice-form-item>
+				<rice-form-item name="smsCode">
+					<view class="input-area">
+						<view style="padding-right: 15px">
+							<l-icon name="material-symbols:lock" size="25px" color="#0765ae" />
+						</view>
+						<view  class="input-style">
+								 <input type="number" maxlength="4" v-model="userForm.smsCode" placeholder="请输入验证码" />
+						</view>
+						<view style="width: 80px; text-align: right">
+							<text @click="getCode"
+								:class="['smstext', sendSmsDisabled? 'smstext-disable':'']">{{tips}}</text>
+						</view>
+
+
+					</view>
+
+				</rice-form-item>
+				<rice-form-item>
+					<!-- <button class="submit-btn" type="default" :disabled="submitDisabled" @click="submit" :loading="submitLoading"
+					  style="height: 40px">
+					  登录
+					</button> -->
+					<view class="btn-area" >
+						 <rice-button type="primary" text="登录" class="btn"  color="" @click="submit" :loading="submitLoading" :disabled="submitDisabled"/>
+					</view>
+					
+				</rice-form-item>
+				<rice-form-item>
+				<view class="up">
+					<view @click="agreeEvent"> 
+					<l-icon v-show="isAgree" name="material-symbols:check-circle"  size="20"
+					  color="#0765ae"></l-icon>
+										<l-icon  v-show="!isAgree" name="material-symbols-light:circle-outline" size="20"
+										  color="#0765ae"></l-icon>
+					</view>
+			
+				  <text class="ct">我已阅读并同意<text class="edit-text-btn-style ct" @click="openUserAgreement">《用户协议》</text>和<text
+				      class="edit-text-btn-style ct" @click="openUserPrivacyPolicy">《隐私政策》</text></text>
+				</view>
+				</rice-form-item>
+			</rice-form>
 		</view>
 	</view>
 </template>
 
 <script setup>
+	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
+	import { ref, computed } from "vue";
+	type userFormBean = {
+		tk : string,
+		smsCode : string,
+		phone : string
+	}
+	let userForm = ref<userFormBean>({
+		tk: "",
+		smsCode: "",
+		phone: ""
+	});
+	let submitLoading=ref(false);
+	let tips = ref<string>("获取验证码");
+	let isAgree= ref(false);
+	const agreeEvent=() =>{
+		console.log(isAgree.value)
+	  isAgree.value = !isAgree.value;
+	};
+	const openUserAgreement=()=> {
+	  uni.navigateTo({
+	    url: "/pages/common/userAgreement/userAgreement",
+	  });
+	};
+	const openUserPrivacyPolicy=()=> {
+	  uni.navigateTo({
+	    url: "/pages/common/privacyPolicy/privacyPolicy",
+	  });
+	};
+	const sendSmsDisabled = computed<boolean>(() => {
+		return userForm.value.phone.length != 11;
+	});
+	const submitDisabled = computed<boolean>(() => {
+		return userForm.value.phone.length != 11 || userForm.value.smsCode.length != 4
+	});
 
+
+
+	//rules 校验规则，注意写在Form上面的为 Map 类型
+	const loginRules = new Map<string, FormRules[]>([
+		[
+			"smsCode",
+			[
+				{ required: true, message: '请输入验证码' },
+				{ min: 4, max: 4, message: '字数需为 4', trigger: 'blur' },
+			]
+		],
+		[
+			"phone",
+			//正则校验
+			[{ pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'all' }]
+		]
+	])
+
+	const loginFormRef = ref<RiceFormComponentPublicInstance | null>(null)
+	const getCode = () => {
+		console.log("getcode");
+	}
+	const submit1 = async () => {
+		const result = await loginFormRef.value!.validate()
+		//校验成功
+		if (result == true) {
+			uni.showToast({ title: "校验成功", icon: "none" });
+		} else {
+			//校验失败，返回校验失败的数组集合
+			const errsName = (result as FormValidateErrors[]).map(v => v.name)
+			console.log('校验失败的name合集', errsName)
+		}
+	}
+
+const submit =()=>{
+	console.log("1111");
+}
 </script>
 
 <style lang="scss">
@@ -44,7 +182,9 @@
 		display: flex;
 		flex-direction: column;
 	}
-
+	.btn {
+		flex: 1;
+	}
 	.top-banar {
 		display: flex;
 		flex-direction: column;
@@ -53,39 +193,55 @@
 		background-color: #0765ae;
 
 		.subtitle {
-			font-size: 16px;
-			color: #fff;
+			.txt-style {
+				font-size: 16px;
+				color: #fff;
+			}
+
 		}
 	}
+.btn-area{
+	width: 298px;
+	margin:auto;
 
+	height: 45px;
+
+}
 	.input-area {
 		width: 298px;
+		margin:auto;
 		background-color: #ebebeb70;
+		border: 1px solid #ebebeb70;
 		height: 45px;
 		padding: 15px;
 		border-radius: 8px;
 		box-sizing: border-box;
 		display: flex;
 		align-items: center;
-		font-size: $uni-font-size-sm;
+		flex-direction: row;
+		font-size: 16px;
 
-		input {
+		.input-style {
 			flex: 1;
-			font-size: $uni-font-size-sm;
 		}
+	}
+
+	.input-area-error {
+		border: 1px solid #ff0000;
 	}
 
 	.sms-btn {
 		border-radius: 22.5px;
 		color: #fff;
 		background-color: #0765ae;
-		cursor: pointer;
+
 	}
 
 	.smstext {
 		color: #0765ae;
 		margin-right: 6px;
-		cursor: pointer;
+		font-size: 14px;
+
 	}
 
 	.smstext-disable {
@@ -93,7 +249,7 @@
 	}
 
 	.container {
-		width: 100vw;
+
 		padding-top: 120px;
 		/* background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%); */
 		display: flex;
@@ -118,13 +274,13 @@
 
 	.up {
 		display: flex;
+		flex-direction: row;
 		align-items: center;
 		justify-content: center;
-		font-size: 12px;
 
 		.ct {
 			font-size: 12px;
-			cursor: pointer;
+
 		}
 	}
 </style>

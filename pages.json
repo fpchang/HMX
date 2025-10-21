@@ -17,12 +17,17 @@
 
 		,
 		{
-			"path" : "pages/tt/tt",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
-			}
-		}
+					"path": "pages/common/privacyPolicy/privacyPolicy",
+					"style": {
+						"navigationBarTitleText": "隐私政策"
+					}
+				},
+				{
+					"path": "pages/common/userAgreement/userAgreement",
+					"style": {
+						"navigationBarTitleText": "用户协议"
+					}
+				}
 ,{
     "path": "uni_modules/lime-action-sheet/pages/index"
 },
@@ -43,7 +48,8 @@
 	"path" : "pages/login/login",
 	"style" : 
 	{
-		"navigationBarTitleText" : ""
+		"navigationBarTitleText" : "",
+		"navigationStyle": "custom"
 	}
 }
 ],

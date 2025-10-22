@@ -1,5 +1,6 @@
 import{DB} from '../api/DB';
 class AccountServiceClass{
+	
 	constructor(){
        
     }
@@ -19,8 +20,7 @@ sendSmsCode(phone:string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
     return DB.callFunction("hm_validToken") ;
   }
   login(userForm: UTSJSONObject):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
-	  const data:UTSJSONObject=userForm;
-	 return DB.callFunction("hm_login", data)
+	 return DB.callFunction("hm_login", {userForm});
   }
   /**
    * 注销账号
@@ -30,6 +30,9 @@ sendSmsCode(phone:string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
   }
   recoverAccount(_id:string):Promise<UniCloudDBUpdateResult>{
     return DB.update("hm-user",_id,{accountStatus:1})
+  }
+  getUserInfoByPhone(phone:string):Promise<UniCloudDBGetResult>{
+	   return DB.getCollection("hm-user",{phone});
   }
   getuserByToken():Promise<UniCloudDBGetResult>{
     return DB.getCollection("hm-user",{hm_token:uni.getStorageSync("hm_token")});

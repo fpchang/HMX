@@ -1,5 +1,5 @@
 <template>
-	<view class="login" >
+	<view class="login">
 
 		<view class="top-banar">
 			<view class="flex-center">
@@ -7,17 +7,17 @@
 				<image style="width:200px;height:150px" src="https://cdn.hotelsys.fun/HM/images/blue-logo.jpg" />
 			</view>
 			<view class="subtitle flex-center">
-			
-					<text class="txt-style">酒店助手</text>
-					<text class="txt-style" style="padding:4px">/</text>
-					<text class="txt-style">经营管理</text>
-					<text class="txt-style" style="padding: 0 4px">/</text>
-					<text class="txt-style">宣传推广</text>
-				
+
+				<text class="txt-style">酒店助手</text>
+				<text class="txt-style" style="padding:4px">/</text>
+				<text class="txt-style">经营管理</text>
+				<text class="txt-style" style="padding: 0 4px">/</text>
+				<text class="txt-style">宣传推广</text>
+
 
 			</view>
 			<view style="height: 40px"></view>
-		</view> 
+		</view>
 
 		<view class="form-content-style">
 			<rice-form :model="userForm" :rules="loginRules" ref="loginFormRef" label-width="100px"
@@ -28,7 +28,8 @@
 							<l-icon name="material-symbols:phone-android-rounded" size="25px" color="#0765ae" />
 						</view>
 						<view class="input-style">
-							 <input type="tel" maxlength="11" inputmode="tel" v-model="userForm.phone" placeholder="请输入手机号"  style="font-size: 14px;"/>								
+							<input type="tel" maxlength="11" inputmode="tel" v-model="userForm.phone"
+								placeholder="请输入手机号" style="font-size: 14px;" />
 						</view>
 
 					</view>
@@ -39,8 +40,9 @@
 						<view style="padding-right: 15px">
 							<l-icon name="material-symbols:lock" size="25px" color="#0765ae" />
 						</view>
-						<view  class="input-style">
-								 <input type="number" maxlength="4" v-model="userForm.smsCode" placeholder="请输入验证码"  style="font-size: 14px;"/>
+						<view class="input-style">
+							<input type="number" maxlength="4" v-model="userForm.smsCode" placeholder="请输入验证码"
+								style="font-size: 14px;" />
 						</view>
 						<view style="width: 80px; text-align: right">
 							<text @click="getCode"
@@ -56,23 +58,25 @@
 					  style="height: 40px">
 					  登录
 					</button> -->
-					<view class="btn-area" >
-						 <rice-button type="primary" text="登录" class="btn"  color="" @click="submit" :loading="submitLoading" :disabled="submitDisabled"/>
+					<view class="btn-area">
+						<rice-button type="primary" text="登录" class="btn" color="" @click="submit"
+							:loading="submitLoading" :disabled="submitDisabled" />
 					</view>
-					
+
 				</rice-form-item>
 				<rice-form-item>
-				<view class="up">
-					<view @click="agreeEvent"> 
-					<l-icon v-show="isAgree" name="material-symbols:check-circle"  size="20"
-					  color="#0765ae"></l-icon>
-										<l-icon  v-show="!isAgree" name="material-symbols-light:circle-outline" size="20"
-										  color="#0765ae"></l-icon>
+					<view class="up">
+						<view @click="agreeEvent">
+							<l-icon v-show="isAgree" name="material-symbols:check-circle" size="20"
+								color="#0765ae"></l-icon>
+							<l-icon v-show="!isAgree" name="material-symbols-light:circle-outline" size="20"
+								color="#0765ae"></l-icon>
+						</view>
+
+						<text class="ct">我已阅读并同意<text class="edit-text-btn-style ct"
+								@click="openUserAgreement">《用户协议》</text>和<text class="edit-text-btn-style ct"
+								@click="openUserPrivacyPolicy">《隐私政策》</text></text>
 					</view>
-			
-				  <text class="ct">我已阅读并同意<text class="edit-text-btn-style ct" @click="openUserAgreement">《用户协议》</text>和<text
-				      class="edit-text-btn-style ct" @click="openUserPrivacyPolicy">《隐私政策》</text></text>
-				</view>
 				</rice-form-item>
 			</rice-form>
 			<view> {{userForm.tk}}</view>
@@ -94,22 +98,22 @@
 		smsCode: "",
 		phone: ""
 	});
-	let submitLoading=ref(false);
+	let submitLoading = ref(false);
 	let tips = ref<string>("获取验证码");
-	let isAgree= ref(false);
-	const agreeEvent=() =>{
+	let isAgree = ref(false);
+	const agreeEvent = () => {
 		console.log(isAgree.value)
-	  isAgree.value = !isAgree.value;
+		isAgree.value = !isAgree.value;
 	};
-	const openUserAgreement=()=> {
-	  uni.navigateTo({
-	    url: "/pages/common/userAgreement/userAgreement",
-	  });
+	const openUserAgreement = () => {
+		uni.navigateTo({
+			url: "/pages/common/userAgreement/userAgreement",
+		});
 	};
-	const openUserPrivacyPolicy=()=> {
-	  uni.navigateTo({
-	    url: "/pages/common/privacyPolicy/privacyPolicy",
-	  });
+	const openUserPrivacyPolicy = () => {
+		uni.navigateTo({
+			url: "/pages/common/privacyPolicy/privacyPolicy",
+		});
 	};
 	const sendSmsDisabled = computed<boolean>(() => {
 		return userForm.value.phone.length != 11;
@@ -137,77 +141,132 @@
 	])
 
 	const loginFormRef = ref<RiceFormComponentPublicInstance | null>(null);
-	let canGetCode=ref(true);
-	const  sendSmsSuccess=()=> {
-      let t:number= 30;
-      tips.value = `${t}S`;
-      canGetCode.value = false;
-     let timevent: number=0;
-      timevent = setInterval(() => {
-        if (t < 1) {
-          clearInterval(timevent);
-          tips.value = `重新发送`;
-          canGetCode.value = true;
-          return;
-        }
-        t--;
-        tips.value = `${t}S`;
-      }, 1000);
-    }
-	const getCode = async() => {
-		console.log("getcode");
-		  if (!canGetCode.value) {
-		        uni.showToast({ title: "倒计时结束后再发送", icon: "none" });
-		        return;
-		      }
-		      if (sendSmsDisabled.value) {
-				  return;
-			  }
-		        uni.showLoading({title:""});
-				try{
-					const res = await AccountService.sendSmsCode(userForm.value.phone);
-					const data =res.result as UTSJSONObject;
-					console.log("res",res);
-					    userForm.value.tk = data.tk.toString();
-					    uni.setStorageSync("tk",data.tk.toString());
-					    uni.hideLoading();
-					   sendSmsSuccess();
-				}catch(error){
-					uni.showToast({
-						title:"发送短信失败"
-					})
-				}
-				
-		        // uniCloud
-		        //   .callFunction({
-		        //     name: "hm-sendSms",
-		        //     data: {
-		        //       phone: this.userForm.phone,
-		        //       templateId: "100",
-		        //     },
-		        //   })
-		        //   .then((res) => {
-		        //     //console.log("sendsms value", res);
-		        //     userForm.value.tk = res.result.tk;
-		        //     uni.setStorageSync("tk", res.result.tk);
-		        //     uni.hideLoading();
-		        //    sendSmsSuccess();
-		        //   });
-		      
+	let canGetCode = ref(true);
+	const sendSmsSuccess = () => {
+		let t : number = 30;
+		tips.value = `${t}S`;
+		canGetCode.value = false;
+		let timevent : number = 0;
+		timevent = setInterval(() => {
+			if (t < 1) {
+				clearInterval(timevent);
+				tips.value = `重新发送`;
+				canGetCode.value = true;
+				return;
+			}
+			t--;
+			tips.value = `${t}S`;
+		}, 1000);
 	}
-	const submit = async () => {
-		const result = await loginFormRef.value!.validate()
-		//校验成功
-		if (result != true) {
-			uni.showToast({ title: "校验成功", icon: "none" });
-			//校验失败，返回校验失败的数组集合
-			const errsName = (result as FormValidateErrors[]).map(v => v.name)
-			console.log('校验失败的name合集', errsName)
+	const getCode = async () => {
+		console.log("getcode");
+		if (!canGetCode.value) {
+			uni.showToast({ title: "倒计时结束后再发送", icon: "none" });
 			return;
 		}
+		if (sendSmsDisabled.value) {
+			return;
+		}
+		uni.showLoading({ title: "" });
+		try {
+			const res = await AccountService.sendSmsCode(userForm.value.phone);
+			const data = res.result as UTSJSONObject;
+			console.log("res", res);
+			userForm.value.tk = data.tk.toString();
+			uni.setStorageSync("tk", data.tk.toString());
+			uni.hideLoading();
+			sendSmsSuccess();
+		} catch (error) {
+			uni.showToast({
+				title: "发送短信失败"
+			})
+		}
+
+		// uniCloud
+		//   .callFunction({
+		//     name: "hm-sendSms",
+		//     data: {
+		//       phone: this.userForm.phone,
+		//       templateId: "100",
+		//     },
+		//   })
+		//   .then((res) => {
+		//     //console.log("sendsms value", res);
+		//     userForm.value.tk = res.result.tk;
+		//     uni.setStorageSync("tk", res.result.tk);
+		//     uni.hideLoading();
+		//    sendSmsSuccess();
+		//   });
+
 	}
+	const getUserInfo = async () => {
+		console.log("getuserinfo")
+		
+		const userRes = await AccountService.getUserInfoByPhone(userForm.value.phone)
+		
+		const data = userRes['data'] as Array<UTSJSONObject>;
+		console.log("22222",data[0]);
+		uni.setStorageSync("user",data[0]);
+		//this.$store.commit("setUser", userRes.result.data[0]);
+		submitLoading.value = false;
+		
+		uni.reLaunch({
+			url: "/pages/index/index",
+		});
+	}
+	const submit = async () => {
+		console.log("submit")
+		if (!isAgree.value) {
+			uni.showToast({
+				title: "请先阅读并同意协议",
+				icon: "none",
+			});
+			return;
+		}
+		submitLoading.value = true;
 
+		try {
+			const res = await AccountService.login({...userForm.value});
+			console.log("ressss",res)
+		
+			
+			const result = res.result as UTSJSONObject;
+			 const data = result.data as UTSJSONObject;
+			 const code = result.code as number;
+			const msg = result.msg as string;
+			
+			if (code != 0) {
+				uni.showToast({
+					title: msg,
+					duration: 2000,
+					icon: "error",
+				});
+				submitLoading.value = false;
+				return;
+			}
+			
+			const token = data['token'] as string | null;
+			if (token != null) {
+				uni.setStorageSync("hm_token", token as string);
+			}
+			uni.setStorageSync("phone", userForm.value.phone);
+			getUserInfo();
+		} catch (error) {
+			console.log("登录失败",error);
+			submitLoading.value = false;
+		}
 
+	}
+	onCreated(()=>{
+		 try {
+		      let phone = uni.getStorageSync("phone") as string;
+		      if (phone != "") {
+		        userForm.value.phone = phone.toString();
+		      }
+		    } catch (error) {
+		      userForm.value.phone = "";
+		    }
+	})
 </script>
 
 <style lang="scss">
@@ -237,49 +296,54 @@
 		display: flex;
 		flex-direction: column;
 	}
+
 	.btn {
 		flex: 1;
 	}
-	
-.btn-area{
-	width: 298px;
-	margin:auto;
 
-	height: 45px;
+	.btn-area {
+		width: 298px;
+		margin: auto;
 
-}
-.login{
-	flex:1 ;
-	background-color: #0765ae;
-	.top-banar {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-content: center;
-		
-	
-		.subtitle {
+		height: 45px;
+
+	}
+
+	.login {
+		flex: 1;
+		background-color: #0765ae;
+
+		.top-banar {
 			display: flex;
-			flex-direction: row;
-			.txt-style {
-				font-size: 16px;
-				color: #fff;
+			flex-direction: column;
+			justify-content: center;
+			align-content: center;
+
+
+			.subtitle {
+				display: flex;
+				flex-direction: row;
+
+				.txt-style {
+					font-size: 16px;
+					color: #fff;
+				}
+
 			}
-	
+		}
+
+		.form-content-style {
+			flex: 1;
+			background-color: #fff;
+			padding: 20px;
+			border-top-left-radius: 15px;
+			border-top-right-radius: 15px;
 		}
 	}
-	.form-content-style{
-		flex: 1;
-		background-color:#fff;
-		padding:20px;
-		border-top-left-radius: 15px;
-		border-top-right-radius: 15px;
-	}
-}
 
 	.input-area {
 		width: 298px;
-		margin:auto;
+		margin: auto;
 		background-color: #ebebeb70;
 		border: 1px solid #ebebeb70;
 		height: 45px;
@@ -312,7 +376,6 @@
 		margin-right: 6px;
 		font-size: 14px;
 		text-align: right
-
 	}
 
 	.smstext-disable {

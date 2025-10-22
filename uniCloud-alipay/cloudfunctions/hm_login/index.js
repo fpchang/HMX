@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const tokenEvent = require('tokenEvent');
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
-	//console.log('event : ', event);
+	console.log('event : ', event);
 	const starttime = new Date().getTime();
 	let {
 		userForm,

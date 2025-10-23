@@ -30,7 +30,7 @@
             "type" : "uni-app:app-ios"
         },
         {
-            "playground" : "standard",
+            "playground" : "custom",
             "type" : "uni-app:app-ios_simulator"
         }
     ]

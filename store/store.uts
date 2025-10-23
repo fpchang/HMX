@@ -1,0 +1,161 @@
+	import { AccountService } from "@/services/AccountService";
+export type State={
+	//存放状态
+	isLogin: boolean,
+	config: UTSJSONObject, //配置信息
+	viewWidth: number, //可视宽度
+	user: UTSJSONObject,
+	hotelList: Array<UTSJSONObject>,
+	employeeList: Array<UTSJSONObject>,
+	hotel_id: string,
+	roomTypeList: Array<UTSJSONObject>,
+	location: Array<number>
+}
+// 实例化为state
+export const state = reactive({ 
+	isLogin: false,
+	config: {} as UTSJSONObject,
+	viewWidth: 0,
+	user: {} as UTSJSONObject,
+	hotelList: [] as Array<UTSJSONObject>,
+	employeeList: [] as Array<UTSJSONObject>,
+	hotel_id: "",
+	roomTypeList: [] as Array<UTSJSONObject>,
+	location: [] as Array<number>
+} as State);
+// 定义修改属性值的方法
+
+
+   export const   setIsLogin=( bool:boolean)=> {
+      state.isLogin = bool;
+    };
+    //当前位置坐标
+     export const   setLocation=(loc:Array<number>)=> {
+      state.location = loc;
+    };
+    export const  setConfig=(obj:UTSJSONObject)=> {
+      uni.setStorageSync("config", obj);
+      state.config = obj;
+    };
+
+
+    export const setUser=(user:UTSJSONObject)=> {
+      state.user = user;
+    };
+     export const setHotelId=(hotel_id:string)=> {
+      state.hotel_id = hotel_id;
+    };
+
+    //调用 this.$store.commit('updateHotelList',[])
+    export const updateHotelList=(list:Array<UTSJSONObject>)=>{
+      state.hotelList = list;
+	  setDefaultHotel();
+     // store.commit("setDefaultHotel");
+    };
+    export const updateEmployeeList=(list:Array<UTSJSONObject>)=>{
+      state.employeeList = list;
+    };
+     export const updateRoomTypeList=(state, list)=> {
+      state.roomTypeList = list;
+    };
+    export const checkHotel=(hotel_id:string)=> {
+      uni.setStorageSync("hotel_id", hotel_id);
+	  setHotelId(hotel_id);
+	  //getPermissionList(hotel_id);
+	 // getRoomTypeList();
+     // store.commit("setHotelId", hotel_id);
+      // store.dispatch("getPermissionList", hotel_id);
+      //  store.dispatch("getRoomType");
+    };
+     export const  setDefaultHotel=()=> {
+      if (!state.hotelList.length) {
+        return;
+      }
+      let _hotel_id:string = uni.getStorageSync("hotel_id");
+
+      let h = state.hotelList.find((item) => {
+        return item._id == _hotel_id;
+      }) as (UTSJSONObject | null);
+      let n_hotel_id:string = h ? _hotel_id : state.hotelList[0]._id;
+      if (n_hotel_id == state.hotel_id) {
+        console.warn("与旧hotel_id相同，无需重置");
+        return;
+      }
+      //store.commit("checkHotel", n_hotel_id);
+     checkHotel( n_hotel_id)
+    };
+	
+    export const updateUser=()=>{     
+      const user:UTSJSONObject = uni.getStorageSync("user");
+      if (user) {
+		  setUser(user);
+        //store.commit("setUser", user);
+      }
+    };
+	const  getUser= async ():UTSJSONObject=>{
+	  const res = await AccountService.getuserByToken();
+	  if (res.result.data[0]) {
+	    uni.setStorageSync("user", res.result.data[0]);
+	    //context.commit("setUser", res.result.data[0]);
+	  }
+	  return res;
+	};
+	const  getHotelList= async ():Promise<UTSJSONObject>=> {
+	  console.log("服务端hotellist");
+	  //const res = await HotelService.getHotelList();
+	 // console.log("酒店列表", res);
+	 // context.commit("updateHotelList", res.result);
+	 // return res;
+	 return Promise.resolve({aa:11} as UTSJSONObject);
+	};
+	const getRoomType= async ()=> {
+	 // const res = await HotelService.getRoomType(context.state.hotel_id);
+	  //console.log("房型列表", res);
+	  //let obj = res.result.data.length?res.result.data:[];
+	  //context.commit("updateRoomType", res.result.data);
+	 // return res;
+	};
+	/**
+	 * 
+	 * @param {*} context 
+	 * @param {*} loginSuccess 未登录进入登录页面，登录成功后触发
+	 * @param {*} noLoginEvent 未登录时直接触发
+	 * @returns 
+	 */
+	export const loginEvent=async ():Promise<string> =>{
+	    const token = uni.getStorageSync("hm_token") as string | null;
+	    if (token == null || token == "") {
+	      //未登录
+	      clearCache();      
+	      return Promise.reject("未登录");                
+	    }
+	    
+	    const res = await AccountService.validToken();
+		console.log("res",res);
+	    const code = res.result['code'] as number;
+	    if (code != 0) {
+	      const msg = res.result['msg'] as string;
+	      if (msg != "") {
+	        uni.showToast({
+	          title: msg,
+	          duration: 2000,
+	          icon: "none",
+	        });
+	      }
+	      return Promise.reject("token验证失败");
+	    }
+	    return Promise.resolve('token验证通过')
+	};
+	export const clearCache=():void=>{
+	  uni.removeStorageSync("hm_token");
+	  uni.removeStorageSync("user");
+	  //context.commit("setUser",null);
+	 // context.commit("setHotelId", "");
+	};
+	export const loginOut=():void=> {
+	  console.log("退出登录");
+	  clearCache();
+	  uni.reLaunch({
+	    url: "/pages/indexAdvise/indexAdvise",
+	  });
+	};

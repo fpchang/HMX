@@ -1,21 +1,23 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://doc.dcloud.net.cn/uni-app-x/collocation/pagesjson.html
 		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app x"
-			}
-		},
-		{
 			"path" : "pages/indexAdvise/indexAdvise",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "",
+				"disableScroll": true,
+				"enablePullDownRefresh": false
 			}
-		}
-
-
+		}				
 		,
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+
 		{
 					"path": "pages/common/privacyPolicy/privacyPolicy",
 					"style": {

@@ -25,9 +25,9 @@
 	const showPickTime=()=>{
 	  showRange.value=true;
 	}
-	uni.navigateTo({
-		url:"/pages/login/login"
-	})
+	// uni.navigateTo({
+	// 	url:"/pages/login/login"
+	// })
 </script>
 
 <style>

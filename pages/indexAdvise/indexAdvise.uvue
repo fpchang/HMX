@@ -1,59 +1,64 @@
 <template>
 	<!-- #ifdef APP -->
-	<scroll-view style="flex:1" :refresher-enabled="true">
+	<scroll-view style="flex:1" :refresher-enabled="false" v-if="isReading">
 	<!-- #endif -->
+	<view class="indexAdvise">
 		<view class="introduce">
-			<view class="card glass" style="padding:0">
-				<view class="video-content">
+				<view class="card glass" style="padding:0">
+					<view class="video-content">
+					</view>
+		
 				</view>
-
-			</view>
-			<view class="card glass">
-				<view class="title">简介</view>
-				<view class="txt-content">
-					议宿是一款基于酒店民宿日常事务管理开发的工具类软件，提供基础的房型房间管理，收入与支出的财务管理，财务统计图表。订单与房态管理，并自动生成店铺个性化信息展示，并且能分享给微信好友，方便快速预览。提供app与小程序支持，酒店管理员随身管理类必备工具。
+				<view class="card glass">
+					<view class="title">简介</view>
+					<view class="txt-content">
+						议宿是一款基于酒店民宿日常事务管理开发的工具类软件，提供基础的房型房间管理，收入与支出的财务管理，财务统计图表。订单与房态管理，并自动生成店铺个性化信息展示，并且能分享给微信好友，方便快速预览。提供app与小程序支持，酒店管理员随身管理类必备工具。
+					</view>
+				</view>
+				<view class="card glass">
+					<view class="title">功能</view>
+					<view class="content">
+						<view class="control-item-group">
+							<!-- <view><l-icon name="solar:reorder-bold" size="80px" color="#4f99fd" /></view>
+							 --><view><text style="color: #fff">订单管理</text></view>
+						</view>
+						<view class="control-item-group">
+							<!-- <view><l-icon name="solar:calendar-date-bold-duotone" size="80px" color="#34ce84" /></view>
+							 --><view><text style="color: #fff">房态管理</text></view>
+						</view>
+						<view class="control-item-group">
+							<!-- <view><l-icon name="ic:sharp-maps-home-work" size="80px" color="#905d3e" /></view>
+							 --><view><text style="color: #fff">房型管理</text></view>
+						</view>
+						<view class="control-item-group">
+							<!-- <view><l-icon name="material-symbols:bar-chart-4-bars" size="80px" color="orange" /></view>
+							 --><view><text style="color: #fff">财务管理</text></view>
+						</view>
+						<view class="control-item-group">
+						<!-- 	<view><l-icon name="icon-park-solid:people-plus-one" size="80px" color="green" /></view>
+							 --><view><text style="color: #fff">员工账号</text></view>
+						</view>
+						<view class="control-item-group">
+							<!-- <view><l-icon name="majesticons:monitor" size="80px" color="#fff" /></view>
+							 --><view><text style="color: #fff">店铺信息展示</text></view>
+						</view>
+						<view class="cs"></view>
+						<view class="cs"></view>
+						<view class="cs"></view>
+						<view class="cs"></view>
+					</view>
 				</view>
 			</view>
-			<view class="card glass">
-				<view class="title">功能</view>
-				<view class="content">
-					<view class="control-item-group">
-						<!-- <view><l-icon name="solar:reorder-bold" size="80px" color="#4f99fd" /></view>
-						 --><view><text style="color: #fff">订单管理</text></view>
-					</view>
-					<view class="control-item-group">
-						<!-- <view><l-icon name="solar:calendar-date-bold-duotone" size="80px" color="#34ce84" /></view>
-						 --><view><text style="color: #fff">房态管理</text></view>
-					</view>
-					<view class="control-item-group">
-						<!-- <view><l-icon name="ic:sharp-maps-home-work" size="80px" color="#905d3e" /></view>
-						 --><view><text style="color: #fff">房型管理</text></view>
-					</view>
-					<view class="control-item-group">
-						<!-- <view><l-icon name="material-symbols:bar-chart-4-bars" size="80px" color="orange" /></view>
-						 --><view><text style="color: #fff">财务管理</text></view>
-					</view>
-					<view class="control-item-group">
-					<!-- 	<view><l-icon name="icon-park-solid:people-plus-one" size="80px" color="green" /></view>
-						 --><view><text style="color: #fff">员工账号</text></view>
-					</view>
-					<view class="control-item-group">
-						<!-- <view><l-icon name="majesticons:monitor" size="80px" color="#fff" /></view>
-						 --><view><text style="color: #fff">店铺信息展示</text></view>
-					</view>
-					<view class="cs"></view>
-					<view class="cs"></view>
-					<view class="cs"></view>
-					<view class="cs"></view>
-				</view>
+			<view style="height: 120px"></view>
+			<view class="control">
+				<button class="btn" @click="toLoginEvent()"><text class="btn-txt">登录体验</text></button>
+				<button><text>222222222</text></button>
 			</view>
-		</view>
-		<view style="height: 120px"></view>
-		<view class="control">
-			<button class="btn glass" @click="toLoginEvent()">登录体验</button>
-		</view>
-	<!-- #ifdef APP -->
-	</scroll-view>
+			
+		<!-- #ifdef APP -->
+		
+	</view>
+</scroll-view>
 	<!-- #endif -->
 	<l-popup v-model="showPopu">
 		<view class="popup-con">
@@ -69,8 +74,9 @@
 </template>
 
 <script setup>
-	import { ref, onMounted, computed } from "vue";
-	import { useStore } from "vuex";
+	import {loginEvent,loginOut} from "@/store/store.uts";
+	 
+	//import { ref, onMounted, computed } from "vue";
 	//import { AccountService } from "@/services/AccountService";
 	// const props = defineProps({
 	//   message: {
@@ -83,7 +89,7 @@
 	let refresher_triggered = ref(false);
 	let submitLoading = ref(false);
 	let agreeGetPhone = ref(false);
-	let showPopu = ref(true);
+	let showPopu = ref(false);
 	const accessin = () => {
 		uni.redirectTo({
 			url: "/pages/index/index",
@@ -113,18 +119,6 @@
 		showPopu.value = false;
 	};
 
-	const start = (async () => {
-		try {
-			console.log("验证token");
-			//const res = await store.dispatch("loginEvent");
-			//console.log("验证token结果", res);
-			//accessin();
-		} catch (error) {
-			console.log("err", error);
-
-			isReading.value = true;
-		}
-	})();
 	const list = [
 		{
 			title: "首页",
@@ -207,6 +201,22 @@
 			refresher_triggered.value = false;
 		}, 1000);
 	};
+	const initData = (async () => {
+		try {
+			console.log("验证token");
+			const res = await loginEvent();;
+			console.log("验证token结果", res);
+			accessin();
+		} catch (error) {
+			console.log("err", error);
+	
+			isReading.value = true;
+		}
+	});
+	onLoad(()=>{
+		console.warn("11111");
+		initData();
+	})
 	onMounted(() => { });
 </script>
 
@@ -297,19 +307,23 @@
 		.control {
 			position: fixed;
 			bottom: 20px;
-			/*width: 100vw;*/
+			width: 750rpx;
 			padding: 0 20px 20px 20px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			box-sizing: border-box;
+			background:green;
 
 			.btn {
-				padding: 10px 100px;
-				color: #fff;
-				font-size: 16px;
-				letter-spacing: 2px;
+			
+				
 				background-color: rgba(0, 0, 0, 0.48);
+				.btn-txt{
+					color: #fff;
+					font-size: 14px;
+					letter-spacing: 2px;
+				}
 			}
 		}
 	}

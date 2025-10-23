@@ -6,6 +6,7 @@
 
 				<image style="width:200px;height:150px" src="https://cdn.hotelsys.fun/HM/images/blue-logo.jpg" />
 			</view>
+			<view><text>{{user}}</text></view>
 			<view class="subtitle flex-center">
 
 				<text class="txt-style">酒店助手</text>
@@ -88,6 +89,7 @@
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
 	import { ref, computed } from "vue";
 	import { AccountService } from "../../services/AccountService";
+	import { state,setUser} from '@/store/store.uts';
 	type userFormBean = {
 		tk : string,
 		smsCode : string,
@@ -205,9 +207,9 @@
 		const userRes = await AccountService.getUserInfoByPhone(userForm.value.phone)
 		
 		const data = userRes['data'] as Array<UTSJSONObject>;
-		console.log("22222",data[0]);
 		uni.setStorageSync("user",data[0]);
 		//this.$store.commit("setUser", userRes.result.data[0]);
+		setUser(data[0]);
 		submitLoading.value = false;
 		
 		uni.reLaunch({
@@ -266,6 +268,9 @@
 		    } catch (error) {
 		      userForm.value.phone = "";
 		    }
+	});
+	const user=computed(():UTSJSONObject=>{
+		return state.user;
 	})
 </script>
 

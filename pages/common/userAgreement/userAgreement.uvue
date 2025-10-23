@@ -97,7 +97,6 @@
 		}
 	}
 	.p{
-		text-indent: 28px;
 		padding:5px 0;
 	}
 	.strong{

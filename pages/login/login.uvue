@@ -1,13 +1,8 @@
 <template>
 	<view class="login">
 
-		<view class="top-banar">
-			<view class="flex-center">
-
-				<image style="width:200px;height:150px" src="https://cdn.hotelsys.fun/HM/images/blue-logo.jpg" />
-			</view>
-			<view><text>{{user}}</text></view>
-			<view class="subtitle flex-center">
+		<view class="left-panal">
+		<!-- 	<view class="subtitle flex-center">
 
 				<text class="txt-style">酒店助手</text>
 				<text class="txt-style" style="padding:4px">/</text>
@@ -16,72 +11,83 @@
 				<text class="txt-style">宣传推广</text>
 
 
+			</view> -->
+			<image style="width:100%;height:100%" src="https://cdn.hotelsys.fun/HM/images/advise/bg9.png" mode="aspectFill"></image>
+		</view>
+		<view class="center-panal">
+			<view class="container">
+				<view class="log-area">
+
+					<!-- <image style="width:200px;height:150px" src="https://cdn.hotelsys.fun/HM/images/blue-logo.jpg" /> -->
+					<view class="log-img-area"><image style="width:80px;height:80px" src="/static/images/ysw.png" /></view>
+					<view class="txt-area"><text class="txt">登录</text></view>
+				</view>
+				<view class="form-content-style">
+					<rice-form :model="userForm" :rules="loginRules" ref="loginFormRef" label-width="100px"
+						:border-bottom="false">
+						<rice-form-item name="phone">
+							<view class="input-area">
+								<view style="padding-right: 15px">
+									<l-icon name="material-symbols-light:phone-android-outline" size="25px" color="#9aa4bb" />
+								</view>
+								<view class="input-style">
+									<input type="tel" maxlength="11" inputmode="tel" v-model="userForm.phone"
+										placeholder="请输入手机号" style="font-size: 14px;" />
+								</view>
+
+							</view>
+
+						</rice-form-item>
+						<rice-form-item name="smsCode">
+							<view class="input-area">
+								<view style="padding-right: 15px">
+									<l-icon name="solar:lock-password-broken" size="25px" color="#9aa4bb" />
+								</view>
+								<view class="input-style">
+									<input type="number" maxlength="4" v-model="userForm.smsCode" placeholder="请输入验证码"
+										style="font-size: 14px;" />
+								</view>
+								<view style="width: 80px; text-align: right">
+									<text @click="getCode"
+										:class="['smstext', sendSmsDisabled? 'smstext-disable':'']">{{tips}}</text>
+								</view>
+
+
+							</view>
+
+						</rice-form-item>
+						<rice-form-item>
+							<view class="btn-area">
+								<rice-button type="primary" text="登录" class="btn"  shape="round" color="#004af6" @click="submit"
+									:loading="submitLoading" :disabled="submitDisabled" />
+							</view>
+
+						</rice-form-item>
+						<rice-form-item>
+							<view class="up">
+								<view @click="agreeEvent">
+									<l-icon v-show="isAgree" name="material-symbols:check-circle" size="20"
+										color="#004af6"></l-icon>
+									<l-icon v-show="!isAgree" name="material-symbols-light:circle-outline" size="20"
+										color="#004af6"></l-icon>
+								</view>
+								<view>
+									<text class="ct">我已阅读并同意<text class="edit-text-btn-style ct"
+											@click="openUserAgreement">《用户协议》</text>和<text
+											class="edit-text-btn-style ct"
+											@click="openUserPrivacyPolicy">《隐私政策》</text></text>
+								</view>
+
+							</view>
+						</rice-form-item>
+					</rice-form>
+				
+				</view>
 			</view>
-			<view style="height: 40px"></view>
+
 		</view>
 
-		<view class="form-content-style">
-			<rice-form :model="userForm" :rules="loginRules" ref="loginFormRef" label-width="100px"
-				:border-bottom="false">
-				<rice-form-item name="phone">
-					<view class="input-area">
-						<view style="padding-right: 15px">
-							<l-icon name="material-symbols:phone-android-rounded" size="25px" color="#0765ae" />
-						</view>
-						<view class="input-style">
-							<input type="tel" maxlength="11" inputmode="tel" v-model="userForm.phone"
-								placeholder="请输入手机号" style="font-size: 14px;" />
-						</view>
 
-					</view>
-
-				</rice-form-item>
-				<rice-form-item name="smsCode">
-					<view class="input-area">
-						<view style="padding-right: 15px">
-							<l-icon name="material-symbols:lock" size="25px" color="#0765ae" />
-						</view>
-						<view class="input-style">
-							<input type="number" maxlength="4" v-model="userForm.smsCode" placeholder="请输入验证码"
-								style="font-size: 14px;" />
-						</view>
-						<view style="width: 80px; text-align: right">
-							<text @click="getCode"
-								:class="['smstext', sendSmsDisabled? 'smstext-disable':'']">{{tips}}</text>
-						</view>
-
-
-					</view>
-
-				</rice-form-item>
-				<rice-form-item>
-					<!-- <button class="submit-btn" type="default" :disabled="submitDisabled" @click="submit" :loading="submitLoading"
-					  style="height: 40px">
-					  登录
-					</button> -->
-					<view class="btn-area">
-						<rice-button type="primary" text="登录" class="btn" color="" @click="submit"
-							:loading="submitLoading" :disabled="submitDisabled" />
-					</view>
-
-				</rice-form-item>
-				<rice-form-item>
-					<view class="up">
-						<view @click="agreeEvent">
-							<l-icon v-show="isAgree" name="material-symbols:check-circle" size="20"
-								color="#0765ae"></l-icon>
-							<l-icon v-show="!isAgree" name="material-symbols-light:circle-outline" size="20"
-								color="#0765ae"></l-icon>
-						</view>
-
-						<text class="ct">我已阅读并同意<text class="edit-text-btn-style ct"
-								@click="openUserAgreement">《用户协议》</text>和<text class="edit-text-btn-style ct"
-								@click="openUserPrivacyPolicy">《隐私政策》</text></text>
-					</view>
-				</rice-form-item>
-			</rice-form>
-			<view> {{userForm.tk}}</view>
-		</view>
 	</view>
 </template>
 
@@ -89,12 +95,12 @@
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
 	import { ref, computed } from "vue";
 	import { AccountService } from "../../services/AccountService";
-	import { state,setUser} from '@/store/store.uts';
+	import { state, setUser } from '@/store/store.uts';
 	type userFormBean = {
 		tk : string,
 		smsCode : string,
 		phone : string
-	}
+	};
 	let userForm = ref<userFormBean>({
 		tk: "",
 		smsCode: "",
@@ -174,8 +180,9 @@
 			const res = await AccountService.sendSmsCode(userForm.value.phone);
 			const data = res.result as UTSJSONObject;
 			console.log("res", res);
-			userForm.value.tk = data.tk.toString();
-			uni.setStorageSync("tk", data.tk.toString());
+			const tk = data.tk as string;
+			userForm.value.tk = tk;
+			uni.setStorageSync("tk", tk);
 			uni.hideLoading();
 			sendSmsSuccess();
 		} catch (error) {
@@ -203,15 +210,15 @@
 	}
 	const getUserInfo = async () => {
 		console.log("getuserinfo")
-		
+
 		const userRes = await AccountService.getUserInfoByPhone(userForm.value.phone)
-		
+
 		const data = userRes['data'] as Array<UTSJSONObject>;
-		uni.setStorageSync("user",data[0]);
+		uni.setStorageSync("user", data[0]);
 		//this.$store.commit("setUser", userRes.result.data[0]);
 		setUser(data[0]);
 		submitLoading.value = false;
-		
+
 		uni.reLaunch({
 			url: "/pages/index/index",
 		});
@@ -228,15 +235,15 @@
 		submitLoading.value = true;
 
 		try {
-			const res = await AccountService.login({...userForm.value});
-			console.log("ressss",res)
-		
-			
+			const res = await AccountService.login({ ...userForm.value });
+			console.log("ressss", res)
+
+
 			const result = res.result as UTSJSONObject;
-			 const data = result.data as UTSJSONObject;
-			 const code = result.code as number;
+			const data = result.data as UTSJSONObject;
+			const code = result.code as number;
 			const msg = result.msg as string;
-			
+
 			if (code != 0) {
 				uni.showToast({
 					title: msg,
@@ -246,7 +253,7 @@
 				submitLoading.value = false;
 				return;
 			}
-			
+
 			const token = data['token'] as string | null;
 			if (token != null) {
 				uni.setStorageSync("hm_token", token as string);
@@ -254,22 +261,22 @@
 			uni.setStorageSync("phone", userForm.value.phone);
 			getUserInfo();
 		} catch (error) {
-			console.log("登录失败",error);
+			console.log("登录失败", error);
 			submitLoading.value = false;
 		}
 
 	}
-	onCreated(()=>{
-		 try {
-		      let phone = uni.getStorageSync("phone") as string;
-		      if (phone != "") {
-		        userForm.value.phone = phone.toString();
-		      }
-		    } catch (error) {
-		      userForm.value.phone = "";
-		    }
+	onCreated(() => {
+		try {
+			let phone = uni.getStorageSync("phone") as string;
+			if (phone != "") {
+				userForm.value.phone = phone.toString();
+			}
+		} catch (error) {
+			userForm.value.phone = "";
+		}
 	});
-	const user=computed(():UTSJSONObject=>{
+	const user = computed(() : UTSJSONObject => {
 		return state.user;
 	})
 </script>
@@ -307,24 +314,29 @@
 	}
 
 	.btn-area {
-		width: 298px;
+		width: 100%;
 		margin: auto;
-
 		height: 45px;
 
 	}
 
 	.login {
+		width: 750rpx;
+		overflow: hidden;
 		flex: 1;
-		background-color: #0765ae;
+		background-color: #fff;
+		display: flex;
+		flex-direction: row;
 
-		.top-banar {
+		.left-panal {
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
 			align-content: center;
-
-
+			width: 187rpx;
+			overflow: hidden;
+			
+			background:url("https://cdn.hotelsys.fun/HM/images/advise/bg9.png");
 			.subtitle {
 				display: flex;
 				flex-direction: row;
@@ -335,22 +347,78 @@
 				}
 
 			}
+
+
 		}
 
-		.form-content-style {
-			flex: 1;
-			background-color: #fff;
-			padding: 20px;
-			border-top-left-radius: 15px;
-			border-top-right-radius: 15px;
+		.center-panal {
+			width: 563rpx;
+			display: flex;
+			align-items: center;
+
+			.container {
+				margin-top: 120px;
+				max-width: 563rpx;
+
+				box-sizing: border-box;
+				overflow: hidden;
+				display: flex;
+				.log-area{
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					.log-img-area{
+						width: 80px;
+						height: 80px;
+						background:#004af6;
+						border-radius: 12px;
+					}
+					.txt-area{
+						display: flex;
+						flex-direction: row;
+						align-items: flex-end;
+						height: 80px;
+						.txt{
+							font-size: 20px;
+							font-weight: bold;
+							padding-left: 25px;
+							padding-bottom: 12px;
+						}
+					}
+					
+				}
+				.form-content-style {
+					flex: 1;
+					max-width: 563rpx;
+					padding: 0 15px;
+
+					box-sizing: border-box;
+					overflow: hidden;
+
+					.up {
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						justify-content: center;
+
+						.ct {
+							font-size: 12px;
+
+						}
+					}
+				}
+			}
+
+
 		}
+
+		.right-panal {}
 	}
 
 	.input-area {
-		width: 298px;
+		min-width: 250px;
 		margin: auto;
-		background-color: #ebebeb70;
-		border: 1px solid #ebebeb70;
+		border: 1px solid #9aa4bb;
 		height: 45px;
 		padding: 15px;
 		border-radius: 8px;
@@ -372,12 +440,12 @@
 	.sms-btn {
 		border-radius: 22.5px;
 		color: #fff;
-		background-color: #0765ae;
+		background-color: #004af6;
 
 	}
 
 	.smstext {
-		color: #0765ae;
+		color: #004af6;
 		margin-right: 6px;
 		font-size: 14px;
 		text-align: right
@@ -408,18 +476,6 @@
 				font-size: 16px;
 				color: #424242;
 			}
-		}
-	}
-
-	.up {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
-
-		.ct {
-			font-size: 12px;
-
 		}
 	}
 </style>

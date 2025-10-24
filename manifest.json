@@ -42,7 +42,12 @@
 	},
 	"app-android": {
 		"distribute": {
-			"modules": {},
+			"modules": {
+				"uni-map": {},
+				"uni-location": {
+					"system": {}
+				}
+			},
 			"icons": {
 				"hdpi": "",
 				"xhdpi": "",

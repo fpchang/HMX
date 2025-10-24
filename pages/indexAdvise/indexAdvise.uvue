@@ -1,64 +1,68 @@
 <template>
 	<!-- #ifdef APP -->
-	<scroll-view style="flex:1" :refresher-enabled="false" v-if="isReading">
+	<scroll-view class="indexAdvise-page" :refresher-enabled="false" v-if="isReading">
 	<!-- #endif -->
+	<view style="height:60px"></view>
 	<view class="indexAdvise">
+	 
 		<view class="introduce">
-				<view class="card glass" style="padding:0">
+				<view class="card" style="padding:0">
 					<view class="video-content">
+						<video style="width:750rpx;height:562rpx" :muted="true" src="https://cdn.hotelsys.fun/HM/images/advise/advise.mp4" :autoplay="true" :show-mute-btn="true" object-fit="contain" :controls="true"></video>
 					</view>
 		
 				</view>
-				<view class="card glass">
-					<view class="title">简介</view>
+				<view class="card">
+					<view ><text class="title">议宿管理系统</text></view>
 					<view class="txt-content">
-						议宿是一款基于酒店民宿日常事务管理开发的工具类软件，提供基础的房型房间管理，收入与支出的财务管理，财务统计图表。订单与房态管理，并自动生成店铺个性化信息展示，并且能分享给微信好友，方便快速预览。提供app与小程序支持，酒店管理员随身管理类必备工具。
+						<text class="txt"> 
+						议宿是一款基于酒店民宿日常事务管理开发的工具类软件，提供基础的房型房间管理，收入与支出的财务管理，财务统计图表。订单与房态管理，并自动生成店铺个性化信息展示，并且能分享给其它用户，方便快速预览。酒店管理员随身管理类必备工具。
+						
+						</text>
 					</view>
 				</view>
-				<view class="card glass">
-					<view class="title">功能</view>
-					<view class="content">
+				<view class="card">
+					<view class="list-content">
 						<view class="control-item-group">
-							<!-- <view><l-icon name="solar:reorder-bold" size="80px" color="#4f99fd" /></view>
-							 --><view><text style="color: #fff">订单管理</text></view>
+							<view><l-icon name="icon-park-outline:transaction-order" size="40px"  color="#004af6" /></view>
+							<view><text class="txt">订单管理</text></view>
 						</view>
 						<view class="control-item-group">
-							<!-- <view><l-icon name="solar:calendar-date-bold-duotone" size="80px" color="#34ce84" /></view>
-							 --><view><text style="color: #fff">房态管理</text></view>
+							<view><l-icon name="solar:calendar-date-linear" size="40px"  color="#004af6" /></view>
+							<view><text class="txt">房态管理</text></view>
 						</view>
 						<view class="control-item-group">
-							<!-- <view><l-icon name="ic:sharp-maps-home-work" size="80px" color="#905d3e" /></view>
-							 --><view><text style="color: #fff">房型管理</text></view>
+							<view><l-icon name="hugeicons:home-10" size="40px"  color="#004af6" /></view>
+							<view><text class="txt">房型管理</text></view>
 						</view>
 						<view class="control-item-group">
-							<!-- <view><l-icon name="material-symbols:bar-chart-4-bars" size="80px" color="orange" /></view>
-							 --><view><text style="color: #fff">财务管理</text></view>
+							<view><l-icon name="lucide:chart-no-axes-combined" size="40px"  color="#004af6" /></view>
+							<view><text class="txt">财务管理</text></view>
 						</view>
 						<view class="control-item-group">
-						<!-- 	<view><l-icon name="icon-park-solid:people-plus-one" size="80px" color="green" /></view>
-							 --><view><text style="color: #fff">员工账号</text></view>
+							<view><l-icon name="clarity:employee-line" size="40px"  color="#004af6" /></view>
+							<view><text class="txt">员工账号</text></view>
 						</view>
 						<view class="control-item-group">
-							<!-- <view><l-icon name="majesticons:monitor" size="80px" color="#fff" /></view>
-							 --><view><text style="color: #fff">店铺信息展示</text></view>
+							<view><l-icon name="solar:display-outline" size="40px"  color="#004af6" /></view>
+							<view><text class="txt">酒店展示</text></view>
 						</view>
+						<!-- <view class="cs"></view>
 						<view class="cs"></view>
 						<view class="cs"></view>
-						<view class="cs"></view>
-						<view class="cs"></view>
+						<view class="cs"></view> -->
 					</view>
 				</view>
 			</view>
-			<view style="height: 120px"></view>
+			<view style="height: 320px;"></view>
 			<view class="control">
 				<button class="btn" @click="toLoginEvent()"><text class="btn-txt">登录体验</text></button>
-				<button><text>222222222</text></button>
+			</view>
 			</view>
 			
-		<!-- #ifdef APP -->
-		
-	</view>
-</scroll-view>
+			
+	<!-- #ifdef APP -->			
+	</scroll-view>
 	<!-- #endif -->
 	<l-popup v-model="showPopu">
 		<view class="popup-con">
@@ -109,8 +113,8 @@
 		toLogin();
 	};
 
-	const agreeGetPhoneEvent = (flag:boolean) => {
-		if (flag) {
+	const agreeGetPhoneEvent = (f:boolean):void => {
+		if (f) {
 			showPopu.value = false;
 			toLogin();
 
@@ -217,61 +221,67 @@
 		console.warn("11111");
 		initData();
 	})
-	onMounted(() => { });
+	onMounted(() => {
+		// uni.setNavigationBarColor({
+		// 	backgroundColor: "#rgba(0,0,0,0.2)",
+		// 	frontColor: "rgba(255,255,255,0.3)"
+		// })
+	});
 </script>
 
 
 <style lang="scss">
+	.indexAdvise-page{
+			flex:1;
+			 background: linear-gradient(to bottom, rgba(0,74,246,0.2), #fff);
+			
+	}
 	.indexAdvise {
 		background: #eee;
-		height: 100%;
-		background: #0765ae;
-
-		/*background: url("https://cdn.hotelsys.fun/HM/images/advise/bg9.png");*/
-		/*background-repeat: no-repeat;*/
-		/* background-size: cover;*/
+		background-color: transparent;
+		
+		height: fit-content;
+		border-top-right-radius: 15px;
+		border-top-left-radius: 15px;
 		.introduce {
 			margin-top: 10px;
 			max-width: 800px;
-			padding: 0 10px;
-			margin: auto;
 			display: flex;
 			flex-direction: column;
-			/*gap: 15px;*/
-
 			.card {
-				/*background: rgba(255, 255, 255, 0.15);
-      -webkit-backdrop-filter: blur(5px);
-      backdrop-filter: blur(16px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2),inset 0 4px 20px rgba(255, 255, 255, 0.3);*/
 				padding: 0 15px 15px 15px;
 				box-sizing: border-box;
 				border-radius: 12px;
-				background: rgba(0, 0, 0, 0.48);
+				/*background: rgba(0, 0, 0, 0.48);*/
 				overflow: hidden;
 
 				.title {
 					font-weight: 400;
 					font-size: 24px;
 					padding: 20px 0;
-					color: #fff;
+					color: #004af6;
+					font-weight: bold;
 				}
 
 				.txt-content {
-					font-size: 15px;
-					color: #e6e6e6;
-					/*text-indent: 20px;*/
-					letter-spacing: 2px;
-					/*text-align: justify;*/
+				
+					.txt{
+						font-size: 18px;
+						color: #e6e6e6;
+					
+						letter-spacing: 2px;
+						text-align: justify;
+						color: #666;
+						line-height: 30px;
+					}
 				}
 
-				.content {
+				.list-content {
 					display: flex;
-					/*gap: 18px;*/
-					flex-flow: wrap;
-					justify-content: space-around;
-
+					flex-direction: row;
+					flex-flow:row wrap;
+					
+					
 					.cs {
 						height: 0;
 					}
@@ -281,10 +291,15 @@
 						align-items: center;
 
 						justify-content: center;
-						font-size: 12px;
 						flex-direction: column;
-						font-weight: 400;
-						font-size: 15px;
+						padding:20px;
+						.txt{
+							font-weight: 400;
+							font-size: 15px;
+							color: #004af6;
+							padding-top:5px;
+						}
+						
 					}
 
 					.img-area {
@@ -300,6 +315,7 @@
 					position: relative;
 					/*height:fit-content;*/
 					padding: 0;
+					
 				}
 			}
 		}
@@ -313,12 +329,12 @@
 			align-items: center;
 			justify-content: center;
 			box-sizing: border-box;
-			background:green;
 
 			.btn {
 			
-				
-				background-color: rgba(0, 0, 0, 0.48);
+				padding: 0px 100px;
+				background-color:#004af6 ;
+				border-radius: 33px;
 				.btn-txt{
 					color: #fff;
 					font-size: 14px;

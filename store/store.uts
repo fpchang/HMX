@@ -71,7 +71,7 @@ export const state = reactive({
       if (!state.hotelList.length) {
         return;
       }
-      let _hotel_id:string = uni.getStorageSync("hotel_id");
+      let _hotel_id = uni.getStorageSync("hotel_id") as string;
 
       let h = state.hotelList.find((item) => {
         return item._id == _hotel_id;

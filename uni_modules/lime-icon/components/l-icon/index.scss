@@ -49,14 +49,15 @@ $icon-color: create-var(icon-color, currentColor);
 	&--image {
 		width: $icon-size;
 		height: $icon-size;
+		// background: red;
 		/* #ifndef APP-NVUE || UNI-APP-X && APP */
 		display: block;
 		/* #endif */
 		/* #ifdef WEB */
 		position: relative;
-		::v-deep(img) {
-			z-index: -1;
-		}
+		// ::deep(img) {
+		// 	z-index: -1;
+		// }
 		/* #endif */
 	}
 }

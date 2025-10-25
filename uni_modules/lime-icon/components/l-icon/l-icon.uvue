@@ -87,7 +87,7 @@
 	
 	const hasIconify = computed<boolean>(() : boolean => {
 		// #ifdef APP && uniVersion >= 4.82
-		return isIconify.value && props.color != null
+		return isIconify.value //&& props.color != null
 		// #endif
 		// #ifndef APP && uniVersion >= 4.82
 		return isIconify.value
@@ -106,7 +106,7 @@
 		// #ifdef APP && uniVersion >= 4.82
 		// 由于base64 安卓image尺寸不对
 		if(innerName.value.startsWith('data:image/svg+xml')) return true
-		if(props.color == null) return false
+		// if(props.color == null) return false
 		return (/\.svg$/i.test(innerName.value) || innerName.value.startsWith('data:image/svg+xml') || innerName.value.startsWith('<svg'))
 		// #endif
 		// #ifndef APP && uniVersion >= 4.82

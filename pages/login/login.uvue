@@ -28,7 +28,7 @@
 						<rice-form-item name="phone">
 							<view class="input-area">
 								<view style="padding-right: 15px">
-									<l-icon name="material-symbols-light:phone-android-outline" size="25px" color="#9aa4bb" />
+									<!-- <l-icon name="material-symbols-light:phone-android-outline" size="25px" color="#9aa4bb" /> -->
 								</view>
 								<view class="input-style">
 									<input type="tel" maxlength="11" inputmode="tel" v-model="userForm.phone"
@@ -41,7 +41,7 @@
 						<rice-form-item name="smsCode">
 							<view class="input-area">
 								<view style="padding-right: 15px">
-									<l-icon name="solar:lock-password-broken" size="25px" color="#9aa4bb" />
+									<!-- <l-icon name="solar:lock-password-broken" size="25px" color="#9aa4bb" /> -->
 								</view>
 								<view class="input-style">
 									<input type="number" maxlength="4" v-model="userForm.smsCode" placeholder="请输入验证码"
@@ -66,10 +66,10 @@
 						<rice-form-item>
 							<view class="up">
 								<view @click="agreeEvent">
-									<l-icon v-show="isAgree" name="material-symbols:check-circle" size="20"
+									<!-- <l-icon v-show="isAgree" name="material-symbols:check-circle" size="20"
 										color="#004af6"></l-icon>
 									<l-icon v-show="!isAgree" name="material-symbols-light:circle-outline" size="20"
-										color="#004af6"></l-icon>
+										color="#004af6"></l-icon> -->
 								</view>
 								<view>
 									<text class="ct">我已阅读并同意<text class="edit-text-btn-style ct"
@@ -265,8 +265,8 @@
 			submitLoading.value = false;
 		}
 
-	}
-	onCreated(() => {
+	};
+	const createdEvent=() => {
 		try {
 			let phone = uni.getStorageSync("phone") as string;
 			if (phone != "") {
@@ -275,10 +275,11 @@
 		} catch (error) {
 			userForm.value.phone = "";
 		}
-	});
+	};
 	const user = computed(() : UTSJSONObject => {
 		return state.user;
-	})
+	});
+	createdEvent();
 </script>
 
 <style lang="scss">
@@ -358,8 +359,7 @@
 
 			.container {
 				margin-top: 120px;
-				max-width: 563rpx;
-
+				width: 300px;
 				box-sizing: border-box;
 				overflow: hidden;
 				display: flex;
@@ -389,7 +389,7 @@
 				}
 				.form-content-style {
 					flex: 1;
-					max-width: 563rpx;
+					max-width: 300px;
 					padding: 0 15px;
 
 					box-sizing: border-box;

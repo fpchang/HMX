@@ -47,16 +47,20 @@
 			"path": "pages/login/login",
 			"style": {
 				"navigationBarTitleText": "",
-				"navigationStyle": "custom"
+				"navigationBarTextStyle": "black",
+				"transparentTitle": "always"
 			}
 		}
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",
 		"navigationBarTextStyle": "white",
-		"navigationBarBackgroundColor": "#0765ae",
-		"backgroundColor": "#F8F8F8"
+		//*"navigationBarBackgroundColor": "#0765ae",*/
+		"backgroundColor": "#F8F8F8",
+		"rpxCalcMaxDeviceWidth": 3000,
+		"rpxCalcBaseDeviceWidth": 1024,
+		"rpxCalcIncludeWidth": 750,
+		 "resizable": true
 	},
 	"uniIdRouter": {}
 }

@@ -4,7 +4,8 @@
 	<!-- #endif -->
 	<view style="height:40px;"></view>
 	<view class="indexAdvise">
-	 
+		
+	 <view><image style="width: 200px;height: 200px;" src="https://cdn.hotelsys.fun/HM/images/blue-logo.svg"></image></view>
 		<view class="introduce">
 				<view class="card" style="padding:0">
 					<view class="video-content">
@@ -24,28 +25,28 @@
 				<view class="card">
 					<view class="list-content">
 						<view class="control-item-group">
-							<view><l-icon name="icon-park-outline:transaction-order" size="40px"  color="#004af6" /></view>
-							<view><text class="txt">订单管理</text></view>
+							<!-- <view><l-icon name="icon-park-outline:transaction-order" size="40px"  color="#004af6" /></view>
+							 --><view><text class="txt">订单管理</text></view>
 						</view>
 						<view class="control-item-group">
-							<view><l-icon name="solar:calendar-date-linear" size="40px"  color="#004af6" /></view>
-							<view><text class="txt">房态管理</text></view>
+							<!-- <view><l-icon name="solar:calendar-date-linear" size="40px"  color="#004af6" /></view>
+							 --><view><text class="txt">房态管理</text></view>
 						</view>
 						<view class="control-item-group">
-							<view><l-icon name="hugeicons:home-10" size="40px"  color="#004af6" /></view>
-							<view><text class="txt">房型管理</text></view>
+							<!-- <view><l-icon name="hugeicons:home-10" size="40px"  color="#004af6" /></view>
+							 --><view><text class="txt">房型管理</text></view>
 						</view>
 						<view class="control-item-group">
-							<view><l-icon name="lucide:chart-no-axes-combined" size="40px"  color="#004af6" /></view>
-							<view><text class="txt">财务管理</text></view>
+							<!-- <view><l-icon name="lucide:chart-no-axes-combined" size="40px"  color="#004af6" /></view>
+							 --><view><text class="txt">财务管理</text></view>
 						</view>
 						<view class="control-item-group">
-							<view><l-icon name="clarity:employee-line" size="40px"  color="#004af6" /></view>
-							<view><text class="txt">员工账号</text></view>
+							<!-- <view><l-icon name="clarity:employee-line" size="40px"  color="#004af6" /></view>
+							 --><view><text class="txt">员工账号</text></view>
 						</view>
 						<view class="control-item-group">
-							<view><l-icon name="solar:display-outline" size="40px"  color="#004af6" /></view>
-							<view><text class="txt">酒店展示</text></view>
+							<!-- <view><l-icon name="solar:display-outline" size="40px"  color="#004af6" /></view>
+							 --><view><text class="txt">酒店展示</text></view>
 						</view>
 						<!-- <view class="cs"></view>
 						<view class="cs"></view>
@@ -246,7 +247,6 @@
 		border-top-left-radius: 15px;
 		.introduce {
 			margin-top: 10px;
-			max-width: 800px;
 			display: flex;
 			flex-direction: column;
 			.card {

@@ -1,8 +1,8 @@
 <template>
 	<!-- #ifdef APP -->
-	<scroll-view class="indexAdvise-page" :refresher-enabled="false" v-if="isReading">
+	<scroll-view class="indexAdvise-page" :refresher-enabled="false" v-if="isReading" :show-scrollbar="false">
 	<!-- #endif -->
-	<view style="height:60px"></view>
+	<view style="height:40px;"></view>
 	<view class="indexAdvise">
 	 
 		<view class="introduce">
@@ -56,7 +56,8 @@
 			</view>
 			<view style="height: 320px;"></view>
 			<view class="control">
-				<button class="btn" @click="toLoginEvent()"><text class="btn-txt">登录体验</text></button>
+				
+				<rice-button type="primary" text="登录体验" class="btn"  shape="round" color="#004af6" @click="toLoginEvent"/>
 			</view>
 			</view>
 			
@@ -233,7 +234,7 @@
 <style lang="scss">
 	.indexAdvise-page{
 			flex:1;
-			 background: linear-gradient(to bottom, rgba(0,74,246,0.2), #fff);
+			/* background: linear-gradient(to bottom, rgba(0,74,246,0.2), #fff);*/
 			
 	}
 	.indexAdvise {
@@ -251,7 +252,7 @@
 			.card {
 				padding: 0 15px 15px 15px;
 				box-sizing: border-box;
-				border-radius: 12px;
+				/*border-radius: 12px;*/
 				/*background: rgba(0, 0, 0, 0.48);*/
 				overflow: hidden;
 

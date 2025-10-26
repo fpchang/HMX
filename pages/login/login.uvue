@@ -16,14 +16,64 @@
 		</view>
 		<view class="center-panal">
 			<view class="container">
-				<view class="log-area">
-
-					<!-- <image style="width:200px;height:150px" src="https://cdn.hotelsys.fun/HM/images/blue-logo.jpg" /> -->
-					<view class="log-img-area"><image style="width:80px;height:80px" src="/static/images/ysw.png" /></view>
-					<view class="txt-area"><text class="txt">登录</text></view>
-				</view>
+				
 				<view class="form-content-style">
-					<rice-form :model="userForm" :rules="loginRules" ref="loginFormRef" label-width="100px"
+					<view class="form-item">
+						<view class="log-area">
+						
+							<!-- <image style="width:200px;height:150px" src="https://cdn.hotelsys.fun/HM/images/blue-logo.jpg" /> -->
+							<view class="log-img-area"><image style="width:80px;height:80px" src="/static/images/ysw.png" /></view>
+							<view class="txt-area"><text class="txt">登录</text></view>
+						</view>
+					</view>
+					<view class="form-item">
+						<view class="input-area">
+							<view style="padding-right: 15px">
+								<!-- <l-icon name="material-symbols-light:phone-android-outline" size="25px" color="#9aa4bb" /> -->
+							</view>
+							<view class="input-style">
+								<input type="tel" maxlength="11" inputmode="tel" v-model="userForm.phone"
+									placeholder="请输入手机号" style="font-size: 14px;" />
+							</view>
+						
+						</view>
+					</view>
+					<view class="form-item">
+						<view class="input-area">
+							<view style="padding-right: 15px">
+								<!-- <l-icon name="solar:lock-password-broken" size="25px" color="#9aa4bb" /> -->
+							</view>
+							<view class="input-style">
+								<input type="number" maxlength="4" v-model="userForm.smsCode" placeholder="请输入验证码"
+									style="font-size: 14px;" />
+							</view>
+							<view style="width: 80px; text-align: right">
+								<text @click="getCode"
+									:class="['smstext', sendSmsDisabled? 'smstext-disable':'']">{{tips}}</text>
+							</view>
+						
+						
+						</view>
+						
+					</view>
+					<view class="form-item"> 
+					<view class="up">
+						<view @click="agreeEvent">
+							<!-- <l-icon v-show="isAgree" name="material-symbols:check-circle" size="20"
+								color="#004af6"></l-icon>
+							<l-icon v-show="!isAgree" name="material-symbols-light:circle-outline" size="20"
+								color="#004af6"></l-icon> -->
+						</view>
+						<view>
+							<text class="ct">我已阅读并同意<text class="edit-text-btn-style ct"
+									@click="openUserAgreement">《用户协议》</text>和<text
+									class="edit-text-btn-style ct"
+									@click="openUserPrivacyPolicy">《隐私政策》</text></text>
+						</view>
+					
+					</view>
+					</view>
+					<rice-form v-if="false" :model="userForm" :rules="loginRules" ref="loginFormRef" label-width="100px"
 						:border-bottom="false">
 						<rice-form-item name="phone">
 							<view class="input-area">
@@ -363,30 +413,7 @@
 				box-sizing: border-box;
 				overflow: hidden;
 				display: flex;
-				.log-area{
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-					.log-img-area{
-						width: 80px;
-						height: 80px;
-						background:#004af6;
-						border-radius: 12px;
-					}
-					.txt-area{
-						display: flex;
-						flex-direction: row;
-						align-items: flex-end;
-						height: 80px;
-						.txt{
-							font-size: 20px;
-							font-weight: bold;
-							padding-left: 25px;
-							padding-bottom: 12px;
-						}
-					}
-					
-				}
+				
 				.form-content-style {
 					flex: 1;
 					max-width: 300px;
@@ -394,18 +421,95 @@
 
 					box-sizing: border-box;
 					overflow: hidden;
-
-					.up {
+					.form-item{
 						display: flex;
 						flex-direction: row;
-						align-items: center;
-						justify-content: center;
-
-						.ct {
-							font-size: 12px;
-
+						margin-bottom: 25px;
+						&:last-child{
+							margin-bottom: 0;
+						}
+						.input-area {
+							flex: 1;
+							box-sizing: border-box;
+							min-width: 250px;
+							margin: auto;
+							border: 1px solid #9aa4bb;
+							height: 45px;
+							padding: 15px;
+							border-radius: 8px;
+							box-sizing: border-box;
+							display: flex;
+							align-items: center;
+							flex-direction: row;
+							font-size: 16px;
+							
+							.input-style {
+								flex: 1;
+							}
+						}
+						
+						.input-area-error {
+							border: 1px solid #ff0000;
+						}
+						
+						.sms-btn {
+							border-radius: 22.5px;
+							color: #fff;
+							background-color: #004af6;
+						
+						}
+						
+						.smstext {
+							color: #004af6;
+							margin-right: 6px;
+							font-size: 14px;
+							text-align: right
+						}
+						
+						.smstext-disable {
+							color: #bbb;
+						}
+						.log-area{
+							display: flex;
+							flex: 1;
+							flex-direction: row;
+							align-items: flex-end;
+							justify-content: center;
+							.log-img-area{
+								width: 80px;
+								height: 80px;
+								background:#004af6;
+								border-radius: 12px;
+							}
+							.txt-area{
+								display: flex;
+								flex-direction: row;
+								align-items: flex-end;
+								height: 80px;
+								.txt{
+									font-size: 20px;
+									font-weight: bold;
+									padding-left: 25px;
+									padding-bottom: 12px;
+								}
+							}
+							
+						}
+						.up {
+							display: flex;
+							flex: 1;
+							flex-direction: row;
+							align-items: center;
+							justify-content: center;
+						
+							.ct {
+								font-size: 12px;
+						
+							}
 						}
 					}
+					
+					
 				}
 			}
 
@@ -415,67 +519,4 @@
 		.right-panal {}
 	}
 
-	.input-area {
-		min-width: 250px;
-		margin: auto;
-		border: 1px solid #9aa4bb;
-		height: 45px;
-		padding: 15px;
-		border-radius: 8px;
-		box-sizing: border-box;
-		display: flex;
-		align-items: center;
-		flex-direction: row;
-		font-size: 16px;
-
-		.input-style {
-			flex: 1;
-		}
-	}
-
-	.input-area-error {
-		border: 1px solid #ff0000;
-	}
-
-	.sms-btn {
-		border-radius: 22.5px;
-		color: #fff;
-		background-color: #004af6;
-
-	}
-
-	.smstext {
-		color: #004af6;
-		margin-right: 6px;
-		font-size: 14px;
-		text-align: right
-	}
-
-	.smstext-disable {
-		color: #bbb;
-	}
-
-	.container {
-
-		padding-top: 120px;
-		/* background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%); */
-		display: flex;
-		align-items: center;
-		justify-content: center;
-
-		.panel {
-			width: 300px;
-
-			.title {
-				font-size: 25px;
-				padding: 15px 0;
-				color: #434343;
-			}
-
-			.subtitle {
-				font-size: 16px;
-				color: #424242;
-			}
-		}
-	}
 </style>

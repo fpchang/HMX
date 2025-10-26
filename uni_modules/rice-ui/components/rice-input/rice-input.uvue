@@ -175,6 +175,7 @@
 	})
 
 	const isShowPassword = computed<boolean>(() => {
+		if (props.showPassword == false) return false
 		const isPasswordType = props.type == 'password'
 		const shouldTrigger = props.showPasswordTrigger == 'focus' ? isFocus.value : true
 		return isPasswordType && modelValue.value != "" && shouldTrigger

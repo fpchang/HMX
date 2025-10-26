@@ -489,7 +489,25 @@
 
 	watch(() : any | null => props.date, () => {
 		currentDate.value = getInitDate()
+		if (typeof props.date == 'string') {
+			currentPanelDate.value = props.date as string
+		} else if (Array.isArray(props.date)) {
+			const d = props.date as string[]
+			if (d.length > 0) {
+				currentPanelDate.value = d[0]
+			}
+		}
 	})
+
+	watch(
+		[
+			() : string | null => props.minDate,
+			() : string | null => props.maxDate
+		],
+		() => {
+			currentDate.value = getInitDate()
+			monthDays.value = getMonthDays([currentPanelDate.value], firstDayOfWeek.value, props.formatter, props.minDate, props.maxDate)
+		})
 
 	watch(currentPanelDate, () => {
 		monthDays.value = getMonthDays([currentPanelDate.value], firstDayOfWeek.value, props.formatter, props.minDate, props.maxDate)

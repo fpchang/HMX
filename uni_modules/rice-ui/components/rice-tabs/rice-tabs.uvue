@@ -110,7 +110,7 @@
 			updateTabIndicator(modelValue.value)
 		}).exec()
 	}
-	
+
 	//@ts-ignore
 	const tabsItemClick = (tab : TabsOptions, index : number) => {
 
@@ -214,24 +214,30 @@
 		]
 	})
 
-	// #ifdef APP-HARMONY
+	// #ifdef APP-HARMONY || APP-IOS
 	let timer : number | null = null
 	// #endif
 
 	onMounted(() => {
-		// #ifdef APP-HARMONY
+		// #ifdef APP-HARMONY 
 		timer = setTimeout(() => {
 			resize()
 		}, 200)
 		// #endif
 
-		// #ifndef APP-HARMONY
+		// #ifdef APP-IOS
+		timer = setTimeout(() => {
+			resize()
+		}, 50)
+		// #endif
+
+		// #ifndef APP-HARMONY || APP-IOS
 		resize()
 		// #endif
 
 	})
 
-	// #ifdef APP-HARMONY
+	// #ifdef APP-HARMONY || APP-IOS
 	onUnmounted(() => {
 		if (timer != null) clearTimeout(timer!)
 	})

@@ -3,6 +3,14 @@
 
 			<!-- <rice-button type="primary" text="选择日期" @click="showPickTime"></rice-button>
 			<rice-calendar v-model:show="showRange" mode="range" :date="dateRange" @confirm="rangeConfirm"></rice-calendar>	 -->
+			    <view class="check-area" @click="showCheckHotel">
+			              <text class="$uni-font-size-lg h-n-style">{{
+			                hotel.hotelName
+			              }}</text>
+			              <view>
+			                <l-icon name="ic:sharp-expand-more" size="30px" color="#fff"></l-icon>
+			              </view>
+			            </view>
 			<scroll-view style="flex:1"> 
 				<gatherComponent></gatherComponent>
 			</scroll-view>
@@ -21,9 +29,9 @@
 	const showPickTime=()=>{
 	  showRange.value=true;
 	}
-	// uni.navigateTo({
-	// 	url:"/pages/login/login"
-	// })
+	const hotel = computed(() : UTSJSONObject => {
+		return state.hotel;
+	});
 </script>
 
 <style>
@@ -31,7 +39,7 @@
 		flex:1;
 		display: flex;
 		flex-direction: column;
-		background: linear-gradient(to bottom, #457fe0, #fff);
+		/*background: linear-gradient(to bottom, #457fe0, #fff);*/
 	}
 </style>
 

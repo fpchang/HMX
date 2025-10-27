@@ -2,7 +2,9 @@
 	<view class="gather">
 		<view class="gather-list">
 			<view class="gather-list-item">
-				<view class="title"><text class="txt">今日</text></view>
+				<view class="title">
+					<rice-tabs v-model="activeIndex" :list="list" @clickTab="tabClick" bg-color="rgba(255,255,255,0)" :shrink="true"></rice-tabs>
+				</view>
 				<view class="card-list">
 					<view class="card-list-item" style="width:750rpx;max-width:360px">
 						<view class="card" style="background: linear-gradient(to right, #11eebb, #00a2fd)">
@@ -16,7 +18,7 @@
 					<view class="card-list-item" style="width:375rpx;max-width:180px">
 						<view class="card">
 							<view class="c-title">
-								<text class="txt">在住</text>
+								<text class="tit">在住</text>
 								<view style="display: flex;flex-direction: row;align-items: center;">
 									<text class="txt" style="padding-right:4px">32</text>
 									<rice-icon name="arrow-right" />
@@ -24,7 +26,8 @@
 
 							</view>
 							<view class="chart-progress-circle">
-								<l-circle percent="40" size="100px" strokeColor="green">
+								<l-circle percent="40" size="100px" strokeColor="green" strokeWidth="12"
+									trailWidth="12">
 									<text>{{33}}%</text>
 								</l-circle>
 							</view>
@@ -34,7 +37,7 @@
 					<view class="card-list-item" style="width:375rpx;max-width:180px">
 						<view class="card">
 							<view class="c-title">
-								<text class="txt">空房</text>
+								<text class="tit">空房</text>
 								<view style="display: flex;flex-direction: row;align-items: center;">
 									<text class="txt" style="padding-right:4px">32</text>
 									<rice-icon name="arrow-right" />
@@ -42,62 +45,24 @@
 
 							</view>
 							<view class="chart-progress-circle">
-								<l-circle percent="40" size="100px" strokeColor="red" >
+								<l-circle percent="40" size="100px" strokeColor="red" strokeWidth="12" trailWidth="12">
 									<text>{{33}}%</text>
 								</l-circle>
 							</view>
 						</view>
 					</view>
 					<view class="card-list-item" style="width:375rpx;max-width:180px">
-					<view class="card">
-						<view class="c-title">
-							<text class="txt">餐单</text>
-							<view style="display: flex;flex-direction: row;align-items: center;">
-								<text class="txt" style="padding-right:4px">32</text>
-								<rice-icon name="arrow-right" />
-							</view>
-					
-						</view>
-						<view class="chart-progress-circle">
-							<image src="/static/icons/cyorder.png" style="width:100px;height:100px"></image>
-						</view>
-					</view>
-					</view>
-					<view class="card-list-item" style="width:375rpx;max-width:180px;height:0"></view>
-					<view class="card-list-item" style="width:375rpx;max-width:180px;height:0"></view>
-				</view>
-			</view>
-			<view class="gather-list-item">
-				<view class="title"><text class="txt">明日</text></view>
-				<view class="card-list">
-					<view class="card-list-item" style="width:750rpx">
-						<view class="card" style="background: linear-gradient(to right, #11eebb, #00a2fd)">
-							<view class="card-content-one">
-								<view class="c-item"><text class="tit txt">入住</text><text class="txt">11</text></view>
-								<view class="c-item"><text class="tit txt">退房</text><text class="txt">11</text></view>
-							</view>
+						<view class="card">
+							<view class="c-title">
+								<text class="txt">餐单</text>
+								<view style="display: flex;flex-direction: row;align-items: center;">
+									<text class="txt" style="padding-right:4px">32</text>
+									<rice-icon name="arrow-right" />
+								</view>
 
-						</view>
-					</view>
-					<view class="card-list-item" style="width:375rpx;max-width:180px">
-						<view class="card" style="background:#053e5a">
-							<view class="card-content-normal">
-								<view class="c-item"><text class="tit txt">在住</text><text class="txt">32</text></view>
 							</view>
-
-						</view>
-					</view>
-					<view class="card-list-item" style="width:375rpx;max-width:180px">
-						<view class="card" style="background-color: #135474;">
-							<view class="card-content-normal">
-								<view class="c-item"><text class="tit txt">在住</text><text class="txt">32</text></view>
-							</view>
-						</view>
-					</view>
-					<view class="card-list-item" style="width:375rpx;max-width:180px">
-						<view class="card" style="background-color: #135474;">
-							<view class="card-content-normal">
-								<view class="c-item"><text class="tit txt">餐单</text><text class="txt">32</text></view>
+							<view class="chart-progress-circle">
+								<image src="/static/icons/cyorder.png" style="width:100px;height:100px"></image>
 							</view>
 						</view>
 					</view>
@@ -105,6 +70,7 @@
 					<view class="card-list-item" style="width:375rpx;max-width:180px;height:0"></view>
 				</view>
 			</view>
+
 		</view>
 
 
@@ -113,6 +79,16 @@
 
 <script setup>
 	import { ref } from 'vue';
+	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
+	const activeIndex = ref(0);
+	const list = ref<TabsOptions[]>([{
+		name: '今天',
+		value: 'today'
+	},
+	{
+		name: '明天',
+		value: 'tommorow'
+	}]);
 	const echartRef = ref<EChartComponentPublicInstance | null>(null);
 	const option = {
 		xAxis: {
@@ -133,6 +109,10 @@
 		console.log("11111", echartRef);
 		echartRef.value.init(option); // uni-app vue3 和 uni-app x 组合式
 		// echartRef.init(option); // uni-app x 选项式
+	}
+	function tabClick(e : TabsClickTab) {
+		console.log('TabsClickTab', e);
+		activeIndex.value = e.index as number;
 	}
 	onMounted(() => {
 		initEchart();
@@ -188,8 +168,14 @@
 								flex-direction: row;
 								justify-content: space-between;
 
+								.tit {
+									color: rgb(51, 51, 51);
+									font-size: 18px;
+									font-weight: bolder;
+								}
+
 								.txt {
-									color: gray;
+									color: rgb(29, 29, 31);
 									font-size: 18px;
 									font-weight: 400;
 

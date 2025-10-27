@@ -1,22 +1,18 @@
 <template>
-	<view>
-		<image class="logo" src="/static/logo.png"></image>
-		<text class="title">uniappx test </text>
-		<navigator url="/pages/indexAdvise/indexAdvise">
-			<view style="height:40px;background-color: #eee;">indexadvidse</view>
-			</navigator>
-		<view style="height: 200px;background-color: aliceblue;"> 
-			<l-icon name="solar:accessibility-bold" size="180px" color="#000" />
-		</view>
-			<rice-button type="primary" text="选择日期" @click="showPickTime"></rice-button>
-			<rice-calendar v-model:show="showRange" mode="range" :date="dateRange" @confirm="rangeConfirm"></rice-calendar>
-			
-		
+	<view class="index">
+
+			<!-- <rice-button type="primary" text="选择日期" @click="showPickTime"></rice-button>
+			<rice-calendar v-model:show="showRange" mode="range" :date="dateRange" @confirm="rangeConfirm"></rice-calendar>	 -->
+			<scroll-view style="flex:1"> 
+				<gatherComponent></gatherComponent>
+			</scroll-view>
+							
 	</view>
 </template>
 
 <script setup>
-	import {ref} from "vue";
+	//import {ref} from "vue";
+	import gatherComponent from "./components/gatherComponent";
 	const showRange=ref(false);
 	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"])
 	const rangeConfirm = (e : string[]) => {
@@ -31,19 +27,11 @@
 </script>
 
 <style>
-	.logo {
-		height: 100px;
-		width: 100px;
-		margin: 100px auto 25px auto;
-	}
-
-	.title {
-		font-size: 18px;
-		color: #8f8f94;
-    text-align: center;
-	}
-	.l-icon--image{
-		    z-index: 1!important;
+	.index{
+		flex:1;
+		display: flex;
+		flex-direction: column;
+		background: linear-gradient(to bottom, #457fe0, #fff);
 	}
 </style>
 

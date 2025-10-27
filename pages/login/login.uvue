@@ -30,6 +30,7 @@
 						<view class="input-area">
 							<view style="padding-right: 15px">
 								<!-- <l-icon name="material-symbols-light:phone-android-outline" size="25px" color="#9aa4bb" /> -->
+							<image src="/static/icons/phone.png" class="form-icon"></image>
 							</view>
 							<view class="input-style">
 								<input type="tel" maxlength="11" inputmode="tel" v-model="userForm.phone"
@@ -42,12 +43,13 @@
 						<view class="input-area">
 							<view style="padding-right: 15px">
 								<!-- <l-icon name="solar:lock-password-broken" size="25px" color="#9aa4bb" /> -->
+								<image src="/static/icons/code.png" class="form-icon"></image>
 							</view>
 							<view class="input-style">
 								<input type="number" maxlength="4" v-model="userForm.smsCode" placeholder="请输入验证码"
 									style="font-size: 14px;" />
 							</view>
-							<view style="width: 80px; text-align: right">
+							<view>
 								<text @click="getCode"
 									:class="['smstext', sendSmsDisabled? 'smstext-disable':'']">{{tips}}</text>
 							</view>
@@ -56,81 +58,30 @@
 						</view>
 						
 					</view>
+					<view class="form-item" style="padding-top:15px">
+						<rice-button type="primary" text="登录体验" class="btn"  shape="round" color="#004af6" :disabled="submitDisabled || submitLoading" @click="submit"  :loading="submitLoading"/>
+					</view>
 					<view class="form-item"> 
 					<view class="up">
-						<view @click="agreeEvent">
+						<view @click="agreeEvent" style="padding-right: 2px;">
 							<!-- <l-icon v-show="isAgree" name="material-symbols:check-circle" size="20"
 								color="#004af6"></l-icon>
 							<l-icon v-show="!isAgree" name="material-symbols-light:circle-outline" size="20"
 								color="#004af6"></l-icon> -->
+								<image v-show="!isAgree" src="/static/icons/circle.png" class="form-icon"></image>
+										<image v-show="isAgree" src="/static/icons/confirm_selcted.png" class="form-icon"></image>
+								
 						</view>
 						<view>
-							<text class="ct">我已阅读并同意<text class="edit-text-btn-style ct"
+							<text class="ct">我已阅读并同意<text class="txt-btn"
 									@click="openUserAgreement">《用户协议》</text>和<text
-									class="edit-text-btn-style ct"
+									class="txt-btn"
 									@click="openUserPrivacyPolicy">《隐私政策》</text></text>
 						</view>
 					
 					</view>
 					</view>
-					<rice-form v-if="false" :model="userForm" :rules="loginRules" ref="loginFormRef" label-width="100px"
-						:border-bottom="false">
-						<rice-form-item name="phone">
-							<view class="input-area">
-								<view style="padding-right: 15px">
-									<!-- <l-icon name="material-symbols-light:phone-android-outline" size="25px" color="#9aa4bb" /> -->
-								</view>
-								<view class="input-style">
-									<input type="tel" maxlength="11" inputmode="tel" v-model="userForm.phone"
-										placeholder="请输入手机号" style="font-size: 14px;" />
-								</view>
-
-							</view>
-
-						</rice-form-item>
-						<rice-form-item name="smsCode">
-							<view class="input-area">
-								<view style="padding-right: 15px">
-									<!-- <l-icon name="solar:lock-password-broken" size="25px" color="#9aa4bb" /> -->
-								</view>
-								<view class="input-style">
-									<input type="number" maxlength="4" v-model="userForm.smsCode" placeholder="请输入验证码"
-										style="font-size: 14px;" />
-								</view>
-								<view style="width: 80px; text-align: right">
-									<text @click="getCode"
-										:class="['smstext', sendSmsDisabled? 'smstext-disable':'']">{{tips}}</text>
-								</view>
-
-
-							</view>
-
-						</rice-form-item>
-						<rice-form-item>
-							<view class="btn-area">
-								<rice-button type="primary" text="登录" class="btn"  shape="round" color="#004af6" @click="submit"
-									:loading="submitLoading" :disabled="submitDisabled" />
-							</view>
-
-						</rice-form-item>
-						<rice-form-item>
-							<view class="up">
-								<view @click="agreeEvent">
-									<!-- <l-icon v-show="isAgree" name="material-symbols:check-circle" size="20"
-										color="#004af6"></l-icon>
-									<l-icon v-show="!isAgree" name="material-symbols-light:circle-outline" size="20"
-										color="#004af6"></l-icon> -->
-								</view>
-								<view>
-									<text class="ct">我已阅读并同意<text class="edit-text-btn-style ct"
-											@click="openUserAgreement">《用户协议》</text>和<text
-											class="edit-text-btn-style ct"
-											@click="openUserPrivacyPolicy">《隐私政策》</text></text>
-								</view>
-
-							</view>
-						</rice-form-item>
-					</rice-form>
+				
 				
 				</view>
 			</view>
@@ -406,19 +357,21 @@
 		.center-panal {
 			width: 563rpx;
 			display: flex;
+			flex-direction: row;
+			justify-content: center;
 			align-items: center;
-
 			.container {
-				margin-top: 120px;
+				
 				width: 300px;
+				height: fit-content;
 				box-sizing: border-box;
 				overflow: hidden;
 				display: flex;
-				
+				flex-direction: row;
+				justify-content: center;
 				.form-content-style {
 					flex: 1;
-					max-width: 300px;
-					padding: 0 15px;
+					max-width: 260px;
 
 					box-sizing: border-box;
 					overflow: hidden;
@@ -432,11 +385,10 @@
 						.input-area {
 							flex: 1;
 							box-sizing: border-box;
-							min-width: 250px;
 							margin: auto;
 							border: 1px solid #9aa4bb;
 							height: 45px;
-							padding: 15px;
+							padding: 8px;
 							border-radius: 8px;
 							box-sizing: border-box;
 							display: flex;
@@ -446,6 +398,10 @@
 							
 							.input-style {
 								flex: 1;
+							}
+							.form-icon{
+								width:25px;
+								height:25px;
 							}
 						}
 						
@@ -505,7 +461,15 @@
 						
 							.ct {
 								font-size: 12px;
-						
+								color:gray;
+								.txt-btn{
+									color:#004af6;
+									font-size: 12px;
+								}
+							}
+							.form-icon{
+								width:14px;
+								height:14px;
 							}
 						}
 					}

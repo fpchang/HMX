@@ -1,0 +1,266 @@
+<template>
+	<view class="gather">
+		<view class="gather-list">
+			<view class="gather-list-item">
+				<view class="title"><text class="txt">今日</text></view>
+				<view class="card-list">
+					<view class="card-list-item" style="width:750rpx;max-width:360px">
+						<view class="card" style="background: linear-gradient(to right, #11eebb, #00a2fd)">
+							<view class="card-content-one">
+								<view class="c-item"><text class="tit txt">入住</text><text class="txt">11</text></view>
+								<view class="c-item"><text class="tit txt">退房</text><text class="txt">11</text></view>
+							</view>
+
+						</view>
+					</view>
+					<view class="card-list-item" style="width:375rpx;max-width:180px">
+						<view class="card">
+							<view class="c-title">
+								<text class="txt">在住</text>
+								<view style="display: flex;flex-direction: row;align-items: center;">
+									<text class="txt" style="padding-right:4px">32</text>
+									<rice-icon name="arrow-right" />
+								</view>
+
+							</view>
+							<view class="chart-progress-circle">
+								<l-circle percent="40" size="100px" strokeColor="green">
+									<text>{{33}}%</text>
+								</l-circle>
+							</view>
+
+						</view>
+					</view>
+					<view class="card-list-item" style="width:375rpx;max-width:180px">
+						<view class="card">
+							<view class="c-title">
+								<text class="txt">空房</text>
+								<view style="display: flex;flex-direction: row;align-items: center;">
+									<text class="txt" style="padding-right:4px">32</text>
+									<rice-icon name="arrow-right" />
+								</view>
+
+							</view>
+							<view class="chart-progress-circle">
+								<l-circle percent="40" size="100px" strokeColor="red" >
+									<text>{{33}}%</text>
+								</l-circle>
+							</view>
+						</view>
+					</view>
+					<view class="card-list-item" style="width:375rpx;max-width:180px">
+					<view class="card">
+						<view class="c-title">
+							<text class="txt">餐单</text>
+							<view style="display: flex;flex-direction: row;align-items: center;">
+								<text class="txt" style="padding-right:4px">32</text>
+								<rice-icon name="arrow-right" />
+							</view>
+					
+						</view>
+						<view class="chart-progress-circle">
+							<image src="/static/icons/cyorder.png" style="width:100px;height:100px"></image>
+						</view>
+					</view>
+					</view>
+					<view class="card-list-item" style="width:375rpx;max-width:180px;height:0"></view>
+					<view class="card-list-item" style="width:375rpx;max-width:180px;height:0"></view>
+				</view>
+			</view>
+			<view class="gather-list-item">
+				<view class="title"><text class="txt">明日</text></view>
+				<view class="card-list">
+					<view class="card-list-item" style="width:750rpx">
+						<view class="card" style="background: linear-gradient(to right, #11eebb, #00a2fd)">
+							<view class="card-content-one">
+								<view class="c-item"><text class="tit txt">入住</text><text class="txt">11</text></view>
+								<view class="c-item"><text class="tit txt">退房</text><text class="txt">11</text></view>
+							</view>
+
+						</view>
+					</view>
+					<view class="card-list-item" style="width:375rpx;max-width:180px">
+						<view class="card" style="background:#053e5a">
+							<view class="card-content-normal">
+								<view class="c-item"><text class="tit txt">在住</text><text class="txt">32</text></view>
+							</view>
+
+						</view>
+					</view>
+					<view class="card-list-item" style="width:375rpx;max-width:180px">
+						<view class="card" style="background-color: #135474;">
+							<view class="card-content-normal">
+								<view class="c-item"><text class="tit txt">在住</text><text class="txt">32</text></view>
+							</view>
+						</view>
+					</view>
+					<view class="card-list-item" style="width:375rpx;max-width:180px">
+						<view class="card" style="background-color: #135474;">
+							<view class="card-content-normal">
+								<view class="c-item"><text class="tit txt">餐单</text><text class="txt">32</text></view>
+							</view>
+						</view>
+					</view>
+					<view class="card-list-item" style="width:375rpx;max-width:180px;height:0"></view>
+					<view class="card-list-item" style="width:375rpx;max-width:180px;height:0"></view>
+				</view>
+			</view>
+		</view>
+
+
+	</view>
+</template>
+
+<script setup>
+	import { ref } from 'vue';
+	const echartRef = ref<EChartComponentPublicInstance | null>(null);
+	const option = {
+		xAxis: {
+			type: 'category',
+			data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+		},
+		yAxis: { type: 'value' },
+		series: [{
+			data: [12, 20, 15, 8, 7, 11, 13],
+			type: 'bar',
+		}],
+		grid: [{ left: 50, right: 15, top: 40, bottom: 30 }],
+		tooltip: { show: true },
+	};
+
+	// 组件挂载后初始化echarts实例 (也可在请求数据后初始化)
+	function initEchart() {
+		console.log("11111", echartRef);
+		echartRef.value.init(option); // uni-app vue3 和 uni-app x 组合式
+		// echartRef.init(option); // uni-app x 选项式
+	}
+	onMounted(() => {
+		initEchart();
+	})
+</script>
+
+<style lang="scss">
+	.gather {
+		display: flex;
+		flex-direction: row;
+
+		.gather-list {
+			display: flex;
+			flex-direction: column;
+
+			.gather-list-item {
+				.title {
+					padding: 15px;
+					box-sizing: border-box;
+
+					.txt {
+						font-size: 25px;
+						color: #fff;
+
+					}
+				}
+
+				.card-list {
+					display: flex;
+					flex-direction: row;
+					flex-wrap: wrap;
+					width: 750rpx;
+					justify-content: space-evenly;
+
+					.card-list-item {
+						min-height: 180px;
+						padding: 15px;
+						display: flex;
+						flex-direction: column;
+
+						.card {
+							flex: 1;
+							display: flex;
+							flex-direction: column;
+							box-sizing: border-box;
+							padding: 15px;
+							border-radius: 12px;
+							box-shadow: rgba(0, 0, 0, 0.05) 0px 3px 10px;
+							background-color: rgb(255, 255, 255);
+
+							.c-title {
+								display: flex;
+								flex-direction: row;
+								justify-content: space-between;
+
+								.txt {
+									color: gray;
+									font-size: 18px;
+									font-weight: 400;
+
+								}
+							}
+
+							.chart-progress-circle {
+								padding-top: 15px;
+								box-sizing: border-box;
+								box-sizing: border-box;
+								display: flex;
+								justify-content: center;
+								align-items: center;
+								flex-direction: row;
+							}
+
+							.card-content-one {
+								flex: 1;
+								display: flex;
+								flex-direction: row;
+
+								justify-content: space-between;
+								padding: 15px;
+
+								.c-item {
+									display: flex;
+									flex-direction: column;
+									justify-content: space-around;
+
+									.txt {
+										color: #fff;
+										font-size: 30px;
+										font-weight: bold;
+
+									}
+
+
+								}
+
+							}
+
+							.card-content-normal {
+								display: flex;
+								flex: 1;
+								flex-direction: row;
+								width: 75px;
+								justify-content: space-between;
+
+								.c-item {
+									display: flex;
+									flex-direction: column;
+									align-content: space-between;
+									justify-content: space-around;
+
+									.txt {
+										color: #fff;
+										font-size: 25px;
+										font-weight: bold;
+
+									}
+
+									.tit {
+										padding-bottom: 20px;
+									}
+								}
+
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+</style>

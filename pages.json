@@ -15,6 +15,8 @@
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "",
+				"disableScroll": true,
+				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
 		},

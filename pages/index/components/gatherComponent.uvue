@@ -1,76 +1,146 @@
 <template>
 	<view class="gather">
-		<view class="gather-list">
-			<view class="gather-list-item">
-				<view class="title">
-					<rice-tabs v-model="activeIndex" :list="list" @clickTab="tabClick" bg-color="rgba(255,255,255,0)" :shrink="true"></rice-tabs>
+
+		<view class="stats-card">
+			<view class="stats-header">
+				<view class="header-title">
+					<image src="/static/icons/analysis.png" style="width:55px;height:55px"></image>
+
+					<view style="padding-left: 8px;">
+						<view><text class="txt">住房数据统计</text></view>
+						<view class="header-date"><text class="txt">2025年10月28日星期二</text></view>
+					</view>
 				</view>
-				<view class="card-list">
-					<view class="card-list-item" style="width:750rpx;max-width:360px">
-						<view class="card" style="background: linear-gradient(to right, #11eebb, #00a2fd)">
-							<view class="card-content-one">
-								<view class="c-item"><text class="tit txt">入住</text><text class="txt">11</text></view>
-								<view class="c-item"><text class="tit txt">退房</text><text class="txt">11</text></view>
-							</view>
-
-						</view>
-					</view>
-					<view class="card-list-item" style="width:375rpx;max-width:180px">
-						<view class="card">
-							<view class="c-title">
-								<text class="tit">在住</text>
-								<view style="display: flex;flex-direction: row;align-items: center;">
-									<text class="txt" style="padding-right:4px">32</text>
-									<rice-icon name="arrow-right" />
-								</view>
-
-							</view>
-							<view class="chart-progress-circle">
-								<l-circle percent="40" size="100px" strokeColor="green" strokeWidth="12"
-									trailWidth="12">
-									<text>{{33}}%</text>
-								</l-circle>
-							</view>
-
-						</view>
-					</view>
-					<view class="card-list-item" style="width:375rpx;max-width:180px">
-						<view class="card">
-							<view class="c-title">
-								<text class="tit">空房</text>
-								<view style="display: flex;flex-direction: row;align-items: center;">
-									<text class="txt" style="padding-right:4px">32</text>
-									<rice-icon name="arrow-right" />
-								</view>
-
-							</view>
-							<view class="chart-progress-circle">
-								<l-circle percent="40" size="100px" strokeColor="red" strokeWidth="12" trailWidth="12">
-									<text>{{33}}%</text>
-								</l-circle>
-							</view>
-						</view>
-					</view>
-					<view class="card-list-item" style="width:375rpx;max-width:180px">
-						<view class="card">
-							<view class="c-title">
-								<text class="txt">餐单</text>
-								<view style="display: flex;flex-direction: row;align-items: center;">
-									<text class="txt" style="padding-right:4px">32</text>
-									<rice-icon name="arrow-right" />
-								</view>
-
-							</view>
-							<view class="chart-progress-circle">
-								<image src="/static/icons/cyorder.png" style="width:100px;height:100px"></image>
-							</view>
-						</view>
-					</view>
-					<view class="card-list-item" style="width:375rpx;max-width:180px;height:0"></view>
-					<view class="card-list-item" style="width:375rpx;max-width:180px;height:0"></view>
+				<view style="padding-top:8px"> 
+				<rice-tabs v-model="activeIndex" :list="list" @clickTab="tabClick"  bg-color="rgba(255,255,255,0)" :shrink="true" :item-style="itemStyle" line-width="60%" title-active-color="#fff" line-color="#fff" :active-style="activeStyle"></rice-tabs>
+				
 				</view>
 			</view>
-
+			<view class="swiper" :style="{transform: `translateX(${swiperx})`}">
+				<view class="swiper-item">
+					<view class="stats-body">
+						<view class="stat-item">
+							<view class="card check-out">
+								<view class="stat-icon">
+									<image src="/static/icons/accessin-mount.png" style="width:30px;height:30px"></image>
+								</view>
+								<view class="stat-number"><text class="txt">23</text></view>
+								<view class="stat-label"><text class="txt">今日入住</text></view>
+							</view>
+					
+						</view>
+						<view class="stat-item">
+							<view class="card check-in">
+								<view class="stat-icon">
+									<image src="/static/icons/accessout-mount.png" style="width:30px;height:30px"></image>
+								</view>
+								<view class="stat-number"><text class="txt">23</text></view>
+								<view class="stat-label"><text class="txt">今日退房</text></view>
+							</view>
+					
+						</view>
+					
+						<view class="stat-item">
+							<view class="card occupied-rooms">
+								<view class="stat-icon">
+									<image src="/static/icons/ykmn.png" style="width:30px;height:30px"></image>
+								</view>
+								<view style="padding:10px 0">
+					
+					
+									<l-circle :percent="40" size="100px" strokeColor="green" strokeWidth="12" trailWidth="12">
+										<text>{{33}}%</text>
+									</l-circle>
+					
+								</view>
+								<view class="stat-label"><text class="txt">当前在住</text></view>
+							</view>
+					
+						</view>
+						<view class="stat-item">
+							<view class="card available-rooms">
+								<view class="stat-icon">
+									<image src="/static/icons/empty-room.png" style="width:30px;height:30px"></image>
+								</view>
+								<view style="padding:10px 0">
+					
+					
+									<l-circle :percent="40" size="100px" strokeColor="green" strokeWidth="12" trailWidth="12">
+										<text>{{33}}%</text>
+									</l-circle>
+					
+								</view>
+								<view class="stat-label"><text class="txt">空房数量</text></view>
+							</view>
+					
+						</view>
+					
+					
+					</view>
+				</view>
+				<view class="swiper-item">
+					<view class="stats-body">
+						<view class="stat-item">
+							<view class="card check-out">
+								<view class="stat-icon">
+									<image src="/static/icons/accessin-mount.png" style="width:30px;height:30px"></image>
+								</view>
+								<view class="stat-number"><text class="txt">23</text></view>
+								<view class="stat-label"><text class="txt">明日入住</text></view>
+							</view>
+					
+						</view>
+						<view class="stat-item">
+							<view class="card check-in">
+								<view class="stat-icon">
+									<image src="/static/icons/accessout-mount.png" style="width:30px;height:30px"></image>
+								</view>
+								<view class="stat-number"><text class="txt">23</text></view>
+								<view class="stat-label"><text class="txt">今日退房</text></view>
+							</view>
+					
+						</view>
+					
+						<view class="stat-item">
+							<view class="card occupied-rooms">
+								<view class="stat-icon">
+									<image src="/static/icons/ykmn.png" style="width:30px;height:30px"></image>
+								</view>
+								<view style="padding:10px 0">
+					
+					
+									<l-circle :percent="40" size="100px" strokeColor="green" strokeWidth="12" trailWidth="12">
+										<text>{{33}}%</text>
+									</l-circle>
+					
+								</view>
+								<view class="stat-label"><text class="txt">当前在住</text></view>
+							</view>
+					
+						</view>
+						<view class="stat-item">
+							<view class="card available-rooms">
+								<view class="stat-icon">
+									<image src="/static/icons/empty-room.png" style="width:30px;height:30px"></image>
+								</view>
+								<view style="padding:10px 0">
+					
+					
+									<l-circle :percent="40" size="100px" strokeColor="green" strokeWidth="12" trailWidth="12">
+										<text>{{33}}%</text>
+									</l-circle>
+					
+								</view>
+								<view class="stat-label"><text class="txt">空房数量</text></view>
+							</view>
+					
+						</view>
+					
+					
+					</view>
+				</view>
+			</view>
+			
 		</view>
 
 
@@ -78,9 +148,15 @@
 </template>
 
 <script setup>
-	import { ref } from 'vue';
+	import { ref,watch } from 'vue';
 	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
 	const activeIndex = ref(0);
+	const itemStyle = {
+		fontSize: "20px"
+	}
+	const activeStyle={
+		color:"#ff0000"
+	}
 	const list = ref<TabsOptions[]>([{
 		name: '今天',
 		value: 'today'
@@ -89,7 +165,8 @@
 		name: '明天',
 		value: 'tommorow'
 	}]);
-	const echartRef = ref<EChartComponentPublicInstance | null>(null);
+	let swiperx=ref('0');
+	//const echartRef = ref<EChartComponentPublicInstance | null>(null);
 	const option = {
 		xAxis: {
 			type: 'category',
@@ -106,14 +183,20 @@
 
 	// 组件挂载后初始化echarts实例 (也可在请求数据后初始化)
 	function initEchart() {
-		console.log("11111", echartRef);
-		echartRef.value.init(option); // uni-app vue3 和 uni-app x 组合式
+		//console.log("11111", echartRef);
+		//echartRef.value.init(option); // uni-app vue3 和 uni-app x 组合式
 		// echartRef.init(option); // uni-app x 选项式
 	}
 	function tabClick(e : TabsClickTab) {
-		console.log('TabsClickTab', e);
 		activeIndex.value = e.index as number;
 	}
+	watch(activeIndex,(indexNew:number,indexOld:number):void=>{
+		if(indexNew==1){
+			swiperx.value= '-50%';
+			return;
+		}
+		swiperx.value= '0'
+	});
 	onMounted(() => {
 		initEchart();
 	})
@@ -123,130 +206,181 @@
 	.gather {
 		display: flex;
 		flex-direction: row;
+		padding: 15px;
+	}
+	.swiper{
+		width:200%;
+		display: flex;
+		flex-direction: row;
+		transition: transform 0.2s linear;
+		.swiper-item{
+			flex:1;
+			
+		}
+		
+	}
+	.stats-card {
+		flex: 1;
+		margin: 0 auto;
+		background: white;
+		border-radius: 20px;
+		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+		overflow: hidden;
+	}
 
-		.gather-list {
+	.stats-header {
+		background: #2563eb;
+
+		padding: 18px 24px;
+
+		.txt {
+			color: white;
+			font-size: 14px;
+		}
+	}
+
+	.header-title {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+
+		.txt {
+			font-size: 18px;
+			font-weight: 500;
+		}
+
+	}
+
+	.header-date {
+
+		opacity: 0.9;
+		margin-top: 4px;
+
+		.txt {
+			font-size: 14px;
+		}
+	}
+
+	.stats-body {
+		padding: 15px 0;
+		display: flex;
+		flex-direction: row;
+		/*gap: 24px;*/
+		flex-wrap: wrap;
+		justify-content: center;
+
+	}
+
+	.stat-item {
+		min-width: 132px;
+		flex: 1;
+		padding: 10px;
+		width: fit-content;
+
+		.card {
+			flex: 1;
+			display: flex;
+			flex-direction: row;
+			min-width: 112px;
+			text-align: center;
+			padding: 20px 12px;
+			box-sizing: border-box;
+			border-radius: 12px;
+			transition: all 0.3s ease;
 			display: flex;
 			flex-direction: column;
-
-			.gather-list-item {
-				.title {
-					padding: 15px;
-					box-sizing: border-box;
-
-					.txt {
-						font-size: 25px;
-						color: #fff;
-
-					}
-				}
-
-				.card-list {
-					display: flex;
-					flex-direction: row;
-					flex-wrap: wrap;
-					width: 750rpx;
-					justify-content: space-evenly;
-
-					.card-list-item {
-						min-height: 180px;
-						padding: 15px;
-						display: flex;
-						flex-direction: column;
-
-						.card {
-							flex: 1;
-							display: flex;
-							flex-direction: column;
-							box-sizing: border-box;
-							padding: 15px;
-							border-radius: 12px;
-							box-shadow: rgba(0, 0, 0, 0.05) 0px 3px 10px;
-							background-color: rgb(255, 255, 255);
-
-							.c-title {
-								display: flex;
-								flex-direction: row;
-								justify-content: space-between;
-
-								.tit {
-									color: rgb(51, 51, 51);
-									font-size: 18px;
-									font-weight: bolder;
-								}
-
-								.txt {
-									color: rgb(29, 29, 31);
-									font-size: 18px;
-									font-weight: 400;
-
-								}
-							}
-
-							.chart-progress-circle {
-								padding-top: 15px;
-								box-sizing: border-box;
-								box-sizing: border-box;
-								display: flex;
-								justify-content: center;
-								align-items: center;
-								flex-direction: row;
-							}
-
-							.card-content-one {
-								flex: 1;
-								display: flex;
-								flex-direction: row;
-
-								justify-content: space-between;
-								padding: 15px;
-
-								.c-item {
-									display: flex;
-									flex-direction: column;
-									justify-content: space-around;
-
-									.txt {
-										color: #fff;
-										font-size: 30px;
-										font-weight: bold;
-
-									}
+			justify-content: space-between;
+			align-items: center;
 
 
-								}
-
-							}
-
-							.card-content-normal {
-								display: flex;
-								flex: 1;
-								flex-direction: row;
-								width: 75px;
-								justify-content: space-between;
-
-								.c-item {
-									display: flex;
-									flex-direction: column;
-									align-content: space-between;
-									justify-content: space-around;
-
-									.txt {
-										color: #fff;
-										font-size: 25px;
-										font-weight: bold;
-
-									}
-
-									.tit {
-										padding-bottom: 20px;
-									}
-								}
-
-							}
-						}
-					}
-				}
-			}
 		}
+
+
+	}
+
+	.stat-item:hover {
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	}
+
+	.check-in {
+		border: 1px solid #dbeafe;
+		background-color: #f0f9ff;
+	}
+
+	.check-out {
+		border: 1px solid #fee2e2;
+		background-color: #fff5f5;
+	}
+
+	.occupied-rooms {
+		border: 1px solid #e0e7ff;
+		background-color: #f5f7ff;
+	}
+
+	.available-rooms {
+		border: 1px solid #dcfce7;
+		background-color: #f0fdf4;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.stat-icon {
+		font-size: 28px;
+		margin-bottom: 10px;
+	}
+
+	.check-in .stat-icon {
+		color: #3b82f6;
+	}
+
+	.check-out .stat-icon {
+		color: #ef4444;
+	}
+
+	.occupied-rooms .stat-icon {
+		color: #6366f1;
+		/* 紫色系：代表在住状态 */
+	}
+
+	.available-rooms .stat-icon {
+		color: #22c55e;
+	}
+
+	.stat-number {
+
+		margin-bottom: 6px;
+
+		.txt {
+			font-size: 32px;
+			font-weight: 700;
+			color: #1e293b;
+		}
+	}
+
+	.stat-label {
+
+		.txt {
+			font-size: 14px;
+			color: #64748b;
+		}
+	}
+
+	.chart-container {
+		width: 160px;
+		height: 160px;
+		position: relative;
+		margin-bottom: 12px;
+	}
+
+	.chart-value {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		font-size: 24px;
+		font-weight: 700;
+		color: #1e293b;
 	}
 </style>

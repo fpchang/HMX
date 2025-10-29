@@ -3,14 +3,15 @@
 
 			<!-- <rice-button type="primary" text="选择日期" @click="showPickTime"></rice-button>
 			<rice-calendar v-model:show="showRange" mode="range" :date="dateRange" @confirm="rangeConfirm"></rice-calendar>	 -->
-			    <view class="check-area" @click="showCheckHotel">
+			  <!--  <view class="check-area" @click="showCheckHotel">
 			              <text class="$uni-font-size-lg h-n-style">{{
 			                hotel.hotelName
 			              }}</text>
 			              <view>
-			                <l-icon name="ic:sharp-expand-more" size="30px" color="#fff"></l-icon>
+			                <image src=""></image>
 			              </view>
-			            </view>
+			            </view> -->
+			<view style="height:60px"></view>
 			<scroll-view style="flex:1"> 
 				<gatherComponent></gatherComponent>
 			</scroll-view>
@@ -21,6 +22,7 @@
 <script setup>
 	//import {ref} from "vue";
 	import gatherComponent from "./components/gatherComponent";
+	import { state, setUser } from '@/store/store.uts';
 	const showRange=ref(false);
 	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"])
 	const rangeConfirm = (e : string[]) => {
@@ -29,9 +31,13 @@
 	const showPickTime=()=>{
 	  showRange.value=true;
 	}
-	const hotel = computed(() : UTSJSONObject => {
-		return state.hotel;
-	});
+	const showCheckHotel=()=>{
+		
+	}
+	// const hotel = computed(() : UTSJSONObject => {
+	// 	return state.hotel;
+	// });
+	
 </script>
 
 <style>

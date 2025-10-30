@@ -1,4 +1,5 @@
 import{DB} from '../api/DB';
+import {callFunctionRes} from "@/bean/DBBean";
 class PermissionServiceClass{
     constructor(){
       
@@ -23,7 +24,7 @@ class PermissionServiceClass{
     *获取权限列表
     */
     getPermissionList(hotel_id:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
-        return DB.callFunction("hm_getPermission",{hotel_id});
+        return DB.callFunction("hm_getPermission_x",{hotel_id});
     }
 	/*
     *根据角色的权限列表

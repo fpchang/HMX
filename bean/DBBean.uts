@@ -1,0 +1,10 @@
+export type callFunctionRes={
+	result:Array<UTSJSONObject>
+}
+export type dbRes={
+	code:number,
+	data:Array<UTSJSONObject>,
+	errCode:number,
+	errMsg:string
+
+}

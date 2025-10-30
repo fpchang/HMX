@@ -1,7 +1,0 @@
-{
-	"deploymentTarget": "11",
-	"dependencies-pods": [{
-		"name": "VisualEffectView",
-		"version": "4.1.5"
-	}]
-}

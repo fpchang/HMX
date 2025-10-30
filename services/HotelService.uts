@@ -1,4 +1,5 @@
 import{DB} from '../api/DB';
+import {callFunctionRes} from "@/bean/DBBean";
 class HotelServiceClass{
 	constructor(){
        
@@ -24,8 +25,16 @@ class HotelServiceClass{
     /** 
      * 获取当前用户关联酒店列表(包括老板与用户)
     */
-      getHotelList():Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
-            return DB.callFunction("hm_getHotelList");
+      async getHotelList():Promise<Array<UTSJSONObject>>{
+           const res = await DB.callFunction("hm_getHotelList_x");
+		   console.log("XXXX", res);
+		  const result = res.result as UTSJSONObject;
+		  const data = result.get('data') as Array<UTSJSONObject>;
+		  
+		  return data;
+		  
+		   
+	
          
     }
 /**

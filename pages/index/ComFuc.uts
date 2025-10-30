@@ -7,10 +7,9 @@ class ComFuc{
 	constructor(){}
 	async getUser():Promise<UTSJSONObject>{
 	  const res = await AccountService.getuserByToken();
+	  console.log("getuser",res);
 	  const user = res.data[0] as UTSJSONObject;
-	  if (user!=null) {
-	    uni.setStorageSync("user", user);
-	  }
+	  uni.setStorageSync("user", user);
 	 return user;
 	}
 	// updateUser(){
@@ -21,8 +20,7 @@ class ComFuc{
 	// }
 
 	 async getHotelList():Promise<Array<UTSJSONObject>>{
-	  const res = await HotelService.getHotelList();
-		const list = res.result as Array<UTSJSONObject>;
+		const list = await HotelService.getHotelList();
 		return list;
 	}
 	async getRoomTypeList(hotel_id:string):Promise<Array<UTSJSONObject>> {
@@ -40,7 +38,7 @@ class ComFuc{
 		let hotel = state.hotelList.find(item=>item._id==hotel_id) as UTSJSONObject;
 		setHotel(hotel);
 		const roomList = await this.getRoomTypeList(state.hotel_id);
-		console.log("333",roomList);
+		//console.log("333",roomList);
 		const permissionList = await this.getPermissionList(state.hotel_id);
 		setPermissionList(permissionList);
 		console.log("4444",permissionList);
@@ -69,19 +67,17 @@ class ComFuc{
 	}
 	async getPermissionList(hotel_id:string):Promise<Array<string>>{
 		const pes=  await PermissionService.getPermissionList(hotel_id);
-		console.log("pppp",pes);
-		const perlist = pes['result'] as Array<string>;
-		return perlist;
+		const result = pes['result'] as UTSJSONObject;
+		const list = result.get("data") as Array<string>;
+		return list;
 	}
 	
 	async init(){
 		uni.showLoading({title: ''});
 		const user = await this.getUser();
-		console.log("11111",user);
-		 setUser(user);
+		 setUser(user);		 		  
 		 const hotelList = await this.getHotelList();
 		 setHotelList(hotelList);
-		console.log("2222",hotelList);
 		await this.setDefaultHotel();
 		console.log("all thing is ok;");
 		uni.hideLoading();

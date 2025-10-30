@@ -26,11 +26,11 @@ exports.main = async (event, context) => {
 		if(userRes.data.length<1){//无此账号
 			return {code:9992,msg:""}
 		}
-		//if(userRes.data[0]['hm_token']!=$token){
-		//	return {code:9991,msg:"账号已在别外登录"}
-		//}else{
+		if(userRes.data[0]['hm_token']!=$token){
+			return {code:9991,msg:"账号已在别外登录"}
+		}else{
 			return {code:0,msg:""};
-		//}
+		}
 		
 	}catch(e){
 		//console.log(e)

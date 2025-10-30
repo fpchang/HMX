@@ -1,0 +1,9 @@
+{
+  "name": "hm_getPermission_x",
+  "dependencies": {
+    "tokenEvent": "file:../common/tokenEvent"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

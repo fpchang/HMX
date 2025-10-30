@@ -15,7 +15,7 @@ class HotelServiceClass{
     createHotel(hotelObj:UTSJSONObject):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
       return   DB.callFunction("hm_createHotel",{hotelObj});
     }
-    updateHotel(hotel_id,hotelObj):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
+    updateHotel(hotel_id:string,hotelObj:UTSJSONObject):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
       return   DB.callFunction("hm_updateHotel",{hotel_id,hotelObj});
     }
     deleteHotel(hotel_id:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
@@ -24,27 +24,27 @@ class HotelServiceClass{
     /** 
      * 获取当前用户关联酒店列表(包括老板与用户)
     */
-      getHotelList(){
+      getHotelList():Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
             return DB.callFunction("hm_getHotelList");
          
     }
 /**
  *所属于 当前用户酒店
  */
-    getHotelListOfUser(phone){
+    getHotelListOfUser(phone:string):Promise<UniCloudDBGetResult>{
       return DB.getCollection("hm-hotel",{belong:phone})
     }
     /**
      * 根据id获取酒店信息
      */
-    getHotelInfoById(hotel_id){
-        return this.DB.getCollection("hm-hotel",{_id:hotel_id})
+    getHotelInfoById(hotel_id:string):Promise<UniCloudDBGetResult>{
+        return DB.getCollection("hm-hotel",{_id:hotel_id})
     }
     
     /** 
      * 获取当前酒店房型信息
     */
-     getRoomType(hotel_id){
+     getRoomType(hotel_id:string):Promise<UniCloudDBGetResult>{
           //  return DB.callFunction(
           //       "hm_getRoomType",
           //       {hotel_id}
@@ -58,7 +58,7 @@ class HotelServiceClass{
      * @param {*} room_type_id:
      * @returns 
      */
-     getRoom(room_type_id){
+     getRoom(room_type_id:string):Promise<UniCloudDBGetResult>{
            return DB.getCollection("hm-room",{_id:room_type_id})
      
    }
@@ -67,31 +67,31 @@ class HotelServiceClass{
     * @param {*} hotel_id 
     * @returns 根据店铺获取房间列表
     */
-   getRoomListByHotelId(hotel_id){
+   getRoomListByHotelId(hotel_id:string):Promise<UniCloudDBGetResult>{
     return DB.getCollection("hm-room",{hotel_id:hotel_id});
    }
    /**
     * 
     * @param {*} hotel_id 
     */
-   async getRoomListByHotelIdGroupByRoomType(hotel_id){
+   async getRoomListByHotelIdGroupByRoomType(hotel_id:string):Promise<UniCloudDBGetResult>{
   
-      const db=uniCloud.database();
+      const db=uniCloud.databaseForJQL();
       const roomType=  db.collection("hm-roomType").where({hotel_id}).field("hotel_id,_id,name").getTemp();
       const res = await db.collection(roomType,"hm-room").where({hotel_id}).get();
       return res;
    }
    /** get employeeList */
-   getEmployeeList(hotel_id){
+   getEmployeeList(hotel_id:string):Promise<UniCloudDBGetResult>{
     return DB.getCollectionOrderBy("hm-employee",{hotel_id},"role asc")
    }
    /**
     * 房价添加
     * @param {*} data 
     */
-   addRoomTypePrice(list){
-     return DB.add("hm-roomTypePrice",list)
-   }
+   // addRoomTypePrice(list){
+   //   return DB.add("hm-roomTypePrice",list)
+   // }
 }
 //module.exports =new HotelService();
 export var HotelService=new HotelServiceClass();

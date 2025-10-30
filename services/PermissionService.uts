@@ -48,7 +48,7 @@ class PermissionServiceClass{
     /*
     *获取用户权限列表
     */
-    getUserPermissionList(phone){
+    getUserPermissionList(phone: string){
 
     }
     //权限数组列表

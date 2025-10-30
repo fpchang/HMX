@@ -18,8 +18,11 @@
 				</view>
 			</view>
 
-			<view class="view-item" style="margin-top: -15px;">
-				<gatherComponent></gatherComponent>
+			<view class="view-item" style="margin-top: -15px;flex:1">
+				<scroll-view style="flex: 1;">
+					<gatherComponent></gatherComponent>
+				</scroll-view>
+				
 			</view>
 		</view>
 	</scroll-view>
@@ -139,6 +142,9 @@
 			border-radius: 15px;
 			margin-bottom: 20px;
 			box-sizing: border-box;
+			flex:1;
+			display: flex;
+			flex-direction: column;
 
 		}
 	}

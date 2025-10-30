@@ -111,8 +111,11 @@
 		}
 	}
 	.p{
-		text-indent: 28px;
+		
 		padding:5px 0;
+		.txt{
+			text-indent: 28px;
+		}
 	}
 	.strong{
 		font-weight: 400;

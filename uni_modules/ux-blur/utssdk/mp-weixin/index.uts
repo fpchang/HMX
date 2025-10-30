@@ -1,0 +1,16 @@
+export class UxBlur {
+
+	$element : UniNativeViewElement; 
+	
+	constructor(element : UniNativeViewElement) {
+		this.$element = element
+	}
+	
+	initView(view: any | null, radius: number, cornerRadius: number, color: string) {
+		
+	}
+	
+	destroy() {
+		
+	}
+}

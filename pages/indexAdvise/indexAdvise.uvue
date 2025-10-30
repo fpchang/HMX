@@ -97,9 +97,9 @@
 	let agreeGetPhone = ref(false);
 	let showPopu = ref(false);
 	const accessin = () => {
-		uni.redirectTo({
-			url: "/pages/index/index",
-		});
+		  uni.reLaunch({
+		        url: "/pages/index/index",
+		      });
 	};
 	const popup_confirm = ref(null);
 	const toLogin = () => {

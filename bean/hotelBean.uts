@@ -1,0 +1,18 @@
+export type hotelBean= {
+						belong:string,
+						hotelName:string,
+						hotelAddressCode?:string,
+						hotelAddress?:string,
+						hotelAddressArea?:string,
+						hotelCoordinate?:Array<number>,
+						hotelIntroduction?:string,
+						firstImages?:string,
+						imagesList?:Array<string>,
+						cateringServices?:Array<string>,
+						baseFacility?:Array<string>,
+						recreationFacility?:Array<string>,
+						athleticFacility?:Array<string>,
+						serviceTel?:string,
+						wechat?:string,
+						feature?:Array<string>
+}

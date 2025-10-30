@@ -1,0 +1,40 @@
+import "VisualEffectView"
+
+export class UxBlur {
+
+	$element : UniNativeViewElement
+	blurView ?: VisualEffectView
+	
+	constructor(element : UniNativeViewElement) {
+		this.$element = element
+		this.blurView = new VisualEffectView() as VisualEffectView
+		this.blurView!.isUserInteractionEnabled = false
+		
+		super.init()
+		
+		this.$element.bindIOSView(this.blurView!)
+	}
+	
+	initView(view: any | null, radius: number, cornerRadius: number, color: string) {
+		var colorStr = UTSiOS.colorWithString(color)
+		this.blurView!.colorTint = colorStr
+		
+		var alpha = Float(0)
+		var c_f = Float(1.0)
+		if (colorStr.cgColor.components!.count > 3) {
+			c_f = Float(colorStr.cgColor.components![3])
+		}
+		if (c_f < 1.0) {
+			alpha = c_f
+		}
+		this.blurView!.colorTintAlpha = CGFloat(alpha)
+		
+		this.blurView!.blurRadius = CGFloat(radius.floatValue)
+		this.blurView!.layer.cornerRadius = CGFloat(cornerRadius.floatValue)
+		this.blurView!.layer.masksToBounds = true
+	}
+	
+	destroy() {
+		UTSiOS.destroyInstance(this)
+	}
+}

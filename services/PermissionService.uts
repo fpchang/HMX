@@ -1,12 +1,12 @@
 import{DB} from '../api/DB';
 class PermissionServiceClass{
     constructor(){
-        this.DB=DB
+      
     }
     /*
     *获取角色列表
     */
-    getRoleList(){
+    getRoleList():void{
     //     const db = uniCloud.database();
     //     const mt=   db.collection("hm-menuType").where({hotel_id}).getTemp();
     //     const mtd =  db.collection("hm-menuDetail").getTemp();
@@ -16,19 +16,19 @@ class PermissionServiceClass{
     /*
     *获取用户角色
     */
-    getUserRoleList(phone){
+    getUserRoleList(phone:string){
 
     }
      /*
     *获取权限列表
     */
-    getPermissionList(hotel_id){
+    getPermissionList(hotel_id:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
         return DB.callFunction("hm_getPermission",{hotel_id});
     }
 	/*
     *根据角色的权限列表
     */
-    getRolePermissionList(hotel_id){  
+    getRolePermissionList(hotel_id:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{  
         // return new Promise(async (resolve,reject)=>{
         //     try {
         //         const db = uniCloud.database();
@@ -52,13 +52,13 @@ class PermissionServiceClass{
 
     }
     //权限数组列表
-    formatPermissionToArray(list=[]){
-        let arr =[];
-        list.map(item=>{
-          arr.push(item.permission_id[0].permission_name);  
-        })
-        return arr;
-    }
+    // formatPermissionToArray(list=[]){
+    //     let arr =[];
+    //     list.map(item=>{
+    //       arr.push(item.permission_id[0].permission_name);  
+    //     })
+    //     return arr;
+    // }
 }
 //module.exports =new PermissionService();
 export var PermissionService=new PermissionServiceClass();

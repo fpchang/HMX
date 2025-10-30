@@ -97,11 +97,12 @@
 	import { ref, computed } from "vue";
 	import { AccountService } from "../../services/AccountService";
 	import { state, setUser } from '@/store/store.uts';
-	type userFormBean = {
-		tk : string,
-		smsCode : string,
-		phone : string
-	};
+	import {userFormBean} from "@/bean/loginBean.uts";
+	// type userFormBean = {
+	// 	tk : string,
+	// 	smsCode : string,
+	// 	phone : string
+	// };
 	let userForm = ref<userFormBean>({
 		tk: "",
 		smsCode: "",

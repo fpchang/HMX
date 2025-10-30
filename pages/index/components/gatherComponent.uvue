@@ -1,18 +1,16 @@
 <template>
 	<view class="gather">
-
 		<view class="stats-card">
 			<view class="stats-header">
 				<view class="header-title">
 					<image src="/static/icons/analysis.png" style="width:55px;height:55px"></image>
-
 					<view style="padding-left: 8px;">
 						<view><text class="txt">住房数据统计</text></view>
 						<view class="header-date"><text class="txt">2025年10月28日星期二</text></view>
 					</view>
 				</view>
 				<view style="padding-top:8px"> 
-				<rice-tabs v-model="activeIndex" :list="list" @clickTab="tabClick"  bg-color="rgba(255,255,255,0)" :shrink="true" :item-style="itemStyle" line-width="60%" title-active-color="#fff" line-color="#fff" :active-style="activeStyle"></rice-tabs>
+				<rice-tabs v-model="activeIndex" :list="list" @clickTab="tabClick"  bg-color="rgba(255,255,255,0)" :shrink="true" :item-style="itemStyle" line-width="60%" title-active-color="#000" line-color="#000" :active-style="activeStyle"></rice-tabs>
 				
 				</view>
 			</view>
@@ -22,7 +20,7 @@
 						<view class="stat-item">
 							<view class="card check-out">
 								<view class="stat-icon">
-									<image src="/static/icons/accessin-mount.png" style="width:30px;height:30px"></image>
+									<image class="img-style" src="/static/icons/accessin-mount.png"></image>
 								</view>
 								<view class="stat-number"><text class="txt">23</text></view>
 								<view class="stat-label"><text class="txt">今日入住</text></view>
@@ -32,7 +30,7 @@
 						<view class="stat-item">
 							<view class="card check-in">
 								<view class="stat-icon">
-									<image src="/static/icons/accessout-mount.png" style="width:30px;height:30px"></image>
+									<image class="img-style" src="/static/icons/accessout-mount.png" ></image>
 								</view>
 								<view class="stat-number"><text class="txt">23</text></view>
 								<view class="stat-label"><text class="txt">今日退房</text></view>
@@ -43,7 +41,7 @@
 						<view class="stat-item">
 							<view class="card occupied-rooms">
 								<view class="stat-icon">
-									<image src="/static/icons/ykmn.png" style="width:30px;height:30px"></image>
+									<image class="img-style" src="/static/icons/ykmn.png"></image>
 								</view>
 								<view style="padding:10px 0">
 					
@@ -60,7 +58,7 @@
 						<view class="stat-item">
 							<view class="card available-rooms">
 								<view class="stat-icon">
-									<image src="/static/icons/empty-room.png" style="width:30px;height:30px"></image>
+									<image class="img-style" src="/static/icons/empty-room.png" ></image>
 								</view>
 								<view style="padding:10px 0">
 					
@@ -83,7 +81,7 @@
 						<view class="stat-item">
 							<view class="card check-out">
 								<view class="stat-icon">
-									<image src="/static/icons/accessin-mount.png" style="width:30px;height:30px"></image>
+									<image class="img-style" src="/static/icons/accessin-mount.png" ></image>
 								</view>
 								<view class="stat-number"><text class="txt">23</text></view>
 								<view class="stat-label"><text class="txt">明日入住</text></view>
@@ -93,7 +91,7 @@
 						<view class="stat-item">
 							<view class="card check-in">
 								<view class="stat-icon">
-									<image src="/static/icons/accessout-mount.png" style="width:30px;height:30px"></image>
+									<image class="img-style" src="/static/icons/accessout-mount.png"></image>
 								</view>
 								<view class="stat-number"><text class="txt">23</text></view>
 								<view class="stat-label"><text class="txt">今日退房</text></view>
@@ -104,7 +102,7 @@
 						<view class="stat-item">
 							<view class="card occupied-rooms">
 								<view class="stat-icon">
-									<image src="/static/icons/ykmn.png" style="width:30px;height:30px"></image>
+									<image class="img-style" src="/static/icons/ykmn.png"></image>
 								</view>
 								<view style="padding:10px 0">
 					
@@ -121,7 +119,7 @@
 						<view class="stat-item">
 							<view class="card available-rooms">
 								<view class="stat-icon">
-									<image src="/static/icons/empty-room.png" style="width:30px;height:30px"></image>
+									<image class="img-style" src="/static/icons/empty-room.png"></image>
 								</view>
 								<view style="padding:10px 0">
 					
@@ -206,7 +204,7 @@
 	.gather {
 		display: flex;
 		flex-direction: row;
-		padding: 15px;
+		
 	}
 	.swiper{
 		width:200%;
@@ -222,20 +220,19 @@
 	.stats-card {
 		flex: 1;
 		background: #fff;
-		border-radius: 20px;
+		border-radius: 15px;
 		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
 		overflow: hidden;
 	}
 
 	.stats-header {
-		background: #2563eb;
-
+		// background: #2563eb;
 		padding: 18px 24px;
 		box-sizing: border-box;
-		border-top-right-radius: 20px;
-		border-top-left-radius: 20px;
+		border-top-right-radius: 15px;
+		border-top-left-radius: 15px;
 		.txt {
-			color: white;
+			color: #999;
 			font-size: 14px;
 		}
 	}
@@ -330,6 +327,10 @@
 	.stat-icon {
 		font-size: 28px;
 		margin-bottom: 10px;
+		.img-style{
+			width:40px;
+			height:40px;
+		}
 	}
 
 	.check-in .stat-icon {

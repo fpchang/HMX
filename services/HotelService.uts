@@ -1,7 +1,7 @@
 import{DB} from '../api/DB';
 class HotelServiceClass{
 	constructor(){
-        this.DB=DB;
+       
     }
 
     
@@ -12,13 +12,13 @@ class HotelServiceClass{
      * @return {*} 
      * @memberof HotelService
      */
-    createHotel(hotelObj){
+    createHotel(hotelObj:UTSJSONObject):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
       return   DB.callFunction("hm_createHotel",{hotelObj});
     }
-    updateHotel(hotel_id,hotelObj){
+    updateHotel(hotel_id,hotelObj):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
       return   DB.callFunction("hm_updateHotel",{hotel_id,hotelObj});
     }
-    deleteHotel(hotel_id){
+    deleteHotel(hotel_id:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
       return   DB.callFunction("hm_deleteHotel",{hotel_id});
     }
     /** 

@@ -1,4 +1,6 @@
 	import { AccountService } from "@/services/AccountService";
+	import {PermissionService} from "@/services/PermissionService";
+	//import {hotelBean} from "@/bean/hotelBean";
 export type State={
 	//存放状态
 	isLogin: boolean,
@@ -8,7 +10,9 @@ export type State={
 	hotelList: Array<UTSJSONObject>,
 	employeeList: Array<UTSJSONObject>,
 	hotel_id: string,
+	hotel:UTSJSONObject,
 	roomTypeList: Array<UTSJSONObject>,
+	permissionList:Array<string>,//s权限列表
 	location: Array<number>
 }
 // 实例化为state
@@ -20,7 +24,9 @@ export const state = reactive({
 	hotelList: [] as Array<UTSJSONObject>,
 	employeeList: [] as Array<UTSJSONObject>,
 	hotel_id: "",
+	hotel:{} as UTSJSONObject,
 	roomTypeList: [] as Array<UTSJSONObject>,
+	permissionList: [] as Array<UTSJSONObject>,
 	location: [] as Array<number>
 } as State);
 // 定义修改属性值的方法
@@ -42,79 +48,25 @@ export const state = reactive({
     export const setUser=(user:UTSJSONObject)=> {
       state.user = user;
     };
+	export const setHotelList=(list:Array<UTSJSONObject>)=> {
+	  state.hotelList = list;
+	};
      export const setHotelId=(hotel_id:string)=> {
       state.hotel_id = hotel_id;
     };
 
-    //调用 this.$store.commit('updateHotelList',[])
-    export const updateHotelList=(list:Array<UTSJSONObject>)=>{
-      state.hotelList = list;
-	  setDefaultHotel();
-     // store.commit("setDefaultHotel");
+	export const setHotel=(hotel:UTSJSONObject)=> {
+      state.hotel = hotel;
     };
-    export const updateEmployeeList=(list:Array<UTSJSONObject>)=>{
-      state.employeeList = list;
+export const setPermissionList=(list:Array<string>)=> {
+      state.permissionList = list;
     };
-     export const updateRoomTypeList=(state, list)=> {
-      state.roomTypeList = list;
-    };
-    export const checkHotel=(hotel_id:string)=> {
-      uni.setStorageSync("hotel_id", hotel_id);
-	  setHotelId(hotel_id);
-	  //getPermissionList(hotel_id);
-	 // getRoomTypeList();
-     // store.commit("setHotelId", hotel_id);
-      // store.dispatch("getPermissionList", hotel_id);
-      //  store.dispatch("getRoomType");
-    };
-     export const  setDefaultHotel=()=> {
-      if (!state.hotelList.length) {
-        return;
-      }
-      let _hotel_id = uni.getStorageSync("hotel_id") as string;
 
-      let h = state.hotelList.find((item) => {
-        return item._id == _hotel_id;
-      }) as (UTSJSONObject | null);
-      let n_hotel_id:string = h ? _hotel_id : state.hotelList[0]._id;
-      if (n_hotel_id == state.hotel_id) {
-        console.warn("与旧hotel_id相同，无需重置");
-        return;
-      }
-      //store.commit("checkHotel", n_hotel_id);
-     checkHotel( n_hotel_id)
-    };
+
 	
-    export const updateUser=()=>{     
-      const user:UTSJSONObject = uni.getStorageSync("user");
-      if (user) {
-		  setUser(user);
-        //store.commit("setUser", user);
-      }
-    };
-	const  getUser= async ():UTSJSONObject=>{
-	  const res = await AccountService.getuserByToken();
-	  if (res.result.data[0]) {
-	    uni.setStorageSync("user", res.result.data[0]);
-	    //context.commit("setUser", res.result.data[0]);
-	  }
-	  return res;
-	};
-	const  getHotelList= async ():Promise<UTSJSONObject>=> {
-	  console.log("服务端hotellist");
-	  //const res = await HotelService.getHotelList();
-	 // console.log("酒店列表", res);
-	 // context.commit("updateHotelList", res.result);
-	 // return res;
-	 return Promise.resolve({aa:11} as UTSJSONObject);
-	};
-	const getRoomType= async ()=> {
-	 // const res = await HotelService.getRoomType(context.state.hotel_id);
-	  //console.log("房型列表", res);
-	  //let obj = res.result.data.length?res.result.data:[];
-	  //context.commit("updateRoomType", res.result.data);
-	 // return res;
-	};
+
+
+
 	/**
 	 * 
 	 * @param {*} context 

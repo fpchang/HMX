@@ -1,0 +1,40 @@
+import BlurView from "eightbitlab.com.blurview.BlurView"
+import RenderScriptBlur from "eightbitlab.com.blurview.RenderScriptBlur"
+import FrameLayout from 'android.widget.FrameLayout'
+import Color from 'android.graphics.Color'
+import ViewGroup from 'android.view.ViewGroup'
+
+export class UxBlur {
+
+	$element : UniNativeViewElement; 
+	blurView : BlurView | null = null
+	
+	constructor(element : UniNativeViewElement) {
+		this.$element = element
+		this.blurView = new BlurView(element.getAndroidActivity()!)
+		this.$element.bindAndroidView(this.blurView!);
+	}
+	
+	initView(view: any | null, radius: number, cornerRadius: number, color: string) {
+		let _view: ViewGroup
+		if(view == null) {
+			_view = UTSAndroid.getUniActivity()!.window.decorView.findViewById<FrameLayout>(android.R.id.content)
+		} else {
+			_view = view as ViewGroup
+		}
+		
+		const facade = this.blurView!.setupWith(_view)
+		facade.setBlurAlgorithm(new RenderScriptBlur(UTSAndroid.getAppContext()!))
+			.setBlurRadius(radius.toFloat())
+			.setBlurAutoUpdate(true)
+		
+		if(color != '') {
+			facade.setOverlayColor(Color.parseColor(color))
+		}
+	}
+	
+	destroy() {
+		this.blurView?.setBlurEnabled(false)
+		this.blurView = null
+	}
+}

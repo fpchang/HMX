@@ -1,0 +1,87 @@
+<template>
+	<!-- #ifdef APP -->
+	<native-view @init="onInit" @click="click"></native-view>
+	<!-- #endif -->
+	<!-- #ifndef APP -->
+	<view class="ux-blur" :style="style" @click="click"></view>
+	<!-- #endif -->
+</template>
+
+<script setup lang="uts">
+	/**
+	* 高斯模糊
+	* @description 实时计算毛玻璃效果 支持android、ios、web
+	* @demo pages/component/blur.uvue
+	* @tutorial https://www.uxframe.cn/component/blur.html
+	* @property {Any} 				view						Any | 指定模糊的视图 通过 el.getAndroidView()、el.getIOSView() 获取
+	* @property {Number} 			radius						Number | 模糊半径 (默认 10)
+	* @property {String} 			color						String | 颜色 (默认 white)
+	* @property {Number} 			cornerRadius				Number | 圆角 (默认 0)
+	* @event {Function} 			click 						Function |  被点击时触发
+	* @author UxFrame
+	* @date 2025-03-25 14:33:28
+	*/
+   
+	import { UxBlur } from '@/uni_modules/ux-blur'
+	
+	const emit = defineEmits(['click'])
+	
+	const props = defineProps({
+		view: {
+			type: Object as PropType<any | null>,
+		},
+		color: {
+			type: String,
+			default: ''
+		},
+		radius: {
+			type: Number,
+			default: 10
+		},
+		cornerRadius: {
+			type: Number,
+			default: 0
+		}
+	})
+	
+	let blur : UxBlur | null = null
+	
+	function init() {
+		blur?.initView(props.view, props.radius, props.cornerRadius, props.color)
+	}
+	
+	function destroy() {
+		blur?.destroy()
+	}
+	
+	function onInit(e : UniNativeViewInitEvent) {
+		blur = new UxBlur(e.detail.element)
+		init()
+	}
+	
+	watch((): any | null => props.view, () => {
+		init()
+	}, {immediate: true, deep: true})
+	
+	onUnmounted(() => {
+		blur?.destroy()
+		blur = null
+	})
+	
+	const style = computed(() => {
+		let css = {}
+		
+		css['background-color'] = props.color
+		css['backdrop-filter'] = `blur(${props.radius}px)`
+		css['-webkit-backdrop-filter'] = `blur(${props.radius}px)`
+		
+		return css
+	})
+	
+	function click(e: MouseEvent) {
+		emit('click', e)
+	}
+</script>
+
+<style>
+</style>

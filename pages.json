@@ -94,43 +94,45 @@
 		 "resizable": true
 	},
 	"tabBar": {
-			"color": "#1d1d1f",
-			"selectedColor": "#0765ae",
+			"color": " #8a8a8a",
+			"selectedColor": "#0d8eea",
 			"borderStyle": "white",
 			"backgroundColor": "#ffffff",
-			"spacing":"5px",
-			"fontSize":"12px",
-			"iconWidth":"28px",
-			"height":"80px",
+			"redDotColor":"#ff0000",
+			"backgroundColor":"#ffffff",
+			//"spacing":"5px",
+			//"fontSize":"12px",
+			//"iconWidth":"28px",
+			//"height":"80px",
 			"list": [{
 					"pagePath": "pages/index/index",
-					"iconPath": "static/images/home-black.png",
-					"selectedIconPath": "static/images/home-blue.png",
+					"iconPath": "static/icons/home-black.png",
+					"selectedIconPath": "static/icons/home-blue.png",
 					"text": "首页"
 				},
 				{
 					"pagePath": "pages/order/orderState/orderState",
-					"iconPath": "static/images/order-black.png",
-					"selectedIconPath": "static/images/order-blue.png",
+					"iconPath": "static/icons/order-black.png",
+					"selectedIconPath": "static/icons/order-blue.png",
 					"text": "房态"
 				},
 				{
 					"pagePath": "pages/financialManagement/financiaHome/financiaHome",
-					"iconPath": "static/images/financia-black.png",
-					"selectedIconPath": "static/images/financia-blue.png",
+					"iconPath": "static/icons/financia-black.png",
+					"selectedIconPath": "static/icons/financia-blue.png",
 					"text": "财务"
 				},
 				
 				{
 					"pagePath": "pages/homeMenu/homeMenu",
-					"iconPath": "static/images/menu-black.png",
-					"selectedIconPath": "static/images/menu-blue.png",
+					"iconPath": "static/icons/menu-black.png",
+					"selectedIconPath": "static/icons/menu-blue.png",
 					"text": "功能"
 				},
 				{
 					"pagePath": "pages/mine/mine",
-					"iconPath": "static/images/mine-black.png",
-					"selectedIconPath": "static/images/mine-blue.png",
+					"iconPath": "static/icons/mine-black.png",
+					"selectedIconPath": "static/icons/mine-blue.png",
 					"text": "我的"
 				}
 			]

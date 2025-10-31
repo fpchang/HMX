@@ -21,10 +21,8 @@
 			</view>
 
 			<view class="view-item" style="margin-top: -15px;flex:1">
-				
 					<gatherComponent></gatherComponent>
-				
-				
+								
 			</view>
 		</view>
 		<!-- #ifdef APP -->
@@ -131,10 +129,24 @@
 		}
 
 	};
-	 onLoad(async ()=>{
+	 // onLoad(async ():Promise<void>=>{
+		//  await conFunction.init();
+		//  dataReading.value=true;
+	 // })
+	 // onBeforeMount(async ()=>{
+		//  console.log("index onBeforeMound");
+		//     conFunction.init();
+		//    dataReading.value=true;
+		//    //return Promise.resolve({aa:111});
+	 // })
+	 const init = async ()=>{
 		 await conFunction.init();
 		 dataReading.value=true;
-	 })
+	 }
+	 watch(hotel_id,(hotel_idNew:string,hotel_idOld:string):void=>{
+	 	//console.log("hotel_id change index ",hotel_idNew,hotel_idOld)
+	 }); 
+	    init(); 
 	
 </script>
 
@@ -234,8 +246,8 @@
 
 			.zcard-right {
 				flex: 1;
-				color: #fff;
-				font-size: $uni-font-size-sm;
+				
+				
 				display: flex;
 				min-width: 0;
 				flex-direction: column;
@@ -264,6 +276,7 @@
 						text-overflow: ellipsis;
 						overflow: hidden;
 						white-space: nowrap;
+						font-size: $uni-font-size-sm;
 					}
 				}
 
@@ -275,8 +288,9 @@
 						flex-direction: row;
 						justify-content: flex-start;
 						align-items: center;
-						gap: 8px;
 						flex-wrap: wrap;
+						margin-right: -8px;
+						margin-bottom: -8px;
 					}
 				}
 

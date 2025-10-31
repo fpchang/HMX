@@ -19,7 +19,7 @@ class DBConnect{
     return  uniCloud.databaseForJQL().collection(dbName).where(w).limit(50000).get();
   
   }
-   getCollectionOrderBy(dbName:string,w:UTSJSONObject={},orderBy="_id desc"):Promise<UniCloudDBGetResult>{
+   getCollectionOrderBy(dbName:string,w:(string | UTSJSONObject),orderBy="_id desc"):Promise<UniCloudDBGetResult>{
     return uniCloud.databaseForJQL().collection(dbName).where(w).orderBy(orderBy).get();
   }
    insertData(dbName:string,r:UTSJSONObject={}):Promise<UniCloudDBAddResult>{

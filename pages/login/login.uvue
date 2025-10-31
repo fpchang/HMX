@@ -340,7 +340,7 @@
 			width: 105rpx;
 			overflow: hidden;
 			
-			background:url("https://cdn.hotelsys.fun/HM/images/advise/bg9.png");
+			background-image:url("https://cdn.hotelsys.fun/HM/images/advise/bg9.png");
 			.subtitle {
 				display: flex;
 				flex-direction: row;

@@ -242,7 +242,7 @@
 		background: #eee;
 		background-color: transparent;
 		
-		height: fit-content;
+    /* height: fit-content; */ /* 注释掉不支持的属性 */
 		border-top-right-radius: 15px;
 		border-top-left-radius: 15px;
 		.introduce {

@@ -1,51 +1,5 @@
-import {OrderService} from '@/services/OrderService';
-export type OrderState = {
-	orderListTodayAfter : Array<UTSJSONObject>,//今天及以后的订单
-	orderListByCheckInToday : Array<UTSJSONObject>, //今天办理入住的订单
-	orderListByCheckOutToday : Array<UTSJSONObject>, //今天退房的订单
-	orderListToday : Array<UTSJSONObject>,//今天住宿订单
-	orderListByCheckInTommorow : Array<UTSJSONObject>, //明天天办理入住的订单
-	orderListByCheckOutTommorow : Array<UTSJSONObject>, //明天退房的订单
-	orderListTommorow : Array<UTSJSONObject>,//明天住宿订单
-}
-
-//实例化
-export const orderState = reactive({
-	orderListTodayAfter: [] as Array<UTSJSONObject>,//今天及以后的订单
-	orderListByCheckInToday: [] as Array<UTSJSONObject>, //今天办理入住的订单
-	orderListByCheckOutToday: [] as Array<UTSJSONObject>, //今天退房的订单
-	orderListToday: [] as Array<UTSJSONObject>,//今天住宿订单
-	orderListByCheckInTommorow: [] as Array<UTSJSONObject>, //明天天办理入住的订单
-	orderListByCheckOutTommorow: [] as Array<UTSJSONObject>, //明天退房的订单
-	orderListTommorow: [] as Array<UTSJSONObject>,//明天住宿订单
-} as OrderState)
-
-export const updateOrderListTodayAfter = (list : Array<UTSJSONObject>) => {
-	orderState.orderListTodayAfter = list;
-}
-
-export const updateOrderListByCheckInToday = (list : Array<UTSJSONObject>) => {
-	orderState.orderListByCheckInToday = list;
-}
-export const updateOrderListByCheckOutToday = (list : Array<UTSJSONObject>) => {
-	orderState.orderListByCheckOutToday = list;
-}
-export const updateOrderListToday = (list : Array<UTSJSONObject>) => {
-	orderState.orderListToday = list;
-}
-//明天
-export const updateOrderListByCheckInTommorow = (list : Array<UTSJSONObject>) => {
-	orderState.orderListByCheckInTommorow = list;
-}
-export const updateOrderListByCheckOutTommorow = (list : Array<UTSJSONObject>) => {
-	orderState.orderListByCheckOutTommorow = list;
-}
-export const updateOrderListTommorow = (list : Array<UTSJSONObject>) => {
-	orderState.orderListTommorow = list;
-}
-/**方法*/
-
-
+import {OrderService} from "@/services/OrderService.uts";
+import {orderState} from "@/store/modules/orderStore";
 //获取当天开始的订单
 export const getOrderListTodayAfter = async (hotel_id : string):Promise<Array<UTSJSONObject>> => {
 	const res = await OrderService.getOrderListTodayAfter(hotel_id);
@@ -64,7 +18,7 @@ export const getOrderListByCheckOutToday = async (hotel_id : string):Promise<Arr
 }
 //明天退房订单
 export const getOrderListByCheckOutTommorow = async (hotel_id : string):Promise<Array<UTSJSONObject>> => {
-	const res = await OrderService.getOrderListByCheckOut(hotel_id, new Date(new Date().getTime() + 1000 * 60 * 60 * 24));
+	const res = await OrderService.getOrderListByCheckOut(hotel_id, new Date(new Date().getTime() + 1000 * 60 * 60 * 24);
 	console.log("明日退房订单",res);
 	const list = res['data'] as Array<UTSJSONObject>;
 	updateOrderListByCheckOutTommorow(list);
@@ -97,7 +51,7 @@ export const getOrderListByCheckInTommorow = async (hotel_id : string):Promise<A
 }
 //明日订单
 export const getOrderListTommorow = async (hotel_id : string):Promise<Array<UTSJSONObject>> => {
-	const res = await OrderService.getOrderListByDate(hotel_id, new Date(new Date().getTime() + 1000 * 60 * 60 * 24));
+	const res = await OrderService.getOrderListByDate(hotel_id, new Date(new Date().getTime() + 1000 * 60 * 60 * 24);
 	console.log("明日订单",res);
 	const list = res['data'] as Array<UTSJSONObject>;
 	updateOrderListTommorow(list);

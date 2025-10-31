@@ -2,7 +2,7 @@
 	<!-- #ifdef APP -->
 	<scroll-view  :refresher-enabled="false" style="flex:1;background:#f5f5f5;display: flex;flex-direction: column" :show-scrollbar="false">
 	<!-- #endif -->
-		<view class="index-page-style">
+		<view class="index-page-style" v-if="dataReading">
 			<view style="width: 750rpx;height: 422rpx;max-height:253px;position: relative;">
 				<view style="height:44px;width:750rpx;z-index:999; background-color:rgba(0,0,0,0.6);position: absolute;top:0;left: 0;">
 					
@@ -101,7 +101,7 @@
 	import { conFunction } from "./ComFuc.uts";
 	const showRange = ref(false);
 	const showPopup = ref(false);
-	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"])
+	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"]);
 	const rangeConfirm = (e : string[]) => {
 		console.log(e)
 	}
@@ -111,7 +111,7 @@
 	const showCheckHotel = () => {
 		showPopup.value = !showPopup.value;
 	}
-
+	let dataReading=ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -131,7 +131,11 @@
 		}
 
 	};
-	conFunction.init();
+	 onLoad(async ()=>{
+		 await conFunction.init();
+		 dataReading.value=true;
+	 })
+	
 </script>
 
 <style lang="scss">

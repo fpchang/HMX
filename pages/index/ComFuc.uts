@@ -71,7 +71,9 @@ class ComFuc{
 		const list = result.get("data") as Array<string>;
 		return list;
 	}
-	
+	/**
+	 * 数据开始加载
+	 */
 	async init(){
 		uni.showLoading({title: ''});
 		const user = await this.getUser();

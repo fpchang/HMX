@@ -15,7 +15,7 @@ class DBConnect{
 	  	data:groupData
 	  })
   }
-   getCollection(dbName:string,w:UTSJSONObject={}):Promise<UniCloudDBGetResult>{
+   getCollection(dbName:string,w:(string | UTSJSONObject)):Promise<UniCloudDBGetResult>{
     return  uniCloud.databaseForJQL().collection(dbName).where(w).limit(50000).get();
   
   }

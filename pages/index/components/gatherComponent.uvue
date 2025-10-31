@@ -6,7 +6,7 @@
 					<image src="/static/icons/analysis.png" style="width:55px;height:55px"></image>
 					<view style="padding-left: 8px;">
 						<view><text class="txt">住房数据统计</text></view>
-						<view class="header-date"><text class="txt">2025年10月28日星期二</text></view>
+						<view class="header-date"><text class="txt">{{currentData()}}</text></view>
 					</view>
 				</view>
 				<view style="padding-top:8px"> 
@@ -148,6 +148,10 @@
 <script setup>
 	import { ref,watch } from 'vue';
 	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
+	import {dayuts} from '@/uni_modules/lime-dayuts';
+	import {TIME} from "@/static/utils/TIME";
+	import {state} from "@/store/store";
+	import {orderState,getGatherEvent} from "@/store/modules/orderStore";
 	const activeIndex = ref(0);
 	const itemStyle = {
 		fontSize: "20px"
@@ -178,7 +182,12 @@
 		grid: [{ left: 50, right: 15, top: 40, bottom: 30 }],
 		tooltip: { show: true },
 	};
-
+	const currentData=()=>{
+		 // const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+		 // return new Date().toLocaleDateString('zh-CN', dateOptions);
+		 //console.log(dayuts().locale())
+		return  dayuts(new Date()).locale('zh-cn').format("YYYY 年 MM 月 DD 日 dddd");
+	}
 	// 组件挂载后初始化echarts实例 (也可在请求数据后初始化)
 	function initEchart() {
 		//console.log("11111", echartRef);
@@ -188,16 +197,29 @@
 	function tabClick(e : TabsClickTab) {
 		activeIndex.value = e.index as number;
 	}
+	const hotel_id=computed(()=>{
+		return state.hotel_id;
+	});
 	watch(activeIndex,(indexNew:number,indexOld:number):void=>{
 		if(indexNew==1){
 			swiperx.value= '-50%';
 			return;
 		}
 		swiperx.value= '0'
-	});
+	}); 
+	const init = async ()=>{
+		const res = await getGatherEvent(hotel_id.value);
+		console.log("getGatherEvent",res);
+		//await getMenuEvent(hotel_id);
+	}
+	
 	onMounted(() => {
 		initEchart();
-	})
+	});
+	init();
+	//console.log(11111,dayuts(new Date()).format("YYYY/MM/DD 14:00:00"));
+	//	console.log(222,new Date("2025-10-31 00:00:00").getTime())
+	//console.log("33333333",TIME.getTodayStartTimeAndEndTime(new Date()));
 </script>
 
 <style lang="scss">
@@ -281,7 +303,6 @@
 			display: flex;
 			flex-direction: row;
 			min-width: 112px;
-			text-align: center;
 			padding: 20px 12px;
 			box-sizing: border-box;
 			border-radius: 12px;
@@ -326,29 +347,11 @@
 	}
 
 	.stat-icon {
-		font-size: 28px;
 		margin-bottom: 10px;
 		.img-style{
 			width:40px;
 			height:40px;
 		}
-	}
-
-	.check-in .stat-icon {
-		color: #3b82f6;
-	}
-
-	.check-out .stat-icon {
-		color: #ef4444;
-	}
-
-	.occupied-rooms .stat-icon {
-		color: #6366f1;
-		/* 紫色系：代表在住状态 */
-	}
-
-	.available-rooms .stat-icon {
-		color: #22c55e;
 	}
 
 	.stat-number {

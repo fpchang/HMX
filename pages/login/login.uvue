@@ -337,7 +337,7 @@
 			flex-direction: column;
 			justify-content: center;
 			align-content: center;
-			width: 187rpx;
+			width: 105rpx;
 			overflow: hidden;
 			
 			background:url("https://cdn.hotelsys.fun/HM/images/advise/bg9.png");
@@ -356,14 +356,16 @@
 		}
 
 		.center-panal {
-			width: 563rpx;
+			width: 645rpx;
 			display: flex;
 			flex-direction: row;
 			justify-content: center;
 			align-items: center;
 			.container {
 				
-				width: 300px;
+				box-shadow: 2px 4px 12px #00000014;
+				padding:18px;
+				border-radius: 18px;
 				height: fit-content;
 				box-sizing: border-box;
 				overflow: hidden;

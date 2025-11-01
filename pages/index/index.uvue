@@ -212,14 +212,15 @@
 
 			.btn {
 
-				background-color: #004af6;
-
-				padding: 2px 10px;
-				border-radius: 6px;
-
+				background-color: transparent;
+				
+				border:1px solid #999;
+				padding: 10px 20px;
+				border-radius: 22px;
+				
 				.txt {
-					color: #fff;
-					font-size: 12px;
+					color: #999;
+					font-size: 14px;
 				}
 			}
 		}

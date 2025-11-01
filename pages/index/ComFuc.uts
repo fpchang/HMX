@@ -1,16 +1,17 @@
-import {state,setHotelId,setUser,setHotelList,setHotel,setPermissionList} from "@/store/store.uts";
-import {AccountService} from "@/services/AccountService";
-import {HotelService} from "@/services/HotelService";
-import {PermissionService} from "@/services/PermissionService";
+import { state, setHotelId, setUser, setHotelList, setHotel, setPermissionList ,setRoomTypeList} from "@/store/store.uts";
+import { AccountService } from "@/services/AccountService";
+import { HotelService } from "@/services/HotelService";
+import { PermissionService } from "@/services/PermissionService";
 
-class ComFuc{
-	constructor(){}
-	async getUser():Promise<UTSJSONObject>{
-	  const res = await AccountService.getuserByToken();
-	  console.log("getuser",res);
-	  const user = res.data[0] as UTSJSONObject;
-	  uni.setStorageSync("user", user);
-	 return user;
+class ComFuc {
+	constructor() { }
+	async getUser() : Promise<UTSJSONObject> {
+		const res = await AccountService.getuserByToken();
+		console.log("getuser", res);
+		const user = res.data[0] as UTSJSONObject;
+		uni.setStorageSync("user", user);
+		setUser(user);
+		return user;
 	}
 	// updateUser(){
 	//   const user:UTSJSONObject = uni.getStorageSync("user");
@@ -19,54 +20,55 @@ class ComFuc{
 	//   }
 	// }
 
-	 async getHotelList():Promise<Array<UTSJSONObject>>{
+	async getHotelList() : Promise<Array<UTSJSONObject>> {
 		const list = await HotelService.getHotelList();
+		setHotelList(list);
 		return list;
 	}
-	async getRoomTypeList(hotel_id:string):Promise<Array<UTSJSONObject>> {
-	 const res = await HotelService.getRoomType(hotel_id);
-	  console.log("房型列表", res);
-	  const list = res['data'] as Array<UTSJSONObject>;
-	 return list;
+	async getRoomTypeList(hotel_id : string) : Promise<Array<UTSJSONObject>> {
+		const res = await HotelService.getRoomType(hotel_id);
+		console.log("房型列表", res);
+		const list = res['data'] as Array<UTSJSONObject>;
+		setRoomTypeList(list);
+		return list;
 	}
 	/**
 	 * 切换酒店
 	 */
-	async checkHotel(hotel_id:string):Promise<void>{
-	  uni.setStorageSync("hotel_id", hotel_id);
+	async checkHotel(hotel_id : string) : Promise<void> {
+		uni.setStorageSync("hotel_id", hotel_id);
 		setHotelId(hotel_id);
-		let hotel = state.hotelList.find(item=>item._id==hotel_id) as UTSJSONObject;
+		let hotel = state.hotelList.find(item => item._id == hotel_id) as UTSJSONObject;
 		setHotel(hotel);
-		const roomList = await this.getRoomTypeList(state.hotel_id);
-		//console.log("333",roomList);
+		await this.getRoomTypeList(state.hotel_id);
 		const permissionList = await this.getPermissionList(state.hotel_id);
 		setPermissionList(permissionList);
-		console.log("4444",permissionList);
-		
+		console.log("4444", permissionList);
+
 	}
-	async setDefaultHotel(){
-	  if (state.hotelList.length<1) {
-	    return;
-	  }
-	  let _hotel_id = uni.getStorageSync("hotel_id") as string;
-	
-	  let h = state.hotelList.find((item) => {
-	    return item._id == _hotel_id;
-	  }) as (UTSJSONObject | null);
-	  let n_hotel_id:string= state.hotelList[0]._id as string;
-	  if(h!=null){
-		  n_hotel_id =  _hotel_id  as string;
-	  }
-	  
-	  if (n_hotel_id == state.hotel_id) {
-	    console.warn("与旧hotel_id相同，无需重置");
-	    return;
-	  }
-		await this.checkHotel( n_hotel_id);
+	async setDefaultHotel() {
+		if (state.hotelList.length < 1) {
+			return;
+		}
+		let _hotel_id = uni.getStorageSync("hotel_id") as string;
+
+		let h = state.hotelList.find((item) => {
+			return item._id == _hotel_id;
+		}) as (UTSJSONObject | null);
+		let n_hotel_id : string = state.hotelList[0]._id as string;
+		if (h != null) {
+			n_hotel_id = _hotel_id as string;
+		}
+
+		if (n_hotel_id == state.hotel_id) {
+			console.warn("与旧hotel_id相同，无需重置");
+			return;
+		}
+		await this.checkHotel(n_hotel_id);
 		console.log("数据准备完毕")
 	}
-	async getPermissionList(hotel_id:string):Promise<Array<string>>{
-		const pes=  await PermissionService.getPermissionList(hotel_id);
+	async getPermissionList(hotel_id : string) : Promise<Array<string>> {
+		const pes = await PermissionService.getPermissionList(hotel_id);
 		const result = pes['result'] as UTSJSONObject;
 		const list = result.get("data") as Array<string>;
 		return list;
@@ -74,16 +76,14 @@ class ComFuc{
 	/**
 	 * 数据开始加载
 	 */
-	async init(){
-		uni.showLoading({title: ''});
-		const user = await this.getUser();
-		 setUser(user);		 		  
-		 const hotelList = await this.getHotelList();
-		 setHotelList(hotelList);
+	async init() {
+		uni.showLoading({ title: '' });
+		this.getUser();
+		await this.getHotelList();
 		await this.setDefaultHotel();
 		console.log("all thing is ok;");
 		uni.hideLoading();
-	
+
 	}
 }
 export var conFunction = new ComFuc();

@@ -4,16 +4,17 @@
 	<!-- #endif -->
 		<view class="index-page-style" v-if="dataReading">
 			<view style="width: 750rpx;height: 422rpx;max-height:253px;position: relative;">
-				<view style="height:44px;width:750rpx;z-index:999; background-color:rgba(0,0,0,0.6);position: absolute;top:0;left: 0;">
+				<!-- <view style="height:44px;width:750rpx;z-index:999; background-color:rgba(0,0,0,0.6);position: absolute;top:0;left: 0;">
 					
-				</view>
+				</view> -->
 				<image style="width: 100%;height: 100%;"
-					src="https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1760774195766_img0.JPG"
+					:src="topImg"
 					mode="aspectFill">
 				</image>
 				<!-- <ux-blur style="width: 100%;height: 81px;position: absolute;left:0;bottom:0;" :radius="10"></ux-blur> -->
+				
 				<view @click="showCheckHotel"
-					style="position:absolute;bottom:0;left:0;background-color: rgba(0,0,0,0.6); width:100%;  padding:5px 20px 20px 20px ;display: flex;flex-direction: row;align-items: center;">
+					style="position:absolute;bottom:0;left:0;border-top-right-radius: 18px;border-top-left-radius: 18px; background-color: rgba(0,0,0,0.4); width:100%;  padding:5px 20px 20px 20px ;display: flex;flex-direction: row;align-items: center;">
 					<text
 						style="font-size: 22px;padding:15px;color:#fff;min-width:200px;font-family: cursive;font-weight: 400;">{{hotel.hotelName}}</text>
 					<rice-icon name="arrow-down" color="#fff" size="22px" />
@@ -50,7 +51,7 @@
 					<view>
 						<view v-for="item of hotelList" style="padding: 10px" @click="checkHotel((item._id as string))">
 							<view style="display: flex" :class="['zcard', item._id==hotel_id? 'zcard-active':'']"
-								@click="checkHotel((item._id as string))">
+								@click="checkHotel(item._id as string)">
 								<view class="select">
 									<image v-show="item._id!=hotel_id" src="/static/icons/circle.png" class="form-icon"
 										style="width:35px;height:35px"></image>
@@ -59,17 +60,17 @@
 
 								</view>
 								<view class="img-container">
-									<image v-if="(item['firstImages'] as string) != ''"
-										style="width: 100%; height: 100%" mode="aspectFill"
-										:src="(item['firstImages'] as string)" />
 									<image
-										v-if="(item['firstImages'] as string) == '' && (item['_id'] as string) != hotel_id"
 										style="width: 100%; height: 100%" mode="aspectFill"
-										:src="'https://cdn.hotelsys.fun/HM/images/app.png'" />
-									<image
-										v-if="(item['firstImages'] as string) == '' && (item['_id'] as string) == hotel_id"
+										:src="(item['firstImages'] != ''&&item['firstImages'] !=null)?item['firstImages']:'/static/images/hotel.png'" />
+									<!-- <image
+										v-if="(item['firstImages'] == '' ||item['firstImages'] ==null)&& item['_id'] != hotel_id"
 										style="width: 100%; height: 100%" mode="aspectFill"
-										:src="'https://cdn.hotelsys.fun/HM/images/blue-logo.jpg'" />
+										src="@/static/icons/hotelnormal.png" /> -->
+									<!-- <image
+										v-if="(item['firstImages']== ''|| item['firstImages'] ==null) && item['_id']== hotel_id"
+										style="width: 100%; height: 100%" mode="aspectFill"
+										src="@/static/icons/hotelnormal-white.png" /> -->
 								</view>
 								<view style="padding: 15px 10px" class="zcard-right">
 									<view class="item">
@@ -118,6 +119,13 @@
 	});
 	const hotelList = computed(() => {
 		return state.hotelList;
+	});
+	const topImg=computed(():string=>{
+		const firstImages = hotel.value['firstImages'] as string | null;
+		if(firstImages==''||firstImages==null){
+			return '/static/images/hotel.png';
+		}
+		return firstImages;
 	});
 	const checkHotel = async (h_id : string) => {
 		if (h_id != hotel_id.value) {

@@ -9,12 +9,14 @@
 						<view class="header-date"><text class="txt">{{currentData()}}</text></view>
 					</view>
 				</view>
-				<view style="padding-top:8px"> 
-				<rice-tabs v-model="activeIndex" :list="list" @clickTab="tabClick"  bg-color="rgba(255,255,255,0)" :shrink="true" :item-style="itemStyle" line-width="60%" title-active-color="#000" line-color="#000" :active-style="activeStyle"></rice-tabs>
-				
+				<view style="padding-top:8px">
+					<rice-tabs v-model="activeIndex" :list="list" @clickTab="tabClick" bg-color="rgba(255,255,255,0)"
+						:shrink="true" :item-style="itemStyle" line-width="60%" title-active-color="#000"
+						line-color="#000" :active-style="activeStyle"></rice-tabs>
+
 				</view>
 			</view>
-			<view class="swiper" :style="{transform: `translateX(${swiperx})`}">
+			<view class="swiper" :style="{transform: `translateX(${swiperx})`}" @touchmove="swiperMove">
 				<view class="swiper-item">
 					<view class="stats-body">
 						<view class="stat-item">
@@ -22,99 +24,39 @@
 								<view class="stat-icon">
 									<image class="img-style" src="/static/icons/accessin-mount.png"></image>
 								</view>
-								<view class="stat-number"><text class="txt">23</text></view>
+								<view class="stat-number"><text class="txt">{{numOrderToday}}</text></view>
 								<view class="stat-label"><text class="txt">今日入住</text></view>
 							</view>
-					
-						</view>
-						<view class="stat-item">
-							<view class="card check-in">
-								<view class="stat-icon">
-									<image class="img-style" src="/static/icons/accessout-mount.png" ></image>
-								</view>
-								<view class="stat-number"><text class="txt">23</text></view>
-								<view class="stat-label"><text class="txt">今日退房</text></view>
-							</view>
-					
-						</view>
-					
-						<view class="stat-item">
-							<view class="card occupied-rooms">
-								<view class="stat-icon">
-									<image class="img-style" src="/static/icons/ykmn.png"></image>
-								</view>
-								<view style="padding:10px 0">
-					
-					
-									<l-circle :percent="40" size="100px" strokeColor="green" strokeWidth="12" trailWidth="12">
-										<text>{{33}}%</text>
-									</l-circle>
-					
-								</view>
-								<view class="stat-label"><text class="txt">当前在住</text></view>
-							</view>
-					
-						</view>
-						<view class="stat-item">
-							<view class="card available-rooms">
-								<view class="stat-icon">
-									<image class="img-style" src="/static/icons/empty-room.png" ></image>
-								</view>
-								<view style="padding:10px 0">
-					
-					
-									<l-circle :percent="40" size="100px" strokeColor="green" strokeWidth="12" trailWidth="12">
-										<text>{{33}}%</text>
-									</l-circle>
-					
-								</view>
-								<view class="stat-label"><text class="txt">空房数量</text></view>
-							</view>
-					
-						</view>
-					
-					
-					</view>
-				</view>
-				<view class="swiper-item">
-					<view class="stats-body">
-						<view class="stat-item">
-							<view class="card check-out">
-								<view class="stat-icon">
-									<image class="img-style" src="/static/icons/accessin-mount.png" ></image>
-								</view>
-								<view class="stat-number"><text class="txt">23</text></view>
-								<view class="stat-label"><text class="txt">明日入住</text></view>
-							</view>
-					
+
 						</view>
 						<view class="stat-item">
 							<view class="card check-in">
 								<view class="stat-icon">
 									<image class="img-style" src="/static/icons/accessout-mount.png"></image>
 								</view>
-								<view class="stat-number"><text class="txt">23</text></view>
+								<view class="stat-number"><text class="txt">{{numAccessOutToday}}</text></view>
 								<view class="stat-label"><text class="txt">今日退房</text></view>
 							</view>
-					
+
 						</view>
-					
+
 						<view class="stat-item">
 							<view class="card occupied-rooms">
 								<view class="stat-icon">
 									<image class="img-style" src="/static/icons/ykmn.png"></image>
 								</view>
 								<view style="padding:10px 0">
-					
-					
-									<l-circle :percent="40" size="100px" strokeColor="green" strokeWidth="12" trailWidth="12">
-										<text>{{33}}%</text>
+
+
+									<l-circle :percent="numCustomerOrderToday_percent" size="100px" strokeColor="green" strokeWidth="12"
+										trailWidth="12">
+										<text>{{numCustomerOrderToday}}</text>
 									</l-circle>
-					
+
 								</view>
 								<view class="stat-label"><text class="txt">当前在住</text></view>
 							</view>
-					
+
 						</view>
 						<view class="stat-item">
 							<view class="card available-rooms">
@@ -122,23 +64,87 @@
 									<image class="img-style" src="/static/icons/empty-room.png"></image>
 								</view>
 								<view style="padding:10px 0">
-					
-					
-									<l-circle :percent="40" size="100px" strokeColor="green" strokeWidth="12" trailWidth="12">
-										<text>{{33}}%</text>
+
+
+									<l-circle :percent="(100 - numCustomerOrderToday_percent)" size="100px" strokeColor="orange" strokeWidth="12"
+										trailWidth="12">
+										<text>{{ roomCount - numCustomerOrderToday}}</text>
 									</l-circle>
-					
+
 								</view>
 								<view class="stat-label"><text class="txt">空房数量</text></view>
 							</view>
-					
+
 						</view>
-					
-					
+
+
+					</view>
+				</view>
+				<view class="swiper-item">
+					<view class="stats-body">
+						<view class="stat-item">
+							<view class="card check-out">
+								<view class="stat-icon">
+									<image class="img-style" src="/static/icons/accessin-mount.png"></image>
+								</view>
+								<view class="stat-number"><text class="txt">{{numOrderTommorow}}</text></view>
+								<view class="stat-label"><text class="txt">明日入住</text></view>
+							</view>
+
+						</view>
+						<view class="stat-item">
+							<view class="card check-in">
+								<view class="stat-icon">
+									<image class="img-style" src="/static/icons/accessout-mount.png"></image>
+								</view>
+								<view class="stat-number"><text class="txt">{{numAccessOutTommorow}}</text></view>
+								<view class="stat-label"><text class="txt">今日退房</text></view>
+							</view>
+
+						</view>
+
+						<view class="stat-item">
+							<view class="card occupied-rooms">
+								<view class="stat-icon">
+									<image class="img-style" src="/static/icons/ykmn.png"></image>
+								</view>
+								<view style="padding:10px 0">
+
+
+									<l-circle :percent="numCustomerOrderTommorw_percent" size="100px" strokeColor="green" strokeWidth="12"
+										trailWidth="12">
+										<text>{{numCustomerOrderTommorw}}</text>
+									</l-circle>
+
+								</view>
+								<view class="stat-label"><text class="txt">当前在住</text></view>
+							</view>
+
+						</view>
+						<view class="stat-item">
+							<view class="card available-rooms">
+								<view class="stat-icon">
+									<image class="img-style" src="/static/icons/empty-room.png"></image>
+								</view>
+								<view style="padding:10px 0">
+
+
+									<l-circle :percent="(100 - numCustomerOrderTommorw_percent)" size="100px" strokeColor="orange" strokeWidth="12"
+										trailWidth="12">
+										<text>{{roomCount - numCustomerOrderTommorw}}</text>
+									</l-circle>
+
+								</view>
+								<view class="stat-label"><text class="txt">空房数量</text></view>
+							</view>
+
+						</view>
+
+
 					</view>
 				</view>
 			</view>
-			
+
 		</view>
 
 
@@ -146,18 +152,18 @@
 </template>
 
 <script setup>
-	import { ref,watch } from 'vue';
+	import { ref, watch } from 'vue';
 	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
-	import {dayuts} from '@/uni_modules/lime-dayuts';
-	import {TIME} from "@/static/utils/TIME";
-	import {state} from "@/store/store";
-	import {orderState,getGatherEvent} from "@/store/modules/orderStore";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import { TIME } from "@/static/utils/TIME";
+	import { state } from "@/store/store";
+	import { orderState, getGatherEvent } from "@/store/modules/orderStore";
 	const activeIndex = ref(0);
 	const itemStyle = {
 		fontSize: "20px"
 	}
-	const activeStyle={
-		color:"#ff0000"
+	const activeStyle = {
+		color: "#ff0000"
 	}
 	const list = ref<TabsOptions[]>([{
 		name: '今天',
@@ -167,7 +173,7 @@
 		name: '明天',
 		value: 'tommorow'
 	}]);
-	let swiperx=ref('0');
+	let swiperx = ref('0');
 	//const echartRef = ref<EChartComponentPublicInstance | null>(null);
 	const option = {
 		xAxis: {
@@ -182,11 +188,11 @@
 		grid: [{ left: 50, right: 15, top: 40, bottom: 30 }],
 		tooltip: { show: true },
 	};
-	const currentData=()=>{
-		 // const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-		 // return new Date().toLocaleDateString('zh-CN', dateOptions);
-		 //console.log(dayuts().locale())
-		return  dayuts(new Date()).locale('zh-cn').format("YYYY 年 MM 月 DD 日 dddd");
+	const currentData = () => {
+		// const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+		// return new Date().toLocaleDateString('zh-CN', dateOptions);
+		//console.log(dayuts().locale())
+		return dayuts(new Date()).locale('zh-cn').format("YYYY 年 MM 月 DD 日 dddd");
 	}
 	// 组件挂载后初始化echarts实例 (也可在请求数据后初始化)
 	function initEchart() {
@@ -197,28 +203,137 @@
 	function tabClick(e : TabsClickTab) {
 		activeIndex.value = e.index as number;
 	}
-	const hotel_id=computed(()=>{
+	let clientx = ref(0);
+	const swiperMove = (event : UniTouchEvent) : void => {
+		//console.log("tochmove",event);
+		// if(clientx.value==0){
+		// 	clientx.value=event.changedTouches[0].clientX
+		// }
+		// console.log();
+		// let x = event.changedTouches[0].clientX - clientx.value;
+		// if(x>0 &&activeIndex.value==0){
+		// 	swiperx.value= '0';
+		// }
+		// if(x<0 &&activeIndex.value==list.value.length){
+		// 	swiperx.value= `${100/list.value.length}%`;
+		// }
+		// swiperx.value= `${x}px`;
+	}
+	//订单列表中计算有多少房间
+	const getRoomCountFromOrderList = (orderList : Array<UTSJSONObject>) : number => {
+		let numCount = 0;
+		orderList.map(item => {
+			let num = 0;
+			let list = item['roomTypeArray'] as Array<UTSJSONObject>;
+			list.map(it => {
+				num += it.count as number;
+			});
+			numCount += num;
+		});
+		return numCount;
+	}
+	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
-	watch(activeIndex,(indexNew:number,indexOld:number):void=>{
-		if(indexNew==1){
-			swiperx.value= '-50%';
+	const roomTypeList = computed(() => {
+		return state.roomTypeList;
+	});
+	console.log("33333333333333", roomTypeList.value);
+	const roomCount = computed(() => {
+		let count = 0;
+		roomTypeList.value.map(item => {
+		const hmRoom = (item['_id'] as UTSJSONObject).get('hm-room') as Array<UTSJSONObject>|null;
+		count += hmRoom != null ? hmRoom.length : 0;
+		})
+		return count;
+	})
+	//今日办理入住的订单
+	// const orderListByCheckInToday = computed(() => {
+	// 	return orderState.orderListByCheckInToday;
+	// });
+	const numOrderToday = computed(() : number => {
+		let orderList = orderState.orderListByCheckInToday;
+		let num = getRoomCountFromOrderList(orderList);
+		return num;
+	});
+	//今日退房订单
+	// const orderListByCheckOutToday = computed(() => {
+	// 	return orderState.orderListByCheckOutToday;
+	// });
+	const numAccessOutToday = computed(() : number => {
+		let orderList = orderState.orderListByCheckOutToday;
+		let num = getRoomCountFromOrderList(orderList);
+		return num;
+	});
+	//明日办理入住的订单
+	// const orderListByCheckInTommorow = computed(() => {
+	// 	return orderState.orderListByCheckInTommorow;
+	// });
+	const numOrderTommorow = computed(() : number => {
+		let orderList = orderState.orderListByCheckInTommorow;
+		let num = getRoomCountFromOrderList(orderList);
+		return num;
+	});
+	//明日退房订单
+	// const orderListByCheckOutTommorow = computed(() => {
+	// 	return orderState.orderListByCheckOutTommorow;
+	// });
+	const numAccessOutTommorow = computed(() : number => {
+		let orderList = orderState.orderListByCheckOutTommorow;
+		let num = getRoomCountFromOrderList(orderList);
+		return num;
+	});
+	//今日住客数量
+	// const orderListToday = computed(() => {
+	// 	return orderState.orderListToday;
+	// });
+	const numCustomerOrderToday = computed(() : number => {
+		let orderList = orderState.orderListToday;
+		let num = getRoomCountFromOrderList(orderList);
+		return num;
+	});
+	const numCustomerOrderToday_percent = computed(() : number => {
+		if(roomCount.value==0){
+			return 0;
+		}
+		const val =  (numCustomerOrderToday.value*100 /roomCount.value) as number;
+		return parseFloat(val.toFixed(2));
+	});
+	//明日住客订单
+	// const orderListTommorow = computed(() => {
+	// 	return orderState.orderListTommorow;
+	// });
+	const numCustomerOrderTommorw = computed(() : number => {
+		let orderList = orderState.orderListTommorow;
+		let num = getRoomCountFromOrderList(orderList);
+		return num
+	});
+	const numCustomerOrderTommorw_percent = computed(() : number => {
+		if(roomCount.value==0){
+			return 0;
+		}
+    const val =  (numCustomerOrderTommorw.value*100 /roomCount.value) as number;
+    return parseFloat(val.toFixed(2));
+	});
+	watch(activeIndex, (indexNew : number, indexOld : number) : void => {
+		if (indexNew == 1) {
+			swiperx.value = '-50%';
 			return;
 		}
-		swiperx.value= '0'
-	}); 
+		swiperx.value = '0'
+	});
 
-	const init = async ()=>{
-		 await getGatherEvent(hotel_id.value);
+	const init = async () => {
+		await getGatherEvent(hotel_id.value);
 		//console.log("getGatherEvent",res);
 	}
-	watch(hotel_id,(hotel_idNew:string,hotel_idOld:string):void=>{
-		console.log("hotel_id change",hotel_idNew,hotel_idOld);
+	watch(hotel_id, (hotel_idNew : string, hotel_idOld : string) : void => {
+		console.log("hotel_id change", hotel_idNew, hotel_idOld);
 		init();
-	}); 
-	onBeforeMount(()=>{
-			 console.log("gather component onBeforeMound");
-			 
+	});
+	onBeforeMount(() => {
+		console.log("gather component onBeforeMound");
+
 	})
 	onMounted(() => {
 		initEchart();
@@ -230,20 +345,23 @@
 	.gather {
 		display: flex;
 		flex-direction: row;
-		flex:1;
-		
+		flex: 1;
+
 	}
-	.swiper{
-		width:200%;
+
+	.swiper {
+		width: 200%;
 		display: flex;
 		flex-direction: row;
 		transition: transform 0.4s ease-out;
-		.swiper-item{
-			flex:1;
-			
+
+		.swiper-item {
+			flex: 1;
+
 		}
-		
+
 	}
+
 	.stats-card {
 		flex: 1;
 		background: #fff;
@@ -258,6 +376,7 @@
 		box-sizing: border-box;
 		border-top-right-radius: 15px;
 		border-top-left-radius: 15px;
+
 		.txt {
 			color: #999;
 			font-size: 14px;
@@ -352,9 +471,10 @@
 
 	.stat-icon {
 		margin-bottom: 10px;
-		.img-style{
-			width:40px;
-			height:40px;
+
+		.img-style {
+			width: 40px;
+			height: 40px;
 		}
 	}
 

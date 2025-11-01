@@ -192,9 +192,10 @@
 			.title {
 				height: 30px;
 				color: #000101;
+				font-weight:700;
 
 				.txt {
-					font-size: 16px;
+					font-size: 18px;
 					font-weight: 400;
 					height: 30px;
 					line-height: 30px;
@@ -266,7 +267,7 @@
 						white-space: nowrap;
 						color: #1f2937;
 						font-weight: 700;
-						font-size: $uni-font-size-base;
+						font-size: 16px;
 					}
 				}
 
@@ -274,10 +275,10 @@
 
 					.txt {
 						color: #666666;
-						text-overflow: ellipsis;
+						/*text-overflow: ellipsis;
 						overflow: hidden;
-						white-space: nowrap;
-						font-size: $uni-font-size-sm;
+						white-space: nowrap;*/
+						font-size: 14px;
 					}
 				}
 

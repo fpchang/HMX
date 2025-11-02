@@ -22,7 +22,7 @@
 			</view>
 
 			<view class="view-item" style="margin-top: -15px;flex:1">
-					<gatherComponent></gatherComponent>
+					<gatherComponent v-if="dataReading"></gatherComponent>
 								
 			</view>
 		</view>
@@ -143,11 +143,13 @@
 		 conFunction.loadStorage();
 		 await conFunction.init();
 		 dataReading.value=true;
+		 console.log("33333333",hotel)
 	 }
 	 watch(hotel_id,(hotel_idNew:string,hotel_idOld:string):void=>{
 	 	//console.log("hotel_id change index ",hotel_idNew,hotel_idOld)
 	 }); 
 	    init(); 
+	
 	
 </script>
 

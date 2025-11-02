@@ -2,7 +2,7 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		{{list}}
+		{{hotel}}
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
@@ -10,13 +10,8 @@
 
 <script setup>
 	
-	const list =uni.getStorageSync("hotelList");
-	uni.getStorage({key:"permissionList",success(res){
-			  // setPermissionList(res.data)
-			  console.log(res);
-	},fail(error){
-		console.log(error);
-	}});
+	const hotel =uni.getStorageSync("hotel");
+	
 </script>
 
 <style>

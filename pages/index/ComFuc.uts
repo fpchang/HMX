@@ -73,16 +73,36 @@ class ComFuc {
 		const list = result.get("data") as Array<string>;
 		return list;
 	}
+	/*
+	*默认加载本地数据
+	*/
+   loadStorage(){
+	   const hotel_id = uni.getStorageSync("hotel_id");
+	   setHotelId(hotel_id);
+	    uni.getStorage({key:"user",success(res){
+		   setUser(res.data)
+	   }});
+	   uni.getStorage({key:"hotelList",success(res){
+		   setHotelList(res.data)
+	   }});
+	    
+		 uni.getStorage({key:"hotel",success(res){
+		   setHotel(res.data)
+	   }});
+	   uni.getStorage({key:"permissionList",success(res){
+		   setPermissionList(res.data)
+	   }});
+   }
 	/**
 	 * 数据开始加载
 	 */
 	async init() {
-		uni.showLoading({ title: '' });
+		//uni.showLoading({ title: '' });
 		this.getUser();
 		await this.getHotelList();
 		await this.setDefaultHotel();
 		console.log("all thing is ok;");
-		uni.hideLoading();
+		//uni.hideLoading();
 
 	}
 }

@@ -54,8 +54,8 @@
 					</navigator>
 				</view>
 				<scroll-view style="background:#fff;height:500px">
-					<view>
-						<view v-for="item of hotelList" style="padding: 10px" @click="checkHotel((item._id as string))">
+					<view style="display: flex;flex-wrap:wrap;flex-direction: row;">
+						<view  v-for="item of hotelList" style="padding: 10px;flex:1;min-width:360px;" @click="checkHotel((item._id as string))">
 							<view style="display: flex" :class="['zcard', item._id==hotel_id? 'zcard-active':'']"
 								@click="checkHotel(item._id as string)">
 								<view class="img-container">

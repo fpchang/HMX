@@ -50,7 +50,7 @@
 
 									<l-circle :percent="numCustomerOrderToday_percent" size="100px" strokeColor="green" strokeWidth="12"
 										trailWidth="12">
-										<text style="font-size:32px;font-weight:700">{{numCustomerOrderToday}}</text>
+										<text class="val-text">{{numCustomerOrderToday}}</text>
 									</l-circle>
 
 								</view>
@@ -68,7 +68,7 @@
 
 									<l-circle :percent="(100 - numCustomerOrderToday_percent)" size="100px" strokeColor="orange" strokeWidth="12"
 										trailWidth="12">
-										<text style="font-size:32px;font-weight:700">{{ roomCount - numCustomerOrderToday}}</text>
+										<text class="val-text">{{ roomCount - numCustomerOrderToday}}</text>
 									</l-circle>
 
 								</view>
@@ -113,7 +113,7 @@
 
 									<l-circle :percent="numCustomerOrderTommorw_percent" size="100px" strokeColor="green" strokeWidth="12"
 										trailWidth="12">
-										<text>{{numCustomerOrderTommorw}}</text>
+										<text class="val-text">{{numCustomerOrderTommorw}}</text>
 									</l-circle>
 
 								</view>
@@ -131,7 +131,7 @@
 
 									<l-circle :percent="(100 - numCustomerOrderTommorw_percent)" size="100px" strokeColor="orange" strokeWidth="12"
 										trailWidth="12">
-										<text>{{roomCount - numCustomerOrderTommorw}}</text>
+										<text class="val-text">{{roomCount - numCustomerOrderTommorw}}</text>
 									</l-circle>
 
 								</view>
@@ -434,7 +434,10 @@
 			flex-direction: column;
 			justify-content: space-between;
 			align-items: center;
-
+			.val-text{
+				font-size: 32px;
+				font-weight: 700;
+			}
 
 		}
 

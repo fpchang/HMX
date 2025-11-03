@@ -21,8 +21,12 @@
 				</view>
 			</view>
 
-			<view class="view-item" style="margin-top: -15px;flex:1">
+			<view class="view-item" style="margin-top: -15px;">
 					<gatherComponent></gatherComponent>
+								
+			</view>
+			<view class="view-item">
+					<operation></operation>
 								
 			</view>
 		</view>
@@ -88,6 +92,8 @@
 <script setup>
 	//import {ref} from "vue";
 	import gatherComponent from "./components/gatherComponent";
+	import operation from "./components/operation";
+	
 	import { state, setUser } from '@/store/store.uts';
 	import { conFunction } from "./ComFuc.uts";
 	const showRange = ref(false);
@@ -161,7 +167,6 @@
 			border-radius: 15px;
 			margin-bottom: 20px;
 			box-sizing: border-box;
-			flex:1;
 			display: flex;
 			flex-direction: column;
 
@@ -241,9 +246,9 @@
 
 			.img-container {
 				width: 120px;
-				height: 90px;
-				
+				height: 90px;				
 				overflow: hidden;
+				
 			}
 
 			.zcard-right {

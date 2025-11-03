@@ -1,5 +1,12 @@
 import{DB} from '../api/DB';
 import {callFunctionRes} from "@/bean/DBBean";
+// type UniCloudCallFunctionResult={
+// 	"errCode": number,
+// 	"success": boolean,
+// 	"requestId":string,
+// 	"result":UTSJSONObject
+
+// }
 class HotelServiceClass{
 	constructor(){
        

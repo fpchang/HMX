@@ -58,10 +58,12 @@ export const setRoomTypeList = (list : Array<UTSJSONObject>) => {
 };
 export const setHotelId = (hotel_id : string) => {
 	state.hotel_id = hotel_id;
+	setHotel();
 };
 
-export const setHotel = (hotel : UTSJSONObject) => {
+export const setHotel = () => {
 	console.log("store set hotel");
+	let hotel = state.hotelList.find(item => item._id == state.hotel_id) as UTSJSONObject;
 	state.hotel = hotel;
 	uni.setStorage({key:"hotel",data:hotel});
 };

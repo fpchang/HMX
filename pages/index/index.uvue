@@ -21,23 +21,18 @@
 				</view>
 			</view>
 
-<<<<<<< HEAD
 			<view class="view-item" style="margin-top: -15px;">
 					<gatherComponent></gatherComponent>
-=======
-			<view class="view-item" style="margin-top: -15px;flex:1">
-					<gatherComponent v-if="dataReading"></gatherComponent>
->>>>>>> daad862a028bc6012688ee5d7987537b4b25fca2
-								
+	
 			</view>
 			<view class="view-item">
 					<operation></operation>
 								
 			</view>
 		</view>
-		<!-- #ifdef APP -->
-		</scroll-view>
-		<!-- #endif -->
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
 	
 	<rice-popup v-model:show="showPopup" position="bottom" :closeable="true" radius="15px">
 
@@ -105,7 +100,7 @@
 	const showPopup = ref(false);
 	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"]);
 	const rangeConfirm = (e : string[]) => {
-		console.log(e)
+		//console.log(e)
 	}
 	const showPickTime = () => {
 		showRange.value = true;
@@ -154,7 +149,6 @@
 		 conFunction.loadStorage();
 		 await conFunction.init();
 		 dataReading.value=true;
-		 console.log("33333333",hotel)
 	 }
 	 watch(hotel_id,(hotel_idNew:string,hotel_idOld:string):void=>{
 	 	//console.log("hotel_id change index ",hotel_idNew,hotel_idOld)

@@ -50,7 +50,7 @@
 
 									<l-circle :percent="numCustomerOrderToday_percent" size="100px" strokeColor="green" strokeWidth="12"
 										trailWidth="12">
-										<text>{{numCustomerOrderToday}}</text>
+										<text style="font-size:32px;font-weight:700">{{numCustomerOrderToday}}</text>
 									</l-circle>
 
 								</view>
@@ -68,7 +68,7 @@
 
 									<l-circle :percent="(100 - numCustomerOrderToday_percent)" size="100px" strokeColor="orange" strokeWidth="12"
 										trailWidth="12">
-										<text>{{ roomCount - numCustomerOrderToday}}</text>
+										<text style="font-size:32px;font-weight:700">{{ roomCount - numCustomerOrderToday}}</text>
 									</l-circle>
 
 								</view>

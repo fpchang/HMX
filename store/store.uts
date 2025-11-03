@@ -49,14 +49,18 @@ export const setUser = (user : UTSJSONObject) => {
 	state.user = user;
 };
 export const setHotelList = (list : Array<UTSJSONObject>) => {
+	console.error("set hotellist",list);
 	state.hotelList = list;
-	uni.setStorage({key:"hotelList",data:list});
+	uni.setStorageSync("hotelList",list);
+	const t =  uni.getStorageSync("hotelList") as  Array<UTSJSONObject>;
+	console.error("hotelist??",t)
 };
 export const setRoomTypeList = (list : Array<UTSJSONObject>) => {
 	state.roomTypeList = list;
 	uni.setStorage({key:"roomTypeList",data:list});
 };
 export const setHotelId = (hotel_id : string) => {
+	console.error("王g")
 	state.hotel_id = hotel_id;
 	setHotel();
 };
@@ -64,8 +68,12 @@ export const setHotelId = (hotel_id : string) => {
 export const setHotel = () => {
 	console.log("store set hotel");
 	let hotel = state.hotelList.find(item => item._id == state.hotel_id) as UTSJSONObject;
-	state.hotel = hotel;
-	uni.setStorage({key:"hotel",data:hotel});
+	console.log("eeee",hotel);
+	if(hotel!=null){
+		state.hotel = hotel;
+		uni.setStorage({key:"hotel",data:hotel});
+	}
+	
 };
 export const setPermissionList = (list : Array<string>) => {
 	state.permissionList = list;

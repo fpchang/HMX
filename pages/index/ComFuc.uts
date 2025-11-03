@@ -22,7 +22,7 @@ class ComFuc {
 
 	async getHotelList() : Promise<Array<UTSJSONObject>> {
 		console.log("gethotellist")
-		const list = await HotelService.getHotelList();
+		const list = await HotelService.getHotelList() as Array<UTSJSONObject>;
 		setHotelList(list);
 		return list;
 	}
@@ -75,51 +75,46 @@ class ComFuc {
 	/*
 	*默认加载本地数据
 	*/
-	loadStorage() {
+	async loadStorage() {
 		const hotelList = uni.getStorageSync("hotelList") as Array<UTSJSONObject> | null;
+		console.log("hotel-list - storeage",hotelList);
 		if (hotelList != null) {
+			
 			setHotelList(hotelList)
 		}
 
 		const hotel_id = uni.getStorageSync("hotel_id") as string | null;
+		console.log("hotel-id - storeage",hotel_id);
 		if (hotel_id != null) {
 			setHotelId(hotel_id);
 		}
-		uni.getStorage({
-			key: "user", success(res) {
-				if (res.data != null) {
-					setUser(res.data as UTSJSONObject)
-				}
-			}
-		});
-
-		uni.getStorage({
-			key: "roomTypeList", success(res) {
-				if (res.data != null) {
-					setRoomTypeList(res.data as Array<UTSJSONObject>)
-				}
-			}
-		});
-
-		uni.getStorage({
-			key: "permissionList", success(res) {
-				if (res.data != null) {
-					setPermissionList(res.data as Array<string>)
-				}
-			}
-		});
+		
+		const user = uni.getStorageSync("user") as UTSJSONObject| null;
+		if (user != null) {
+			setUser(user as UTSJSONObject)
+		}
+		const roomTypeList = uni.getStorageSync("roomTypeList") as Array<UTSJSONObject> | null;
+		if (roomTypeList != null) {
+			setRoomTypeList(roomTypeList as Array<UTSJSONObject>)
+		}
+		const permissionList = uni.getStorageSync("permissionList") as Array<string> | null;
+		if (permissionList != null) {
+			setPermissionList(permissionList as Array<string>)
+		}
+		return true;
 	}
 	/**
 	 * 数据开始加载
 	 */
 	async init() {
-		//uni.showLoading({ title: '' });
+		console.error("333333 init");
+		uni.showLoading({ title: '' });
 		this.getUser();
 		await this.getHotelList();
 		await this.getRoomTypeList(state.hotel_id);
 		await this.setDefaultHotel();
 		console.log("all thing is ok;");
-		//uni.hideLoading();
+		uni.hideLoading();
 
 	}
 }

@@ -21,6 +21,7 @@ class ComFuc {
 	// }
 
 	async getHotelList() : Promise<Array<UTSJSONObject>> {
+		console.log("gethotellist")
 		const list = await HotelService.getHotelList();
 		setHotelList(list);
 		return list;
@@ -43,7 +44,7 @@ class ComFuc {
 		await this.getRoomTypeList(state.hotel_id);
 		const permissionList = await this.getPermissionList(state.hotel_id);
 		setPermissionList(permissionList);
-		console.log("4444", permissionList);
+		
 
 	}
 	async setDefaultHotel() {
@@ -73,16 +74,41 @@ class ComFuc {
 		const list = result.get("data") as Array<string>;
 		return list;
 	}
+	/*
+	*默认加载本地数据
+	*/
+   loadStorage(){
+	   const hotel_id = uni.getStorageSync("hotel_id");
+	   setHotelId(hotel_id);
+	    uni.getStorage({key:"user",success(res){
+		   setUser(res.data)
+	   }});
+	   uni.getStorage({key:"hotelList",success(res){
+		   setHotelList(res.data)
+	   }});
+	   uni.getStorage({key:"roomTypeList",success(res){
+	   		   setRoomTypeList(res.data)
+	   }});
+	    
+		 uni.getStorage({key:"hotel",success(res){
+			 console.log("eeeeee",res);
+		   setHotel(res.data)
+	   }});
+	   uni.getStorage({key:"permissionList",success(res){
+		   setPermissionList(res.data)
+	   }});
+   }
 	/**
 	 * 数据开始加载
 	 */
 	async init() {
-		uni.showLoading({ title: '' });
+		//uni.showLoading({ title: '' });
 		this.getUser();
 		await this.getHotelList();
+		await this.getRoomTypeList();
 		await this.setDefaultHotel();
 		console.log("all thing is ok;");
-		uni.hideLoading();
+		//uni.hideLoading();
 
 	}
 }

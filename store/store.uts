@@ -50,19 +50,24 @@ export const setUser = (user : UTSJSONObject) => {
 };
 export const setHotelList = (list : Array<UTSJSONObject>) => {
 	state.hotelList = list;
+	uni.setStorage({key:"hotelList",data:list});
 };
 export const setRoomTypeList = (list : Array<UTSJSONObject>) => {
 	state.roomTypeList = list;
+	uni.setStorage({key:"roomTypeList",data:list});
 };
 export const setHotelId = (hotel_id : string) => {
 	state.hotel_id = hotel_id;
 };
 
 export const setHotel = (hotel : UTSJSONObject) => {
+	console.log("store set hotel");
 	state.hotel = hotel;
+	uni.setStorage({key:"hotel",data:hotel});
 };
 export const setPermissionList = (list : Array<string>) => {
 	state.permissionList = list;
+	uni.setStorage({key:"permissionList",data:list});
 };
 
 

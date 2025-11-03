@@ -2,23 +2,16 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		
+		{{hotel}}
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
 </template>
 
-<script>
-	export default {
-		data() {
-			return {
-				
-			}
-		},
-		methods: {
-			
-		}
-	}
+<script setup>
+	
+	const hotel =uni.getStorageSync("hotel");
+	
 </script>
 
 <style>

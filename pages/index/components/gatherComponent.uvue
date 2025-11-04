@@ -188,7 +188,7 @@
 		grid: [{ left: 50, right: 15, top: 40, bottom: 30 }],
 		tooltip: { show: true },
 	};
-	const currentData = () => {
+	const currentData = ():string => {
 		// const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
 		// return new Date().toLocaleDateString('zh-CN', dateOptions);
 		//console.log(dayuts().locale())

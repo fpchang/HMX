@@ -1,31 +1,34 @@
 <template>
-	<view class="operation">
-		<view class="card"  v-for="item in menuList">
-			<view class="title">
-				<image :src="item.title_icon" class="icon-stye"></image>
-				<text class="txt" :style="{'color':item.title_color}">{{item.title}}</text>
-				</view>
-			<view class="list">
-
-				<view class="list-item"  v-for="it in item.menu_item_list">
-					<navigator :url="it.url" hover-class="none">
-						<view class="item-content">
-							<view class="groupIcon" :style="{'backgroundColor':it.bgColor}">
-								<image :src="it.icon" class="icon-style" mode="aspectFit"></image>
-							</view>
-							<view>
-								<text class="label">{{it.label}}</text>
-							</view>
-						</view>
-
-					</navigator>
-				</view>
-
-				<view v-for="item in 8" class="list-item" style="height:0;padding:0 15px"></view>
+	<scroll-view style="flex: 1;">
+		<view class="homemenu">
+			<view class="card"  v-for="item in menuList">
+				<view class="title">
+					<image :src="item.title_icon" class="icon-stye"></image>
+					<text class="txt" :style="{'color':item.title_color}">{{item.title}}</text>
+					</view>
+				<view class="list">
 		
+					<view class="list-item"  v-for="it in item.menu_item_list">
+						<navigator :url="it.url" hover-class="none">
+							<view class="item-content">
+								<view class="groupIcon" :style="{'backgroundColor':it.bgColor}">
+									<image :src="it.icon" class="icon-style" mode="aspectFit"></image>
+								</view>
+								<view>
+									<text class="label">{{it.label}}</text>
+								</view>
+							</view>
+		
+						</navigator>
+					</view>
+		
+					<view v-for="item in 8" class="list-item" style="height:0;padding:0 15px"></view>
+			
+				</view>
 			</view>
 		</view>
-	</view>
+	</scroll-view>
+	
 </template>
 
 <script setup>
@@ -162,8 +165,8 @@
 				padding: 15px;
 
 				.item-content {
-					background-color: #fff;
-					padding: 18px;
+					// background-color: #fff;
+					// padding: 18px;
 					border-radius: 12px;
 					/*&:hover{
 						transform: scale(1.1);

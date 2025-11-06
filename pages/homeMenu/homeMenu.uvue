@@ -1,20 +1,232 @@
 <template>
-	<view class="home-menu">
-		<scroll-view style="flex:1">
-			1111
-		</scroll-view>
+	<view class="operation">
+		<view class="card"  v-for="item in menuList">
+			<view class="title">
+				<image :src="item.title_icon" class="icon-stye"></image>
+				<text class="txt" :style="{'color':item.title_color}">{{item.title}}</text>
+				</view>
+			<view class="list">
+
+				<view class="list-item"  v-for="it in item.menu_item_list">
+					<navigator :url="it.url" hover-class="none">
+						<view class="item-content">
+							<view class="groupIcon" :style="{'backgroundColor':it.bgColor}">
+								<image :src="it.icon" class="icon-style" mode="aspectFit"></image>
+							</view>
+							<view>
+								<text class="label">{{it.label}}</text>
+							</view>
+						</view>
+
+					</navigator>
+				</view>
+
+				<view class="list-item" style="height:0;padding:0 15px"></view>
+				<view class="list-item" style="height:0;padding:0 15px"></view>
+				<view class="list-item" style="height:0;padding:0 15px"></view>
+				<view class="list-item" style="height:0;padding:0 15px"></view>
+			</view>
+		</view>
 	</view>
-	
 </template>
 
 <script setup>
+	type menu = {
+		icon : string,
+		label : string,
+		bgColor : string,
+		url : string
+	}
+	type menu_item = {
+		title : string,
+		title_icon:string,
+		title_color:string,
+		menu_item_list : Array<menu>
+	}
+	const menuList : Array<menu_item> = [
+		{
+		title: "酒店设置",
+		title_icon:"/static/icons/homemenu/hotel-anage.png",
+		title_color:"rgba(22, 93, 255, 1)",
+		menu_item_list: [{
+			icon: "/static/icons/homemenu/room-type.png",
+			label: "房型管理",
+			bgColor: "rgba(22, 93, 255, 0.1)",
+			url: "/pages/order/createOrder/createOrder"
+		},
+		{
+			icon: "/static/icons/homemenu/room.png",
+			label: "房间管理",
+			bgColor: "rgba(22, 93, 255, 0.1)",
+			url: "/pages/order/createOrder/createOrder"
+		},
+		{
+			icon: "/static/icons/homemenu/employee.png",
+			label: "员工管理",
+			bgColor: "rgba(22, 93, 255, 0.1)",
+			url: "/pages/order/createOrder/createOrder"
+		},
+		{
+			icon: "/static/icons/homemenu/hotel.png",
+			label: "酒店展示",
+			bgColor: "rgba(22, 93, 255, 0.1)",
+			url: "/pages/order/createOrder/createOrder"
+		}],
+
+		},
+		{
+		title: "财务",
+		title_icon:"/static/icons/homemenu/financia-green.png",
+		title_color:"rgb(72,187,120)",
+		menu_item_list: [{
+			icon: "/static/icons/homemenu/income.png",
+			label: "收入管理",
+			bgColor: "rgba(72,187,120,0.1)",
+			url: "/pages/order/createOrder/createOrder"
+		},
+		{
+			icon: "/static/icons/homemenu/expense.png",
+			label: "支出管理",
+			bgColor:  "rgba(72,187,120,0.1)",
+			url: "/pages/order/createOrder/createOrder"
+		},
+		{
+			icon: "/static/icons/homemenu/financial-statistics.png",
+			label: "财务统计",
+			bgColor: "rgba(72,187,120,0.1)",
+			url: "/pages/order/createOrder/createOrder"
+		}
+		]
 		
+		},
+{
+		title: "订单",
+		title_icon:"/static/icons/homemenu/order-manage.png",
+		title_color:"rgb(237,137,54)",
+		menu_item_list: [{
+			icon: "/static/icons/homemenu/order.png",
+			label: "订单管理",
+			bgColor: "rgba(237,137,54,0.1)",
+			url: "/static/icons/homemenu/order-list.png"
+		},
+		{
+			icon: "/static/icons/homemenu/order-add.png",
+			label: "添加订单",
+			bgColor: "rgba(237,137,54,0.1)",
+			url: "/pages/order/createOrder/createOrder"
+		}
+		]
+		
+		},
+	]
+	const menuListItem : Array<menu> = [{
+		icon: "/static/icons/operation/add-bold.png",
+		label: "添加订单",
+		bgColor: "#165dff1a",
+		url: "/pages/order/createOrder/createOrder"
+	},
+	{
+		icon: "/static/icons/operation/addincome.png",
+		label: "添加收入",
+		bgColor: "#722ed11a",
+		url: "/pages/order/createOrder/createOrder"
+	},
+	{
+		icon: "/static/icons/operation/addincome.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
+		label: "添加收入1",
+		bgColor: "#faad141a",
+		url: "/pages/order/createOrder/createOrder"
+	},
+	{
+		icon: "/static/icons/operation/addincome.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
+		label: "添加收入2",
+		bgColor: "rgba(82 ,196, 26,0.1)",//rgb(250 173 20 / var(--tw-text-opacity, 1))
+		url: "/pages/order/createOrder/createOrder"
+	},
+	{
+		icon: "/static/icons/operation/addincome.png",//rgb(107 114 128 / var(--tw-text-opacity, 1))
+		label: "添加收入3",
+		bgColor: "rgba(243 244 246,0.1)",
+		url: "/pages/order/createOrder/createOrder"
+	}
+	]
 </script>
 
 <style lang="scss">
-		.hote-menu{
-			flex:1;
-			display:flex;
-			flex-direction:comumn;
+	.card {
+
+		padding: 15px;
+
+		.title {
+			padding: 5px 5px 15px 5px;
+			color:#1f2937;
+			font-weight: 700;
+			font-size: 24px;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			.icon-stye{
+				width: 25px;
+				height: 25px;
+				margin-right: 8px;
+			}
+			.txt {
+				color: #1f2937;
+				font-weight: 700;
+				color: #1f2937;
+			}
 		}
+
+		.list {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: space-evenly;
+
+			.list-item {
+				// width: 85px;
+				// height: 85px;
+				min-width: 100px;
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				padding: 15px;
+
+				.item-content {
+					background-color: #fff;
+					padding: 18px;
+					border-radius: 12px;
+
+					.groupIcon {
+						width: 60px;
+						height: 60px;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						justify-content: center;
+						border-radius: 30px;
+						background-color: #165dff1a;
+
+
+						.icon-style {
+							width: 18px;
+							height: 18px;
+						}
+					}
+
+					.label {
+						font-size: 14px;
+						padding-top: 8px;
+						color: #64748b;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
+				}
+
+			}
+		}
+	}
 </style>

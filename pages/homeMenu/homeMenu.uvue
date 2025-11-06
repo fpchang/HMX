@@ -21,10 +21,8 @@
 					</navigator>
 				</view>
 
-				<view class="list-item" style="height:0;padding:0 15px"></view>
-				<view class="list-item" style="height:0;padding:0 15px"></view>
-				<view class="list-item" style="height:0;padding:0 15px"></view>
-				<view class="list-item" style="height:0;padding:0 15px"></view>
+				<view v-for="item in 8" class="list-item" style="height:0;padding:0 15px"></view>
+		
 			</view>
 		</view>
 	</view>
@@ -82,19 +80,19 @@
 			icon: "/static/icons/homemenu/income.png",
 			label: "收入管理",
 			bgColor: "rgba(72,187,120,0.1)",
-			url: "/pages/order/createOrder/createOrder"
+			url: "/pages/financialManagement/income/income"
 		},
 		{
 			icon: "/static/icons/homemenu/expense.png",
 			label: "支出管理",
 			bgColor:  "rgba(72,187,120,0.1)",
-			url: "/pages/order/createOrder/createOrder"
+			url: "/pages/financialManagement/expense/expense"
 		},
 		{
 			icon: "/static/icons/homemenu/financial-statistics.png",
 			label: "财务统计",
 			bgColor: "rgba(72,187,120,0.1)",
-			url: "/pages/order/createOrder/createOrder"
+			url: "/pages/financialManagement/fmchart/fmchart"
 		}
 		]
 		
@@ -107,7 +105,7 @@
 			icon: "/static/icons/homemenu/order.png",
 			label: "订单管理",
 			bgColor: "rgba(237,137,54,0.1)",
-			url: "/static/icons/homemenu/order-list.png"
+			url: "/pages/order/orderList/orderList"
 		},
 		{
 			icon: "/static/icons/homemenu/order-add.png",
@@ -119,37 +117,7 @@
 		
 		},
 	]
-	const menuListItem : Array<menu> = [{
-		icon: "/static/icons/operation/add-bold.png",
-		label: "添加订单",
-		bgColor: "#165dff1a",
-		url: "/pages/order/createOrder/createOrder"
-	},
-	{
-		icon: "/static/icons/operation/addincome.png",
-		label: "添加收入",
-		bgColor: "#722ed11a",
-		url: "/pages/order/createOrder/createOrder"
-	},
-	{
-		icon: "/static/icons/operation/addincome.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
-		label: "添加收入1",
-		bgColor: "#faad141a",
-		url: "/pages/order/createOrder/createOrder"
-	},
-	{
-		icon: "/static/icons/operation/addincome.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
-		label: "添加收入2",
-		bgColor: "rgba(82 ,196, 26,0.1)",//rgb(250 173 20 / var(--tw-text-opacity, 1))
-		url: "/pages/order/createOrder/createOrder"
-	},
-	{
-		icon: "/static/icons/operation/addincome.png",//rgb(107 114 128 / var(--tw-text-opacity, 1))
-		label: "添加收入3",
-		bgColor: "rgba(243 244 246,0.1)",
-		url: "/pages/order/createOrder/createOrder"
-	}
-	]
+	
 </script>
 
 <style lang="scss">
@@ -184,8 +152,7 @@
 			justify-content: space-evenly;
 
 			.list-item {
-				// width: 85px;
-				// height: 85px;
+				
 				min-width: 100px;
 				flex: 1;
 				display: flex;
@@ -198,7 +165,10 @@
 					background-color: #fff;
 					padding: 18px;
 					border-radius: 12px;
-
+					/*&:hover{
+						transform: scale(1.1);
+					}
+					*/
 					.groupIcon {
 						width: 60px;
 						height: 60px;

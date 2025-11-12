@@ -1,7 +1,7 @@
 <template>
 	<view class="operation">
 		<view class="card">
-			<view class="title"><text class="txt">快速操作</text></view>
+			<view class="title"><text class="txt">功能菜单</text></view>
 			<view class="list">
 				
 				<view class="list-item" v-for="item in menuList" >
@@ -33,32 +33,26 @@
 	}
 	const menuList : Array<menu> = [{
 		icon: "/static/icons/operation/add-bold.png",
-		label: "添加订单",
+		label: "系统设置",
 		bgColor:"#165dff1a",
 		url: "/pages/order/createOrder/createOrder"
 	},
 	{
 		icon: "/static/icons/operation/addincome.png",
-		label: "添加收入",
+		label: "意见反馈",
 		bgColor:"#722ed11a",
 		url: "/pages/order/createOrder/createOrder"
 	},
 	{
 		icon: "/static/icons/operation/addincome.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
-		label: "添加收入1",
+		label: "客服中心",
 		bgColor:"#faad141a",
 		url: "/pages/order/createOrder/createOrder"
 	},
 	{
 		icon: "/static/icons/operation/addincome.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
-		label: "添加收入2",
+		label: "帮助中心",
 		bgColor:"rgba(82 ,196, 26,0.1)",//rgb(250 173 20 / var(--tw-text-opacity, 1))
-		url: "/pages/order/createOrder/createOrder"
-	},
-	{
-		icon: "/static/icons/operation/addincome.png",//rgb(107 114 128 / var(--tw-text-opacity, 1))
-		label: "添加收入3",
-		bgColor:"rgba(243 244 246,0.1)",
 		url: "/pages/order/createOrder/createOrder"
 	}
 	]
@@ -87,7 +81,7 @@
 
 			.list-item {
 				width: 85px;
-				height: 100px;
+				height:100px;
 				display: flex;
 				flex-direction: column;
 				align-items: center;

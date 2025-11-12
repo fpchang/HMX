@@ -2,18 +2,166 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		{{hotel}}
+		<view class="user-area">
+			<view class="card"> 
+			<view class="avator"></view>
+			<view class="info">
+				<view class="info-item"  style="margin-bottom: 4px;">
+					<text style="color: rgb(30,30,30);font-weight: 700;font-size: 24px;">张明</text>
+					<text style="margin-left:14px; padding:4px 10px ;border-radius: 12px; background-color:rgba(30,136,229,0.1) ;color:rgb(30,136,229)">酒店管理员</text></view>
+				<view class="info-item" style="margin-bottom: 12px;"><text style="color: rgb(144,147,153);font-size: 16px;">hanfengcfp@outlook.com</text></view>
+				<view class="info-item"><text style="color:rgb(30,136,229);font-size: 16px;font-weight: 700;">编辑个人资料></text></view>
+			</view>
+			</view>
+			
+		</view>
+	
+		<view class="hotel-area">
+			<view class="title">
+				<text class="txt">当前酒店</text><text class="btn-txt">查看全部</text>
+			</view>
+			<view class="card"> 
+				<view class="img-area">
+					<image :src="topImg()" style="height: 100%;width: 100%;" mode="aspectFill"></image>
+				</view>
+				<view class="card-title-group">
+					<view class="card-title-area">
+						<view class="card-title"><text class="txt">银洒酒店</text></view>
+						<view class="card-subtitle"><text class="txt">莫干山裸心谷111号</text></view>
+					</view>
+					<view class="state">
+						<text class="txt">正常运营</text>
+					</view>
+				</view>
+			</view>
+			<view class="card">
+					<operation></operation>
+								
+			</view>
+		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
 </template>
 
 <script setup>
-	
-	const hotel =uni.getStorageSync("hotel");
+	import { state } from "@/store/store";
+	import operation from "./components/operation.uvue";
+	const hotel =computed(()=>{
+		return state.hotel;
+	});
+	const topImg =():string=>{
+			
+		if(hotel===null){
+			return '/static/images/hotel.png';
+		}
+		
+		const firstImages = hotel.value['firstImages'] as string | null;
+		if(firstImages==''||firstImages==null){
+			return '/static/images/hotel.png';
+		}
+		return firstImages;
+	};
+	console.log(hotel.value)
 	
 </script>
 
-<style>
-
+<style lang="scss">
+.user-area{
+	
+	
+	padding:15px;
+	.card{
+		
+		box-sizing: border-box;
+		padding:18px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		background-color: #fff;
+		border-radius: 12px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+		// box-shadow: 0 4px 12px rgba(0,0,0,0.85);
+		.avator{
+			width: 80px;
+			height: 80px;
+			background-color: silver;
+			margin-right: 25px;
+			border-radius: 40px;
+		}
+		.info{
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			height: 100%;
+			.info-item{
+				display: flex;flex-direction: row;align-items: center;
+				
+			}
+		}
+	}
+	
+}
+.hotel-area{
+	padding:15px;
+	.title{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		padding:18px 0;
+		.txt{
+			color: rgb(30,30,30);
+			font-weight: 700;
+			font-size: 22px;
+		}
+		.btn-txt{
+			font-size: 16px;
+			color: rgb(30 ,136 ,229);
+		}
+	}
+	.card{
+		background-color: #fff;
+		border-radius: 12px;
+		margin-bottom: 32px;
+		.img-area{
+			height: 350rpx;
+			background-color: #eee;
+		}
+		.card-title-group{
+			display: flex;
+			flex-direction: row;
+	
+			justify-content: space-between;
+			padding:18px 25px;
+			.card-title-area{
+				.card-title{
+					.txt{
+						color: rgb(30,30,30);
+						font-weight: 700;
+						font-size: 20px;
+					}
+				}
+				.card-subtitle{
+					margin-top: 8px;
+					.txt{
+						color: rgb(144,147,153 );
+						font-size: 14px;
+					}
+				}
+			}
+			.state{
+				
+				
+				.txt{
+					background-color: rgba(255, 152, 0,0.1);
+					color: rgb(255, 152 ,0);
+					font-size: 14px;
+					padding: 8px;
+					border-radius: 4px;
+				}
+			}
+		}
+		
+	}
+}
 </style>

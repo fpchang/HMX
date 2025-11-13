@@ -1,5 +1,5 @@
 <template>
-	<rice-navbar title="" border height="72px">
+	<rice-navbar title="" border >
 		<template #left>
 			<view style="display: flex;flex-direction: row;">
 				<navigator open-type="navigateBack">
@@ -44,7 +44,7 @@
 							</view>
 							<view class="card-subtitle">
 								<image src="/static/icons/position_black.png"
-									style="width:14px;height:14px;margin-right: 4px;"></image>
+									style="width:18px;height:18px;margin-right: 4px;"></image>
 								<text
 									class="txt">{{(hotel.hotelAddress as string | null) != null ? hotel.hotelAddress : '--'}}</text>
 							</view>
@@ -68,7 +68,7 @@
 							<view class="control-btn">
 								<view class="control-btn-group">
 									<image src="/static/icons/edit.png" style="width:25px;height:25px"></image>
-									<text style="color: rgba(22,93,255.1);padding-left: 4px;">编辑</text>
+									<text style="color: rgba(22,93,255,1);padding-left: 4px;">编辑</text>
 								</view>
 							</view>
 						</view>
@@ -179,7 +179,7 @@
 
 <style lang="scss">
 	.add-btn {
-		background-color: rgb(22, 93, 255);
+		// background-color: rgb(22, 93, 255);
 		display: flex;
 		flex-direction: row;
 		align-items: center;
@@ -188,8 +188,8 @@
 		border-radius: 8px;
 
 		.txt {
-			color: #fff;
-			font-size: 16px;
+			color: #1e88e5;
+			font-size: 15px;
 			padding-left: 4px;
 		}
 	}
@@ -220,7 +220,7 @@
 					flex-direction: row;
 
 					justify-content: space-between;
-					padding: 18px 25px;
+					padding: 15px;
 
 					.card-title-area {
 						.card-title {
@@ -240,6 +240,7 @@
 							.txt {
 								color: rgb(144, 147, 153);
 								font-size: 14px;
+								padding-left: 4px;
 							}
 						}
 					}

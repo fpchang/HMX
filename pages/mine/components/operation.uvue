@@ -6,7 +6,7 @@
 				
 				<view class="list-item" v-for="item in menuList" >
 					<navigator :url="item.url" hover-class="none">
-					<view class="groupIcon" :style="{'backgroundColor':item.bgColor}">
+					<view class="groupIcon">
 						<image :src="item.icon" class="icon-style" mode="aspectFit"></image>
 					</view>
 					<view>
@@ -32,27 +32,21 @@
 		url : string
 	}
 	const menuList : Array<menu> = [{
-		icon: "/static/icons/operation/add-bold.png",
+		icon: "/static/icons/mine/set.png",
 		label: "系统设置",
 		bgColor:"#165dff1a",
-		url: "/pages/order/createOrder/createOrder"
+		url: "/pages/set/set"
 	},
 	{
-		icon: "/static/icons/operation/addincome.png",
+		icon: "/static/icons/mine/fedback.png",
 		label: "意见反馈",
 		bgColor:"#722ed11a",
-		url: "/pages/order/createOrder/createOrder"
+		url: "/pages/mine/feedback/feedback"
 	},
 	{
-		icon: "/static/icons/operation/addincome.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
+		icon: "/static/icons/mine/kf.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
 		label: "客服中心",
 		bgColor:"#faad141a",
-		url: "/pages/order/createOrder/createOrder"
-	},
-	{
-		icon: "/static/icons/operation/addincome.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
-		label: "帮助中心",
-		bgColor:"rgba(82 ,196, 26,0.1)",//rgb(250 173 20 / var(--tw-text-opacity, 1))
 		url: "/pages/order/createOrder/createOrder"
 	}
 	]
@@ -60,7 +54,7 @@
 
 <style lang="scss">
 	.card {
-		background-color: #fff;
+		// background-color: #fff;
 		padding: 15px;
 
 		.title {
@@ -77,10 +71,10 @@
 			display: flex;
 			flex-direction: row;
 			flex-wrap: wrap;
-			justify-content: space-evenly;
+			
 
 			.list-item {
-				width: 85px;
+				width: 80px;
 				height:100px;
 				display: flex;
 				flex-direction: column;
@@ -88,19 +82,18 @@
 				justify-content: center;
 
 				.groupIcon {
-					width:60px;
-					height:60px;
+	
 					display: flex;
 					flex-direction: row;
 					align-items: center;
 					justify-content: center;
-					border-radius: 30px;
-					background-color: #165dff1a;
+					
+					
 					
 
 					.icon-style {
-						width: 18px;
-						height: 18px;
+						width: 50px;
+						height: 50px;
 					}
 				}
 

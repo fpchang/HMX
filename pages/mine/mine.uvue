@@ -4,12 +4,14 @@
 	<!-- #endif -->
 		<view class="user-area">
 			<view class="card"> 
-			<view class="avator"></view>
+			<view class="avator">
+				<image src="/static/icons/mine/avator.png" style="height:60px;width:60px" mode="aspectFit"></image>
+			</view>
 			<view class="info">
 				<view class="info-item"  style="margin-bottom: 4px;">
-					<text style="color: rgb(30,30,30);font-weight: 700;font-size: 24px;">张明</text>
+					<text style="color: rgb(30,30,30);font-weight: 700;font-size: 24px;">{{user.userName}}</text>
 					<text style="margin-left:14px; padding:4px 10px ;border-radius: 12px; background-color:rgba(30,136,229,0.1) ;color:rgb(30,136,229)">酒店管理员</text></view>
-				<view class="info-item" style="margin-bottom: 12px;"><text style="color: rgb(144,147,153);font-size: 16px;">hanfengcfp@outlook.com</text></view>
+				<view class="info-item" style="margin-bottom: 12px;"><text style="color: rgb(144,147,153);font-size: 16px;">{{emergency_phone_number((user.phone ?? '') as string)}}</text></view>
 				<view class="info-item"><text style="color:rgb(30,136,229);font-size: 16px;font-weight: 700;">编辑个人资料></text></view>
 			</view>
 			</view>
@@ -18,7 +20,11 @@
 	
 		<view class="hotel-area">
 			<view class="title">
-				<text class="txt">当前酒店</text><text class="btn-txt">查看全部</text>
+				<text class="txt">当前酒店</text>
+				<navigator url="/pages/hotelManage/hotelList/hotelList">
+					<text class="btn-txt">查看全部</text>
+				</navigator>
+				
 			</view>
 			<view class="card"> 
 				<view class="img-area">
@@ -26,8 +32,11 @@
 				</view>
 				<view class="card-title-group">
 					<view class="card-title-area">
-						<view class="card-title"><text class="txt">银洒酒店</text></view>
-						<view class="card-subtitle"><text class="txt">莫干山裸心谷111号</text></view>
+						<view class="card-title"><text class="txt">{{hotel.hotelName}}</text></view>
+						<view class="card-subtitle">
+							<image src="/static/icons/position_black.png" style="width:14px;height:14px;margin-right: 4px;"></image>
+							<text class="txt">{{hotel.hotelAddress}}</text>
+							</view>
 					</view>
 					<view class="state">
 						<text class="txt">正常运营</text>
@@ -47,22 +56,25 @@
 <script setup>
 	import { state } from "@/store/store";
 	import operation from "./components/operation.uvue";
-	const hotel =computed(()=>{
+	import {emergency_phone_number} from "@/static/utils/telphone_transform.uts"
+	const user = computed(() => {
+		return state.user;
+	});
+	const hotel = computed(() => {
 		return state.hotel;
 	});
-	const topImg =():string=>{
-			
-		if(hotel===null){
+	
+	const topImg = (): string => {
+		if (hotel.value == null) {
 			return '/static/images/hotel.png';
 		}
-		
 		const firstImages = hotel.value['firstImages'] as string | null;
-		if(firstImages==''||firstImages==null){
+		if (firstImages == '' || firstImages == null) {
 			return '/static/images/hotel.png';
 		}
 		return firstImages;
 	};
-	console.log(hotel.value)
+	console.log(user.value)
 	
 </script>
 
@@ -88,6 +100,10 @@
 			background-color: silver;
 			margin-right: 25px;
 			border-radius: 40px;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
 		}
 		.info{
 			display: flex;
@@ -143,6 +159,9 @@
 				}
 				.card-subtitle{
 					margin-top: 8px;
+					display: flex;
+					flex-direction: row;
+					align-items: center;
 					.txt{
 						color: rgb(144,147,153 );
 						font-size: 14px;

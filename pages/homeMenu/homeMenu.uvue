@@ -11,7 +11,7 @@
 					<view class="list-item"  v-for="it in item.menu_item_list">
 						<navigator :url="it.url" hover-class="none">
 							<view class="item-content">
-								<view class="groupIcon" :style="{'backgroundColor':it.bgColor}">
+								<view class="groupIcon" >
 									<image :src="it.icon" class="icon-style" mode="aspectFit"></image>
 								</view>
 								<view>
@@ -48,27 +48,27 @@
 		{
 		title: "酒店设置",
 		title_icon:"/static/icons/homemenu/hotel-anage.png",
-		title_color:"rgba(22, 93, 255, 1)",
+		title_color:"rgb(30,30,30)",
 		menu_item_list: [{
-			icon: "/static/icons/homemenu/room-type.png",
+			icon: "/static/icons/homemenu/room-type1.png",
 			label: "房型管理",
 			bgColor: "rgba(22, 93, 255, 0.1)",
 			url: "/pages/order/createOrder/createOrder"
 		},
 		{
-			icon: "/static/icons/homemenu/room.png",
+			icon: "/static/icons/homemenu/room1.png",
 			label: "房间管理",
 			bgColor: "rgba(22, 93, 255, 0.1)",
 			url: "/pages/order/createOrder/createOrder"
 		},
 		{
-			icon: "/static/icons/homemenu/employee.png",
+			icon: "/static/icons/homemenu/employee1.png",
 			label: "员工管理",
 			bgColor: "rgba(22, 93, 255, 0.1)",
 			url: "/pages/order/createOrder/createOrder"
 		},
 		{
-			icon: "/static/icons/homemenu/hotel.png",
+			icon: "/static/icons/homemenu/hotel2.png",
 			label: "酒店展示",
 			bgColor: "rgba(22, 93, 255, 0.1)",
 			url: "/pages/order/createOrder/createOrder"
@@ -78,7 +78,7 @@
 		{
 		title: "财务",
 		title_icon:"/static/icons/homemenu/financia-green.png",
-		title_color:"rgb(72,187,120)",
+		title_color:"rgb(30,30,30)",
 		menu_item_list: [{
 			icon: "/static/icons/homemenu/income.png",
 			label: "收入管理",
@@ -86,13 +86,13 @@
 			url: "/pages/financialManagement/income/income"
 		},
 		{
-			icon: "/static/icons/homemenu/expense.png",
+			icon: "/static/icons/homemenu/expense1.png",
 			label: "支出管理",
 			bgColor:  "rgba(72,187,120,0.1)",
 			url: "/pages/financialManagement/expense/expense"
 		},
 		{
-			icon: "/static/icons/homemenu/financial-statistics.png",
+			icon: "/static/icons/homemenu/financial-statistics1.png",
 			label: "财务统计",
 			bgColor: "rgba(72,187,120,0.1)",
 			url: "/pages/financialManagement/fmchart/fmchart"
@@ -103,15 +103,15 @@
 {
 		title: "订单",
 		title_icon:"/static/icons/homemenu/order-manage.png",
-		title_color:"rgb(237,137,54)",
+		title_color:"rgb(30,30,30)",
 		menu_item_list: [{
-			icon: "/static/icons/homemenu/order.png",
+			icon: "/static/icons/homemenu/order1.png",
 			label: "订单管理",
 			bgColor: "rgba(237,137,54,0.1)",
 			url: "/pages/order/orderList/orderList"
 		},
 		{
-			icon: "/static/icons/homemenu/order-add.png",
+			icon: "/static/icons/homemenu/order-add1.png",
 			label: "添加订单",
 			bgColor: "rgba(237,137,54,0.1)",
 			url: "/pages/order/createOrder/createOrder"
@@ -127,7 +127,8 @@
 	.card {
 
 		padding: 15px;
-
+		background-color: #fff;
+		margin-bottom: 25px;
 		.title {
 			padding: 5px 5px 15px 5px;
 			color:#1f2937;
@@ -135,11 +136,11 @@
 			font-size: 24px;
 			display: flex;
 			flex-direction: row;
-			align-items: center;
+			align-items: flex-end;
 			.icon-stye{
-				width: 25px;
-				height: 25px;
-				margin-right: 8px;
+				width: 18px;
+				height: 18px;
+				margin-right: 4px;
 			}
 			.txt {
 				color: #1f2937;
@@ -179,13 +180,13 @@
 						flex-direction: row;
 						align-items: center;
 						justify-content: center;
-						border-radius: 30px;
-						background-color: #165dff1a;
-
+						border-radius: 12px;
+						//  background-color: #fff;
+						// box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
 						.icon-style {
-							width: 20px;
-							height: 20px;
+							width: 38px;
+							height: 38px;
 						}
 					}
 

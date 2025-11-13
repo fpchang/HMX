@@ -1,6 +1,6 @@
 <template>
 	<!-- #ifdef APP -->
-	<scroll-view style="flex:1;padding:15px">
+	<scroll-view style="flex:1">
 	<!-- #endif -->
 	<view style="padding:15px;border-radius: 12px;"> 
 <!-- 	<rice-form :model="form1"  ref="formRef1" label-width="100px" class="demo-form">

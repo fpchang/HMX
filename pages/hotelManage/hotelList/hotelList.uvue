@@ -103,7 +103,7 @@
 	import { state } from "@/store/store";
 	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
 	import { conFunction } from "@/pages/index/ComFuc.uts";
-	import { HotelService } from "/services/HotelService.uts";
+	import { HotelService } from "@/services/HotelService.uts";
 	let submitLoading = ref(false);
 	const hotelList = computed(() => {
 		return state.hotelList;
@@ -156,30 +156,30 @@
 		showDialog({
 			title: '确认删除此酒店',
 			message: "删除后将无法恢复，确认删除吗？",
-			beforeClose: async () => {
+			beforeClose: async () : Promise<boolean> => {
 				try {
-					await HotelService.deleteHotel(targetObj._id);
+					await HotelService.deleteHotel(targetObj._id as string);
 					await conFunction.getHotelList();
 					hideDialog();
 					uni.showToast({
 						title: "删除成功",
 						icon: "none"
 					});
-
+					return true;
 				} catch (e) {
 					uni.showToast({
 						title: "系统异常",
 						icon: "none"
-					})
+					});
+					return false;
 				}
-
 			},
-			confirm: async () => {
+			confirm: () => {
 			}, cancel: () => {
 				hideDialog();
 			}
-		})
 
+		});
 	}
 	const viewDetail = (targetObj : UTSJSONObject) => {
 		// this.type = 2;

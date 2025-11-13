@@ -23,12 +23,12 @@
 	
 	<xt-form-item label="酒店名称" tips="限50字以内，需填写完整官方名称" required>
 			<view>
-				<rice-input v-model="hotelForm.hotelName" placeholder="请输入酒店名称" focus-border focus-border-color="#165dff"/>
+				<rice-input bg-color="#fff" height="50px"  v-model="hotelForm.hotelName" placeholder="请输入酒店名称" focus-border  focus-border-color="#165dff"/>
 			</view>	
 	</xt-form-item>
 	<xt-form-item label="酒店地址" tips="限50字以内，需填写完整官方名称">
-			<view>
-				<rice-input v-model="hotelForm.hotelName" placeholder="请输入酒店名称" focus-border focus-border-color="#165dff"/>
+			<view style="background-color: #fff;">
+				<rice-input bg-color="#fff" height="50px" v-model="hotelForm.hotelName" placeholder="请输入酒店名称" focus-border focus-border-color="#165dff"/>
 			</view>	
 	</xt-form-item>
 

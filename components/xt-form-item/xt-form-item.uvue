@@ -28,9 +28,9 @@ const label = props.label;
 
 <style lang="scss">
 	.xt-form-item{
-		margin-top: 23px;
-		&:first-child{
-			margin-top: 0;
+		margin-bottom: 23px;
+		&:last-child{
+			margin-bottom: 0;
 		}
 		.label{
 				margin-bottom: 6px;

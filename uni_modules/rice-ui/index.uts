@@ -1,4 +1,4 @@
-export const version = '1.0.17'
+export const version = '1.0.18'
 export * from "./libs/store";
 export * from "./libs/use";
 export * from "./libs/plugin"
@@ -22,3 +22,4 @@ export * from "./components/rice-picker/index"
 export * from "./components/rice-swipe-actions/index"
 export * from "./components/rice-swipe-actions-item/index"
 export * from "./components/rice-tabs/index"
+export * from "./components/rice-uploader/index"

@@ -80,6 +80,7 @@
 	--rice-scroll-x-indicator-background: #f1f1f1;
 	--rice-form-error-color:#ee0a24;
 	--rice-form-item-border:#e7e7e7;
+	--rice-uploader-background: #f7f8fa;
 }
 
 .rice-theme-dark {
@@ -164,6 +165,7 @@
 	--rice-scroll-x-indicator-background: #262727;
 	--rice-form-error-color:#ee0a24;
 	--rice-form-item-border:#3a3a3c;
+	--rice-uploader-background: #262727;
 }
 
 /* #ifdef APP */

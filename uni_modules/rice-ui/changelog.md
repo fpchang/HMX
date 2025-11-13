@@ -1,6 +1,8 @@
+## 1.0.18（2025-10-29）
+- [新增] 新增 Uploader 上传组件 [文档](https://riceui.cn/components/uploader.html)
 ## 1.0.17（2025-10-24）
-[优化] 优化 Calendar 日历组件 date数据 变化时日历面板自动切换到对应的年月
-[修复] 修复 Calendar 日历组件 动态改变 min-date 和 max-date 不生效的问题
+- [优化] 优化 Calendar 日历组件 date数据 变化时日历面板自动切换到对应的年月
+- [修复] 修复 Calendar 日历组件 动态改变 min-date 和 max-date 不生效的问题
 ## 1.0.16（2025-10-22）
 - [修复] 修复 Input 组件 showPassword 参数无效的问题
 - [修复] iOS平台 修复 Tabs 组件 在某些情况下初始化时滚动位置不正确的问题

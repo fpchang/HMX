@@ -1,0 +1,63 @@
+<template>
+	<view class="xt-form-item">
+		<view class="label"><text class="txt">{{label}}</text><text class="required-style" v-if="required">*</text></view>
+		<view class="content">
+			<slot></slot>
+		</view>
+		<view class="tooltips"><text class="txt">{{tips}}</text></view>
+	</view>
+</template>
+
+<script setup>
+const props = defineProps({
+  label: {
+    type: String,
+    default: "",
+  },
+  tips: {
+    type: String,
+    default: "",
+  },
+  required: {
+    type: Boolean,
+    default: false,
+  }
+});
+const label = props.label;
+</script>
+
+<style lang="scss">
+	.xt-form-item{
+		margin-top: 23px;
+		&:first-child{
+			margin-top: 0;
+		}
+		.label{
+				margin-bottom: 6px;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+			.txt{
+				font-weight: 500;
+			}
+			.required-style{
+				color:rgb(239,68,68);
+			}
+		
+		
+		
+		}
+		.content{
+			display: flex;
+			flex-direction: column;
+		}
+		.tooltips{
+			margin-top: 6px;
+			.txt{
+				color:rgb(134,144,156);
+				font-size: 14px;
+			}
+			
+		}
+	}
+</style>

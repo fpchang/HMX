@@ -1,7 +1,6 @@
 
 import { ActionSheetProps, ActionSheetAction } from "./type.uts"
 import { debugWarn, getUID } from "../../libs/utils"
-import { isDark } from "../../libs/store"
 
 export type ActionSheetBusEvent = {
 	type : 'select' | 'cancel' | 'open' | 'close' | 'opened' | 'closed' | 'fail' | 'ready' | 'clickOverlay',

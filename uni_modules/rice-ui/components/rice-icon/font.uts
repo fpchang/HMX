@@ -363,4 +363,10 @@ export const fontData : FontData[] = [{
 }, {
 	name: 'trend-fill',
 	code: '\uea63'
+}, {
+	name: 'file-success-fill',
+	code: '\uea25'
+}, {
+	name: 'file-success',
+	code: '\uea2d'
 }]

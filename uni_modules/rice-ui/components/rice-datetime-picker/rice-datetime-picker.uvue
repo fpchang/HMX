@@ -298,7 +298,7 @@
 	}
 
 	const updateModelValue = (newVal : string) => {
-		if (!isVisible.value) return
+		if (!isVisible.value || modelValue.value == newVal) return
 		modelValue.value = newVal
 	}
 

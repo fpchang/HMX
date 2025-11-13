@@ -1,5 +1,5 @@
 <template>
-	<rice-navbar title="" border >
+	<rice-navbar title="" border>
 		<template #left>
 			<view style="display: flex;flex-direction: row;">
 				<navigator open-type="navigateBack">
@@ -14,7 +14,10 @@
 		<template #right>
 			<view class="add-btn">
 				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
-				<text class="txt">添加酒店</text>
+				<navigator url="/pages/hotelManage/createHotel/createHotel">
+					<text class="txt">添加酒店</text>
+				</navigator>
+
 			</view>
 		</template>
 	</rice-navbar>
@@ -55,7 +58,8 @@
 					</view>
 
 					<view class="control">
-						<view class="control-item" style="background-color: rgb(245,247,250);flex: 1;margin-right: 8px;">
+						<view class="control-item"
+							style="background-color: rgb(245,247,250);flex: 1;margin-right: 8px;">
 							<view class="control-btn">
 								<view class="control-btn-group">
 									<image src="/static/icons/view.png" style="width:25px;height:25px"></image>
@@ -64,7 +68,8 @@
 
 							</view>
 						</view>
-						<view class="control-item" style="background-color: rgba(22,93,255,0.1);height: 100%;flex: 1;margin-right: 8px;">
+						<view class="control-item"
+							style="background-color: rgba(22,93,255,0.1);height: 100%;flex: 1;margin-right: 8px;">
 							<view class="control-btn">
 								<view class="control-btn-group">
 									<image src="/static/icons/edit.png" style="width:25px;height:25px"></image>
@@ -72,8 +77,9 @@
 								</view>
 							</view>
 						</view>
-						<view class="control-item" style="background-color: rgba(239,68,68,0.1);height: 100%;width: 45px;">
-							<view class="control-btn">
+						<view class="control-item"
+							style="background-color: rgba(239,68,68,0.1);height: 100%;width: 45px;">
+							<view class="control-btn" @click="deleteHotel(hotel)">
 								<view class="control-btn-group">
 									<image src="/static/icons/delete.png" style="width:16px;height:16px"></image>
 
@@ -89,12 +95,15 @@
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
+
 </template>
 
 <script setup>
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui"
 	import { state } from "@/store/store";
 	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
 	import { conFunction } from "@/pages/index/ComFuc.uts";
+	import { HotelService } from "/services/HotelService.uts";
 	let submitLoading = ref(false);
 	const hotelList = computed(() => {
 		return state.hotelList;
@@ -122,7 +131,6 @@
 			alert.alertNoPermisson();
 			return;
 		}
-		// this.targetObj = JSON.parse(JSON.stringify(targetObj));
 		uni.navigateTo({
 			url: `/pages/hotelManage/createHotel/createHotel?1&&targetObj=${encodeURIComponent(JSON.stringify(this.targetObj))}`,
 		});
@@ -134,38 +142,44 @@
 	}
 	const deleteHotel = async (targetObj : UTSJSONObject) => {
 		if (targetObj.curRole != "administrator") {
-			alert.alertNoPermisson();
-			return;
-		}
-		const conf = await uni.showModal({
-			title: "确认删除此酒店",
-			content: "删除后将无法恢复,确认删除吗?",
-			cancelText: "取消",
-			confirmText: "确认",
-		});
-		if (conf["cancel"]) {
-			return;
-		}
-		submitLoading.value = true;
-		HotelService.deleteHotel(targetObj._id)
-			.then(async (res) => {
-				//console.log("删除成功");
-				// await this.$store.dispatch("getHotelList");
-				submitLoading.value = false;
-				uni.hideLoading();
-				// if (!this.hotelList || this.hotelList.length < 1) {
-				//   uni.reLaunch({ url: "/pages/index/index" });
-				// }
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
 			})
-			.catch((er) => {
-				//console.log("删除失败",er);
-				submitLoading.value = false;
-				uni.hideLoading();
-				uni.showModal({
-					content: "系统异常，请稍候再试！",
-					confirmText: "确认",
-				});
-			});
+			return;
+		}
+
+		showDialog({
+			title: '确认删除此酒店',
+			message: "删除后将无法恢复，确认删除吗？",
+			beforeClose: async () => {
+				try {
+					await HotelService.deleteHotel(targetObj._id);
+					await conFunction.getHotelList();
+					hideDialog();
+					uni.showToast({
+						title: "删除成功",
+						icon: "none"
+					});
+
+				} catch (e) {
+					uni.showToast({
+						title: "系统异常",
+						icon: "none"
+					})
+				}
+
+			},
+			confirm: async () => {
+			}, cancel: () => {
+				hideDialog();
+			}
+		})
+
 	}
 	const viewDetail = (targetObj : UTSJSONObject) => {
 		// this.type = 2;
@@ -267,6 +281,7 @@
 						display: flex;
 						flex-direction: row;
 						border-radius: 8px;
+
 						.control-btn {
 							flex: 1;
 							display: flex;

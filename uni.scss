@@ -81,3 +81,17 @@ $uni-font-size-paragraph:15px;
   	font-size: $uni-font-size-base;
   	cursor: pointer;
   }
+  .navbar-btn{
+	  display: flex;
+	  flex-direction: row;
+	  align-items: center;
+	  justify-content: center;
+	  padding: 12px 15px;
+	  border-radius: 8px;
+	  
+	  .txt {
+	  	color: #1e88e5;
+	  	font-size: 15px;
+	  	padding-left: 4px;
+	  }
+  }

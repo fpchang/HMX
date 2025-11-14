@@ -1,4 +1,26 @@
 <template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+	
+				<image src="/static/icons/add-form.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">添加酒店</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn">
+				<!-- <image src="/static/icons/add-form.png" style="width:18px;height: 18px;"></image> -->
+				
+					<text class="txt">保存</text>
+				
+	
+			</view>
+		</template>
+	</rice-navbar>
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
@@ -29,6 +51,56 @@
 	<xt-form-item label="酒店地址" tips="限50字以内，需填写完整官方名称">
 			<view style="background-color: #fff;">
 				<rice-input bg-color="#fff" height="50px" v-model="hotelForm.hotelName" placeholder="请输入酒店名称" focus-border focus-border-color="#165dff"/>
+			</view>	
+	</xt-form-item>
+	<xt-form-item label="特点" tips="限50字以内，需填写完整官方名称" required>
+			<view>
+				<rice-input bg-color="#fff" height="50px"  v-model="hotelForm.hotelName" placeholder="请输入酒店名称" focus-border  focus-border-color="#165dff"/>
+			</view>	
+	</xt-form-item>
+	<xt-form-item label="餐饮" tips="限50字以内，需填写完整官方名称" required>
+			<view>
+				<rice-input bg-color="#fff" height="50px"  v-model="hotelForm.hotelName" placeholder="请输入酒店名称" focus-border  focus-border-color="#165dff"/>
+			</view>	
+	</xt-form-item>
+	<xt-form-item label="基础设施" tips="限50字以内，需填写完整官方名称" required>
+			<view>
+				<rice-input bg-color="#fff" height="50px"  v-model="hotelForm.hotelName" placeholder="请输入酒店名称" focus-border  focus-border-color="#165dff"/>
+			</view>	
+	</xt-form-item>
+	<xt-form-item label="休闲设施" tips="限50字以内，需填写完整官方名称" required>
+			<view>
+				<rice-input bg-color="#fff" height="50px"  v-model="hotelForm.hotelName" placeholder="请输入酒店名称" focus-border  focus-border-color="#165dff"/>
+			</view>	
+	</xt-form-item>
+	<xt-form-item label="运动设施" tips="限50字以内，需填写完整官方名称" required>
+			<view>
+				<rice-input bg-color="#fff" height="50px"  v-model="hotelForm.hotelName" placeholder="请输入酒店名称" focus-border  focus-border-color="#165dff"/>
+			</view>	
+	</xt-form-item>
+	<xt-form-item label="客服电话" tips="限50字以内，需填写完整官方名称" required>
+			<view>
+				<rice-input bg-color="#fff" height="50px"  v-model="hotelForm.hotelName" placeholder="请输入酒店名称" focus-border  focus-border-color="#165dff"/>
+			</view>	
+	</xt-form-item>
+	<xt-form-item label="客服微信" tips="限50字以内，需填写完整官方名称" required>
+			<view>
+				<rice-input bg-color="#fff" height="50px"  v-model="hotelForm.hotelName" placeholder="请输入酒店名称" focus-border  focus-border-color="#165dff"/>
+			</view>	
+	</xt-form-item>
+	<xt-form-item label="备注" tips="限50字以内，需填写完整官方名称" required>
+			<view>
+				<rice-input bg-color="#fff" height="50px"  v-model="hotelForm.hotelName" placeholder="请输入酒店名称" focus-border  focus-border-color="#165dff"/>
+			</view>	
+	</xt-form-item>
+	<xt-form-item label="封面图片" tips="限50字以内，需填写完整官方名称" required>
+			<view>
+				<rice-input bg-color="#fff" height="50px"  v-model="hotelForm.hotelName" placeholder="请输入酒店名称" focus-border  focus-border-color="#165dff"/>
+			</view>	
+	</xt-form-item>
+	<xt-form-item label="酒店图片" tips="限50字以内，需填写完整官方名称" required>
+			<view>
+				<rice-input bg-color="#fff" height="50px"  v-model="hotelForm.hotelName" placeholder="请输入酒店名称" focus-border  focus-border-color="#165dff"/>
 			</view>	
 	</xt-form-item>
 

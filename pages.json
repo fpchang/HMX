@@ -85,7 +85,8 @@
 			"path" : "pages/order/createOrder/createOrder",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "",
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -146,7 +147,8 @@
 		{
 			"path": "pages/hotelManage/createHotel/createHotel",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
 			}
 		}
 	],

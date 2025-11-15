@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<l-upload @add="handleAdd" v-bind="$attrs" :sizeType="['compressed']" />
+		<l-upload @add="handleAdd" @remove="removeImg" v-bind="$attrs" :defaultFiles="filesList"   v-model="filesList"/>
 	</view>
 </template>
 
@@ -11,25 +11,32 @@
 			type: String,
 			default: "test",
 		},
-		imageList:{
+		default_files_list:{
 			type:Array<String>,
 			default:[]
 		}
 	});
-	const files = ref<LimeUploadFile[]>([]);
+
+	const emit = defineEmits(['uploadSuccess']);
+	const returnResult=()=>{
+		console.log("rrrr",filesList);
+		let list:string[] =filesList.value.map(item=>item.url);
+		emit("uploadSuccess",list);
+	}
+	const filesList = ref<LimeUploadFile[]>([]);
 	const transform=()=>{
-		if(props.imageList.length<1){
+		if(props.default_files_list.length<1){
 			return ;
 		}
-		for(let i =0;i<props.imageList.length;i++){
-			let arr = props.imageList[i].split("/") as Array<string>; 
-			const filename =arr[arr.length-1];
+		for(let i =0;i<props.default_files_list.length;i++){
+			// let arr = props.default_files_list[i].split("/") as Array<string>; 
+			// const filename =arr[arr.length-1];
 			let item:LimeUploadFile={
-				url: props.imageList[i] as string,
-				name: filename,
+				url: props.default_files_list[i] as string,
+				name: i.toString(),
 				type: 'image'
 			}
-			files.value.push(item);
+			filesList.value.push(item);
 		}			
 	}
 	transform();
@@ -57,12 +64,12 @@
 	
 	
 	}
-	const uploadevent = async (name : string, filePath : string) : Promise<string> => {
+	const uploadevent = async (name_ : string, filePath: string,item:LimeUploadFile) : Promise<string> => {
 		return new Promise((resolve, reject) => {
 			uniCloudStorageExtCo.getUploadFileOptions({
-				cloudPath: `${props.filePath}/${name}`, // 支持自定义目录
+				cloudPath: `${props.filePath}/${name_}`, // 支持自定义目录
 			}).then((uploadFileOptionsRes : UTSJSONObject) => {
-				console.log("aaaa", uploadFileOptionsRes);
+				//console.log("aaaa", uploadFileOptionsRes);
 				const uploadFileOptions = uploadFileOptionsRes['uploadFileOptions'] as UTSJSONObject;
 				const url = uploadFileOptions['url'] as string;
 				const name = uploadFileOptions['name'] as string;
@@ -88,7 +95,8 @@
 						// 数据库里可直接保存 fileURL 或 fileID
 
 						console.log("上传成功", uploadRes);
-						resolve("upload success");
+						item.url=uploadRes.fileURL as string;
+						resolve(uploadRes.fileURL as string);
 						//fileURL
 
 					},
@@ -109,12 +117,14 @@
 	const uploadExtStorage = async (files : LimeUploadFile[]) => {
 		let task : Array<Promise<string>> = [];
 		for (let i = 0; i < files.length; i++) {
-			const name  = files[i].name as string;
+			let item = files[i];
+			const name  = (`h${Date.now()}${i.toString()}${files[i].name}`) as string;
 			const filePath = await compressImage(files[i].path as string) as string;
-			task.push(uploadevent(name, filePath));
+			task.push(uploadevent(name, filePath,item));
 		}
 		const res = await Promise.all(task);
 		console.log("上传完成", res);
+		returnResult();
 
 	}
 
@@ -125,6 +135,12 @@
 		// const filePath = files[0].path;
 		uploadExtStorage(files);
 	}
+	const removeImg= (index:number, files : LimeUploadFile[]) => {
+		console.log(index,files);		
+		filesList.value.splice(index, 1);
+		returnResult();
+	}
+
 </script>
 
 <style lang="scss">

@@ -138,7 +138,7 @@
 			</xt-form-item>
 			<xt-form-item label="酒店图片" tips="" required>
 				<view>
-					<xt-file-upload :max="9"></xt-file-upload>
+					<xt-file-upload :max="9" :default_files_list="hotelForm.imagesList" @uploadSuccess="uploadSuccess"></xt-file-upload>
 				</view>
 			</xt-form-item>
 
@@ -171,6 +171,14 @@
 		phone : string,
 		password : string
 	}
+	const imagesList = [
+	    "https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img0.jpg",
+	    "https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img1.jpg",
+	    "https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img2.jpg",
+	    "https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img3.jpg",
+	    "https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img4.jpg"
+	   
+	  ];
 	const type = props.type;
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -235,6 +243,9 @@
 	const athleticFacilityCheckboxChange = (e:string[]) => { 
 					hotelForm.value.athleticFacility = e;
 				}
+	const uploadSuccess=(list:string[])=>{
+		console.log("得到的list：",list);
+	}
 	const init = async () => {
 		HotelService.getConfig_facilityConfig('base').then(list => {
 			facilityConfig_base.value = list;

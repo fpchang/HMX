@@ -138,7 +138,7 @@
 			</xt-form-item>
 			<xt-form-item label="酒店图片" tips="" required>
 				<view>
-					<xt-file-upload :max="9" v-model="hotelForm.imagesList"></xt-file-upload>
+					<xt-file-upload :max="9"></xt-file-upload>
 				</view>
 			</xt-form-item>
 

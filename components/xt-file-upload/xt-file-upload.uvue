@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<l-upload @add="handleAdd" v-bind="$attrs" />
+		<l-upload @add="handleAdd" v-bind="$attrs" :sizeType="['compressed']" />
 	</view>
 </template>
 
@@ -10,28 +10,55 @@
 		filePath: {
 			type: String,
 			default: "test",
+		},
+		imageList:{
+			type:Array<String>,
+			default:[]
 		}
 	});
-	const uniCloudStorageExtCo = uniCloud.importObject("ext_storage_co");
-	const handleAdd = (files : LimeUploadFile[]) => {
-		console.log('选择的文件:', files);
-		// const name = files[0].name;
-		// const filePath = files[0].path;
-		uploadExtStorage(files);
-	}
-	const uploadExtStorage = async (files : LimeUploadFile[]) => {
-		let task:Array<Promise<string>> =[];
-		for (let i = 0; i < files.length; i++) {
-			const name:string = files[i].name;
-			const filePath:string = files[i].path;
-			task.push(uploadevent(name,filePath));
+	const files = ref<LimeUploadFile[]>([]);
+	const transform=()=>{
+		if(props.imageList.length<1){
+			return ;
 		}
-		const res = await Promise.all(task);
-		console.log("上传完成",res);
-		
+		for(let i =0;i<props.imageList.length;i++){
+			let arr = props.imageList[i].split("/") as Array<string>; 
+			const filename =arr[arr.length-1];
+			let item:LimeUploadFile={
+				url: props.imageList[i] as string,
+				name: filename,
+				type: 'image'
+			}
+			files.value.push(item);
+		}			
 	}
-	const uploadevent = async (name : string, filePath : string):Promise<string> => {
-		return new Promise((resolve,reject)=>{
+	transform();
+	const uniCloudStorageExtCo = uniCloud.importObject("ext_storage_co");
+	const compressImage = (imgSrc: string):Promise<string> => {
+		return new Promise((resolve, reject) => {
+			// #ifdef H5 
+			resolve(imgSrc)
+			// #endif
+			// #ifndef  H5 
+			uni.compressImage({
+				src: imgSrc,
+				compressedWidth: 450,
+				success: res => {
+					//console.log("压缩后路径", res.tempFilePath);
+					resolve(res.tempFilePath as string)
+				},
+				fail: e => {
+					reject("")
+				}
+			})
+			//#endif
+	
+		})
+	
+	
+	}
+	const uploadevent = async (name : string, filePath : string) : Promise<string> => {
+		return new Promise((resolve, reject) => {
 			uniCloudStorageExtCo.getUploadFileOptions({
 				cloudPath: `${props.filePath}/${name}`, // 支持自定义目录
 			}).then((uploadFileOptionsRes : UTSJSONObject) => {
@@ -59,11 +86,11 @@
 							fileURL, // 文件URL（如果是私有权限，则此URL是无法直接访问的）
 						};
 						// 数据库里可直接保存 fileURL 或 fileID
-						
+
 						console.log("上传成功", uploadRes);
 						resolve("upload success");
 						//fileURL
-			
+
 					},
 					fail: (err) => {
 						console.log("上传失败", err);
@@ -77,7 +104,26 @@
 				uni.hideLoading();
 			});
 		});
-		
+
+	}
+	const uploadExtStorage = async (files : LimeUploadFile[]) => {
+		let task : Array<Promise<string>> = [];
+		for (let i = 0; i < files.length; i++) {
+			const name  = files[i].name as string;
+			const filePath = await compressImage(files[i].path as string) as string;
+			task.push(uploadevent(name, filePath));
+		}
+		const res = await Promise.all(task);
+		console.log("上传完成", res);
+
+	}
+
+	
+	const handleAdd = (files : LimeUploadFile[]) => {
+		console.log('选择的文件:', files);
+		// const name = files[0].name;
+		// const filePath = files[0].path;
+		uploadExtStorage(files);
 	}
 </script>
 

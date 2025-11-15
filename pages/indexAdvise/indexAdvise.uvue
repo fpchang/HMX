@@ -268,11 +268,8 @@
 				
 					.txt{
 						font-size: 18px;
-						color: #e6e6e6;
-					
-						letter-spacing: 2px;
-						text-align: justify;
 						color: #666;
+						letter-spacing: 2px;
 						line-height: 30px;
 					}
 				}

@@ -91,6 +91,7 @@
 				<text class="demo-block__title-text large">自定义颜色</text>
 				<view class="demo-block__body row">
 					<l-button class="btn" color="#7232dd" >默认按钮</l-button>
+					<!-- <l-button class="btn" color="#7232dd" text-color="red">默认按钮</l-button> -->
 					<l-button class="btn" color="#7232dd"  variant="outline">镂空按钮</l-button> 
 					<l-button class="btn" color="linear-gradient(to right, #ff6034, #ee0a24)">渐变按钮</l-button>
 				</view>	

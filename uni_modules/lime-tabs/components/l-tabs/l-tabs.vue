@@ -29,7 +29,7 @@
 						</slot>
 
 					</view>
-					<view class="l-tabs__track" v-if="tabs.length" :style="[trackStyle]" :class="{'l-tabs__track--transition': initialized && immediate || !immediate}"></view>
+					<view class="l-tabs__track" v-if="tabs.length" :style="[trackStyle, shouldSkipInitialAnimation ? { visibility: 'hidden' } : {}]" :class="{'l-tabs__track--transition': !shouldSkipInitialAnimation}"></view>
 				</view>
 			</scroll-view>
 			<slot name="right"></slot>
@@ -172,6 +172,7 @@
 			})
 			
 			const initialized = ref(false)
+			const shouldSkipInitialAnimation = computed(():boolean=> !(initialized.value && props.immediate || !props.immediate)) 
 			const moveToActiveTab = () => {
 				nextTick(() => {
 					try {
@@ -208,7 +209,6 @@
 			const updateInnerStyle = (offset : number) => {
 				if (props.list && props.list.length > 0) return
 				nextTick(() => {
-					const immediateAni = !(initialized.value && props.immediate || !props.immediate)
 					Promise.all(
 						[
 							getRect('.l-tabs__content', context),
@@ -220,7 +220,7 @@
 								innerStyle['transition-duration'] = `0s`
 							} else {
 								if (props.animated) {
-									innerStyle['transition-duration'] = offset != 0 || !props.animated || immediateAni ? '0s' : `${props.duration}s`
+									innerStyle['transition-duration'] = offset != 0 || !props.animated || shouldSkipInitialAnimation.value ? '0s' : `${props.duration}s`
 								}
 								innerStyle.transform = `translateX(${left}px)`
 							}
@@ -347,7 +347,8 @@
 				onTouchStart,
 				onTouchMove,
 				onTouchEnd,
-				initialized
+				initialized,
+				shouldSkipInitialAnimation
 			}
 		}
 	})

@@ -61,29 +61,32 @@
 	
 	
 	const customFormat = (day : DateStriPDay) : DateStriPDay => {
-		const { date } = day;
-		const year = date.getFullYear();
-		const month = date.getMonth() + 1;
-		const curDate = date.getDate();
-	
-		day.suffix = '¥60';
-	
-		if (year == 2025) {
-			if (month == 2) {
-				const map = new Map<number, string>([
-					[1, '初一'],
-					[2, '初二'],
-					[3, '初三'],
-					[14, '情人节'],
-					[15, '元宵节'],
-				])
-				if (map.has(curDate)) {
-					day.prefix = map.get(curDate)!;
-					day.suffix = '¥100';
+		setTimeout(()=>{
+			const { date } = day;
+			const year = date.getFullYear();
+			const month = date.getMonth() + 1;
+			const curDate = date.getDate();
+				
+			day.suffix = '¥60';
+				
+			if (year == 2025) {
+				if (month == 2) {
+					const map = new Map<number, string>([
+						[1, '初一'],
+						[2, '初二'],
+						[3, '初三'],
+						[14, '情人节'],
+						[15, '元宵节'],
+					])
+					if (map.has(curDate)) {
+						day.prefix = map.get(curDate)!;
+						day.suffix = '¥100';
+					}
 				}
 			}
-		}
-	
+				
+		},3000)
+		
 		return day;
 	};
 </script>

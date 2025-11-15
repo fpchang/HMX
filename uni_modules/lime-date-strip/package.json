@@ -1,7 +1,7 @@
 {
   "id": "lime-date-strip",
   "displayName": "lime-date-strip 日期横条",
-  "version": "0.0.6",
+  "version": "0.0.9",
   "description": "lime-date-strip 日期横条用于展示周日历或一组日历信息，兼容uniapp/uniappx",
   "keywords": [
     "lime-date-strip",

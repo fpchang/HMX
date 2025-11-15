@@ -1,7 +1,7 @@
 {
   "id": "lime-segmented",
   "displayName": "lime-segmented 分段器",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "lime-segmented 分段器由至少 2 个分段控件组成，用作不同视图的显示，兼容uniapp/uniappx",
   "keywords": [
     "lime-segmented",

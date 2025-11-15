@@ -4,7 +4,7 @@
 			<slot name="icon" :checked="isChecked" :disabled="isDisabled">
 				<view class="l-checkbox__icon" ref="iconRef" 
 				:class="[
-					`l-checkbox__icon--${icon}`,
+					`l-checkbox__icon--${innerIcon}`,
 					{
 						'l-checkbox__icon--checked': isChecked,
 						'l-checkbox__icon--disabled': isDisabled,
@@ -174,7 +174,7 @@
 	const iconClasses = computed(():Map<string, boolean>=>{
 		const cls = new Map<string, boolean>()
 		cls.set(`${name}__icon--disabled`, isDisabled.value)
-		cls.set(`${name}__icon--${props.icon}`, true)
+		cls.set(`${name}__icon--${innerIcon.value}`, true)
 		// #ifdef APP
 		cls.set(`${name}__icon--checked`, isChecked.value && innerCheckedColor.value == null)
 		cls.set(`${name}__icon--indeterminate`, isIndeterminate.value && innerCheckedColor.value == null)
@@ -218,7 +218,7 @@
 		if(innerIconSize.value != null) {
 			style.set('--l-checkbox-icon-size', innerIconSize.value!)
 		}
-		
+		console.log('style', style)
 		return style
 	})
 	

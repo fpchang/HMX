@@ -33,10 +33,7 @@
 			<view class="demo-block card">
 				<text class="demo-block__title-text">占位符</text>
 				<view class="demo-block__body">
-					<l-switch :defaultValue="true" :placeholder="[
-						$t('message.directPass'),
-						$t('message.threeDirect')
-					]" style="margin-right: 10px;"></l-switch>
+					<l-switch :defaultValue="true" :placeholder="placeholder" style="margin-right: 10px;"></l-switch>
 				</view>
 			</view>
 			<view class="demo-block card">
@@ -100,8 +97,8 @@
 	const onClick = ()=>{
 		// index.value++
 		if(context == null) return
-		context.proxy!.$locale.value = context.proxy!.$locale.value != 'zh-CN' ? 'zh-CN' : 'en-US'
-		// placeholder.value = placeholders[index.value % 2]
+		// context.proxy!.$locale.value = context.proxy!.$locale.value != 'zh-CN' ? 'zh-CN' : 'en-US'
+		placeholder.value = placeholders[index.value % 2]
 	}
 	
 </script>

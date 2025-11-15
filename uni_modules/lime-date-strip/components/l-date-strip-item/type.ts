@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { DateStriPDay } from '../l-date-strip/type';
+import type { DateStriPDay } from '../l-date-strip/type';
 
 export interface DateStripItemProps {
 	dates: DateStriPDay[];

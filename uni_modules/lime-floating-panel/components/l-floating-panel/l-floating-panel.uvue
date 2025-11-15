@@ -1,5 +1,5 @@
 <template>
-	<!-- #ifdef APP-ANDROID || APP-IOS || APP-HARMONY || WEB -->
+	<!-- #ifdef UNI-APP-X && APP || WEB -->
 	<view class="l-floating-panel" :class="{ 'l-floating-panel--safe' : safeAreaInsetBottom}" :style="[styles]" ref="rootRef" @touchstart="onTouchstart"
 		@touchmove.stop="onTouchmove" 
 		@touchend="onTouchend" 
@@ -14,7 +14,7 @@
 		<slot></slot>
 	</view>
 	<!-- #endif -->
-	<!-- #ifndef APP-ANDROID || APP-IOS || APP-HARMONY || WEB -->
+	<!-- #ifndef UNI-APP-X && APP || WEB -->
 	<movable-area class="l-floating-panel-area" :style="[areaStyles]" :data-initialized="initialized">
 		<movable-view 
 			class="l-floating-panel" 
@@ -66,7 +66,7 @@
 	import { closest } from '@/uni_modules/lime-shared/closest';
 	import { unitConvert } from '@/uni_modules/lime-shared/unitConvert';
 	import { LFloatingPanelBoundary , FloatingPanelProps} from './type'
-	// #ifdef APP-ANDROID || APP-IOS || APP-HARMONY || WEB
+	// #ifdef UNI-APP-X && APP || WEB
 	import { useTouch } from './useTouch'
 	// #endif
 	const emit = defineEmits(['heightChange', 'change', 'update:height'])
@@ -106,6 +106,12 @@
 		if(props.bgColor != null) {
 			style.set('background-color', props.bgColor!)
 		}
+		// #ifdef APP
+		if(initialized.value) {
+			// 根据反馈 首次会闪现，需要先-100%，再回到0
+			style.set('bottom', 0)
+		}
+		// #endif
 		return style
 	})
 	
@@ -118,7 +124,7 @@
 		return style
 	})
 	
-	// #ifdef APP-ANDROID || APP-IOS || APP-HARMONY || WEB
+	// #ifdef UNI-APP-X && APP || WEB
 	const touch = useTouch()
 	const rootRef = ref<UniElement | null>(null)
 	const contentRef = ref<UniElement | null>(null)
@@ -156,6 +162,11 @@
 		touch.move(e);
 		const target = e.target!
 		const classNmae = target.classList.length > 0 ? target.classList[0] : '';
+		
+		// 添加移动距离阈值，只有移动超过阈值才认为是拖动
+		const MOVE_THRESHOLD = 10;
+		const moveDistance = Math.abs(touch.deltaY.value)
+		
 		// ios 鸿蒙 无法捕找到点击区域的classList
 		// 只有拖动了内容区域才进行判断是否需要阻止滚动
 		if (!['l-floating-panel__header', 'l-floating-panel__header-bar'].includes(classNmae) && contentRef.value != null) {
@@ -166,7 +177,7 @@
 			maxScroll = Math.max(maxScroll, scrollTop);
 			
 			if (!props.contentDraggable) return;
-			if (-startY < boundary.value.max) {
+			if (moveDistance > MOVE_THRESHOLD && -startY < boundary.value.max) {
 				e.preventDefault()
 				e.stopPropagation()
 			}
@@ -237,7 +248,7 @@
 	})
 	// #endif
 	
-	// #ifndef APP-ANDROID || APP-IOS || APP-HARMONY || WEB
+	// #ifndef UNI-APP-X && APP || WEB
 	const areaStyles = computed(() => {
 		return ({
 			height: addUnit(boundary.value.max * 2 - boundary.value.min),
@@ -336,10 +347,10 @@
 	defineExpose({
 		toAnchor: (index : number) => {
 			if(index >= 0 && index < anchors.value.length) {
-				// #ifndef APP-ANDROID || APP-IOS || APP-HARMONY || WEB
+				// #ifndef UNI-APP-X && APP || WEB
 				setCurrentY(calcY(anchors.value[index]))
 				// #endif
-				// #ifdef APP-ANDROID || APP-IOS || APP-HARMONY || WEB
+				// #ifdef UNI-APP-X && APP || WEB
 				jumpAnchor.value = index
 				// #endif
 			}
@@ -348,10 +359,10 @@
 	})
 </script>
 <style lang="scss">
-	/* #ifdef APP-ANDROID || APP-IOS || APP-HARMONY || WEB */
+	/* #ifdef UNI-APP-X && APP || WEB */
 	@import './index-u.scss';
 	/* #endif */
-	/* #ifndef APP-ANDROID || APP-IOS || APP-HARMONY || WEB */
+	/* #ifndef UNI-APP-X && APP || WEB */
 	@import './index.scss';
 	/* #endif */
 </style>

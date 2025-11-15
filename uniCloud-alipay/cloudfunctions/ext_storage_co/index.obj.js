@@ -44,6 +44,7 @@ module.exports = {
 			mimeLimit:"image/jpeg;image/png",
    			allowUpdate: false, // 是否允许覆盖更新，如果返回前端，建议设置false，代表仅新增，不可覆盖
    		});
+		console.log("KKKKKKKKKKK",uploadFileOptionsRes);
    		return uploadFileOptionsRes;
    	}
 }

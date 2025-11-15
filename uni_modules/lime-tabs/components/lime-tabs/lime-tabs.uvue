@@ -5,7 +5,7 @@
 		<view class="demo-block__body">
 			<view class="demo-block">
 				<text class="demo-block__title-text">基础用法1</text>
-				<view class="demo-block__body tabs">
+				<view class="demo-block__body">
 					<!-- <l-tabs v-model="typeIndex" 
 						v-if="alltypeList.length > 0"
 						color="#606266" activeColor="#C4302C" lineColor="#C4302C">
@@ -21,7 +21,8 @@
 							</view>
 						</template>
 					</l-tabs> -->
-					<l-tabs v-model="value" :list="list" immediate l-style="padding:3px; background: #eee; margin: 10px" ></l-tabs>
+					<!-- l-style="padding:3px; background: #eee; margin: 10px" -->
+					<l-tabs v-model="value" :list="list" immediate  ></l-tabs>
 				</view>
 			</view>
 			<view class="demo-block">

@@ -17,7 +17,7 @@ export type hotelBean = {
   serviceTel?: string,
   wechat: string,
   hotelAddress?: string,
-  hotelAddressArea: string,
+  hotelAddressArea: string | null,
   hotelAddressCode?: string,
   baseFacility?: Array<string>
 }

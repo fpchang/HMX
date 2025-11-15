@@ -76,9 +76,9 @@
 	 * @event {Function} scroll 滚动时触发
 	 * @event {Function} panelChange 切换面板时触发
 	 */
-	import { defineComponent, ref, computed, watchEffect, onMounted, nextTick  } from '@/uni_modules/lime-shared/vue';
+	import { defineComponent, ref, computed, watchEffect, onMounted, nextTick, reactive } from '@/uni_modules/lime-shared/vue';
 	import dateStripProps from './props';
-	import { WeekDateCollection, DateStriPDay, DateType } from './type';
+	import type { WeekDateCollection, DateStriPDay, DateType } from './type';
 	import { unitConvert } from '@/uni_modules/lime-shared/unitConvert'
 	import { getWeekRange, addDays, addWeeks, calcType, daysBetween } from './utils';
 	
@@ -133,7 +133,7 @@
 					const year = date.getFullYear();
 					const month = date.getMonth() + 1; 
 					const day =  date.getDate()
-					const dateObj:DateStriPDay = {
+					const dateObj:DateStriPDay = reactive({
 						key: `${year}-${month}-${day}`,
 						date,
 						year,
@@ -142,7 +142,7 @@
 						text: `${day}`.padStart(2, '0'),
 						type: calcType(date, minDate.value, maxDate.value, selectedDate.value),
 						prefix: props.weekdays[week],
-					}
+					})
 					dates.push(props.format != null ? props.format!(dateObj) : dateObj);
 				}
 				const obj:WeekDateCollection = {

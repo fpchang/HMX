@@ -1,3 +1,6 @@
+## 0.2.1（2025-10-21）
+- fix: 修复uniapp 未导出innerPlaceholderStyle导致报错
+- fix: 修复labelStylep写错的问题
 ## 0.2.0（2025-09-29）
 - fix: 修复uniapp 缺少box-sizing导致样式问题
 ## 0.1.9（2025-06-27）

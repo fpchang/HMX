@@ -19,7 +19,12 @@ $floating-panel-bar-radius: create-var(floating-panel-bar-radius, 3px);
 	position: fixed;
 	left: 0;
 	// bottom: -150rpx;
+	// #ifndef UNI-APP-X && APP
 	bottom: 0;
+	// #endif
+	// #ifdef UNI-APP-X && APP
+	bottom: -100%;
+	// #endif
 	width: 100%;
 	z-index: $floating-panel-z-index;
 	display: flex;
@@ -42,7 +47,7 @@ $floating-panel-bar-radius: create-var(floating-panel-bar-radius, 3px);
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		// #ifndef APP-ANDROID || APP-IOS || APP-HARMONY
+		// #ifndef UNI-APP-X && APP
 		cursor: grab;
 		user-select: none;
 		// #endif

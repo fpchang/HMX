@@ -126,14 +126,16 @@ $placeholder-offset: calc(1.20 * #{$switch-height} - #{$switch-dot-offset});
 		
 		justify-content: center;
 		align-items: center;
-		
-		overflow: visible;
+		// ios 初始化时可能不生效 
+		// overflow: visible;
 		transition-duration: 300ms;
 		transition-property: background-color, opacity, left, max-width, width, box-shadow, transform;
 		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 		// transition: all cubic-bezier(0.4, 0, 0.2, 1);
 		// transition: background-color .3s var(--n-bezier), left .3s var(--n-bezier), opacity .3s var(--n-bezier), max-width .3s var(--n-bezier), box-shadow .3s var(--n-bezier);
 		/* #ifndef UNI-APP-X && APP */
+		// ios 初始化时可能不生效
+		overflow: visible;
 		display: flex;
 		width: $switch-dot-size-pressed;//$switch-dot-size;
 		max-width: $switch-dot-size;

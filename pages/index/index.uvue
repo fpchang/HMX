@@ -322,26 +322,6 @@
 			}
 		}
 
-		.zcard-active- {
-			background-color: #004af6;
 
-			.zcard-right {
-
-
-				.title {
-
-					.txt {
-						color: #fff;
-					}
-				}
-
-				.subtitle {
-					.txt {
-						color: #eee;
-					}
-
-				}
-			}
-		}
 	}
 </style>

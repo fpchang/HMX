@@ -10,7 +10,7 @@ export interface LoadingProps {
   // #endif
   text?: string;
   textColor?: string;
-  textSize?: string;
+  textSize?: string|number;
   mode: 'raf' | 'animate';
   vertical: boolean;
   animated: boolean;

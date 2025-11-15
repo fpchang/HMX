@@ -1,7 +1,7 @@
 {
   "id": "lime-tabs",
   "displayName": "lime-tabs 选项卡",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "lime-tabs 标签页选项卡组件，用于在不同的内容区域之间进行切换。兼容uniapp/uniappx",
   "keywords": [
     "lime-tabs",

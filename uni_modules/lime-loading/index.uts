@@ -333,7 +333,11 @@ export function useLoading(element : Ref<UniElement | null>) : UseLoadingReturn 
 	}
 
 	// 监听元素尺寸
+	let manualCheckTimer:number|null = null;
 	const getBoundingClientRect = () => {
+		if(manualCheckTimer != null){
+			clearTimeout(manualCheckTimer!);
+		}
 		requestAnimationFrame(()=> {
 			element.value?.getBoundingClientRectAsync()?.then(rect => {
 				if (rect.width == 0 || rect.height == 0) return
@@ -345,6 +349,7 @@ export function useLoading(element : Ref<UniElement | null>) : UseLoadingReturn 
 			})
 		})
 	}
+	
 	const resizeObserver : UniResizeObserver = new UniResizeObserver((_entries : UniResizeObserverEntry[]) => {
 		getBoundingClientRect()
 	});
@@ -353,7 +358,10 @@ export function useLoading(element : Ref<UniElement | null>) : UseLoadingReturn 
 		if (element.value == null) return
 		resizeObserver.observe(element.value!);
 		// #ifdef APP-IOS
-		getBoundingClientRect()
+		// nextTick(getBoundingClientRect)
+		 manualCheckTimer = setTimeout(() => {
+			getBoundingClientRect();
+		}, 50);
 		// #endif
 	})
 

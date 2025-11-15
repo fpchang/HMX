@@ -1,5 +1,5 @@
 @import '~@/uni_modules/lime-style/index.scss';
-/* #ifndef APP-ANDROID || APP-HARMONY || APP-IOS */
+/* #ifndef UNI-APP-X && APP */
 @supports(background: conic-gradient(#000, #fff)) {
 	.check {
 		height: 1rpx;
@@ -107,7 +107,7 @@ $circle-stroke-cap-end-color: create-var(circle-stroke-cap-end-color, $circle-st
 }
 /*  #endif */
 
-/* #ifdef APP-ANDROID || APP-HARMONY || APP-IOS */
+/* #ifdef UNI-APP-X && APP */
 .l-circle {
 		// background-color: red;
 		&__inner {

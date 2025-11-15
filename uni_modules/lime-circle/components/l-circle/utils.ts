@@ -84,11 +84,11 @@ export function getCircleStyle(
     
     // 处理单色情况
     if (isString(strokeColor) || !strokeColor) {
-        // 使用CSS变量代替固定颜色
-        const colorVar = `--l-circle-${name}-color`;
-        startColor = `var(${colorVar})`;
-        endColor = `var(${colorVar})`;
-        background = `conic-gradient(from ${startDeg}deg, var(${colorVar}, var(--l-circle-${name}-base-color)) 0%, var(${colorVar}, var(--l-circle-${name}-base-color)) ${perimeter}%, transparent ${perimeter}%, transparent 100%)`;
+        // 直接使用颜色值，而不是CSS变量
+        const colorValue = strokeColor || '';
+        startColor = colorValue;
+        endColor = colorValue;
+        background = `conic-gradient(from ${startDeg}deg, ${colorValue} 0%, ${colorValue} ${perimeter}%, transparent ${perimeter}%, transparent 100%)`;
     } 
     // 处理渐变色情况
     else if (Array.isArray(strokeColor)) {
@@ -96,11 +96,7 @@ export function getCircleStyle(
         const len = strokeColor.length;
         
         for (let i = 0; i < len; i++) {
-            // 使用带索引的CSS变量
-            const colorVar = `--l-circle-${name}-color-${i + 1}`;
-            const colorValue = strokeColor[i].startsWith('--') ? 
-                `var(${strokeColor[i]})` :  // 如果已经是变量则直接使用
-                `var(${colorVar})`;         // 否则使用自动生成的变量名
+            const colorValue = strokeColor[i];
             
             if (i === 0) {
                 background += `${colorValue} 0%,`;
@@ -115,35 +111,21 @@ export function getCircleStyle(
         background += `transparent ${perimeter}%, transparent 100%)`;
     }
     
-	
     // 返回样式配置对象
-	const style = {
-        // color: startColor,
+    const style = {
+        color: startColor,
         [`--l-circle-${name}-cap-start`]: `${startDeg}deg`,
-        // [`--l-circle-${name}-cap-color-end`]: endColor,
         [`--l-circle-${name}-cap-end`]: `${perimeter / 100 * 360 + startDeg}deg`,
         [`--l-circle-${name}-cap-size`]: `${strokeWidth / 2}px`,
         mask,
         '-webkit-mask': mask,
         '--l-background': background,
-        // 添加颜色变量定义（如果传入的是固定颜色）
-        ...(isString(strokeColor) && !strokeColor.startsWith('--') 
-            ? { [`--l-circle-${name}-color`]: strokeColor } 
-            : {}),
-        ...(Array.isArray(strokeColor) 
-            ? strokeColor.reduce((acc, color, index) => {
-                if (!color.startsWith('--')) {
-                    acc[`--l-circle-${name}-color-${index + 1}`] = color;
-                }
-                return acc;
-            }, {} as Record<string, string>)
-            : {})
     }
-	
-	if(name !== 'trail') {
-		style[`--l-circle-${name}-cap-start-color`] = startColor
-		style[`--l-circle-${name}-cap-end-color`] = endColor
-	}
-	
-    return style
+    
+    if(name !== 'trail') {
+        style[`--l-circle-${name}-cap-start-color`] = startColor;
+        style[`--l-circle-${name}-cap-end-color`] = endColor;
+    }
+    
+    return style;
 }

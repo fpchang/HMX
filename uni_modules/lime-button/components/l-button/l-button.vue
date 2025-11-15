@@ -162,7 +162,9 @@
 						style['color'] = 'white'
 					}
 				}
-				
+				if(props.textColor) {
+					style['color'] = props.textColor
+				}
 				return style
 			})
 			const getuserinfo = (e) => {

@@ -25,7 +25,7 @@ export default {
 	},
 	strokeColor: {
 		type: [String , Array],
-		// default: '#2db7f5'
+		default: '#3283ff'
 	},
 	trailWidth: {
 		type: [String, Number],
@@ -33,7 +33,7 @@ export default {
 	},
 	trailColor: {
 		type: String,
-		// default: '#ddd'
+		default: '#eaeef2'
 	},
 	dashboard: Boolean,
 	clockwise: {

@@ -1,0 +1,86 @@
+<template>
+	<view>
+		<l-upload @add="handleAdd" v-bind="$attrs" />
+	</view>
+</template>
+
+<script setup>
+	import { LimeUploadFile } from '@/uni_modules/lime-upload';
+	const props = defineProps({
+		filePath: {
+			type: String,
+			default: "test",
+		}
+	});
+	const uniCloudStorageExtCo = uniCloud.importObject("ext_storage_co");
+	const handleAdd = (files : LimeUploadFile[]) => {
+		console.log('选择的文件:', files);
+		// const name = files[0].name;
+		// const filePath = files[0].path;
+		uploadExtStorage(files);
+	}
+	const uploadExtStorage = async (files : LimeUploadFile[]) => {
+		let task:Array<Promise<string>> =[];
+		for (let i = 0; i < files.length; i++) {
+			const name:string = files[i].name;
+			const filePath:string = files[i].path;
+			task.push(uploadevent(name,filePath));
+		}
+		const res = await Promise.all(task);
+		console.log("上传完成",res);
+		
+	}
+	const uploadevent = async (name : string, filePath : string):Promise<string> => {
+		return new Promise((resolve,reject)=>{
+			uniCloudStorageExtCo.getUploadFileOptions({
+				cloudPath: `${props.filePath}/${name}`, // 支持自定义目录
+			}).then((uploadFileOptionsRes : UTSJSONObject) => {
+				console.log("aaaa", uploadFileOptionsRes);
+				const uploadFileOptions = uploadFileOptionsRes['uploadFileOptions'] as UTSJSONObject;
+				const url = uploadFileOptions['url'] as string;
+				const name = uploadFileOptions['name'] as string;
+				const formData = uploadFileOptions['formData'] as UTSJSONObject;
+				const cloudPath = uploadFileOptionsRes['cloudPath'] as string; // 文件云端路径
+				const fileID = uploadFileOptionsRes['fileID'] as string; // 文件ID
+				const fileURL = uploadFileOptionsRes['fileURL'] as string; // 文件URL（如果是私有权限，则此URL是无法直接访问的）
+				const uploadTask = uni.uploadFile({
+					url,
+					name,
+					formData,
+					filePath,
+					success: (uploadFileRes) => {
+						if (uploadFileRes.statusCode !== 200) {
+							console.log("上传失败", uploadFileRes);
+							return;
+						}
+						const uploadRes = {
+							cloudPath, // 文件云端路径
+							fileID, // 文件ID
+							fileURL, // 文件URL（如果是私有权限，则此URL是无法直接访问的）
+						};
+						// 数据库里可直接保存 fileURL 或 fileID
+						
+						console.log("上传成功", uploadRes);
+						resolve("upload success");
+						//fileURL
+			
+					},
+					fail: (err) => {
+						console.log("上传失败", err);
+						reject("upload fail");
+					}
+				});
+				// 监听上传进度
+				uploadTask.onProgressUpdate((res) => {
+					console.log("监听上传进度", res);
+				});
+				uni.hideLoading();
+			});
+		});
+		
+	}
+</script>
+
+<style lang="scss">
+
+</style>

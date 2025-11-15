@@ -197,7 +197,7 @@ Vue.use(VueCompositionAPI)
 | tips | 输入框下方提示文本，会根据不同的 `status` 呈现不同的样式 | _string_ | - |
 | type | 输入框类型 | _'text' \| 'number' \| 'idcard' \| 'digit' \| 'safe-password' \| 'password' \| 'nickname'_ | - |
 | lStyle | 自定义样式 | _string \| UTSJSONObject_ | - |
-| lableStyle | 标签自定义样式 | _string \| UTSJSONObject_ | - |
+| labelStyle | 标签自定义样式 | _string \| UTSJSONObject_ | - |
 | tipsStyle | 提示文本自定义样式 | _string \| UTSJSONObject_ | - |
 | inputStyle | 输入框自定义样式 | _string \| UTSJSONObject_ | - |
 | borderColor | 边框颜色 | _string_ | - |

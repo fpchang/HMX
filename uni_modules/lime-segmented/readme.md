@@ -37,7 +37,7 @@ const options = ['选项1','选项2','选项3','选项4'];
 ```
 
 ### 类型
-通过`type`设置分段器类型，可选值有`button`、`text`，默认值为`card`。
+通过`type`设置分段器类型，可选值有`button`、`card`、`text`，默认值为`card`。
 
 ```html
 <l-segmented v-model="value" type="button" />

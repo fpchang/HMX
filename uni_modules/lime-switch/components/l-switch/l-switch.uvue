@@ -1,6 +1,6 @@
 <template>
 	<view class="l-switch">
-		<view class="l-switch__rail" ref="switchContainerRef" :hover-start-time="20" :hover-stay-time="70"
+		<view class="l-switch__rail" ref="switchRailRef" :hover-start-time="20" :hover-stay-time="70"
 			@longpress="handleLongPress " :hover-class="hoverClass" :class="classes" :style="[styles]"
 			aria-role="switch" @touchend="handleTouchEnd" @touchcancel="handleTouchEnd" @click="handleClick">
 			<!-- #ifndef UNI-APP-X && APP -->
@@ -135,7 +135,7 @@
 	})
 	const styles = computed(() : Map<string, any> => {
 		const style = new Map<string, any>();
-		// #ifndef UNI-APP-X && APP
+		
 		if (props.width != null) {
 			style.set('--l-switch-width', props.width!)
 		}
@@ -168,7 +168,7 @@
 			style.set('--l-switch-checked-disabled-color', props.checkedColor!)
 			style.set('--l-switch-disabled-opacity', 0.5)
 		}
-
+		// #ifndef UNI-APP-X && APP
 		// #endif
 		// #ifdef UNI-APP-X && APP
 		if (props.width != null) {
@@ -204,8 +204,6 @@
 	// #endif
 	// #ifdef APP
 
-
-
 	// 常量定义
 	const PLACEHOLDER_SCALE_FACTOR = 1.2; // 占位符缩放因子，用于计算位置偏移
 	const TEXT_WIDTH_OFFSET = 20;        // 文本测量宽度补偿值（安卓平台专用）
@@ -222,12 +220,14 @@
 	const PLACEHOLDER_POSITION_ADJUSTMENT = 0; // 占位符位置补偿值（用于微调布局）IOS文本左对齐开头有点占位
 	// #endif
 	
-	// 响应式数据
-	let rootRect = ref<DOMRect | null>(null);  // 开关容器尺寸信息
-	let dotRect = ref<DOMRect | null>(null);   // 开关圆点尺寸信息
+	// 尺寸数据
+	const rootRectWidth = ref(0);    // 开关容器宽度
+	const rootRectHeight = ref(0);   // 开关容器高度
+	const dotRectWidth = ref(0);     // 圆点宽度
+	const dotRectHeight = ref(0);    // 圆点高度
 
 	// DOM 引用
-	const switchContainerRef = ref<UniElement | null>(null); // 开关容器元素引用
+	const switchRailRef = ref<UniElement | null>(null); // 开关容器元素引用
 	const dotRef = ref<UniElement | null>(null);      // 可拖动圆点元素引用
 	const checkedStateRef = ref<UniElement | null>(null);    // 开启状态文本容器引用
 	const uncheckedStateRef = ref<UniElement | null>(null);  // 关闭状态文本容器引用
@@ -251,12 +251,12 @@
 	/**
 	 * 计算属性：开关容器高度
 	 */
-	const switchContainerHeight = computed(() : number => unitConvert(props.height ?? rootRect.value?.height ?? 0));
+	const switchContainerHeight = computed(() : number => unitConvert(props.height ?? rootRectHeight.value ?? 0));
 
 	/**
 	 * 计算属性：圆点元素高度
 	 */
-	const dotElementHeight = computed(() : number => unitConvert(props.dotSize ?? dotRect.value?.height ?? 0));
+	const dotElementHeight = computed(() : number => unitConvert(props.dotSize ?? dotRectHeight.value ?? 0));
 
 	/**
 	 * 计算属性：圆点垂直居中偏移量
@@ -297,12 +297,13 @@
 	 * - iOS使用异步获取元素尺寸
 	 * - Android/Harmony使用文本测量方法
 	 */
-	watch(() : string[] => props.placeholder, () => {
+	watch(() : string[] => props.placeholder, (v: string[], o: string[]) => {
 		if (props.placeholder.length == 0) {
 			placeholderMaxWidth.value = 0;
 			return;
 		}
 		// #ifdef APP-IOS 
+		if(v.join('') == (o??[]).join('')) return
 		//|| APP && uniVersion >= 4.82
 		nextTick(() => {
 			setTimeout(()=>{
@@ -324,9 +325,7 @@
 		// #endif
 
 		// Android/Harmony平台使用文本测量
-		
 		// #ifdef APP-ANDROID || APP-HARMONY
-		
 		const rectPromises = props.placeholder.map((text):number => {
 			const fontSize = unitConvert(props.fontSize ?? uni.rpx2px(28));
 			const textWidth = measureTextSize(text, fontSize);
@@ -346,32 +345,15 @@
 
 	}, { immediate: true })
 
-
-
 	/**
 	 * 计算属性：当前圆点尺寸
 	 * @description 根据悬停状态返回圆点尺寸，悬停时取按压尺寸和默认尺寸的较大值
 	 */
 	const currentDotSize = computed(() : number => {
-		if (dotRect.value == null) return 0;
+		if (dotRectHeight.value == 0) return 0;
 		return isHovered.value
-			? Math.max(dotPressedDimension.value, dotRect.value!.height * DOT_PRESSED_SCALE)
-			: dotRect.value!.height;
-	});
-
-
-	/**
-	 * 计算属性：容器背景色
-	 * @description 根据开关状态和禁用状态返回对应的背景颜色
-	 */
-	const containerBackground = computed(() : string | null => {
-		return innerValue.value
-			? props.disabled
-				? props.checkedDisabledColor
-				: props.checkedColor
-			: props.disabled
-				? props.disabledColor
-				: props.uncheckedColor;
+			? Math.max(dotPressedDimension.value, dotRectHeight.value * DOT_PRESSED_SCALE)
+			: dotRectHeight.value;
 	});
 
 
@@ -392,37 +374,16 @@
 	 * @description 根据文本占位符宽度动态调整开关容器的总宽度
 	 */
 	const updateContainerLayout = () => {
-		if (rootRect.value == null || dotRect.value == null) return;
+		if (rootRectHeight.value == 0 || dotRectHeight.value == 0) return;
 
-		const containerWidth = placeholderMaxWidth.value > 0 && baseContainerWidth.value !== placeholderMaxWidth.value
-			? placeholderMaxWidth.value + rootRect.value!.height * CONTAINER_WIDTH_EXPAND_FACTOR
+		const containerWidth = placeholderMaxWidth.value > 0 && baseContainerWidth.value != placeholderMaxWidth.value
+			? placeholderMaxWidth.value + rootRectHeight.value * CONTAINER_WIDTH_EXPAND_FACTOR
 			: baseContainerWidth.value;
 
-		if (containerWidth !== baseContainerWidth.value) {
+		if (containerWidth != baseContainerWidth.value) {
 			baseContainerWidth.value = containerWidth;
-			switchContainerRef.value?.style.setProperty('width', `${containerWidth}px`);
+			switchRailRef.value?.style.setProperty('width', `${containerWidth}px`);
 		}
-	};
-
-
-	/**
-	 * 更新视觉状态
-	 * @description 处理禁用状态的透明度变化和背景色更新
-	 */
-	const updateVisualState = () => {
-		nextTick(() => {
-			// 处理未设置禁用颜色的回退逻辑
-			if (props.disabled && props.checkedColor != null && props.checkedDisabledColor == null) {
-				switchContainerRef.value?.style.setProperty('background-color', props.checkedColor);
-				switchContainerRef.value?.style.setProperty('opacity', INITIAL_OPACITY);
-				return;
-			}
-			if (containerBackground.value != null) {
-				
-				switchContainerRef.value?.style.setProperty('opacity', '1');
-				switchContainerRef.value?.style.setProperty('background-color', containerBackground.value);
-			}
-		});
 	};
 
 	/**
@@ -430,7 +391,7 @@
 	 * @description 根据开关状态计算圆点的水平位移，使用transform实现平滑动画
 	 */
 	const updateDotPosition = () => {
-		if (rootRect.value == null || dotRect.value == null) return;
+		if (rootRectWidth.value == 0 || dotRectHeight.value == 0) return;
 
 		const translateX = innerValue.value
 			? baseContainerWidth.value - currentDotSize.value - dotPositionOffset.value
@@ -461,15 +422,12 @@
 	watch(innerValue, () => {
 		updateContainerLayout()
 		updateDotPosition()
-		updateVisualState()
 	})
-
 
 	watch([placeholderMaxWidth, baseContainerWidth], () => {
 		updateContainerLayout()
 		updateDotPosition()
 	})
-
 
 	watch(() : boolean => props.loading, () => {
 		updateLoadingState()
@@ -485,25 +443,28 @@
 		dotRef.value?.style.setProperty('top', `${dotPositionOffset.value}px`);
 	})
 	
-	
-	
 	// 组件挂载后的初始化逻辑
 	onMounted(() => {
 		nextTick(() => {
-			if (switchContainerRef.value == null) return;
+			if (switchRailRef.value == null) return;
 
 			// 获取初始尺寸并设置布局
-			switchContainerRef.value?.getBoundingClientRectAsync()?.then(() => {
-				rootRect.value = switchContainerRef.value?.getBoundingClientRect();
-				dotRect.value = dotRef.value?.getBoundingClientRect();
-				baseContainerWidth.value = rootRect.value?.width ?? 0;
+			switchRailRef.value?.getBoundingClientRectAsync()?.then(() => {
+				const railRect = switchRailRef.value?.getBoundingClientRect();
+				const dotRect = dotRef.value?.getBoundingClientRect();
+				dotRef.value?.style.setProperty('overflow', `visible`);
+				// 更新具体尺寸值
+				rootRectWidth.value = railRect?.width ?? 0;
+				rootRectHeight.value = railRect?.height ?? 0;
+				dotRectWidth.value = dotRect?.width ?? 0;
+				dotRectHeight.value = dotRect?.height ?? 0;
+				
+				baseContainerWidth.value = rootRectWidth.value;
 
-
-				// 执行初始布局更新
 				updateContainerLayout();
 				updateDotPosition();
 				updateLoadingState();
-				updateVisualState();
+				
 			});
 		});
 	});

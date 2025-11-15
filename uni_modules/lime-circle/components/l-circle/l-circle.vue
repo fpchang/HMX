@@ -124,7 +124,10 @@
 				emit('update:current', v.toFixed(2))
 			})
 			const getProps = () => {
-				return Object.assign({}, props, { trailWidth: widths.value[0], strokeWidth: widths.value[1] })
+				return Object.assign({
+					// strokeColor: '#3283ff',
+					// trailColor: '#eaeef2',
+				}, props, { trailWidth: widths.value[0], strokeWidth: widths.value[1] })
 			}
 			// #ifdef APP-NVUE
 			const finished = ref(false)

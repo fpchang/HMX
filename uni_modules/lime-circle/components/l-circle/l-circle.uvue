@@ -159,7 +159,7 @@
 	// #endif
 	onMounted(() => {
 		nextTick(() => {
-			//  #ifdef APP-ANDROID || APP-IOS || APP-HARMONY
+			//  #ifdef UNI-APP-X && APP
 			const option : CircleOptions = {
 				size: unitConvert(props.size),
 				lineCap: props.lineCap,
@@ -197,7 +197,7 @@
 			    }
 			})
 			// #endif
-			//  #ifndef APP-ANDROID || APP-IOS || APP-HARMONY
+			//  #ifndef UNI-APP-X && APP
 			uni.createSelectorQuery().in(context).select('.check').boundingClientRect((res)=>{
 				useCanvas.value = !(res['height'] > 0 && !props.canvas)
 				if(!useCanvas.value) return

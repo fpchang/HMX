@@ -1,7 +1,7 @@
 {
   "id": "lime-button",
   "displayName": "lime-button 按钮",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "lime-button 按钮用于触发一个操作，支持自定义颜色等，兼容uniapp/uniappx",
   "keywords": [
     "lime-button",

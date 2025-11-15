@@ -82,7 +82,7 @@ export interface InputProps {
 	value?: string|number;
 	modelValue?: string|number;
 	lStyle?:string|UTSJSONObject;
-	lableStyle?:string|UTSJSONObject;
+	labelStyle?:string|UTSJSONObject;
 	tipsStyle?:string|UTSJSONObject;
 	inputStyle?:string|UTSJSONObject;
 	borderColor?:string;

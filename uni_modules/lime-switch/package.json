@@ -1,7 +1,7 @@
 {
   "id": "lime-switch",
   "displayName": "lime-switch 开关",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "lime-switch 用于控制某个功能的开启和关闭。可嵌套内容、禁用以及颜色配置，兼容uniapp/uniappx",
   "keywords": [
     "lime-switch",

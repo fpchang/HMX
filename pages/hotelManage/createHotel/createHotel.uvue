@@ -45,81 +45,100 @@
 
 			<xt-form-item label="酒店名称" tips="" required>
 				<view>
-					<rice-input bg-color="#fff" height="40px" font-size="14px" v-model="hotelForm.hotelName"
-						placeholder="请输入酒店名称" focus-border focus-border-color="#165dff" />
+
+					<!-- <rice-input bg-color="#fff" height="40px" font-size="14px" v-model="hotelForm.hotelName"
+						placeholder="请输入酒店名称" focus-border focus-border-color="#165dff" /> -->
+<l-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入酒店名称"
+						borderColor="#dcdfe6" :disabled="type==2" v-model="hotelForm.hotelName"></l-input>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="酒店地址" tips="" required>
 				<view>
 					<view @click="selectAddress()" class="address-group">
-						<text style="color:rgba(0,0,0,0.6);font-size: 14px;">点击选择地址</text>
-						<text style="font-size: 14px;" v-if="fieldValue7!=null">{{fieldValue7}}</text>
-						<rice-icon name="arrow-right"  color="#dcdfe6"/>
+						<view>
+							<text style="color:rgba(0,0,0,0.6);font-size: 14px;"
+								v-if="hotelForm.hotelAddressArea==null">选择地址</text>
+							<text style="font-size: 14px;"
+								v-if="hotelForm.hotelAddressArea!=null">{{hotelForm.hotelAddressArea}}</text>
+						</view>
+
+						<rice-icon name="arrow-right" color="#dcdfe6" />
 					</view>
 					<view style="height: 100px;">
 						<l-textarea style="height: 40px;flex: 1;" placeholderStyle="font-size:14px" classic
-							placeholder="请输入具体地址" layout="vertical"></l-textarea>
+							placeholder="请输入具体地址" layout="vertical" borderColor="#dcdfe6"
+							:disabled="type==2"></l-textarea>
 					</view>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="特点" tips="如：免费停车，宠物免费，户外泳池，草地烧烤等" required>
 				<view>
-					<rice-input bg-color="#fff" height="40px" v-model="hotelForm.hotelName" placeholder="请输入酒店名称"
-						focus-border focus-border-color="#165dff" />
+					<!-- <rice-input bg-color="#fff" height="40px" v-model="hotelForm.hotelName" placeholder="请输入酒店名称"
+						focus-border focus-border-color="#165dff" /> -->
 				</view>
 			</xt-form-item>
-			<xt-form-item label="餐饮" tips="" required>
-				<view>
-					<rice-input bg-color="#fff" height="40px" v-model="hotelForm.hotelName" placeholder="请输入酒店名称"
-						focus-border focus-border-color="#165dff" />
-				</view>
+			<xt-form-item label="餐饮" tips="" required>				
+					<l-checkbox-group @change="cateringCheckboxChange">
+						<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+							v-for="item in facilityConfig_catering">
+							<l-checkbox :disabled="type==2" :value="item ['_id']" :label="item.name" />
+						</view>
+					</l-checkbox-group>				
 			</xt-form-item>
 			<xt-form-item label="基础设施" tips="" required>
-				<view>
-					<rice-input bg-color="#fff" height="40px" v-model="hotelForm.hotelName" placeholder="请输入酒店名称"
-						focus-border focus-border-color="#165dff" />
-				</view>
+				<l-checkbox-group @change="baseCheckboxChange">
+				
+					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+						v-for="item in facilityConfig_base">
+						<l-checkbox :disabled="type==2" :value="item ['_id']" :label="item.name" />
+				
+					</view>
+				
+				</l-checkbox-group>
 			</xt-form-item>
 			<xt-form-item label="休闲设施" tips="" required>
-				<view>
-					<rice-input bg-color="#fff" height="40px" v-model="hotelForm.hotelName" placeholder="请输入酒店名称"
-						focus-border focus-border-color="#165dff" />
-				</view>
+				<l-checkbox-group @change="baseCheckboxChange">				
+					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+						v-for="item in facilityConfig_base">
+						<l-checkbox :disabled="type==2" :value="item ['_id']" :label="item.name" />				
+					</view>				
+				</l-checkbox-group>
 			</xt-form-item>
 			<xt-form-item label="运动设施" tips="" required>
-				<view>
-					<rice-input bg-color="#fff" height="40px" v-model="hotelForm.hotelName" placeholder="请输入酒店名称"
-						focus-border focus-border-color="#165dff" />
-				</view>
+				
+				<l-checkbox-group @change="athleticFacilityCheckboxChange">
+					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+						v-for="item in facilityConfig_athleticFacility">
+						<l-checkbox :disabled="type==2" :value="item ['_id']" :label="item.name" />				
+					</view>				
+				</l-checkbox-group>
 			</xt-form-item>
 			<xt-form-item label="客服电话" tips="" required>
 				<view>
-					<rice-input bg-color="#fff" height="40px" v-model="hotelForm.hotelName" placeholder="请输入酒店名称"
-						focus-border focus-border-color="#165dff" />
+					<l-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服电话"
+						borderColor="#dcdfe6" :disabled="type==2" v-model="hotelForm.serviceTel"></l-input>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="客服微信" tips="" required>
 				<view>
-					<rice-input bg-color="#fff" height="40px" v-model="hotelForm.hotelName" placeholder="请输入酒店名称"
-						focus-border focus-border-color="#165dff" />
+						<l-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服微信"
+						borderColor="#dcdfe6" :disabled="type==2" v-model="hotelForm.wechat"></l-input>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="备注" tips="" required>
 				<view>
-					<rice-input bg-color="#fff" height="40px" v-model="hotelForm.hotelName" placeholder="请输入酒店名称"
-						focus-border focus-border-color="#165dff" />
+					<l-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="备注内容"
+						borderColor="#dcdfe6" :disabled="type==2" v-model="hotelForm.hotelIntroduction"></l-input>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="封面图片" tips="" required>
 				<view>
-					<rice-input bg-color="#fff" height="40px" v-model="hotelForm.hotelName" placeholder="请输入酒店名称"
-						focus-border focus-border-color="#165dff" />
+					<xt-file-upload :max="1" :filePath="`HM/client/${hotel_id}/hotel`"></xt-file-upload>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="酒店图片" tips="" required>
 				<view>
-					<rice-input bg-color="#fff" height="40px" v-model="hotelForm.hotelName" placeholder="请输入酒店名称"
-						focus-border focus-border-color="#165dff" />
+					<xt-file-upload :max="9" v-model="hotelForm.imagesList"></xt-file-upload>
 				</view>
 			</xt-form-item>
 
@@ -130,19 +149,32 @@
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
-	<l-cascader v-model:visible="showSelectAreaPopup" v-model="cascaderValue7" :options="options7"
-		:subTitles="subTitles" title="请选择所在地区" @change="setAddress" />
+	<l-cascader v-model:visible="showSelectAreaPopup" v-model="cascaderValue7" :options="optionsAreaData"
+		:subTitles="subTitles" title="请选择所在地区" @change="onChange7" />
 
 </template>
 
 <script setup>
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
 	import { hotelBean } from "@/bean/hotelBean.uts";
+	import { HotelService } from "../../../services/HotelService";
+	import { useCascaderAreaData } from '@/uni_modules/lime-shared/areaData';
+	import { state } from '@/store/store.uts';
+	const props = defineProps({
+		type: {
+			type: Number,
+			default: 0,
+		}
+	});
 	type form = {
 		username : string,
 		phone : string,
 		password : string
 	}
+	const type = props.type;
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
 	const form1 = ref<form>({
 		username: '',
 		phone: '',
@@ -153,7 +185,7 @@
 		hotelName: "",
 		hotelAddress: "1",
 		hotelAddressCode: "",
-		hotelAddressArea: "",
+		hotelAddressArea: null,
 		hotelCoordinate: [],
 		hotelIntroduction: "",
 		firstImages: "",
@@ -166,6 +198,9 @@
 		wechat: "",
 		feature: []
 	});
+
+
+
 	const submit1 = async () => { }
 	const inputStyle = ref({
 		height: '24px',
@@ -173,18 +208,50 @@
 		backgroundColor: 'transparent',
 	});
 	const showSelectAreaPopup = ref(false);
-	import { useCascaderAreaData } from '@/uni_modules/lime-shared/areaData'
-	const options7 = useCascaderAreaData();
+	let optionsAreaData = ref<Array<UTSJSONObject>>([]);
 	const subTitles = ['请选择省份', '请选择城市', '请选择区/县'];
-	const visible7 = ref(false)
 	const cascaderValue7 = ref('');
-	const fieldValue7 = ref<string | null>(null);
-	const setAddress = (value : string, options : UTSJSONObject[]) => {
-		fieldValue7.value = options.map((item : UTSJSONObject) : any | null => (item['label'])).join('/');
+	//const fieldValue7 = ref<string | null>(null);
+	const onChange7 = (value : string, options : UTSJSONObject[]) => {
+		hotelForm.value.hotelAddressArea = options.map((item : UTSJSONObject) : any | null => (item['label'])).join('/');
 	};
 	const selectAddress = () => {
 		showSelectAreaPopup.value = true;
+		optionsAreaData.value = useCascaderAreaData();
 	}
+	const facilityConfig_base = ref<Array<UTSJSONObject> | null>(null);
+	const facilityConfig_catering = ref<Array<UTSJSONObject> | null>(null);
+	const facilityConfig_recreation = ref<Array<UTSJSONObject> | null>(null);
+	const facilityConfig_athleticFacility = ref<Array<UTSJSONObject> | null>(null);
+	const cateringCheckboxChange = (e:string[]) => { 
+		hotelForm.value.cateringServices=e;
+	}
+	const baseCheckboxChange = (e:string[]) => { 
+		hotelForm.value.baseFacility=e;
+	}
+	const recreationCheckboxChange = (e:string[]) => { 
+		hotelForm.value.recreationFacility=e;
+	}
+	const athleticFacilityCheckboxChange = (e:string[]) => { 
+					hotelForm.value.athleticFacility = e;
+				}
+	const init = async () => {
+		HotelService.getConfig_facilityConfig('base').then(list => {
+			facilityConfig_base.value = list;
+		});
+		HotelService.getConfig_facilityConfig('catering').then(list => {
+			console.log("3333333333", list)
+			facilityConfig_catering.value = list;
+		});
+		HotelService.getConfig_facilityConfig('recreation').then(list => {
+			facilityConfig_recreation.value = list;
+		});
+		HotelService.getConfig_facilityConfig('athleticFacility').then(list => {
+			facilityConfig_athleticFacility.value = list;
+		});
+		
+	}
+	init();
 </script>
 
 <style lang="scss">

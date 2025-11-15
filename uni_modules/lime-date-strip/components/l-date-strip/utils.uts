@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { WeekRange, DateType } from './type';
+import type { WeekRange, DateType } from './type';
 
 
 /**

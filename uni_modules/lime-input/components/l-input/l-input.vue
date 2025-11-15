@@ -15,7 +15,7 @@
 				</slot>
 			</view>
 			<text class="l-input__label" 
-				:style="[lableStyle]"
+				:style="[labelStyle]"
 				:class="{ 'l-input__label--gap': prefixIcon || $slots['prefix-icon']}"
 				v-if="label || $slots['label'] ">
 				<slot name="label">{{label}}</slot>
@@ -162,7 +162,7 @@
 	 * @property {string} value 输入值（支持v-model）
 	 * @property {string} modelValue 输入值（支持v-model）
 	 * @property {string} lStyle 根节点自定义样式
-	 * @property {string} lableStyle 标签样式
+	 * @property {string} labelStyle 标签样式
 	 * @property {string} tipsStyle 提示文本样式
 	 * @property {string} inputStyle 输入域样式
 	 * @property {string} borderColor 边框颜色（bordered时生效）
@@ -309,7 +309,8 @@
 				onNickNameReview,
 				clearInput,
 				onSuffixClick,
-				onSuffixIconClick
+				onSuffixIconClick,
+				innerPlaceholderStyle
 			}
 		}
 	})

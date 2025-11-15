@@ -215,7 +215,7 @@ export default {
 		type: String,
 		default: null
 	},
-	lableStyle: {
+	labelStyle: {
 		type: String,
 		default: null
 	},

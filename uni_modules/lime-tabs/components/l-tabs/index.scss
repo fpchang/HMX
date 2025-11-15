@@ -1,9 +1,6 @@
 @import '@/uni_modules/lime-style/index.scss';
 @import '@/uni_modules/lime-style/mixins/hairline.scss';
-
-/* #ifdef  uniVersion >= 4.75 */ 
 $use-css-var: true;
-/* #endif */
 
 $tabs: l-tabs;
 $item: l-tabs__item;

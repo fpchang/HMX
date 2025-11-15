@@ -14,9 +14,9 @@
 		<template #right>
 			<view class="navbar-btn">
 				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
-				<navigator url="/pages/hotelManage/createHotel/createHotel">
-					<text class="txt">添加酒店</text>
-				</navigator>
+				
+					<text class="txt" @click="addHotel">添加酒店</text>
+				
 
 			</view>
 		</template>
@@ -136,8 +136,9 @@
 		});
 	}
 	const addHotel = () => {
+		console.log("addhotel");
 		uni.navigateTo({
-			url: "/pages/hotelManage/createHotel/createHotel",
+			url: "/pages/hotelManage/createHotel/createHotel"
 		});
 	}
 	const deleteHotel = async (targetObj : UTSJSONObject) => {

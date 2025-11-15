@@ -9,6 +9,8 @@ $segmented-bg-color: create-var(segmented-bg-color, $fill-3);
 $segmented-padding-x: create-var(segmented-padding-x, $spacer-tn);
 $segmented-padding-y: create-var(segmented-padding-y, $spacer-tn);
 $segmented-radius: create-var(segmented-radius, $border-radius-sm);
+$segmented-round-radius: create-var(segmented-radius, 99px);
+
 $segmented-text-color: create-var(segmented-text-color, $text-color-1);
 $segmented-active-bg-color: create-var(segmented-active-bg-color, white);
 $segmented-active-text-color: create-var(segmented-active-text-color, $primary-color);
@@ -78,7 +80,7 @@ $segmented-large-font-size: create-var(segmented-large-font-size, $font-size-md)
 		}
 	}
 	&--round {
-		border-radius: 999px;
+		@include border-radius($segmented-round-radius);
 	}
 	&__item {
 		flex: 1;
@@ -122,7 +124,7 @@ $segmented-large-font-size: create-var(segmented-large-font-size, $font-size-md)
 	&__slider {
 		position: absolute;
 		left: 0;
-		transition-property: transform,width,height;
+		transition-property: transform,opacity;
 		transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
 		// transition-duration: 200ms;
 		background-color: $segmented-active-bg-color;

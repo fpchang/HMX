@@ -1,7 +1,7 @@
 {
   "id": "lime-circle",
   "displayName": "lime-circle 进度环-圆形进度条",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "lime-circle 进度环 提供css和canvas渲染的圆形进度环, 弧形进度条, 环形进度条, 有渐变色, 仪表盘等配置。兼容uniapp/uniappx",
   "keywords": [
     "进度环",
@@ -41,7 +41,8 @@
   },
   "uni_modules": {
     "dependencies": [
-      "lime-shared"
+      "lime-shared",
+      "lime-style"
     ],
     "encrypt": [],
     "platforms": {

@@ -1,9 +1,7 @@
 @import '~@/uni_modules/lime-style/index.scss';
 @import '~@/uni_modules/lime-style/functions.scss';
-/* #ifdef  uniVersion >= 4.75 */ 
-$use-css-var: true !default;
-/* #endif */
 
+$use-css-var: true;
 $checkbox: #{$prefix}-checkbox;
 $icon: #{$checkbox}__icon;
 

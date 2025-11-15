@@ -18,6 +18,7 @@
 				<!-- #ifndef APP -->
 				<view ref="navRef" class="l-tabs__nav">
 				<!-- #endif -->
+					<view ref="trackRef" :style="[trackStyle, shouldSkipInitialAnimation ? { visibility: 'hidden' } : {}]" class="l-tabs__track"></view>
 					<view class="l-tabs__item" v-for="(item, index) in tabs" :key="index" :style="[itemStyle]" :class="{
 							'l-tabs__item--active': index == currentIndex,
 							'l-tabs__item--evenly': spaceEvenly, 
@@ -50,7 +51,7 @@
 								]">{{item.label}}</text>
 						</slot>
 					</view>
-					<view ref="trackRef" :style="[trackStyle]" class="l-tabs__track"></view>
+					
 				<!-- #ifndef APP -->
 				</view>
 				<!-- #endif -->
@@ -176,6 +177,7 @@
 		}
 	} as WritableComputedOptions<number>);
 	const initialized = ref(false)
+	const shouldSkipInitialAnimation = computed(():boolean=> !(initialized.value && props.immediate || !props.immediate)) 
 	const styles = computed(() : Map<string, any> => {
 		const style = new Map<string, any>();
 		// #ifdef APP
@@ -293,6 +295,7 @@
 	})
 	
 	
+	
 	const scrollRef = ref<UniScrollViewElement | null>(null)
 	const trackRef = ref<UniElement | null>(null)
 	const navRef = ref<UniElement | null>(null)
@@ -328,7 +331,13 @@
 				
 				const tabsRects:DOMRect[] = []
 				elements.forEach((el)=>{
-					if(el.tagName == 'VIEW') {
+					// #ifdef WEB
+					const classList = [...el.classList]
+					// #endif
+					// #ifndef WEB
+					const classList = el.classList
+					// #endif
+					if(el.tagName == 'VIEW' && !classList.includes('l-tabs__track')) {
 						tabsRects.push(el.getBoundingClientRect())
 					}
 				})
@@ -397,7 +406,6 @@
 	}
 	const updateInnerStyle = (offset : number) => {
 		nextTick(() => {
-			const immediateAni = !(initialized.value && props.immediate || !props.immediate)
 			// #ifdef WEB || APP
 			if (innerRef.value == null) return;
 			const width = innerRef.value!.parentElement?.offsetWidth ?? 0;
@@ -410,7 +418,7 @@
 				innerRef.value!.style.setProperty('transform', `translateX(${left}px)`)
 			} else {
 				if (props.animated) {
-					innerRef.value!.style.setProperty('transition-duration', offset != 0 || !props.animated || immediateAni ? '0s' : `${props.duration}s`)
+					innerRef.value!.style.setProperty('transition-duration', offset != 0 || !props.animated || shouldSkipInitialAnimation.value ? '0s' : `${props.duration}s`)
 				}
 				nextTick(() => {
 					innerRef.value!.style.setProperty('transform', `translateX(${left}px)`)
@@ -431,7 +439,7 @@
 						innerStyle['transition-duration'] = `0s`
 					} else {
 						if (props.animated) {
-							innerStyle['transition-duration'] = offset != 0 || !props.animated || immediateAni ? '0s' : `${props.duration}s`
+							innerStyle['transition-duration'] = offset != 0 || !props.animated || shouldSkipInitialAnimation.value ? '0s' : `${props.duration}s`
 						}
 						innerStyle.transform = `translateX(${left}px)`
 					}

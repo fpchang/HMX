@@ -66,7 +66,7 @@
 	// @ts-nocheck
 	import { defineComponent, computed } from '@/uni_modules/lime-shared/vue';
 	import dateStripItemProps from './props';
-	import { DateStriPDay } from '../l-date-strip/type';
+	// import type { DateStriPDay } from '../l-date-strip/type';
 	
 	export default defineComponent({
 		props: dateStripItemProps,

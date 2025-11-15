@@ -1,7 +1,7 @@
 {
   "id": "lime-floating-panel",
   "displayName": "lime-floating-panel 浮动面板",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "lime-floating-panel 浮动在页面底部的面板，上下拖动来浏览内容，常用于提供额外的功能或信息。兼容uniapp/uniappx",
   "keywords": [
     "浮动面板",

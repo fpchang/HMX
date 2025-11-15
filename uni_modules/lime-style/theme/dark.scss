@@ -402,7 +402,7 @@ $border-color-4: $gray-6;//#{getSolidColor(#000, 12%)}; //$gray-6; // 重/按钮
 	--l-picker-mask-top-color: #{$gray-2};
 	--l-picker-loading-mask-color: rgba(0,0,0,.6);
 	--l-picker-item-color:  #{$text-color-1};
-	--l-picker-indicator-bg-color:  #{$fill-4};
+	--l-picker-indicator-bg-color:  #{$fill-3};
 	
 	// empty
 	--l-empty-opacity: 0.6;
@@ -481,7 +481,8 @@ $border-color-4: $gray-6;//#{getSolidColor(#000, 12%)}; //$gray-6; // 重/按钮
 	--l-dialog-title-color:  #{$text-color-1};
 	--l-dialog-content-color:  #{$text-color-2};
 	--l-dialog-close-color:  #{$text-color-3};
-	--l-dialog-bg-color:  #{$bg-color-container};
+	// --l-dialog-bg-color:  #{$bg-color-container};
+	--l-dialog-bg-color:  #{$gray-3};
 	--l-dialog-split-color: #{$border-color-2};
 	
 	// action-sheet

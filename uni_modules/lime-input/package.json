@@ -1,7 +1,7 @@
 {
   "id": "lime-input",
   "displayName": "lime-input 输入框",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "lime-input 用于文本信息输入。是对原生input组件的增强，兼容uniapp/uniappx",
   "keywords": [
     "lime-input",

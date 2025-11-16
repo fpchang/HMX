@@ -12,12 +12,8 @@
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn">
-				<!-- <image src="/static/icons/add-form.png" style="width:18px;height: 18px;"></image> -->
-
+			<view class="navbar-btn" @click="submitForm">
 				<text class="txt">保存</text>
-
-
 			</view>
 		</template>
 	</rice-navbar>
@@ -48,7 +44,7 @@
 
 					<!-- <rice-input bg-color="#fff" height="40px" font-size="14px" v-model="hotelForm.hotelName"
 						placeholder="请输入酒店名称" focus-border focus-border-color="#165dff" /> -->
-<l-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入酒店名称"
+					<l-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入酒店名称"
 						borderColor="#dcdfe6" :disabled="type==2" v-model="hotelForm.hotelName"></l-input>
 				</view>
 			</xt-form-item>
@@ -66,8 +62,8 @@
 					</view>
 					<view style="height: 100px;">
 						<l-textarea style="height: 40px;flex: 1;" placeholderStyle="font-size:14px" classic
-							placeholder="请输入具体地址" layout="vertical" borderColor="#dcdfe6"
-							:disabled="type==2"></l-textarea>
+							placeholder="请输入具体地址" layout="vertical" borderColor="#dcdfe6" :disabled="type==2"
+							v-model="hotelForm.hotelAddress"></l-textarea>
 					</view>
 				</view>
 			</xt-form-item>
@@ -77,40 +73,40 @@
 						focus-border focus-border-color="#165dff" /> -->
 				</view>
 			</xt-form-item>
-			<xt-form-item label="餐饮" tips="" required>				
-					<l-checkbox-group @change="cateringCheckboxChange">
-						<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
-							v-for="item in facilityConfig_catering">
-							<l-checkbox :disabled="type==2" :value="item ['_id']" :label="item.name" />
-						</view>
-					</l-checkbox-group>				
+			<xt-form-item label="餐饮" tips="" required>
+				<l-checkbox-group @change="cateringCheckboxChange">
+					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+						v-for="item in facilityConfig_catering">
+						<l-checkbox :disabled="type==2" :value="item ['_id']" :label="item.name" />
+					</view>
+				</l-checkbox-group>
 			</xt-form-item>
 			<xt-form-item label="基础设施" tips="" required>
 				<l-checkbox-group @change="baseCheckboxChange">
-				
+
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
 						v-for="item in facilityConfig_base">
 						<l-checkbox :disabled="type==2" :value="item ['_id']" :label="item.name" />
-				
+
 					</view>
-				
+
 				</l-checkbox-group>
 			</xt-form-item>
 			<xt-form-item label="休闲设施" tips="" required>
-				<l-checkbox-group @change="baseCheckboxChange">				
+				<l-checkbox-group @change="recreationCheckboxChange">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
 						v-for="item in facilityConfig_base">
-						<l-checkbox :disabled="type==2" :value="item ['_id']" :label="item.name" />				
-					</view>				
+						<l-checkbox :disabled="type==2" :value="item ['_id']" :label="item.name" />
+					</view>
 				</l-checkbox-group>
 			</xt-form-item>
 			<xt-form-item label="运动设施" tips="" required>
-				
+
 				<l-checkbox-group @change="athleticFacilityCheckboxChange">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
 						v-for="item in facilityConfig_athleticFacility">
-						<l-checkbox :disabled="type==2" :value="item ['_id']" :label="item.name" />				
-					</view>				
+						<l-checkbox :disabled="type==2" :value="item ['_id']" :label="item.name" />
+					</view>
 				</l-checkbox-group>
 			</xt-form-item>
 			<xt-form-item label="客服电话" tips="" required>
@@ -121,7 +117,7 @@
 			</xt-form-item>
 			<xt-form-item label="客服微信" tips="" required>
 				<view>
-						<l-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服微信"
+					<l-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服微信"
 						borderColor="#dcdfe6" :disabled="type==2" v-model="hotelForm.wechat"></l-input>
 				</view>
 			</xt-form-item>
@@ -133,12 +129,14 @@
 			</xt-form-item>
 			<xt-form-item label="封面图片" tips="" required>
 				<view>
-					<xt-file-upload :max="1" :filePath="`HM/client/${hotel_id}/hotel`"></xt-file-upload>
+					<xt-file-upload :max="1" :filePath="`HM/client/${hotel_id}/hotel`"
+						@uploadSuccess="uploadFirstImageSuccess"></xt-file-upload>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="酒店图片" tips="" required>
 				<view>
-					<xt-file-upload :max="9" :default_files_list="hotelForm.imagesList" @uploadSuccess="uploadSuccess"></xt-file-upload>
+					<xt-file-upload :max="9" :default_files_list="hotelForm.imagesList"
+						@uploadSuccess="uploadImageListSuccess"></xt-file-upload>
 				</view>
 			</xt-form-item>
 
@@ -172,13 +170,13 @@
 		password : string
 	}
 	const imagesList = [
-	    "https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img0.jpg",
-	    "https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img1.jpg",
-	    "https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img2.jpg",
-	    "https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img3.jpg",
-	    "https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img4.jpg"
-	   
-	  ];
+		"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img0.jpg",
+		"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img1.jpg",
+		"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img2.jpg",
+		"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img3.jpg",
+		"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img4.jpg"
+
+	];
 	const type = props.type;
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -209,7 +207,10 @@
 
 
 
-	const submit1 = async () => { }
+	const submitForm = async () => {
+		hotelForm.value.belong=state.user.phone;
+		console.log("submit",hotelForm.value);
+	}
 	const inputStyle = ref({
 		height: '24px',
 		padding: '0px',
@@ -231,20 +232,23 @@
 	const facilityConfig_catering = ref<Array<UTSJSONObject> | null>(null);
 	const facilityConfig_recreation = ref<Array<UTSJSONObject> | null>(null);
 	const facilityConfig_athleticFacility = ref<Array<UTSJSONObject> | null>(null);
-	const cateringCheckboxChange = (e:string[]) => { 
-		hotelForm.value.cateringServices=e;
+	const cateringCheckboxChange = (e : string[]) => {
+		hotelForm.value.cateringServices = e;
 	}
-	const baseCheckboxChange = (e:string[]) => { 
-		hotelForm.value.baseFacility=e;
+	const baseCheckboxChange = (e : string[]) => {
+		hotelForm.value.baseFacility = e;
 	}
-	const recreationCheckboxChange = (e:string[]) => { 
-		hotelForm.value.recreationFacility=e;
+	const recreationCheckboxChange = (e : string[]) => {
+		hotelForm.value.recreationFacility = e;
 	}
-	const athleticFacilityCheckboxChange = (e:string[]) => { 
-					hotelForm.value.athleticFacility = e;
-				}
-	const uploadSuccess=(list:string[])=>{
-		console.log("得到的list：",list);
+	const athleticFacilityCheckboxChange = (e : string[]) => {
+		hotelForm.value.athleticFacility = e;
+	}
+	const uploadFirstImageSuccess = (list : string[]) => {
+		console.log("得到的list：", list);
+	}
+	const uploadImageListSuccess = (list : string[]) => {
+		console.log("得到的list：", list);
 	}
 	const init = async () => {
 		HotelService.getConfig_facilityConfig('base').then(list => {
@@ -260,7 +264,7 @@
 		HotelService.getConfig_facilityConfig('athleticFacility').then(list => {
 			facilityConfig_athleticFacility.value = list;
 		});
-		
+
 	}
 	init();
 </script>

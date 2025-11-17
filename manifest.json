@@ -1,5 +1,5 @@
 {
-	"name": "HMX",
+	"name": "议宿",
 	"appid": "__UNI__6CB5534",
 	"description": "",
 	"versionName": "3.0.0",
@@ -121,6 +121,7 @@
 					"key": ""
 				}
 			}
-		}
+		},
+		"title": "议宿"
 	}
 }

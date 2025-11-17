@@ -126,11 +126,9 @@
 	});
 	const topImg =():string=>{	
 			console.log("11111111111",hotel_id.value,hotelList.value);
-		if(hotel===null){
-			console.log("222222222222222222222222");
+		if(hotel.value==null){
 			return '/static/images/hotel.png';
 		}
-		console.log("3333333333333333",hotel);
 		const firstImages = hotel.value['firstImages'] as string | null;
 		if(firstImages==''||firstImages==null){
 			return '/static/images/hotel.png';

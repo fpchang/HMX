@@ -1,22 +1,24 @@
 <template>
 	<view>
-		<l-upload @add="handleAdd" @remove="removeImg" v-bind="$attrs" :defaultFiles="filesList"   v-model="filesList"/>
+		<!-- <l-upload @add="handleAdd" @remove="removeImg" v-bind="$attrs" :defaultFiles="filesList"   v-model="filesList"/> -->
+		  <rice-uploader v-model="(filesList as UploaderFileItem[])" @remove="removeImg"  v-bind="$attrs" @add="handleAdd" :auto-upload="false"/>
 	</view>
 </template>
 
 <script setup>
-	import { LimeUploadFile } from '@/uni_modules/lime-upload';
+	//import { LimeUploadFile } from '@/uni_modules/lime-upload';
+	import { UploaderFileItem, UploaderComplete } from "@/uni_modules/rice-ui"
 	const props = defineProps({
 		filePath: {
 			type: String,
 			default: "test",
 		},
 		default_files_list:{
-			type:Array<String>,
+			type:Array,
 			default:[]
 		}
 	});
-	const filesList = ref<LimeUploadFile[]>([]);
+	let filesList = ref<UploaderFileItem[]>([]);
 	const emit = defineEmits(['uploadSuccess']);
 	const returnResult=()=>{
 		console.log("rrrr",filesList);
@@ -24,6 +26,7 @@
 		 filesList.value.map(item=>{
 			 list.push(item['url'] as string)
 		 });
+		 console.log("返回结果::",list)
 		emit("uploadSuccess",list);
 	}
 
@@ -32,12 +35,10 @@
 			return ;
 		}
 		for(let i =0;i<props.default_files_list.length;i++){
-			// let arr = props.default_files_list[i].split("/") as Array<string>; 
-			// const filename =arr[arr.length-1];
-			let item:LimeUploadFile={
+			let item:UploaderFileItem={
 				url: props.default_files_list[i] as string,
-				name: i.toString(),
-				type: 'image'
+				status:"success",
+				name: i.toString()
 			}
 			filesList.value.push(item);
 		}			
@@ -67,12 +68,12 @@
 	
 	
 	}
-	const uploadevent = async (name_ : string, filePath: string,item:LimeUploadFile) : Promise<string> => {
+	const uploadevent = async (fileName : string, filePath: string,item:UploaderFileItem) : Promise<string> => {
 		return new Promise((resolve, reject) => {
 			uniCloudStorageExtCo.getUploadFileOptions({
-				cloudPath: `${props.filePath}/${name_}`, // 支持自定义目录
+				cloudPath: `${props.filePath}/${fileName}`, // 支持自定义目录
 			}).then((uploadFileOptionsRes : UTSJSONObject) => {
-				//console.log("aaaa", uploadFileOptionsRes);
+				console.log("aaaa", uploadFileOptionsRes);
 				const uploadFileOptions = uploadFileOptionsRes['uploadFileOptions'] as UTSJSONObject;
 				const url = uploadFileOptions['url'] as string;
 				const name = uploadFileOptions['name'] as string;
@@ -80,6 +81,7 @@
 				const cloudPath = uploadFileOptionsRes['cloudPath'] as string; // 文件云端路径
 				const fileID = uploadFileOptionsRes['fileID'] as string; // 文件ID
 				const fileURL = uploadFileOptionsRes['fileURL'] as string; // 文件URL（如果是私有权限，则此URL是无法直接访问的）
+				item.status = 'uploading';
 				const uploadTask = uni.uploadFile({
 					url,
 					name,
@@ -88,6 +90,8 @@
 					success: (uploadFileRes) => {
 						if (uploadFileRes.statusCode !== 200) {
 							console.log("上传失败", uploadFileRes);
+							 item.status = 'failed';
+							 item.message = '上传失败';
 							return;
 						}
 						const uploadRes = {
@@ -98,32 +102,47 @@
 						// 数据库里可直接保存 fileURL 或 fileID
 
 						console.log("上传成功", uploadRes);
+						item.status = 'success'
 						item.url=uploadRes.fileURL as string;
 						resolve(uploadRes.fileURL as string);
 						//fileURL
 
 					},
 					fail: (err) => {
-						console.log("上传失败", err);
+						console.log("上传失败ee", err);
 						reject("upload fail");
+						item.status = 'failed';
+						item.message = '上传失败';
 					}
 				});
 				// 监听上传进度
 				uploadTask.onProgressUpdate((res) => {
 					console.log("监听上传进度", res);
+					///item.percent=res.progress as number;
+					item.message = res.progress + '%'
 				});
 				uni.hideLoading();
 			});
 		});
 
 	}
-	const uploadExtStorage = async (files : LimeUploadFile[]) => {
+	const uploadExtStorage = async (files : UploaderFileItem[]) => {
 		let task : Array<Promise<string>> = [];
 		for (let i = 0; i < files.length; i++) {
 			let item = files[i];
-			const name  = (`h${Date.now()}${i.toString()}${files[i].name}`) as string;
-			const filePath = await compressImage(files[i].path as string) as string;
-			task.push(uploadevent(name, filePath,item));
+			let fileName  = "";
+			const filePath = await compressImage(files[i].url as string) as string;
+			//if(files[i].fileName==null){
+				//`h${Date.now().toString()}${i.toString()}${files[i].fileName}`
+				if(filePath.includes(".png")){
+					fileName=`h${Date.now().toString()}${i.toString()}.png`
+				}else{
+					fileName=`h${Date.now().toString()}${i.toString()}.jpg`
+				}
+			//}
+			console.log("FFFF",fileName);
+			
+			task.push(uploadevent(fileName, filePath,item));
 		}
 		const res = await Promise.all(task);
 		console.log("上传完成", res);
@@ -132,17 +151,19 @@
 	}
 
 	
-	const handleAdd = (files : LimeUploadFile[]) => {
+	const handleAdd = (files : UploaderFileItem[]) => {
 		console.log('选择的文件:', files);
 		// const name = files[0].name;
 		// const filePath = files[0].path;
 		uploadExtStorage(files);
 	}
-	const removeImg= (index:number, files : LimeUploadFile[]) => {
-		console.log(index,files);		
+	const removeImg= (file: UploaderFileItem,index:number) => {
+		console.log(index,file);		
 		filesList.value.splice(index, 1);
 		returnResult();
 	}
+
+const onBeforeUpload=async ()=>{}
 
 </script>
 

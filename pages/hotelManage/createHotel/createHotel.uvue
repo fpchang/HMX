@@ -21,8 +21,6 @@
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
-
-
 			<xt-form-item label="酒店名称" tips="" required>
 				<view>
 				
@@ -55,7 +53,7 @@
 				<view>
 					<!-- <rice-input bg-color="#fff" height="40px" v-model="hotelForm.hotelName" placeholder="请输入酒店名称"
 						focus-border focus-border-color="#165dff" /> -->
-						<xt-input-tab v-model="hotelForm.feature"></xt-input-tab>
+						<!-- <xt-input-tab v-model="hotelForm.feature"></xt-input-tab> -->
 				</view>
 			</xt-form-item>
 			<xt-form-item label="餐饮" tips="" required>
@@ -114,14 +112,14 @@
 			</xt-form-item>
 			<xt-form-item label="封面图片" tips="" required>
 				<view>
-					<xt-file-upload :max="1" :filePath="`HM/client/${hotel_id}/hotel`"
-						@uploadSuccess="uploadFirstImageSuccess"></xt-file-upload>
+					<xt-file-upload :max-count="1" :filePath="`HM/client/${hotel_id}/hotel`"
+						complete="uploadFirstImageSuccess"  accept="image"></xt-file-upload>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="酒店图片" tips="" required>
 				<view>
-					<xt-file-upload :max="9" :default_files_list="hotelForm.imagesList"
-						@uploadSuccess="uploadImageListSuccess"></xt-file-upload>
+					<xt-file-upload :max-count="3" :default_files_list="hotelForm.imagesList"
+						complete="uploadImageListSuccess" filePath="tt" accept="image"></xt-file-upload>
 				</view>
 			</xt-form-item>
 
@@ -152,7 +150,8 @@
 	import { useCascaderAreaData } from '@/uni_modules/lime-shared/areaData';
 	import { state } from '@/store/store.uts';
 	//import amap from "@/common/amap-wx.130";
-	import {Location} from "@/services/LocationService.uts"
+	import {Location} from "@/services/LocationService.uts";
+	import {validForm} from "./hotelFormVaild.uts";
 	const props = defineProps({
 		type: {
 			type: Number,
@@ -200,15 +199,20 @@
 		athleticFacility: [],
 		serviceTel: "",
 		wechat: "",
-		feature: [1,2]
+		feature: ["1","2"]
 	});
 
 	const submitForm = async () => {
+		const flag:boolean = validForm(hotelForm.value);
+		if(flag==false){
+			return;
+		}
 		hotelForm.value.belong=user.value['phone'] as string;
 		console.log("submit",hotelForm.value);
 		//searchAddress("上海市人民广场");
-		const location:Array<number> =await Location.getLocation("上海汉庭");
+		const location:Array<number> =await Location.getLocation(hotelForm.value.hotelAddress);
 		console.log("location",location);
+		hotelForm.value.hotelCoordinate=location;
 	}
 	const inputStyle = ref({
 		height: '24px',
@@ -276,13 +280,7 @@
 		});
 
 	}
-	// const visible6 = ref(false)
-	// const cascaderValue6 = ref('');
-	// const fieldValue6 = ref<string|null>(null);
-	// const options6=ref(null);
-	// const onChange6 = (value: string, options: UTSJSONObject[]) => {
-	//   fieldValue6.value = options.map((item: UTSJSONObject):any|null => (item['name'])).join('/');
-	// };
+
 	init();
 </script>
 

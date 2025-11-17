@@ -21,10 +21,10 @@ class HotelServiceClass{
 		const data = res['data'] as Array<UTSJSONObject>;		
 		return data;
 	}
-	async  getUseCascaderAreaData() :Promise<UTSJSONObject[]>{
-		//const data = useCascaderAreaData();
-		return [];
-	}
+	// async  getUseCascaderAreaData() :Promise<UTSJSONObject[]>{
+	// 	//const data = useCascaderAreaData();
+	// 	return [];
+	// }
 	async getOpendbCityChina(type:number):Promise<Array<UTSJSONObject>>{
 		const db =uniCloud.databaseForJQL();
 		//const res = await db.collection("opendb-city-china").field("code as value, name as text, eq(type, 2) as isleaf").get();

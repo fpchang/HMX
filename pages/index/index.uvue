@@ -2,6 +2,7 @@
 	<!-- #ifdef APP -->
 	<scroll-view  :refresher-enabled="false" style="flex:1;background:#f5f5f5;display: flex;flex-direction: column" :show-scrollbar="false">
 	<!-- #endif -->
+
 		<view class="index-page-style">
 			<view style="width: 750rpx;height: 422rpx;max-height:253px;position: relative;">
 				<!-- <view style="height:44px;width:750rpx;z-index:999; background-color:rgba(0,0,0,0.6);position: absolute;top:0;left: 0;">
@@ -40,7 +41,7 @@
 			<view style="flex: 1; min-height: 330px">
 				<view class="black-area">
 					<text>
-						<!-- <l-icon name="line-md:confirm-square-filled" size="35px" color="#1E88E5" /> -->
+					
 						
 					</text>
 				</view>
@@ -119,6 +120,9 @@
 	});
 	const hotelList = computed(() => {
 		return state.hotelList;
+	});
+	const user=computed(() => {
+		return state.user;
 	});
 	const topImg =():string=>{	
 			console.log("11111111111",hotel_id.value,hotelList.value);
@@ -234,7 +238,6 @@
 		}
 
 		.zcard {
-			cursor: pointer;
 			/*padding: 10px 0;
 			box-shadow: 2px 4px 12px #f5f5f5;
 			*/

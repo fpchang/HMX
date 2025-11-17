@@ -1,0 +1,25 @@
+<template>
+	<view>
+	{{props.modelValue}}
+	</view>
+</template>
+
+
+
+<script setup>
+const props = defineProps(['modelValue'])
+const emit = defineEmits(['update:modelValue'])
+
+const onUPdate = () => {
+   // 更新
+   emit("update:modelValue", {
+    ...props.modelValue,
+    a: new Date().toLocaleString(),
+  });
+}
+</script>
+
+
+<style lang="scss">
+
+</style>

@@ -43,16 +43,23 @@
 	"app-android": {
 		"distribute": {
 			"modules": {
-				"uni-map": {},
+				"uni-map": {
+					"tencent": {
+						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+					}
+				},
 				"uni-location": {
-					"system": {}
+					"system": {},
+					"tencent": {
+						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+					}
 				}
 			},
 			"icons": {
-				"hdpi": "/Volumes/hanfeng/工作资料/项目资料/hm/上架资料/ios专用/议宿_z.png",
-				"xhdpi": "",
-				"xxhdpi": "",
-				"xxxhdpi": ""
+				"hdpi": "D:/workspace-uniapp/HMX/unpackage/res/icons/72x72.png",
+				"xhdpi": "D:/workspace-uniapp/HMX/unpackage/res/icons/96x96.png",
+				"xxhdpi": "D:/workspace-uniapp/HMX/unpackage/res/icons/144x144.png",
+				"xxxhdpi": "D:/workspace-uniapp/HMX/unpackage/res/icons/192x192.png"
 			},
 			"splashScreens": {
 				"default": {}
@@ -69,18 +76,48 @@
 	},
 	"app-ios": {
 		"distribute": {
-			"modules": {},
-			"icons": {},
+			"modules": {
+				"uni-location": {
+					"system": {},
+					"tencent": {
+						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+					}
+				},
+				"uni-map": {
+					"tencent": {
+						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+					}
+				}
+			},
+			"icons": {
+				"appstore": "D:/workspace-uniapp/HMX/unpackage/res/icons/1024x1024.png"
+			},
 			"splashScreens": {}
 		}
 	},
 	"web": {
+		"devServer": {
+			"host": "localhost", // 指定服务器应该监听哪个IP地址,默认：localhost
+			"port": 5173,
+			//"disableHostCheck" : true,
+			"proxy": {
+				"/txmapKey": {
+					"target": "https://apis.map.qq.com",
+					"changeOrigin": true,
+					"secure": false,
+					"ws": false,
+					"pathRewrite": {
+						"^/txmapKey": ""
+					}
+				}
+			}
+		},
 		"router": {
 			"mode": ""
 		},
 		"sdkConfigs": {
 			"maps": {
-				"amap": {
+				"tencent": {
 					"key": ""
 				}
 			}

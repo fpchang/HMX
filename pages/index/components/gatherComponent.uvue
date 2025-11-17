@@ -48,10 +48,11 @@
 								<view style="padding:10px 0">
 
 
-									<l-circle :percent="numCustomerOrderToday_percent" size="100px" strokeColor="green" strokeWidth="12"
+									<l-circle :percent="numCustomerOrderToday_percent" size="100px" strokeColor="green"  trailColor="#eee" strokeWidth="12"
 										trailWidth="12">
 										<text class="val-text">{{numCustomerOrderToday}}</text>
 									</l-circle>
+				
 
 								</view>
 								<view class="stat-label"><text class="txt">当前在住</text></view>
@@ -66,7 +67,7 @@
 								<view style="padding:10px 0">
 
 
-									<l-circle :percent="(100 - numCustomerOrderToday_percent)" size="100px" strokeColor="orange" strokeWidth="12"
+									<l-circle :percent="(100 - numCustomerOrderToday_percent)" trailColor="#eee" size="100px" strokeColor="orange" strokeWidth="12"
 										trailWidth="12">
 										<text class="val-text">{{ roomCount - numCustomerOrderToday}}</text>
 									</l-circle>
@@ -189,16 +190,12 @@
 		tooltip: { show: true },
 	};
 	const currentData = ():string => {
-		// const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-		// return new Date().toLocaleDateString('zh-CN', dateOptions);
-		//console.log(dayuts().locale())
+
 		return dayuts(new Date()).locale('zh-cn').format("YYYY 年 MM 月 DD 日 dddd");
 	}
 	// 组件挂载后初始化echarts实例 (也可在请求数据后初始化)
 	function initEchart() {
-		//console.log("11111", echartRef);
-		//echartRef.value.init(option); // uni-app vue3 和 uni-app x 组合式
-		// echartRef.init(option); // uni-app x 选项式
+
 	}
 	function tabClick(e : TabsClickTab) {
 		activeIndex.value = e.index as number;

@@ -1,0 +1,179 @@
+import { UIImage } from "UIKit"
+import { CIImage, CIFilter, CIVector, CIContext, kCIInputImageKey } from "CoreImage"
+// import { SVGKImage } from "SVGKit"
+import { SVGKImage } from "SVGKit"  assert { type: "implementationOnly" };
+import { URL, Data, URLSession } from 'Foundation'
+import { getResourcePath, svgDataURLPrefix, fileToDataUrl,readFileContent } from './fileUtils'
+// let svgDataURLPrefix = "data:image/svg+xml;base64,"
+// export function getResourcePath(path : string) : string | null {
+// 	try{
+// 		let uri = path
+// 		if (uri.startsWith("http") || uri.startsWith("<svg") || uri.startsWith(svgDataURLPrefix)) {
+// 			return uri
+// 		}
+// 		if (uri.startsWith("file://")) {
+// 			return uri.substring("file://".length)
+// 		} else if (path.startsWith("/var/")) {
+// 			return path
+// 		}
+// 		return UTSiOS.getResourcePath(path)
+// 	}catch(e){
+// 		return null
+// 	}
+
+// }
+
+export function createColoredUIImage(svgImage : UIImage, color : string) : UIImage {
+	try {
+		if (color == '') return svgImage
+		let tintColor = UTSiOS.colorWithString(color)
+		let red : CGFloat = 0
+		let green : CGFloat = 0
+		let blue : CGFloat = 0
+		let alpha : CGFloat = 0
+		tintColor.getRed(UTSiOS.getPointer(red), green = UTSiOS.getPointer(green), blue = UTSiOS.getPointer(blue), alpha = UTSiOS.getPointer(alpha))
+
+		let ciImage = new CIImage(image = svgImage);
+
+		// 创建颜色
+		let colorFilter = new CIFilter(name = "CIColorMatrix")!
+
+		colorFilter.setValue(ciImage, forKey = kCIInputImageKey)
+		colorFilter.setValue(CIVector(x = 1, y = 0, z = 0, w = red), forKey = 'inputRVector')
+		colorFilter.setValue(CIVector(x = 0, y = 1, z = 0, w = green), forKey = 'inputGVector')
+		colorFilter.setValue(CIVector(x = 0, y = 0, z = 1, w = blue), forKey = 'inputBVector')
+		colorFilter.setValue(CIVector(x = 0, y = 0, z = 0, w = 1), forKey = 'inputAVector')
+
+		let filteredCIImage = colorFilter.outputImage
+		if (filteredCIImage == null) return svgImage
+
+
+		let context = new CIContext(options = null)
+		let cgImage = context.createCGImage(filteredCIImage!, from = filteredCIImage!.extent)
+		if (cgImage == null) return svgImage
+		return new UIImage(cgImage = cgImage!)
+	} catch (e) {
+		return svgImage
+	}
+
+}
+
+export function processSvgString(path : string) : string | null {
+	let svgString = path
+	if (svgString.startsWith(svgDataURLPrefix)) {
+		const base64Data = svgString.split("base64,")[1]
+		const data = new Data(base64Encoded = base64Data);
+		if (data == null) return null
+		const _svgString = String(data = data!, encoding = String.Encoding.utf8);
+		if (_svgString == null) return null
+		if (!_svgString!.startsWith('<')) return null
+		svgString = _svgString!
+	}
+	return svgString.replace(/(width|height)="\d+(\.\d+)?([a-z]+)?"/g, '').replace(/[\t\r\n]/g, '');
+}
+
+export function getSvgImage(svgString : string) : UIImage | null {
+	let fileData = svgString.data(using = String.Encoding.utf8)!;
+	let svgImage = new SVGKImage(data = fileData).uiImage
+	if (svgImage == null) return null
+	return svgImage
+}
+
+
+
+export function setSvgImage(src : string, color : string, cb : (image : UIImage | null) => void) {
+	if ([null, ''].includes(src)) return cb(null)
+	const path : string = getResourcePath(src) ?? '';
+	if (path == '') return cb(null)
+	
+	if (path.startsWith('<') || path.startsWith(svgDataURLPrefix)) {
+		try {
+			const svgString = processSvgString(path)
+			if (svgString == null) return cb(null)
+			const svgImage = getSvgImage(svgString!)
+			if (svgImage == null) return cb(null)
+			const image = createColoredUIImage(svgImage!, color)
+			cb(image)
+		} catch (e) {
+			cb(null)
+		}
+	} else if (path.startsWith('http')) {
+		try {
+			let url = new URL(string = path)
+			let session = URLSession.shared
+			let task = session.dataTask(with = url!, completionHandler = (data, response, error) : void => {
+				if (data != null) {
+					try {
+						const _svgString = String(data = data!, encoding = String.Encoding.utf8);
+						const svgString = processSvgString(_svgString!)
+						const svgImage = getSvgImage(svgString!)
+						const image = createColoredUIImage(svgImage!, color)
+						cb(image)
+					} catch (e) {
+						cb(null)
+					}
+				} else {
+					cb(null)
+				}
+			})
+			task.resume()
+		} catch (e) {
+			cb(null)
+		}
+		// try {
+		// 	uni.request({
+		// 		url: path,
+		// 		dataType: 'text',
+		// 		success: (res : RequestSuccess<UTSJSONObject>) => {
+		// 			// const svgString = processSvgString(res.get('data') ?? '')
+		// 			// // const svgString = processSvgString(res.data ?? '')
+		// 			// if (svgString == null) return cb(null)
+		// 			// const svgImage = getSvgImage(svgString!)
+		// 			// if (svgImage == null) return cb(null)
+		// 			// const image = createColoredUIImage(svgImage!, color)
+		// 			// cb(image)
+		// 		},
+		// 		fail: (err) => {
+		// 			// console.warn('[lime-svg]: ' + JSON.stringify(err))
+		// 			cb(null)
+		// 		}
+		// 	})
+
+		// } catch (e) {
+		// 	try {
+		// 		let url = new URL(string = path)
+		// 		let session = URLSession.shared
+		// 		let task = session.dataTask(with = url!, completionHandler = (data, response, error) : void => {
+		// 			if (data != null) {
+		// 				try {
+		// 					const _svgString = String(data = data!, encoding = String.Encoding.utf8);
+		// 					const svgString = processSvgString(_svgString!)
+		// 					const svgImage = getSvgImage(svgString!)
+		// 					const image = createColoredUIImage(svgImage!, color)
+		// 					cb(image)
+		// 				} catch (e) {
+		// 					cb(null)
+		// 				}
+		// 			} else {
+		// 				cb(null)
+		// 			}
+		// 		})
+		// 		task.resume()
+		// 	} catch (e) {
+		// 		cb(null)
+		// 	}
+		// }
+	} else {
+		try {
+			const _svgContent = readFileContent(path)
+			// const _svgString = fileToDataUrl(path) //UTSiOS.try(String(contentsOfFile = path, encoding = String.Encoding.utf8));
+			if (_svgContent == null) return cb(null)
+			const svgString = processSvgString(_svgContent ?? '')
+			const svgImage = getSvgImage(svgString!)
+			const image = createColoredUIImage(svgImage!, color)
+			cb(image)
+		} catch (e) {
+			cb(null)
+		}
+	}
+}

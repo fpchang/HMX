@@ -10,7 +10,8 @@
 			<view class="info">
 				<view class="info-item"  style="margin-bottom: 4px;">
 					<text style="color: rgb(30,30,30);font-weight: 700;font-size: 24px;">{{user.userName}}</text>
-					<text style="margin-left:14px; padding:4px 10px ;border-radius: 12px; background-color:rgba(30,136,229,0.1) ;color:rgb(30,136,229)">酒店管理员</text></view>
+					<!-- <text style="margin-left:14px; padding:4px 10px ;border-radius: 12px; background-color:rgba(30,136,229,0.1) ;color:rgb(30,136,229)">酒店管理员</text> -->
+					</view>
 				<view class="info-item" style="margin-bottom: 12px;"><text style="color: rgb(144,147,153);font-size: 16px;">{{emergency_phone_number((user.phone ?? '') as string)}}</text></view>
 				<view class="info-item"><text style="color:rgb(30,136,229);font-size: 16px;font-weight: 700;">编辑个人资料></text></view>
 			</view>

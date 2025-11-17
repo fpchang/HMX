@@ -14,13 +14,15 @@ exports.main = async (event, context) => {
 		"env-00jxh1m2dpmq":{
 			hostName:"http://hmdev.hotelsys.fun",
 			cloudUrl:"https://env-00jxh1m2dpmq.normal.cloudstatic.cn",
-			miniProgramKey:"a69cc73276ceb1a813f3be0d5d42c2aa"
+			miniProgramKey:"a69cc73276ceb1a813f3be0d5d42c2aa",
+			txmapkey:"I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
 		},
 		//生产环境
 		"env-00jxhfhjd231":{
 			hostName:"http://hm.hotelsys.fun",
 			cloudUrl:"https://env-00jxhfhjd231.normal.cloudstatic.cn",
-			miniProgramKey:"a69cc73276ceb1a813f3be0d5d42c2aa"
+			miniProgramKey:"a69cc73276ceb1a813f3be0d5d42c2aa",
+			txmapkey:"I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
 		}
 		
 }

@@ -12,6 +12,7 @@ sendSmsCode(phone:string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
 	const data:UTSJSONObject={phone};
 	return DB.callFunction("hm-sendSms",data);
 }
+//腾讯地图 web secret =   qvQRgL3QqGosrlh7BrIyleFrs3Phs0X9
   getConfig():Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
 	//  const data:UTSJSONObject={"a":1};
     return DB.callFunction("hm_getConfig") ;

@@ -1,6 +1,5 @@
 import{DB} from '../api/DB';
 import {callFunctionRes} from "@/bean/DBBean";
-import { useCascaderAreaData } from '@/uni_modules/lime-shared/areaData';
 // type UniCloudCallFunctionResult={
 // 	"errCode": number,
 // 	"success": boolean,
@@ -23,8 +22,18 @@ class HotelServiceClass{
 		return data;
 	}
 	async  getUseCascaderAreaData() :Promise<UTSJSONObject[]>{
-		const data = useCascaderAreaData();
+		//const data = useCascaderAreaData();
+		return [];
+	}
+	async getOpendbCityChina(type:number):Promise<Array<UTSJSONObject>>{
+		const db =uniCloud.databaseForJQL();
+		//const res = await db.collection("opendb-city-china").field("code as value, name as text, eq(type, 2) as isleaf").get();
+		const res = await db.collection("opendb-city-china").where({type}).get();
+		//return  DB.getCollection("opendb-city-china")
+		console.log("111111111111111111",res);
+		const data = res['data'] as Array<UTSJSONObject>;
 		return data;
+		
 	}
     
     /**

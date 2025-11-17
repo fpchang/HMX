@@ -32,9 +32,7 @@
 			"style": {
 				"navigationBarTitleText": "用户协议"
 			}
-		}, {
-			"path": "uni_modules/lime-action-sheet/pages/index"
-		},
+		}, 
 		{
 			"path": "pages/home/home",
 			"style": {

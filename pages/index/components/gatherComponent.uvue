@@ -1,5 +1,6 @@
 <template>
 	<view class="gather">
+		
 		<view class="stats-card">
 			<view class="stats-header">
 				<view class="header-title">

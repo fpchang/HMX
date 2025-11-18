@@ -61,7 +61,7 @@
 						<view class="control-item"
 							style="background-color: rgb(245,247,250);flex: 1;margin-right: 8px;">
 							<view class="control-btn">
-								<view class="control-btn-group">
+								<view class="control-btn-group" @click="viewDetail(hotel)">
 									<image src="/static/icons/view.png" style="width:25px;height:25px"></image>
 									<text style="color:rgb(29,33,41);padding-left: 4px">查看</text>
 								</view>
@@ -71,7 +71,7 @@
 						<view class="control-item"
 							style="background-color: rgba(22,93,255,0.1);height: 100%;flex: 1;margin-right: 8px;">
 							<view class="control-btn">
-								<view class="control-btn-group">
+								<view class="control-btn-group" @click="editHotel(hotel)">
 									<image src="/static/icons/edit.png" style="width:25px;height:25px"></image>
 									<text style="color: rgba(22,93,255,1);padding-left: 4px;">编辑</text>
 								</view>
@@ -102,13 +102,13 @@
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui"
 	import { state } from "@/store/store";
 	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
-	import { conFunction } from "@/pages/index/ComFuc.uts";
+	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { HotelService } from "@/services/HotelService.uts";
 	let submitLoading = ref(false);
 	const hotelList = computed(() => {
 		return state.hotelList;
 	});
-	console.log("hotelList", hotelList);
+	console.log("hotelList>>>>>>>>>>>>>>", hotelList.value);
 	const topImg = (imgUrl : string | null) : string => {
 		if (imgUrl == null || imgUrl == '') {
 			return '/static/images/hotel.png';
@@ -126,13 +126,13 @@
 		]);
 		return p.get(val) ?? val;
 	}
-	const editHotel = (targetObj : UTSJSONObject) => {
-		if (targetObj.curRole != "administrator") {
-			alert.alertNoPermisson();
+	const editHotel = (hotel_item : UTSJSONObject) => {
+		if (hotel_item.curRole != "administrator") {
+			//alert.alertNoPermisson();
 			return;
 		}
 		uni.navigateTo({
-			url: `/pages/hotelManage/createHotel/createHotel?1&&targetObj=${encodeURIComponent(JSON.stringify(this.targetObj))}`,
+			url: `/pages/hotelManage/createHotel/createHotel?pageType=1&&hotel_item=${encodeURIComponent(JSON.stringify(hotel_item))}`,
 		});
 	}
 	const addHotel = () => {
@@ -160,7 +160,7 @@
 			beforeClose: async () : Promise<boolean> => {
 				try {
 					await HotelService.deleteHotel(targetObj._id as string);
-					await conFunction.getHotelList();
+					await comFunction.getHotelList();
 					hideDialog();
 					uni.showToast({
 						title: "删除成功",
@@ -182,14 +182,14 @@
 
 		});
 	}
-	const viewDetail = (targetObj : UTSJSONObject) => {
+	const viewDetail = (hotel_item : UTSJSONObject) => {
 		// this.type = 2;
 		//this.targetObj = JSON.parse(JSON.stringify(targetObj));
 		uni.navigateTo({
-			url: `/pages/hotelManage/createHotel/createHotel?2&&targetObj=${encodeURIComponent(JSON.stringify(targetObj))}`,
+			url: `/pages/hotelManage/createHotel/createHotel?pageType=2&&hotel_item=${encodeURIComponent(JSON.stringify(hotel_item))}`,
 		});
 	}
-	//conFunction.getHotelList();
+
 </script>
 
 <style lang="scss">

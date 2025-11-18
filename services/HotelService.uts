@@ -1,5 +1,6 @@
 import{DB} from '../api/DB';
 import {callFunctionRes} from "@/bean/DBBean";
+import { hotelBean } from '../bean/hotelBean';
 // type UniCloudCallFunctionResult={
 // 	"errCode": number,
 // 	"success": boolean,
@@ -17,7 +18,6 @@ class HotelServiceClass{
 	 */
 	async getConfig_facilityConfig(type:string):Promise<Array<UTSJSONObject>>{
 		 const res =await DB.getCollection("hm-facilityConfig",{type:type});	
-			  console.log("2222",res);
 		const data = res['data'] as Array<UTSJSONObject>;		
 		return data;
 	}
@@ -30,7 +30,6 @@ class HotelServiceClass{
 		//const res = await db.collection("opendb-city-china").field("code as value, name as text, eq(type, 2) as isleaf").get();
 		const res = await db.collection("opendb-city-china").where({type}).get();
 		//return  DB.getCollection("opendb-city-china")
-		console.log("111111111111111111",res);
 		const data = res['data'] as Array<UTSJSONObject>;
 		return data;
 		
@@ -43,10 +42,10 @@ class HotelServiceClass{
      * @return {*} 
      * @memberof HotelService
      */
-    createHotel(hotelObj:UTSJSONObject):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
+    createHotel(hotelObj:hotelBean):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
       return   DB.callFunction("hm_createHotel",{hotelObj});
     }
-    updateHotel(hotel_id:string,hotelObj:UTSJSONObject):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
+    updateHotel(hotel_id:string,hotelObj:hotelBean):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
       return   DB.callFunction("hm_updateHotel",{hotel_id,hotelObj});
     }
     deleteHotel(hotel_id:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
@@ -57,7 +56,6 @@ class HotelServiceClass{
     */
       async getHotelList():Promise<Array<UTSJSONObject>>{
            const res = await DB.callFunction("hm_getHotelList_x");
-		   console.log("XXXX", res);
 		  const result = res.result as UTSJSONObject;
 		  const data = result.get('data') as Array<UTSJSONObject>;
 		  

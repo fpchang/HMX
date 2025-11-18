@@ -1,23 +1,24 @@
 
 
 export type hotelBean = {
+//_id?:string,
   belong: string,
   hotelCoordinate?: Array<number>,
-  onlinePayment?: boolean,
-  hotelIntroduction: string | null,
+ // onlinePayment?: boolean,
+  hotelIntroduction:string,
   contactPhone?: string,
-  dataStatus?: number,
+ // dataStatus?: number,
   hotelName: string,
-  firstImages: string |null,
-   imagesList: Array<string> | null,
-  athleticFacility?: Array<string>,
-  cateringServices?: Array<string>,
-  recreationFacility?: Array<string>,
-  feature?: Array<string>,
-  serviceTel: string | null,
-  wechat: string | null,
+  firstImages: string ,
+   imagesList: Array<string> ,
+  athleticFacility: Array<string>,
+  cateringServices: Array<string>,
+  recreationFacility: Array<string>,
+  feature: Array<string>,
+  serviceTel: string ,
+  wechat: string ,
   hotelAddress: string,
-  hotelAddressArea: string | null,
+  hotelAddressArea: string ,
   hotelAddressCode?: string,
-  baseFacility: Array<string> | null
+  baseFacility: Array<string> 
 }

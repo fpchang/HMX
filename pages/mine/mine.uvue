@@ -2,18 +2,28 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
+	<rice-navbar title="" bg-color="rgba(0,0,0,0)" :left-arrow="false" :auto-back="false"></rice-navbar>
 		<view class="user-area">
 			<view class="card"> 
 			<view class="avator">
 				<image src="/static/icons/mine/avator.png" style="height:60px;width:60px" mode="aspectFit"></image>
 			</view>
-			<view class="info">
+			<view class="info" style="flex:1">
 				<view class="info-item"  style="margin-bottom: 4px;">
 					<text style="color: rgb(30,30,30);font-weight: 700;font-size: 24px;">{{user.userName}}</text>
 					<!-- <text style="margin-left:14px; padding:4px 10px ;border-radius: 12px; background-color:rgba(30,136,229,0.1) ;color:rgb(30,136,229)">酒店管理员</text> -->
 					</view>
-				<view class="info-item" style="margin-bottom: 12px;"><text style="color: rgb(144,147,153);font-size: 16px;">{{emergency_phone_number((user.phone ?? '') as string)}}</text></view>
-				<view class="info-item"><text style="color:rgb(30,136,229);font-size: 16px;font-weight: 700;">编辑个人资料></text></view>
+					<navigator url="./editUser/editUser">
+				<view class="info-item" style="margin-bottom: 12px;display: flex;flex-direction: row;justify-content: space-between;">					
+					<text style="color: rgb(144,147,153);font-size: 16px;">{{emergency_phone_number((user.phone ?? '') as string)}}</text>					
+							<rice-icon size="16px" name="arrow-right"/>					
+					</view>
+					</navigator>
+			<!-- 	<view class="info-item"><text style="color:rgb(30,136,229);font-size: 16px;font-weight: 700;">编辑个人资料></text></view> -->
+				<!-- <rice-cell-group border>
+				  <rice-cell :title="user.userName" :title-style="titleStyle" size="medium" /> 
+				  <rice-cell :title="emergency_phone_number((user.phone ?? '') as string)"   :border="false"  arrow arrow-direction="right" size="medium"/>
+				</rice-cell-group> -->
 			</view>
 			</view>
 			
@@ -76,7 +86,10 @@
 		return firstImages;
 	};
 	console.log(user.value)
-	
+	const titleStyle={
+		fontSize:'24px',
+		fontWeight:'700'
+	}
 </script>
 
 <style lang="scss">

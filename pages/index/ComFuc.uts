@@ -118,4 +118,4 @@ class ComFuc {
 
 	}
 }
-export var conFunction = new ComFuc();
+export var comFunction = new ComFuc();

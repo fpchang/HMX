@@ -1,0 +1,92 @@
+<template>
+	<rice-navbar title="" border>
+<!-- 		<template #left>
+			<view style="display: flex;flex-direction: row;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+	
+				<image src="/static/icons/hotel-manage.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">酒店列表</text>
+			</view>
+		</template> -->
+		<template #right>
+			<view class="navbar-btn">
+				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
+				
+					<text class="txt" @click="saveUser">保存</text>
+				
+	
+			</view>
+		</template>
+	</rice-navbar>
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1">
+	<!-- #endif -->
+		<view style="padding:15px;background-color: #fff;border-radius: 12px;margin:18px"> 
+		<rice-form :model="userForm" ref="formRef2" label-width="100px" class="demo-form">
+		  <rice-form-item name="username" label="用户名">
+		    <rice-input v-model="userForm.username" placeholder="输入用户名" border="none" :custom-style="inputStyle" />
+		  </rice-form-item>
+		</rice-form>
+		</view>
+	
+		
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+</template>
+
+<script setup>
+		import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
+		import {AccountService} from "@/services/AccountService.uts";
+		import { state, setUser } from '@/store/store.uts';
+		import { comFunction } from "@/pages/index/ComFuc.uts";
+		type formBean = {
+		  username : string
+		}
+		const userForm = ref<formBean>({
+		  username: ''
+		})
+		//自定义 rice-input 的样式
+		const inputStyle = ref({
+		  height: '24px',
+		  padding: '0px',
+		  backgroundColor: 'transparent',
+		});
+		const user=computed(() => {
+			return state.user;
+		});
+		const saveUser= async ()=>{
+			      if (userForm.value.username=="") {
+					  uni.showToast({
+					  	title:"请输入用户名",
+						icon:"none"
+					  })
+			        return;
+			      }
+			      uni.showLoading({title:""});
+			      try {
+			       if (user.value != null && user.value._id != null) {
+			         await AccountService.updateUserName(user.value._id as string, userForm.value.username);
+			       } else {
+			         throw new Error("用户信息异常");
+			       }
+				   await comFunction.getUser();
+			        uni.hideLoading();
+					
+			        uni.showToast({ title: "修改成功", icon: "success" });
+					uni.navigateBack();
+			      } catch (error) {
+			        //console.log("修改失败", error);
+			        uni.hideLoading();
+			        uni.showToast({ title: "修改失败", icon: "error" });
+			      }
+			     
+		}
+</script>
+
+<style>
+		
+</style>

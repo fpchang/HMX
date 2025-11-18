@@ -98,7 +98,7 @@
 	import operation from "./components/operation";
 	
 	import { state, setUser } from '@/store/store.uts';
-	import { conFunction } from "./ComFuc.uts";
+	import { comFunction } from "./ComFuc.uts";
 	const showRange = ref(false);
 	const showPopup = ref(false);
 	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"]);
@@ -138,7 +138,7 @@
 	const checkHotel = async (h_id : string) => {
 		if (h_id != hotel_id.value) {
 			uni.showLoading({ title: "" });
-			await conFunction.checkHotel(h_id);
+			await comFunction.checkHotel(h_id);
 			showPopup.value = false;
 			uni.hideLoading();
 
@@ -146,19 +146,19 @@
 
 	};
 	 // onLoad(async ():Promise<void>=>{
-		//  await conFunction.init();
+		//  await comFunction.init();
 		//  dataReading.value=true;
 	 // })
 	 // onBeforeMount(async ()=>{
 		//  console.log("index onBeforeMound");
-		//     conFunction.init();
+		//     comFunction.init();
 		//    dataReading.value=true;
 		//    //return Promise.resolve({aa:111});
 	 // })
 	 const init = async ()=>{
 		 console.log(">>>>>> sss")
-		 //conFunction.loadStorage();
-		 await conFunction.init();
+		 //comFunction.loadStorage();
+		 await comFunction.init();
 		 dataReading.value=true;
 	 }
 	 watch(hotel_id,(hotel_idNew:string,hotel_idOld:string):void=>{

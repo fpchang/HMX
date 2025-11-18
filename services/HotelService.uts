@@ -8,6 +8,7 @@ import { hotelBean } from '../bean/hotelBean';
 // 	"result":UTSJSONObject
 
 // }
+
 class HotelServiceClass{
 	constructor(){
        
@@ -42,12 +43,55 @@ class HotelServiceClass{
      * @return {*} 
      * @memberof HotelService
      */
-    createHotel(hotelObj:hotelBean):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
-      return   DB.callFunction("hm_createHotel",{hotelObj});
+	async createHotel(hotelObj:hotelBean):Promise<UTSJSONObject>{
+	
+		try {
+			const res = await  DB.callFunction("hm_createHotel",{hotelObj});
+			console.log("create hotel",res);
+			const result =res['result'] as UTSJSONObject;
+			const code = result.code.toString();
+			const message = result.message as string;
+			if(code!='0'){
+				console.log("code error",code);
+				uni.showToast({
+					title:message,
+					icon:"none"
+				});
+				throw new Error(result.message as string);
+			}
+			uni.showToast({
+				title:"添加成功",
+				icon:"none"
+			});
+			return {code:0,message:""} as UTSJSONObject;
+		} catch (error) {
+			throw new Error("创建失败");
+		}
+ 
+	  
     }
-    updateHotel(hotel_id:string,hotelObj:hotelBean):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
-      return   DB.callFunction("hm_updateHotel",{hotel_id,hotelObj});
+    async updateHotel(hotel_id:string,hotelObj:hotelBean):Promise<UTSJSONObject>{
+		console.log("UPDATE+++++===",hotelObj);
+	try {
+		const res = await  DB.callFunction("hm_updateHotel",{hotel_id,hotelObj});
+		console.log("update hotel",res);
+		const result =res['result'] as UTSJSONObject;
+		const code = result.code.toString();
+		const message = result.message as string;
+		if(code!='0'){
+			uni.showToast({
+				title:message,
+				icon:"none"
+			});
+			throw new Error(result.message as string);
+		}
+	
+		return {code:0,message:""} as UTSJSONObject;
+	} catch (error) {
+		throw new Error("更新失败");
+	}
     }
+	
     deleteHotel(hotel_id:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
       return   DB.callFunction("hm_deleteHotel",{hotel_id});
     }

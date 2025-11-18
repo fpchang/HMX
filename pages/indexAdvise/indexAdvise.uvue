@@ -333,10 +333,10 @@
 				padding: 0px 100px;
 				background-color:#004af6 ;
 				border-radius: 33px;
-				.btn-txt{
+	.btn-txt{
 					color: #fff;
 					font-size: 14px;
-					letter-spacing: 2px;
+					letter-spacing: 2rpx;
 				}
 			}
 		}

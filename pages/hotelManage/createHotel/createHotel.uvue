@@ -36,9 +36,9 @@
 					<view @click="selectAddress()" class="address-group">
 						<view>
 							<text style="color:rgba(0,0,0,0.6);font-size: 14px;"
-								v-if="hotelForm.hotelAddressArea==null">选择地址</text>
+								v-if="hotelForm.hotelAddressArea==''">选择地址</text>
 							<text style="font-size: 14px;"
-								v-if="hotelForm.hotelAddressArea!=null">{{hotelForm.hotelAddressArea}}</text>
+								v-if="hotelForm.hotelAddressArea!=''">{{hotelForm.hotelAddressArea}}</text>
 						</view>
 
 						<rice-icon name="arrow-right" color="#dcdfe6" />
@@ -210,19 +210,36 @@
 		// const location:Array<number> =await Location.getLocation(hotelForm.value.hotelAddress);
 		// console.log("location",location);
 		// hotelForm.value.hotelCoordinate=location;
+		try{
+			await HotelService.createHotel(hotelForm.value);
+			submitLoading.value=false;		
+			comFunction.getHotelList();
+			uni.navigateBack();
+		}catch(e){
+			submitLoading.value=false;	
+		}
+			
 		
-		await HotelService.createHotel(hotelForm.value);
-		submitLoading.value=false;
-		uni.showToast({
-			title:"添加成功",
-			icon:"none"
-		});
-		comFunction.getHotelList();
-		uni.navigateBack();
+
 	}
 	const updateHotel= async ()=>{
-			//await HotelService.updateHotel(this.targetObj._id, this.hotelForm);
-			//await this.$store.dispatch("getHotelList");
+		try{
+			const id = hotelForm.value._id as string;
+			await HotelService.updateHotel(id, hotelForm.value);
+			submitLoading.value=false;		
+			comFunction.getHotelList();
+			uni.navigateBack({
+				success(){
+					uni.showToast({
+						title:"更新成功",
+						icon:"none",
+						position:'top'
+					});
+				}
+			});
+		}catch(e){
+			submitLoading.value=false;	
+		}
 	}
 	const submitForm = async () => {
 		const flag:boolean = validForm(hotelForm.value);
@@ -234,9 +251,7 @@
 		if (pageType.value == 1) {
 				updateHotel();
 				return;
-			}
-		
-		
+			}				
 		addHotel();
 	}
 	const inputStyle = ref({

@@ -1,13 +1,13 @@
 
 
 export type hotelBean = {
-//_id?:string,
+  _id?:string,
   belong: string,
   hotelCoordinate?: Array<number>,
- // onlinePayment?: boolean,
+  onlinePayment?: boolean,
   hotelIntroduction:string,
   contactPhone?: string,
- // dataStatus?: number,
+  //dataStatus?: number,
   hotelName: string,
   firstImages: string ,
    imagesList: Array<string> ,

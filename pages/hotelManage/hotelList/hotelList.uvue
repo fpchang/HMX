@@ -60,8 +60,8 @@
 					<view class="control">
 						<view class="control-item"
 							style="background-color: rgb(245,247,250);flex: 1;margin-right: 8px;">
-							<view class="control-btn">
-								<view class="control-btn-group" @click="viewDetail(hotel)">
+							<view class="control-btn" @click="viewDetail(hotel)">
+								<view class="control-btn-group" >
 									<image src="/static/icons/view.png" style="width:25px;height:25px"></image>
 									<text style="color:rgb(29,33,41);padding-left: 4px">查看</text>
 								</view>
@@ -69,15 +69,17 @@
 							</view>
 						</view>
 						<view class="control-item"
+						 v-if="hotel.curRole == 'administrator'"
 							style="background-color: rgba(22,93,255,0.1);height: 100%;flex: 1;margin-right: 8px;">
-							<view class="control-btn">
-								<view class="control-btn-group" @click="editHotel(hotel)">
+							<view class="control-btn" @click="editHotel(hotel)">
+								<view class="control-btn-group" >
 									<image src="/static/icons/edit.png" style="width:25px;height:25px"></image>
 									<text style="color: rgba(22,93,255,1);padding-left: 4px;">编辑</text>
 								</view>
 							</view>
 						</view>
 						<view class="control-item"
+						 v-if="hotel.curRole == 'administrator'"
 							style="background-color: rgba(239,68,68,0.1);height: 100%;width: 45px;">
 							<view class="control-btn" @click="deleteHotel(hotel)">
 								<view class="control-btn-group">
@@ -108,7 +110,6 @@
 	const hotelList = computed(() => {
 		return state.hotelList;
 	});
-	console.log("hotelList>>>>>>>>>>>>>>", hotelList.value);
 	const topImg = (imgUrl : string | null) : string => {
 		if (imgUrl == null || imgUrl == '') {
 			return '/static/images/hotel.png';
@@ -226,6 +227,7 @@
 
 				.img-area {
 					height: 350rpx;
+					max-height: 200px;
 					background-color: #eee;
 				}
 

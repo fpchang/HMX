@@ -155,6 +155,7 @@
 		margin-bottom: 32px;
 		.img-area{
 			height: 350rpx;
+			max-height: 300px;
 			background-color: #eee;
 		}
 		.card-title-group{

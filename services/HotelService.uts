@@ -44,7 +44,6 @@ class HotelServiceClass{
      * @memberof HotelService
      */
 	async createHotel(hotelObj:hotelBean):Promise<UTSJSONObject>{
-	
 		try {
 			const res = await  DB.callFunction("hm_createHotel",{hotelObj});
 			console.log("create hotel",res);
@@ -65,6 +64,7 @@ class HotelServiceClass{
 			});
 			return {code:0,message:""} as UTSJSONObject;
 		} catch (error) {
+			
 			throw new Error("创建失败");
 		}
  

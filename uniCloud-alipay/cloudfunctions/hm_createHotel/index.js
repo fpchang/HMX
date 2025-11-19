@@ -16,6 +16,7 @@ exports.main = async (event, context) => {
 		if(validstr!=""){
 			return {code:10,message:validstr};
 		}
+		console.log("入库对象：：",foramtHotel(hotelObj))
 		const result = await  dbJQL.collection('hm-hotel').add(foramtHotel(hotelObj));
 		const employeeForm={
 			    "employee_name": "店主",

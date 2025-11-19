@@ -206,17 +206,16 @@
 	})
 	let submitLoading=ref(false);
 	const addHotel= async ()=>{
-		hotelForm.value.belong=user.value['phone'] as string;
-		// const location:Array<number> =await Location.getLocation(hotelForm.value.hotelAddress);
-		// console.log("location",location);
-		// hotelForm.value.hotelCoordinate=location;
+		
 		try{
-			await HotelService.createHotel(hotelForm.value);
+			const res = await HotelService.createHotel(hotelForm.value);
+			console.log("res:::::::",res);
 			submitLoading.value=false;		
 			comFunction.getHotelList();
 			uni.navigateBack();
 		}catch(e){
 			submitLoading.value=false;	
+			console.error("保存失败",e)
 		}
 			
 		
@@ -241,13 +240,19 @@
 			submitLoading.value=false;	
 		}
 	}
+	
 	const submitForm = async () => {
 		const flag:boolean = validForm(hotelForm.value);
 		if(flag==false){
 			return;
 		}
 		submitLoading.value=true;
-		console.log(hotelForm.value);
+		hotelForm.value.belong=user.value['phone'] as string;
+		const address=`${hotelForm.value.hotelAddressArea}${hotelForm.value.hotelAddress}`;
+		console.log("address",address);
+		const location:Array<number> =await Location.getLocation(address);
+		console.log("location",location);
+		hotelForm.value.hotelCoordinate=location;
 		if (pageType.value == 1) {
 				updateHotel();
 				return;

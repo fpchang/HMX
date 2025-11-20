@@ -97,9 +97,9 @@
 	},
 	"web": {
 		"devServer": {
-			"host": "localhost", // 指定服务器应该监听哪个IP地址,默认：localhost
-			"port": 5173,
-			//"disableHostCheck" : true,
+			//"host": "localhost", // 指定服务器应该监听哪个IP地址,默认：localhost
+			//"port": 5173,
+			"disableHostCheck" : true,
 			"proxy": {
 				"/txmapKey": {
 					"target": "https://apis.map.qq.com",

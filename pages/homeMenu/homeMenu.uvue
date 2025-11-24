@@ -55,7 +55,7 @@
 				icon: "/static/icons/homemenu/room-type1.png",
 				label: "房型管理",
 				bgColor: "rgba(22, 93, 255, 0.1)",
-				url: "/pages/order/createOrder/createOrder"
+				url: "/pages/hotelManage/roomTypeList/roomTypeList"
 			},
 			{
 				icon: "/static/icons/homemenu/room1.png",

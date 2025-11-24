@@ -8,14 +8,14 @@
 
 				<image src="/static/icons/hotel-manage.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">酒店列表</text>
+				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">房型列表</text>
 			</view>
 		</template>
 		<template #right>
 			<view class="navbar-btn">
 				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
 				
-					<text class="txt" @click="addHotel">添加酒店</text>
+					<text class="txt" @click="addRoomType">添加房型</text>
 				
 
 			</view>
@@ -25,72 +25,55 @@
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<view class="card-list">
-			<view class="card-list-item" v-for="hotel of hotelList">
+			<view class="card-list-item" v-for="roomType of roomTypeList">
 				<view class="card">
 					<view class="img-area">
-						<image :src="topImg((hotel['firstImages'] as string | null) ?? null)"
+						<image :src="topImg((roomType['firstImages'] as string | null) ?? null)"
 							style="height: 100%;width: 100%;" mode="aspectFill">
 						</image>
 					</view>
 					<view class="card-title-group">
 						<view class="card-title-area">
-							<view class="card-title"><text class="txt">{{hotel.hotelName}}</text></view>
+							<view class="card-title">
+								<text class="txt">{{roomType.name}}</text>
+								<text class="price">¥{{roomType.priceBase}}</text>
+								</view>
 							<view class="card-subtitle">
-								<image src="/static/icons/position_black.png"
-									style="width:18px;height:18px;margin-right: 4px;"></image>
+								
 								<text
-									class="txt">{{(hotel.hotelAddress as string | null) != null ? hotel.hotelAddress : '--'}}</text>
-							</view>
-							<view class="card-subtitle" style="margin-top: 15px;">
-								<image src="/static/icons/administrator.png"
-									style="width:18px;height:18px;margin-right: 4px;"></image>
-								<text class="txt">店主:{{belong((hotel.belong??'') as string)}}</text>
+									class="txt">tag</text>
 							</view>
 							<view class="card-subtitle">
-								<image src="/static/icons/role.png" style="width:18px;height:18px;margin-right: 4px;">
-								</image>
-								<text class="txt">角色:{{roleFormat(hotel.curRole as string)}}</text>
+								
+									<view style="display: flex;flex-direction: row;">
+										<text style=" font-weight:500;color: #1d2129;font-size: 14px;">房间数量：</text>
+										<text class="txt-num" style="color: #00b42f;font-size: 14px;padding:0 5px;">23</text>
+										<text style="color: #4e5969;font-size: 14px;"> 间</text>
+									</view>
+									<view class="control-icons" style="display: flex;flex-direction: row;">
+										<view class="control-icons-item">
+											<rice-icon color="#4e5969" name="eyes"/>
+										</view>
+										<view class="control-icons-item">
+											<rice-icon color="#4e5969" name="edit"/>
+										</view>
+										<view class="control-icons-item">
+											<rice-icon color="#4e5969" name="delete"/>
+										</view>
+										
+										
+										
+									</view>
+								
 							</view>
 							
+							
 						</view>
-						<view class="state">
-							<text class="txt">正常运营</text>
-						</view>
+					
 					</view>
 
 					<view class="control">
-						<view class="control-item"
-							style="background-color: rgb(245,247,250);flex: 1;margin-right: 8px;">
-							<view class="control-btn" @click="viewDetail(hotel)">
-								<view class="control-btn-group" >
-									<image src="/static/icons/view.png" style="width:25px;height:25px"></image>
-									<text style="color:rgb(29,33,41);padding-left: 4px">查看</text>
-								</view>
-
-							</view>
 						</view>
-						<view class="control-item"
-						 v-if="hotel.curRole == 'administrator'"
-							style="background-color: rgba(22,93,255,0.1);height: 100%;flex: 1;margin-right: 8px;">
-							<view class="control-btn" @click="editHotel(hotel)">
-								<view class="control-btn-group" >
-									<image src="/static/icons/edit.png" style="width:25px;height:25px"></image>
-									<text style="color: rgba(22,93,255,1);padding-left: 4px;">编辑</text>
-								</view>
-							</view>
-						</view>
-						<view class="control-item"
-						 v-if="hotel.curRole == 'administrator'"
-							style="background-color: rgba(239,68,68,0.1);height: 100%;width: 45px;">
-							<view class="control-btn" @click="deleteHotel(hotel)">
-								<view class="control-btn-group">
-									<image src="/static/icons/delete.png" style="width:16px;height:16px"></image>
-
-								</view>
-							</view>
-
-						</view>
-					</view>
 				</view>
 			</view>
 
@@ -111,6 +94,10 @@
 	const hotelList = computed(() => {
 		return state.hotelList;
 	});
+	const roomTypeList = computed(() => {
+		return state.roomTypeList;
+	});
+	console.log("roomTypeList",roomTypeList);
 	const topImg = (imgUrl : string | null) : string => {
 		if (imgUrl == null || imgUrl == '') {
 			return '/static/images/hotel.png';
@@ -137,8 +124,8 @@
 			url: `/pages/hotelManage/createHotel/createHotel?pageType=1&&hotel_item=${encodeURIComponent(JSON.stringify(hotel_item))}`,
 		});
 	}
-	const addHotel = () => {
-		console.log("addhotel");
+	const addRoomType = () => {
+		console.log("addRoomType");
 		uni.navigateTo({
 			url: "/pages/hotelManage/createHotel/createHotel"
 		});
@@ -240,11 +227,19 @@
 					padding: 15px;
 
 					.card-title-area {
+						flex: 1;
 						.card-title {
+							display: flex;
+							flex-direction: row;
+							justify-content: space-between;
+							align-items: center;
+							.price{
+								color: #165dff;font-size: 20px;font-weight: 700;
+							}
 							.txt {
-								color: rgb(30, 30, 30);
-								font-weight: 700;
-								font-size: 20px;
+								color: #1d2129;
+								font-weight: 600;
+								font-size: 18px;
 							}
 						}
 
@@ -253,7 +248,7 @@
 							display: flex;
 							flex-direction: row;
 							align-items: center;
-
+							justify-content: space-between;
 							.txt {
 								color: rgb(144, 147, 153);
 								font-size: 14px;
@@ -275,35 +270,11 @@
 					}
 				}
 
-				.control {
-					display: flex;
-					flex-direction: row;
-					padding: 15px;
-
-					.control-item {
-						display: flex;
-						flex-direction: row;
-						border-radius: 8px;
-
-						.control-btn {
-							flex: 1;
-							display: flex;
-							flex-direction: row;
-							align-items: center;
-							justify-content: center;
-
-							.control-btn-group {
-								display: flex;
-								flex-direction: row;
-								align-items: center;
-								padding: 10px;
-							}
-						}
-
-
+				.control-icons{
+					display: flex;flex-direction: row;
+					.control-icons-item{
+						padding:6px 8px;
 					}
-
-
 				}
 
 			}

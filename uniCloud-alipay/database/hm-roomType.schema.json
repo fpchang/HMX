@@ -1,6 +1,6 @@
 {
 	"bsonType": "object",
-	"required": ["hotel_id", "count", "name","isWindow"],
+	"required": ["hotel_id", "name"],
 	"permission": {
 		"read": true,
 		"create": true,
@@ -46,7 +46,7 @@
 		"firstImages": {
 			"description": "首图",
 			"bsonType": "string",
-			"defaultValue": "https:\/\/env-00jxhfhjd231.normal.cloudstatic.cn\/HM\/images\/app.png"
+			"defaultValue": ""
 		},
 		"imagesList": {
 			"description": "图片列表",
@@ -64,57 +64,62 @@
 			"bsonType": "bool",
 			"defaultValue": true
 		},
+		"independentBathroom":{
+			"description": "独立卫浴",
+			"bsonType": "bool",
+			"defaultValue":true
+		},
 		"bedList": {
 			"description": "床位",
 			"bsonType": "array",
 			"defaultValue": []
 		},
-		// "disposableToiletries": {
-		// 	"description": "洗漱用品",
-		// 	"bsonType": "bool",
-		// 	"defaultValue": false
-		// },
+		"disposableToiletries": {
+			"description": "洗漱用品",
+			"bsonType": "bool",
+			"defaultValue": false
+		},
 		"facility": {
 			"description": "设施",
 			"bsonType": "array"
 		},
 		"priceBase":{
-					"description": "价格1",
+					"description": "基本价格",
 					"bsonType": "double",
 					"defaultValue":0
 		},
-		"priceA":{
-					"description": "价格2",
-					"bsonType": "double",
-					"defaultValue":0
-		},
-		"priceB":{
-					"description": "价格3",
-					"bsonType": "double",
-					"defaultValue":0
-		},
-		"priceBase_name":{
-					"description": "价格1名称",
-					"bsonType": "string"
-		},
-		"priceA_name":{
-					"description": "价格2名称",
-					"bsonType": "string"
-		},
-		"priceB_name":{
-					"description": "价格3名称",
-					"bsonType": "string"
-		},
-		"isBargain":{
-					"description": "是否接受议价",
-					"bsonType": "bool",
-					"defaultValue":true
-		},
-		"bargainMinPercent":{
-					"description": "议价最低百分比",
-					"bsonType": "int",
-					"defaultValue":80
-		},
+		// "priceA":{
+		// 			"description": "价格2",
+		// 			"bsonType": "double",
+		// 			"defaultValue":0
+		// },
+		// "priceB":{
+		// 			"description": "价格3",
+		// 			"bsonType": "double",
+		// 			"defaultValue":0
+		// },
+		// "priceBase_name":{
+		// 			"description": "价格1名称",
+		// 			"bsonType": "string"
+		// },
+		// "priceA_name":{
+		// 			"description": "价格2名称",
+		// 			"bsonType": "string"
+		// },
+		// "priceB_name":{
+		// 			"description": "价格3名称",
+		// 			"bsonType": "string"
+		// },
+		// "isBargain":{
+		// 			"description": "是否接受议价",
+		// 			"bsonType": "bool",
+		// 			"defaultValue":true
+		// },
+		// "bargainMinPercent":{
+		// 			"description": "议价最低百分比",
+		// 			"bsonType": "int",
+		// 			"defaultValue":80
+		// },
 		"dataStatus": {
 			"description": "数据是否有效",
 			"bsonType": "int",

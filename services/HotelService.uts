@@ -48,7 +48,7 @@ class HotelServiceClass{
 			const res = await  DB.callFunction("hm_createHotel",{hotelObj});
 			console.log("create hotel",res);
 			const result =res['result'] as UTSJSONObject;
-			const code = result.code.toString();
+			const code = result['CODE'].toString();
 			const message = result.message as string;
 			if(code!='0'){
 				console.log("code error",code);
@@ -173,6 +173,23 @@ class HotelServiceClass{
    // addRoomTypePrice(list){
    //   return DB.add("hm-roomTypePrice",list)
    // }
+   async deleteRoomType(roomType_id:string):Promise<void>{
+	   try {
+	   	await DB.callFunction("hm_deleteRoomType", {
+	   	  _id: roomType_id,
+	   	});
+		uni.showToast({
+			title:"删除成功",
+			icon:"none"
+		});
+	   } catch (error) {
+	   	uni.showToast({
+	   		title:"删除失败",
+			icon:"none"
+	   	});
+	   }
+	  
+   }
 }
 //module.exports =new HotelService();
 export var HotelService=new HotelServiceClass();

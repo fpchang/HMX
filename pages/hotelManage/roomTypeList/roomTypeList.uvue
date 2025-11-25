@@ -6,8 +6,8 @@
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
 
-				<image src="/static/icons/hotel-manage.png"
-					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<!-- <image src="/static/icons/hotel-manage.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image> -->
 				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">房型列表</text>
 			</view>
 		</template>
@@ -38,7 +38,7 @@
 								<text class="txt">{{roomType.name}}</text>
 								<text class="price">¥{{roomType.priceBase}}</text>
 								</view>
-							<view class="card-subtitle" style="justify-content: flex-start;">
+							<view class="card-subtitle" style="justify-content: flex-start;margin-bottom: 16px;">
 								<view> 
 								<rice-tag :text="`${roomType.area}㎡`" text-color="#4e5969" color="#f2f3f5"  :round="true"/>
 								
@@ -59,14 +59,17 @@
 										<text style="color: #4e5969;font-size: 14px;"> 间</text>
 									</view>
 									<view class="control-icons" style="display: flex;flex-direction: row;">
-										<view class="control-icons-item">
-											<rice-icon color="#4e5969" name="eyes"/>
+										<view class="control-icons-item" @click="addRoomType">
+											<!-- <rice-icon color="#4e5969" name="eyes"/> -->
+											<image src="/static/icons/operation/view.png" style="width: 18px;height: 18px;"></image>
 										</view>
-										<view class="control-icons-item">
-											<rice-icon color="#4e5969" name="edit"/>
+										<view class="control-icons-item" @click="editRoomType(roomType)">
+											<!-- <rice-icon color="#4e5969" name="edit"/> -->
+											<image src="/static/icons/operation/edit.png" style="width: 18px;height: 18px;"></image>
 										</view>
-										<view class="control-icons-item">
-											<rice-icon color="#4e5969" name="delete"/>
+										<view class="control-icons-item" @click="deleteRoomType(roomType)">
+											<!-- <rice-icon color="#4e5969" name="delete"/> -->
+											<image src="/static/icons/operation/delete.png" style="width: 18px;height: 18px;"></image>
 										</view>
 										
 										
@@ -102,6 +105,9 @@
 	const hotelList = computed(() => {
 		return state.hotelList;
 	});
+	const permissionList=computed(() => {
+		return state.permissionList;
+	});
 	const roomTypeList = computed(() => {
 		return state.roomTypeList;
 	});
@@ -123,7 +129,7 @@
 		]);
 		return p.get(val) ?? val;
 	}
-	const editHotel = (hotel_item : UTSJSONObject) => {
+	const editRoomType = (hotel_item : UTSJSONObject) => {
 		if (hotel_item.curRole != "administrator") {
 			//alert.alertNoPermisson();
 			return;
@@ -135,11 +141,14 @@
 	const addRoomType = () => {
 		console.log("addRoomType");
 		uni.navigateTo({
-			url: "/pages/hotelManage/createHotel/createHotel"
+			url: "/pages/hotelManage/createRoomType/createRoomType"
 		});
 	}
-	const deleteHotel = async (targetObj : UTSJSONObject) => {
-		if (targetObj.curRole != "administrator") {
+	const deleteRoomType = async (targetObj : UTSJSONObject) => {
+		console.log(permissionList.value)
+		if (!permissionList.value.includes(
+          "ROOMTYPE_DELETE"
+        )) {
 			showDialog({
 				title: '没有足够的权限',
 				message: "请联系负责人",
@@ -152,7 +161,7 @@
 		}
 
 		showDialog({
-			title: '确认删除此酒店',
+			title: '确认删除此房型',
 			message: "删除后将无法恢复，确认删除吗？",
 			beforeClose: async () : Promise<boolean> => {
 				try {
@@ -241,6 +250,7 @@
 							flex-direction: row;
 							justify-content: space-between;
 							align-items: center;
+							margin-bottom: 12px;
 							.price{
 								color: #165dff;font-size: 20px;font-weight: 700;
 							}

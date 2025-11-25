@@ -312,7 +312,17 @@
 	watch([modelValue, mode, isVisible, () => props.minDate, () => props.maxDate], async () => {
 		if (!isVisible.value) return
 		currentDate.value = getParseDate()
+		//iOS临时解决方案
+		// #ifdef APP-IOS
+		nextTick(()=>{
+			currentValues.value = initCurrentValues()
+		})
+		//#endif
+		
+		// #ifndef APP-IOS
 		currentValues.value = initCurrentValues()
+		//#endif
+		
 		updateColumns()
 	}, {
 		deep: true,

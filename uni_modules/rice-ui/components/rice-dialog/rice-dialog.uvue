@@ -33,9 +33,7 @@
 						@click="confirm">
 						<text v-if="!confirmLoading" class="rice-dialog__button__text rice-dialog__button__text__confirm"
 							:style="confirmTextStyle">{{confirmButtonText}}</text>
-						<view v-else class="rice-dialog__button__loading">
-							<rice-loading :color="confirmButtonColor" />
-						</view>
+						<rice-loading v-else :color="confirmButtonColor" />
 					</view>
 				</template>
 			</slot>
@@ -516,7 +514,6 @@
 		}
 
 		&__button {
-			position: relative;
 			height: 48px;
 			flex: 1;
 			align-items: center;
@@ -531,16 +528,6 @@
 				&__confirm {
 					color: var(--rice-primary-color);
 				}
-
-
-			}
-
-			&__loading {
-				position: absolute;
-				z-index: 1;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
 			}
 
 			&--disabled {

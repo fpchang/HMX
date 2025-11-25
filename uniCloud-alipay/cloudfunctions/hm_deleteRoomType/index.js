@@ -5,6 +5,6 @@ exports.main = async (event, context) => {
 	console.log("hm_deleteRoomType",event);
 		const db =uniCloud.database();
 		const dCmd=db.command;
-	const result = await db.collection('hm-roomType').doc(_id).remove();
+	const result = await db.collection('hm-roomType').doc(_id._value).remove();
 	return result;
 };

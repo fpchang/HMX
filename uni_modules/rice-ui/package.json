@@ -1,7 +1,7 @@
 {
   "id": "rice-ui",
   "displayName": "RiceUI 基于uniappx 的UI框架【支持APP 鸿蒙 小程序 H5】",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "RiceUI 框架基于 uniappx setup 模式开发，支持Android，iOS，鸿蒙next，微信小程序和H5，免费开源，无需付费",
   "keywords": [
     "rice-ui",

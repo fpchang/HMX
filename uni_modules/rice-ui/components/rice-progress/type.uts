@@ -1,4 +1,3 @@
-export type ProgressColorFun = (percentage : number) => string
 
 export type ProgressColors = {
 	color : string,
@@ -7,14 +6,12 @@ export type ProgressColors = {
 
 export type ProgressProps = {
 	percentage : string | number,
-	animation ?: boolean,
 	strokeWidth ?: string | number,
 	showText ?: boolean,
 	textColor ?: string,
 	textSize ?: string | number,
 	textPosition ?: 'right' | 'inside',
 	format ?: (percentage : number) => string,
-	status ?: 'success' | 'warning' | 'exception',
 	color ?: string,
 	inactiveColor ?: string,
 	radius ?: string | number,

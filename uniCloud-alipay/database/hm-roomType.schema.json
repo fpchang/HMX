@@ -1,6 +1,6 @@
 {
 	"bsonType": "object",
-	"required": ["hotel_id", "count", "name"],
+	"required": ["hotel_id", "count", "name","isWindow"],
 	"permission": {
 		"read": true,
 		"create": true,

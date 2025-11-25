@@ -1,3 +1,6 @@
+## 1.0.19（2025-11-23）
+- [新增] 新增 ProgressCircle 圆环进度条组件 [文档](https://riceui.cn/components/progress-circle.html)
+- [提示] picker相关组件在HBuilderx4.80+以上版本的[问题见](https://riceui.cn/components/picker.html)
 ## 1.0.18（2025-10-29）
 - [新增] 新增 Uploader 上传组件 [文档](https://riceui.cn/components/uploader.html)
 ## 1.0.17（2025-10-24）

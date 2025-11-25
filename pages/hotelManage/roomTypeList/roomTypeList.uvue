@@ -38,10 +38,18 @@
 								<text class="txt">{{roomType.name}}</text>
 								<text class="price">¥{{roomType.priceBase}}</text>
 								</view>
-							<view class="card-subtitle">
+							<view class="card-subtitle" style="justify-content: flex-start;">
+								<view> 
+								<rice-tag :text="`${roomType.area}㎡`" text-color="#4e5969" color="#f2f3f5"  :round="true"/>
 								
-								<text
-									class="txt">tag</text>
+								</view>
+								<view style="margin-left: 8px;" v-for="it of roomType.bedList">
+									<rice-tag  :text="`${it.count}张${it.name}床`" text-color="#4e5969" color="#f2f3f5" text-size="12px" :round="true"/>
+									
+								</view>
+								
+								
+								
 							</view>
 							<view class="card-subtitle">
 								

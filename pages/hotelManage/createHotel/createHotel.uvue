@@ -54,7 +54,7 @@
 				<view>
 					<!-- <rice-input bg-color="#fff" height="40px" v-model="hotelForm.hotelName" placeholder="请输入酒店名称"
 						focus-border focus-border-color="#165dff" /> -->
-						<!-- <xt-input-tab v-model="hotelForm.feature"></xt-input-tab> -->
+						<xt-input-tab v-model="hotelForm.feature"></xt-input-tab>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="餐饮" tips="" required>

@@ -126,7 +126,9 @@
 					item.message = res.progress + '%'
 				});
 				uni.hideLoading();
-			});
+			}).catch(e=>{
+				item.status = 'failed';
+			})
 		});
 
 	}

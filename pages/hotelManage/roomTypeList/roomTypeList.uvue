@@ -43,8 +43,8 @@
 								<rice-tag :text="`${roomType.area}㎡`" text-color="#4e5969" color="#f2f3f5"  :round="true"/>
 								
 								</view>
-								<view style="margin-left: 8px;" v-for="it of roomType.bedList">
-									<rice-tag  :text="`${it.count}张${it.name}床`" text-color="#4e5969" color="#f2f3f5" text-size="12px" :round="true"/>
+								<view style="margin-left: 8px;" v-for="it of (roomType.bedList as Array<UTSJSONObject>)">
+									<rice-tag  :text="`${it['count']}张${it['name']}床`" text-color="#4e5969" color="#f2f3f5" text-size="12px" :round="true"/>
 									
 								</view>
 								
@@ -129,14 +129,23 @@
 		]);
 		return p.get(val) ?? val;
 	}
-	const editRoomType = (hotel_item : UTSJSONObject) => {
-		if (hotel_item.curRole != "administrator") {
-			//alert.alertNoPermisson();
-			return;
-		}
+	const editRoomType = (roomType_item : UTSJSONObject) => {
+	if (!permissionList.value.includes(
+	  "ROOMTYPE_UPDATE"
+	)) {
+		showDialog({
+			title: '没有足够的权限',
+			message: "请联系负责人",
+			showCancelButton: false,
+			confirm: () => {
+				hideDialog();
+			}
+		})
+		return;
+	}
 		uni.navigateTo({
-			url: `/pages/hotelManage/createHotel/createHotel?pageType=1&&hotel_item=${encodeURIComponent(JSON.stringify(hotel_item))}`,
-		});
+					url: `/pages/hotelManage/createRoomType/createRoomType?pageType=1&&roomType_item=${encodeURIComponent(JSON.stringify(roomType_item))}`,
+				});
 	}
 	const addRoomType = () => {
 		console.log("addRoomType");
@@ -145,7 +154,6 @@
 		});
 	}
 	const deleteRoomType = async (targetObj : UTSJSONObject) => {
-		console.log(permissionList.value)
 		if (!permissionList.value.includes(
           "ROOMTYPE_DELETE"
         )) {
@@ -188,11 +196,11 @@
 
 		});
 	}
-	const viewDetail = (hotel_item : UTSJSONObject) => {
+	const viewDetail = (roomType_item : UTSJSONObject) => {
 		// this.type = 2;
 		//this.targetObj = JSON.parse(JSON.stringify(targetObj));
 		uni.navigateTo({
-			url: `/pages/hotelManage/createHotel/createHotel?pageType=2&&hotel_item=${encodeURIComponent(JSON.stringify(hotel_item))}`,
+			url: `/pages/hotelManage/createRoomType/createRoomType?pageType=2&&roomType_item=${encodeURIComponent(JSON.stringify(roomType_item))}`,
 		});
 	}
 

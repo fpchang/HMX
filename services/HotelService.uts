@@ -48,7 +48,7 @@ class HotelServiceClass{
 			const res = await  DB.callFunction("hm_createHotel",{hotelObj});
 			console.log("create hotel",res);
 			const result =res['result'] as UTSJSONObject;
-			const code = result['CODE'].toString();
+			const code = result['code'] as string;
 			const message = result.message as string;
 			if(code!='0'){
 				console.log("code error",code);
@@ -64,7 +64,7 @@ class HotelServiceClass{
 			});
 			return {code:0,message:""} as UTSJSONObject;
 		} catch (error) {
-			
+			console.error(error);
 			throw new Error("创建失败");
 		}
  

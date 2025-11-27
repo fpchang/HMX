@@ -1,16 +1,16 @@
 export type roomType = {
-	"_id" ?: string,
-	//"count" : number,
-	"name" : string,
-	"area" : number,
-	"isWindow" : boolean,
-	"guestNumber" : number,
-	"firstImages" : string,
-	"imagesList" : string[],
-	"bedList" : string[],
-	"roomList" : string[],
-	"facility" : string[],
-	"priceBase" : number,
-	"independentBathroom" : boolean
+	_id ?: string,
+	//count : number,
+	name : string,
+	area : number,
+	isWindow : boolean,
+	guestNumber : number,
+	firstImages : string,
+	imagesList : Array<string>,
+	bedList : Array<string>,
+	roomList : Array<string>,
+	facility : Array<string>,
+	priceBase : number,
+	independentBathroom : boolean
 
 }

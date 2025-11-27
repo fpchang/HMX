@@ -4,7 +4,7 @@
 		<view class="content">
 			<slot></slot>
 		</view>
-		<view class="tooltips"><text class="txt">{{tips}}</text></view>
+		<view class="tooltips" v-if="showTips"><text class="txt">{{tips}}</text></view>
 	</view>
 </template>
 
@@ -17,6 +17,10 @@ const props = defineProps({
   tips: {
     type: String,
     default: "",
+  },
+  showTips:{
+	  type: Boolean,
+	  default: true,
   },
   required: {
     type: Boolean,

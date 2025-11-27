@@ -160,13 +160,15 @@
 		{
 			"path": "pages/hotelManage/roomTypeList/roomTypeList",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/hotelManage/createRoomType/createRoomType",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
 			}
 		},
 		{

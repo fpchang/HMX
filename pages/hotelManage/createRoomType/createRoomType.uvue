@@ -70,14 +70,14 @@
 
 			<xt-form-item label="封面图片" tips="" required>
 				<view>
-					<xt-file-upload :max-count="1" :filePath="`HM/client/${hotel_id}/hotel`"
+					<xt-file-upload :max-count="1" :filePath="`HM/client/${hotel_id}/roomType`"
 						complete="uploadFirstImageSuccess" accept="image"></xt-file-upload>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="酒店图片" tips="" required>
 				<view>
 					<xt-file-upload :max-count="3" :default_files_list="roomTypeForm.imagesList"
-						complete="uploadImageListSuccess" filePath="tt" accept="image"></xt-file-upload>
+						complete="uploadImageListSuccess"  :filePath="`HM/client/${hotel_id}/roomType`" accept="image"></xt-file-upload>
 				</view>
 			</xt-form-item>
 
@@ -119,24 +119,24 @@
 		{ name: "1.3米", checked: false, count: 1 },
 		{ name: "1.2米", checked: false, count: 1 }
 	]);
-	const bedTypeListFomat : Array<UTSJSONObject> = computed(()=>{
-		let arr = bedTypeList.value.filter(item => item.checked);
-		return arr.map(item => {
-			return { name: item.name, count: item.count };
+	const bedTypeListFomat = computed<Array<bedType>>(()=>{
+		let arr = bedTypeList.value.filter((item: bedType) => item.checked);
+		return arr.map((item: bedType) => {
+			return { name: item.name, count: item.count } as bedType;
 		})
 	})
 	let roomTypeForm = ref<roomType>({
-		"name": "",
-		"area": 25,
-		"isWindow": true,
-		"guestNumber": 2,
-		"firstImages": "",
-		"imagesList": [],
-		"bedList": [],
-		"roomList": [],
-		"facility": [],
-		"priceBase": 0,
-		"independentBathroom": true
+		name: "",
+		area: 25,
+		isWindow: true,
+		guestNumber: 2,
+		firstImages: "",
+		imagesList: [],
+		bedList: [],
+		roomList: [],
+		facility: [],
+		priceBase: 0,
+		independentBathroom: true
 	});
 	let facilityConfig_roomType = ref<Array<UTSJSONObject> | null>(null);
 	HotelService.getConfig_facilityConfig('roomType').then(list => {
@@ -146,6 +146,30 @@
 	const submitForm = () => {
 		console.log(roomTypeForm.value)
 	}
+
+	// 屋内设施勾选变化
+	const recreationCheckboxChange = (e : string[]) => {
+		roomTypeForm.value.facility = e
+	}
+	onLoad(params=>{
+		//console.log("params",params);
+		try{
+			const pt = params.get("pageType");
+			const h=params.get("roomType_item");
+			if(pt!=null){
+				pageType.value= parseInt(pt);
+			}
+			if(h!=null){
+				let decoded = decodeURIComponent(h as string);
+				if (decoded!=null) {				
+					roomTypeForm.value=JSON.parse<roomType>(decoded)!;
+					console.log("bbbbbbb",roomTypeForm.value);
+				}
+			}
+		}catch(e){
+			console.error(e)
+		}
+	});
 </script>
 
 <style lang="scss">

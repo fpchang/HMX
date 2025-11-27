@@ -59,7 +59,7 @@
 										<text style="color: #4e5969;font-size: 14px;"> 间</text>
 									</view>
 									<view class="control-icons" style="display: flex;flex-direction: row;">
-										<view class="control-icons-item" @click="addRoomType">
+										<view class="control-icons-item" @click="viewDetail(roomType)">
 											<!-- <rice-icon color="#4e5969" name="eyes"/> -->
 											<image src="/static/icons/operation/view.png" style="width: 18px;height: 18px;"></image>
 										</view>

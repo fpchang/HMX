@@ -1,108 +1,6 @@
+import {ssq_history} from "./ssq_data.js";
 const redballAll =[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]
-const history=[
-	{
-		index:2025117,
-		redBall:[6,8,17,20,25,33],
-		blueBall:[10]
-	},
-	{
-		index:2025118,
-		redBall:[1,10,11,16,24,26],
-		blueBall:[3]
-	},
-	{
-		index:2025119,
-		redBall:[6,9,23,26,28,32],
-		blueBall:[11]
-	},
-	{
-		index:2025120,
-		redBall:[1,22,4,7,13,32],
-		blueBall:[7]
-	},
-	{
-		index:2025121,
-		redBall:[6,8,10,25,29,30],
-		blueBall:[8]
-	},
-	{
-		index:2025122,
-		redBall:[16,18,19,20,25,31],
-		blueBall:[13]
-	},
-	{
-		index:2025123,
-		redBall:[7,9,23,24,25,26],
-		blueBall:[10]
-	},
-	{
-		index:2025124,
-		redBall:[1,2,18,19,21,33],
-		blueBall:[13]
-	},
-	{
-		index:2025125,
-		redBall:[3,9,12,13,26,32],
-		blueBall:[9]
-	},
-	{
-		index:2025126,
-		redBall:[2,12,13,16,19,25],
-		blueBall:[10]
-	},
-	{
-		index:2025127,
-		redBall:[3,9,15,17,19,28],
-		blueBall:[3]
-	},
-	{
-		index:2025128,
-		redBall:[2,10,18,19,24,27],
-		blueBall:[1]
-	},
-	{
-		index:2025129,
-		redBall:[3,4,7,13,20,30],
-		blueBall:[3]
-	},
-	{
-		index:2025130,
-		redBall:[1,5,8,14,19,23],
-		blueBall:[6]
-	},
-	{
-		index:2025131,
-		redBall:[3,13,14,18,24,31],
-		blueBall:[3]
-	},
-	{
-		index:2025132,
-		redBall:[4,8,10,21,23,32],
-		blueBall:[11]
-	},
-	{
-		index:2025133,
-		redBall:[5,14,17,19,20,33],
-		blueBall:[7]
-	},
-	{
-		index:2025134,
-		redBall:[3,5,9,13,26,29],
-		blueBall:[12]
-	},
-	{
-		index:2025135,
-		redBall:[1,2,5,9,25,32],
-		blueBall:[10]
-	},
-	{
-		index:2025136,
-		redBall:[8,10,14,23,28,32],
-		blueBall:[12]
-	},
-	]
-	//console.log(history.slice(history.length-13),history.length);
-//随机一组彩票红球 33 双色球，35 大乐透
+const history=ssq_history;
 function getRandomRedBall(len=33){
 	let result = [];
 	while(result.length<6){
@@ -126,7 +24,7 @@ function sameHistory(n=2,historyList=[]){
 		//console.log("groupRedBall",groupRedBall);
 		return groupRedBall;
 	}
-	
+	let s={};
 	for(let i =n;i<historyList.length;i++){
 		const grouplist = getGroupBall(i);
 		//console.log("111",grouplist);
@@ -139,10 +37,22 @@ function sameHistory(n=2,historyList=[]){
 		//console.log("--------------");
 		//console.log("groupRedBall",grouplist);
 		//console.log("groupRedBall_",groupRedBall_)
-		console.log(`与前${n}期比较有${result}个球重复-index${i}`);
+		//console.log(`与前${n}期比较有${result}个球重复-index${i}`);
+		if(result<2){
+			console.log(`前${n}期组合为：：`,groupRedBall_);
+			console.log(`当期为：：`,historyList[i]);
+			//console.log(`与前${n}期比较有${result}个球重复-index${i}`);
+		}
+		if(s[result]){
+			s[result]++;
+		}else{
+			s[result]=1;
+		}
+		
 		//console.log("--------------");
 		
 	}
+	console.log(`统计结果：${historyList.length}期与前== ${n}期重复结果 ==`,s)
 }
 //比较随机与前n期重复数量
 function compare(list =[],listHistory=[]){
@@ -151,7 +61,7 @@ function compare(list =[],listHistory=[]){
 		groupList.push(...listHistory[i].redBall)
 	}
 	groupList = [...new Set(groupList)];
-	console.log("groupList",groupList);
+	//console.log("groupList",groupList);
 	let newList = [...groupList,...list];
 	newList=[...new Set(newList)];
 	//console.log("newList",newList);
@@ -159,27 +69,71 @@ function compare(list =[],listHistory=[]){
 }
 //console.log(getRandomRedBall());
 //sameHistory(2,history);
-
-
+//红球算法 与前几期比较
+function S1(list,history){
+	let count1 = compare(list,history.slice(history.length-1));
+	let count2 = compare(list,history.slice(history.length-2));
+	let count3 = compare(list,history.slice(history.length-3));
+	let count4 = compare(list,history.slice(history.length-4));
+	let count5 = compare(list,history.slice(history.length-5));
+	let count6 = compare(list,history.slice(history.length-6));
+	let count7 = compare(list,history.slice(history.length-7));
+	console.log("count:",count1,count2,count3,count4,count5);
+	if(count1<3&&count2>0&&count2<4&&count3>1&&count3<5&&count4<6&&count4>1&&count5>2&&count5<6&&count6>3&&count6<6&&count7>3&&count7<6){
+		return true
+	}
+	return false;
+}
+//红球冷号
+/**
+ * @param {Object} list
+ * @param {Object} history
+ * 1,与前2期 只有0个号重复--6/137
+ * 2，与前3期只1个号重复 12/137
+ * 3，前4期只有一个号 重复4/137
+ * 4,
+ */
+function S2(list,history){
+	let count2 = compare(list,history.slice(history.length-2));
+	let count3 = compare(list,history.slice(history.length-3));
+	let count4 = compare(list,history.slice(history.length-4));
+	let count5 = compare(list,history.slice(history.length-5));
+	if(count2==0&&count3<2&&count4<2&&count5<3){
+		
+		return true;
+	}
+}
+//红球绝杀爆冷号
+/**
+ * @param {Object} list
+ * @param {Object} history
+ * 1,与前2期 只有0个号重复--6/137
+ * 2，与前3期只1个号重复 12/137
+ * 3，前4期只有一个号 重复4/137
+ * 4,
+ */
+function S3(list,history){
+	let count2 = compare(list,history.slice(history.length-2));
+	let count3 = compare(list,history.slice(history.length-3));
+	let count4 = compare(list,history.slice(history.length-4));
+	let count5 = compare(list,history.slice(history.length-5));
+	if(count3==0&&count5<2){
+		
+		return true;
+	}
+}
 function caculate(){
 	
-	let h =[{
-		redBall:[1,2,5,9,25,32],
-		blueBall:[10]
-	},
-	{
-		redBall:[8,10,14,23,28,32],
-		blueBall:[12]
-	}];
+
 	let thread=0;
 	let result =[];
-	while(thread<64){
-		let list =getRandomRedBall();
-		let count2 = compare(list,history.slice(history.length-2));
-		let count3 = compare(list,history.slice(history.length-3));
-		let count4 = compare(list,history.slice(history.length-4));
-		if(count2<3&&count3<4&&count4<4){
-			//console.log("---",list,"---")
+	while(thread<20){
+		let list =getRandomRedBall();		
+		// if(S1(list,history)){
+		// 	result.push({redBall:list})
+		// 	thread++;
+		// }
+		if(S3(list,history)){
 			result.push({redBall:list})
 			thread++;
 		}
@@ -187,5 +141,13 @@ function caculate(){
 	return result;
 }
 //结果 与前2期最多重复2，与前3期最多重复3,前4期最多3
-console.log(caculate());
-//sameHistory(4,history);
+//console.log(caculate());
+///sameHistory(1,history);
+//let flag = S1([ 8, 10, 14, 23, 28, 32 ],history);
+//console.log(flag);
+
+sameHistory(4,history);
+sameHistory(5,history);
+sameHistory(6,history);
+sameHistory(7,history);
+sameHistory(8,history);

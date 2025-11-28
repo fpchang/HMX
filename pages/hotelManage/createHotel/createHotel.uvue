@@ -117,14 +117,14 @@
 			</xt-form-item>
 			<xt-form-item label="封面图片" tips="" required>
 				<view>
-					<xt-file-upload :max-count="1" :filePath="`HM/client/${hotel_id}/hotel`"
-						complete="uploadFirstImageSuccess"  accept="image"  :readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
+					<xt-file-upload :max-count="1" :filePath="`HM/client/${hotel_id}/hotel`" :default_files_list="[hotelForm.firstImages]"
+						@uploadSuccess="uploadFirstImageSuccess"  accept="image"  :readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="酒店图片" tips="" required>
 				<view>
 					<xt-file-upload :max-count="3" :default_files_list="hotelForm.imagesList"
-						complete="uploadImageListSuccess" ::filePath="`HM/client/${hotel_id}/hotel`" accept="image" :readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
+						@uploadSuccess="uploadImageListSuccess" ::filePath="`HM/client/${hotel_id}/hotel`" accept="image" :readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
 				</view>
 			</xt-form-item>
 
@@ -207,8 +207,7 @@
 		return pageType.value==1?'修改酒店信息':'酒店信息';
 	})
 	let submitLoading=ref(false);
-	const addHotel= async ()=>{
-		
+	const addHotel= async ()=>{		
 		try{
 			const res = await HotelService.createHotel(hotelForm.value);
 			console.log("res:::::::",res);
@@ -218,9 +217,7 @@
 		}catch(e){
 			submitLoading.value=false;	
 			console.error("保存失败",e)
-		}
-			
-		
+		}					
 
 	}
 	const updateHotel= async ()=>{
@@ -307,9 +304,11 @@
 	}
 	const uploadFirstImageSuccess = (list : string[]) => {
 		console.log("得到的list：", list);
+		hotelForm.value.firstImages=list[0];
 	}
 	const uploadImageListSuccess = (list : string[]) => {
-		console.log("得到的list：", list);
+		console.log("得到的list2：", list);
+		hotelForm.value.imagesList=list;
 	}
 
 	onLoad(params=>{

@@ -88,38 +88,38 @@
 					"bsonType": "double",
 					"defaultValue":0
 		},
-		// "priceA":{
-		// 			"description": "价格2",
-		// 			"bsonType": "double",
-		// 			"defaultValue":0
-		// },
-		// "priceB":{
-		// 			"description": "价格3",
-		// 			"bsonType": "double",
-		// 			"defaultValue":0
-		// },
-		// "priceBase_name":{
-		// 			"description": "价格1名称",
-		// 			"bsonType": "string"
-		// },
-		// "priceA_name":{
-		// 			"description": "价格2名称",
-		// 			"bsonType": "string"
-		// },
-		// "priceB_name":{
-		// 			"description": "价格3名称",
-		// 			"bsonType": "string"
-		// },
-		// "isBargain":{
-		// 			"description": "是否接受议价",
-		// 			"bsonType": "bool",
-		// 			"defaultValue":true
-		// },
-		// "bargainMinPercent":{
-		// 			"description": "议价最低百分比",
-		// 			"bsonType": "int",
-		// 			"defaultValue":80
-		// },
+		"priceA":{
+					"description": "价格2",
+					"bsonType": "double",
+					"defaultValue":0
+		},
+		"priceB":{
+					"description": "价格3",
+					"bsonType": "double",
+					"defaultValue":0
+		},
+		"priceBase_name":{
+					"description": "价格1名称",
+					"bsonType": "string"
+		},
+		"priceA_name":{
+					"description": "价格2名称",
+					"bsonType": "string"
+		},
+		"priceB_name":{
+					"description": "价格3名称",
+					"bsonType": "string"
+		},
+		"isBargain":{
+					"description": "是否接受议价",
+					"bsonType": "bool",
+					"defaultValue":true
+		},
+		"bargainMinPercent":{
+					"description": "议价最低百分比",
+					"bsonType": "int",
+					"defaultValue":80
+		},
 		"dataStatus": {
 			"description": "数据是否有效",
 			"bsonType": "int",

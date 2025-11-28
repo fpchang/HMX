@@ -55,7 +55,7 @@
 								
 									<view style="display: flex;flex-direction: row;">
 										<text style=" font-weight:500;color: #1d2129;font-size: 14px;">房间数量：</text>
-										<text class="txt-num" style="color: #00b42f;font-size: 14px;padding:0 5px;">23</text>
+										<text class="txt-num" style="color: #00b42f;font-size: 14px;padding:0 5px;">{{ roomNum(roomType)}}</text>
 										<text style="color: #4e5969;font-size: 14px;"> 间</text>
 									</view>
 									<view class="control-icons" style="display: flex;flex-direction: row;">
@@ -102,6 +102,9 @@
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { HotelService } from "@/services/HotelService.uts";
 	let submitLoading = ref(false);
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
 	const hotelList = computed(() => {
 		return state.hotelList;
 	});
@@ -112,6 +115,10 @@
 		return state.roomTypeList;
 	});
 	console.log("roomTypeList",roomTypeList);
+	const roomNum=(roomType:UTSJSONObject)=>{
+		const roomList = roomType["_id"]["hm-room"] as Array<UTSJSONObject>;
+		return roomList.length;
+	}
 	const topImg = (imgUrl : string | null) : string => {
 		if (imgUrl == null || imgUrl == '') {
 			return '/static/images/hotel.png';
@@ -173,8 +180,8 @@
 			message: "删除后将无法恢复，确认删除吗？",
 			beforeClose: async () : Promise<boolean> => {
 				try {
-					await HotelService.deleteHotel(targetObj._id as string);
-					await comFunction.getHotelList();
+					await HotelService.deleteRoomType(targetObj._id._value as string);
+					await comFunction.getRoomTypeList();
 					hideDialog();
 					uni.showToast({
 						title: "删除成功",

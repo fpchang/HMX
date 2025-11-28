@@ -13,7 +13,7 @@
 		</template>
 		<template #right>
 			<view class="navbar-btn" v-if="pageType!=2">
-			
+
 				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
 					textColor="#1e88e5" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
 			</view>
@@ -40,26 +40,28 @@
 				</view>
 			</xt-form-item>
 			<xt-form-item label="床位" tips="" required>
-				<!-- <rice-checkbox-group @change="cateringCheckboxChange" direction="row" v-model="roomTypeForm.facility"> -->
-					<view class="checkbox-group">
-						<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
-							v-for="item in bedTypeList">
-							<rice-checkbox :disabled="pageType==2" :value="item ['name']" :label="item.name" v-model="item.checked"/>
-							<view style="margin-left: 25px;"> 
+
+				<view class="checkbox-group">
+					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+						v-for="item of bedTypeList">
+						<rice-checkbox :disabled="pageType==2" :value="item ['name']" :label="item.name"
+							v-model="item.checked" />
+						<view style="margin-left: 25px;">
 							<rice-stepper :disabled="!item.checked" v-model="item.count" input-width="42"
-								button-size="38" font-size="15"  mode="outline"/>
-							</view>
-							
+								button-size="38" font-size="15" mode="outline" />
 						</view>
+
 					</view>
+				</view>
 				<!-- </rice-checkbox-group> -->
 			</xt-form-item>
 			<xt-form-item label="价格" tips="" required>
-				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入价格"
-					borderColor="#dcdfe6" :disabled="pageType==2" v-model="roomTypeForm.priceBase"></rice-input>
+				<!-- <rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入价格"
+					borderColor="#dcdfe6" :disabled="pageType==2" type="number" v-model="roomTypeForm.priceBase"></rice-input> -->
+					<rice-stepper v-model="roomTypeForm.priceBase" input-width="150" button-size="38" font-size="15" />
 			</xt-form-item>
 			<xt-form-item label="屋内设施" tips="" required>
-				
+
 				<rice-checkbox-group @change="recreationCheckboxChange" direction="row" v-model="roomTypeForm.facility">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
 						v-for="item in facilityConfig_roomType">
@@ -71,13 +73,15 @@
 			<xt-form-item label="封面图片" tips="" required>
 				<view>
 					<xt-file-upload :max-count="1" :filePath="`HM/client/${hotel_id}/roomType`"
-						complete="uploadFirstImageSuccess" accept="image"></xt-file-upload>
+					:default_files_list="[roomTypeForm.firstImages]"
+						@uploadSuccess="uploadFirstImageSuccess" accept="image"></xt-file-upload>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="酒店图片" tips="" required>
 				<view>
 					<xt-file-upload :max-count="3" :default_files_list="roomTypeForm.imagesList"
-						complete="uploadImageListSuccess"  :filePath="`HM/client/${hotel_id}/roomType`" accept="image"></xt-file-upload>
+						@uploadSuccess="uploadImageListSuccess" :filePath="`HM/client/${hotel_id}/roomType`"
+						accept="image"></xt-file-upload>
 				</view>
 			</xt-form-item>
 
@@ -90,9 +94,10 @@
 <script setup>
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
 	import { state } from '@/store/store.uts';
-	import { roomType } from "@/bean/roomTypeBean.uts";
+	import { roomTypeBean } from "@/bean/roomTypeBean.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { HotelService } from "@/services/HotelService";
+	import { validRoomTypeForm } from "./roomTypeFormVaild.uts";
 	type bedType = {
 		name : string,
 		checked : boolean,
@@ -113,19 +118,21 @@
 		return state.user;
 	});
 	const cloudPath = `/${hotel_id.value}/roomType/`;
+	let roomType_id=ref("");//编辑房型id
 	let bedTypeList = ref<bedType[]>([
 		{ name: "1.8米", checked: false, count: 1 },
 		{ name: "1.5米", checked: false, count: 1 },
 		{ name: "1.3米", checked: false, count: 1 },
 		{ name: "1.2米", checked: false, count: 1 }
 	]);
-	const bedTypeListFomat = computed<Array<bedType>>(()=>{
-		let arr = bedTypeList.value.filter((item: bedType) => item.checked);
-		return arr.map((item: bedType) => {
-			return { name: item.name, count: item.count } as bedType;
+	const bedTypeListFomat = computed<Array<UTSJSONObject>>(() => {
+		let arr = bedTypeList.value.filter((item : bedType) => item.checked);
+		return arr.map((item : bedType) => {
+			return { name: item.name, count: item.count } as UTSJSONObject;
 		})
 	})
-	let roomTypeForm = ref<roomType>({
+	let roomTypeForm = ref<roomTypeBean>({
+		hotel_id:hotel_id.value,
 		name: "",
 		area: 25,
 		isWindow: true,
@@ -136,40 +143,90 @@
 		roomList: [],
 		facility: [],
 		priceBase: 0,
+		
 		independentBathroom: true
 	});
 	let facilityConfig_roomType = ref<Array<UTSJSONObject> | null>(null);
 	HotelService.getConfig_facilityConfig('roomType').then(list => {
 		facilityConfig_roomType.value = list;
 	});
-
+	const addRoomType= async ()=>{
+		submitLoading.value=true;
+		await HotelService.addRoomType(roomTypeForm.value);
+		await comFunction.getRoomTypeList(hotel_id.value);
+		submitLoading.value=false;
+		uni.navigateBack();
+	}
+	const updateRoomType=async ()=>{
+		submitLoading.value=true;
+	//	const id = roomTypeForm.value._id._value as string;
+		roomTypeForm.value._id=roomType_id.value;
+		await HotelService.updateRoomType(roomType_id.value,roomTypeForm.value);
+		await comFunction.getRoomTypeList(hotel_id.value);
+		submitLoading.value=false;
+		uni.navigateBack();
+	}
 	const submitForm = () => {
-		console.log(roomTypeForm.value)
+			//roomTypeForm.value.hotel_id=hotel_id.value;
+			roomTypeForm.value.bedList = bedTypeListFomat.value;
+		const flag : boolean = validRoomTypeForm(roomTypeForm.value);
+		if (flag == false) {
+			return;
+		}
+		console.log(flag)
+	
+		console.log(roomTypeForm.value);
+		if (pageType.value == 1) {
+			updateRoomType();
+			return;
+		}
+		addRoomType();
 	}
 
 	// 屋内设施勾选变化
 	const recreationCheckboxChange = (e : string[]) => {
 		roomTypeForm.value.facility = e
 	}
-	onLoad(params=>{
+	const uploadFirstImageSuccess = (list : string[]) => {
+		console.log("得到的list：", list);
+		roomTypeForm.value.firstImages=list[0];
+	}
+	const uploadImageListSuccess = (list : string[]) => {
+		console.log("得到的list2：", list);
+		roomTypeForm.value.imagesList=list;
+	}
+	
+	onLoad(params => {
 		//console.log("params",params);
-		try{
+		try {
 			const pt = params.get("pageType");
-			const h=params.get("roomType_item");
-			if(pt!=null){
-				pageType.value= parseInt(pt);
+			const h = params.get("roomType_item");
+			if (pt != null) {
+				pageType.value = parseInt(pt);
 			}
-			if(h!=null){
+			if (h != null) {
 				let decoded = decodeURIComponent(h as string);
-				if (decoded!=null) {				
-					roomTypeForm.value=JSON.parse<roomType>(decoded)!;
-					console.log("bbbbbbb",roomTypeForm.value);
+				if (decoded != null) {
+					roomTypeForm.value = JSON.parse<roomTypeBean>(decoded)!;
+					roomType_id.value= JSON.parse<roomTypeBean>(decoded)['_id']['_value'];
+					console.log(roomTypeForm.value);
+
 				}
 			}
-		}catch(e){
+		} catch (e) {
 			console.error(e)
 		}
 	});
+	onMounted(() => {
+		for (let i = 0; i < bedTypeList.value.length; i++) {
+			let obj = roomTypeForm.value.bedList.find(it => it.name == bedTypeList.value[i].name);
+			if (obj) {
+				bedTypeList.value[i].checked = true;
+				bedTypeList.value[i].count = obj.count as number;
+			}
+		}
+
+	})
 </script>
 
 <style lang="scss">

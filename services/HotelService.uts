@@ -1,6 +1,7 @@
-import{DB} from '../api/DB';
-import {callFunctionRes} from "@/bean/DBBean";
+import { DB } from '../api/DB';
+import { callFunctionRes } from "@/bean/DBBean";
 import { hotelBean } from '../bean/hotelBean';
+import { roomTypeBean } from "@/bean/roomTypeBean.uts";
 // type UniCloudCallFunctionResult={
 // 	"errCode": number,
 // 	"success": boolean,
@@ -9,187 +10,239 @@ import { hotelBean } from '../bean/hotelBean';
 
 // }
 
-class HotelServiceClass{
-	constructor(){
-       
-    }
+class HotelServiceClass {
+	constructor() {
+
+	}
 	/**
 	 * 获取基础设施 配置
 	 * type:base 基础设施，recreation休闲设施，athleticFacility运动设施
 	 */
-	async getConfig_facilityConfig(type:string):Promise<Array<UTSJSONObject>>{
-		 const res =await DB.getCollection("hm-facilityConfig",{type:type});	
-		const data = res['data'] as Array<UTSJSONObject>;		
+	async getConfig_facilityConfig(type : string) : Promise<Array<UTSJSONObject>> {
+		const res = await DB.getCollection("hm-facilityConfig", { type: type });
+		const data = res['data'] as Array<UTSJSONObject>;
 		return data;
 	}
 	// async  getUseCascaderAreaData() :Promise<UTSJSONObject[]>{
 	// 	//const data = useCascaderAreaData();
 	// 	return [];
 	// }
-	async getOpendbCityChina(type:number):Promise<Array<UTSJSONObject>>{
-		const db =uniCloud.databaseForJQL();
+	async getOpendbCityChina(type : number) : Promise<Array<UTSJSONObject>> {
+		const db = uniCloud.databaseForJQL();
 		//const res = await db.collection("opendb-city-china").field("code as value, name as text, eq(type, 2) as isleaf").get();
-		const res = await db.collection("opendb-city-china").where({type}).get();
+		const res = await db.collection("opendb-city-china").where({ type }).get();
 		//return  DB.getCollection("opendb-city-china")
 		const data = res['data'] as Array<UTSJSONObject>;
 		return data;
-		
+
 	}
-    
-    /**
-     *
-     *
-     * @param {*} hotelObj
-     * @return {*} 
-     * @memberof HotelService
-     */
-	async createHotel(hotelObj:hotelBean):Promise<UTSJSONObject>{
+
+	/**
+	 *
+	 *
+	 * @param {*} hotelObj
+	 * @return {*} 
+	 * @memberof HotelService
+	 */
+	async createHotel(hotelObj : hotelBean) : Promise<UTSJSONObject> {
 		try {
-			const res = await  DB.callFunction("hm_createHotel",{hotelObj});
-			console.log("create hotel",res);
-			const result =res['result'] as UTSJSONObject;
+			const res = await DB.callFunction("hm_createHotel", { hotelObj });
+			console.log("create hotel", res);
+			const result = res['result'] as UTSJSONObject;
 			const code = result['code'] as string;
 			const message = result.message as string;
-			if(code!='0'){
-				console.log("code error",code);
+			if (code != '0') {
+				console.log("code error", code);
 				uni.showToast({
-					title:message,
-					icon:"none"
+					title: message,
+					icon: "none"
 				});
 				throw new Error(result.message as string);
 			}
 			uni.showToast({
-				title:"添加成功",
-				icon:"none"
+				title: "添加成功",
+				icon: "none"
 			});
-			return {code:0,message:""} as UTSJSONObject;
+			return { code: 0, message: "" } as UTSJSONObject;
 		} catch (error) {
 			console.error(error);
 			throw new Error("创建失败");
 		}
- 
-	  
-    }
-    async updateHotel(hotel_id:string,hotelObj:hotelBean):Promise<UTSJSONObject>{
-		console.log("UPDATE+++++===",hotelObj);
-	try {
-		const res = await  DB.callFunction("hm_updateHotel",{hotel_id,hotelObj});
-		console.log("update hotel",res);
-		const result =res['result'] as UTSJSONObject;
-		const code = result.code.toString();
-		const message = result.message as string;
-		if(code!='0'){
-			uni.showToast({
-				title:message,
-				icon:"none"
-			});
-			throw new Error(result.message as string);
-		}
-	
-		return {code:0,message:""} as UTSJSONObject;
-	} catch (error) {
-		throw new Error("更新失败");
+
+
 	}
-    }
+	async updateHotel(hotel_id : string, hotelObj : hotelBean) : Promise<UTSJSONObject> {
+		console.log("UPDATE+++++===", hotelObj);
+		try {
+			const res = await DB.callFunction("hm_updateHotel", { hotel_id, hotelObj });
+			console.log("update hotel", res);
+			const result = res['result'] as UTSJSONObject;
+			const code = result.code.toString();
+			const message = result.message as string;
+			if (code != '0') {
+				uni.showToast({
+					title: message,
+					icon: "none"
+				});
+				throw new Error(result.message as string);
+			}
+
+			return { code: 0, message: "" } as UTSJSONObject;
+		} catch (error) {
+			throw new Error("更新失败");
+		}
+	}
+
+	deleteHotel(hotel_id : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+		return DB.callFunction("hm_deleteHotel", { hotel_id });
+	}
+	/** 
+	 * 获取当前用户关联酒店列表(包括老板与用户)
+	*/
+	async getHotelList() : Promise<Array<UTSJSONObject>> {
+		const res = await DB.callFunction("hm_getHotelList_x");
+		const result = res.result as UTSJSONObject;
+		const data = result.get('data') as Array<UTSJSONObject>;
+
+		return data;
+
+
+
+
+	}
+	/**
+	 *所属于 当前用户酒店
+	 */
+	getHotelListOfUser(phone : string) : Promise<UniCloudDBGetResult> {
+		return DB.getCollection("hm-hotel", { belong: phone })
+	}
+	/**
+	 * 根据id获取酒店信息
+	 */
+	getHotelInfoById(hotel_id : string) : Promise<UniCloudDBGetResult> {
+		return DB.getCollection("hm-hotel", { _id: hotel_id })
+	}
+
+	/** 
+	 * 获取当前酒店房型信息
+	*/
+	getRoomType(hotel_id : string) : Promise<UniCloudDBGetResult> {
+		return DB.getCollection("hm-roomType,hm-room", { "hotel_id":hotel_id })
+	}
+	/**
+	 * 根据房型id获取房间
+	 * @param {*} room_type_id:
+	 * @returns 
+	 */
+	getRoom(room_type_id : string) : Promise<UniCloudDBGetResult> {
+		return DB.getCollection("hm-room", { _id: room_type_id })
+
+	}
+	/**
+	 * 
+	 * @param {*} hotel_id 
+	 * @returns 根据店铺获取房间列表
+	 */
+	getRoomListByHotelId(hotel_id : string) : Promise<UniCloudDBGetResult> {
+		return DB.getCollection("hm-room", { hotel_id: hotel_id });
+	}
+	/**
+	 * 
+	 * @param {*} hotel_id 
+	 */
+	async getRoomListByHotelIdGroupByRoomType(hotel_id : string) : Promise<UniCloudDBGetResult> {
+
+		const db = uniCloud.databaseForJQL();
+		const roomType = db.collection("hm-roomType").where({ hotel_id }).field("hotel_id,_id,name").getTemp();
+		const res = await db.collection(roomType, "hm-room").where({ hotel_id }).get();
+		return res;
+	}
+	/** get employeeList */
+	getEmployeeList(hotel_id : string) : Promise<UniCloudDBGetResult> {
+		return DB.getCollectionOrderBy("hm-employee", { hotel_id }, "role asc")
+	}
+	/**
+	 * 房价添加
+	 * @param {*} data 
+	 */
+	// addRoomTypePrice(list){
+	//   return DB.add("hm-roomTypePrice",list)
+	// }
+	async deleteRoomType(roomType_id : string) : Promise<void> {
+		console.log("删除房型：：",roomType_id);
+		if(roomType_id==null||roomType_id==""){
+			uni.showToast({
+				title: "删除异常",
+				icon: "none"
+			});
+			return;
+		}
+		try {
+			await DB.callFunction("hm_deleteRoomType_x", {
+				_id: roomType_id,
+			});
+			uni.showToast({
+				title: "删除成功",
+				icon: "none"
+			});
+		} catch (error) {
+			uni.showToast({
+				title: "删除失败",
+				icon: "none"
+			});
+		}
+
+	}
+	async addRoomType(roomTypeForm : roomTypeBean):Promise<UTSJSONObject> {
+		try {
+			const res =await DB.callFunction("hm_addRoomType",{roomTypeObj: roomTypeForm});
+			console.log("create roomTypeForm", res);
+			const result = res['result'] as UTSJSONObject;
+			const code = result['code'] as string;
+			const message = result.message as string;
+			if (code != '0') {
+				console.log("code error", code);
+				uni.showToast({
+					title: message,
+					icon: "none"
+				});
+				throw new Error(result.message as string);
+			}
+			uni.showToast({
+				title: "添加成功",
+				icon: "none"
+			});
+			return { code: 0, message: "" } as UTSJSONObject;
+			//await this.$store.dispatch("getRoomType");
+		} catch (error) {
+			//TODO handle the exception
+			throw new Error("创建房型失败");
+		}
+		
+	}
 	
-    deleteHotel(hotel_id:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
-      return   DB.callFunction("hm_deleteHotel",{hotel_id});
-    }
-    /** 
-     * 获取当前用户关联酒店列表(包括老板与用户)
-    */
-      async getHotelList():Promise<Array<UTSJSONObject>>{
-           const res = await DB.callFunction("hm_getHotelList_x");
-		  const result = res.result as UTSJSONObject;
-		  const data = result.get('data') as Array<UTSJSONObject>;
-		  
-		  return data;
-		  
-		   
+	async updateRoomType(_id : string, roomTypeObj : roomTypeBean) : Promise<UTSJSONObject> {
+		console.log("UPDATE+++++===",_id, roomTypeObj);
+		try {
+			const res = await DB.callFunction("hm_updateRoomType", { _id, roomTypeObj });
+			console.log("update roomType", res);
+			const result = res['result'] as UTSJSONObject;
+			const code = result.code.toString();
+			const message = result.message as string;
+			if (code != '0') {
+				uni.showToast({
+					title: message,
+					icon: "none"
+				});
+				throw new Error(result.message as string);
+			}
 	
-         
-    }
-/**
- *所属于 当前用户酒店
- */
-    getHotelListOfUser(phone:string):Promise<UniCloudDBGetResult>{
-      return DB.getCollection("hm-hotel",{belong:phone})
-    }
-    /**
-     * 根据id获取酒店信息
-     */
-    getHotelInfoById(hotel_id:string):Promise<UniCloudDBGetResult>{
-        return DB.getCollection("hm-hotel",{_id:hotel_id})
-    }
-    
-    /** 
-     * 获取当前酒店房型信息
-    */
-     getRoomType(hotel_id:string):Promise<UniCloudDBGetResult>{
-          //  return DB.callFunction(
-          //       "hm_getRoomType",
-          //       {hotel_id}
-          //   );
-          //   let obj = res.result.data.length?res.result.data:[];
-          //  return obj;
-     return DB.getCollection("hm-roomType,hm-room",{hotel_id})
-   }
-    /**
-     * 根据房型id获取房间
-     * @param {*} room_type_id:
-     * @returns 
-     */
-     getRoom(room_type_id:string):Promise<UniCloudDBGetResult>{
-           return DB.getCollection("hm-room",{_id:room_type_id})
-     
-   }
-   /**
-    * 
-    * @param {*} hotel_id 
-    * @returns 根据店铺获取房间列表
-    */
-   getRoomListByHotelId(hotel_id:string):Promise<UniCloudDBGetResult>{
-    return DB.getCollection("hm-room",{hotel_id:hotel_id});
-   }
-   /**
-    * 
-    * @param {*} hotel_id 
-    */
-   async getRoomListByHotelIdGroupByRoomType(hotel_id:string):Promise<UniCloudDBGetResult>{
-  
-      const db=uniCloud.databaseForJQL();
-      const roomType=  db.collection("hm-roomType").where({hotel_id}).field("hotel_id,_id,name").getTemp();
-      const res = await db.collection(roomType,"hm-room").where({hotel_id}).get();
-      return res;
-   }
-   /** get employeeList */
-   getEmployeeList(hotel_id:string):Promise<UniCloudDBGetResult>{
-    return DB.getCollectionOrderBy("hm-employee",{hotel_id},"role asc")
-   }
-   /**
-    * 房价添加
-    * @param {*} data 
-    */
-   // addRoomTypePrice(list){
-   //   return DB.add("hm-roomTypePrice",list)
-   // }
-   async deleteRoomType(roomType_id:string):Promise<void>{
-	   try {
-	   	await DB.callFunction("hm_deleteRoomType", {
-	   	  _id: roomType_id,
-	   	});
-		uni.showToast({
-			title:"删除成功",
-			icon:"none"
-		});
-	   } catch (error) {
-	   	uni.showToast({
-	   		title:"删除失败",
-			icon:"none"
-	   	});
-	   }
-	  
-   }
+			return { code: 0, message: "" } as UTSJSONObject;
+		} catch (error) {
+			throw new Error("更新失败");
+		}
+	}
 }
+
 //module.exports =new HotelService();
-export var HotelService=new HotelServiceClass();
+export var HotelService = new HotelServiceClass();

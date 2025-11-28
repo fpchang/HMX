@@ -1,0 +1,27 @@
+	import { roomTypeBean } from "@/bean/roomTypeBean.uts";
+export const  validRoomTypeForm = (roomTypeForm:roomTypeBean):boolean=>{
+	let msg ="";
+
+	console.log("vvv",roomTypeForm)
+	if(roomTypeForm.name==""){
+		msg="请填写房型名称";
+		
+	}
+	if(roomTypeForm.bedList.length<1){
+		msg="请选择床位";
+	
+	}
+	if(roomTypeForm.guestNumber<1){
+		msg="入住人数最少1人";
+	
+	}
+	
+	if(msg!=""){
+		uni.showToast({
+			title:msg,
+			icon:"none"
+		})
+		return false;
+	}
+	return true;
+}

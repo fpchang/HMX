@@ -1,5 +1,6 @@
-export type roomType = {
-	_id ?: string,
+export type roomTypeBean = {
+	//_id ?: string,
+	hotel_id:string,
 	//count : number,
 	name : string,
 	area : number,

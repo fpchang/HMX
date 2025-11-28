@@ -127,7 +127,7 @@
 <style lang="scss">
 	.card {
 		margin: 15px;
-		padding: 15px;
+		padding:15px 10px;
 		background-color: #fff;
 		border-radius: 12px;
 
@@ -157,7 +157,7 @@
 			display: flex;
 			flex-direction: row;
 			flex-wrap: wrap;
-			justify-content: space-evenly;
+			justify-content: space-between;
 
 			.list-item {
 

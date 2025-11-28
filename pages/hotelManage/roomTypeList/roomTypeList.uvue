@@ -116,7 +116,8 @@
 	});
 	console.log("roomTypeList",roomTypeList);
 	const roomNum=(roomType:UTSJSONObject)=>{
-		const roomList = roomType["_id"]["hm-room"] as Array<UTSJSONObject>;
+		const idObj = roomType["_id"] as UTSJSONObject;
+		const roomList = idObj["hm-room"] as Array<UTSJSONObject>;
 		return roomList.length;
 	}
 	const topImg = (imgUrl : string | null) : string => {
@@ -151,7 +152,7 @@
 		return;
 	}
 		uni.navigateTo({
-					url: `/pages/hotelManage/createRoomType/createRoomType?pageType=1&&roomType_item=${encodeURIComponent(JSON.stringify(roomType_item))}`,
+					url: `/pages/hotelManage/createRoomType/createRoomType?pageType=1&roomType_item=${encodeURIComponent(JSON.stringify(roomType_item))}`,
 				});
 	}
 	const addRoomType = () => {
@@ -180,8 +181,10 @@
 			message: "删除后将无法恢复，确认删除吗？",
 			beforeClose: async () : Promise<boolean> => {
 				try {
-					await HotelService.deleteRoomType(targetObj._id._value as string);
-					await comFunction.getRoomTypeList();
+					const o=targetObj['_id'] as UTSJSONObject;
+					const id = o["_value"] as string;
+					await HotelService.deleteRoomType(id);
+					await comFunction.getRoomTypeList(hotel_id.value);
 					hideDialog();
 					uni.showToast({
 						title: "删除成功",

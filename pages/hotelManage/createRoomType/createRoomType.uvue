@@ -31,12 +31,12 @@
 			</xt-form-item>
 			<xt-form-item label="面积" tips="" required>
 				<view>
-					<rice-stepper v-model="roomTypeForm.area" input-width="42" button-size="38" font-size="15" />
+					<rice-stepper v-model="roomTypeForm.area" input-width="42" button-size="38" font-size="15" :min="0" :auto-fixed ="false"  integer/>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="入住人数" required>
 				<view>
-					<rice-stepper v-model="roomTypeForm.guestNumber" input-width="42" button-size="38" font-size="15" />
+					<rice-stepper v-model="roomTypeForm.guestNumber" input-width="42" button-size="38" font-size="15" :min="0" :auto-fixed ="false" integer/>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="床位" tips="" required>
@@ -47,8 +47,8 @@
 						<rice-checkbox :disabled="pageType==2" :value="item ['name']" :label="item.name"
 							v-model="item.checked" />
 						<view style="margin-left: 25px;">
-							<rice-stepper :disabled="!item.checked" v-model="item.count" input-width="42"
-								button-size="38" font-size="15" mode="outline" />
+							<rice-stepper :disabled="!item.checked" v-model="item.count" input-width="42" :min="0"
+								button-size="38" font-size="15" mode="outline" :auto-fixed ="false" integer/>
 						</view>
 
 					</view>
@@ -58,7 +58,7 @@
 			<xt-form-item label="价格" tips="" required>
 				<!-- <rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入价格"
 					borderColor="#dcdfe6" :disabled="pageType==2" type="number" v-model="roomTypeForm.priceBase"></rice-input> -->
-					<rice-stepper v-model="roomTypeForm.priceBase" input-width="150" button-size="38" font-size="15" />
+				<rice-stepper v-model="roomTypeForm.priceBase" input-width="150" button-size="38" font-size="15" :auto-fixed ="false" />
 			</xt-form-item>
 			<xt-form-item label="屋内设施" tips="" required>
 
@@ -73,8 +73,8 @@
 			<xt-form-item label="封面图片" tips="" required>
 				<view>
 					<xt-file-upload :max-count="1" :filePath="`HM/client/${hotel_id}/roomType`"
-					:default_files_list="[roomTypeForm.firstImages]"
-						@uploadSuccess="uploadFirstImageSuccess" accept="image"></xt-file-upload>
+						:default_files_list="[roomTypeForm.firstImages]" @uploadSuccess="uploadFirstImageSuccess"
+						accept="image"></xt-file-upload>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="酒店图片" tips="" required>
@@ -94,7 +94,7 @@
 <script setup>
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
 	import { state } from '@/store/store.uts';
-	import { roomTypeBean } from "@/bean/roomTypeBean.uts";
+	import { roomTypeBean,formatRoomTypeBean } from "@/bean/roomTypeBean.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { HotelService } from "@/services/HotelService";
 	import { validRoomTypeForm } from "./roomTypeFormVaild.uts";
@@ -118,7 +118,7 @@
 		return state.user;
 	});
 	const cloudPath = `/${hotel_id.value}/roomType/`;
-	let roomType_id=ref("");//编辑房型id
+	let roomType_id = ref("");//编辑房型id
 	let bedTypeList = ref<bedType[]>([
 		{ name: "1.8米", checked: false, count: 1 },
 		{ name: "1.5米", checked: false, count: 1 },
@@ -132,7 +132,7 @@
 		})
 	})
 	let roomTypeForm = ref<roomTypeBean>({
-		hotel_id:hotel_id.value,
+		hotel_id: hotel_id.value,
 		name: "",
 		area: 25,
 		isWindow: true,
@@ -140,41 +140,41 @@
 		firstImages: "",
 		imagesList: [],
 		bedList: [],
-		roomList: [],
+		//roomList: [],
 		facility: [],
 		priceBase: 0,
-		
+
 		independentBathroom: true
 	});
 	let facilityConfig_roomType = ref<Array<UTSJSONObject> | null>(null);
 	HotelService.getConfig_facilityConfig('roomType').then(list => {
 		facilityConfig_roomType.value = list;
 	});
-	const addRoomType= async ()=>{
-		submitLoading.value=true;
+	const addRoomType = async () => {
+		submitLoading.value = true;
 		await HotelService.addRoomType(roomTypeForm.value);
 		await comFunction.getRoomTypeList(hotel_id.value);
-		submitLoading.value=false;
+		submitLoading.value = false;
 		uni.navigateBack();
 	}
-	const updateRoomType=async ()=>{
-		submitLoading.value=true;
-	//	const id = roomTypeForm.value._id._value as string;
-		roomTypeForm.value._id=roomType_id.value;
-		await HotelService.updateRoomType(roomType_id.value,roomTypeForm.value);
+	const updateRoomType = async () => {
+		submitLoading.value = true;
+		//	const id = roomTypeForm.value._id._value as string;
+		//roomTypeForm.value._id=roomType_id.value;
+		await HotelService.updateRoomType(roomType_id.value, roomTypeForm.value);
 		await comFunction.getRoomTypeList(hotel_id.value);
-		submitLoading.value=false;
+		submitLoading.value = false;
 		uni.navigateBack();
 	}
 	const submitForm = () => {
-			//roomTypeForm.value.hotel_id=hotel_id.value;
-			roomTypeForm.value.bedList = bedTypeListFomat.value;
+		//roomTypeForm.value.hotel_id=hotel_id.value;
+		roomTypeForm.value.bedList = bedTypeListFomat.value;
 		const flag : boolean = validRoomTypeForm(roomTypeForm.value);
 		if (flag == false) {
 			return;
 		}
 		console.log(flag)
-	
+
 		console.log(roomTypeForm.value);
 		if (pageType.value == 1) {
 			updateRoomType();
@@ -189,43 +189,80 @@
 	}
 	const uploadFirstImageSuccess = (list : string[]) => {
 		console.log("得到的list：", list);
-		roomTypeForm.value.firstImages=list[0];
+		roomTypeForm.value.firstImages = list[0];
 	}
 	const uploadImageListSuccess = (list : string[]) => {
 		console.log("得到的list2：", list);
-		roomTypeForm.value.imagesList=list;
+		roomTypeForm.value.imagesList = list;
 	}
-	
+
 	onLoad(params => {
 		//console.log("params",params);
 		try {
 			const pt = params.get("pageType");
 			const h = params.get("roomType_item");
+
 			if (pt != null) {
 				pageType.value = parseInt(pt);
 			}
-			if (h != null) {
-				let decoded = decodeURIComponent(h as string);
-				if (decoded != null) {
-					roomTypeForm.value = JSON.parse<roomTypeBean>(decoded)!;
-					roomType_id.value= JSON.parse<roomTypeBean>(decoded)['_id']['_value'];
-					console.log(roomTypeForm.value);
-
-				}
+			if (h == null) {
+				return;
 			}
+			let decoded = decodeURIComponent(h as string);
+			if (decoded == null) {
+				return;
+			}
+			const parsed = JSON.parse<UTSJSONObject>(decoded);
+			if (parsed == null) {
+				return;
+			}
+			const _idObj = parsed?.get('_id') as UTSJSONObject | null;
+			if (_idObj != null) {
+				roomType_id.value = _idObj?.get('_value') as string;
+			}
+			roomTypeForm.value =formatRoomTypeBean(parsed);
+			// console.log(444, parsed);
+			// const name = parsed?.get("name")
+			// const area = parsed?.get("area")
+			// const isWindow = parsed?.get("isWindow")
+			// const guestNumber = parsed?.get("guestNumber")
+			// const firstImages = parsed?.get("firstImages")
+			// const imagesList = parsed?.get("imagesList")
+			// const bedList = parsed?.get("bedList")
+			// const facility = parsed?.get("facility")
+			// const priceBase = parsed?.get("priceBase")
+
+			// roomTypeForm.value = {
+			// 	hotel_id: hotel_id.value,
+			// 	name: name != null ? name as string : "",
+			// 	area: area != null ? area as number : 25,
+			// 	isWindow: isWindow != null ? isWindow as boolean : true,
+			// 	guestNumber: guestNumber != null ? guestNumber as number : 2,
+			// 	firstImages: firstImages != null ? firstImages as string : "",
+			// 	imagesList: imagesList != null ? imagesList as Array<string> : [],
+			// 	bedList: bedList != null ? bedList as Array<UTSJSONObject> : [],
+			// 	facility: facility != null ? facility as Array<string> : [],
+			// 	priceBase: priceBase != null ? priceBase as number : 0,
+			// 	independentBathroom: true
+			// }
+
+
 		} catch (e) {
 			console.error(e)
 		}
 	});
 	onMounted(() => {
 		for (let i = 0; i < bedTypeList.value.length; i++) {
-			let obj = roomTypeForm.value.bedList.find(it => it.name == bedTypeList.value[i].name);
-			if (obj) {
+			let obj = roomTypeForm.value.bedList.find((it, index) => {
+				const itemObj = it as UTSJSONObject;
+				const name = itemObj['name'] as string;
+				return name == bedTypeList.value[i].name;
+			}) as UTSJSONObject | null;
+			if (obj != null) {
 				bedTypeList.value[i].checked = true;
-				bedTypeList.value[i].count = obj.count as number;
+				bedTypeList.value[i].count = obj['count'] as number;
 			}
 		}
-
 	})
 </script>
 

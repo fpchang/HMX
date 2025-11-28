@@ -8,10 +8,54 @@ export type roomTypeBean = {
 	guestNumber : number,
 	firstImages : string,
 	imagesList : Array<string>,
-	bedList : Array<string>,
-	roomList : Array<string>,
+	bedList : Array<UTSJSONObject>,
+	//roomList : Array<string>,
 	facility : Array<string>,
 	priceBase : number,
 	independentBathroom : boolean
 
+}
+
+export let formatRoomTypeBean =(parsed:UTSJSONObject | null):roomTypeBean=>{
+	const initData:roomTypeBean={
+		hotel_id:"",
+		name : "",
+		area : 0,
+		isWindow : true,
+		guestNumber : 0,
+		firstImages : "",
+		imagesList :[],
+		bedList :[],
+		facility :[],
+		priceBase : 0,
+		independentBathroom : true
+	}
+	//const parsed = JSON.parse<UTSJSONObject>(jsonStr);
+	if (parsed == null) {
+		return initData;
+	}
+	const hotel_id = parsed?.get("hotel_id")
+	const name = parsed?.get("name")
+	const area = parsed?.get("area")
+	const isWindow = parsed?.get("isWindow")
+	const guestNumber = parsed?.get("guestNumber")
+	const firstImages = parsed?.get("firstImages")
+	const imagesList = parsed?.get("imagesList")
+	const bedList = parsed?.get("bedList")
+	const facility = parsed?.get("facility")
+	const priceBase = parsed?.get("priceBase")
+	
+	return {
+		hotel_id:hotel_id != null ? hotel_id as string : initData.hotel_id,
+		name: name != null ? name as string : initData.name,
+		area: area != null ? area as number : initData.area,
+		isWindow: isWindow != null ? isWindow as boolean : initData.isWindow,
+		guestNumber: guestNumber != null ? guestNumber as number :initData.guestNumber,
+		firstImages: firstImages != null ? firstImages as string : initData.firstImages,
+		imagesList: imagesList != null ? imagesList as Array<string> : initData.imagesList,
+		bedList: bedList != null ? bedList as Array<UTSJSONObject> : initData.bedList,
+		facility: facility != null ? facility as Array<string> : initData.facility,
+		priceBase: priceBase != null ? priceBase as number : initData.priceBase,
+		independentBathroom: initData.independentBathroom
+	}
 }

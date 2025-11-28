@@ -5,9 +5,9 @@
 		<view><text class="txt-normal">版本发布日期：2024年11月15日</text></view>
 		<view><text class="txt-normal">生效日期：2024年11月15日</text></view>		
 		<view><text class="txt-normal">本隐私政策旨在说明我们（议宿）如何收集、使用、存储及保护您的个人信息。我们承诺将严格遵守相关法律法规，确保您的个人信息安全</text></view>
-		<view v-for="item in pList">
+	<view v-for="item in pList">
 			<view class="p-title"><text class="txt-normal">{{item.title}}</text></view>
-			<view class="p" v-for="is in item.content"><text class="txt-normal">{{is}}</text></view>
+			<view class="p" v-for="c in item.content"><text class="txt-normal">{{c}}</text></view>
 		</view>
 		
 	</view>

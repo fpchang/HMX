@@ -1,4 +1,5 @@
 import {ssq_history} from "./ssq_data.js";
+
 const redballAll =[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]
 const history=ssq_history;
 function getRandomRedBall(len=33){
@@ -39,8 +40,8 @@ function sameHistory(n=2,historyList=[]){
 		//console.log("groupRedBall_",groupRedBall_)
 		//console.log(`与前${n}期比较有${result}个球重复-index${i}`);
 		if(result<2){
-			console.log(`前${n}期组合为：：`,groupRedBall_);
-			console.log(`当期为：：`,historyList[i]);
+			//console.log(`前${n}期组合为：：`,groupRedBall_);
+			//console.log(`当期为：：`,historyList[i]);
 			//console.log(`与前${n}期比较有${result}个球重复-index${i}`);
 		}
 		if(s[result]){
@@ -67,8 +68,34 @@ function compare(list =[],listHistory=[]){
 	//console.log("newList",newList);
 	return list.length+groupList.length-(newList.length);
 }
+//获取数据组合去重排序
+function getGroupList(listHistory){
+	let groupList =[]
+	for(let i=0;i<listHistory.length;i++){
+		groupList.push(...listHistory[i].redBall)
+	}
+	groupList = [...new Set(groupList)];
+	groupList.sort((a,b)=>a-b);
+	return groupList;
+}
 //console.log(getRandomRedBall());
 //sameHistory(2,history);
+//与所有历史数据相比
+function S0(list,history){
+	let result =true;
+	
+	for(let i=0;i<history.length;i++){
+		 let newList = new Set([...history[i].redBall,...list]);
+		 if(newList.size<8){
+			// console.log("repeat and:"+history[i].index);
+			 result=false;
+			 break;
+		 }
+	}
+	
+	return result;
+	
+}
 //红球算法 与前几期比较
 function S1(list,history){
 	let count1 = compare(list,history.slice(history.length-1));
@@ -78,11 +105,26 @@ function S1(list,history){
 	let count5 = compare(list,history.slice(history.length-5));
 	let count6 = compare(list,history.slice(history.length-6));
 	let count7 = compare(list,history.slice(history.length-7));
-	console.log("count:",count1,count2,count3,count4,count5);
+	//console.log("count:",count1,count2,count3,count4,count5);
 	if(count1<3&&count2>0&&count2<4&&count3>1&&count3<5&&count4<6&&count4>1&&count5>2&&count5<6&&count6>3&&count6<6&&count7>3&&count7<6){
 		return true
 	}
 	return false;
+}
+function S1_stat(list){
+	let s={};
+	for(let i=0;i<list.length;i++){
+		let arr =list[i].redBall;
+		for(let j=0;j<arr.length;j++){
+			if(s[arr[j].toString()]){
+				s[arr[j].toString()]++;
+			}else{
+				s[arr[j].toString()]=1
+			}
+		}
+		
+	}
+	return s;
 }
 //红球冷号
 /**
@@ -97,11 +139,12 @@ function S2(list,history){
 	let count2 = compare(list,history.slice(history.length-2));
 	let count3 = compare(list,history.slice(history.length-3));
 	let count4 = compare(list,history.slice(history.length-4));
-	let count5 = compare(list,history.slice(history.length-5));
-	if(count2==0&&count3<2&&count4<2&&count5<3){
+	let count7 = compare(list,history.slice(history.length-7));
+	if(count4==0&&count7<3){
 		
 		return true;
 	}
+	return false;
 }
 //红球绝杀爆冷号
 /**
@@ -117,23 +160,21 @@ function S3(list,history){
 	let count3 = compare(list,history.slice(history.length-3));
 	let count4 = compare(list,history.slice(history.length-4));
 	let count5 = compare(list,history.slice(history.length-5));
-	if(count3==0&&count5<2){
+	let count7 = compare(list,history.slice(history.length-7));
+	if(count5==0&&count7<3){
 		
 		return true;
 	}
+	return false;
 }
-function caculate(){
+function caculate(fn,n=20){
 	
 
 	let thread=0;
 	let result =[];
-	while(thread<20){
+	while(thread<n){
 		let list =getRandomRedBall();		
-		// if(S1(list,history)){
-		// 	result.push({redBall:list})
-		// 	thread++;
-		// }
-		if(S3(list,history)){
+		if(S0(list,history)&&fn(list,history)){
 			result.push({redBall:list})
 			thread++;
 		}
@@ -145,9 +186,22 @@ function caculate(){
 ///sameHistory(1,history);
 //let flag = S1([ 8, 10, 14, 23, 28, 32 ],history);
 //console.log(flag);
-
+//将2024年双色球61到90期开奖结束整理成json格式，要全部开奖数据升序排列，生成附件
 sameHistory(4,history);
 sameHistory(5,history);
 sameHistory(6,history);
 sameHistory(7,history);
 sameHistory(8,history);
+sameHistory(9,history);
+sameHistory(10,history);
+sameHistory(11,history);
+
+const c4=getGroupList(history.slice(history.length-4));
+const c5=getGroupList(history.slice(history.length-5));
+const c6=getGroupList(history.slice(history.length-6));
+console.log(c4,c5,c6);
+
+const list=caculate(S1,18);
+console.log(list);
+console.log(S1_stat(list));
+

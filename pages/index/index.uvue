@@ -98,7 +98,7 @@
 	import operation from "./components/operation";
 	
 	import { state, setUser } from '@/store/store.uts';
-	import { comFunction } from "./ComFuc.uts";
+	import { comFunction } from "./ComFuc.uts";	
 	const showRange = ref(false);
 	const showPopup = ref(false);
 	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"]);

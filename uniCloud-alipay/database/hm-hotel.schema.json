@@ -34,8 +34,8 @@
 			"bsonType": "string"
 		},
 		"hotelAddressCode":{
-			"description": "地址码（县code）"
-			//"foreignKey": "opendb-city-china.schema.code"
+			"description": "地址码（县code）",
+			"foreignKey": "opendb-city-china.schema.code"
 		},
 		"serviceTel":{
 			"description": "客服电话",
@@ -63,7 +63,7 @@
 		"firstImages":{
 			"description": "首图",
 			"bsonType": "string",
-			"defaultValue":""
+			"defaultValue":"https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/images/app.png"
 		},
 		"imagesList":{
 			"description": "图片列表",

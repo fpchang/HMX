@@ -61,13 +61,13 @@
 				icon: "/static/icons/homemenu/room1.png",
 				label: "房间管理",
 				bgColor: "rgba(22, 93, 255, 0.1)",
-				url: "/pages/order/createOrder/createOrder"
+				url: "/pages/hotelManage/roomList/roomList"
 			},
 			{
 				icon: "/static/icons/homemenu/employee1.png",
 				label: "员工管理",
 				bgColor: "rgba(22, 93, 255, 0.1)",
-				url: "/pages/order/createOrder/createOrder"
+				url: "/pages/hotelManage/employeeList/employeeList"
 			},
 			{
 				icon: "/static/icons/homemenu/hotel2.png",

@@ -2,6 +2,7 @@ import { DB } from '../api/DB';
 import { callFunctionRes } from "@/bean/DBBean";
 import { hotelBean } from '../bean/hotelBean';
 import { roomTypeBean } from "@/bean/roomTypeBean.uts";
+import { employeeBean } from '@/bean/employeeBean';
 // type UniCloudCallFunctionResult={
 // 	"errCode": number,
 // 	"success": boolean,
@@ -158,8 +159,57 @@ class HotelServiceClass {
 		return res;
 	}
 	/** get employeeList */
-	getEmployeeList(hotel_id : string) : Promise<UniCloudDBGetResult> {
-		return DB.getCollectionOrderBy("hm-employee", { hotel_id }, "role asc")
+	async getEmployeeList(hotel_id : string) : Promise<employeeBean[]> {
+		try{
+			const where_ = { "hotel_id":hotel_id } as UTSJSONObject;
+			const res=await DB.getCollectionOrderBy("hm-employee", where_, "role asc");
+			console.log("getEmployeeList", res);
+			const data = res['data']  as UTSJSONObject[];
+			const code = res['code'].toString();
+			const message =  res['message'] as string;
+			if (code != '0') {
+				uni.showToast({
+					title: message,
+					icon: "none"
+				});
+				throw new Error(message);
+			}
+			// const list:Array<employeeBean>=[];
+			// data.forEach(item=>{
+			// 	if (item!=null) {
+			// 		const _id = item.getString("_id")
+			// 		const hotel_id = item.getString("hotel_id")
+			// 		const phone = item.getString("phone")
+			// 		const role = item.getString("_id")
+			// 		const employee_name = item.getString("employee_name")
+			// 		const onboarding_time = item.getNumber("onboarding_time")
+			// 		const separation_time = item.getNumber("separation_time")
+			// 		const working_status = item.getNumber("working_status")
+			// 		const data_status = item.getNumber("data_status")
+			// 		const mark = item.getString("mark")
+			// 		const obj:employeeBean={
+			// 			_id: _id != null ? _id : "",
+			// 			hotel_id: hotel_id != null ? hotel_id : "",
+			// 			phone: phone != null ? phone : "",
+			// 			role: role != null ? role : "",
+			// 			employee_name: employee_name != null ? employee_name : "",
+			// 			onboarding_time: onboarding_time != null ? onboarding_time : 0,
+			// 			separation_time: separation_time != null ? separation_time : 0,
+			// 			working_status: working_status != null ? working_status : 0,
+			// 			data_status: data_status != null ? data_status : 0,
+			// 			mark: mark != null ? mark : "",
+			// 		} as employeeBean;
+			// 		list.push(obj)
+			// 	}
+			// })
+
+			return data as employeeBean[];
+		}catch(e){
+			console.error(e);
+			throw new Error("get employeeList fail");
+				
+		}
+		
 	}
 	/**
 	 * 房价添加

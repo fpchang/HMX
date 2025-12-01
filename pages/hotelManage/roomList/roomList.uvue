@@ -1,17 +1,62 @@
 <template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image src="/static/icons/hotel-manage.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">员工列表</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn">
+				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
+
+				<text class="txt" @click="addRoom">添加房间</text>
+
+
+			</view>
+		</template>
+	</rice-navbar>
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		
+		<view class="card-list">
+			<view class="card-list-item" v-for="room of roomList">
+				<view class="card">
+				</view>
+			</view>
+		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
 </template>
 
 <script setup>
-		
+	const roomList = ref<Array<UTSJSONObject>>([]);
+	const addRoom= async ()=>{}
 </script>
 
-<style>
-		
+<style lang="scss">
+	.card-list {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+
+		.card-list-item {
+			min-width: 360px;
+			padding: 15px;
+			flex: 1;
+
+			.card {
+
+
+				background-color: #fff;
+				border-radius: 12px;
+			}
+		}
+	}
 </style>

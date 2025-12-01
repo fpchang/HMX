@@ -264,7 +264,7 @@
 		backgroundColor: 'transparent',
 	});
 	const showSelectAreaPopup = ref(false);
-	let optionsAreaData = ref<Array<UTSJSONObject>>([]);
+	let optionsAreaData = ref<Array<UTSJSONObject> | null>(null);
 	const subTitles = ['请选择省份', '请选择城市', '请选择区/县'];
 	//const cascaderValue7 = ref('');
 	const fieldValue7 = ref<string | null>(null);
@@ -280,10 +280,16 @@
 		// 	title: '加载中'
 			
 		// })
-	
-			optionsAreaData.value = useCascaderAreaData();
-			//optionsAreaData.value = await HotelService.getUseCascaderAreaData();
+		if(optionsAreaData.value == null){
+			uni.showLoading({
+				title:""
+			});
+			optionsAreaData.value = useCascaderAreaData();	
 			uni.hideLoading();
+		}
+			
+			//optionsAreaData.value = await HotelService.getUseCascaderAreaData();
+			
 		
 	}
 	const facilityConfig_base = ref<Array<UTSJSONObject> | null>(null);

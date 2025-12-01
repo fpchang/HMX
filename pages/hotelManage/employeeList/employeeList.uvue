@@ -1,0 +1,103 @@
+<template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+	
+				<image src="/static/icons/hotel-manage.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">员工列表</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn">
+				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
+	
+				<text class="txt" @click="addEmployee">添加员工</text>
+	
+	
+			</view>
+		</template>
+	</rice-navbar>
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1">
+	<!-- #endif -->
+		<view class="card-list">
+			<view class="card-list-item" v-for="employee of employeeList">
+				<view class="card">
+					<view style="display: flex;flex-direction: row;flex: 1;">
+						<view style="border-radius: 12px;margin-right: 16px;"><image style="width:64px;height:64px" src="/static/images/hotel.png"></image></view>
+						<view>
+							<text style="color:#1d2129;font-size: 18px;line-height: 28px;margin-bottom: 8px;">{{employee.employee_name}}</text>
+							<rice-tag type="primary" :text="roleFormat(employee.role)" text-size="12px" round/>
+						
+						</view>
+					</view>
+					<view> 
+						<view style="display: flex;flex-direction: row;align-items: center;margin-top:15px">
+							<view>t</view>
+							<view><text style="color:#272e3b;font-size: 14px;">{{employee.phone}}</text></view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+</template>
+
+<script setup>
+		import { state } from '@/store/store.uts';
+	import { employeeBean } from '@/bean/employeeBean';
+	import { HotelService } from '@/services/HotelService';
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed(() => {
+		return state.user;
+	});
+	const employeeList = ref<Array<employeeBean>>([]);
+	const roleFormat = (key:string): string => {
+		const m: Map<string, string> = new Map([
+			["administrator", "超级管理员"],
+			["manager", "管理员"],
+			["normal", "员工"]
+		])
+		const value = m.get(key)
+		if (value != null) {
+			return value
+		}
+		return ""
+	}
+	const getEmplolyeeList= async ()=>{
+		console.log("start");
+		employeeList.value=await  HotelService.getEmployeeList(hotel_id.value);
+	}
+	const addEmployee= async ()=>{}
+	getEmplolyeeList();
+</script>
+
+<style lang="scss">
+	.card-list {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+
+		.card-list-item {
+			min-width: 360px;
+			padding: 15px;
+			flex: 1;
+
+			.card {
+
+
+				background-color: #fff;
+				border-radius: 12px;
+				padding:24px;
+			}
+		}
+	}
+</style>

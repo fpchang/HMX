@@ -227,8 +227,8 @@ class HotelServiceClass {
 			const res = await DB.callFunction("hm_updateRoomType", { _id, roomTypeObj });
 			console.log("update roomType", res);
 			const result = res['result'] as UTSJSONObject;
-			const code = result.code.toString();
-			const message = result.message as string;
+			const code = result?.get("code").toString();
+			const message = result?.get("message") as string;
 			if (code != '0') {
 				uni.showToast({
 					title: message,

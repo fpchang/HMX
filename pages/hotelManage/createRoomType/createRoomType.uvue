@@ -31,12 +31,12 @@
 			</xt-form-item>
 			<xt-form-item label="面积" tips="" required>
 				<view>
-					<rice-stepper v-model="roomTypeForm.area" input-width="42" button-size="38" font-size="15" :min="0" :auto-fixed ="false"  integer/>
+					<rice-stepper v-model="roomTypeForm.area" input-width="42" button-size="38" font-size="15" :min="0" :auto-fixed ="false" :disabled="pageType==2" integer/>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="入住人数" required>
 				<view>
-					<rice-stepper v-model="roomTypeForm.guestNumber" input-width="42" button-size="38" font-size="15" :min="0" :auto-fixed ="false" integer/>
+					<rice-stepper v-model="roomTypeForm.guestNumber" input-width="42" button-size="38" font-size="15" :min="0" :auto-fixed ="false" :disabled="pageType==2" integer/>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="床位" tips="" required>
@@ -47,8 +47,8 @@
 						<rice-checkbox :disabled="pageType==2" :value="item ['name']" :label="item.name"
 							v-model="item.checked" />
 						<view style="margin-left: 25px;">
-							<rice-stepper :disabled="!item.checked" v-model="item.count" input-width="42" :min="0"
-								button-size="38" font-size="15" mode="outline" :auto-fixed ="false" integer/>
+							<rice-stepper :disabled="!item.checked||pageType==2" v-model="item.count" input-width="42" :min="0"
+								button-size="38" font-size="15" mode="outline" :auto-fixed ="false" integer />
 						</view>
 
 					</view>
@@ -58,7 +58,7 @@
 			<xt-form-item label="价格" tips="" required>
 				<!-- <rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入价格"
 					borderColor="#dcdfe6" :disabled="pageType==2" type="number" v-model="roomTypeForm.priceBase"></rice-input> -->
-				<rice-stepper v-model="roomTypeForm.priceBase" input-width="150" button-size="38" font-size="15" :auto-fixed ="false" />
+				<rice-stepper v-model="roomTypeForm.priceBase" input-width="150" button-size="38" font-size="15" :auto-fixed ="false" :disabled="pageType==2" />
 			</xt-form-item>
 			<xt-form-item label="屋内设施" tips="" required>
 
@@ -74,14 +74,14 @@
 				<view>
 					<xt-file-upload :max-count="1" :filePath="`HM/client/${hotel_id}/roomType`"
 						:default_files_list="[roomTypeForm.firstImages]" @uploadSuccess="uploadFirstImageSuccess"
-						accept="image"></xt-file-upload>
+						accept="image" :readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="酒店图片" tips="" required>
 				<view>
 					<xt-file-upload :max-count="3" :default_files_list="roomTypeForm.imagesList"
 						@uploadSuccess="uploadImageListSuccess" :filePath="`HM/client/${hotel_id}/roomType`"
-						accept="image"></xt-file-upload>
+						accept="image" :readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
 				</view>
 			</xt-form-item>
 

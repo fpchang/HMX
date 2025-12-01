@@ -21,7 +21,6 @@
 	let filesList = ref<UploaderFileItem[]>([]);
 	const emit = defineEmits(['uploadSuccess']);
 	const returnResult=()=>{
-		console.log("rrrr",filesList);
 		let list:Array<string> = [];
 		 filesList.value.map(item=>{
 			 list.push(item['url'] as string)

@@ -6,15 +6,16 @@
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
 
-				<image v-if="pageType==0"  src="/static/icons/add-form.png"
+				<image v-if="pageType==0" src="/static/icons/add-form.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
 				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn" v-if="pageType!=2" >
+			<view class="navbar-btn" v-if="pageType!=2">
 				<!-- <text class="txt">保存</text> -->
-				<rice-button @click="submitForm" type="default" size="mini" text="保存"  color="rgba(0,0,0,0)" textColor="#1e88e5" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
+					textColor="#1e88e5" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
 			</view>
 		</template>
 	</rice-navbar>
@@ -24,7 +25,7 @@
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
 			<xt-form-item label="酒店名称" tips="" required>
 				<view>
-				
+
 					<!-- <rice-input bg-color="#fff" height="40px" font-size="14px" v-model="hotelForm.hotelName"
 						placeholder="请输入酒店名称" focus-border focus-border-color="#165dff" /> -->
 					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入酒店名称"
@@ -51,19 +52,21 @@
 				</view>
 			</xt-form-item>
 			<xt-form-item label="特点" tips="如：免费停车，宠物免费，户外泳池，草地烧烤等" :showTips="pageType!=2" required>
-				<view v-if="pageType==0">			
-						<xt-input-tab v-model="hotelForm.feature" btnText="添加特点"></xt-input-tab>
+				<view v-if="pageType==0">
+					<xt-input-tab v-model="hotelForm.feature" btnText="添加特点"></xt-input-tab>
 				</view>
 				<view v-if="pageType!=0" class="feature-show-area">
-					<view v-for="txtstr of hotelForm.feature" class="feature-item" style="margin-right: 4px;"><rice-tag size="small" type="primary" :text="txtstr" color="#f2f3f5" text-color="#4e5969"/></view>
-						
+					<view v-for="txtstr of hotelForm.feature" class="feature-item" style="margin-right: 4px;"><rice-tag
+							size="small" type="primary" :text="txtstr" color="#f2f3f5" text-color="#4e5969" /></view>
+
 				</view>
 			</xt-form-item>
 			<xt-form-item label="餐饮" tips="" required>
-				<rice-checkbox-group @change="cateringCheckboxChange" direction="row" v-model="hotelForm.cateringServices">
+				<rice-checkbox-group @change="cateringCheckboxChange" direction="row"
+					v-model="hotelForm.cateringServices">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
 						v-for="item in facilityConfig_catering">
-						<rice-checkbox :disabled="pageType==2" :value="item ['_id']" :label="item.name"/>
+						<rice-checkbox :disabled="pageType==2" :value="item ['_id']" :label="item.name" />
 					</view>
 				</rice-checkbox-group>
 			</xt-form-item>
@@ -79,7 +82,8 @@
 				</rice-checkbox-group>
 			</xt-form-item>
 			<xt-form-item label="休闲设施" tips="" required>
-				<rice-checkbox-group @change="recreationCheckboxChange" direction="row" v-model="hotelForm.recreationFacility">
+				<rice-checkbox-group @change="recreationCheckboxChange" direction="row"
+					v-model="hotelForm.recreationFacility">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
 						v-for="item in facilityConfig_base">
 						<rice-checkbox :disabled="pageType==2" :value="item ['_id']" :label="item.name" />
@@ -88,7 +92,8 @@
 			</xt-form-item>
 			<xt-form-item label="运动设施" tips="" required>
 
-				<rice-checkbox-group @change="athleticFacilityCheckboxChange" direction="row" v-model="hotelForm.athleticFacility">
+				<rice-checkbox-group @change="athleticFacilityCheckboxChange" direction="row"
+					v-model="hotelForm.athleticFacility">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
 						v-for="item in facilityConfig_athleticFacility">
 						<rice-checkbox :disabled="pageType==2" :value="item ['_id']" :label="item.name" />
@@ -109,22 +114,24 @@
 			</xt-form-item>
 			<xt-form-item label="备注" tips="" required>
 				<view>
-					
-						<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic
-							placeholder="备注内容" layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
-							v-model="hotelForm.hotelIntroduction"></rice-textarea>
+
+					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="备注内容"
+						layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
+						v-model="hotelForm.hotelIntroduction"></rice-textarea>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="封面图片" tips="" required>
 				<view>
-					<xt-file-upload :max-count="1" :filePath="`HM/client/${hotel_id}/hotel`" :default_files_list="[hotelForm.firstImages]"
-						@uploadSuccess="uploadFirstImageSuccess"  accept="image"  :readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
+					<xt-file-upload :max-count="1" :filePath="`HM/client/${hotel_id}/hotel`"
+						:default_files_list="getFirstImagesList()" @uploadSuccess="uploadFirstImageSuccess"
+						accept="image" :readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="酒店图片" tips="" required>
 				<view>
 					<xt-file-upload :max-count="3" :default_files_list="hotelForm.imagesList"
-						@uploadSuccess="uploadImageListSuccess" ::filePath="`HM/client/${hotel_id}/hotel`" accept="image" :readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
+						@uploadSuccess="uploadImageListSuccess" ::filePath="`HM/client/${hotel_id}/hotel`"
+						accept="image" :readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
 				</view>
 			</xt-form-item>
 
@@ -147,8 +154,8 @@
 	import { useCascaderAreaData } from '@/uni_modules/lime-shared/areaData';
 	import { state } from '@/store/store.uts';
 	//import amap from "@/common/amap-wx.130";
-	import {Location} from "@/services/LocationService.uts";
-	import {validForm} from "./hotelFormVaild.uts";
+	import { Location } from "@/services/LocationService.uts";
+	import { validForm } from "./hotelFormVaild.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	// const props = defineProps({
 	// 	type: {
@@ -156,106 +163,107 @@
 	// 		default: 0,
 	// 	}
 	// });
-	
+
 	type form = {
 		username : string,
 		phone : string,
 		password : string
 	}
-	const pageType=ref(0);
-	const imagesList = [
-		"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img0.jpg",
-		"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img1.jpg",
-		"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img2.jpg",
-		"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img3.jpg",
-		"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img4.jpg"
+	const pageType = ref(0);
+	// const imagesList = [
+	// 	"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img0.jpg",
+	// 	"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img1.jpg",
+	// 	"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img2.jpg",
+	// 	"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img3.jpg",
+	// 	"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img4.jpg"
 
-	];
+	// ];
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
-	const user=computed(() => {
+	const user = computed(() => {
 		return state.user;
 	});
-	const form1 = ref<form>({
-		username: '',
-		phone: '',
-		password: ''
+	let hotelForm = ref<hotelBean>({
+		belong: "",
+		hotelName: "",
+		hotelAddress: "",
+		hotelAddressCode: "",
+		hotelAddressArea: "",
+		hotelCoordinate: [],
+		hotelIntroduction: "",
+		firstImages: "",
+		imagesList: [],
+		cateringServices: [],
+		baseFacility: [],
+		recreationFacility: [],
+		athleticFacility: [],
+		serviceTel: "",
+		wechat: "",
+		feature: []
 	});
-		let hotelForm = ref<hotelBean>({
-			belong: "",
-			hotelName: "",
-			hotelAddress: "",
-			hotelAddressCode: "",
-			hotelAddressArea: "",
-			hotelCoordinate: [],
-			hotelIntroduction: "",
-			firstImages: "",
-			imagesList: [],
-			cateringServices: [],
-			baseFacility: [],
-			recreationFacility: [],
-			athleticFacility: [],
-			serviceTel: "",
-			wechat: "",
-			feature: []
-		});
-	const title= computed(()=>{
-		if(pageType.value==0){
+	const title = computed(() => {
+		if (pageType.value == 0) {
 			return '创建酒店';
 		}
-		return pageType.value==1?'修改酒店信息':'酒店信息';
+		return pageType.value == 1 ? '修改酒店信息' : '酒店信息';
 	})
-	let submitLoading=ref(false);
-	const addHotel= async ()=>{		
-		try{
+	const getFirstImagesList=():Array<string>=>{
+		if(hotelForm.value.firstImages!=""){
+			return [hotelForm.value.firstImages];
+		}
+		return []
+	}
+	let submitLoading = ref(false);
+	const addHotel = async () => {
+		try {
 			const res = await HotelService.createHotel(hotelForm.value);
-			console.log("res:::::::",res);
-			submitLoading.value=false;		
+			console.log("res:::::::", res);
+			submitLoading.value = false;
 			comFunction.getHotelList();
 			uni.navigateBack();
-		}catch(e){
-			submitLoading.value=false;	
-			console.error("保存失败",e)
-		}					
+		} catch (e) {
+			submitLoading.value = false;
+			console.error("保存失败", e)
+		}
 
 	}
-	const updateHotel= async ()=>{
-		try{
+	const updateHotel = async () => {
+		try {
 			const id = hotelForm.value._id as string;
 			await HotelService.updateHotel(id, hotelForm.value);
-			submitLoading.value=false;		
+			submitLoading.value = false;
 			comFunction.getHotelList();
 			uni.navigateBack({
-				success(){
+				success() {
 					uni.showToast({
-						title:"更新成功",
-						icon:"none",
-						position:'top'
+						title: "更新成功",
+						icon: "none",
+						position: 'top'
 					});
 				}
 			});
-		}catch(e){
-			submitLoading.value=false;	
+		} catch (e) {
+			submitLoading.value = false;
 		}
 	}
-	
+
 	const submitForm = async () => {
-		const flag:boolean = validForm(hotelForm.value);
-		if(flag==false){
+		const flag : boolean = validForm(hotelForm.value);
+		if (flag == false) {
 			return;
 		}
-		submitLoading.value=true;
-		hotelForm.value.belong=user.value['phone'] as string;
-		const address=`${hotelForm.value.hotelAddressArea}${hotelForm.value.hotelAddress}`;
-		console.log("address",address);
-		const location:Array<number> =await Location.getLocation(address);
-		console.log("location",location);
-		hotelForm.value.hotelCoordinate=location;
+		submitLoading.value = true;
+		hotelForm.value.belong = user.value['phone'] as string;
+		const address = `${hotelForm.value.hotelAddressArea}${hotelForm.value.hotelAddress}`;
+		console.log("address", address);
+		const location : Array<number> = await Location.getLocation(address);
+		console.log("location", location);
+		hotelForm.value.hotelCoordinate = location;
 		if (pageType.value == 1) {
-				updateHotel();
-				return;
-			}				
+			updateHotel();
+			return;
+		}
 		addHotel();
 	}
 	const inputStyle = ref({
@@ -269,28 +277,31 @@
 	//const cascaderValue7 = ref('');
 	const fieldValue7 = ref<string | null>(null);
 	const onChange7 = (value : string, options : UTSJSONObject[]) => {
-		hotelForm.value.hotelAddressArea = options.map((item : UTSJSONObject) : any | null => (item['label'])).join('/') +"/";
+		hotelForm.value.hotelAddressArea = options.map((item : UTSJSONObject) : any | null => (item['label'])).join('/') + "/";
 	};
 
-	const selectAddress = async() => {
+	const selectAddress = async () => {
+		if (pageType.value == 2) {
+			return;
+		}
 		showSelectAreaPopup.value = true;
 		//optionsAreaData.value = await HotelService.getOpendbCityChina(0);
 		//console.log("get::",optionsAreaData.value );
 		// uni.showLoading({
 		// 	title: '加载中'
-			
+
 		// })
-		if(optionsAreaData.value == null){
+		if (optionsAreaData.value == null) {
 			uni.showLoading({
-				title:""
+				title: ""
 			});
-			optionsAreaData.value = useCascaderAreaData();	
+			optionsAreaData.value = useCascaderAreaData();
 			uni.hideLoading();
 		}
-			
-			//optionsAreaData.value = await HotelService.getUseCascaderAreaData();
-			
-		
+
+		//optionsAreaData.value = await HotelService.getUseCascaderAreaData();
+
+
 	}
 	const facilityConfig_base = ref<Array<UTSJSONObject> | null>(null);
 	const facilityConfig_catering = ref<Array<UTSJSONObject> | null>(null);
@@ -310,32 +321,32 @@
 	}
 	const uploadFirstImageSuccess = (list : string[]) => {
 		console.log("得到的list：", list);
-		hotelForm.value.firstImages=list[0];
+		hotelForm.value.firstImages = list[0];
 	}
 	const uploadImageListSuccess = (list : string[]) => {
 		console.log("得到的list2：", list);
-		hotelForm.value.imagesList=list;
+		hotelForm.value.imagesList = list;
 	}
 
-	onLoad(params=>{
+	onLoad(params => {
 		//console.log("params",params);
-		try{
+		try {
 			const pt = params.get("pageType");
-			const h=params.get("hotel_item");
+			const h = params.get("hotel_item");
 			//console.log("1111111",pt,h);
-			if(pt!=null){
-				pageType.value= parseInt(pt);
+			if (pt != null) {
+				pageType.value = parseInt(pt);
 			}
-			if(h!=null){
+			if (h != null) {
 				let decoded = decodeURIComponent(h as string);
-				if (decoded!=null) {
+				if (decoded != null) {
 					//let hotelBeanObj = JSON.parse<UTSJSONObject>(decoded);
-				//	console.log("aaaaaaaaaaaaaaaaa",hotelBeanObj);					
-					hotelForm.value=JSON.parse<hotelBean>(decoded)!;
+					//	console.log("aaaaaaaaaaaaaaaaa",hotelBeanObj);					
+					hotelForm.value = JSON.parse<hotelBean>(decoded)!;
 					//console.log("bbbbbbb",hotelForm.value);
 				}
 			}
-		}catch(e){
+		} catch (e) {
 			console.error(e)
 		}
 	});
@@ -372,16 +383,18 @@
 		height: 40px;
 		box-sizing: border-box;
 	}
-	.feature-show-area{
+
+	.feature-show-area {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		.feature-item{
+
+		.feature-item {
 			margin-left: 4px;
 		}
-		.feature-item:first-child{
+
+		.feature-item:first-child {
 			margin-left: 0;
 		}
 	}
-	
 </style>

@@ -1,10 +1,10 @@
-import {ssq_history} from "./ssq_data.js";
+import {kl8_data} from "./kl8_data.js";
 
-const redballAll =[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]
-const history=ssq_history;
-function getRandomRedBall(len=80){
+//const redballAll =[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]
+const history=kl8_data;
+function getRandomRedBall(len=33){
 	let result = [];
-	while(result.length<20){
+	while(result.length<6){
 		const random = Math.ceil(Math.random()*len)
 		let list =[...result];
 		list.push(random);
@@ -187,6 +187,9 @@ function caculate(fn,n=20){
 //let flag = S1([ 8, 10, 14, 23, 28, 32 ],history);
 //console.log(flag);
 //将2024年双色球61到90期开奖结束整理成json格式，要全部开奖数据升序排列，生成附件
+sameHistory(1,history);
+sameHistory(2,history);
+sameHistory(3,history);
 sameHistory(4,history);
 sameHistory(5,history);
 sameHistory(6,history);
@@ -196,12 +199,12 @@ sameHistory(9,history);
 sameHistory(10,history);
 sameHistory(11,history);
 
-const c4=getGroupList(history.slice(history.length-4));
-const c5=getGroupList(history.slice(history.length-5));
-const c6=getGroupList(history.slice(history.length-6));
-console.log(c4,c5,c6);
+// const c4=getGroupList(history.slice(history.length-4));
+// const c5=getGroupList(history.slice(history.length-5));
+// const c6=getGroupList(history.slice(history.length-6));
+// console.log(c4,c5,c6);
 
-const list=caculate(S1,18);
-console.log(list);
-console.log(S1_stat(list));
+// const list=caculate(S1,18);
+// console.log(list);
+// console.log(S1_stat(list));
 

@@ -9,8 +9,8 @@
 </template>
 
 <script setup>
-		import { kl8_date } from '@/common/kl8_data';
-		import { Lottery } from '@/services/LotteryService';
+		//import { kl8_date } from '@/common/kl8_data';
+		//import { Lottery } from '@/services/LotteryService';
 		//console.log(kl8_date)
 		//Lottery.addKl8(kl8_date);
 		

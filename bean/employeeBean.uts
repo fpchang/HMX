@@ -1,12 +1,10 @@
 export type employeeBean={
-	_id?:"",
-	hotel_id: string,
-	phone:string,
-	role: string,
-	employee_name?: string,
-	onboarding_time?: number,
-	separation_time?: number,
-	working_status?:number,
-	data_status?:number,
-	mark?:string
+		_id: string,
+		employee_name: string,
+		hotel_id: string,
+		phone: string,
+		role: string,
+		data_status?: number,
+		mark?: string,
+		working_status?: number
 }

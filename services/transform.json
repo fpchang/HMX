@@ -1,0 +1,48 @@
+[
+	{
+	    "code": 0,
+	    "errCode": 0,
+	    "message": "",
+	    "errMsg": "",
+	    "systemInfo": [],
+	    "data": [
+	        {
+	            "_id": "6714783746efc56f0b06f96c",
+	            "employee_name": "天心",
+	            "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
+	            "phone": "18516285834",
+	            "role": "administrator"
+	        },
+	        {
+	            "_id": "671c9df50bc5804babc5f57a",
+	            "data_status": 1,
+	            "employee_name": "小号管理员",
+	            "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
+	            "mark": "",
+	            "phone": "13122905834",
+	            "role": "manager",
+	            "working_status": 1
+	        },
+	        {
+	            "_id": "671f46a5b938fd953cd5a37d",
+	            "data_status": 1,
+	            "employee_name": "管理员2号",
+	            "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
+	            "mark": "",
+	            "phone": "13122905835",
+	            "role": "manager",
+	            "working_status": 1
+	        },
+	        {
+	            "_id": "671605e71c1691ab38cfa343",
+	            "data_status": 1,
+	            "employee_name": "小号",
+	            "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
+	            "mark": "",
+	            "phone": "15300558468",
+	            "role": "normal",
+	            "working_status": 1
+	        }
+	    ]
+	}
+]

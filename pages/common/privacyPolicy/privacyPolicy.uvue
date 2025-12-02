@@ -97,7 +97,7 @@
 		align-items: center;
 		justify-content: center;
 		.title-txt{
-			font-weight: 400;
+			font-weight: normal;
 			font-size: $uni-font-size-lg;
 		}
 		
@@ -107,7 +107,7 @@
 		padding-top: 30px;
 		.txt-normal{
 			font-size: $uni-font-size-sm;
-			font-weight: 400;
+			font-weight: normal;
 		}
 	}
 	.p{

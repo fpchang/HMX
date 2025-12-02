@@ -28,6 +28,7 @@
 			<view class="card-list-item" v-for="employee of employeeList">
 				<view class="card">
 					<view style="display: flex;flex-direction: row;flex: 1;">
+						
 						<view style="border-radius: 12px;margin-right: 16px;">
 							<image v-if="employee.role=='administrator'" style="width:64px;height:64px"
 								src="/static/images/administrator.png"></image>

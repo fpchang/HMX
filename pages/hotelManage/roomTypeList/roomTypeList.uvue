@@ -57,7 +57,7 @@
 							<view class="card-subtitle">
 
 								<view style="display: flex;flex-direction: row;">
-									<text style=" font-weight:500;color: #1d2129;font-size: 14px;">房间数量：</text>
+									<text style=" font-weight:400;color: #1d2129;font-size: 14px;">房间数量：</text>
 									<text class="txt-num"
 										style="color: #00b42f;font-size: 14px;padding:0 5px;">{{ roomNum(roomType)}}</text>
 									<text style="color: #4e5969;font-size: 14px;"> 间</text>
@@ -103,7 +103,7 @@
 </template>
 
 <script setup>
-	import { showDialog, hideDialog } from "@/uni_modules/rice-ui"
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 	import { state } from "@/store/store";
 	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
@@ -298,7 +298,7 @@
 
 							.txt {
 								color: #1d2129;
-								font-weight: 600;
+							font-weight: 700;
 								font-size: 18px;
 							}
 						}

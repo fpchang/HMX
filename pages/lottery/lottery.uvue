@@ -1,0 +1,21 @@
+<template>
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1">
+	<!-- #endif -->
+		
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+</template>
+
+<script setup>
+		import { kl8_date } from '@/common/kl8_data';
+		import { Lottery } from '@/services/LotteryService';
+		//console.log(kl8_date)
+		//Lottery.addKl8(kl8_date);
+		
+</script>
+
+<style>
+		
+</style>

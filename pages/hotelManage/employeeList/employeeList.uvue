@@ -5,19 +5,19 @@
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
-	
+
 				<image src="/static/icons/hotel-manage.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
 				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">员工列表</text>
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn">
+			<view class="navbar-btn" v-if="permissionList.includes('EMPLOYEE_CREATE')">
 				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
-	
+
 				<text class="txt" @click="addEmployee">添加员工</text>
-	
-	
+
+
 			</view>
 		</template>
 	</rice-navbar>
@@ -28,17 +28,53 @@
 			<view class="card-list-item" v-for="employee of employeeList">
 				<view class="card">
 					<view style="display: flex;flex-direction: row;flex: 1;">
-						<view style="border-radius: 12px;margin-right: 16px;"><image style="width:64px;height:64px" src="/static/images/hotel.png"></image></view>
+						<view style="border-radius: 12px;margin-right: 16px;">
+							<image v-if="employee.role=='administrator'" style="width:64px;height:64px"
+								src="/static/images/administrator.png"></image>
+							<image v-if="employee.role=='manager'" style="width:64px;height:64px"
+								src="/static/images/manager.png"></image>
+							<image v-if="employee.role=='normal'" style="width:64px;height:64px"
+								src="/static/images/employee.png"></image>
+						</view>
 						<view>
-							<text style="color:#1d2129;font-size: 18px;line-height: 28px;margin-bottom: 8px;">{{employee.employee_name}}</text>
-							<rice-tag type="primary" :text="roleFormat(employee.role)" text-size="12px" round/>
-						
+							<text
+								style="color:#1d2129;font-size: 18px;line-height: 28px;margin-bottom: 8px;">{{employee.employee_name}}</text>
+							<rice-tag type="primary" :text="roleFormat(employee.role)" text-size="12px" round
+								:color="getRoleColor(employee.role)" />
+
 						</view>
 					</view>
-					<view> 
+					<view>
+						<!-- <view style="display: flex;flex-direction: row;align-items: center;margin-top:15px">
+							<view><image src="/static/icons/email.png" style="width:14px;height:14px"></image></view>
+							<view><text style="color:#272e3b;font-size: 14px;padding-left: 4px;">{{employee.phone}}</text></view>
+						</view> -->
 						<view style="display: flex;flex-direction: row;align-items: center;margin-top:15px">
-							<view>t</view>
-							<view><text style="color:#272e3b;font-size: 14px;">{{employee.phone}}</text></view>
+						
+							<view>
+								<image src="/static/icons/tel02.png" style="width:14px;height:14px"></image>
+							</view>
+							<view><text
+								@click="makePhone(employee.phone)"
+									style="color:#272e3b;font-size: 14px;padding-left: 4px;">{{employee.phone}}</text>
+							</view>
+						</view>
+					</view>
+					<view class="control-area">
+						<!-- 	<view class="control-icons-item" @click="viewDetail(roomType)">
+							<image src="/static/icons/operation/view.png" style="width: 18px;height: 18px;"></image>
+						</view> -->
+						<view class="control-icons-item" @click="editEmployee(employee)"
+							v-if="showControl_edit(employee)">
+							<!-- <image src="/static/icons/operation/edit.png" style="width: 18px;height: 18px;"></image> -->
+							<rice-icon color="#165dff" name="edit" size="14px" />
+							<text style="color:#165dff;font-size: 16px;">编辑</text>
+						</view>
+						<view class="control-icons-item" 
+							v-if="showControl_delete(employee)" @click="deleteEmployee(employee)">
+							<!-- <image src="/static/icons/operation/delete.png" style="width: 18px;height: 18px;"></image> -->
+							<rice-icon color="#ff4d4f" name="delete" size="14px" />
+							<text style="color:#ff4d4f;font-size: 16px;">删除</text>
 						</view>
 					</view>
 				</view>
@@ -50,18 +86,23 @@
 </template>
 
 <script setup>
-		import { state } from '@/store/store.uts';
+		import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { state } from '@/store/store.uts';
 	import { employeeBean } from '@/bean/employeeBean';
 	import { HotelService } from '@/services/HotelService';
+
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
 	const user = computed(() => {
 		return state.user;
 	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	});
 	const employeeList = ref<Array<employeeBean>>([]);
-	const roleFormat = (key:string): string => {
-		const m: Map<string, string> = new Map([
+	const roleFormat = (key : string) : string => {
+		const m : Map<string, string> = new Map([
 			["administrator", "超级管理员"],
 			["manager", "管理员"],
 			["normal", "员工"]
@@ -72,11 +113,100 @@
 		}
 		return ""
 	}
-	const getEmplolyeeList= async ()=>{
-		console.log("start");
-		employeeList.value=await  HotelService.getEmployeeList(hotel_id.value);
+	const getRoleColor = (role : string) => {
+		if (role == "normal") {
+			return "#52c41a"
+		}
+		return role == "administrator" ? "#1989fa" : "#36cfc9"
 	}
-	const addEmployee= async ()=>{}
+	const getEmplolyeeList = async () => {
+		console.log("start");
+		employeeList.value = await HotelService.getEmployeeList(hotel_id.value);
+	}
+	const showControl_edit = (em : employeeBean) : boolean => {
+		if (permissionList.value.includes("EMPLOYEE_UPDATE")) {
+			return true;
+		}
+		return false;
+	}
+	const showControl_delete = (em : employeeBean) : boolean => {
+		if (em.role == 'administrator') {
+			return false;
+		}
+		if (!permissionList.value.includes("EMPLOYEE_DELETE")) {
+			return false;
+		}
+		return true;
+	}
+	const addEmployee = async () => {
+		console.log(permissionList.value)
+		if (!permissionList.value.includes(
+			"EMPLOYEE_CREATE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+	}
+	const editEmployee = async (em : employeeBean) => {
+		if (!permissionList.value.includes(
+			"EMPLOYEE_UPDATE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+		console.log("edit");
+	}
+	const deleteEmployee = async (em : employeeBean) => {
+		if (!permissionList.value.includes(
+			"EMPLOYEE_DELETE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+		console.log("delete");
+	}
+	 const  makePhone=(phone:string)=>{
+	      let deviceType = uni.getSystemInfoSync().deviceType;
+	      if(phone==null || phone==""|| phone.length!=11){
+	        return;
+	      }
+	      if (deviceType == "phone") {
+	        uni.makePhoneCall({
+	          phoneNumber:phone, //仅为示例
+	          success: (success) => {
+	            //console.log("调用成功", success);
+	          },
+	        });
+	        return;
+	      }
+	      uni.setClipboardData({
+	        data:phone,
+	        success: function () {
+	          //console.log("success");
+	        },
+	      });
+	    }
 	getEmplolyeeList();
 </script>
 
@@ -96,7 +226,21 @@
 
 				background-color: #fff;
 				border-radius: 12px;
-				padding:24px;
+				padding: 24px;
+
+				.control-area {
+					margin-top: 24px;
+					display: flex;
+					flex-direction: row;
+					justify-content: flex-end;
+
+					.control-icons-item {
+						padding: 6px 10px;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+					}
+				}
 			}
 		}
 	}

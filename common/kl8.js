@@ -1,10 +1,9 @@
 import {kl8_data} from "./kl8_data.js";
 
-//const redballAll =[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]
-const history=kl8_data;
-function getRandomRedBall(len=33){
+const history= kl8_data;
+function getRandomRedBall(len=80){
 	let result = [];
-	while(result.length<6){
+	while(result.length<20){
 		const random = Math.ceil(Math.random()*len)
 		let list =[...result];
 		list.push(random);
@@ -106,7 +105,14 @@ function S1(list,history){
 	let count6 = compare(list,history.slice(history.length-6));
 	let count7 = compare(list,history.slice(history.length-7));
 	//console.log("count:",count1,count2,count3,count4,count5);
-	if(count1<3&&count2>0&&count2<4&&count3>1&&count3<5&&count4<6&&count4>1&&count5>2&&count5<6&&count6>3&&count6<6&&count7>3&&count7<6){
+	const s1=count1<1;
+	const s2=count2<2;
+	const s3=count3<15;
+	const s4=count4>7;
+	const s5=count5>12;
+	const s6=count6>12;
+	const s7=count7>15;
+	if(s1&s2&&s3&&s4&&s5&&s6&&s7){
 		return true
 	}
 	return false;
@@ -174,7 +180,7 @@ function caculate(fn,n=20){
 	let result =[];
 	while(thread<n){
 		let list =getRandomRedBall();		
-		if(S0(list,history)&&fn(list,history)){
+		if(fn(list,history)){
 			result.push({redBall:list})
 			thread++;
 		}
@@ -187,24 +193,24 @@ function caculate(fn,n=20){
 //let flag = S1([ 8, 10, 14, 23, 28, 32 ],history);
 //console.log(flag);
 //将2024年双色球61到90期开奖结束整理成json格式，要全部开奖数据升序排列，生成附件
-sameHistory(1,history);
-sameHistory(2,history);
-sameHistory(3,history);
-sameHistory(4,history);
-sameHistory(5,history);
-sameHistory(6,history);
-sameHistory(7,history);
-sameHistory(8,history);
-sameHistory(9,history);
-sameHistory(10,history);
-sameHistory(11,history);
+ //sameHistory(1,history);
+// sameHistory(2,history);
+// sameHistory(3,history);
+// sameHistory(4,history);
+// sameHistory(5,history);
+// sameHistory(6,history);
+// sameHistory(7,history);
+// sameHistory(8,history);
+// sameHistory(9,history);
+// sameHistory(10,history);
+// sameHistory(11,history);
 
 // const c4=getGroupList(history.slice(history.length-4));
 // const c5=getGroupList(history.slice(history.length-5));
 // const c6=getGroupList(history.slice(history.length-6));
 // console.log(c4,c5,c6);
-
-// const list=caculate(S1,18);
-// console.log(list);
-// console.log(S1_stat(list));
+//console.log(getRandomRedBall())
+const list=caculate(S1,20);
+console.log(list);
+console.log(S1_stat(list));
 

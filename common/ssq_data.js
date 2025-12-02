@@ -2137,6 +2137,14 @@ export var ssq_history = [
 		date: '2025 - 11 - 27',
 		redBall: [10, 13, 14, 23, 24, 27],
 		blueBall: 15
+	},
+	{
+	    "blueBall": 6,
+	    "date": "2025 - 12 - 02",
+	    "index": "2025139",
+	    "redBall": [
+	        2,5,17,22,24,30,33
+	    ]
 	}
 ]
 

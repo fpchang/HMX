@@ -21,13 +21,11 @@ class ComFuc {
 	// }
 
 	async getHotelList() : Promise<Array<UTSJSONObject>> {
-		console.log("gethotellist")
 		const list = await HotelService.getHotelList() as Array<UTSJSONObject>;
 		setHotelList(list);
 		return list;
 	}
 	async getRoomTypeList(hotel_id : string) : Promise<Array<UTSJSONObject>> {
-		console.log("getRoomTypeList::::::::",hotel_id);
 		if(hotel_id==null || hotel_id==""){
 			hotel_id=state.hotel_id;
 		}
@@ -68,7 +66,6 @@ class ComFuc {
 			return;
 		}
 		await this.checkHotel(n_hotel_id);
-		console.log("数据准备完毕")
 	}
 	async getPermissionList(hotel_id : string) : Promise<Array<string>> {
 		const pes = await PermissionService.getPermissionList(hotel_id);
@@ -111,7 +108,6 @@ class ComFuc {
 	 * 数据开始加载
 	 */
 	async init() {
-		console.error("333333 init");
 		uni.showLoading({ title: '' });
 		this.getUser();
 		await this.getHotelList();

@@ -1,0 +1,100 @@
+<template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+	
+				<image v-if="pageType==0" src="/static/icons/add-form.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn" v-if="pageType!=2">
+				<!-- <text class="txt">保存</text> -->
+				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
+					textColor="#1e88e5" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+			</view>
+		</template>
+	</rice-navbar>
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1">
+	<!-- #endif -->
+		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
+			<xt-form-item label="用户名" tips="" required>
+				<view>
+					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入员工名"
+						borderColor="#dcdfe6" :disabled="pageType==2||isAdministrator" v-model="employeeForm.employee_name"></rice-input>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="手机号(登录账号)" tips="" required>
+				<view>
+					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入手机号"
+						borderColor="#dcdfe6" :disabled="pageType==2" v-model="employeeForm.phone" :maxlength="11" type="number"></rice-input>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="角色" tips="" required>
+				<view>
+					<rice-radio-group v-model="employeeForm.role" direction="row">
+						<view style="margin:4px"> <rice-radio value="manager" label="管理员"></rice-radio></view>
+						<view style="margin:4px"><rice-radio value="normal" label="普通员工"></rice-radio></view>
+				
+					</rice-radio-group>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="备注" tips="" required>
+				<view>
+			
+					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="备注内容"
+						layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
+						v-model="employeeForm.mark"></rice-textarea>
+				</view>
+			</xt-form-item>
+		</view>
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+</template>
+
+<script setup>
+		import { state } from '@/store/store.uts';
+		import { employeeBeanForm } from '@/bean/employeeBean';
+	
+		let pageType=ref(0);
+		const hotel_id = computed(() => {
+			return state.hotel_id;
+		});
+		const user = computed(() => {
+			return state.user;
+		});
+		const title = computed(() => {
+			if (pageType.value == 0) {
+				return '添加员工';
+			}
+			return pageType.value == 1 ? '修改员工信息' : '员工信息';
+		});
+		let submitLoading = ref(false);
+		let _id=ref("");//编辑页面id
+		let employeeForm=ref<employeeBeanForm>({
+			employee_name: "",
+			hotel_id: hotel_id.value,
+			phone: "",
+			role: "normal",
+			mark:""
+		});
+		 const isAdministrator = computed<boolean>(()=>{
+			   if(employeeForm.value.role=="administrator"&&pageType.value==1){
+				   return true
+			   }
+			   return false
+		 })
+		const submitForm=()=>{
+			console.log(employeeForm.value);
+		}
+</script>
+
+<style>
+		
+</style>

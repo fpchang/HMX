@@ -1,5 +1,6 @@
 import { AccountService } from "@/services/AccountService";
 import { PermissionService } from "@/services/PermissionService";
+import { employeeBean } from "../bean/employeeBean";
 //import {hotelBean} from "@/bean/hotelBean";
 export type State = {
 	//存放状态
@@ -8,7 +9,7 @@ export type State = {
 	viewWidth : number, //可视宽度
 	user : UTSJSONObject,
 	hotelList : Array<UTSJSONObject>,
-	employeeList : Array<UTSJSONObject>,
+	employeeList : Array<employeeBean>,
 	hotel_id : string,
 	hotel : UTSJSONObject,
 	roomTypeList : Array<UTSJSONObject>,
@@ -22,7 +23,7 @@ export const state = reactive({
 	viewWidth: 0,
 	user: {} as UTSJSONObject,
 	hotelList: [] as Array<UTSJSONObject>,
-	employeeList: [] as Array<UTSJSONObject>,
+	employeeList: [] as Array<employeeBean>,
 	hotel_id: "",
 	hotel: {} as UTSJSONObject,
 	roomTypeList: [] as Array<UTSJSONObject>,
@@ -49,26 +50,25 @@ export const setUser = (user : UTSJSONObject) => {
 	state.user = user;
 };
 export const setHotelList = (list : Array<UTSJSONObject>) => {
-	console.error("set hotellist",list);
 	state.hotelList = list;
 	uni.setStorageSync("hotelList",list);
 	const t =  uni.getStorageSync("hotelList") as  Array<UTSJSONObject>;
-	console.error("hotelist??",t)
 };
 export const setRoomTypeList = (list : Array<UTSJSONObject>) => {
 	state.roomTypeList = list;
 	uni.setStorage({key:"roomTypeList",data:list});
 };
+export const setEmployeeList = (list : Array<employeeBean>) => {
+	state.employeeList = list;
+	uni.setStorage({key:"employeeList",data:list});
+};
 export const setHotelId = (hotel_id : string) => {
-	console.error("王g")
 	state.hotel_id = hotel_id;
 	setHotel();
 };
 
 export const setHotel = () => {
-	console.log("store set hotel");
 	let hotel = state.hotelList.find(item => item._id == state.hotel_id) as UTSJSONObject;
-	console.log("eeee",hotel);
 	if(hotel!=null){
 		state.hotel = hotel;
 		uni.setStorage({key:"hotel",data:hotel});

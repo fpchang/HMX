@@ -91,7 +91,6 @@
 	import { state } from '@/store/store.uts';
 	import { employeeBean } from '@/bean/employeeBean';
 	import { HotelService } from '@/services/HotelService';
-
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -122,7 +121,9 @@
 	}
 	const getEmplolyeeList = async () => {
 		console.log("start");
-		employeeList.value = await HotelService.getEmployeeList(hotel_id.value);
+		const list = await HotelService.getEmployeeList(hotel_id.value);
+		state.setEmployeeList(list)
+		employeeList.value =list;
 	}
 	const showControl_edit = (em : employeeBean) : boolean => {
 		if (permissionList.value.includes("EMPLOYEE_UPDATE")) {
@@ -154,6 +155,9 @@
 			})
 			return;
 		}
+		uni.navigateTo({
+			url:"/pages/hotelManage/createEmployee/createEmployee"
+		})
 	}
 	const editEmployee = async (em : employeeBean) => {
 		if (!permissionList.value.includes(

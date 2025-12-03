@@ -25,9 +25,6 @@
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
 			<xt-form-item label="酒店名称" tips="" required>
 				<view>
-
-					<!-- <rice-input bg-color="#fff" height="40px" font-size="14px" v-model="hotelForm.hotelName"
-						placeholder="请输入酒店名称" focus-border focus-border-color="#165dff" /> -->
 					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入酒店名称"
 						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.hotelName"></rice-input>
 				</view>
@@ -103,7 +100,7 @@
 			<xt-form-item label="客服电话" tips="" required>
 				<view>
 					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服电话"
-						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.serviceTel"></rice-input>
+						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.serviceTel" :maxlength="11" type="number"></rice-input>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="客服微信" tips="" required>
@@ -207,14 +204,15 @@
 			return '创建酒店';
 		}
 		return pageType.value == 1 ? '修改酒店信息' : '酒店信息';
-	})
+	});
+	let submitLoading = ref(false);
 	const getFirstImagesList=():Array<string>=>{
 		if(hotelForm.value.firstImages!=""){
 			return [hotelForm.value.firstImages];
 		}
 		return []
 	}
-	let submitLoading = ref(false);
+	
 	const addHotel = async () => {
 		try {
 			const res = await HotelService.createHotel(hotelForm.value);

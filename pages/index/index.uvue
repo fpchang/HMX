@@ -125,10 +125,9 @@
 		return state.user;
 	});
 	const topImg =():string=>{	
-			console.log("11111111111",hotel_id.value,hotelList.value);
-		if(hotel.value==null){
-			return '/static/images/hotel.png';
-		}
+		// if(hotel.value==null){
+		// 	return '/static/images/hotel.png';
+		// }
 		const firstImages = hotel.value['firstImages'] as string | null;
 		if(firstImages==''||firstImages==null){
 			return '/static/images/hotel.png';
@@ -156,7 +155,6 @@
 		//    //return Promise.resolve({aa:111});
 	 // })
 	 const init = async ()=>{
-		 console.log(">>>>>> sss")
 		 //comFunction.loadStorage();
 		 await comFunction.init();
 		 dataReading.value=true;

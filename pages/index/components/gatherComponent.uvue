@@ -236,7 +236,6 @@
 	const roomTypeList = computed(() => {
 		return state.roomTypeList;
 	});
-	console.log("33333333333333", roomTypeList.value);
 	const roomCount = computed(() => {
 		let count = 0;
 		roomTypeList.value.map(item => {
@@ -330,7 +329,7 @@
 		init();
 	});
 	onBeforeMount(() => {
-		console.log("gather component onBeforeMound");
+		//console.log("gather component onBeforeMound");
 
 	})
 	onMounted(() => {

@@ -1,5 +1,5 @@
 export type employeeBean={
-		_id: string,
+		_id?: string,
 		employee_name: string,
 		hotel_id: string,
 		phone: string,
@@ -7,4 +7,11 @@ export type employeeBean={
 		data_status?: number,
 		mark?: string,
 		working_status?: number
+}
+export type employeeBeanForm={
+		employee_name: string,
+		hotel_id: string,
+		phone: string,
+		role: string,
+		mark?: string
 }

@@ -3,6 +3,7 @@ import { callFunctionRes } from "@/bean/DBBean";
 import { hotelBean } from '../bean/hotelBean';
 import { roomTypeBean } from "@/bean/roomTypeBean.uts";
 import { employeeBean } from '@/bean/employeeBean';
+import { state } from '@/store/store.uts';
 type employeeList_Res= {
 	code: number;
 	errCode: number;
@@ -181,24 +182,34 @@ class HotelServiceClass {
 		
 			data.forEach(item=>{
 				if (item!=null) {
-					const _id = item.getString("_id")
-					const hotel_id = item.getString("hotel_id")
-					const phone = item.getString("phone")
-					const role = item.getString("role")
-					const employee_name = item.getString("employee_name")
-					const working_status = item.getNumber("working_status")
-					const data_status = item.getNumber("data_status")
-					const mark = item.getString("mark")
+					// const _id = item.getString("_id");
+					// const hotel_id = item.getString("hotel_id");
+					// const phone = item.getString("phone");
+					// const role = item.getString("role");
+					// const employee_name = item.getString("employee_name");
+					// const working_status = item.getNumber("working_status");
+					// const data_status = item.getNumber("data_status");
+					// const mark = item.getString("mark");
+					// const obj:employeeBean={
+					// 	_id: _id != null ? _id : "",
+					// 	hotel_id: hotel_id != null ? hotel_id : "",
+					// 	phone: phone != null ? phone : "",
+					// 	role: role != null ? role : "",
+					// 	employee_name: employee_name != null ? employee_name : "",
+					// 	working_status: working_status != null ? working_status : 0,
+					// 	data_status: data_status != null ? data_status : 0,
+					// 	mark: mark != null ? mark : "",
+					// } as employeeBean;
 					const obj:employeeBean={
-						_id: _id != null ? _id : "",
-						hotel_id: hotel_id != null ? hotel_id : "",
-						phone: phone != null ? phone : "",
-						role: role != null ? role : "",
-						employee_name: employee_name != null ? employee_name : "",
-						working_status: working_status != null ? working_status : 0,
-						data_status: data_status != null ? data_status : 0,
-						mark: mark != null ? mark : "",
-					} as employeeBean;
+						_id:item.getString("_id")??"",
+						hotel_id:item.getString("hotel_id")??"",
+						phone:item.getString("phone")??"" ,
+						role:item.getString("role")??"" ,
+						employee_name:item.getString("employee_name")??"",
+						working_status:item.getNumber("working_status"),
+						data_status:item.getNumber("data_status"),
+						mark:item.getString("mark"),
+					} 
 					list.push(obj)
 				}
 			})
@@ -210,6 +221,30 @@ class HotelServiceClass {
 				
 		}
 		
+	}
+	
+	async deleteEmployee(_id:string):Promise<boolean>{
+		try {
+			const res = await DB.callFunction("hm_deleteEmployee", {_id});
+			console.log("res",res);
+		} catch (error) {
+			//TODO handle the exception
+			throw new Error("删除员工失败");
+		}
+		
+		// .then((res) => {
+		//   this.$store.dispatch("getHotelList");
+		//   this.submitLoading = false;
+		//   this.getEmployeeList();
+	// .catch((er) => {
+		//   this.submitLoading = false;
+		//   uni.hideLoading();
+		//   uni.showModal({
+		//     content: "系统异常，请稍候再试！",
+		//     confirmText: "确认",
+		//   });
+		// });
+		return false;
 	}
 	/**
 	 * 房价添加

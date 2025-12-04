@@ -1,6 +1,6 @@
 <template>
 	<rice-navbar title="" border>
-<!-- 		<template #left>
+		<template #left>
 			<view style="display: flex;flex-direction: row;">
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
@@ -8,15 +8,15 @@
 	
 				<image src="/static/icons/hotel-manage.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">酒店列表</text>
+				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">用户信息</text>
 			</view>
-		</template> -->
+		</template>
 		<template #right>
 			<view class="navbar-btn">
 				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
-				
-					<text class="txt" @click="saveUser">保存</text>
-				
+	
+				<text class="txt" @click="saveUser">保存</text>
+	
 	
 			</view>
 		</template>

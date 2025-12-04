@@ -200,7 +200,8 @@
 		{
 			"path": "pages/hotelManage/createEmployee/createEmployee",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
 			}
 		}
 	],

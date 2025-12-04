@@ -86,7 +86,7 @@
 			hotel_id: hotel_id.value,
 			phone: "",
 			role: "normal",
-			mark:""
+			mark: ""
 		});
 		 const isAdministrator = computed<boolean>(()=>{
 			   if(employeeForm.value.role=="administrator"&&pageType.value==1){

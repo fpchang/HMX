@@ -25,10 +25,15 @@
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<view style="padding:15px;background-color: #fff;border-radius: 12px;margin:18px"> 
-		<rice-form :model="userForm" ref="formRef2" label-width="100px" class="demo-form">
+		<rice-form :model="userForm" ref="formRef2" label-width="100px" class="demo-form" :border-bottom="false">
 		  <rice-form-item name="username" label="用户名">
 		    <rice-input v-model="userForm.username" placeholder="输入用户名" border="none" :custom-style="inputStyle" />
 		  </rice-form-item>
+		   <rice-form-item name="username" label="头像">
+		  		<xt-file-upload :max-count="1" :filePath="`HM/user`"
+		  			 @uploadSuccess="uploadAvatarSuccess"
+		  			accept="image"></xt-file-upload>
+		  	 </rice-form-item>
 		</rice-form>
 		</view>
 	
@@ -44,10 +49,12 @@
 		import { state, setUser } from '@/store/store.uts';
 		import { comFunction } from "@/pages/index/ComFuc.uts";
 		type formBean = {
-		  username : string
+		  username : string,
+		  avatar:string
 		}
 		const userForm = ref<formBean>({
-		  username: ''
+		  username: '',
+		  avatar:""
 		})
 		//自定义 rice-input 的样式
 		const inputStyle = ref({
@@ -58,6 +65,9 @@
 		const user=computed(() => {
 			return state.user;
 		});
+		const uploadAvatarSuccess=(list : string[])=>{
+			userForm.value.avatar=list[0];
+		}
 		const saveUser= async ()=>{
 			      if (userForm.value.username=="") {
 					  uni.showToast({
@@ -87,6 +97,8 @@
 		}
 </script>
 
-<style>
-		
+<style lang="scss">
+		.editUser{
+			display: flex;
+		}
 </style>

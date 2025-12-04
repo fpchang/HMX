@@ -2,7 +2,7 @@ import { DB } from '../api/DB';
 import { callFunctionRes } from "@/bean/DBBean";
 import { hotelBean } from '../bean/hotelBean';
 import { roomTypeBean } from "@/bean/roomTypeBean.uts";
-import { employeeBean } from '@/bean/employeeBean';
+import { employeeBean,employeeBeanForm } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
 type employeeList_Res= {
 	code: number;
@@ -245,6 +245,16 @@ class HotelServiceClass {
 		//   });
 		// });
 		return false;
+	}
+	async addEmployee(employeeForm:employeeBeanForm):Promise<boolean>{
+		try {
+			 await  DB.callFunction("hm_addEmployee", {employeeObj: employeeForm});
+			 return true;
+		} catch (error) {
+			console.log(error)
+			throw new Error("添加员工失败");
+		}
+		   
 	}
 	/**
 	 * 房价添加

@@ -1,0 +1,14 @@
+import { HotelService } from "@/services/HotelService";
+	import { state,setEmployeeList } from '@/store/store.uts';
+	import { employeeBean } from '@/bean/employeeBean';
+class EmployeeAction{
+	constructor() {
+	    
+	}
+	async getEmplolyeeList(hotel_id:string){
+		console.log("start");
+		const list:Array<employeeBean> = await HotelService.getEmployeeList(hotel_id);
+		setEmployeeList(list)
+	}
+}
+export var employeeAction = new EmployeeAction();

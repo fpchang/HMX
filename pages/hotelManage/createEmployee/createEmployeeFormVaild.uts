@@ -1,6 +1,6 @@
 import { state } from "../../../store/store";
 import { employeeBeanForm } from "@/bean/employeeBean.uts";
-export const  validForm = (employeeForm:employeeBeanForm):boolean=>{
+export const  validEmployeeForm = (employeeForm:employeeBeanForm):boolean=>{
 	let msg ="";
 
 	

@@ -25,13 +25,13 @@
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
 			<xt-form-item label="用户名" tips="" required>
 				<view>
-					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入员工名"
+					<rice-input style="height: 40px;" clearable clear-trigger="always" placeholderStyle="font-size:14px" classic placeholder="请输入员工名"
 						borderColor="#dcdfe6" :disabled="pageType==2||isAdministrator" v-model="employeeForm.employee_name"></rice-input>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="手机号(登录账号)" tips="" required>
 				<view>
-					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入手机号"
+					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" clearable clear-trigger="always" classic placeholder="请输入手机号"
 						borderColor="#dcdfe6" :disabled="pageType==2" v-model="employeeForm.phone" :maxlength="11" type="number"></rice-input>
 				</view>
 			</xt-form-item>
@@ -61,7 +61,11 @@
 <script setup>
 		import { state } from '@/store/store.uts';
 		import { employeeBeanForm } from '@/bean/employeeBean';
-	
+		import {validEmployeeForm} from "./createEmployeeFormVaild.uts";
+		import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+		import { HotelService } from '@/services/HotelService.uts';
+		import {employeeAction} from "../employeeList/employeeAction.uts";
+		
 		let pageType=ref(0);
 		const hotel_id = computed(() => {
 			return state.hotel_id;
@@ -89,10 +93,45 @@
 				   return true
 			   }
 			   return false
-		 })
+		 });
+		 const editEmployee=()=>{
+			 
+		 }
+		 const addEmployee= async()=>{
+				submitLoading.value=true;
+				try {
+					await HotelService.addEmployee(employeeForm.value);
+					submitLoading.value=false;
+					employeeAction.getEmplolyeeList(hotel_id.value);
+					uni.navigateBack();
+				} catch (error) {
+					showDialog({
+						title: '添加失败',
+						message: "请稍候再试",
+						showCancelButton: false,
+						confirm: () => {
+							submitLoading.value=false;
+							hideDialog();
+						}
+					})
+					
+				}
+				
+		 }
 		const submitForm=()=>{
+			
+			if(!validEmployeeForm(employeeForm.value)){
+				return;
+			}
+			employeeAction.getEmplolyeeList(hotel_id.value);
 			console.log(employeeForm.value);
+			 if(pageType.value==1){
+			         editEmployee();
+			          return;
+			        }
+			       addEmployee();
 		}
+		
 </script>
 
 <style>

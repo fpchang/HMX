@@ -87,10 +87,11 @@
 </template>
 
 <script setup>
-		import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
-	import { state } from '@/store/store.uts';
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { state,setEmployeeList } from '@/store/store.uts';
 	import { employeeBean } from '@/bean/employeeBean';
 	import { HotelService } from '@/services/HotelService';
+	import { employeeAction } from "./employeeAction.uts";
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -100,7 +101,10 @@
 	const permissionList = computed(() => {
 		return state.permissionList;
 	});
-	const employeeList = ref<Array<employeeBean>>([]);
+	//const employeeList = ref<Array<employeeBean>>([]);
+	const employeeList =computed<Array<employeeBean>>(()=>{
+		return state.employeeList;
+	});
 	const roleFormat = (key : string) : string => {
 		const m : Map<string, string> = new Map([
 			["administrator", "超级管理员"],
@@ -118,12 +122,6 @@
 			return "#52c41a"
 		}
 		return role == "administrator" ? "#1989fa" : "#36cfc9"
-	}
-	const getEmplolyeeList = async () => {
-		console.log("start");
-		const list = await HotelService.getEmployeeList(hotel_id.value);
-		state.setEmployeeList(list)
-		employeeList.value =list;
 	}
 	const showControl_edit = (em : employeeBean) : boolean => {
 		if (permissionList.value.includes("EMPLOYEE_UPDATE")) {
@@ -212,7 +210,7 @@
 	        },
 	      });
 	    }
-	getEmplolyeeList();
+	employeeAction.getEmplolyeeList(hotel_id.value);
 </script>
 
 <style lang="scss">

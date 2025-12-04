@@ -37,10 +37,10 @@ function sameHistory(n=2,historyList=[]){
 		//console.log("--------------");
 		//console.log("groupRedBall",grouplist);
 		//console.log("groupRedBall_",groupRedBall_)
-		//console.log(`与前${n}期比较有${result}个球重复-index${i}`);
-		if(result<2){
+		//console.log(`与前${n}期比较有${result}个球重复-index${historyList[i].index}`);
+		if(result<1){
 			//console.log(`前${n}期组合为：：`,groupRedBall_);
-			//console.log(`当期为：：`,historyList[i]);
+			//console.log(`当期为：：`,historyList[i].index);
 			//console.log(`与前${n}期比较有${result}个球重复-index${i}`);
 		}
 		if(s[result]){
@@ -96,6 +96,15 @@ function S0(list,history){
 	
 }
 //红球算法 与前几期比较
+//前1期重复【2，8】
+//前2期重复【6，11】
+//前3期重复【9，14】
+//前4期重复【11，16】
+//前5期重复【13，19】
+//前6期重复【15，19】
+//前7期重复【16，19】
+//前8期重复【17，20】
+
 function S1(list,history){
 	let count1 = compare(list,history.slice(history.length-1));
 	let count2 = compare(list,history.slice(history.length-2));
@@ -104,15 +113,17 @@ function S1(list,history){
 	let count5 = compare(list,history.slice(history.length-5));
 	let count6 = compare(list,history.slice(history.length-6));
 	let count7 = compare(list,history.slice(history.length-7));
+	let count8 = compare(list,history.slice(history.length-8));
 	//console.log("count:",count1,count2,count3,count4,count5);
-	const s1=count1<1;
-	const s2=count2<2;
-	const s3=count3<15;
-	const s4=count4>7;
-	const s5=count5>12;
-	const s6=count6>12;
-	const s7=count7>15;
-	if(s1&s2&&s3&&s4&&s5&&s6&&s7){
+	const s1=count1>1&&count1<9;
+	const s2=count2>5&&count2<12;
+	const s3=count3>8&&count3<15;
+	const s4=count4>10&&count4<17;
+	const s5=count5>12&&count4<20;
+	const s6=count6>14&&count4<20;
+	const s7=count7>15&&count4<20;
+	const s8=count8>16;
+	if(s1&s2&&s3&&s4&&s5&&s6&&s7&&s8){
 		return true
 	}
 	return false;
@@ -193,24 +204,24 @@ function caculate(fn,n=20){
 //let flag = S1([ 8, 10, 14, 23, 28, 32 ],history);
 //console.log(flag);
 //将2024年双色球61到90期开奖结束整理成json格式，要全部开奖数据升序排列，生成附件
- //sameHistory(1,history);
-// sameHistory(2,history);
-// sameHistory(3,history);
-// sameHistory(4,history);
-// sameHistory(5,history);
-// sameHistory(6,history);
-// sameHistory(7,history);
-// sameHistory(8,history);
-// sameHistory(9,history);
-// sameHistory(10,history);
-// sameHistory(11,history);
+ sameHistory(1,history);
+sameHistory(2,history);
+sameHistory(3,history);
+sameHistory(4,history);
+sameHistory(5,history);
+sameHistory(6,history);
+sameHistory(7,history);
+sameHistory(8,history);
+sameHistory(9,history);
+sameHistory(10,history);
+sameHistory(11,history);
 
-// const c4=getGroupList(history.slice(history.length-4));
-// const c5=getGroupList(history.slice(history.length-5));
-// const c6=getGroupList(history.slice(history.length-6));
-// console.log(c4,c5,c6);
+const c4=getGroupList(history.slice(history.length-4));
+const c5=getGroupList(history.slice(history.length-5));
+const c6=getGroupList(history.slice(history.length-6));
+console.log(new Set(c4),new Set(c5),new Set(c6));
 //console.log(getRandomRedBall())
-const list=caculate(S1,20);
+const list=caculate(S1,18);
 console.log(list);
 console.log(S1_stat(list));
 

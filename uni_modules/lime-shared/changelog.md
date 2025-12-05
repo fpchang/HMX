@@ -1,3 +1,5 @@
+## 0.4.3（2025-12-02）
+- feat: 增加`arrayEqual`,`findLastIndex`
 ## 0.4.2（2025-09-26）
 - feat: 增加`cssToObj`
 ## 0.4.1（2025-06-13）

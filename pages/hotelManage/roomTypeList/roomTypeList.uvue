@@ -8,7 +8,7 @@
 
 				<!-- <image src="/static/icons/hotel-manage.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image> -->
-				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">房型列表</text>
+				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">房型列表{{scrollTop_val}}</text>
 			</view>
 		</template>
 		<template #right>
@@ -22,7 +22,7 @@
 		</template>
 	</rice-navbar>
 	<!-- #ifdef APP -->
-	<scroll-view style="flex:1">
+	<scroll-view style="flex:1" @scroll="scrollPage">
 	<!-- #endif -->
 		<view class="card-list">
 			<view class="card-list-item" v-for="roomType of roomTypeList">
@@ -62,7 +62,10 @@
 										style="color: #00b42f;font-size: 14px;padding:0 5px;">{{ roomNum(roomType)}}</text>
 									<text style="color: #4e5969;font-size: 14px;"> 间</text>
 								</view>
-								<view class="control-icons" style="display: flex;flex-direction: row;">
+								<view style="display: flex;flex-direction:row; align-items: center;">
+									<xt-control @del="deleteRoomType(roomType)" @view="viewDetail(roomType)" @edit="editRoomType(roomType)" :scrollPosition="scrollTop_val"></xt-control>
+								</view>
+								<view v-if="false" class="control-icons" style="display: flex;flex-direction: row;">
 									<view class="control-icons-item" @click="viewDetail(roomType)">
 										<!-- <rice-icon color="#4e5969" name="eyes"/> -->
 										<image src="/static/icons/operation/view.png" style="width: 18px;height: 18px;">
@@ -96,6 +99,7 @@
 			</view>
 
 		</view>
+		
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
@@ -109,6 +113,7 @@
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { HotelService } from "@/services/HotelService.uts";
 	let submitLoading = ref(false);
+	let showPopover_id=ref("");
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -143,6 +148,13 @@
 			["normal", "员工"]
 		]);
 		return p.get(val) ?? val;
+	}
+	const showControl=(roomType:roomTypeBean)=>{
+		if(roomType._id == showPopover_id.value){
+			showPopover_id.value="";
+			return;
+		}
+		showPopover_id.value=roomType._id;
 	}
 	const editRoomType = (roomType_item : UTSJSONObject) => {
 		if (!permissionList.value.includes(
@@ -232,6 +244,12 @@
 		uni.navigateTo({
 			url: `/pages/hotelManage/createRoomType/createRoomType?pageType=2&&roomType_item=${encodeURIComponent(JSON.stringify(roomType_item))}`,
 		});
+	}
+	let scrollTop_val=ref(0);
+	const scrollPage=(event: UniScrollEvent)=>{
+		//event.detail = {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY}
+		let {scrollTop}=event.detail;
+		scrollTop_val.value=scrollTop
 	}
 </script>
 

@@ -38,6 +38,7 @@
 			<xt-form-item label="角色" tips="" required>
 				<view>
 					<rice-radio-group v-model="employeeForm.role" direction="row">
+					
 						<view style="margin:4px"> <rice-radio value="manager" label="管理员"></rice-radio></view>
 						<view style="margin:4px"><rice-radio value="normal" label="普通员工"></rice-radio></view>
 				
@@ -60,7 +61,7 @@
 
 <script setup>
 		import { state } from '@/store/store.uts';
-		import { employeeBeanForm } from '@/bean/employeeBean';
+		import { employeeBean } from '@/bean/employeeBean';
 		import {validEmployeeForm} from "./createEmployeeFormVaild.uts";
 		import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 		import { HotelService } from '@/services/HotelService.uts';
@@ -79,9 +80,13 @@
 			}
 			return pageType.value == 1 ? '修改员工信息' : '员工信息';
 		});
+		const employeeList =computed<Array<employeeBean>>(()=>{
+			return state.employeeList;
+		});
 		let submitLoading = ref(false);
 		let _id=ref("");//编辑页面id
-		let employeeForm=ref<employeeBeanForm>({
+		let employeeForm=ref<employeeBean>({
+			_id:"",
 			employee_name: "",
 			hotel_id: hotel_id.value,
 			phone: "",
@@ -131,7 +136,35 @@
 			        }
 			       addEmployee();
 		}
-		
+		onLoad(params => {
+			try {
+				console.log("params::",params);
+				const pt = params.getNumber("pageType")??0;
+				const id = params.getString("id")??"";
+				pageType.value=pt;
+				_id.value=id;				
+				const found = employeeList.value.find(item=>item._id == id);
+				if (found != null) {
+					employeeForm.value = found;
+				} 
+				// else {
+				// 	employeeForm.value = {
+				// 		_id:"",
+				// 		employee_name: "",
+				// 		hotel_id: hotel_id.value,
+				// 		phone: "",
+				// 		role: "normal",
+				// 		mark: ""
+				// 	};
+				// }
+				console.log("employeeForm",employeeForm);
+			} catch (error) {
+				throw new Error("参数转换失败");
+			}
+			
+			
+			
+		})
 </script>
 
 <style>

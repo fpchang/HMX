@@ -1,20 +1,22 @@
 {
-  "id": "lime-shared",
-  "displayName": "lime-shared",
-  "version": "0.4.3",
-  "description": "本人插件的几个公共函数，获取当前页，图片的base64转临时路径，图片的exif信息等",
+  "id": "lime-popover",
+  "displayName": "lime-popover 气泡弹出框",
+  "version": "0.1.6",
+  "description": "lime-popover 用于文字提示的气泡框。弹出式的气泡菜单。兼容uniapp/uniappx",
   "keywords": [
-    "lime-shared",
-    "exif"
+    "lime-popover",
+    "popover",
+    "气泡弹出框",
+    "气泡框"
 ],
   "repository": "",
   "engines": {
-    "HBuilderX": "^3.1.0",
-    "uni-app": "^4.55",
-    "uni-app-x": "^4.55"
+    "HBuilderX": "^4.44",
+    "uni-app": "^4.54",
+    "uni-app-x": "^4.61"
   },
   "dcloudext": {
-    "type": "sdk-js",
+    "type": "component-vue",
     "sale": {
       "regular": {
         "price": "0.00"
@@ -37,7 +39,11 @@
     "widescreen": "x"
   },
   "uni_modules": {
-    "dependencies": [],
+    "dependencies": [
+      "lime-shared",
+      "lime-style",
+      "lime-transition"
+    ],
     "encrypt": [],
     "platforms": {
       "cloud": {
@@ -57,19 +63,19 @@
           },
           "app": {
             "vue": "√",
-            "nvue": "-",
+            "nvue": "√",
             "android": {
-              "extVersion": "",
-              "minVersion": "21"
+                "extVersion": "",
+                "minVersion": "21"
             },
             "ios": "√",
             "harmony": "√"
           },
           "mp": {
             "weixin": "√",
-            "alipay": "√",
-            "toutiao": "√",
-            "baidu": "√",
+            "alipay": "-",
+            "toutiao": "-",
+            "baidu": "-",
             "kuaishou": "-",
             "jd": "-",
             "harmony": "-",
@@ -88,8 +94,8 @@
           },
           "app": {
             "android": {
-              "extVersion": "",
-              "minVersion": "21"
+                "extVersion": "",
+                "minVersion": "21"
             },
             "ios": "√",
             "harmony": "√"
@@ -97,12 +103,6 @@
           "mp": {
             "weixin": "√"
           }
-        },
-        "App": {
-          "app-harmony": "u",
-          "app-nvue": "u",
-          "app-uvue": "y",
-          "app-vue": "u"
         }
       }
     }

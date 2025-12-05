@@ -2,7 +2,7 @@ import { DB } from '../api/DB';
 import { callFunctionRes } from "@/bean/DBBean";
 import { hotelBean } from '../bean/hotelBean';
 import { roomTypeBean } from "@/bean/roomTypeBean.uts";
-import { employeeBean,employeeBeanForm } from '@/bean/employeeBean';
+import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
 type employeeList_Res= {
 	code: number;
@@ -53,15 +53,15 @@ class HotelServiceClass {
 			const res = await DB.callFunction("hm_createHotel", { hotelObj });
 			console.log("create hotel", res);
 			const result = res['result'] as UTSJSONObject;
-			const code = result['code'] as string;
-			const message = result.message as string;
-			if (code != '0') {
+			const code =  result.getNumber("code")??99;
+			const message = result.getString("message")??"";
+			if (code != 0) {
 				console.log("code error", code);
 				uni.showToast({
 					title: message,
 					icon: "none"
 				});
-				throw new Error(result.message as string);
+				throw new Error(message);
 			}
 			uni.showToast({
 				title: "添加成功",
@@ -208,7 +208,7 @@ class HotelServiceClass {
 						employee_name:item.getString("employee_name")??"",
 						working_status:item.getNumber("working_status"),
 						data_status:item.getNumber("data_status"),
-						mark:item.getString("mark"),
+						mark:item.getString("mark")??"",
 					} 
 					list.push(obj)
 				}
@@ -246,9 +246,25 @@ class HotelServiceClass {
 		// });
 		return false;
 	}
-	async addEmployee(employeeForm:employeeBeanForm):Promise<boolean>{
+	async addEmployee(employeeForm:employeeBean):Promise<boolean>{
 		try {
-			 await  DB.callFunction("hm_addEmployee", {employeeObj: employeeForm});
+			const {employee_name,hotel_id,phone,role,mark}=employeeForm;
+			 const res = await  DB.callFunction("hm_addEmployee", {employeeObj: {employee_name,hotel_id,phone,role,mark}});
+			 const result = res['result'] as UTSJSONObject;
+			 const code =  result.getNumber("code")??99;
+			 const message = result.getString("message")??"";
+			 if (code != 0) {
+			 	console.log("code error", code);
+			 	uni.showToast({
+			 		title: message,
+			 		icon: "none"
+			 	});
+			 	throw new Error(message);
+			 }
+			 uni.showToast({
+			 	title: "添加成功",
+			 	icon: "none"
+			 });
 			 return true;
 		} catch (error) {
 			console.log(error)

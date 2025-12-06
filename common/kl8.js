@@ -1,6 +1,7 @@
 import {kl8_data} from "./kl8_data.js";
-
+import {getSpecifiedLengthCombinations,sortObjectByNumberValue,sortObjectArrayByNumberValue} from "./math.js"
 const history= kl8_data;
+const BALL=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80]
 function getRandomRedBall(len=80){
 	let result = [];
 	while(result.length<20){
@@ -184,6 +185,41 @@ function S3(list,history){
 	}
 	return false;
 }
+//计算历史开奖中中奖率最高的组合
+//n 代表买几，1-10
+function S5(n=4,minNum=5){
+	console.log(BALL.length)
+	const list = getSpecifiedLengthCombinations(BALL, n);
+	//console.log('示例1：[1,2,3] 长度2的组合 →', example1);
+	//const list=[[43,44]];
+	let result={}
+	for(let i=0;i<list.length;i++){
+		let g=list[i];
+	
+		for(let j=0;j<history.length;j++){
+			let arr =history[j].redBall;
+			let repeatCount = g.length+arr.length - new Set([...arr,...g]).size;
+				//console.log("repeatCount",repeatCount);
+			if(repeatCount==n){
+				let index = g.toString();
+				
+				if(result[index]){
+				
+					result[index]++;
+				}else{
+					
+					result[index]=1
+				}
+			
+			}
+			
+		}
+	}
+	let listArray = sortObjectByNumberValue(result);
+	listArray=listArray.filter(item=>item[1]>minNum);
+	console.log(listArray)
+	return listArray;
+}
 function caculate(fn,n=20){
 	
 
@@ -204,24 +240,47 @@ function caculate(fn,n=20){
 //let flag = S1([ 8, 10, 14, 23, 28, 32 ],history);
 //console.log(flag);
 //将2024年双色球61到90期开奖结束整理成json格式，要全部开奖数据升序排列，生成附件
- sameHistory(1,history);
-sameHistory(2,history);
-sameHistory(3,history);
-sameHistory(4,history);
-sameHistory(5,history);
-sameHistory(6,history);
-sameHistory(7,history);
-sameHistory(8,history);
-sameHistory(9,history);
-sameHistory(10,history);
-sameHistory(11,history);
+//  sameHistory(1,history);
+// sameHistory(2,history);
+// sameHistory(3,history);
+// sameHistory(4,history);
+// sameHistory(5,history);
+// sameHistory(6,history);
+// sameHistory(7,history);
+// sameHistory(8,history);
+// sameHistory(9,history);
+// sameHistory(10,history);
+// sameHistory(11,history);
 
-const c4=getGroupList(history.slice(history.length-4));
-const c5=getGroupList(history.slice(history.length-5));
-const c6=getGroupList(history.slice(history.length-6));
-console.log(new Set(c4),new Set(c5),new Set(c6));
-//console.log(getRandomRedBall())
-const list=caculate(S1,18);
-console.log(list);
-console.log(S1_stat(list));
-
+// const c4=getGroupList(history.slice(history.length-4));
+// const c5=getGroupList(history.slice(history.length-5));
+// const c6=getGroupList(history.slice(history.length-6));
+// console.log(new Set(c4),new Set(c5),new Set(c6));
+// const list=caculate(S1,18);
+// console.log(list);
+// console.log(S1_stat(list));
+ // '52,61,72,80': 7,
+ //  '54,70,72,74': 7,
+ //  '7,21,46,59': 8,
+ //  '8,10,47,54': 8,
+ //  '8,11,15,20': 8,
+ //  '8,15,54,56': 8,
+ //  '8,15,65,80': 8,
+ //  '10,38,52,71': 8,
+ //  '13,43,47,61': 8,
+ //  '15,18,54,74': 8,
+ //  '15,28,48,70': 8,
+ //  '15,54,72,74': 8,
+ //  '16,23,79,80': 8,
+ //  '16,38,62,71': 8,
+ //  '19,33,35,59': 8,
+ //  '20,48,53,68': 8,
+ //  '21,40,58,65': 8,
+ //  '22,34,37,55': 8,
+ //  '22,34,46,50': 8,
+ //  '26,69,72,80': 8,
+ //  '28,33,34,37': 8,
+ //  '12,53,68,80': 9,
+ //  '22,34,50,52': 9
+//set NODE_OPTIONS=--max-old-space-size=4096
+S5(4,5);

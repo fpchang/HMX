@@ -1,61 +1,80 @@
+import { roomBean } from "./roomBean";
+export  type bedBean = {
+	count: number,
+	name: string
+}
 export type roomTypeBean = {
-	//_id ?: string,
+	_id: string,
 	hotel_id:string,
-	//count : number,
 	name : string,
 	area : number,
 	isWindow : boolean,
 	guestNumber : number,
 	firstImages : string,
 	imagesList : Array<string>,
-	bedList : Array<UTSJSONObject>,
-	//roomList : Array<string>,
+	bedList : Array<bedBean>,
+	roomList? : Array<roomBean>,
 	facility : Array<string>,
 	priceBase : number,
 	independentBathroom : boolean
 
 }
 
-export let formatRoomTypeBean =(parsed:UTSJSONObject | null):roomTypeBean=>{
-	const initData:roomTypeBean={
-		hotel_id:"",
-		name : "",
-		area : 0,
-		isWindow : true,
-		guestNumber : 0,
-		firstImages : "",
-		imagesList :[],
-		bedList :[],
-		facility :[],
-		priceBase : 0,
-		independentBathroom : true
-	}
+export let formatRoomTypeBean =(parsed:UTSJSONObject):roomTypeBean=>{
+	// const initData:roomTypeBean={
+	// 	_id:"",
+	// 	hotel_id:"",
+	// 	name : "",
+	// 	area : 0,
+	// 	isWindow : true,
+	// 	guestNumber : 0,
+	// 	firstImages : "",
+	// 	imagesList :[],
+	// 	bedList :[],
+	// 	facility :[],
+	// 	priceBase : 0,
+	// 	independentBathroom : true
+	// }
 	//const parsed = JSON.parse<UTSJSONObject>(jsonStr);
-	if (parsed == null) {
-		return initData;
+	const _idObj = parsed.getJSON("_id")??{};	
+	const _id = _idObj.getString("_value")??"";
+	const hotel_id = parsed.getString("hotel_id")??"";
+	const name = parsed.getString("name")??"";
+	const area = parsed.getNumber("area")??0;
+	const isWindow = parsed.getBoolean("isWindow")??true;
+	const guestNumber = parsed.getNumber("guestNumber")??0;
+	const firstImages = parsed.getString("firstImages")??""
+	let imagesList = [];
+	let bedList =[]
+	if(parsed.getArray("bedList") instanceof Array<bedBean>){
+		bedList=parsed.getArray("bedList")??[]
 	}
-	const hotel_id = parsed?.get("hotel_id")
-	const name = parsed?.get("name")
-	const area = parsed?.get("area")
-	const isWindow = parsed?.get("isWindow")
-	const guestNumber = parsed?.get("guestNumber")
-	const firstImages = parsed?.get("firstImages")
-	const imagesList = parsed?.get("imagesList")
-	const bedList = parsed?.get("bedList")
-	const facility = parsed?.get("facility")
-	const priceBase = parsed?.get("priceBase")
-	
+	const priceBase = parsed.getNumber("priceBase")??0;
+	if(parsed.getArray("imagesList") instanceof Array<string>){
+		imagesList=parsed.getArray("imagesList")??[]
+	}
+	let facility =[]
+	if(parsed.getArray("facility") instanceof Array<string>){
+		facility=parsed.getArray("facility")??[]
+	}
+	let roomList = [];
+	if(_idObj.getArray("hm-room") instanceof Array<roomBean>){
+		roomList=_idObj.getArray("hm-room")??[]
+	}
+	const independentBathroom=parsed.getBoolean("independentBathroom")??false;
 	return {
-		hotel_id:hotel_id != null ? hotel_id as string : initData.hotel_id,
-		name: name != null ? name as string : initData.name,
-		area: area != null ? area as number : initData.area,
-		isWindow: isWindow != null ? isWindow as boolean : initData.isWindow,
-		guestNumber: guestNumber != null ? guestNumber as number :initData.guestNumber,
-		firstImages: firstImages != null ? firstImages as string : initData.firstImages,
-		imagesList: imagesList != null ? imagesList as Array<string> : initData.imagesList,
-		bedList: bedList != null ? bedList as Array<UTSJSONObject> : initData.bedList,
-		facility: facility != null ? facility as Array<string> : initData.facility,
-		priceBase: priceBase != null ? priceBase as number : initData.priceBase,
-		independentBathroom: initData.independentBathroom
+		_id,
+		hotel_id,
+		name,
+		area,
+		isWindow,
+		guestNumber,
+		firstImages,
+		imagesList,
+		bedList,
+		facility,
+		priceBase,
+		roomList,
+		independentBathroom
 	}
 }

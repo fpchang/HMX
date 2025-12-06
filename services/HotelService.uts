@@ -1,7 +1,7 @@
 import { DB } from '../api/DB';
 import { callFunctionRes } from "@/bean/DBBean";
 import { hotelBean } from '../bean/hotelBean';
-import { roomTypeBean } from "@/bean/roomTypeBean.uts";
+import { roomTypeBean,formatRoomTypeBean } from "@/bean/roomTypeBean.uts";
 import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
 type employeeList_Res= {
@@ -130,8 +130,30 @@ class HotelServiceClass {
 	/** 
 	 * 获取当前酒店房型信息
 	*/
-	getRoomType(hotel_id : string) : Promise<UniCloudDBGetResult> {
-		return DB.getCollection("hm-roomType,hm-room", { "hotel_id":hotel_id })
+	async getRoomTypeList(hotel_id : string) : Promise<Array<roomTypeBean>> {
+		try {
+			const params={hotel_id} as UTSJSONObject;
+			const res = await  DB.getCollection("hm-roomType,hm-room",params );
+			console.log("JJJJJJJJJJJJJJJJJJJ",res);
+			const data = res['data'] as Array<UTSJSONObject>;
+			let roomTypeList:Array<roomTypeBean>=[];
+			console.log("KKKKKKKKKKK",data);
+			if(data!=null){
+				data.forEach(item=>{
+					if(item!=null){
+						console.log("LLLLLLLLLLLL",formatRoomTypeBean(item)) 
+						roomTypeList.push(formatRoomTypeBean(item));
+					}
+					
+				})
+			}
+			console.log("roomTypeList",roomTypeList);
+			return roomTypeList;
+		} catch (error) {
+			//TODO handle the exception
+			throw new Error("获取房型数据失败");
+		}
+		
 	}
 	/**
 	 * 根据房型id获取房间
@@ -182,24 +204,6 @@ class HotelServiceClass {
 		
 			data.forEach(item=>{
 				if (item!=null) {
-					// const _id = item.getString("_id");
-					// const hotel_id = item.getString("hotel_id");
-					// const phone = item.getString("phone");
-					// const role = item.getString("role");
-					// const employee_name = item.getString("employee_name");
-					// const working_status = item.getNumber("working_status");
-					// const data_status = item.getNumber("data_status");
-					// const mark = item.getString("mark");
-					// const obj:employeeBean={
-					// 	_id: _id != null ? _id : "",
-					// 	hotel_id: hotel_id != null ? hotel_id : "",
-					// 	phone: phone != null ? phone : "",
-					// 	role: role != null ? role : "",
-					// 	employee_name: employee_name != null ? employee_name : "",
-					// 	working_status: working_status != null ? working_status : 0,
-					// 	data_status: data_status != null ? data_status : 0,
-					// 	mark: mark != null ? mark : "",
-					// } as employeeBean;
 					const obj:employeeBean={
 						_id:item.getString("_id")??"",
 						hotel_id:item.getString("hotel_id")??"",
@@ -231,19 +235,6 @@ class HotelServiceClass {
 			//TODO handle the exception
 			throw new Error("删除员工失败");
 		}
-		
-		// .then((res) => {
-		//   this.$store.dispatch("getHotelList");
-		//   this.submitLoading = false;
-		//   this.getEmployeeList();
-	// .catch((er) => {
-		//   this.submitLoading = false;
-		//   uni.hideLoading();
-		//   uni.showModal({
-		//     content: "系统异常，请稍候再试！",
-		//     confirmText: "确认",
-		//   });
-		// });
 		return false;
 	}
 	async addEmployee(employeeForm:employeeBean):Promise<boolean>{

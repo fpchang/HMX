@@ -1,28 +1,24 @@
 <template>
-	<view style="position: static;">
-		<l-popover :placement="placement" :close-on-click-outside="true" :scrollPosition="scrollPosition" :visible="null">
-			<template #content>
-				<view class="custom-content">
-					<view class="menu-list">
-						<view class="menu-list-item" v-if="controlItem.includes('view')">
-							<image src="./static/view.png" style="width: 18px;height: 18px;">
-							</image>
-							<text class="txt" @click="view">查看</text>
-							</view>
-						<view class="menu-list-item" v-if="controlItem.includes('edit')">
-							<image src="./static/edit.png" style="width: 18px;height: 18px;">
-							</image>
-							<text class="txt" @click="edit">修改</text>
-							</view>
-						<view v-if="controlItem.includes('del')" class="menu-list-item">
-							<image src="./static/delete.png" style="width: 18px;height: 18px;">
-							</image>
-							<text class="txt" @click="del">删除</text></view>
-					</view>
-				</view>
-			</template>
+	<view class="xt-control">
+		<view class="control-item" v-if="!showControl" @click="showControlEvent">
 			<image src="/static/icons/more-control.png" style="width:32px;height:32px" @click="showControl"></image>
-		</l-popover>
+		</view>
+		<block v-if="showControl"> 
+		<view class="control-item view">
+			<image src="/static/icons/operation/view.png" style="width:18px;height:18px" @click="view"></image>
+		</view>
+		<view class="control-item edit">
+			<image src="/static/icons/operation/edit.png" style="width:18px;height:18px" @click="edit"></image>
+		</view>
+		<view class="control-item delete">
+			<image src="/static/icons/operation/delete.png" style="width:18px;height:18px" @click="del"></image>
+		</view>
+		<view class="control-item hide" @click="showControlEvent">
+			<image src="/static/icons/operation/icon-hide.png" style="width:18px;height:18px" @click="hide"></image>
+		</view>
+		</block>
+
+
 	</view>
 </template>
 
@@ -33,25 +29,26 @@
 		id: {
 			type: String
 		},
-		placement:{
-			type:String,
-			default:"left"
+		placement: {
+			type: String,
+			default: "left"
 		},
-		scrollPosition:{
-			type:Number,
-			default:0
+		scrollPosition: {
+			type: Number,
+			default: 0
 		},
-		controlItem:{
-			type:Array,
-			default:['view','edit','del']
+		controlItem: {
+			type: Array,
+			default: ['view', 'edit', 'del']
 		}
-		
+
 	})
-	const showPopover = ref(false)
-	const showControl = () => {
-		showPopover.value = !showPopover.value
+	const showControl=ref(false);
+	
+	const emit = defineEmits(['view', 'edit', 'del']);
+	const showControlEvent=()=>{
+		showControl.value=!showControl.value;
 	}
-	const emit = defineEmits(['view', 'edit', 'del'])
 	const view = () => {
 		emit('view')
 	}
@@ -61,30 +58,36 @@
 	const del = () => {
 		emit('del')
 	}
-	watch(():number => props.scrollPosition , (newVal: number, oldVal: number) => {
-		console.log(newVal)
-		showPopover.value = false
-	})
+	const hide = () => {
+
+	}
+
 </script>
 
 <style lang="scss">
-	.menu-list {
-		.menu-list-item {
+	.xt-control {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		width: fit-content;
+		.control-item{
+			flex:1;
+			height: 40px;
+			width: 40px;
 			display: flex;
 			flex-direction: row;
-			padding: 10px 5px;
-			justify-content: space-between;
 			align-items: center;
-			border-bottom: 1px solid #eee;
-
-			.txt {
-				padding-left: 4px;
-				color: #000;
-				font-size: 16px;
-			}
+			justify-content: center;
+			
 		}
-		.menu-list-item:last-child{
-			border-bottom: 0px solid #eee;
+		.view{
+			background-color: #eee;
+		}
+		.edit{
+			background-color:#eee;
+		}
+		.delete{
+			background-color: #eee;
 		}
 	}
 </style>

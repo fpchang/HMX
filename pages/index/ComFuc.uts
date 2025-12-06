@@ -29,9 +29,9 @@ class ComFuc {
 		if(hotel_id==null || hotel_id==""){
 			hotel_id=state.hotel_id;
 		}
-		const res = await HotelService.getRoomType(hotel_id);
-		console.log("房型列表", res);
-		const list = res['data'] as Array<UTSJSONObject>;
+		const list = await HotelService.getRoomTypeList(hotel_id);
+		console.log("房型列表", list);
+
 		setRoomTypeList(list);
 		return list;
 	}

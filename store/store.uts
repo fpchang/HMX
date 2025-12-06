@@ -2,6 +2,7 @@ import { AccountService } from "@/services/AccountService";
 import { PermissionService } from "@/services/PermissionService";
 import { employeeBean } from "../bean/employeeBean";
 //import {hotelBean} from "@/bean/hotelBean";
+import { roomTypeBean } from "../bean/roomTypeBean";
 export type State = {
 	//存放状态
 	isLogin : boolean,
@@ -12,7 +13,7 @@ export type State = {
 	employeeList : Array<employeeBean>,
 	hotel_id : string,
 	hotel : UTSJSONObject,
-	roomTypeList : Array<UTSJSONObject>,
+	roomTypeList : Array<roomTypeBean>,
 	permissionList : Array<string>,//s权限列表
 	location : Array<number>
 }
@@ -26,7 +27,7 @@ export const state = reactive({
 	employeeList: [] as Array<employeeBean>,
 	hotel_id: "",
 	hotel: {} as UTSJSONObject,
-	roomTypeList: [] as Array<UTSJSONObject>,
+	roomTypeList: [] as Array<roomTypeBean>,
 	permissionList: [] as Array<string>,
 	location: [] as Array<number>
 } as State);
@@ -54,7 +55,7 @@ export const setHotelList = (list : Array<UTSJSONObject>) => {
 	uni.setStorageSync("hotelList",list);
 	const t =  uni.getStorageSync("hotelList") as  Array<UTSJSONObject>;
 };
-export const setRoomTypeList = (list : Array<UTSJSONObject>) => {
+export const setRoomTypeList = (list : Array<roomTypeBean>) => {
 	state.roomTypeList = list;
 	uni.setStorage({key:"roomTypeList",data:list});
 };

@@ -27,11 +27,9 @@
 		<view class="card-list">
 			
 			<view class="card-list-item" v-for="(roomType,index) of roomTypeList">
-				{{showControl_id}}
-				{{getRoomTypeId(roomType)}}
 				<view class="card">
 					<view class="img-area">
-						<image :src="topImg((roomType['firstImages'] as string | null) ?? null)"
+						<image :src="topImg(roomType.firstImages)"
 							style="height: 100%;width: 100%;" mode="aspectFill">
 						</image>
 					</view>
@@ -59,35 +57,21 @@
 							</view>
 
 
-							<!-- <rice-swipe-actions :custom-style="{'width':'100%'}" ref="controlRef">
-								<rice-swipe-actions-item :right-menu="rightMenu"  name="swipe"
-									 ref="controlItemRef"> -->
-			<l-swipe-cell :opened="true">
+			
 				<view class="card-subtitle">
 									<view style="display: flex;flex-direction: row;">
-										<text style=" font-weight:400;color: #1d2129;font-size: 14px;">{{isShowMenu(roomType)}}房间数量：</text>
+										<text style=" font-weight:400;color: #1d2129;font-size: 14px;">房间数量：</text>
 										<text class="txt-num"
-											style="color: #00b42f;font-size: 14px;padding:0 5px;">{{ roomNum(roomType)}}</text>
+											style="color: #00b42f;font-size: 14px;padding:0 5px;">{{roomType.roomList.length}}</text>
 										<text style="color: #4e5969;font-size: 14px;"> 间</text>
 									</view>
 									<view style="display: flex;flex-direction:row; align-items: center;">
 								
-										<image src="/static/icons/more-control.png" style="width:32px;height:32px"
-											@click="showControl(roomType)"></image>
+										<xt-control @del="deleteRoomType(roomType)" @view="viewDetail(roomType)" @edit="editRoomType(roomType)"></xt-control>
 									</view>
 								</view>
-								<template #right>
-									<view class="btn delete-btn"><text>编辑</text></view>
-									<view class="btn delete-btn"><text>删除</text></view>
-								</template>
-							</l-swipe-cell>
-
-
-							<!-- 	</rice-swipe-actions-item>
-							</rice-swipe-actions> -->
-
-
-
+						
+	
 							<!-- <view v-if="false" class="control-icons" style="display: flex;flex-direction: row;">
 								<view class="control-icons-item" @click="viewDetail(roomType)">
 									
@@ -146,17 +130,12 @@
 	const permissionList = computed(() => {
 		return state.permissionList;
 	});
-	const roomTypeList = computed(() => {
+	const roomTypeList = computed<Array<roomTypeBean>>(() => {
 		return state.roomTypeList;
 	});
 	console.log("roomTypeList", roomTypeList);
-	const roomNum = (roomType : UTSJSONObject) => {
-		const idObj = roomType["_id"] as UTSJSONObject;
-		const roomList = idObj["hm-room"] as Array<UTSJSONObject>;
-		return roomList.length;
-	}
-	const topImg = (imgUrl : string | null) : string => {
-		if (imgUrl == null || imgUrl == '') {
+	const topImg = (imgUrl : string) : string => {
+		if (imgUrl == '') {
 			return '/static/images/hotel.png';
 		}
 		return imgUrl;
@@ -183,7 +162,7 @@
 	const isShowMenu=(roomType:UTSJSONObject)=>{
 		return getRoomTypeId(roomType) == showControl_id.value;
 	}
-	const editRoomType = (roomType_item : UTSJSONObject) => {
+	const editRoomType = (roomType : roomTypeBean) => {
 		if (!permissionList.value.includes(
 			"ROOMTYPE_UPDATE"
 		)) {
@@ -198,7 +177,7 @@
 			return;
 		}
 		uni.navigateTo({
-			url: `/pages/hotelManage/createRoomType/createRoomType?pageType=1&roomType_item=${encodeURIComponent(JSON.stringify(roomType_item))}`,
+			url: `/pages/hotelManage/createRoomType/createRoomType?pageType=1&roomType_id=${roomType._id}`,
 		});
 	}
 	const addRoomType = () => {
@@ -220,7 +199,7 @@
 			url: "/pages/hotelManage/createRoomType/createRoomType"
 		});
 	}
-	const deleteRoomType = async (targetObj : UTSJSONObject) => {
+	const deleteRoomType = async (roomType :roomTypeBean) => {
 		if (!permissionList.value.includes(
 			"ROOMTYPE_DELETE"
 		)) {
@@ -240,9 +219,9 @@
 			message: "删除后将无法恢复，确认删除吗？",
 			beforeClose: async () : Promise<boolean> => {
 				try {
-					const o = targetObj['_id'] as UTSJSONObject;
-					const id = o["_value"] as string;
-					await HotelService.deleteRoomType(id);
+					// const o = targetObj['_id'] as UTSJSONObject;
+					// const id = o["_value"] as string;
+					await HotelService.deleteRoomType(roomType._id);
 					await comFunction.getRoomTypeList(hotel_id.value);
 					hideDialog();
 					uni.showToast({
@@ -265,11 +244,11 @@
 
 		});
 	}
-	const viewDetail = (roomType_item : UTSJSONObject) => {
+	const viewDetail = (roomType : roomTypeBean) => {
 		// this.type = 2;
 		//this.targetObj = JSON.parse(JSON.stringify(targetObj));
 		uni.navigateTo({
-			url: `/pages/hotelManage/createRoomType/createRoomType?pageType=2&&roomType_item=${encodeURIComponent(JSON.stringify(roomType_item))}`,
+			url: `/pages/hotelManage/createRoomType/createRoomType?pageType=2&roomType_id=${roomType._id}`,
 		});
 	}
 	let scrollTop_val = ref(0);

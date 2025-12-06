@@ -119,6 +119,9 @@
 	});
 	const cloudPath = `/${hotel_id.value}/roomType/`;
 	let roomType_id = ref("");//编辑房型id
+	const roomTypeList = computed<Array<roomTypeBean>>(() => {
+		return state.roomTypeList;
+	});
 	let bedTypeList = ref<bedType[]>([
 		{ name: "1.8米", checked: false, count: 1 },
 		{ name: "1.5米", checked: false, count: 1 },
@@ -132,6 +135,7 @@
 		})
 	})
 	let roomTypeForm = ref<roomTypeBean>({
+		_id:"",
 		hotel_id: hotel_id.value,
 		name: "",
 		area: 25,
@@ -197,55 +201,17 @@
 	}
 
 	onLoad(params => {
-		//console.log("params",params);
+		console.log("params",params);
 		try {
-			const pt = params.get("pageType");
-			const h = params.get("roomType_item");
-
-			if (pt != null) {
-				pageType.value = parseInt(pt);
+			const pt = params.getString("pageType")??0;
+			const roomType_id = params.getString("roomType_id")??"";
+			if(pt!=0&&roomType_id!=""){
+				pageType.value=pt;
+				let item:roomTypeBean |null = roomTypeList.value.find(item=>item._id ==roomType_id );
+				if(item !=null){
+					roomTypeForm.value=item;
+				}
 			}
-			if (h == null) {
-				return;
-			}
-			let decoded = decodeURIComponent(h as string);
-			if (decoded == null) {
-				return;
-			}
-			const parsed = JSON.parse<UTSJSONObject>(decoded);
-			if (parsed == null) {
-				return;
-			}
-			const _idObj = parsed?.get('_id') as UTSJSONObject | null;
-			if (_idObj != null) {
-				roomType_id.value = _idObj?.get('_value') as string;
-			}
-			roomTypeForm.value =formatRoomTypeBean(parsed);
-			// console.log(444, parsed);
-			// const name = parsed?.get("name")
-			// const area = parsed?.get("area")
-			// const isWindow = parsed?.get("isWindow")
-			// const guestNumber = parsed?.get("guestNumber")
-			// const firstImages = parsed?.get("firstImages")
-			// const imagesList = parsed?.get("imagesList")
-			// const bedList = parsed?.get("bedList")
-			// const facility = parsed?.get("facility")
-			// const priceBase = parsed?.get("priceBase")
-
-			// roomTypeForm.value = {
-			// 	hotel_id: hotel_id.value,
-			// 	name: name != null ? name as string : "",
-			// 	area: area != null ? area as number : 25,
-			// 	isWindow: isWindow != null ? isWindow as boolean : true,
-			// 	guestNumber: guestNumber != null ? guestNumber as number : 2,
-			// 	firstImages: firstImages != null ? firstImages as string : "",
-			// 	imagesList: imagesList != null ? imagesList as Array<string> : [],
-			// 	bedList: bedList != null ? bedList as Array<UTSJSONObject> : [],
-			// 	facility: facility != null ? facility as Array<string> : [],
-			// 	priceBase: priceBase != null ? priceBase as number : 0,
-			// 	independentBathroom: true
-			// }
-
 
 		} catch (e) {
 			console.error(e)

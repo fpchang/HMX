@@ -28,38 +28,44 @@
 			<view class="card-list-item" v-for="employee of employeeList">
 				<view class="card">
 					<view style="display: flex;flex-direction: row;flex: 1;justify-content: space-between;">
-						<view style="flex:1;flex-direction: row;align-items: center;"> 
-						
-						<view style="border-radius: 12px;margin-right: 16px;">
-							<image v-if="employee.role=='administrator'" style="width:64px;height:64px"
-								src="/static/images/administrator.png"></image>
-							<image v-if="employee.role=='manager'" style="width:64px;height:64px"
-								src="/static/images/manager.png"></image>
-							<image v-if="employee.role=='normal'" style="width:64px;height:64px"
-								src="/static/images/employee.png"></image>
-						</view>
-						<view>
-							<text
-								style="color:#1d2129;font-size: 18px;line-height: 28px;margin-bottom: 8px;">{{employee.employee_name}}</text>
-							<rice-tag type="primary" :text="roleFormat(employee.role)" text-size="12px" round
-								:color="getRoleColor(employee.role)" />
+						<view style="flex:1;flex-direction: row;align-items: center;">
 
-						</view>
+							<view style="border-radius: 12px;margin-right: 16px;">
+								<image v-if="employee.role=='administrator'" style="width:64px;height:64px"
+									src="/static/images/administrator.png"></image>
+								<image v-if="employee.role=='manager'" style="width:64px;height:64px"
+									src="/static/images/manager.png"></image>
+								<image v-if="employee.role=='normal'" style="width:64px;height:64px"
+									src="/static/images/employee.png"></image>
+							</view>
+							<view>
+								<text
+									style="color:#1d2129;font-size: 18px;line-height: 28px;margin-bottom: 8px;">{{employee.employee_name}}</text>
+								<rice-tag type="primary" :text="roleFormat(employee.role)" text-size="12px" round
+									:color="getRoleColor(employee.role)" />
+
+							</view>
 						</view>
 						<view style="display: flex;flex-direction:row; align-items: center;">
-							<image src="/static/icons/more-control.png" style="width:32px;height:32px"></image>
+
+							<!-- <image src="/static/icons/more-control.png" style="width:32px;height:32px"></image> -->
+
+
 						</view>
 					</view>
 					<view>
 						<view style="display: flex;flex-direction: row;align-items: center;margin-top:15px">
-						
+
 							<view>
 								<image src="/static/icons/tel02.png" style="width:14px;height:14px"></image>
 							</view>
-							<view><text
-								@click="makePhone(employee.phone)"
+							<view><text @click="makePhone(employee.phone)"
 									style="color:#272e3b;font-size: 14px;padding-left: 4px;">{{employee.phone}}</text>
 							</view>
+							
+						</view>
+						<view>
+							<xt-control :showView="false" :showEdit="showControl_edit(employee)" :show-delete="showControl_delete(employee)"  @del="deleteEmployee(employee)" @edit="editEmployee(employee)"></xt-control>
 						</view>
 					</view>
 					<view class="control-area" v-if="false">
@@ -69,8 +75,8 @@
 							<rice-icon color="#165dff" name="edit" size="14px" />
 							<text style="color:#165dff;font-size: 16px;">编辑</text>
 						</view>
-						<view class="control-icons-item" 
-							v-if="showControl_delete(employee)" @click="deleteEmployee(employee)">
+						<view class="control-icons-item" v-if="showControl_delete(employee)"
+							@click="deleteEmployee(employee)">
 							<rice-icon color="#ff4d4f" name="delete" size="14px" />
 							<text style="color:#ff4d4f;font-size: 16px;">删除</text>
 						</view>
@@ -85,7 +91,7 @@
 
 <script setup>
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
-	import { state,setEmployeeList } from '@/store/store.uts';
+	import { state, setEmployeeList } from '@/store/store.uts';
 	import { employeeBean } from '@/bean/employeeBean';
 	import { HotelService } from '@/services/HotelService';
 	import { employeeAction } from "./employeeAction.uts";
@@ -99,7 +105,7 @@
 		return state.permissionList;
 	});
 	//const employeeList = ref<Array<employeeBean>>([]);
-	const employeeList =computed<Array<employeeBean>>(()=>{
+	const employeeList = computed<Array<employeeBean>>(() => {
 		return state.employeeList;
 	});
 	const roleFormat = (key : string) : string => {
@@ -121,7 +127,7 @@
 		return role == "administrator" ? "#1989fa" : "#36cfc9"
 	}
 	const showControl_edit = (em : employeeBean) : boolean => {
-		if(em.role=='administrator'){
+		if (em.role == 'administrator') {
 			return false;
 		}
 		if (permissionList.value.includes("EMPLOYEE_UPDATE")) {
@@ -154,7 +160,7 @@
 			return;
 		}
 		uni.navigateTo({
-			url:"/pages/hotelManage/createEmployee/createEmployee"
+			url: "/pages/hotelManage/createEmployee/createEmployee"
 		})
 	}
 	const editEmployee = async (em : employeeBean) => {
@@ -172,12 +178,12 @@
 			return;
 		}
 		console.log("edit");
-		if(em.role=='administrator'){
+		if (em.role == 'administrator') {
 			return;
 		}
 		const id = em._id;
 		uni.navigateTo({
-			url:`/pages/hotelManage/createEmployee/createEmployee?pageType=2&id=${id}`
+			url: `/pages/hotelManage/createEmployee/createEmployee?pageType=2&id=${id}`
 		})
 	}
 	const deleteEmployee = async (em : employeeBean) => {
@@ -196,27 +202,27 @@
 		}
 		console.log("delete");
 	}
-	 const  makePhone=(phone:string)=>{
-	      let deviceType = uni.getSystemInfoSync().deviceType;
-	      if(phone==null || phone==""|| phone.length!=11){
-	        return;
-	      }
-	      if (deviceType == "phone") {
-	        uni.makePhoneCall({
-	          phoneNumber:phone, //仅为示例
-	          success: (success) => {
-	            //console.log("调用成功", success);
-	          },
-	        });
-	        return;
-	      }
-	      uni.setClipboardData({
-	        data:phone,
-	        success: function () {
-	          //console.log("success");
-	        },
-	      });
-	    }
+	const makePhone = (phone : string) => {
+		let deviceType = uni.getSystemInfoSync().deviceType;
+		if (phone == null || phone == "" || phone.length != 11) {
+			return;
+		}
+		if (deviceType == "phone") {
+			uni.makePhoneCall({
+				phoneNumber: phone, //仅为示例
+				success: (success) => {
+					//console.log("调用成功", success);
+				},
+			});
+			return;
+		}
+		uni.setClipboardData({
+			data: phone,
+			success: function () {
+				//console.log("success");
+			},
+		});
+	}
 	employeeAction.getEmplolyeeList(hotel_id.value);
 </script>
 

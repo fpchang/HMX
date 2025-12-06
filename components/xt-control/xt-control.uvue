@@ -1,23 +1,26 @@
 <template>
-	<view class="xt-control">
-		<view class="control-item" v-if="!showControl" @click="showControlEvent">
-			<image src="/static/icons/more-control.png" style="width:32px;height:32px" @click="showControl"></image>
+	<view class="xt-control" v-if="showControl_com">
+		<view class="control-container">
+			<view class="control-item" v-if="!showControl" @click="showControlEvent">
+				<image src="/static/icons/more-control.png" style="width:32px;height:32px" @click="showControl"></image>
+			</view>
+			<block v-if="showControl"> 
+			<view class="control-item view" v-if="showView">
+				<image src="/static/icons/operation/view.png" style="width:18px;height:18px" @click="view"></image>
+			</view>
+			<view class="control-item edit" v-if="showEdit">
+				<image src="/static/icons/operation/edit.png" style="width:18px;height:18px" @click="edit"></image>
+			</view>
+			<view class="control-item delete" v-if="showDelete">
+				<image src="/static/icons/operation/delete.png" style="width:18px;height:18px" @click="del"></image>
+			</view>
+			<view class="control-item hide" @click="showControlEvent">
+				<image src="/static/icons/operation/icon-hide.png" style="width:18px;height:18px" @click="hide"></image>
+			</view>
+			</block>
+			
 		</view>
-		<block v-if="showControl"> 
-		<view class="control-item view">
-			<image src="/static/icons/operation/view.png" style="width:18px;height:18px" @click="view"></image>
-		</view>
-		<view class="control-item edit">
-			<image src="/static/icons/operation/edit.png" style="width:18px;height:18px" @click="edit"></image>
-		</view>
-		<view class="control-item delete">
-			<image src="/static/icons/operation/delete.png" style="width:18px;height:18px" @click="del"></image>
-		</view>
-		<view class="control-item hide" @click="showControlEvent">
-			<image src="/static/icons/operation/icon-hide.png" style="width:18px;height:18px" @click="hide"></image>
-		</view>
-		</block>
-
+		
 
 	</view>
 </template>
@@ -36,6 +39,18 @@
 		scrollPosition: {
 			type: Number,
 			default: 0
+		},
+		showView:{
+			type:Boolean,
+			default:true
+		},
+		showEdit:{
+			type:Boolean,
+			default:true
+		},
+		showDelete:{
+			type:Boolean,
+			default:true
 		},
 		controlItem: {
 			type: Array,
@@ -61,33 +76,44 @@
 	const hide = () => {
 
 	}
-
+	const showControl_com =computed(()=>{
+		return props.showDelete||props.showEdit||props.showView;
+	})
 </script>
 
 <style lang="scss">
 	.xt-control {
+		width: 100%;
 		display: flex;
 		flex-direction: row;
-		align-items: center;
-		width: fit-content;
-		.control-item{
-			flex:1;
-			height: 40px;
-			width: 40px;
+		justify-content: flex-end;
+		.control-container{
 			display: flex;
 			flex-direction: row;
 			align-items: center;
-			justify-content: center;
+			width: fit-content;
+			border-radius: 4px;
 			
+			.control-item{
+				height: 40px;
+				width: 40px;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: center;
+				
+			}
+			.view{
+				background-color: #f5f7fa;
+			}
+			.edit{
+				background-color: #f5f7fa;
+			}
+			.delete{
+				background-color: #f5f7fa;
+			}
 		}
-		.view{
-			background-color: #eee;
-		}
-		.edit{
-			background-color:#eee;
-		}
-		.delete{
-			background-color: #eee;
-		}
+		
+		
 	}
 </style>

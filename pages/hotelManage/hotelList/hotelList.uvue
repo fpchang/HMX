@@ -59,7 +59,9 @@
 					</view>
 
 					<view class="control">
-						<view class="control-item"
+						<xt-control :showEdit="hotel.curRole == 'administrator'" :showDelete="hotel.curRole == 'administrator'" @del="deleteHotel(hotel)" @view="viewDetail(hotel)" @edit="editHotel(hotel)"></xt-control>
+				
+						<!-- <view class="control-item"
 							style="background-color: rgb(245,247,250);flex: 1;margin-right: 8px;">
 							<view class="control-btn" @click="viewDetail(hotel)">
 								<view class="control-btn-group" >
@@ -85,11 +87,9 @@
 							<view class="control-btn" @click="deleteHotel(hotel)">
 								<view class="control-btn-group">
 									<image src="/static/icons/delete.png" style="width:16px;height:16px"></image>
-
 								</view>
 							</view>
-
-						</view>
+						</view> -->
 					</view>
 				</view>
 			</view>

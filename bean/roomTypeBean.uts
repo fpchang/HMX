@@ -13,68 +13,91 @@ export type roomTypeBean = {
 	firstImages : string,
 	imagesList : Array<string>,
 	bedList : Array<bedBean>,
-	roomList? : Array<roomBean>,
+	roomList : Array<roomBean>,
 	facility : Array<string>,
 	priceBase : number,
 	independentBathroom : boolean
 
 }
-
-export let formatRoomTypeBean =(parsed:UTSJSONObject):roomTypeBean=>{
-	// const initData:roomTypeBean={
-	// 	_id:"",
-	// 	hotel_id:"",
-	// 	name : "",
-	// 	area : 0,
-	// 	isWindow : true,
-	// 	guestNumber : 0,
-	// 	firstImages : "",
-	// 	imagesList :[],
-	// 	bedList :[],
-	// 	facility :[],
-	// 	priceBase : 0,
-	// 	independentBathroom : true
-	// }
-	//const parsed = JSON.parse<UTSJSONObject>(jsonStr);
+export let formatRoomTypeBean=(parsed:UTSJSONObject):roomTypeBean=>{
+	
 	const _idObj = parsed.getJSON("_id")??{};	
-	const _id = _idObj.getString("_value")??"";
-	const hotel_id = parsed.getString("hotel_id")??"";
-	const name = parsed.getString("name")??"";
-	const area = parsed.getNumber("area")??0;
-	const isWindow = parsed.getBoolean("isWindow")??true;
-	const guestNumber = parsed.getNumber("guestNumber")??0;
-	const firstImages = parsed.getString("firstImages")??""
-	let imagesList = [];
-	let bedList =[]
-	if(parsed.getArray("bedList") instanceof Array<bedBean>){
-		bedList=parsed.getArray("bedList")??[]
+	let imagesList : Array<string> = [];
+	let bedList : Array<bedBean> = []
+	const rawBedArr = parsed.getArray("bedList")
+	if (rawBedArr != null) {
+		for (let i = 0; i < rawBedArr.length; i++) {
+			const item = rawBedArr[i] as UTSJSONObject
+			const bed: bedBean = {
+				count: item.getNumber("count") ?? 0,
+				name: item.getString("name") ?? ""
+			}
+			bedList.push(bed)
+		}
 	}
-	const priceBase = parsed.getNumber("priceBase")??0;
-	if(parsed.getArray("imagesList") instanceof Array<string>){
-		imagesList=parsed.getArray("imagesList")??[]
+	const rawImgArr = parsed.getArray("imagesList")
+	if (rawImgArr != null) {
+		for (let i = 0; i < rawImgArr.length; i++) {
+			const img = rawImgArr[i] as string
+			imagesList.push(img)
+		}
 	}
-	let facility =[]
-	if(parsed.getArray("facility") instanceof Array<string>){
-		facility=parsed.getArray("facility")??[]
+	let facility : Array<string> = []
+	const rawFacArr = parsed.getArray("facility")
+	if (rawFacArr != null) {
+		for (let i = 0; i < rawFacArr.length; i++) {
+			const fac = rawFacArr[i] as string
+			facility.push(fac)
+		}
 	}
-	let roomList = [];
-	if(_idObj.getArray("hm-room") instanceof Array<roomBean>){
-		roomList=_idObj.getArray("hm-room")??[]
+	let roomList : Array<roomBean> = []
+	const rawRoomArr = _idObj.getArray("hm-room")
+	if (rawRoomArr != null) {
+		for (let i = 0; i < rawRoomArr.length; i++) {
+			const rItem = rawRoomArr[i] as UTSJSONObject
+			const rm: roomBean = {
+				_id: rItem.getString("_id") ?? "",
+				data_status: rItem.getNumber("data_status"),
+				hotel_id:  rItem.getString("_id") ?? "",
+				room_name:  rItem.getString("room_name") ?? "",
+				room_type_id:  rItem.getString("room_type_id") ?? ""
+			}
+			roomList.push(rm)
+		}
 	}
-	const independentBathroom=parsed.getBoolean("independentBathroom")??false;
-	return {
-		_id,
-		hotel_id,
-		name,
-		area,
-		isWindow,
-		guestNumber,
-		firstImages,
-		imagesList,
-		bedList,
-		facility,
-		priceBase,
-		roomList,
-		independentBathroom
+	const result:roomTypeBean= {
+		_id:_idObj.getString("_value")??"",
+		hotel_id:parsed.getString("hotel_id")??"",
+		name:parsed.getString("name")??"",
+		area:parsed.getNumber("area")??0,
+		isWindow:parsed.getBoolean("isWindow")??false,
+		guestNumber: parsed.getNumber("guestNumber")??0,
+		firstImages:parsed.getString("firstImages")??"",
+		imagesList:imagesList,
+		bedList:bedList,
+		facility:facility,
+		priceBase:parsed.getNumber("priceBase")??0,
+		roomList:roomList,
+		independentBathroom:parsed.getBoolean("independentBathroom")??false
 	}
+	return result;
+}
+export let formatRoomTypeList =(list:Array<UTSJSONObject>):Array<roomTypeBean>=>{
+	if (list == null) {
+		return []
+	}
+	let returnList:Array<roomTypeBean> =[];
+		list.forEach(item => {
+			if (item == null) {
+				return;
+			}
+			
+			const temp = formatRoomTypeBean(item);
+			if (temp != null) {
+				returnList.push(temp);
+			}
+	
+		})；
+	return returnList;
+	
 }

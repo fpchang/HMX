@@ -2,6 +2,7 @@ import { state, setHotelId, setUser, setHotelList, setHotel, setPermissionList, 
 import { AccountService } from "@/services/AccountService";
 import { HotelService } from "@/services/HotelService";
 import { PermissionService } from "@/services/PermissionService";
+import { roomTypeBean,formatRoomTypeList } from "@/bean/roomTypeBean";
 
 class ComFuc {
 	constructor() { }
@@ -94,9 +95,10 @@ class ComFuc {
 		if (user != null) {
 			setUser(user as UTSJSONObject)
 		}
-		const roomTypeList = uni.getStorageSync("roomTypeList") as Array<UTSJSONObject> | null;
-		if (roomTypeList != null) {
-			setRoomTypeList(roomTypeList as Array<UTSJSONObject>)
+		const roomTypeList_local = uni.getStorageSync("roomTypeList") as Array<UTSJSONObject> | null;
+		if (roomTypeList_local != null) {
+			let roomtypelist = formatRoomTypeList(roomTypeList_local) 
+			setRoomTypeList(roomtypelist)
 		}
 		const permissionList = uni.getStorageSync("permissionList") as Array<string> | null;
 		if (permissionList != null) {

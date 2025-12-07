@@ -160,6 +160,7 @@
 	import { TIME } from "@/static/utils/TIME";
 	import { state } from "@/store/store";
 	import { orderState, getGatherEvent } from "@/store/modules/orderStore";
+	import { roomTypeBean } from '@/bean/roomTypeBean.uts';
 	const activeIndex = ref(0);
 	const itemStyle = {
 		fontSize: "20px"
@@ -233,7 +234,7 @@
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
-	const roomTypeList = computed(() => {
+	const roomTypeList = computed<Array<roomTypeBean>>(() => {
 		return state.roomTypeList;
 	});
 	const roomCount = computed(() => {

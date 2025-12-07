@@ -4,7 +4,7 @@
 			<view class="control-item" v-if="!showControl" @click="showControlEvent">
 				<image src="/static/icons/more-control.png" style="width:32px;height:32px" @click="showControl"></image>
 			</view>
-			<block v-if="showControl"> 
+			<view v-if="showControl" class="show-container"> 
 			<view class="control-item view" v-if="showView">
 				<image src="/static/icons/operation/view.png" style="width:18px;height:18px" @click="view"></image>
 			</view>
@@ -17,7 +17,7 @@
 			<view class="control-item hide" @click="showControlEvent">
 				<image src="/static/icons/operation/icon-hide.png" style="width:18px;height:18px" @click="hide"></image>
 			</view>
-			</block>
+			</view>
 			
 		</view>
 		
@@ -83,6 +83,7 @@
 
 <style lang="scss">
 	.xt-control {
+		min-width: 160px;
 		width: 100%;
 		display: flex;
 		flex-direction: row;
@@ -102,6 +103,11 @@
 				align-items: center;
 				justify-content: center;
 				
+			}
+			.show-container{
+				display: flex;
+				flex-direction: row;
+				align-items: center;
 			}
 			.view{
 				background-color: #f5f7fa;

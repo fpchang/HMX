@@ -94,7 +94,7 @@
 <script setup>
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
 	import { state } from '@/store/store.uts';
-	import { roomTypeBean,formatRoomTypeBean } from "@/bean/roomTypeBean.uts";
+	import { roomTypeBean,bedBean } from "@/bean/roomTypeBean.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { HotelService } from "@/services/HotelService";
 	import { validRoomTypeForm } from "./roomTypeFormVaild.uts";
@@ -128,10 +128,10 @@
 		{ name: "1.3米", checked: false, count: 1 },
 		{ name: "1.2米", checked: false, count: 1 }
 	]);
-	const bedTypeListFomat = computed<Array<UTSJSONObject>>(() => {
+	const bedTypeListFomat = computed<Array<bedBean>>(() => {
 		let arr = bedTypeList.value.filter((item : bedType) => item.checked);
 		return arr.map((item : bedType) => {
-			return { name: item.name, count: item.count } as UTSJSONObject;
+			return { name: item.name, count: item.count } as bedBean;
 		})
 	})
 	let roomTypeForm = ref<roomTypeBean>({
@@ -144,10 +144,9 @@
 		firstImages: "",
 		imagesList: [],
 		bedList: [],
-		//roomList: [],
 		facility: [],
 		priceBase: 0,
-
+		roomList: [],
 		independentBathroom: true
 	});
 	let facilityConfig_roomType = ref<Array<UTSJSONObject> | null>(null);
@@ -203,18 +202,19 @@
 	onLoad(params => {
 		console.log("params",params);
 		try {
-			const pt = params.getString("pageType")??0;
-			const roomType_id = params.getString("roomType_id")??"";
-			if(pt!=0&&roomType_id!=""){
-				pageType.value=pt;
-				let item:roomTypeBean |null = roomTypeList.value.find(item=>item._id ==roomType_id );
-				if(item !=null){
-					roomTypeForm.value=item;
+			//const pt = (params?.["pageType"] as number) ?? 0;
+			const pt = params.getNumber("pageType")?? 0;
+			//const roomType_id = (params?.["roomType_id"] as string) ?? "";
+			const roomType_id = params.getString("roomType_id") ?? "";
+			if (pt != 0 && roomType_id != "") {
+				pageType.value = pt;
+				const item = roomTypeList.value.find(item => item._id == roomType_id);
+				if (item != null) {
+					roomTypeForm.value = item;
 				}
 			}
-
 		} catch (e) {
-			console.error(e)
+			console.error(e);
 		}
 	});
 	onMounted(() => {

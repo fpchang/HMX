@@ -1,16 +1,16 @@
 import { DB } from '../api/DB';
 import { callFunctionRes } from "@/bean/DBBean";
 import { hotelBean } from '../bean/hotelBean';
-import { roomTypeBean,formatRoomTypeBean } from "@/bean/roomTypeBean.uts";
+import { roomTypeBean, formatRoomTypeList } from "@/bean/roomTypeBean.uts";
 import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
-type employeeList_Res= {
-	code: number;
-	errCode: number;
-	message: string;
-	errMsg: string;
-	systemInfo: any[];
-	data:Array<employeeBean> ;
+type employeeList_Res = {
+	code : number;
+	errCode : number;
+	message : string;
+	errMsg : string;
+	systemInfo : any[];
+	data : Array<employeeBean>;
 }
 
 
@@ -53,8 +53,8 @@ class HotelServiceClass {
 			const res = await DB.callFunction("hm_createHotel", { hotelObj });
 			console.log("create hotel", res);
 			const result = res['result'] as UTSJSONObject;
-			const code =  result.getNumber("code")??99;
-			const message = result.getString("message")??"";
+			const code = result.getNumber("code") ?? 99;
+			const message = result.getString("message") ?? "";
 			if (code != 0) {
 				console.log("code error", code);
 				uni.showToast({
@@ -132,28 +132,16 @@ class HotelServiceClass {
 	*/
 	async getRoomTypeList(hotel_id : string) : Promise<Array<roomTypeBean>> {
 		try {
-			const params={hotel_id} as UTSJSONObject;
-			const res = await  DB.getCollection("hm-roomType,hm-room",params );
-			console.log("JJJJJJJJJJJJJJJJJJJ",res);
+			const params = { hotel_id } as UTSJSONObject;
+			const res = await DB.getCollection("hm-roomType,hm-room", params);
 			const data = res['data'] as Array<UTSJSONObject>;
-			let roomTypeList:Array<roomTypeBean>=[];
-			console.log("KKKKKKKKKKK",data);
-			if(data!=null){
-				data.forEach(item=>{
-					if(item!=null){
-						console.log("LLLLLLLLLLLL",formatRoomTypeBean(item)) 
-						roomTypeList.push(formatRoomTypeBean(item));
-					}
-					
-				})
-			}
-			console.log("roomTypeList",roomTypeList);
+			let roomTypeList : Array<roomTypeBean> = formatRoomTypeList(data);
 			return roomTypeList;
 		} catch (error) {
 			//TODO handle the exception
 			throw new Error("获取房型数据失败");
 		}
-		
+
 	}
 	/**
 	 * 根据房型id获取房间
@@ -185,9 +173,9 @@ class HotelServiceClass {
 	}
 	/** get employeeList */
 	async getEmployeeList(hotel_id : string) : Promise<employeeBean[]> {
-		try{
-			const where_ = { "hotel_id":hotel_id } as UTSJSONObject;
-			const res=await DB.getCollectionOrderBy("hm-employee", where_, "role asc");
+		try {
+			const where_ = { "hotel_id": hotel_id } as UTSJSONObject;
+			const res = await DB.getCollectionOrderBy("hm-employee", where_, "role asc");
 			console.log("getEmployeeList", res);
 			const data = res["data"] as UTSJSONObject[];
 			//const code = res['code'] as string;
@@ -199,69 +187,69 @@ class HotelServiceClass {
 			// 	});
 			// 	throw new Error(message);
 			// }
-			let list:Array<employeeBean>=[];
-	
-		
-			data.forEach(item=>{
-				if (item!=null) {
-					const obj:employeeBean={
-						_id:item.getString("_id")??"",
-						hotel_id:item.getString("hotel_id")??"",
-						phone:item.getString("phone")??"" ,
-						role:item.getString("role")??"" ,
-						employee_name:item.getString("employee_name")??"",
-						working_status:item.getNumber("working_status"),
-						data_status:item.getNumber("data_status"),
-						mark:item.getString("mark")??"",
-					} 
+			let list : Array<employeeBean> = [];
+
+
+			data.forEach(item => {
+				if (item != null) {
+					const obj : employeeBean = {
+						_id: item.getString("_id") ?? "",
+						hotel_id: item.getString("hotel_id") ?? "",
+						phone: item.getString("phone") ?? "",
+						role: item.getString("role") ?? "",
+						employee_name: item.getString("employee_name") ?? "",
+						working_status: item.getNumber("working_status"),
+						data_status: item.getNumber("data_status"),
+						mark: item.getString("mark") ?? "",
+					}
 					list.push(obj)
 				}
 			})
 
 			return list;
-		}catch(e){
+		} catch (e) {
 			console.error(e);
 			throw new Error("get employeeList fail");
-				
+
 		}
-		
+
 	}
-	
-	async deleteEmployee(_id:string):Promise<boolean>{
+
+	async deleteEmployee(_id : string) : Promise<boolean> {
 		try {
-			const res = await DB.callFunction("hm_deleteEmployee", {_id});
-			console.log("res",res);
+			const res = await DB.callFunction("hm_deleteEmployee", { _id });
+			console.log("res", res);
 		} catch (error) {
 			//TODO handle the exception
 			throw new Error("删除员工失败");
 		}
 		return false;
 	}
-	async addEmployee(employeeForm:employeeBean):Promise<boolean>{
+	async addEmployee(employeeForm : employeeBean) : Promise<boolean> {
 		try {
-			const {employee_name,hotel_id,phone,role,mark}=employeeForm;
-			 const res = await  DB.callFunction("hm_addEmployee", {employeeObj: {employee_name,hotel_id,phone,role,mark}});
-			 const result = res['result'] as UTSJSONObject;
-			 const code =  result.getNumber("code")??99;
-			 const message = result.getString("message")??"";
-			 if (code != 0) {
-			 	console.log("code error", code);
-			 	uni.showToast({
-			 		title: message,
-			 		icon: "none"
-			 	});
-			 	throw new Error(message);
-			 }
-			 uni.showToast({
-			 	title: "添加成功",
-			 	icon: "none"
-			 });
-			 return true;
+			const { employee_name, hotel_id, phone, role, mark } = employeeForm;
+			const res = await DB.callFunction("hm_addEmployee", { employeeObj: { employee_name, hotel_id, phone, role, mark } });
+			const result = res['result'] as UTSJSONObject;
+			const code = result.getNumber("code") ?? 99;
+			const message = result.getString("message") ?? "";
+			if (code != 0) {
+				console.log("code error", code);
+				uni.showToast({
+					title: message,
+					icon: "none"
+				});
+				throw new Error(message);
+			}
+			uni.showToast({
+				title: "添加成功",
+				icon: "none"
+			});
+			return true;
 		} catch (error) {
 			console.log(error)
 			throw new Error("添加员工失败");
 		}
-		   
+
 	}
 	/**
 	 * 房价添加
@@ -271,8 +259,8 @@ class HotelServiceClass {
 	//   return DB.add("hm-roomTypePrice",list)
 	// }
 	async deleteRoomType(roomType_id : string) : Promise<void> {
-		console.log("删除房型：：",roomType_id);
-		if(roomType_id==null||roomType_id==""){
+		console.log("删除房型：：", roomType_id);
+		if (roomType_id == null || roomType_id == "") {
 			uni.showToast({
 				title: "删除异常",
 				icon: "none"
@@ -295,9 +283,9 @@ class HotelServiceClass {
 		}
 
 	}
-	async addRoomType(roomTypeForm : roomTypeBean):Promise<UTSJSONObject> {
+	async addRoomType(roomTypeForm : roomTypeBean) : Promise<UTSJSONObject> {
 		try {
-			const res =await DB.callFunction("hm_addRoomType",{roomTypeObj: roomTypeForm});
+			const res = await DB.callFunction("hm_addRoomType", { roomTypeObj: roomTypeForm });
 			console.log("create roomTypeForm", res);
 			const result = res['result'] as UTSJSONObject;
 			const code = result['code'] as string;
@@ -320,17 +308,17 @@ class HotelServiceClass {
 			//TODO handle the exception
 			throw new Error("创建房型失败");
 		}
-		
+
 	}
-	
+
 	async updateRoomType(_id : string, roomTypeObj : roomTypeBean) : Promise<UTSJSONObject> {
-		console.log("UPDATE+++++===",_id, roomTypeObj);
+		console.log("UPDATE+++++===", _id, roomTypeObj);
 		try {
 			const res = await DB.callFunction("hm_updateRoomType", { _id, roomTypeObj });
 			console.log("update roomType", res);
 			const result = res['result'] as UTSJSONObject;
-			const code = result?.getString("code")??"";
-			const message = result?.getString("message")??"";
+			const code = result?.getString("code") ?? "";
+			const message = result?.getString("message") ?? "";
 			if (code != '0') {
 				uni.showToast({
 					title: message,
@@ -338,7 +326,7 @@ class HotelServiceClass {
 				});
 				throw new Error(result.message as string);
 			}
-	
+
 			return { code: 0, message: "" } as UTSJSONObject;
 		} catch (error) {
 			throw new Error("更新失败");

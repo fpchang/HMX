@@ -118,7 +118,7 @@
 		return state.user;
 	});
 	const cloudPath = `/${hotel_id.value}/roomType/`;
-	let roomType_id = ref("");//编辑房型id
+	let edit_roomType_id = ref("");//编辑房型id
 	const roomTypeList = computed<Array<roomTypeBean>>(() => {
 		return state.roomTypeList;
 	});
@@ -164,7 +164,7 @@
 		submitLoading.value = true;
 		//	const id = roomTypeForm.value._id._value as string;
 		//roomTypeForm.value._id=roomType_id.value;
-		await HotelService.updateRoomType(roomType_id.value, roomTypeForm.value);
+		await HotelService.updateRoomType(edit_roomType_id.value, roomTypeForm.value);
 		await comFunction.getRoomTypeList(hotel_id.value);
 		submitLoading.value = false;
 		uni.navigateBack();
@@ -202,15 +202,15 @@
 	onLoad(params => {
 		console.log("params",params);
 		try {
-			//const pt = (params?.["pageType"] as number) ?? 0;
-			const pt = params.getNumber("pageType")?? 0;
-			//const roomType_id = (params?.["roomType_id"] as string) ?? "";
+			const pt = params.getString("pageType")?? "";
 			const roomType_id = params.getString("roomType_id") ?? "";
-			if (pt != 0 && roomType_id != "") {
-				pageType.value = pt;
+			if (pt != "" && roomType_id != "") {
+				edit_roomType_id.value=roomType_id;
+				pageType.value = parseInt(pt);
 				const item = roomTypeList.value.find(item => item._id == roomType_id);
-				if (item != null) {
+				if (item != null) {			
 					roomTypeForm.value = item;
+						
 				}
 			}
 		} catch (e) {
@@ -219,11 +219,11 @@
 	});
 	onMounted(() => {
 		for (let i = 0; i < bedTypeList.value.length; i++) {
-			let obj = roomTypeForm.value.bedList.find((it, index) => {
-				const itemObj = it as UTSJSONObject;
+			let obj:bedBean|null = roomTypeForm.value.bedList.find((it, index) => {
+				const itemObj:bedBean = it;
 				const name = itemObj['name'] as string;
 				return name == bedTypeList.value[i].name;
-			}) as UTSJSONObject | null;
+			});
 			if (obj != null) {
 				bedTypeList.value[i].checked = true;
 				bedTypeList.value[i].count = obj['count'] as number;

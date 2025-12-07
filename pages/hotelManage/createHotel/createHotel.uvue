@@ -134,13 +134,11 @@
 
 		</view>
 
-
-
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
-	<l-cascader v-model:visible="showSelectAreaPopup" v-model="hotelForm.hotelAddressArea" :options="optionsAreaData"
-		:subTitles="subTitles" title="请选择所在地区" @change="onChange7" />
+	 <l-cascader v-model:visible="showSelectAreaPopup" v-model="hotelForm.hotelAddressArea" uniCloud
+		:subTitles="subTitles" title="请选择所在地区"  @change="transformAddress" />
 
 </template>
 
@@ -167,14 +165,6 @@
 		password : string
 	}
 	const pageType = ref(0);
-	// const imagesList = [
-	// 	"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img0.jpg",
-	// 	"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img1.jpg",
-	// 	"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img2.jpg",
-	// 	"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img3.jpg",
-	// 	"https://cdn.hotelsys.fun/HM/client/671e5c98973a81ab7ff6fde8/hotel/1740727129468_img4.jpg"
-
-	// ];
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -274,31 +264,21 @@
 	const subTitles = ['请选择省份', '请选择城市', '请选择区/县'];
 	//const cascaderValue7 = ref('');
 	const fieldValue7 = ref<string | null>(null);
-	const onChange7 = (value : string, options : UTSJSONObject[]) => {
-		hotelForm.value.hotelAddressArea = options.map((item : UTSJSONObject) : any | null => (item['label'])).join('/') + "/";
+	const transformAddress =(value: string, options: UTSJSONObject[]) => {
+		hotelForm.value.hotelAddressArea = options.map((item: UTSJSONObject):any|null => (item['name'])).join('/');
 	};
-
 	const selectAddress = async () => {
 		if (pageType.value == 2) {
 			return;
 		}
 		showSelectAreaPopup.value = true;
-		//optionsAreaData.value = await HotelService.getOpendbCityChina(0);
-		//console.log("get::",optionsAreaData.value );
-		// uni.showLoading({
-		// 	title: '加载中'
-
-		// })
-		if (optionsAreaData.value == null) {
-			uni.showLoading({
-				title: ""
-			});
-			optionsAreaData.value = useCascaderAreaData();
-			uni.hideLoading();
-		}
-
-		//optionsAreaData.value = await HotelService.getUseCascaderAreaData();
-
+		// if (optionsAreaData.value == null) {
+		// 	uni.showLoading({
+		// 		title: ""
+		// 	});
+		// 	optionsAreaData.value = useCascaderAreaData();
+		// 	uni.hideLoading();
+		// }
 
 	}
 	const facilityConfig_base = ref<Array<UTSJSONObject> | null>(null);
@@ -322,7 +302,6 @@
 		hotelForm.value.firstImages = list[0];
 	}
 	const uploadImageListSuccess = (list : string[]) => {
-		console.log("得到的list2：", list);
 		hotelForm.value.imagesList = list;
 	}
 
@@ -337,9 +316,7 @@
 			}
 			if (h != null) {
 				let decoded = decodeURIComponent(h as string);
-				if (decoded != null) {
-					//let hotelBeanObj = JSON.parse<UTSJSONObject>(decoded);
-					//	console.log("aaaaaaaaaaaaaaaaa",hotelBeanObj);					
+				if (decoded != null) {				
 					hotelForm.value = JSON.parse<hotelBean>(decoded)!;
 					//console.log("bbbbbbb",hotelForm.value);
 				}
@@ -353,7 +330,6 @@
 			facilityConfig_base.value = list;
 		});
 		HotelService.getConfig_facilityConfig('catering').then(list => {
-			console.log("3333333333", list)
 			facilityConfig_catering.value = list;
 		});
 		HotelService.getConfig_facilityConfig('recreation').then(list => {

@@ -93,7 +93,7 @@
 			flex-direction: row;
 			align-items: center;
 			width: fit-content;
-			border-radius: 4px;
+		
 			
 			.control-item{
 				height: 40px;

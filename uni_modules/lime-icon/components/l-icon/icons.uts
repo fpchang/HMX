@@ -1,6 +1,6 @@
 // #ifndef APP-ANDROID || APP-HARMONY
 import iconList from '../../static/icons.json';
-export const icons = ref<Map<string, any | null>>((iconList as UTSJSONObject).toMap())
+export const icons = ref<Map<string, any | null>>(UTSJSONObject.assign({}, iconList as UTSJSONObject).toMap())
 // #endif
 // #ifdef APP-ANDROID || APP-HARMONY
 export const icons = ref<Map<string, any | null>>(new Map<string, any | null>())

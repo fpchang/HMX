@@ -1,7 +1,7 @@
 <template>
 	<text :key="iconCode" class="l-icon" :class="[classes, lClass]" :style="[styles, lStyle]" v-if="!isImage && !isIconify && !isSVG">{{iconCode}}</text>
 	<image class="l-icon" :class="[classes, lClass]" :style="[styles, lStyle]" v-else-if="(!isSVG && !hasIconify) && isImage" :src="iconUrl"></image>
-	<l-svg class="l-icon" :class="[classes, lClass]" :style="[styles, lStyle]" :color="color" :src="iconUrl" v-else :web="web" @error="imageError" @load="imageload"></l-svg>
+	<l-svg class="l-icon" :class="[classes, lClass]" :style="[styles, lStyle]" :inherit="inherit" :color="color" :src="iconUrl" v-else :web="web" @error="imageError" @load="imageload"></l-svg>
 </template>
 <script lang="uts" setup>
 	/**
@@ -56,7 +56,7 @@
 		// 对安卓IOS无效
 		inherit: {
 			type: Boolean,
-			default: true
+			default: false
 		},
 		web: {
 			type: Boolean,

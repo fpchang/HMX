@@ -27,7 +27,9 @@ export function cssToObj(css : string | UTSJSONObject | null) : UTSJSONObject {
 		if(res.length > 1) {
 			const [prop, val] = res;
 			if (prop != '' && val != '') {
-				const camelProp = prop!.replace(/-([a-z])/g, (_: string, _offset: number,c: string):string => c.toUpperCase());
+				const camelProp = prop!.replace(/-([a-z])/g, (_a: string, b: string, _c: number, _d: string):string => {
+					return b.toUpperCase()
+				});
 				style[camelProp] = val!;
 			}
 		}
@@ -35,7 +37,9 @@ export function cssToObj(css : string | UTSJSONObject | null) : UTSJSONObject {
 		// #ifndef APP-ANDROID
 		const [prop, val] = decl.split(':').map(s => s.trim());
 		if (prop && val) {
-			const camelProp = prop.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+			const camelProp = prop.replace(/-([a-z])/g, (_, c) => {
+				return c.toUpperCase()
+			});
 			style[camelProp] = val;
 		}
 		// #endif

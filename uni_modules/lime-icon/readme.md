@@ -15,7 +15,7 @@
 3. 在页面中使用`l-icon`组件（组件）或`lime-icon`（演示）
 
 ::: tip 注意🔔 
-本插件依赖的[【lime-svg】](https://ext.dcloud.net.cn/plugin?id=18519)是原生插件，如果购买(收费为6元)则需要自定义基座，才能使用，
+本插件依赖的[【lime-svg】](https://ext.dcloud.net.cn/plugin?id=18519)是原生插件，如果购买(收费为8元)则需要自定义基座，才能使用，
 若不需要删除即可
 :::
 

@@ -1,3 +1,5 @@
+## 0.4.4（2025-12-07）
+- fix: 修复csstoobj uniappx安卓正则问题
 ## 0.4.3（2025-12-02）
 - feat: 增加`arrayEqual`,`findLastIndex`
 ## 0.4.2（2025-09-26）

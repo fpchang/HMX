@@ -167,6 +167,13 @@ function S3(list,history){
 	}
 	return false;
 }
+//验证自行选择是否在算法内
+function validSelfCheck(list){
+	if(S0(list,history)&&S1(list,history)){
+		return ture
+	}
+	return false;
+}
 function caculate(fn,n=20){
 	
 
@@ -204,4 +211,7 @@ console.log(new Set(c4),new Set(c5),new Set(c6));
 const list=caculate(S1,18);
 console.log(list);
 console.log(S1_stat(list));
-
+//[6,7,15,16,20,25,26,28,31]
+//[6,16,20,25,28,31]
+//[6,16,20,25,28,31] [6,7,15,16,26,31] [7,15,20,25,26,28]
+// console.log(validSelfCheck([2,4,6,10,12,13]));

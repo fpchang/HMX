@@ -1,13 +1,14 @@
 <template>
 	<rice-navbar title="" border>
 		<template #left>
-			<view style="display: flex;flex-direction: row;">
+			<view style="display: flex;flex-direction: row;align-items: center;">
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
 	
-				<image v-if="pageType==0" src="/static/icons/add-form.png"
+				<image  :src="titleImg"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+		
 				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
 			</view>
 		</template>
@@ -93,6 +94,12 @@
 			role: "normal",
 			mark: ""
 		});
+		const titleImg=computed<string>(()=>{
+			if(pageType.value==0){
+				return "/static/icons/addpage.png"
+			}
+			return pageType.value==1?"/static/icons/editpage.png":"/static/icons/detailpage.png"
+		})
 		 const isAdministrator = computed<boolean>(()=>{
 			   if(employeeForm.value.role=="administrator"&&pageType.value==1){
 				   return true

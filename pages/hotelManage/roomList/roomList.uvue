@@ -6,9 +6,9 @@
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
 
-				<image src="/static/icons/hotel-manage.png"
+				<image src="/static/icons/list.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">员工列表</text>
+				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">房间列表</text>
 			</view>
 		</template>
 		<template #right>
@@ -23,11 +23,25 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
+		<view class="search-area">
+			<view class="card">
+				<view class="title-area">
+					<text class="txt">房间筛选</text>
+					<l-tag variant="light">共29间</l-tag>
+					<!-- <rice-tag color="#6b7280" type="primary" text="共29间" /> -->
+				</view>
+				<view class="select-area">
+				<xt-select></xt-select>
+				</view>
+				<view class="search"></view>
+			</view>
+		
+		</view>
 		<view class="card-list">
-			<view class="card-list-item" v-for="room of roomList">
+			<!-- <view class="card-list-item" v-for="room of roomList">
 				<view class="card">
 				</view>
-			</view>
+			</view> -->
 		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
@@ -35,11 +49,44 @@
 </template>
 
 <script setup>
-	const roomList = ref<Array<UTSJSONObject>>([]);
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { roomBean } from '@/bean/roomBean';
+		import { state } from "@/store/store";
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	});
+		const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+			return state.roomTypeList;
+		});
 	const addRoom= async ()=>{}
 </script>
 
 <style lang="scss">
+	.search-area{
+		padding:18px;
+		.card{
+			background-color: #fff;
+			border-radius: 8px;
+			padding:16px;
+			.title-area{
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				.txt{
+					padding-right: 8px;
+					font-size: 18px;
+					font-weight: 700;
+				}
+			}
+			
+		}
+	}
 	.card-list {
 		display: flex;
 		flex-direction: row;

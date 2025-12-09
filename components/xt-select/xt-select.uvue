@@ -1,0 +1,60 @@
+<template>
+	<view class="xt-select">
+		{{show}}
+		<view class="select" :style="{'overflow':show?'visible':'hidden'}">
+			<view class="content" @click="showSelect">
+				<text class="txt">请选择</text>
+				<image src="/static/icons/arrow-down.png" style="width: 16px;height:16px"></image>
+			</view>
+			<view class="select-panal" :style="{'overflow':show?'visible':'hidden'}">
+				<view class="select-list">
+					<view class="select-list-item"><text>11111</text></view>
+					<view class="select-list-item"><text>11111</text></view>
+					<view class="select-list-item"><text>11111</text></view>
+					<view class="select-list-item"><text>11111</text></view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script setup>
+	let show=ref(false);
+	const showSelect=()=>{
+		show.value=!show.value;
+	}
+</script>
+
+<style lang="scss" scoped>
+	
+	.select{
+		height: 40px;
+		position: relative;
+		border:1px solid #eee;
+		box-sizing: border-box;
+		overflow: visible;
+		.content{
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			height: 40px;
+			padding:0 8px;
+			overflow: visible;
+			.txt{
+				line-height: 40px;
+			}
+		}
+		.select-panal{
+			overflow: visible;
+			width: 100%;
+			position: relative;
+			top:40px;
+			left: 0;
+			.select-list{
+				overflow: visible;
+				background-color: #fff;
+			}
+		}
+	}
+</style>

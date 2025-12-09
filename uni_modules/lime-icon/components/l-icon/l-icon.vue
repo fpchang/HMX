@@ -1,7 +1,7 @@
 <template>
 	<text class="l-icon" :class="[classes]" :style="[styles, lStyle]" v-if="!isImage && !isIconify && !isSVG" @click="$emit('click')">{{iconCode}}</text>
 	<image class="l-icon" :class="[classes]" :style="[styles, lStyle]" v-else-if="(!isSVG && !isIconify) && isImage" :src="iconUrl" @click="$emit('click')"></image>
-	<l-svg class="l-icon" :class="[classes]" :style="[styles, lStyle]" v-else :web="web" :color="color" :src="iconUrl"  @error="imageError" @load="imageLoad" @click="$emit('click')"></l-svg>
+	<l-svg class="l-icon" :class="[classes]" :style="[styles, lStyle]" v-else :web="web" :inherit="inherit" :color="color" :src="iconUrl"  @error="imageError" @load="imageLoad" @click="$emit('click')"></l-svg>
 </template>
 <script lang="ts">
 	// @ts-nocheck

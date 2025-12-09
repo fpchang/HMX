@@ -1,20 +1,21 @@
 {
-  "id": "lime-shared",
-  "displayName": "lime-shared",
-  "version": "0.4.4",
-  "description": "本人插件的几个公共函数，获取当前页，图片的base64转临时路径，图片的exif信息等",
+  "id": "lime-tag",
+  "displayName": "lime-tag 标签",
+  "version": "0.1.0",
+  "description": "lime-tag 标签用于标记关键词和概括主要内容,可自定义颜色，关闭等，uniapp/uniappx",
   "keywords": [
-    "lime-shared",
-    "exif"
+    "lime-tag",
+    "tag",
+    "标签"
 ],
   "repository": "",
   "engines": {
-    "HBuilderX": "^3.1.0",
-    "uni-app": "^4.55",
-    "uni-app-x": "^4.55"
+    "HBuilderX": "^4.28",
+    "uni-app": "^4.44",
+    "uni-app-x": "^4.61"
   },
   "dcloudext": {
-    "type": "sdk-js",
+    "type": "component-vue",
     "sale": {
       "regular": {
         "price": "0.00"
@@ -37,7 +38,11 @@
     "widescreen": "x"
   },
   "uni_modules": {
-    "dependencies": [],
+    "dependencies": [
+      "lime-style",
+      "lime-icon",
+      "lime-shared"
+    ],
     "encrypt": [],
     "platforms": {
       "cloud": {
@@ -59,8 +64,8 @@
             "vue": "√",
             "nvue": "-",
             "android": {
-              "extVersion": "",
-              "minVersion": "21"
+                "extVersion": "",
+                "minVersion": "21"
             },
             "ios": "√",
             "harmony": "√"
@@ -68,8 +73,8 @@
           "mp": {
             "weixin": "√",
             "alipay": "√",
-            "toutiao": "√",
-            "baidu": "√",
+            "toutiao": "-",
+            "baidu": "-",
             "kuaishou": "-",
             "jd": "-",
             "harmony": "-",
@@ -88,8 +93,8 @@
           },
           "app": {
             "android": {
-              "extVersion": "",
-              "minVersion": "21"
+                "extVersion": "",
+                "minVersion": "21"
             },
             "ios": "√",
             "harmony": "√"
@@ -97,12 +102,6 @@
           "mp": {
             "weixin": "√"
           }
-        },
-        "App": {
-          "app-harmony": "u",
-          "app-nvue": "u",
-          "app-uvue": "y",
-          "app-vue": "u"
         }
       }
     }

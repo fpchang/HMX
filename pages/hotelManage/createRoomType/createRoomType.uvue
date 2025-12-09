@@ -6,7 +6,7 @@
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
 
-				<image src="/static/icons/add-form.png"
+				<image  :src="titleImg"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
 				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
 			</view>
@@ -149,6 +149,12 @@
 		roomList: [],
 		independentBathroom: true
 	});
+	const titleImg=computed<string>(()=>{
+		if(pageType.value==0){
+			return "/static/icons/addpage.png"
+		}
+		return pageType.value==1?"/static/icons/editpage.png":"/static/icons/detailpage.png"
+	})
 	let facilityConfig_roomType = ref<Array<UTSJSONObject> | null>(null);
 	HotelService.getConfig_facilityConfig('roomType').then(list => {
 		facilityConfig_roomType.value = list;

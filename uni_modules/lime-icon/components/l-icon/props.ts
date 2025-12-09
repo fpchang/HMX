@@ -21,7 +21,7 @@ export default {
 	// type: String,
 	inherit: {
 		type: Boolean,
-		default: true
+		default: false
 	},
 	web: {
 		type: Boolean,

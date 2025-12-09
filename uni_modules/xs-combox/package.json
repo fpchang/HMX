@@ -1,0 +1,89 @@
+{
+	"id": "xs-combox",
+	"name": "xs-combox",
+	"displayName": "xs-combox 通用选择器",
+	"version": "0.0.3",
+	"description": "【xs-combox】是一个通用的下拉选择器，支持搜索、清空、自定义渲染等功能",
+	"keywords": [
+        "vue3",
+        "select",
+        "选择器",
+        "远程搜索",
+        "模糊搜索"
+    ],
+	"types": "global.d.ts",
+    "engines": {
+	},
+	"dcloudext": {
+		"sale": {
+			"regular": {
+				"price": "0.00"
+			},
+			"sourcecode": {
+				"price": "0.00"
+			}
+		},
+		"contact": {
+			"qq": "2974550071"
+		},
+		"declaration": {
+			"ads": "无",
+			"data": "无",
+			"permissions": "无"
+		},
+		"npmurl": "https://www.npmjs.com/package/xs-combox",
+		"type": "component-vue"
+	},
+	"uni_modules": {
+		"dependencies": [],
+		"encrypt": [],
+		"platforms": {
+			"cloud": {
+				"tcb": "y",
+				"aliyun": "y",
+				"alipay": "n"
+			},
+			"client": {
+				"App": {
+                    "app-vue": "y",
+                    "app-nvue": "y",
+                    "app-harmony": "u",
+                    "app-uvue": "u"
+                },
+				"H5-mobile": {
+					"Safari": "y",
+					"Android Browser": "y",
+					"微信浏览器(Android)": "y",
+					"QQ浏览器(Android)": "y"
+				},
+				"H5-pc": {
+					"Chrome": "y",
+					"IE": "y",
+					"Edge": "y",
+					"Firefox": "y",
+					"Safari": "y"
+				},
+				"小程序": {
+					"微信": "y",
+					"阿里": "u",
+					"百度": "u",
+					"字节跳动": "u",
+					"QQ": "y",
+					"钉钉": "u",
+					"快手": "u",
+					"飞书": "u",
+					"京东": "u"
+				},
+				"快应用": {
+					"华为": "u",
+					"联盟": "u"
+				},
+				"Vue": {
+					"vue2": "n",
+					"vue3": "y"
+				}
+			}
+		}
+    },
+    "repository": ""
+}

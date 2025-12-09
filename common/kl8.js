@@ -116,7 +116,7 @@ function S1(list,history){
 	let count7 = compare(list,history.slice(history.length-7));
 	let count8 = compare(list,history.slice(history.length-8));
 	//console.log("count:",count1,count2,count3,count4,count5);
-	const s1=count1>1&&count1<9;
+	const s1=count1>2&&count1<8;
 	const s2=count2>5&&count2<12;
 	const s3=count3>8&&count3<15;
 	const s4=count4>10&&count4<17;
@@ -256,9 +256,9 @@ function caculate(fn,n=20){
 // const c5=getGroupList(history.slice(history.length-5));
 // const c6=getGroupList(history.slice(history.length-6));
 // console.log(new Set(c4),new Set(c5),new Set(c6));
-// const list=caculate(S1,18);
-// console.log(list);
-// console.log(S1_stat(list));
+//const list=caculate(S1,1018);
+//console.log(list);
+ //console.log(sortObjectByNumberValue(S1_stat(list)));
  // '52,61,72,80': 7,
  //  '54,70,72,74': 7,
  //  '7,21,46,59': 8,
@@ -283,4 +283,4 @@ function caculate(fn,n=20){
  //  '12,53,68,80': 9,
  //  '22,34,50,52': 9
 //set NODE_OPTIONS=--max-old-space-size=4096
-S5(4,5);
+S5(3,12);

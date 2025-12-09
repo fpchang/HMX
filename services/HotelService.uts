@@ -285,7 +285,34 @@ class HotelServiceClass {
 	}
 	async addRoomType(roomTypeForm : roomTypeBean) : Promise<UTSJSONObject> {
 		try {
-			const res = await DB.callFunction("hm_addRoomType", { roomTypeObj: roomTypeForm });
+			const {
+				hotel_id,
+				name,
+				area,
+				isWindow,
+				guestNumber,
+				firstImages,
+				imagesList,
+				bedList,
+				roomList,
+				facility,
+				priceBase,
+				independentBathroom } = roomTypeForm;
+			const roomTypeObj = {
+				hotel_id,
+				name,
+				area,
+				isWindow,
+				guestNumber,
+				firstImages,
+				imagesList,
+				bedList,
+				roomList,
+				facility,
+				priceBase,
+				independentBathroom
+			}
+			const res = await DB.callFunction("hm_addRoomType", { roomTypeObj });
 			console.log("create roomTypeForm", res);
 			const result = res['result'] as UTSJSONObject;
 			const code = result['code'] as string;
@@ -311,15 +338,43 @@ class HotelServiceClass {
 
 	}
 
-	async updateRoomType(_id : string, roomTypeObj : roomTypeBean) : Promise<UTSJSONObject> {
-		console.log("UPDATE+++++===", _id, roomTypeObj);
+	async updateRoomType(_id : string, roomTypeForm : roomTypeBean) : Promise<boolean> {
+		
 		try {
+			const {
+				hotel_id,
+				name,
+				area,
+				isWindow,
+				guestNumber,
+				firstImages,
+				imagesList,
+				bedList,
+				roomList,
+				facility,
+				priceBase,
+				independentBathroom } = roomTypeForm;
+			const roomTypeObj = {
+				hotel_id,
+				name,
+				area,
+				isWindow,
+				guestNumber,
+				firstImages,
+				imagesList,
+				bedList,
+				roomList,
+				facility,
+				priceBase,
+				independentBathroom
+			}
 			const res = await DB.callFunction("hm_updateRoomType", { _id, roomTypeObj });
 			console.log("update roomType", res);
 			const result = res['result'] as UTSJSONObject;
-			const code = result?.getString("code") ?? "";
-			const message = result?.getString("message") ?? "";
-			if (code != '0') {
+			const code = result.getNumber("code") ?? 0;
+			const message = result.getString("message") ?? "";
+			console.log(">>>>>",code,message);
+			if (code != 0) {
 				uni.showToast({
 					title: message,
 					icon: "none"
@@ -327,11 +382,58 @@ class HotelServiceClass {
 				throw new Error(result.message as string);
 			}
 
-			return { code: 0, message: "" } as UTSJSONObject;
+			return true;
 		} catch (error) {
 			throw new Error("更新失败");
 		}
 	}
+	//h5 {
+	//     "errCode": 0,
+	//     "success": true,
+	//     "requestId": "6dc1b1b7-85ff-4041-8e20-ad0f07649b03",
+	//     "result": {
+	//         "code": 0,
+	//         "errCode": 0,
+	//         "message": "",
+	//         "errMsg": "",
+	//         "systemInfo": [],
+	//         "updated": 1
+	//     }
+	// }
+	//ios == {
+	//     "errCode": 0,
+	//     "success": true,
+	//     "requestId": "b10c5a03-11b0-4c74-bb62-36f214a41710",
+	//     "result": {
+	//         "errCode": 0,
+	//         "message": "",
+	//         "code": 0,
+	//         "systemInfo": [],
+	//         "updated": 1,
+	//         "errMsg": ""
+	//     }
+	// }
+	// android{
+	// 	"requestId": "",
+	// 	"result":
+	// 	//‍[⁠UTSJSONObject⁠]‍
+	// 	{
+	// 		"code":
+	// 			//‍[number]‍
+	// 			0,
+	// 		"errCode":
+	// 			//‍[number]‍
+	// 			0,
+	// 		"message": "",
+	// 		"errMsg": "",
+	// 		"systemInfo":
+	// 			//‍[Array]‍
+	// 			[],
+	// 		"updated":
+	// 			//‍[number]‍
+	// 			1
+	// 	}
+	// }
 }
 
 //module.exports =new HotelService();

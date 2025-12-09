@@ -240,8 +240,9 @@
 	const roomCount = computed(() => {
 		let count = 0;
 		roomTypeList.value.map(item => {
-		const hmRoom = (item['_id'] as UTSJSONObject).get('hm-room') as Array<UTSJSONObject>|null;
-		count += hmRoom != null ? hmRoom.length : 0;
+		//const hmRoom = (item['_id'] as UTSJSONObject).get('hm-room') as Array<UTSJSONObject>|null;
+		//count += hmRoom != null ? hmRoom.length : 0;
+		count +=item.roomList?.length??0;
 		})
 		return count;
 	})

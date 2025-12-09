@@ -38,7 +38,8 @@
 			</view>
 
 		</view>
-		<view class="card-list" v-for="roomType of filterRoomTypeList">
+		<view class="card-list">
+			<template  v-for="roomType of filterRoomTypeList">
 			<view class="card-list-item" v-for="room of roomType.roomList">
 				<view class="card">
 					<view class="card-item title">
@@ -54,7 +55,7 @@
 					</view>
 				</view>
 			</view>
-		
+		</template>
 		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
@@ -85,11 +86,11 @@
 		if (roomTypeList.value == null) {
 			return []
 		}
-		let result=  roomTypeList.value.map(item=>{
-			return {name:item.name}
-		});
-		result.unshift({name:"全部房型"});
-		return result;
+		let result: Array<ActionSheetAction> = roomTypeList.value.map(item => {
+			return { name: item.name } as ActionSheetAction
+		})
+		result.unshift({ name: "全部房型" } as ActionSheetAction)
+		return result
 	});
 	let  filterRoomTypeList =ref<Array<roomTypeBean>>(roomTypeList.value??[]);
 	const selectRoomType = (index:number)=>{
@@ -130,7 +131,7 @@
 			})
 			return;
 		}
-		 if(roomTypeList.value!=null&& roomType.value.length<1){
+		 if(roomTypeList.value!=null && roomTypeList.value.length<1){
 		        uni.showToast({
 		          title: '请先创建房型',
 		          icon: 'none'
@@ -138,7 +139,7 @@
 		        return;
 		      }
 	}
-	const deleteRoom=async ()=>{
+	const deleteRoom=async (room:roomBean)=>{
 		if (!permissionList.value.includes(
 			"ROOMTYPE_DELETE"
 		)) {
@@ -153,7 +154,7 @@
 			return;
 		}
 	}
-	const editRoom=async ()=>{
+	const editRoom=async (room:roomBean)=>{
 		if (!permissionList.value.includes(
 			"ROOMTYPE_UPDATE"
 		)) {

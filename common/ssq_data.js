@@ -2145,7 +2145,15 @@ export var ssq_history = [
 	    "redBall": [
 	        2,5,17,22,24,30,33
 	    ]
+	},{
+	    "blueBall": 5,
+	    "date": "2025 - 12 - 04",
+	    "index": "2025140",
+	    "redBall": [
+	        1,3,4,12,18,24
+	    ]
 	}
+
 ]
 
  //let arr = [];

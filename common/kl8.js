@@ -283,4 +283,4 @@ function caculate(fn,n=20){
  //  '12,53,68,80': 9,
  //  '22,34,50,52': 9
 //set NODE_OPTIONS=--max-old-space-size=4096
-S5(4,5);
+S5(4,7);

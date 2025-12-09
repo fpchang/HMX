@@ -1,28 +1,38 @@
 <template>
 	<view class="xt-select">
-		{{show}}
 		<view class="select" :style="{'overflow':show?'visible':'hidden'}">
 			<view class="content" @click="showSelect">
-				<text class="txt">请选择</text>
+				<text class="txt">{{val}}</text>
 				<image src="/static/icons/arrow-down.png" style="width: 16px;height:16px"></image>
 			</view>
-			<view class="select-panal" :style="{'overflow':show?'visible':'hidden'}">
-				<view class="select-list">
-					<view class="select-list-item"><text>11111</text></view>
-					<view class="select-list-item"><text>11111</text></view>
-					<view class="select-list-item"><text>11111</text></view>
-					<view class="select-list-item"><text>11111</text></view>
-				</view>
-			</view>
 		</view>
+		
+		<rice-action-sheet v-model:show="show" :close-on-click-action="true" 
+					@select="onSelect"  v-bind="$attrs"/>
 	</view>
 </template>
 
 <script setup>
+	
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	const emit =defineEmits(['selectAction']);
+	const props = defineProps({
+		defaultValue: {
+			type: String,
+			default:"请选择"
+		}
+		})
 	let show=ref(false);
+	let val =ref(props.defaultValue);
 	const showSelect=()=>{
 		show.value=!show.value;
 	}
+	const onSelect = (action : ActionSheetAction, index : number) => {
+		//console.log(index,action);
+		val.value = action.name;
+		emit("selectAction",index);
+	}
+	
 </script>
 
 <style lang="scss" scoped>
@@ -54,6 +64,20 @@
 			.select-list{
 				overflow: visible;
 				background-color: #fff;
+			}
+		}
+	}
+	.center-panal{
+		padding:16px;
+		border-radius: 8px;
+		background-color: #f1f1f1;
+		.select-list{
+			min-width: 250px;
+			.select-list-item{
+				padding:8px;
+				.txt{
+					color:#eee
+				}
 			}
 		}
 	}

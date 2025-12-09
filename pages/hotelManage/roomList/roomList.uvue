@@ -12,12 +12,12 @@
 			</view>
 		</template>
 		<template #right>
-		<view class="navbar-btn">
-			<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
+			<view class="navbar-btn">
+				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
 
-			<text class="txt" @click="addRoom">添加房间</text>
+				<text class="txt" @click="addRoom">添加房间</text>
 
-		</view>
+			</view>
 		</template>
 	</rice-navbar>
 	<!-- #ifdef APP -->
@@ -25,33 +25,37 @@
 	<!-- #endif -->
 		<view class="search-area">
 			<view class="card">
-				<view class="title-area">
+				<view class="card-item title-area">
 					<text class="txt">房间筛选</text>
-					<l-tag variant="light">共29间</l-tag>
+					<l-tag variant="light">共{{getRoomNum}}间</l-tag>
 					<!-- <rice-tag color="#6b7280" type="primary" text="共29间" /> -->
 				</view>
-				<view class="select-area">
-				<xt-select></xt-select>
+				<view class="card-item  select-area">
+					<xt-select :actions="actionList" @selectAction="selectRoomType" defaultValue="全部房型"></xt-select>
 				</view>
-				<view class="search"></view>
+				<view class="card-item search"></view>
 			</view>
-		
+
 		</view>
 		<view class="card-list">
 			<!-- <view class="card-list-item" v-for="room of roomList">
 				<view class="card">
 				</view>
 			</view> -->
+			{{filterRoomTypeList.length}}
+			{{filterRoomTypeList}}
 		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
+
 </template>
 
 <script setup>
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
-		import { state } from "@/store/store";
+	import { state } from "@/store/store";
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -61,32 +65,77 @@
 	const permissionList = computed(() => {
 		return state.permissionList;
 	});
-		const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
-			return state.roomTypeList;
+	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+		return state.roomTypeList;
+	});
+	//选择列表
+	const actionList = computed<Array<ActionSheetAction>>(() => {
+		if (roomTypeList.value == null) {
+			return []
+		}
+		let result=  roomTypeList.value.map(item=>{
+			return {name:item.name}
 		});
-	const addRoom= async ()=>{}
+		result.unshift({name:"全部房型"});
+		return result;
+	});
+	let  filterRoomTypeList =ref<Array<roomTypeBean>>(roomTypeList.value??[]);
+	const selectRoomType = (index:number)=>{
+		if(index==0){
+			filterRoomTypeList.value= roomTypeList.value??[];
+			 return;
+		}
+		if(roomTypeList.value!=null){
+			let _id = roomTypeList.value[index-1]._id;
+			console.log("_id",_id);
+			let list = roomTypeList.value.filter(item=>item._id == _id);
+			console.log("22222",list)
+			filterRoomTypeList.value= list;
+		}
+		
+	}
+	const getRoomNum=computed<number>(()=>{
+		let num =0;
+		if(filterRoomTypeList.value!=null){
+			filterRoomTypeList.value.forEach(item=>{
+				num+=item.roomList.length;
+			})
+		}
+		 return num;
+		
+	})
+	const addRoom = async () => { }
 </script>
 
 <style lang="scss">
-	.search-area{
-		padding:18px;
-		.card{
+	.search-area {
+		padding: 18px;
+
+		.card {
 			background-color: #fff;
 			border-radius: 8px;
-			padding:16px;
-			.title-area{
+			padding: 16px;
+			.card-item{
+				margin-bottom: 15px;
+				&:last-child{
+					margin: 0;
+				}
+			}
+			.title-area {
 				display: flex;
 				flex-direction: row;
 				align-items: center;
-				.txt{
+
+				.txt {
 					padding-right: 8px;
 					font-size: 18px;
 					font-weight: 700;
 				}
 			}
-			
+
 		}
 	}
+
 	.card-list {
 		display: flex;
 		flex-direction: row;

@@ -74,17 +74,23 @@ class RoomTypeClass {
 	// }
 	async deleteRoomType(roomType_id : string) : Promise<void> {
 		console.log("删除房型：：", roomType_id);
-		if (roomType_id == null || roomType_id == "") {
-			uni.showToast({
-				title: "删除异常",
-				icon: "none"
-			});
-			return;
-		}
+		
 		try {
-			await DB.callFunction("hm_deleteRoomType_x", {
+			const res = await DB.callFunction("hm_deleteRoomType_x", {
 				_id: roomType_id,
 			});
+			console.log("res delete",res);
+			const result = res['result'] as UTSJSONObject;
+			const code = result.getNumber('code')??0;
+			const message = result.getString("message")??"";
+			if (code != 0) {
+				console.log("code error", code);
+				uni.showToast({
+					title: message,
+					icon: "none"
+				});
+				throw new Error(result.message as string);
+			}
 			uni.showToast({
 				title: "删除成功",
 				icon: "none"
@@ -207,10 +213,51 @@ class RoomTypeClass {
 				})
 			});
 			 const res = await  DB.callFunction("hm_addRoom", { roomList: list });
+			 console.log("add room",res);
+			 const result = res['result'] as UTSJSONObject;
+			 const code = result.getNumber("code") ?? 0;
+			 const message = result.getString("message") ?? "";
+			 if (code != 0) {
+			 	console.log("code error", code);
+			 	uni.showToast({
+			 		title: message,
+			 		icon: "none"
+			 	});
+			 	throw new Error(message);
+			 }
+			 uni.showToast({
+			 	title: "添加成功",
+			 	icon: "none"
+			 });
 			return true;
 		} catch (error) {
-			throw new Error("添加房间失败")
+			throw new Error("添加房间失败");
+			
 		}
+	}
+	/**
+	 * 删除房间
+	 */
+	async deleteRoom(room_id:string):Promise<boolean>{
+		console.log("1111",room_id);
+		try {
+			const res = await DB.callFunction("hm_deleteRoom_x", {_id:room_id });
+			console.log("delete",res);
+			const result = res['result'] as UTSJSONObject;
+			const code = result.getNumber("code") ?? 0;
+			const message = result.getString("message") ?? "";
+			if (code != 0) {
+				uni.showToast({
+					title: message,
+					icon: "none"
+				});
+				throw new Error(result.message as string);
+			}
+			return true;
+		} catch (error) {
+			throw new Error("删除房间失败");
+		}
+		
 	}
 	//h5 {
 	//     "errCode": 0,

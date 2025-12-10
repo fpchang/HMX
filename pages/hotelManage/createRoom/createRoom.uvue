@@ -61,8 +61,10 @@
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
+	import {roomTypeService} from "/services/roomTypeService.uts";
 	import { state } from "@/store/store";
-
+	import {comFunction} from "/pages/index/ComFuc.uts"
+	import {validForm} from "./createRoomVaild.uts";
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -94,7 +96,7 @@
 		roomList : Array<roomBean>
 	}
 	let roomForm = ref<roomFormBean>({
-		room_type_id: "",
+		room_type_id:"",
 		roomList: [{
 			_id: "",
 			hotel_id: hotel_id.value,
@@ -102,12 +104,6 @@
 			room_type_id: ""
 		}]
 	});
-	// let roomList = ref<Array<roomBean>>([{
-	// 	_id: "",
-	// 	hotel_id: hotel_id.value,
-	// 	room_name: "",
-	// 	room_type_id:""
-	// }]);
 	let _select_index = ref(0);
 	const actionList = computed<Array<ActionSheetAction>>(() => {
 		if (roomTypeList.value == null) {
@@ -156,12 +152,30 @@
 		}
 		roomForm.value.roomList.splice(index, 1);
 	}
-	const submitForm = () => {
-		
+	const submitForm = async () => {
+		submitLoading.value=true;
 		roomForm.value.roomList.forEach(item=>{
-			item.room_type_id=roomForm.value.room_type_id;
+			let roomtypeid = roomForm.value.room_type_id;
+			if(roomtypeid=="" && roomTypeList.value!=null){
+				roomtypeid=roomTypeList.value[0]._id
+			}
+			item.room_type_id=roomtypeid;
 		});
-		console.log(roomForm);
+		console.log("1111",roomForm);
+		let flag:boolean = validForm(roomForm.value.roomList)
+		if(flag==false){
+			submitLoading=false;
+			return;
+		}
+		try {
+			await roomTypeService.addRoom(roomForm.value.roomList);
+			await comFunction.getRoomTypeList(hotel_id.value);
+			uni.navigateBack();
+			submitLoading.value=false;
+		} catch (error) {
+			submitLoading.value=false;
+		}
+		
 	}
 </script>
 

@@ -69,6 +69,9 @@
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
 	import { state } from "@/store/store";
+	import {roomTypeService} from "/services/roomTypeService.uts";
+	import {comFunction} from "/pages/index/ComFuc.uts";
+	let submitLoading=ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -98,23 +101,22 @@
 		})
 		return result
 	});
-	let  filterRoomTypeList =ref<Array<roomTypeBean>>(roomTypeList.value??[]);
+	let  filterRoomTypeList =computed(()=>{
+		if(_select_index.value==0){			
+			 return roomTypeList.value??[];
+		}
+		if(roomTypeList.value!=null){
+			let _id = roomTypeList.value[select_index.value-1]._id;
+			let list = roomTypeList.value.filter(item=>item._id == _id);
+			filterRoomTypeList.value= list;
+		}
+	});
 
 	const selectRoomType = (index:number)=>{
 		if(_select_index.value==index){
 			return;
 		}
-		_select_index.value=index;
-		if(index==0){
-			filterRoomTypeList.value= roomTypeList.value??[];
-			 return;
-		}
-		if(roomTypeList.value!=null){
-			let _id = roomTypeList.value[index-1]._id;
-			let list = roomTypeList.value.filter(item=>item._id == _id);
-			filterRoomTypeList.value= list;
-		}
-		
+		_select_index.value=index;				
 	}
 	const getRoomNum=computed<number>(()=>{
 		let num =0;
@@ -152,6 +154,9 @@
 		      });
 	}
 	const deleteRoom=async (room:roomBean)=>{
+		if (submitLoading.value==true) {
+		        return;
+		    }
 		if (!permissionList.value.includes(
 			"ROOMTYPE_DELETE"
 		)) {
@@ -166,6 +171,33 @@
 			return;
 		}
 		console.log("delete")
+		showDialog({
+			title: '确认删除此房间',
+			message: "删除后将无法恢复，确认删除吗？",
+			beforeClose: async () : Promise<boolean> => {
+				try {
+					await roomTypeService.deleteRoom(room._id);
+					await comFunction.getRoomTypeList(hotel_id.value);
+					hideDialog();
+					uni.showToast({
+						title: "删除成功",
+						icon: "none"
+					});
+					return true;
+				} catch (e) {
+					uni.showToast({
+						title: "系统异常",
+						icon: "none"
+					});
+					return false;
+				}
+			},
+			confirm: () => {
+			}, cancel: () => {
+				hideDialog();
+			}
+		
+		});
 	}
 	const editRoom=async (room:roomBean)=>{
 		if (!permissionList.value.includes(
@@ -182,6 +214,7 @@
 			return;
 		}
 	}
+	
 </script>
 
 <style lang="scss">

@@ -10,8 +10,12 @@ export const  validForm = (roomList:Array<roomBean>):boolean=>{
 			msg="请选择房型";
 			return；
 		}
+		
 	})
-	
+	if(roomList.length<1){
+		msg="至少添加一个房间";
+		
+	}
 	if(msg!=""){
 		uni.showToast({
 			title:msg,

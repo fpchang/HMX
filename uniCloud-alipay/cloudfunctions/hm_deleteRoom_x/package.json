@@ -1,0 +1,7 @@
+{
+  "name": "hm_deleteRoom_x",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

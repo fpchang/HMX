@@ -96,7 +96,8 @@
 	import { state } from '@/store/store.uts';
 	import { roomTypeBean,bedBean } from "@/bean/roomTypeBean.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
-	import { HotelService } from "@/services/HotelService";
+	import { HotelService } from "@/services/HotelService.uts";
+	import { roomTypeService } from "@/services/roomTypeService.uts";
 	import { validRoomTypeForm } from "./roomTypeFormVaild.uts";
 	type bedType = {
 		name : string,
@@ -161,7 +162,7 @@
 	});
 	const addRoomType = async () => {
 		submitLoading.value = true;
-		await HotelService.addRoomType(roomTypeForm.value);
+		await roomTypeService.addRoomType(roomTypeForm.value);
 		await comFunction.getRoomTypeList(hotel_id.value);
 		submitLoading.value = false;
 		uni.navigateBack();
@@ -170,7 +171,7 @@
 		submitLoading.value = true;
 		//	const id = roomTypeForm.value._id._value as string;
 		//roomTypeForm.value._id=roomType_id.value;
-		await HotelService.updateRoomType(edit_roomType_id.value, roomTypeForm.value);
+		await roomTypeService.updateRoomType(edit_roomType_id.value, roomTypeForm.value);
 		await comFunction.getRoomTypeList(hotel_id.value);
 		submitLoading.value = false;
 		uni.navigateBack();
@@ -182,9 +183,6 @@
 		if (flag == false) {
 			return;
 		}
-		console.log(flag)
-
-		console.log(roomTypeForm.value);
 		if (pageType.value == 1) {
 			updateRoomType();
 			return;
@@ -206,7 +204,6 @@
 	}
 
 	onLoad(params => {
-		console.log("params",params);
 		try {
 			const pt = params.getString("pageType")?? "";
 			const roomType_id = params.getString("roomType_id") ?? "";

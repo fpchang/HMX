@@ -1,17 +1,199 @@
 <template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;align-items: center;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn" v-if="pageType!=2">
+				<!-- <text class="txt">保存</text> -->
+				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
+					textColor="#1e88e5" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+			</view>
+		</template>
+	</rice-navbar>
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		
+		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
+
+			<xt-form-item label="房型" tips="" required>
+				<view>
+					<xt-select :actions="actionList" @selectAction="selectRoomType"></xt-select>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="房间名称" tips="" required>
+				<view class="room-list-item" style="display: flex;flex-direction: row;align-items: center;"
+					v-for="(item, index) of roomForm.roomList">
+
+					<view style="flex: 1;">
+						<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic
+							placeholder="请输入房间名称" borderColor="#dcdfe6" :disabled="pageType==2"
+							v-model="item.room_name"></rice-input>
+					</view>
+					<view class="del-style" @click="deleteRoom(index)" v-if="roomForm.roomList.length>1">
+						<image src="/static/icons/delete.png" style="width:20px;height:20px"></image>
+					</view>
+				</view>
+
+			</xt-form-item>
+			<xt-form-item tips="">
+				<view @click="addNew" class="addNew-btn">
+					<rice-icon name="plus" size="16px" color="#1e88e5" />
+					<text class="txt">继续添加</text>
+				</view>
+			</xt-form-item>
+			
+		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
 </template>
 
 <script setup>
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { roomBean } from '@/bean/roomBean';
+	import { state } from "@/store/store";
+
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	});
+	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+		return state.roomTypeList;
+	});
+	let pageType = ref(0);
+	let submitLoading = ref(false);
+	const title = computed(() => {
+		if (pageType.value == 0) {
+			return '添加房间';
+		}
+		return pageType.value == 1 ? '修改房间信息' : '房间信息';
+	});
+	const titleImg = computed<string>(() => {
+		if (pageType.value == 0) {
+			return "/static/icons/addpage.png"
+		}
+		return pageType.value == 1 ? "/static/icons/editpage.png" : "/static/icons/detailpage.png"
+	});
+	type roomFormBean = {
+		room_type_id : "",
+		roomList : Array<roomBean>
+	}
+	let roomForm = ref<roomFormBean>({
+		room_type_id: "",
+		roomList: [{
+			_id: "",
+			hotel_id: hotel_id.value,
+			room_name: "",
+			room_type_id: ""
+		}]
+	});
+	// let roomList = ref<Array<roomBean>>([{
+	// 	_id: "",
+	// 	hotel_id: hotel_id.value,
+	// 	room_name: "",
+	// 	room_type_id:""
+	// }]);
+	let _select_index = ref(0);
+	const actionList = computed<Array<ActionSheetAction>>(() => {
+		if (roomTypeList.value == null) {
+			return []
+		}
+		let result : Array<ActionSheetAction> = roomTypeList.value.map(item => {
+			return { name: item.name, color: "#000" } as ActionSheetAction
+		});
+		result.forEach((item, index) => {
+			if (index == _select_index.value) {
+				item.color = "#1e88e5";
+			}
+		})
+		return result
+	});
+	const selectRoomType = (index : number) => {
+		_select_index.value = index;
+		if (roomTypeList.value != null) {
+			let _id = roomTypeList.value[index]._id;
+			roomForm.value.room_type_id = _id;
+			roomForm.value.roomList = [{
+				_id: "",
+				hotel_id: hotel_id.value,
+				room_name: "",
+				room_type_id: roomForm.value.room_type_id
+			}] as Array<roomBean>;
+		}
+
+	}
+	const addNew = () => {
+		let room : roomBean = {
+			_id: "",
+			hotel_id: hotel_id.value,
+			room_name: "",
+			room_type_id: roomForm.value.room_type_id
+		}
+		roomForm.value.roomList.push(room);
+	}
+	const deleteRoom = (index : number) => {
+		if (roomForm.value.roomList.length < 2) {
+			uni.showToast({
+				title: "至少添加一个房间",
+				icon: "none"
+			})
+			return;
+		}
+		roomForm.value.roomList.splice(index, 1);
+	}
+	const submitForm = () => {
 		
+		roomForm.value.roomList.forEach(item=>{
+			item.room_type_id=roomForm.value.room_type_id;
+		});
+		console.log(roomForm);
+	}
 </script>
 
-<style>
-		
+<style lang="scss">
+	.room-list-item {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		margin-bottom: 12px;
+
+		.del-style {
+			padding-left: 8px;
+		}
+
+
+	}
+
+	.addNew-btn {
+		flex: 1;
+		background: #fff;
+		padding: 10px 0;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid #ededed;
+		border-radius: 8px;
+
+		.txt {
+			font-size: 14px;
+			color: #1e88e5;
+
+		}
+	}
 </style>

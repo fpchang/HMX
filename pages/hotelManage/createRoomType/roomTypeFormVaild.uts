@@ -1,8 +1,6 @@
 	import { roomTypeBean } from "@/bean/roomTypeBean.uts";
 export const  validRoomTypeForm = (roomTypeForm:roomTypeBean):boolean=>{
 	let msg ="";
-
-	console.log("vvv",roomTypeForm)
 	if(roomTypeForm.name==""){
 		msg="请填写房型名称";
 		

@@ -21,9 +21,16 @@
 			type: String,
 			default:"请选择"
 		}
-		})
+		});
+	const attrs = useAttrs();
 	let show=ref(false);
-	let val =ref(props.defaultValue);
+	let val =ref("请选择");
+	const actions = attrs['actions'] as Array<ActionSheetAction> | null;
+	if(actions != null){
+		const name =  actions[0].name;
+		val.value = name;
+	}
+	
 	const showSelect=()=>{
 		show.value=!show.value;
 	}

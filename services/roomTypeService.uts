@@ -1,0 +1,265 @@
+import { DB } from '../api/DB';
+import { callFunctionRes } from "@/bean/DBBean";
+import { hotelBean } from '../bean/hotelBean';
+import { roomTypeBean, formatRoomTypeList } from "@/bean/roomTypeBean.uts";
+import { employeeBean } from '@/bean/employeeBean';
+import { state } from '@/store/store.uts';
+import { roomBean } from '../bean/roomBean';
+type employeeList_Res = {
+	code : number;
+	errCode : number;
+	message : string;
+	errMsg : string;
+	systemInfo : any[];
+	data : Array<employeeBean>;
+}
+
+
+class RoomTypeClass {
+	constructor() {
+
+	}
+
+	/** 
+	 * 获取当前酒店房型信息
+	*/
+	async getRoomTypeList(hotel_id : string) : Promise<Array<roomTypeBean>> {
+		try {
+			const params = { hotel_id } as UTSJSONObject;
+			const res = await DB.getCollection("hm-roomType,hm-room", params);
+			const data = res['data'] as Array<UTSJSONObject>;
+			let roomTypeList : Array<roomTypeBean> = formatRoomTypeList(data);
+			return roomTypeList;
+		} catch (error) {
+			//TODO handle the exception
+			throw new Error("获取房型数据失败");
+		}
+
+	}
+	/**
+	 * 根据房型id获取房间
+	 * @param {*} room_type_id:
+	 * @returns 
+	 */
+	getRoom(room_type_id : string) : Promise<UniCloudDBGetResult> {
+		return DB.getCollection("hm-room", { _id: room_type_id })
+
+	}
+	/**
+	 * 
+	 * @param {*} hotel_id 
+	 * @returns 根据店铺获取房间列表
+	 */
+	getRoomListByHotelId(hotel_id : string) : Promise<UniCloudDBGetResult> {
+		return DB.getCollection("hm-room", { hotel_id: hotel_id });
+	}
+	/**
+	 * 
+	 * @param {*} hotel_id 
+	 */
+	async getRoomListByHotelIdGroupByRoomType(hotel_id : string) : Promise<UniCloudDBGetResult> {
+
+		const db = uniCloud.databaseForJQL();
+		const roomType = db.collection("hm-roomType").where({ hotel_id }).field("hotel_id,_id,name").getTemp();
+		const res = await db.collection(roomType, "hm-room").where({ hotel_id }).get();
+		return res;
+	}
+
+	/**
+	 * 删除房型
+	 * @param {*} data 
+	 */
+	// addRoomTypePrice(list){
+	//   return DB.add("hm-roomTypePrice",list)
+	// }
+	async deleteRoomType(roomType_id : string) : Promise<void> {
+		console.log("删除房型：：", roomType_id);
+		if (roomType_id == null || roomType_id == "") {
+			uni.showToast({
+				title: "删除异常",
+				icon: "none"
+			});
+			return;
+		}
+		try {
+			await DB.callFunction("hm_deleteRoomType_x", {
+				_id: roomType_id,
+			});
+			uni.showToast({
+				title: "删除成功",
+				icon: "none"
+			});
+		} catch (error) {
+			uni.showToast({
+				title: "删除失败",
+				icon: "none"
+			});
+		}
+
+	}
+	async addRoomType(roomTypeForm : roomTypeBean) : Promise<boolean> {
+		try {
+			const {
+				hotel_id,
+				name,
+				area,
+				isWindow,
+				guestNumber,
+				firstImages,
+				imagesList,
+				bedList,
+				roomList,
+				facility,
+				priceBase,
+				independentBathroom } = roomTypeForm;
+			const roomTypeObj = {
+				hotel_id,
+				name,
+				area,
+				isWindow,
+				guestNumber,
+				firstImages,
+				imagesList,
+				bedList,
+				roomList,
+				facility,
+				priceBase,
+				independentBathroom
+			}
+			const res = await DB.callFunction("hm_addRoomType", { roomTypeObj });
+			const result = res['result'] as UTSJSONObject;
+			const code = result['code'] as string;
+			const message = result.message as string;
+			if (code != '0') {
+				console.log("code error", code);
+				uni.showToast({
+					title: message,
+					icon: "none"
+				});
+				throw new Error(result.message as string);
+			}
+			uni.showToast({
+				title: "添加成功",
+				icon: "none"
+			});
+			return true;
+		} catch (error) {
+			throw new Error("创建房型失败");
+		}
+
+	}
+
+	async updateRoomType(_id : string, roomTypeForm : roomTypeBean) : Promise<boolean> {
+
+		try {
+			const {
+				hotel_id,
+				name,
+				area,
+				isWindow,
+				guestNumber,
+				firstImages,
+				imagesList,
+				bedList,
+				roomList,
+				facility,
+				priceBase,
+				independentBathroom } = roomTypeForm;
+			const roomTypeObj = {
+				hotel_id,
+				name,
+				area,
+				isWindow,
+				guestNumber,
+				firstImages,
+				imagesList,
+				bedList,
+				roomList,
+				facility,
+				priceBase,
+				independentBathroom
+			}
+			const res = await DB.callFunction("hm_updateRoomType", { _id, roomTypeObj });
+			const result = res['result'] as UTSJSONObject;
+			const code = result.getNumber("code") ?? 0;
+			const message = result.getString("message") ?? "";
+			if (code != 0) {
+				uni.showToast({
+					title: message,
+					icon: "none"
+				});
+				throw new Error(result.message as string);
+			}
+
+			return true;
+		} catch (error) {
+			throw new Error("更新失败");
+		}
+	}
+	async addRoom(roomList:Array<roomBean>):Promise<boolean>{
+		try {
+			let list:Array<UTSJSONObject> =[];
+			roomList.forEach(item=>{
+				list.push({
+					"hotel_id":item.hotel_id,
+					"room_name": item.room_name,
+					"room_type_id":item.room_type_id
+				})
+			});
+			 const res = await  DB.callFunction("hm_addRoom", { roomList: list });
+			return true;
+		} catch (error) {
+			throw new Error("添加房间失败")
+		}
+	}
+	//h5 {
+	//     "errCode": 0,
+	//     "success": true,
+	//     "requestId": "6dc1b1b7-85ff-4041-8e20-ad0f07649b03",
+	//     "result": {
+	//         "code": 0,
+	//         "errCode": 0,
+	//         "message": "",
+	//         "errMsg": "",
+	//         "systemInfo": [],
+	//         "updated": 1
+	//     }
+	// }
+	//ios == {
+	//     "errCode": 0,
+	//     "success": true,
+	//     "requestId": "b10c5a03-11b0-4c74-bb62-36f214a41710",
+	//     "result": {
+	//         "errCode": 0,
+	//         "message": "",
+	//         "code": 0,
+	//         "systemInfo": [],
+	//         "updated": 1,
+	//         "errMsg": ""
+	//     }
+	// }
+	// android{
+	// 	"requestId": "",
+	// 	"result":
+	// 	//‍[⁠UTSJSONObject⁠]‍
+	// 	{
+	// 		"code":
+	// 			//‍[number]‍
+	// 			0,
+	// 		"errCode":
+	// 			//‍[number]‍
+	// 			0,
+	// 		"message": "",
+	// 		"errMsg": "",
+	// 		"systemInfo":
+	// 			//‍[Array]‍
+	// 			[],
+	// 		"updated":
+	// 			//‍[number]‍
+	// 			1
+	// 	}
+	// }
+}
+
+//module.exports =new HotelService();
+export var roomTypeService = new RoomTypeClass();

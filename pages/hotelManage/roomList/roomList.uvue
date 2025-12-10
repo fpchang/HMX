@@ -51,7 +51,7 @@
 						</text>
 					</view>
 					<view class="card-item">													
-						<xt-control @del="deleteRoom(room)"  @edit="editRoom(room)"></xt-control>
+						<xt-control @del="deleteRoom(room)"  @edit="editRoom(room)" :show-view="false"></xt-control>
 					</view>
 				</view>
 			</view>
@@ -82,6 +82,7 @@
 		return state.roomTypeList;
 	});
 	//选择列表
+		let _select_index=ref(0);
 	const actionList = computed<Array<ActionSheetAction>>(() => {
 		if (roomTypeList.value == null) {
 			return []
@@ -89,20 +90,28 @@
 		let result: Array<ActionSheetAction> = roomTypeList.value.map(item => {
 			return { name: item.name } as ActionSheetAction
 		})
-		result.unshift({ name: "全部房型" } as ActionSheetAction)
+		result.unshift({ name: "全部房型",color:"#000" } as ActionSheetAction);
+		result.forEach((item,index)=>{
+			if(index==_select_index.value){
+				item.color="#1e88e5";
+			}
+		})
 		return result
 	});
 	let  filterRoomTypeList =ref<Array<roomTypeBean>>(roomTypeList.value??[]);
+
 	const selectRoomType = (index:number)=>{
+		if(_select_index.value==index){
+			return;
+		}
+		_select_index.value=index;
 		if(index==0){
 			filterRoomTypeList.value= roomTypeList.value??[];
 			 return;
 		}
 		if(roomTypeList.value!=null){
 			let _id = roomTypeList.value[index-1]._id;
-			console.log("_id",_id);
 			let list = roomTypeList.value.filter(item=>item._id == _id);
-			console.log("22222",list)
 			filterRoomTypeList.value= list;
 		}
 		
@@ -138,6 +147,9 @@
 		        })
 		        return;
 		      }
+		   uni.navigateTo({
+		        url: `/pages/hotelManage/createRoom/createRoom`
+		      });
 	}
 	const deleteRoom=async (room:roomBean)=>{
 		if (!permissionList.value.includes(
@@ -153,6 +165,7 @@
 			})
 			return;
 		}
+		console.log("delete")
 	}
 	const editRoom=async (room:roomBean)=>{
 		if (!permissionList.value.includes(

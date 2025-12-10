@@ -1,6 +1,7 @@
 import { state, setHotelId, setUser, setHotelList, setHotel, setPermissionList, setRoomTypeList } from "@/store/store.uts";
 import { AccountService } from "@/services/AccountService";
 import { HotelService } from "@/services/HotelService";
+import {roomTypeService} from "@/services/roomTypeService.uts";
 import { PermissionService } from "@/services/PermissionService";
 import { roomTypeBean,formatRoomTypeList } from "@/bean/roomTypeBean";
 
@@ -26,11 +27,11 @@ class ComFuc {
 		setHotelList(list);
 		return list;
 	}
-	async getRoomTypeList(hotel_id : string) : Promise<Array<UTSJSONObject>> {
+	async getRoomTypeList(hotel_id : string) : Promise<Array<roomTypeBean>> {
 		if(hotel_id==null || hotel_id==""){
 			hotel_id=state.hotel_id;
 		}
-		const list = await HotelService.getRoomTypeList(hotel_id);
+		const list = await roomTypeService.getRoomTypeList(hotel_id);
 		console.log("房型列表", list);
 
 		setRoomTypeList(list);

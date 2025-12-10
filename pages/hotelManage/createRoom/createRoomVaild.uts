@@ -1,0 +1,23 @@
+	import { roomBean } from "@/bean/roomBean.uts";
+export const  validForm = (roomList:Array<roomBean>):boolean=>{
+	let msg ="";
+	let obj =roomList.forEach(item=>{
+		if(item.room_name==""){
+			msg="房间名不能为空";
+			return;
+		}
+		if(item.room_type_id==""){
+			msg="请选择房型";
+			return；
+		}
+	})
+	
+	if(msg!=""){
+		uni.showToast({
+			title:msg,
+			icon:"none"
+		})
+		return false;
+	}
+	return true;
+}

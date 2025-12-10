@@ -201,7 +201,7 @@
 			return "/static/icons/addpage.png"
 		}
 		return pageType.value==1?"/static/icons/editpage.png":"/static/icons/detailpage.png"
-	})
+	});
 	let submitLoading = ref(false);
 	const getFirstImagesList=():Array<string>=>{
 		if(hotelForm.value.firstImages!=""){

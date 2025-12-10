@@ -118,7 +118,7 @@
 	import { state } from "@/store/store";
 	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
-	import { HotelService } from "@/services/HotelService.uts";
+	import { roomTypeService } from "@/services/roomTypeService";
 	import {roomTypeBean} from "@/bean/roomTypeBean.uts";
 	let submitLoading = ref(false);
 	
@@ -222,7 +222,7 @@
 				try {
 					// const o = targetObj['_id'] as UTSJSONObject;
 					// const id = o["_value"] as string;
-					await HotelService.deleteRoomType(roomType._id);
+					await roomTypeService.deleteRoomType(roomType._id);
 					await comFunction.getRoomTypeList(hotel_id.value);
 					hideDialog();
 					uni.showToast({

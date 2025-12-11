@@ -1,78 +1,117 @@
 <template>
 	<view class="xt-select">
+		<view class="select-item"> 
 		<view class="select" :style="{'overflow':show?'visible':'hidden'}">
 			<view class="content" @click="showSelect">
-				<text class="txt">{{val}}</text>
+				<text class="txt">{{text_val}}</text>
 				<image src="/static/icons/arrow-down.png" style="width: 16px;height:16px"></image>
 			</view>
 		</view>
+		</view>
 		
-		<rice-action-sheet v-model:show="show" :close-on-click-action="true" 
-					@select="onSelect"  v-bind="$attrs"/>
+	
+		
+		
+		<view class="select-item">
+			<view class="select"> 
+			<rice-search v-model="keystr" input-color="#fff" placeholder="请输入搜索关键词" :custom-style="{'padding':0}"/>
+			
+			</view>
+			
+		</view>
+		<!-- <rice-action-sheet v-model:show="show" :close-on-click-action="true"
+					@select="onSelect"  v-bind="$attrs"/> -->
+		<rice-picker   v-model:show="show" :columns="columns" @confirm="onColumnsConfirm"></rice-picker>
+					
+		
 	</view>
 </template>
 
 <script setup>
-	
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	const emit =defineEmits(['selectAction']);
 	const props = defineProps({
-		defaultValue: {
-			type: String,
-			default:"请选择"
+		columns:{
+			type:Array<Array<PickerOption>>,
+			default:[]
 		}
 		});
 	const attrs = useAttrs();
 	let show=ref(false);
-	let val =ref("请选择");
-	const actions = attrs['actions'] as Array<ActionSheetAction> | null;
-	if(actions != null){
-		const name =  actions[0].name;
-		val.value = name;
-	}
+	let text_val =ref("请选择");
+	let keystr=ref("");
+	text_val.value=props.columns[0][0]['text'];
 	
 	const showSelect=()=>{
 		show.value=!show.value;
 	}
-	const onSelect = (action : ActionSheetAction, index : number) => {
-		//console.log(index,action);
-		val.value = action.name;
-		emit("selectAction",index);
+	const columnsValue=ref<string>(['Wenzhou'])
+	// const columns = ref<PickerOption[][]>([
+	//   [
+	//     { text: '杭州', value: 'Hangzhou' },
+	//     { text: '宁波', value: 'Ningbo' },
+	//     { text: '温州', value: 'Wenzhou', },
+	//     { text: '绍兴', value: 'Shaoxing' },
+	//     { text: '湖州', value: 'Huzhou' },
+	//     { text: '金华', value: 'JinHua' },
+	//     { text: '嘉兴', value: 'JiaXing' },
+	//   ]
+	// ])
+	const onColumnsConfirm = (e:PickerEvent) => {
+		console.log('PickerEvent', e)
+		let val:string = e.selectedValues[0];
+		let index:number = e.selectedIndex[0];
+		text_val.value=props.columns[0][index]['text'];
+		emit("selectAction",val);
 	}
-	
 </script>
 
 <style lang="scss" scoped>
-	
-	.select{
-		height: 40px;
-		position: relative;
-		border:1px solid #eee;
-		box-sizing: border-box;
-		overflow: visible;
-		.content{
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			align-items: center;
-			height: 40px;
-			padding:0 8px;
-			overflow: visible;
-			.txt{
-				line-height: 40px;
-			}
+	.xt-select{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		flex-wrap: wrap;
+		.select-item{
+			margin-bottom: 12px;
+			max-width: 350px;
+			min-width: 300px;
+			padding:0 15px;
+			
+			flex:1;
 		}
-		.select-panal{
-			overflow: visible;
-			width: 100%;
+		.select{
+			
 			position: relative;
-			top:40px;
-			left: 0;
-			.select-list{
+			border:1px solid #eee;
+			box-sizing: border-box;
+			overflow: visible;
+			.content{
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				height: 36px;
+				padding:0 8px;
 				overflow: visible;
-				background-color: #fff;
+				.txt{
+					line-height: 36px;
+				}
+			}
+			.select-panal{
+				overflow: visible;
+				width: 100%;
+				position: relative;
+				top:40px;
+				left: 0;
+				.select-list{
+					overflow: visible;
+					background-color: #fff;
+				}
 			}
 		}
+		
 	}
 	.center-panal{
 		padding:16px;

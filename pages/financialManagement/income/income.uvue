@@ -1,17 +1,95 @@
 <template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+	
+				<image src="/static/icons/list.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">收入列表</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn">
+				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
+	
+				<text class="txt" @click="addIncome">添加收入</text>
+	
+			</view>
+		</template>
+	</rice-navbar>
+	
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		income
+		<view class="search-area">
+			
+			<view class="card">
+				<view class="card-item title-area">
+					<text class="txt">收入类型</text>
+					<l-tag variant="light">共111</l-tag>
+					<!-- <rice-tag color="#6b7280" type="primary" text="共29间" /> -->
+				</view>
+				<view class="card-item  select-area">
+					<xt-select :actions="actionList" @selectAction="selectIncome" defaultValue="全部收入"></xt-select>
+				</view>
+				<view class="card-item search"></view>
+			</view>
+		
+		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
 </template>
 
 <script setup>
+		import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+		import { ActionSheetAction } from "@/uni_modules/rice-ui";
+		import { state } from "@/store/store";
+		let submitLoading=ref(false);
+		const hotel_id = computed(() => {
+			return state.hotel_id;
+		});
+		const user = computed(() => {
+			return state.user;
+		});
+		const permissionList = computed(() => {
+			return state.permissionList;
+		});
 		
+		const actionList:Array<ActionSheetAction> = [{name:111,color:"#000"}];
+		const selectIncome = (index:number)=>{}
 </script>
 
-<style>
+<style lang="scss">
+	.search-area {
+		padding: 18px;
+	
+		.card {
+			background-color: #fff;
+			border-radius: 8px;
+			padding: 16px;
+			.card-item{
+				margin-bottom: 15px;
+				&:last-child{
+					margin: 0;
+				}
+			}
+			.title-area {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+	
+				.txt {
+					padding-right: 8px;
+					font-size: 18px;
+					font-weight: 700;
+				}
+			}
+	
+		}
+	}
 		
 </style>

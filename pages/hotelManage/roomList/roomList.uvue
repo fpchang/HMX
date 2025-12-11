@@ -32,7 +32,7 @@
 					<!-- <rice-tag color="#6b7280" type="primary" text="共29间" /> -->
 				</view>
 				<view class="card-item  select-area">
-					<xt-select :actions="actionList" @selectAction="selectRoomType" defaultValue="全部房型"></xt-select>
+					<xt-select :columns="columns"  @selectAction="selectRoomType"></xt-select>
 				</view>
 				<view class="card-item search"></view>
 			</view>
@@ -66,6 +66,7 @@
 <script setup>
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
 	import { state } from "@/store/store";
@@ -85,38 +86,33 @@
 		return state.roomTypeList;
 	});
 	//选择列表
-		let _select_index=ref(0);
-	const actionList = computed<Array<ActionSheetAction>>(() => {
+		let _select_id=ref("all");
+	const columns = computed<Array<PickerOption>>(() => {
 		if (roomTypeList.value == null) {
 			return []
 		}
-		let result: Array<ActionSheetAction> = roomTypeList.value.map(item => {
-			return { name: item.name } as ActionSheetAction
+		let result: Array<Array<PickerOption>>=[];
+		result[0] = roomTypeList.value.map(item => {
+			return { text: item.name,value:item._id } as PickerOption
 		})
-		result.unshift({ name: "全部房型",color:"#000" } as ActionSheetAction);
-		result.forEach((item,index)=>{
-			if(index==_select_index.value){
-				item.color="#1e88e5";
-			}
-		})
-		return result
+		result[0].unshift({ text: "全部房型",value:"all" } as PickerOption);
+		return result;
 	});
 	let  filterRoomTypeList =computed(()=>{
-		if(_select_index.value==0){			
+		if(_select_id.value=="all"){			
 			 return roomTypeList.value??[];
 		}
 		if(roomTypeList.value!=null){
-			let _id = roomTypeList.value[select_index.value-1]._id;
-			let list = roomTypeList.value.filter(item=>item._id == _id);
-			filterRoomTypeList.value= list;
+			let list = roomTypeList.value.filter(item=>item._id == _select_id.value);
+			return list;
 		}
 	});
 
-	const selectRoomType = (index:number)=>{
-		if(_select_index.value==index){
+	const selectRoomType = (val:string)=>{
+		if(_select_id.value==val){
 			return;
 		}
-		_select_index.value=index;				
+		_select_id.value=val;				
 	}
 	const getRoomNum=computed<number>(()=>{
 		let num =0;

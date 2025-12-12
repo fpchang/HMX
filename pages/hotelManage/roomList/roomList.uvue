@@ -16,6 +16,7 @@
 				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
 
 				<text class="txt" @click="addRoom">添加房间</text>
+				
 
 			</view>
 		</template>
@@ -24,38 +25,38 @@
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<view class="search-area">
-			
+
 			<view class="card">
 				<view class="card-item title-area">
 					<text class="txt">房间筛选</text>
-					<l-tag variant="light">共{{getRoomNum}}间</l-tag>
-					<!-- <rice-tag color="#6b7280" type="primary" text="共29间" /> -->
+					<l-tag variant="light">共{{filterRoomList.length}}间</l-tag>
 				</view>
 				<view class="card-item  select-area">
-					<xt-select :columns="columns"  @selectAction="selectRoomType"></xt-select>
+					<xt-select :columns="columns" @selectAction="selectRoomType" placeholder="搜索房间名称"
+						@searchInputChange="searchInputChange"></xt-select>
 				</view>
 				<view class="card-item search"></view>
 			</view>
 
 		</view>
 		<view class="card-list">
-			<template  v-for="roomType of filterRoomTypeList">
-			<view class="card-list-item" v-for="room of roomType.roomList">
-				<view class="card">
-					<view class="card-item title">
-						<text class="txt">{{room.room_name}}</text>
+			<!-- <template v-for="roomType of filterRoomTypeList"> -->
+				<view class="card-list-item" v-for="room of filterRoomList">
+					<view class="card">
+						<view class="card-item title">
+							<text class="txt">{{room.room_name}}</text>
 						</view>
-					<view class="card-item subtitle">
-						<text class="txt">
-							{{roomType.name}}
-						</text>
-					</view>
-					<view class="card-item">													
-						<xt-control @del="deleteRoom(room)"  @edit="editRoom(room)" :show-view="false"></xt-control>
+						<view class="card-item subtitle">
+							<text class="txt">
+								{{getRoomTypeName(room.room_type_id)}}
+							</text>
+						</view>
+						<view class="card-item">
+							<xt-control @del="deleteRoom(room)" @edit="editRoom(room)" :show-view="false"></xt-control>
+						</view>
 					</view>
 				</view>
-			</view>
-		</template>
+			<!-- </template> -->
 		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
@@ -70,9 +71,9 @@
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
 	import { state } from "@/store/store";
-	import {roomTypeService} from "/services/roomTypeService.uts";
-	import {comFunction} from "/pages/index/ComFuc.uts";
-	let submitLoading=ref(false);
+	import { roomTypeService } from "@/services/roomTypeService";
+	import { comFunction } from "@/pages/index/ComFuc";
+	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -86,45 +87,69 @@
 		return state.roomTypeList;
 	});
 	//选择列表
-		let _select_id=ref("all");
-	const columns = computed<Array<PickerOption>>(() => {
+	let _select_id = ref("all");
+	let _search_key = ref("");
+	const columns = computed<Array<Array<PickerOption>>>(() => {
 		if (roomTypeList.value == null) {
 			return []
 		}
-		let result: Array<Array<PickerOption>>=[];
-		result[0] = roomTypeList.value.map(item => {
-			return { text: item.name,value:item._id } as PickerOption
-		})
-		result[0].unshift({ text: "全部房型",value:"all" } as PickerOption);
+		let result:Array<Array<PickerOption>>=[];
+		let list:Array<PickerOption>=[];
+		// let result : Array<Array<PickerOption>> = [];
+		// let list = roomTypeList.value.map(item => {
+		// 	return { text: item.name, value: item._id } as PickerOption
+		// }) as Array<PickerOption>;
+		// result[0].unshift({ text: "全部房型", value: "all" } as PickerOption);
+		// return result;
+		roomTypeList.value.forEach(item=>{
+			list.push({ text: item.name, value: item._id } as PickerOption);
+		});
+		result.push(list);
 		return result;
 	});
-	let  filterRoomTypeList =computed(()=>{
-		if(_select_id.value=="all"){			
-			 return roomTypeList.value??[];
-		}
-		if(roomTypeList.value!=null){
-			let list = roomTypeList.value.filter(item=>item._id == _select_id.value);
-			return list;
-		}
-	});
 
-	const selectRoomType = (val:string)=>{
-		if(_select_id.value==val){
+	let filterRoomList = computed<Array<roomBean>>(() => {
+		if(roomTypeList.value==null){
+			return []
+		}
+		let roomList:Array<roomBean>=[];
+		roomTypeList.value.forEach(item=>{
+			if(_select_id.value=="all"||_select_id.value==item._id){
+				item.roomList.forEach(it=>{
+					if(it.room_name.includes(_search_key.value)){
+						roomList.push(it);
+					}
+					
+				})
+			}
+			
+		});
+		return roomList;
+	});
+	const searchInputChange = (value : string) => {
+		_search_key.value = value;
+	}
+	const selectRoomType = (val : string) => {
+		if (_select_id.value == val) {
 			return;
 		}
-		_select_id.value=val;				
+		_select_id.value = val;
 	}
-	const getRoomNum=computed<number>(()=>{
-		let num =0;
-		if(filterRoomTypeList.value!=null){
-			filterRoomTypeList.value.forEach(item=>{
-				num+=item.roomList.length;
-			})
-		}
-		 return num;
-		
-	})
-	const addRoom = async () => { 
+	// const getRoomNum = computed<number>(() => {
+	// 	let num = 0;
+	// 	if (filterRoomTypeList.value != null) {
+	// 		filterRoomTypeList.value.forEach(item => {
+	// 			num += item.roomList.length;
+	// 		})
+	// 	}
+	// 	return num;
+
+	// })
+	const getRoomTypeName=(room_type_id:string)=>{
+		let obj:roomTypeBean = roomTypeList.value.find(item=>item._id == room_type_id);
+		return obj.name;
+	}
+	const addRoom = async () => {
 		if (!permissionList.value.includes(
 			"ROOMTYPE_CREATE"
 		)) {
@@ -138,21 +163,21 @@
 			})
 			return;
 		}
-		 if(roomTypeList.value!=null && roomTypeList.value.length<1){
-		        uni.showToast({
-		          title: '请先创建房型',
-		          icon: 'none'
-		        })
-		        return;
-		      }
-		   uni.navigateTo({
-		        url: `/pages/hotelManage/createRoom/createRoom`
-		      });
+		if (roomTypeList.value != null && roomTypeList.value.length < 1) {
+			uni.showToast({
+				title: '请先创建房型',
+				icon: 'none'
+			})
+			return;
+		}
+		uni.navigateTo({
+			url: `/pages/hotelManage/createRoom/createRoom`
+		});
 	}
-	const deleteRoom=async (room:roomBean)=>{
-		if (submitLoading.value==true) {
-		        return;
-		    }
+	const deleteRoom = async (room : roomBean) => {
+		if (submitLoading.value == true) {
+			return;
+		}
 		if (!permissionList.value.includes(
 			"ROOMTYPE_DELETE"
 		)) {
@@ -192,10 +217,10 @@
 			}, cancel: () => {
 				hideDialog();
 			}
-		
+
 		});
 	}
-	const editRoom=async (room:roomBean)=>{
+	const editRoom = async (room : roomBean) => {
 		if (!permissionList.value.includes(
 			"ROOMTYPE_UPDATE"
 		)) {
@@ -210,7 +235,6 @@
 			return;
 		}
 	}
-	
 </script>
 
 <style lang="scss">
@@ -221,12 +245,15 @@
 			background-color: #fff;
 			border-radius: 8px;
 			padding: 16px;
-			.card-item{
+
+			.card-item {
 				margin-bottom: 15px;
-				&:last-child{
+
+				&:last-child {
 					margin: 0;
 				}
 			}
+
 			.title-area {
 				display: flex;
 				flex-direction: row;
@@ -257,23 +284,27 @@
 
 				background-color: #fff;
 				border-radius: 12px;
-				padding:16px;
-				.card-item{
+				padding: 16px;
+
+				.card-item {
 					margin-bottom: 12px;
-					&:last-child{
+
+					&:last-child {
 						margin-bottom: 0;
 					}
 				}
-				.title{
-					.txt{
+
+				.title {
+					.txt {
 						font-size: 18px;
 						font-weight: 700;
 						color: #1d2129;
 					}
-					
+
 				}
-				.subtitle{
-					.txt{
+
+				.subtitle {
+					.txt {
 						color: #6b7280;
 						font-size: 14px;
 					}

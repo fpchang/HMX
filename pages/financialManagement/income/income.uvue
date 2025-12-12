@@ -5,7 +5,7 @@
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
-	
+
 				<image src="/static/icons/list.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
 				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">收入列表</text>
@@ -14,82 +14,288 @@
 		<template #right>
 			<view class="navbar-btn">
 				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
-	
-				<text class="txt" @click="addIncome">添加收入</text>
-	
+
+				<text class="txt" @click="addIncome">添加房间</text>
+
 			</view>
 		</template>
 	</rice-navbar>
-	
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<view class="search-area">
-			
+
 			<view class="card">
 				<view class="card-item title-area">
-					<text class="txt">收入类型</text>
-					<l-tag variant="light">共111</l-tag>
+					<text class="txt">房间筛选{{_search_key}}</text>
+					<l-tag variant="light">共111单</l-tag>
 					<!-- <rice-tag color="#6b7280" type="primary" text="共29间" /> -->
 				</view>
 				<view class="card-item  select-area">
-					<xt-select :actions="actionList" @selectAction="selectIncome" defaultValue="全部收入"></xt-select>
+					<xt-select :columns="columns" @selectAction="selectRoomType" placeholder="搜索收入名称"
+						@searchInputChange="searchInputChange"></xt-select>
 				</view>
 				<view class="card-item search"></view>
 			</view>
-		
+
+		</view>
+		<view class="card-list">
+			<template v-for="roomType of filterRoomTypeList">
+				<view class="card-list-item" v-for="room of filterRoomList(roomType.roomList)">
+					<view class="card">
+						<view class="card-item title">
+							<text class="txt">{{room.room_name}}</text>
+						</view>
+						<view class="card-item subtitle">
+							<text class="txt">
+								{{roomType.name}}
+							</text>
+						</view>
+						<view class="card-item">
+							<xt-control @del="deleteRoom(room)" @edit="editRoom(room)" :show-view="false"></xt-control>
+						</view>
+					</view>
+				</view>
+			</template>
 		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
+
 </template>
 
 <script setup>
-		import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
-		import { ActionSheetAction } from "@/uni_modules/rice-ui";
-		import { state } from "@/store/store";
-		let submitLoading=ref(false);
-		const hotel_id = computed(() => {
-			return state.hotel_id;
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { roomBean } from '@/bean/roomBean';
+	import { state } from "@/store/store";
+	import { roomTypeService } from "@/services/roomTypeService";
+	import { comFunction } from "@/pages/index/ComFuc";
+	let submitLoading = ref(false);
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	});
+	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+		return state.roomTypeList;
+	});
+	//选择列表
+	let _select_id = ref("all");
+	let _search_key = ref("");
+	const columns = computed<Array<Array<PickerOption>>>(() => {
+		if (roomTypeList.value == null) {
+			return []
+		}
+		let result:Array<Array<PickerOption>>=[];
+		let list:Array<PickerOption>=[];
+		roomTypeList.value.forEach(item=>{
+			list.push({ text: item.name, value: item._id } as PickerOption);
 		});
-		const user = computed(() => {
-			return state.user;
-		});
-		const permissionList = computed(() => {
-			return state.permissionList;
-		});
+		result.push(list);
+		return result;
+	});
+	let filterRoomTypeList = computed<Array<roomTypeBean>>(() => {
+		if (roomTypeList.value == null) {
+			return [];
+		}
+		if (_select_id.value == "all") {
+			return roomTypeList.value ??[];
+
+		}	
+			let list = roomTypeList.value.filter(item => item._id == _select_id.value);
+			return list;	
 		
-		const actionList:Array<ActionSheetAction> = [{name:111,color:"#000"}];
-		const selectIncome = (index:number)=>{}
+	});
+	const filterRoomList = (roomList : Array<roomBean>) : Array<roomBean> => {
+		return roomList.filter(item=>item.room_name.includes(_search_key.value));		
+	}
+	const searchInputChange = (value : string) => {
+		_search_key.value = value;
+	}
+	const selectRoomType = (val : string) => {
+		if (_select_id.value == val) {
+			return;
+		}
+		_select_id.value = val;
+	}
+	const getRoomNum = computed<number>(() => {
+		let num = 0;
+		if (filterRoomTypeList.value != null) {
+			filterRoomTypeList.value.forEach(item => {
+				num += item.roomList.length;
+			})
+		}
+		return num;
+
+	})
+	const addIncome = async () => {
+		if (!permissionList.value.includes(
+			"ROOMTYPE_CREATE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+		if (roomTypeList.value != null && roomTypeList.value.length < 1) {
+			uni.showToast({
+				title: '请先创建房型',
+				icon: 'none'
+			})
+			return;
+		}
+		uni.navigateTo({
+			url: `/pages/hotelManage/createRoom/createRoom`
+		});
+	}
+	const deleteRoom = async (room : roomBean) => {
+		if (submitLoading.value == true) {
+			return;
+		}
+		if (!permissionList.value.includes(
+			"ROOMTYPE_DELETE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+		console.log("delete")
+		showDialog({
+			title: '确认删除此房间',
+			message: "删除后将无法恢复，确认删除吗？",
+			beforeClose: async () : Promise<boolean> => {
+				try {
+					await roomTypeService.deleteRoom(room._id);
+					await comFunction.getRoomTypeList(hotel_id.value);
+					hideDialog();
+					uni.showToast({
+						title: "删除成功",
+						icon: "none"
+					});
+					return true;
+				} catch (e) {
+					uni.showToast({
+						title: "系统异常",
+						icon: "none"
+					});
+					return false;
+				}
+			},
+			confirm: () => {
+			}, cancel: () => {
+				hideDialog();
+			}
+
+		});
+	}
+	const editRoom = async (room : roomBean) => {
+		if (!permissionList.value.includes(
+			"ROOMTYPE_UPDATE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+	}
 </script>
 
 <style lang="scss">
 	.search-area {
 		padding: 18px;
-	
+
 		.card {
 			background-color: #fff;
 			border-radius: 8px;
 			padding: 16px;
-			.card-item{
+
+			.card-item {
 				margin-bottom: 15px;
-				&:last-child{
+
+				&:last-child {
 					margin: 0;
 				}
 			}
+
 			.title-area {
 				display: flex;
 				flex-direction: row;
 				align-items: center;
-	
+
 				.txt {
 					padding-right: 8px;
 					font-size: 18px;
 					font-weight: 700;
 				}
 			}
-	
+
 		}
 	}
-		
+
+	.card-list {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+
+		.card-list-item {
+			min-width: 360px;
+			padding: 15px;
+			flex: 1;
+
+			.card {
+
+
+				background-color: #fff;
+				border-radius: 12px;
+				padding: 16px;
+
+				.card-item {
+					margin-bottom: 12px;
+
+					&:last-child {
+						margin-bottom: 0;
+					}
+				}
+
+				.title {
+					.txt {
+						font-size: 18px;
+						font-weight: 700;
+						color: #1d2129;
+					}
+
+				}
+
+				.subtitle {
+					.txt {
+						color: #6b7280;
+						font-size: 14px;
+					}
+				}
+			}
+		}
+	}
 </style>

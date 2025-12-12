@@ -61,9 +61,9 @@
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
-	import {roomTypeService} from "/services/roomTypeService.uts";
+	import {roomTypeService} from "@/services/roomTypeService.uts";
 	import { state } from "@/store/store";
-	import {comFunction} from "/pages/index/ComFuc.uts"
+	import {comFunction} from "@/pages/index/ComFuc.uts"
 	import {validForm} from "./createRoomVaild.uts";
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -161,10 +161,9 @@
 			}
 			item.room_type_id=roomtypeid;
 		});
-		console.log("1111",roomForm);
 		let flag:boolean = validForm(roomForm.value.roomList)
 		if(flag==false){
-			submitLoading=false;
+			submitLoading.value=false;
 			return;
 		}
 		try {

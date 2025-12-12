@@ -14,7 +14,7 @@
 		
 		<view class="select-item">
 			<view class="select"> 
-			<rice-search v-model="keystr" input-color="#fff" placeholder="请输入搜索关键词" :custom-style="{'padding':0}"/>
+			<rice-search v-model="keystr" input-color="#fff" :clearable="false" :placeholder="placeholder" :custom-style="{'padding':0}" @search="searchEvent" @clickLeftIcon="searchEvent" @input="searchInputChange"/>
 			
 			</view>
 			
@@ -30,23 +30,29 @@
 <script setup>
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
-	const emit =defineEmits(['selectAction']);
+	//selectAction下拉 选择
+	//searchAction input点击搜索
+	//searchInputChange 输入框变化
+	const emit =defineEmits(['selectAction',"searchAction","searchInputChange"]);
 	const props = defineProps({
 		columns:{
 			type:Array<Array<PickerOption>>,
 			default:[]
+		},
+		placeholder:{
+			type:String,
+			default:"请输入关键字"
 		}
 		});
 	const attrs = useAttrs();
 	let show=ref(false);
 	let text_val =ref("请选择");
 	let keystr=ref("");
-	text_val.value=props.columns[0][0]['text'];
+	text_val.value = props.columns[0][0]['text'] as string
 	
 	const showSelect=()=>{
 		show.value=!show.value;
 	}
-	const columnsValue=ref<string>(['Wenzhou'])
 	// const columns = ref<PickerOption[][]>([
 	//   [
 	//     { text: '杭州', value: 'Hangzhou' },
@@ -58,11 +64,17 @@
 	//     { text: '嘉兴', value: 'JiaXing' },
 	//   ]
 	// ])
+	const searchEvent=(value:string)=>{
+		emit("searchAction",value);
+	}
+	const searchInputChange=(value:string)=>{
+		emit("searchInputChange",value);
+	}
 	const onColumnsConfirm = (e:PickerEvent) => {
 		console.log('PickerEvent', e)
-		let val:string = e.selectedValues[0];
-		let index:number = e.selectedIndex[0];
-		text_val.value=props.columns[0][index]['text'];
+		let val: string = e.selectedValues[0] as string
+		let index: number = e.selectedIndex[0] as number
+		text_val.value = props.columns[0][index]['text'] as string
 		emit("selectAction",val);
 	}
 </script>

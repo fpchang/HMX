@@ -94,7 +94,7 @@
 			return []
 		}
 		let result:Array<Array<PickerOption>>=[];
-		let list:Array<PickerOption>=[];
+		let list:Array<PickerOption>=[{ text: "全部房型", value: "all" }];
 		// let result : Array<Array<PickerOption>> = [];
 		// let list = roomTypeList.value.map(item => {
 		// 	return { text: item.name, value: item._id } as PickerOption

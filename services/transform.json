@@ -1,264 +1,119 @@
- [
-        {
-            "_id": {
-                "_value": "66f53e30ff6b41c804c55d36",
-                "hm-room": [
-                    {
-                        "_id": "68c116a2d3f484b4dd0ec80f",
-                        "data_status": 1,
-                        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
-                        "room_name": "301",
-                        "room_type_id": "66f53e30ff6b41c804c55d36"
-                    },
-                    {
-                        "_id": "68c116e1ac6b4af5dc12f5fb",
-                        "data_status": 1,
-                        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
-                        "room_name": "401",
-                        "room_type_id": "66f53e30ff6b41c804c55d36"
-                    },
-                    {
-                        "_id": "68c12843095d887bc0bae0a3",
-                        "data_status": 1,
-                        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
-                        "room_name": "501",
-                        "room_type_id": "66f53e30ff6b41c804c55d36"
-                    }
-                ]
-            },
-            "count": 1,
-            "createTime": 1727348272291,
-            "dataStatus": 1,
-            "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
-            "name": "亲子房",
-            "roomList": [],
-            "bedList": [
-                {
-                    "count": 1,
-                    "name": "1.8米"
-                },
-                {
-                    "count": 3,
-                    "name": "1.2米"
-                }
-            ],
-            "firstImages": "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732960389878undefined?expire_at=1732960990&er_sign=109d2c3c92522d0373b25c8047d409e1",
-            "imagesList": [
-                "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732960402707undefined?expire_at=1732961003&er_sign=4b3db004bb5d4a2fc84436f200a3eb6c",
-                "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732960406031undefined?expire_at=1732961007&er_sign=70f9ee99d962d15364aec82f93a715d7",
-                "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732960420892undefined?expire_at=1732961022&er_sign=fd4b4ea62b52734955b7213f6a6b2f50"
-            ],
-            "guestNumber": 4,
-            "area": 36,
-            "facility": [
-                "6752b3f1447535d39e7e293c",
-                "6752b48ddc3253af04724a83",
-                "6752b3da7931f7a8861453b9",
-                "67531b1ee1929544834bb690",
-                "67531b5d949c0ee87a8ee291",
-                "6752b510174c423ec4afec5a",
-                "6752b40a005fb92e0570b69e",
-                "6752b43aa1476907dc928b88",
-                "6752b4d416129c3840eb16de",
-                "6759112bca75bcfcb6849778",
-                "6752b44d447535d39e7e293e",
-                "67531af2e1929544834bb68d"
-            ],
-            "priceA": 600,
-            "priceA_name": "2份早餐",
-            "priceB": 800,
-            "priceB_name": "2份早餐+景区单票2张",
-            "priceBase": 501,
-            "priceBase_name": "标准价格",
-            "bargainMinPercent": 85,
-            "isBargain": true,
-            "independentBathroom": true,
-            "isWindow": true
-        },
-        {
-            "_id": {
-                "_value": "66f503af1de6951f97a9fa1d",
-                "hm-room": [
-                    {
-                        "_id": "68c12806d3f484b4dd0fa7c4",
-                        "data_status": 1,
-                        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
-                        "room_name": "202",
-                        "room_type_id": "66f503af1de6951f97a9fa1d"
-                    },
-                    {
-                        "_id": "68c12806d3f484b4dd0fa7c5",
-                        "data_status": 1,
-                        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
-                        "room_name": "203",
-                        "room_type_id": "66f503af1de6951f97a9fa1d"
-                    },
-                    {
-                        "_id": "68c12806d3f484b4dd0fa7c6",
-                        "data_status": 1,
-                        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
-                        "room_name": "204",
-                        "room_type_id": "66f503af1de6951f97a9fa1d"
-                    }
-                ]
-            },
-            "count": 3,
-            "createTime": 1727333294813,
-            "dataStatus": 1,
-            "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
-            "name": "大床房",
-            "roomList": [
-                "202",
-                "203",
-                "204"
-            ],
-            "bedList": [
-                {
-                    "name": "1.8米",
-                    "count": 1
-                }
-            ],
-            "firstImages": "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732959331995undefined?expire_at=1732959933&er_sign=091d9c04743bc43f5cda03a41fc2cead",
-            "imagesList": [
-                "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732959366254undefined?expire_at=1732959967&er_sign=4eb6f0fd07245c73c72727ed7eebfc19",
-                "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732959374026undefined?expire_at=1732959974&er_sign=a8db65b07d7672d80471528a2a781143",
-                "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732959366254undefined?expire_at=1732959967&er_sign=4eb6f0fd07245c73c72727ed7eebfc19",
-                "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732959408600undefined?expire_at=1732960009&er_sign=58856b0a9d15625e057e41f7113045e1"
-            ],
-            "area": 30,
-            "facility": [
-                "6752b3f1447535d39e7e293c",
-                "6752b3da7931f7a8861453b9",
-                "6752b4f96b40e277a720e0b9",
-                "67531b1ee1929544834bb690",
-                "6752b48ddc3253af04724a83",
-                "6752b40a005fb92e0570b69e",
-                "6752b4d416129c3840eb16de",
-                "67531af2e1929544834bb68d"
-            ],
-            "priceBase": 400,
-            "bargainMinPercent": 82,
-            "isBargain": true,
-            "guestNumber": 2
-        },
-        {
-            "_id": {
-                "_value": "66f50633183a7b1d3d37c1ce",
-                "hm-room": [
-                    {
-                        "_id": "68c1281614fbd59188c9a257",
-                        "data_status": 1,
-                        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
-                        "room_name": "303",
-                        "room_type_id": "66f50633183a7b1d3d37c1ce"
-                    }
-                ]
-            },
-            "count": 1,
-            "createTime": 1727333938842,
-            "dataStatus": 1,
-            "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
-            "name": "家庭套房",
-            "roomList": [],
-            "area": 60,
-            "bedList": [
-                {
-                    "name": "1.8米",
-                    "count": 1
-                },
-                {
-                    "name": "1.2米",
-                    "count": 2
-                }
-            ],
-            "firstImages": "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732959574061undefined?expire_at=1732960175&er_sign=56b1314bd7d19cafe721eb1615256ac0",
-            "imagesList": [
-                "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732959581279undefined?expire_at=1732960182&er_sign=cb20ef74f8447241f56c239ea5282de0",
-                "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732959581280undefined?expire_at=1732960182&er_sign=c2f5260be9e7f2d2ab7b36a561761e49"
-            ],
-            "facility": [
-                "6752b4b6858b0b67c1a07381"
-            ],
-            "bargainMinPercent": 80,
-            "priceBase": 851,
-            "guestNumber": 4
-        },
-        {
-            "_id": {
-                "_value": "66f5061560f84340ce286019",
-                "hm-room": [
-                    {
-                        "_id": "68c12822ac6b4af5dc13ded4",
-                        "data_status": 1,
-                        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
-                        "room_name": "302",
-                        "room_type_id": "66f5061560f84340ce286019"
-                    }
-                ]
-            },
-            "count": 1,
-            "createTime": 1727333908784,
-            "dataStatus": 1,
-            "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
-            "name": "标间",
-            "roomList": [
-                "302"
-            ],
-            "bedList": [
-                {
-                    "name": "1.3米",
-                    "count": 2
-                }
-            ],
-            "firstImages": "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732959245153undefined?expire_at=1732959846&er_sign=10df2c1b5568c8717cdac832c8151e80",
-            "imagesList": [
-                "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732959250534undefined?expire_at=1732959851&er_sign=99ed09690523ea4813be4e5bf594a644",
-                "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732959253921undefined?expire_at=1732959854&er_sign=2ff9f00f9947a83a21d58fea712108de"
-            ],
-            "area": 30,
-            "bargainMinPercent": 80,
-            "facility": [
-                "6752b3da7931f7a8861453b9",
-                "6752b4d416129c3840eb16de",
-                "6752b4f96b40e277a720e0b9"
-            ],
-            "priceBase": 400,
-            "guestNumber": 2
-        },
-        {
-            "_id": {
-                "_value": "66f5061d14d9e2960c104e8b",
-                "hm-room": [
-                    {
-                        "_id": "68c1282be2b826dcc66a7a06",
-                        "data_status": 1,
-                        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
-                        "room_name": "201",
-                        "room_type_id": "66f5061d14d9e2960c104e8b"
-                    }
-                ]
-            },
-            "count": 1,
-            "createTime": 1727333917083,
-            "dataStatus": 1,
-            "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
-            "name": "豪华大床房",
-            "roomList": [],
-            "area": 35,
-            "bedList": [
-                {
-                    "name": "1.8米",
-                    "count": 1
-                }
-            ],
-            "firstImages": "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732959129050undefined?expire_at=1732959730&er_sign=8962d3cd31c0158c3805fb107dd2357f",
-            "imagesList": [
-                "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732959144077undefined?expire_at=1732959745&er_sign=0ac84a4635d4669434ef9b86aa13631d",
-                "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732959151106undefined?expire_at=1732959752&er_sign=b2c02baae9f711b80293efbc6e8ff17c",
-                "https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/client/671e5c98973a81ab7ff6fde8/roomType/1732959137381undefined?expire_at=1732959738&er_sign=d2bd5d1831cfb0109523de82aae21097"
-            ],
-            "bargainMinPercent": 80,
-            "facility": [],
-            "priceBase": 600
-        }
-    ]
+[
+    {
+        "_id": "68c6888529da5842c094cb36",
+        "amount": 45,
+        "billType": "income",
+        "createTime": 1757841540825,
+        "creater": "18516285834",
+        "data_status": 1,
+        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
+        "ioeTime": 1758729600000,
+        "mark": "",
+        "type": "wine",
+        "unit": "CNY"
+    },
+    {
+        "_id": "68c12dadfe64b2442dffd2a9",
+        "amount": 478,
+        "billType": "income",
+        "createTime": 1757490605664,
+        "creater": "13122905834",
+        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
+        "ioeTime": 1757606400000,
+        "mark": "",
+        "type": "specialty",
+        "unit": "CNY",
+        "data_status": 1
+    },
+    {
+        "_id": "68c12da3d3f484b4dd0fef31",
+        "amount": 658,
+        "billType": "income",
+        "createTime": 1757490595618,
+        "creater": "13122905834",
+        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
+        "ioeTime": 1757520000000,
+        "mark": "",
+        "type": "drink",
+        "unit": "CNY",
+        "data_status": 1
+    },
+    {
+        "_id": "68c688688d04173d7e97d698",
+        "amount": 4,
+        "billType": "income",
+        "createTime": 1757841511537,
+        "creater": "18516285834",
+        "data_status": 1,
+        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
+        "ioeTime": 1757433600000,
+        "mark": "",
+        "type": "drink",
+        "unit": "CNY"
+    },
+    {
+        "_id": "68c68858e2b826dcc6c9b6cb",
+        "amount": 223,
+        "billType": "income",
+        "createTime": 1757841495278,
+        "creater": "18516285834",
+        "data_status": 1,
+        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
+        "ioeTime": 1756656000000,
+        "mark": "",
+        "type": "drink",
+        "unit": "CNY"
+    },
+    {
+        "_id": "6891bfef14fbd59188222b24",
+        "amount": 123,
+        "billType": "income",
+        "createTime": 1754382319741,
+        "creater": "18516285834",
+        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
+        "ioeTime": 1755100800000,
+        "mark": "",
+        "type": "specialty",
+        "unit": "CNY",
+        "data_status": 1
+    },
+    {
+        "_id": "6891bfe4eef1a7e6e2bcdc8a",
+        "amount": 45,
+        "billType": "income",
+        "createTime": 1754382308703,
+        "creater": "18516285834",
+        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
+        "ioeTime": 1754409600000,
+        "mark": "",
+        "type": "wine",
+        "unit": "CNY",
+        "data_status": 1
+    },
+    {
+        "_id": "684c30a4fb96a2f27ce2f8ff",
+        "amount": 98,
+        "billType": "income",
+        "createTime": 1749823652512,
+        "creater": "13122905834",
+        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
+        "ioeTime": 1750780800000,
+        "mark": "",
+        "type": "wine",
+        "unit": "CNY",
+        "data_status": 1
+    },
+    {
+        "_id": "6841ac78fa8545fab3befe89",
+        "amount": 99,
+        "billType": "income",
+        "createTime": 1749134456142,
+        "creater": "13122905834",
+        "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
+        "ioeTime": 1749571200000,
+        "mark": "",
+        "type": "drink",
+        "unit": "CNY",
+        "data_status": 1
+    }
+]

@@ -1,0 +1,20 @@
+export type FMTypeConfigBean ={
+	_id:string,
+	billType:string,
+	name:string,
+	text:string
+	
+}
+export type FMBean={
+	_id: string;
+	amount: number;
+	billType: string;
+	createTime: number;
+	creater: string;
+	data_status?: number;
+	hotel_id: string;
+	ioeTime: number;
+	mark: string;
+	type: FMTypeConfigBean;
+	unit: string;
+}

@@ -1,4 +1,5 @@
 import{DB} from '../api/DB';
+import { FMBean, FMTypeConfigBean } from '@/bean/FMBean';
 import { dayuts } from '@/uni_modules/lime-dayuts';
 class FMServiceClass{
 	constructor(){
@@ -9,6 +10,62 @@ class FMServiceClass{
   add(item){
     return DB.add("hm-incomeAndExpenses",item) ;
   }
+	
+	
+	
+	//获取收入与支出分类
+	async getIncomeAndExpensesDateBySearch(hotel_id:string,billType:string='income',st:number,et:number):Promise<Array<FMBean>>{
+	  const db = uniCloud.databaseForJQL();
+	  const dbCmd = db.command;
+	  const w = {
+	    hotel_id:hotel_id,
+	    billType:billType,
+	    ioeTime:dbCmd.and(dbCmd.gte(st),dbCmd.lte(et))
+	  }
+		let FMList:Array<FMBean>=[];
+		const main=  db.collection("hm-incomeAndExpenses").where(w).orderBy("ioeTime desc").getTemp();
+		const config=  db.collection("hm-incomeAndExpensesConfig").getTemp();
+		try{
+			const res =await db.collection(main,config).get();
+			console.log("fmm",res);
+			const data = res['data'] as Array<UTSJSONObject>;
+		
+			if(data !=null){
+				data.forEach(item=>{
+					const typeArr = item.getArray("type")??[];
+					let typeObj:FMTypeConfigBean;
+					if(typeArr.length>0){
+						let item = typeArr[0] as UTSJSONObject;
+						typeObj={
+							_id:item.getString("_id")??"",
+							billType:item.getString("billType")??"",
+							name:item.getString("name")??"",
+							text:item.getString("text")??"",
+						}
+					}
+					FMList.push({
+						_id: item.getString("_id")??"",
+						amount: item.getNumber("amount")??0,
+						billType:  item.getString("billType")??"",
+						createTime: item.getNumber("amount")??0,,
+						creater:  item.getString("createTime")??"",
+						data_status: item.getNumber("data_status"),,
+						hotel_id:item.getString("hotel_id")??"",
+						ioeTime: item.getNumber("ioeTime")??0,,
+						mark:item.getString("mark")??"",
+						type:typeObj,
+						unit:item.getString("unit")??""
+					})
+				})
+			}
+			return FMList;
+		}catch(e){
+			throw new Error("获取收支列表失败");
+		}
+	
+	  
+	}
+	
   //房费统计按店铺分类
   getRoomOrder(hotel_id:string,st:number,et:number){
     const db = uniCloud.databaseForJQL()
@@ -28,7 +85,7 @@ class FMServiceClass{
       return  db.collection("hm-order").where(w).groupBy('dateToString(timestampToDate(checkInStartDateTimeStamp),"%Y-%m") as month').groupField('sum(totalAmount) as amount').get()
     }
   //获取收入与支出分类
-  getIncomeAndExpenses(hotel_id:string,billType:string='income',st:number,et:number){
+  async getIncomeAndExpenses(hotel_id:string,billType:string='income',st:number,et:number){
     const db = uniCloud.databaseForJQL();
     const dbCmd = db.command;
     const w = {
@@ -36,8 +93,11 @@ class FMServiceClass{
       billType:billType,
       ioeTime:dbCmd.and(dbCmd.gte(st),dbCmd.lte(et))
     }
-    const res =db.collection("hm-incomeAndExpenses").where(w).groupBy(' type as name').groupField('sum(amount) as value').get();
-    return res
+		try{
+			const res =await db.collection("hm-incomeAndExpenses").where(w).groupBy(' type as name').groupField('sum(amount) as value').get();
+			return res;
+		}catch(e){}
+
     
   }
    //按月统计

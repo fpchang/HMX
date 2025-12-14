@@ -15,7 +15,8 @@
 			<view class="navbar-btn">
 				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
 
-				<text class="txt" @click="addIncome">添加房间</text>
+				<text class="txt" @click="addFm">添加收入</text>
+				
 
 			</view>
 		</template>
@@ -23,40 +24,57 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
+	       <view class="info-area">
+	          <view class="item">
+	            <view><text class="label-text" style="color:#4e5969;font-size: 16px;">总计</text></view>
+	            <view class="num-area"><text class="num" style="color: #00b42a;">￥23455</text></view>
+	          </view>
+	          <view class="item">
+	            <view><text class="label-text" style="color:#f53f3f;font-size: 16px;">房费</text></view>
+	            <view class="num-area"><text class="num" style="color:#f53f3f">￥6655</text></view>
+	          </view>
+	          <view class="item">
+	            <view><text class="label-text" style="color:#4e5969;font-size: 16px;">其它</text></view>
+	            <view class="num-area"><text class="num" style="color:#165dff">￥4433</text></view>
+	          </view>
+	        </view>
 		<view class="search-area">
-
 			<view class="card">
 				<view class="card-item title-area">
-					<text class="txt">房间筛选{{_search_key}}</text>
-					<l-tag variant="light">共111单</l-tag>
-					<!-- <rice-tag color="#6b7280" type="primary" text="共29间" /> -->
+					<text class="txt">收入筛选</text>
+					<l-tag variant="light">共{{filterRoomList.length}}间</l-tag>
 				</view>
 				<view class="card-item  select-area">
-					<xt-select :columns="columns" @selectAction="selectRoomType" placeholder="搜索收入名称"
-						@searchInputChange="searchInputChange"></xt-select>
+					<fmSearchComponent :columns="columns" @selectAction="selectFm" placeholder="搜索收入名称"
+						></fmSearchComponent>
 				</view>
 				<view class="card-item search"></view>
 			</view>
 
 		</view>
 		<view class="card-list">
-			<template v-for="roomType of filterRoomTypeList">
-				<view class="card-list-item" v-for="room of filterRoomList(roomType.roomList)">
+			<!-- <template v-for="roomType of filterRoomTypeList"> -->
+				<view class="card-list-item" v-for="fm of FMList">
 					<view class="card">
 						<view class="card-item title">
-							<text class="txt">{{room.room_name}}</text>
+							<text>类型：</text> <text class="txt">{{fm.type.text}}</text>
 						</view>
 						<view class="card-item subtitle">
-							<text class="txt">
-								{{roomType.name}}
+							<text>金额：</text><text class="txt">
+								{{fm.amount}}
+							</text>
+						</view>
+						<view class="card-item subtitle">
+							<text>备注：</text><text class="txt">
+								{{fm.mark}}
 							</text>
 						</view>
 						<view class="card-item">
-							<xt-control @del="deleteRoom(room)" @edit="editRoom(room)" :show-view="false"></xt-control>
+							<xt-control @del="deleteFm(fm)" @edit="editFm(fm)" :show-view="false"></xt-control>
 						</view>
 					</view>
 				</view>
-			</template>
+			<!-- </template> -->
 		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
@@ -69,10 +87,12 @@
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { FMService } from "@/services/FMService";
 	import { roomBean } from '@/bean/roomBean';
+	import { FMBean } from '@/bean/FMBean';
 	import { state } from "@/store/store";
-	import { roomTypeService } from "@/services/roomTypeService";
 	import { comFunction } from "@/pages/index/ComFuc";
+	import fmSearchComponent from "../components/fmSearchComponent/fmSearchComponent.uvue"
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -90,52 +110,42 @@
 	let _select_id = ref("all");
 	let _search_key = ref("");
 	const columns = computed<Array<Array<PickerOption>>>(() => {
-		if (roomTypeList.value == null) {
-			return []
-		}
-		let result:Array<Array<PickerOption>>=[];
-		let list:Array<PickerOption>=[];
-		roomTypeList.value.forEach(item=>{
-			list.push({ text: item.name, value: item._id } as PickerOption);
-		});
-		result.push(list);
+		let result:Array<Array<PickerOption>>=[[
+			 { text: '收入', value: 'income' },
+			{ text: '支出', value: 'expense' }
+		]];
 		return result;
 	});
-	let filterRoomTypeList = computed<Array<roomTypeBean>>(() => {
-		if (roomTypeList.value == null) {
-			return [];
-		}
-		if (_select_id.value == "all") {
-			return roomTypeList.value ??[];
 
-		}	
-			let list = roomTypeList.value.filter(item => item._id == _select_id.value);
-			return list;	
-		
+	let filterRoomList = computed<Array<roomBean>>(() => {
+		if(roomTypeList.value==null){
+			return []
+		}
+		let roomList:Array<roomBean>=[];
+		roomTypeList.value.forEach(item=>{
+			if(_select_id.value=="all"||_select_id.value==item._id){
+				item.roomList.forEach(it=>{
+					if(it.room_name.includes(_search_key.value)){
+						roomList.push(it);
+					}
+					
+				})
+			}
+			
+		});
+		return roomList;
 	});
-	const filterRoomList = (roomList : Array<roomBean>) : Array<roomBean> => {
-		return roomList.filter(item=>item.room_name.includes(_search_key.value));		
+	const FMList = ref([])
+	const  getFm= async(type:string)=>{
+		const st=new Date("2023-01-01").getTime();
+		const ed=new Date("2025-10-01").getTime();
+	const list:Array<FMBean>=	await FMService.getIncomeAndExpensesDateBySearch(hotel_id.value,"income",st,ed);
+	FMList.value=list;
 	}
-	const searchInputChange = (value : string) => {
-		_search_key.value = value;
+	const selectFm = (val : string) => {
+		
 	}
-	const selectRoomType = (val : string) => {
-		if (_select_id.value == val) {
-			return;
-		}
-		_select_id.value = val;
-	}
-	const getRoomNum = computed<number>(() => {
-		let num = 0;
-		if (filterRoomTypeList.value != null) {
-			filterRoomTypeList.value.forEach(item => {
-				num += item.roomList.length;
-			})
-		}
-		return num;
-
-	})
-	const addIncome = async () => {
+	const addFm = async () => {
 		if (!permissionList.value.includes(
 			"ROOMTYPE_CREATE"
 		)) {
@@ -160,7 +170,7 @@
 			url: `/pages/hotelManage/createRoom/createRoom`
 		});
 	}
-	const deleteRoom = async (room : roomBean) => {
+	const deleteFm = async (room : roomBean) => {
 		if (submitLoading.value == true) {
 			return;
 		}
@@ -183,8 +193,8 @@
 			message: "删除后将无法恢复，确认删除吗？",
 			beforeClose: async () : Promise<boolean> => {
 				try {
-					await roomTypeService.deleteRoom(room._id);
-					await comFunction.getRoomTypeList(hotel_id.value);
+					//await roomTypeService.deleteFm(room._id);
+					//await comFunction.getRoomTypeList(hotel_id.value);
 					hideDialog();
 					uni.showToast({
 						title: "删除成功",
@@ -206,7 +216,7 @@
 
 		});
 	}
-	const editRoom = async (room : roomBean) => {
+	const editFm = async (room : roomBean) => {
 		if (!permissionList.value.includes(
 			"ROOMTYPE_UPDATE"
 		)) {
@@ -221,9 +231,50 @@
 			return;
 		}
 	}
+	getFm();
 </script>
 
 <style lang="scss">
+	.info-area {
+	  padding: 18px;
+	  color: #6a6a6a;
+	  font-size: 12px;
+	  display: flex;
+	  flex-direction: row;
+	  align-items: center;
+	  display: flex;
+	  box-sizing: border-box;
+	  justify-content: space-between;
+	
+	  .item {
+	    background-color: #fff;
+	    border-radius: 8px;
+	    width: 110px;
+		margin-left: 12px;
+		flex: 1;
+	    box-sizing: border-box;
+	    padding: 12px;
+	    display: flex;
+	    flex-direction: column;
+	    justify-content: space-between;
+	    color: #fff;
+		&:first-child{
+			margin-left: 0;
+		}
+		.label-text{
+			line-height: 24px;
+		}
+	    .num-area {
+	      text-align: center;
+		  margin-top: 4px;
+	      .num {
+	        font-weight: 700;
+	        font-size: 18px;
+			line-height: 28px;
+	      }
+	    }
+	  }
+	}
 	.search-area {
 		padding: 18px;
 
@@ -264,10 +315,7 @@
 			min-width: 360px;
 			padding: 15px;
 			flex: 1;
-
 			.card {
-
-
 				background-color: #fff;
 				border-radius: 12px;
 				padding: 16px;

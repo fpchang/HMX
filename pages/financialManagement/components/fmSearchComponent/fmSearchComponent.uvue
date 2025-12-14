@@ -1,0 +1,162 @@
+<template>
+	<view class="fm-search">
+		<view class="select-item">
+			<view class="select" :style="{'overflow':show?'visible':'hidden'}">
+				<view class="content" @click="showSelect">
+					<text class="txt">{{text_val}}</text>
+					<image src="/static/icons/arrow-down.png" style="width: 16px;height:16px"></image>
+				</view>
+			</view>
+		</view>
+		<view class="select-item">
+			<view class="select" :style="{'overflow':show?'visible':'hidden'}">
+				<view class="content" @click="showCalendarEvent">
+					<text class="txt">{{dateRange.join(" ~ ") }}</text>
+					<image src="/static/icons/calendar.png" style="width: 16px;height:16px"></image>
+				</view>
+			</view>
+		</view>
+		<view class="select-item">
+			<view class="select">
+				<rice-search v-model="keystr" input-color="#fff" :clearable="false" :placeholder="placeholder"
+					:custom-style="{'padding':0}" @search="searchEvent" @clickLeftIcon="searchEvent"
+					@input="searchInputChange" @clickAction="searchEvent" show-action left-icon=""action-color="#1e88e5"/>
+			</view>
+		</view>
+		<rice-picker   v-model:show="showPicker" :columns="columns" @confirm="onColumnsConfirm"></rice-picker>
+		<rice-calendar v-model:show="showCalendar" mode="range" :date="dateRange" @confirm="rangeConfirm"></rice-calendar>
+	</view>
+</template>
+
+<script setup>
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	//selectAction下拉 选择
+	//searchAction input点击搜索
+	//searchInputChange 输入框变化
+	const emit = defineEmits(['selectAction', "searchAction", "searchInputChange"]);
+	const props = defineProps({
+		// columns: {
+		// 	type: Array<Array<PickerOption>>,
+		// 	default: []
+		// },
+		placeholder: {
+			type: String,
+			default: "请输入关键字"
+		}
+	});
+	const columns = ref<PickerOption[][]>([
+	  [
+	    { text: '收入', value: 'income' },
+	    { text: '支出', value: 'expense' }
+	  ]
+	])
+	const attrs = useAttrs();
+	let showPicker = ref(false);
+	let showCalendar = ref(false);
+	let text_val =ref("请选择");
+	let keystr=ref("");
+	text_val.value = columns.value[0][0]['text'] as string;
+	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"])
+
+	const showSelect = () => {
+		showPicker.value = !showPicker.value;
+	}
+	const showCalendarEvent = () => {
+		showCalendar.value = !showCalendar.value;
+	}
+	
+
+	const searchEvent = (value : string) => {
+		emit("searchAction", value);
+	}
+	const searchInputChange = (value : string) => {
+		emit("searchInputChange", value);
+	}
+	const rangeConfirm = (e : string[]) => {
+		console.log('rangeConfirm', e)
+		// let val: string = e.selectedValues[0] as string
+		// let index: number = e.selectedIndex[0] as number
+		// text_val.value = props.columns[0][index]['text'] as string
+		// emit("selectAction",val);
+		dateRange.value = e;
+	}
+	const onColumnsConfirm = (e:PickerEvent) => {
+		console.log('PickerEvent', e)
+		let val: string = e.selectedValues[0] as string
+		let index: number = e.selectedIndex[0] as number
+		text_val.value = props.columns[0][index]['text'] as string
+		emit("selectAction",val);
+	}
+</script>
+
+<style lang="scss" scoped>
+	.fm-search {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		flex-wrap: wrap;
+
+		.select-item {
+			margin-bottom: 12px;
+			min-width: 300px;
+			padding: 0 15px;
+
+			flex: 1;
+		}
+
+		.select {
+
+			position: relative;
+			border: 1px solid #eee;
+			box-sizing: border-box;
+			overflow: visible;
+			padding-right:8px;
+			.content {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				height: 36px;
+				padding: 0 8px;
+				overflow: visible;
+
+				.txt {
+					line-height: 36px;
+				}
+			}
+
+			.select-panal {
+				overflow: visible;
+				width: 100%;
+				position: relative;
+				top: 40px;
+				left: 0;
+
+				.select-list {
+					overflow: visible;
+					background-color: #fff;
+				}
+			}
+		}
+
+	}
+
+	.center-panal {
+		padding: 16px;
+		border-radius: 8px;
+		background-color: #f1f1f1;
+
+		.select-list {
+			min-width: 250px;
+
+			.select-list-item {
+				padding: 8px;
+
+				.txt {
+					color: #eee
+				}
+			}
+		}
+	}
+</style>

@@ -161,7 +161,19 @@ function S3(list,history){
 	let count4 = compare(list,history.slice(history.length-4));
 	let count5 = compare(list,history.slice(history.length-5));
 	let count7 = compare(list,history.slice(history.length-7));
-	if(count5==0&&count7<3){
+	if(count3==0){
+		
+		return true;
+	}
+	return false;
+}
+function S4(list,history){
+	let count2 = compare(list,history.slice(history.length-2));
+	let count3 = compare(list,history.slice(history.length-3));
+	let count4 = compare(list,history.slice(history.length-4));
+	let count5 = compare(list,history.slice(history.length-5));
+	let count7 = compare(list,history.slice(history.length-7));
+	if(count4==6){
 		
 		return true;
 	}
@@ -194,22 +206,22 @@ function caculate(fn,n=20){
 //let flag = S1([ 8, 10, 14, 23, 28, 32 ],history);
 //console.log(flag);
 //将2024年双色球61到90期开奖结束整理成json格式，要全部开奖数据升序排列，生成附件
-sameHistory(1,history);
-sameHistory(2,history);
-sameHistory(3,history);
-sameHistory(4,history);
-sameHistory(5,history);
-sameHistory(6,history);
-sameHistory(7,history);
-sameHistory(8,history);
-sameHistory(9,history);
-sameHistory(10,history);
-sameHistory(11,history);
-
-// const c4=getGroupList(history.slice(history.length-4));
-// const c5=getGroupList(history.slice(history.length-5));
-// const c6=getGroupList(history.slice(history.length-6));
-// console.log(new Set(c4),new Set(c5),new Set(c6));
+// sameHistory(1,history);
+// sameHistory(2,history);
+// sameHistory(3,history);
+// sameHistory(4,history);
+// sameHistory(5,history);
+// sameHistory(6,history);
+// sameHistory(7,history);
+// sameHistory(8,history);
+// sameHistory(9,history);
+// sameHistory(10,history);
+// sameHistory(11,history);
+const c3=getGroupList(history.slice(history.length-3));
+const c4=getGroupList(history.slice(history.length-4));
+//const c5=getGroupList(history.slice(history.length-5));
+//const c6=getGroupList(history.slice(history.length-6));
+console.log("c3",new Set(c3),"c4",new Set(c4));
 
 // const list=caculate(S1,18);
 // console.log(list);

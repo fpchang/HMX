@@ -194,6 +194,9 @@ function caculate(fn,n=20){
 //let flag = S1([ 8, 10, 14, 23, 28, 32 ],history);
 //console.log(flag);
 //将2024年双色球61到90期开奖结束整理成json格式，要全部开奖数据升序排列，生成附件
+sameHistory(1,history);
+sameHistory(2,history);
+sameHistory(3,history);
 sameHistory(4,history);
 sameHistory(5,history);
 sameHistory(6,history);
@@ -203,14 +206,14 @@ sameHistory(9,history);
 sameHistory(10,history);
 sameHistory(11,history);
 
-const c4=getGroupList(history.slice(history.length-4));
-const c5=getGroupList(history.slice(history.length-5));
-const c6=getGroupList(history.slice(history.length-6));
-console.log(new Set(c4),new Set(c5),new Set(c6));
+// const c4=getGroupList(history.slice(history.length-4));
+// const c5=getGroupList(history.slice(history.length-5));
+// const c6=getGroupList(history.slice(history.length-6));
+// console.log(new Set(c4),new Set(c5),new Set(c6));
 
-const list=caculate(S1,18);
-console.log(list);
-console.log(S1_stat(list));
+// const list=caculate(S1,18);
+// console.log(list);
+// console.log(S1_stat(list));
 //[6,7,15,16,20,25,26,28,31]
 //[6,16,20,25,28,31]
 //[6,16,20,25,28,31] [6,7,15,16,26,31] [7,15,20,25,26,28]

@@ -99,7 +99,6 @@
 
 		.select-item {
 			margin-bottom: 12px;
-			max-width: 350px;
 			min-width: 300px;
 			padding: 0 15px;
 

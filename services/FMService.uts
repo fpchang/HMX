@@ -1,6 +1,7 @@
 import{DB} from '../api/DB';
-import { FMBean, FMTypeConfigBean } from '@/bean/FMBean';
+import { FMBean, FMTypeConfigBean,FMDataListResult} from '@/bean/FMBean';
 import { dayuts } from '@/uni_modules/lime-dayuts';
+import {TIME,MOONTH_START_END_TIMESTAMP} from "@/static/utils/TIME";
 class FMServiceClass{
 	constructor(){
        // this.DB=DB;
@@ -14,20 +15,31 @@ class FMServiceClass{
 	
 	
 	//获取收入与支出分类
-	async getIncomeAndExpensesDateBySearch(hotel_id:string,billType:string='income',st:number,et:number):Promise<Array<FMBean>>{
+	async getIncomeAndExpensesDateBySearch(hotel_id:string,billType:string,dateRange:string[] | null,pageNo:number,pageSize:number):Promise<FMDataListResult>{
 	  const db = uniCloud.databaseForJQL();
 	  const dbCmd = db.command;
+	  let st:number=TIME.getCurrentMonthFirst(new Date());
+	  let et:number=TIME.getCurrentMonthLast(new Date());
+	  if(dateRange!=null&&dateRange.length==2){
+		  st=TIME.startTime(new Date(dateRange[0]));
+		  et=TIME.endTime(new Date(dateRange[1]));
+	  }
+	
 	  const w = {
 	    hotel_id:hotel_id,
-	    billType:billType,
+	    billType:billType=='all'?dbCmd.neq(''):billType,
 	    ioeTime:dbCmd.and(dbCmd.gte(st),dbCmd.lte(et))
 	  }
+	 
+	 
 		let FMList:Array<FMBean>=[];
-		const main=  db.collection("hm-incomeAndExpenses").where(w).orderBy("ioeTime desc").getTemp();
+		let skipnum:number =Math.max((pageNo-1)*pageSize,0);
+		 console.log("过滤条件",w,st,et,pageNo,pageSize,skipnum);
+		const main=  db.collection("hm-incomeAndExpenses").where(w).orderBy("ioeTime desc").skip(skipnum).limit(pageSize).getTemp();
 		const config=  db.collection("hm-incomeAndExpensesConfig").getTemp();
 		try{
-			const res =await db.collection(main,config).get();
-			console.log("fmm",res);
+			const res =await db.collection(main,config).get({ getCount:true});
+			console.log("fmm",res,res['count'] as number);
 			const data = res['data'] as Array<UTSJSONObject>;
 		
 			if(data !=null){
@@ -42,25 +54,33 @@ class FMServiceClass{
 							name:item.getString("name")??"",
 							text:item.getString("text")??"",
 						}
+						FMList.push({
+							_id: item.getString("_id")??"",
+							amount: item.getNumber("amount")??0,
+							billType:  item.getString("billType")??"",
+							createTime: item.getNumber("amount")??0,,
+							creater:  item.getString("createTime")??"",
+							data_status: item.getNumber("data_status"),,
+							hotel_id:item.getString("hotel_id")??"",
+							ioeTime: item.getNumber("ioeTime")??0,,
+							mark:item.getString("mark")??"",
+							type:typeObj,
+							unit:item.getString("unit")??""
+						})
 					}
-					FMList.push({
-						_id: item.getString("_id")??"",
-						amount: item.getNumber("amount")??0,
-						billType:  item.getString("billType")??"",
-						createTime: item.getNumber("amount")??0,,
-						creater:  item.getString("createTime")??"",
-						data_status: item.getNumber("data_status"),,
-						hotel_id:item.getString("hotel_id")??"",
-						ioeTime: item.getNumber("ioeTime")??0,,
-						mark:item.getString("mark")??"",
-						type:typeObj,
-						unit:item.getString("unit")??""
-					})
+				
 				})
+				
 			}
-			return FMList;
+			let fMDataListResult:FMDataListResult={
+					  count:res['count'] as number,//总数量
+					  pageNo:pageNo??1,//当前页码
+					  pageSize:pageSize??20,//每页数量
+					  fmList:FMList
+			}
+			return fMDataListResult;
 		}catch(e){
-			throw new Error("获取收支列表失败");
+			throw new Error("获取收支列表失败",e);
 		}
 	
 	  

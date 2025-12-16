@@ -632,4 +632,7 @@ $border-color-4: $gray-6;//#{getSolidColor(#000, 12%)}; //$gray-6; // 重/按钮
 	
 	// fit-swiper
 	--l-fit-swiper-indicator-color: #{$gray-5};
+	
+	// skeleton
+	--l-skeleton-bg-color: #{$fill-2}
 }

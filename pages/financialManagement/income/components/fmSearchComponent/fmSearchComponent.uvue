@@ -1,12 +1,21 @@
 <template>
 	<view class="fm-search">
 		<view class="select-item">
-			<view class="select" :style="{'overflow':show?'visible':'hidden'}">
+			<!-- <view class="select" :style="{'overflow':show?'visible':'hidden'}">
 				<view class="content" @click="showSelect">
 					<text class="txt">{{text_val}}</text>
 					<image src="/static/icons/arrow-down.png" style="width: 16px;height:16px"></image>
 				</view>
+			</view> -->
+			<view style="display: flex;flex-direction: row;align-items: center;">
+				<view style="width: 50px;margin-right: 8px;"><rice-button :type="billType=='all'?'primary':'info'" size="small"
+						text="全部" @click="checkBillType('all')"></rice-button></view>
+				<view style="width: 50px;margin-right: 8px"><rice-button :type="billType=='income'?'primary':'info'" size="small"
+						text="收入"  @click="checkBillType('income')"></rice-button></view>
+				<view style="width: 50px;">
+					<rice-button size="small" :type="billType=='expenses'?'primary':'info'" text="支出"  @click="checkBillType('expenses')"></rice-button></view>
 			</view>
+
 		</view>
 		<view class="select-item">
 			<view class="select" :style="{'overflow':show?'visible':'hidden'}">
@@ -20,17 +29,21 @@
 			<view class="select">
 				<rice-search v-model="keystr" input-color="#fff" :clearable="false" :placeholder="placeholder"
 					:custom-style="{'padding':0}" @search="searchEvent" @clickLeftIcon="searchEvent"
-					@input="searchInputChange" @clickAction="searchEvent" show-action left-icon=""action-color="#1e88e5"/>
+					@input="searchInputChange" @clickAction="searchEvent" show-action left-icon=""
+					action-color="#1e88e5" />
 			</view>
 		</view>
-		<rice-picker   v-model:show="showPicker" :columns="columns" @confirm="onColumnsConfirm"></rice-picker>
-		<rice-calendar v-model:show="showCalendar" mode="range" :date="dateRange" @confirm="rangeConfirm"></rice-calendar>
+		<rice-picker v-model:show="showPicker" :columns="columns" @confirm="onColumnsConfirm"></rice-picker>
+		<rice-calendar v-model:show="showCalendar" mode="range" :date="dateRange"
+			@confirm="rangeConfirm"></rice-calendar>
 	</view>
 </template>
 
 <script setup>
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import {TIME,MOONTH_START_END_TIMESTAMP} from "@/static/utils/TIME";
 	//selectAction下拉 选择
 	//searchAction input点击搜索
 	//searchInputChange 输入框变化
@@ -46,29 +59,36 @@
 		}
 	});
 	const columns = ref<PickerOption[][]>([
-	  [
-	    { text: '收入', value: 'income' },
-	    { text: '支出', value: 'expense' }
-	  ]
+		[
+			{ text: '收入', value: 'income' },
+			{ text: '支出', value: 'expense' }
+		]
 	])
 	const attrs = useAttrs();
 	let showPicker = ref(false);
 	let showCalendar = ref(false);
-	let text_val =ref("请选择");
-	let keystr=ref("");
+	const billType=ref("all");
+	let text_val = ref("请选择");
+	let keystr = ref("");
 	text_val.value = columns.value[0][0]['text'] as string;
-	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"])
-
+	let s =dayuts(TIME.getCurrentMonthFirst()).format("YYYY-MM-DD");
+	let e =dayuts(TIME.getCurrentMonthLast()).format("YYYY-MM-DD");
+	const dateRange = ref<string[]>([s, e]);
+	const checkBillType=(id:string)=>{
+		billType.value=id;
+		emit("selectAction",id);
+	}
 	const showSelect = () => {
 		showPicker.value = !showPicker.value;
 	}
 	const showCalendarEvent = () => {
 		showCalendar.value = !showCalendar.value;
 	}
-	
 
-	const searchEvent = (value : string) => {
-		emit("searchAction", value);
+
+	const searchEvent = () => {
+		console.log(keystr.value,billType.value,dateRange.value);
+		emit("searchAction", billType.value,dateRange.value,keystr.value);
 	}
 	const searchInputChange = (value : string) => {
 		emit("searchInputChange", value);
@@ -81,12 +101,12 @@
 		// emit("selectAction",val);
 		dateRange.value = e;
 	}
-	const onColumnsConfirm = (e:PickerEvent) => {
+	const onColumnsConfirm = (e : PickerEvent) => {
 		console.log('PickerEvent', e)
-		let val: string = e.selectedValues[0] as string
-		let index: number = e.selectedIndex[0] as number
+		let val : string = e.selectedValues[0] as string
+		let index : number = e.selectedIndex[0] as number
 		text_val.value = props.columns[0][index]['text'] as string
-		emit("selectAction",val);
+		emit("selectAction", val);
 	}
 </script>
 
@@ -111,7 +131,8 @@
 			border: 1px solid #eee;
 			box-sizing: border-box;
 			overflow: visible;
-			padding-right:8px;
+			padding-right: 8px;
+
 			.content {
 				display: flex;
 				flex-direction: row;

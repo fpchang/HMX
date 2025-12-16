@@ -27,13 +27,14 @@ export function cssToObj(css : string | UTSJSONObject | null) : UTSJSONObject {
 		if(res.length > 1) {
 			const [prop, val] = res;
 			if (prop != '' && val != '') {
-				const camelProp = prop!.replace(/-([a-z])/g, (_a: string, b: string, _c: number, _d: string):string => {
+				const camelProp = prop!.replace(/-([a-z])/g, (_a: string|null, b: string, _c: number, _d: string):string => {
 					return b.toUpperCase()
 				});
 				style[camelProp] = val!;
 			}
 		}
 		// #endif
+		
 		// #ifndef APP-ANDROID
 		const [prop, val] = decl.split(':').map(s => s.trim());
 		if (prop && val) {

@@ -16,7 +16,7 @@
 				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
 
 				<text class="txt" @click="addFm">添加收入</text>
-				
+
 
 			</view>
 		</template>
@@ -24,20 +24,8 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-	       <view class="info-area">
-	          <view class="item">
-	            <view><text class="label-text" style="color:#4e5969;font-size: 16px;">总计</text></view>
-	            <view class="num-area"><text class="num" style="color: #00b42a;">￥23455</text></view>
-	          </view>
-	          <view class="item">
-	            <view><text class="label-text" style="color:#f53f3f;font-size: 16px;">房费</text></view>
-	            <view class="num-area"><text class="num" style="color:#f53f3f">￥6655</text></view>
-	          </view>
-	          <view class="item">
-	            <view><text class="label-text" style="color:#4e5969;font-size: 16px;">其它</text></view>
-	            <view class="num-area"><text class="num" style="color:#165dff">￥4433</text></view>
-	          </view>
-	        </view>
+		<incomeInfoCardComponent v-if="billType=='income'"></incomeInfoCardComponent>
+		<expensesInfoCardComponent v-if="billType=='expenses'"></expensesInfoCardComponent>
 		<view class="search-area">
 			<view class="card">
 				<view class="card-item title-area">
@@ -45,8 +33,8 @@
 					<l-tag variant="light">共{{filterRoomList.length}}间</l-tag>
 				</view>
 				<view class="card-item  select-area">
-					<fmSearchComponent :columns="columns" @selectAction="selectFm" placeholder="搜索收入名称"
-						></fmSearchComponent>
+					<fmSearchComponent :columns="columns" @selectAction="selectFm" @searchAction="getFmList"
+						placeholder="搜索收入名称"></fmSearchComponent>
 				</view>
 				<view class="card-item search"></view>
 			</view>
@@ -54,45 +42,52 @@
 		</view>
 		<view class="card-list">
 			<!-- <template v-for="roomType of filterRoomTypeList"> -->
-				<view class="card-list-item" v-for="fm of FMList">
-					<view class="card">
-						<view class="card-item title">
-							<text>类型：</text> <text class="txt">{{fm.type.text}}</text>
-						</view>
-						<view class="card-item subtitle">
-							<text>金额：</text><text class="txt">
-								{{fm.amount}}
-							</text>
-						</view>
-						<view class="card-item subtitle">
-							<text>备注：</text><text class="txt">
-								{{fm.mark}}
-							</text>
-						</view>
-						<view class="card-item">
-							<xt-control @del="deleteFm(fm)" @edit="editFm(fm)" :show-view="false"></xt-control>
-						</view>
+			<view class="card-list-item" v-for="fm of fmResult?.fmList">
+				<view class="card">
+					<view class="card-item title">
+						<text>类型：</text> <text class="txt">{{fm.type.text}}</text>
+					</view>
+					<view class="card-item subtitle">
+						<text>金额：</text><text class="txt">
+							{{fm.amount}}
+						</text>
+					</view>
+					<view class="card-item subtitle">
+						<text>备注：</text><text class="txt">
+							{{fm.mark}}
+						</text>
+					</view>
+					<view class="card-item">
+						<xt-control @del="deleteFm(fm)" @edit="editFm(fm)" :show-view="false"></xt-control>
 					</view>
 				</view>
+			</view>
 			<!-- </template> -->
 		</view>
+		
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
-
+	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"> 
+		<l-pagination v-model="currentPage" :total="fmResult?.count" :page-size="fmResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" />
+	</view>
 </template>
 
 <script setup>
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import {TIME,MOONTH_START_END_TIMESTAMP} from "@/static/utils/TIME";
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { FMService } from "@/services/FMService";
 	import { roomBean } from '@/bean/roomBean';
-	import { FMBean } from '@/bean/FMBean';
+	import { FMBean,FMDataListResult } from '@/bean/FMBean';
 	import { state } from "@/store/store";
 	import { comFunction } from "@/pages/index/ComFuc";
-	import fmSearchComponent from "../components/fmSearchComponent/fmSearchComponent.uvue"
+	import fmSearchComponent from "./components/fmSearchComponent/fmSearchComponent";
+	import expensesInfoCardComponent from "./components/expensesInfoCardComponent/expensesInfoCardComponent";
+	import incomeInfoCardComponent from "./components/incomeInfoCardComponent/incomeInfoCardComponent";
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -102,48 +97,55 @@
 	});
 	const permissionList = computed(() => {
 		return state.permissionList;
-	});
+	})
+	const currentPage=ref(1);
 	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
 		return state.roomTypeList;
 	});
 	//选择列表
 	let _select_id = ref("all");
 	let _search_key = ref("");
+	const billType = ref("all");
+	const keystr=ref("");//过滤字段
 	const columns = computed<Array<Array<PickerOption>>>(() => {
-		let result:Array<Array<PickerOption>>=[[
-			 { text: '收入', value: 'income' },
+		let result : Array<Array<PickerOption>> = [[
+			{ text: '收入', value: 'income' },
 			{ text: '支出', value: 'expense' }
 		]];
 		return result;
 	});
 
 	let filterRoomList = computed<Array<roomBean>>(() => {
-		if(roomTypeList.value==null){
+		if (roomTypeList.value == null) {
 			return []
 		}
-		let roomList:Array<roomBean>=[];
-		roomTypeList.value.forEach(item=>{
-			if(_select_id.value=="all"||_select_id.value==item._id){
-				item.roomList.forEach(it=>{
-					if(it.room_name.includes(_search_key.value)){
+		let roomList : Array<roomBean> = [];
+		roomTypeList.value.forEach(item => {
+			if (_select_id.value == "all" || _select_id.value == item._id) {
+				item.roomList.forEach(it => {
+					if (it.room_name.includes(_search_key.value)) {
 						roomList.push(it);
 					}
-					
+
 				})
 			}
-			
+
 		});
 		return roomList;
 	});
-	const FMList = ref([])
-	const  getFm= async(type:string)=>{
-		const st=new Date("2023-01-01").getTime();
-		const ed=new Date("2025-10-01").getTime();
-	const list:Array<FMBean>=	await FMService.getIncomeAndExpensesDateBySearch(hotel_id.value,"income",st,ed);
-	FMList.value=list;
+	const fmResult = ref<FMDataListResult>({
+		count:1,//总数量
+		pageNo:1,//当前页码
+		pageSize:20,//每页数量
+		fmList:[]//列表
+	})
+	const getFmList = async (billType : string, dateRange : string[] |null, keystr : string,pageNo:number,pageSize:number) => {
+		console.log("getFmList");
+		const fmr : FMDataListResult = await FMService.getIncomeAndExpensesDateBySearch(hotel_id.value, billType, dateRange,pageNo,pageSize);
+		fmResult.value= fmr;
 	}
-	const selectFm = (val : string) => {
-		
+	const selectFm = (bt : string) => {
+		billType.value = bt;
 	}
 	const addFm = async () => {
 		if (!permissionList.value.includes(
@@ -231,50 +233,59 @@
 			return;
 		}
 	}
-	getFm();
+	const init = ()=>{
+		let d:MOONTH_START_END_TIMESTAMP=TIME.getTodayStartTimeAndEndTime(new Date());
+		getFmList("income", null, "",fmResult.value.pageNo,fmResult.value.pageSize);
+	}
+	
 </script>
 
 <style lang="scss">
 	.info-area {
-	  padding: 18px;
-	  color: #6a6a6a;
-	  font-size: 12px;
-	  display: flex;
-	  flex-direction: row;
-	  align-items: center;
-	  display: flex;
-	  box-sizing: border-box;
-	  justify-content: space-between;
-	
-	  .item {
-	    background-color: #fff;
-	    border-radius: 8px;
-	    width: 110px;
-		margin-left: 12px;
-		flex: 1;
-	    box-sizing: border-box;
-	    padding: 12px;
-	    display: flex;
-	    flex-direction: column;
-	    justify-content: space-between;
-	    color: #fff;
-		&:first-child{
-			margin-left: 0;
+		padding: 18px;
+		color: #6a6a6a;
+		font-size: 12px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		display: flex;
+		box-sizing: border-box;
+		justify-content: space-between;
+
+		.item {
+			background-color: #fff;
+			border-radius: 8px;
+			width: 110px;
+			margin-left: 12px;
+			flex: 1;
+			box-sizing: border-box;
+			padding: 12px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			color: #fff;
+
+			&:first-child {
+				margin-left: 0;
+			}
+
+			.label-text {
+				line-height: 24px;
+			}
+
+			.num-area {
+				text-align: center;
+				margin-top: 4px;
+
+				.num {
+					font-weight: 700;
+					font-size: 18px;
+					line-height: 28px;
+				}
+			}
 		}
-		.label-text{
-			line-height: 24px;
-		}
-	    .num-area {
-	      text-align: center;
-		  margin-top: 4px;
-	      .num {
-	        font-weight: 700;
-	        font-size: 18px;
-			line-height: 28px;
-	      }
-	    }
-	  }
 	}
+
 	.search-area {
 		padding: 18px;
 
@@ -315,6 +326,7 @@
 			min-width: 360px;
 			padding: 15px;
 			flex: 1;
+
 			.card {
 				background-color: #fff;
 				border-radius: 12px;

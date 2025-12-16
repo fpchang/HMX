@@ -18,3 +18,10 @@ export type FMBean={
 	type: FMTypeConfigBean;
 	unit: string;
 }
+
+export type FMDataListResult={
+	count:number,//总数量
+	pageNo:number,//当前页码
+	pageSize:number,//每页数量
+	fmList:Array<FMBean>//列表
+}

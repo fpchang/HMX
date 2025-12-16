@@ -1,0 +1,80 @@
+<template>
+	<view>
+		<view class="info-area">
+		   <view class="item">
+		     <view class="title-area">
+				 <text class="label-text" style="color:#4e5969 ;font-size: 16px;">总计</text>
+				 <image  class="icon" src="/static/icons/fm/all.png"></image>
+				 </view>
+		     <view class="num-area"><text class="num" style="color: #f53f3f;">￥23455</text></view>
+		   </view>
+		   <view class="item">
+		     <view class="title-area"><text class="label-text" style="color:#4e5969;font-size: 16px;">房费</text>
+			 <image  class="icon" src="/static/icons/fm/room.png"></image></view>
+		     <view class="num-area"><text class="num" style="color: #00b42a">￥6655</text></view>
+		   </view>
+		   <view class="item">
+		     <view class="title-area"><text class="label-text" style="color:#4e5969;font-size: 16px;">其它</text>
+			 <image class="icon" src="/static/icons/fm/other.png"></image></view>
+		     <view class="num-area"><text class="num" style="color:#165dff">￥4433</text></view>
+		   </view>
+		 </view>
+	</view>
+</template>
+
+<script setup>
+	
+</script>
+
+<style lang="scss">
+.info-area {
+	  padding: 18px;
+	  color: #6a6a6a;
+	  font-size: 12px;
+	  display: flex;
+	  flex-direction: row;
+	  align-items: center;
+	  display: flex;
+	  box-sizing: border-box;
+	  justify-content: space-between;
+	
+	  .item {
+	    background-color: #fff;
+	    border-radius: 8px;
+	    width: 110px;
+		margin-left: 12px;
+		flex: 1;
+	    box-sizing: border-box;
+	    padding: 12px;
+	    display: flex;
+	    flex-direction: column;
+	    justify-content: space-between;
+	    color: #fff;
+		.title-area{
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			.icon{
+				width: 18px;
+				height: 18px;
+			}
+		}
+	
+		&:first-child{
+			margin-left: 0;
+		}
+		.label-text{
+			line-height: 24px;
+		}
+	    .num-area {
+	      text-align: center;
+		  margin-top: 4px;
+	      .num {
+	        font-weight: 700;
+	        font-size: 18px;
+			line-height: 28px;
+	      }
+	    }
+	  }
+	}
+</style>

@@ -1,3 +1,8 @@
+//根据日期获取月初开始与月末结束 timestamp
+ export type MOONTH_START_END_TIMESTAMP={
+	start:number,
+	end:number
+}
 class TimeClass{
     constructor(){}
     /**
@@ -25,11 +30,13 @@ class TimeClass{
        * @param {*} time 
        * @returns 
        */
-       getTodayStartTimeAndEndTime(time:Date):UTSJSONObject {
-        time = time != null ? time : new Date();
+	  
+       getTodayStartTimeAndEndTime(time:Date|string|number):MOONTH_START_END_TIMESTAMP {
+       // time = time != null ? time : new Date();
+	   let d = new Date(time);
         return {
-          startTime: new Date(time.setHours(0, 0, 0, 0)),
-          endTime: new Date(time.setHours(23, 59, 59, 999)),
+          start: d.setHours(0,0,0,0),
+          end:d.setHours(23,59,59,999),
         };
       }
       /**
@@ -58,7 +65,11 @@ class TimeClass{
        * @param {*} time 
        * @returns 
        */
-       getCurrentMonthFirst(date:Date=new Date()):number{
+       getCurrentMonthFirst(d:Date|number|string):number{
+		   if(d==null){
+		   			   d=new Date();
+		   }
+		   let date = new Date(d);
         date.setDate(1);
         return this.startTime(date);
       }
@@ -68,13 +79,17 @@ class TimeClass{
        * @memberof TIME
        */
       
-       getCurrentMonthLast(time:Date= new Date()):number{
-        const currentMonth = time.getMonth();
+       getCurrentMonthLast(d:Date|number|string):number{
+		   if(d==null){
+			   d=new Date();
+		   }
+		   let date = new Date(d);
+        const currentMonth = date.getMonth();
         const nextMonth = currentMonth + 1;
-        let nextMonthFirstDay:Date = new Date(time.getFullYear(), nextMonth, 1);
+        let nextMonthFirstDay:Date = new Date(date.getFullYear(), nextMonth, 1);
         let oneDay:number = 24 * 60 * 60 * 1000;
-		const d = new Date(nextMonthFirstDay.getTime() - oneDay)
-        return this.endTime(d);
+		const result = new Date(nextMonthFirstDay.getTime() - oneDay)
+        return this.endTime(result);
       }
       /**
        * 获取本年第一天

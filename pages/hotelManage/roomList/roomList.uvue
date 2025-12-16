@@ -145,9 +145,12 @@
 	// 	return num;
 
 	// })
-	const getRoomTypeName=(room_type_id:string)=>{
-		let obj:roomTypeBean = roomTypeList.value.find(item=>item._id == room_type_id);
-		return obj.name;
+	const getRoomTypeName=(room_type_id:string):string=>{
+		if( roomTypeList.value!=null){
+			let obj = roomTypeList.value.find(item=>item._id == room_type_id) as roomTypeBean;
+			return obj.name;
+		}
+		return "-"
 	}
 	const addRoom = async () => {
 		if (!permissionList.value.includes(

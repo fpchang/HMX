@@ -18,7 +18,7 @@
 
 		</view>
 		<view class="select-item">
-			<view class="select" :style="{'overflow':show?'visible':'hidden'}">
+			<view class="select">
 				<view class="content" @click="showCalendarEvent">
 					<text class="txt">{{dateRange.join(" ~ ") }}</text>
 					<image src="/static/icons/calendar.png" style="width: 16px;height:16px"></image>
@@ -33,7 +33,7 @@
 					action-color="#1e88e5" />
 			</view>
 		</view>
-		<rice-picker v-model:show="showPicker" :columns="columns" @confirm="onColumnsConfirm"></rice-picker>
+	<!-- 	<rice-picker v-model:show="showPicker" :columns="columns" @confirm="onColumnsConfirm"></rice-picker> -->
 		<rice-calendar v-model:show="showCalendar" mode="range" :date="dateRange"
 			@confirm="rangeConfirm"></rice-calendar>
 	</view>
@@ -43,7 +43,7 @@
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
-	import {TIME,MOONTH_START_END_TIMESTAMP} from "@/static/utils/TIME";
+	import {TIME,MOONTH_START_END_TIMESTAMP,getMonthDateArray} from "@/static/utils/TIME";
 	//selectAction下拉 选择
 	//searchAction input点击搜索
 	//searchInputChange 输入框变化
@@ -71,9 +71,9 @@
 	let text_val = ref("请选择");
 	let keystr = ref("");
 	text_val.value = columns.value[0][0]['text'] as string;
-	let s =dayuts(TIME.getCurrentMonthFirst()).format("YYYY-MM-DD");
-	let e =dayuts(TIME.getCurrentMonthLast()).format("YYYY-MM-DD");
-	const dateRange = ref<string[]>([s, e]);
+
+	const dateRange = ref<string[]>(getMonthDateArray());
+	//dateRange.value =getMonthDateArray()
 	const checkBillType=(id:string)=>{
 		billType.value=id;
 		emit("selectAction",id);
@@ -101,13 +101,13 @@
 		// emit("selectAction",val);
 		dateRange.value = e;
 	}
-	const onColumnsConfirm = (e : PickerEvent) => {
-		console.log('PickerEvent', e)
-		let val : string = e.selectedValues[0] as string
-		let index : number = e.selectedIndex[0] as number
-		text_val.value = props.columns[0][index]['text'] as string
-		emit("selectAction", val);
-	}
+	// const onColumnsConfirm = (e : PickerEvent) => {
+	// 	console.log('PickerEvent', e)
+	// 	let val : string = e.selectedValues[0] as string
+	// 	let index : number = e.selectedIndex[0] as number
+	// 	text_val.value = props.columns[0][index]['text'] as string
+	// 	emit("selectAction", val);
+	// }
 </script>
 
 <style lang="scss" scoped>

@@ -42,7 +42,7 @@
 		</view>
 		<view class="card-list">
 			<!-- <template v-for="roomType of filterRoomTypeList"> -->
-			<view class="card-list-item" v-for="fm of fmResult?.fmList">
+			<view class="card-list-item" v-for="fm of fmResult.fmList">
 				<view class="card">
 					<view class="card-item title">
 						<text>类型：</text> <text class="txt">{{fm.type.text}}</text>
@@ -76,7 +76,7 @@
 <script setup>
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
-	import {TIME,MOONTH_START_END_TIMESTAMP} from "@/static/utils/TIME";
+	import {TIME,getMonthDateArray} from "@/static/utils/TIME";
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
@@ -107,6 +107,7 @@
 	let _search_key = ref("");
 	const billType = ref("all");
 	const keystr=ref("");//过滤字段
+	const dateRange = ref<string[]>(getMonthDateArray());
 	const columns = computed<Array<Array<PickerOption>>>(() => {
 		let result : Array<Array<PickerOption>> = [[
 			{ text: '收入', value: 'income' },
@@ -139,10 +140,13 @@
 		pageSize:20,//每页数量
 		fmList:[]//列表
 	})
-	const getFmList = async (billType : string, dateRange : string[] |null, keystr : string,pageNo:number,pageSize:number) => {
-		console.log("getFmList");
-		const fmr : FMDataListResult = await FMService.getIncomeAndExpensesDateBySearch(hotel_id.value, billType, dateRange,pageNo,pageSize);
-		fmResult.value= fmr;
+	const getFmList = async (billType : string, dateRange : string[], keystr : string) => {
+		//console.log("getFmList",arguments);
+		// if(pageNo==null){
+		// 	pageNo=1;
+		// }
+		const fmr = await FMService.getIncomeAndExpensesDateBySearch(hotel_id.value, billType,dateRange, fmResult.value.pageNo,fmResult.value.pageSize);
+		fmResult.value= fmr as FMDataListResult;
 	}
 	const selectFm = (bt : string) => {
 		billType.value = bt;
@@ -172,7 +176,7 @@
 			url: `/pages/hotelManage/createRoom/createRoom`
 		});
 	}
-	const deleteFm = async (room : roomBean) => {
+	const deleteFm = async (fm : FMBean) => {
 		if (submitLoading.value == true) {
 			return;
 		}
@@ -218,7 +222,7 @@
 
 		});
 	}
-	const editFm = async (room : roomBean) => {
+	const editFm = async (fm : FMBean) => {
 		if (!permissionList.value.includes(
 			"ROOMTYPE_UPDATE"
 		)) {
@@ -234,8 +238,8 @@
 		}
 	}
 	const init = ()=>{
-		let d:MOONTH_START_END_TIMESTAMP=TIME.getTodayStartTimeAndEndTime(new Date());
-		getFmList("income", null, "",fmResult.value.pageNo,fmResult.value.pageSize);
+		//let d:MOONTH_START_END_TIMESTAMP=TIME.getTodayStartTimeAndEndTime(new Date());
+		getFmList("income",  dateRange.value,"");
 	}
 	
 </script>

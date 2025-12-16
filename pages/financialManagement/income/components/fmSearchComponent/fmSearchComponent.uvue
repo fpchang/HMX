@@ -47,7 +47,7 @@
 	//selectAction下拉 选择
 	//searchAction input点击搜索
 	//searchInputChange 输入框变化
-	const emit = defineEmits(['selectAction', "searchAction", "searchInputChange"]);
+	const emit = defineEmits(['selectAction', "searchAction", "searchInputChange","dateChange"]);
 	const props = defineProps({
 		// columns: {
 		// 	type: Array<Array<PickerOption>>,
@@ -98,7 +98,7 @@
 		// let val: string = e.selectedValues[0] as string
 		// let index: number = e.selectedIndex[0] as number
 		// text_val.value = props.columns[0][index]['text'] as string
-		// emit("selectAction",val);
+		 emit("dateChange",e);
 		dateRange.value = e;
 	}
 	// const onColumnsConfirm = (e : PickerEvent) => {

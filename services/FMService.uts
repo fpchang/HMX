@@ -1,263 +1,261 @@
-import{DB} from '../api/DB';
-import { FMBean, FMTypeConfigBean,FMDataListResult} from '@/bean/FMBean';
+import { DB } from '../api/DB';
+import { FMBean, FMTypeConfigBean, FMDataListResult } from '@/bean/FMBean';
 import { dayuts } from '@/uni_modules/lime-dayuts';
-import {TIME,MOONTH_START_END_TIMESTAMP} from "@/static/utils/TIME";
-class FMServiceClass{
-	constructor(){
-       // this.DB=DB;
-      //  this.validTokenRequest=null;
-    }
+import { TIME, MOONTH_START_END_TIMESTAMP } from "@/static/utils/TIME";
+class FMServiceClass {
+	constructor() {
+		// this.DB=DB;
+		//  this.validTokenRequest=null;
+	}
 
-  add(item: UTSJSONObject){
-    return DB.add("hm-incomeAndExpenses",item) ;
-  }
-	
-	
-	
+	add(item : UTSJSONObject) {
+		return DB.add("hm-incomeAndExpenses", item);
+	}
+
+
+
 	//获取收入与支出分类
-	async getIncomeAndExpensesDateBySearch(hotel_id:string,billType:string,dateRange:string[],pageNo:number,pageSize:number):Promise<FMDataListResult>{
-	  const db = uniCloud.databaseForJQL();
-	  const dbCmd = db.command;
-	  let st:number=TIME.getCurrentMonthFirst(new Date());
-	  let et:number=TIME.getCurrentMonthLast(new Date());
-	  if(dateRange!=null&&dateRange.length==2){
-		  st=TIME.startTime(new Date(dateRange[0]));
-		  et=TIME.endTime(new Date(dateRange[1]));
-	  }
-	
-  const w = {
-    hotel_id:hotel_id,
-    billType:billType=='all'?dbCmd.neq(''):billType,
-    ioeTime:dbCmd.and([dbCmd.gte(st),dbCmd.lte(et)])
-  }
-	 
-	 
-		let FMList:Array<FMBean>=[];
-		let skipnum:number =Math.max((pageNo-1)*pageSize,0);
-		 console.log("过滤条件",w,st,et,pageNo,pageSize,skipnum);
-		const main=  db.collection("hm-incomeAndExpenses").where(w).orderBy("ioeTime desc").skip(skipnum).limit(pageSize).getTemp();
-		const config=  db.collection("hm-incomeAndExpensesConfig").getTemp();
-		try{
-			const res =await db.collection(main,config).get({ getCount:true});
-			console.log("fmm",res,res['count'] as number);
+	async getIncomeAndExpensesDateBySearch(hotel_id : string, billType : string, dateRange : string[], pageNo : number, pageSize : number) : Promise<FMDataListResult> {
+
+		const db = uniCloud.databaseForJQL();
+		const dbCmd = db.command;
+		let st : number = TIME.getCurrentMonthFirst(new Date());
+		let et : number = TIME.getCurrentMonthLast(new Date());
+		if (dateRange != null && dateRange.length == 2) {
+			st = TIME.startTime(new Date(dateRange[0]));
+			et = TIME.endTime(new Date(dateRange[1]));
+		}
+		const w = {
+			hotel_id: hotel_id,
+			billType: billType == 'all' ? dbCmd.neq('') : billType,
+			ioeTime: dbCmd.and([dbCmd.gte(st), dbCmd.lte(et)])
+		}
+		let FMList : Array<FMBean> = [];
+		let skipnum : number = Math.max((pageNo - 1) * pageSize, 0);
+		console.log("过滤条件", w, st, et, pageNo, pageSize, skipnum);
+		const main = db.collection("hm-incomeAndExpenses").where(w).orderBy("ioeTime desc").skip(skipnum).limit(pageSize).getTemp();
+		const config = db.collection("hm-incomeAndExpensesConfig").getTemp();
+		try {
+			const res = await db.collection(main, config).get({ getCount: true });
+			console.log("fmm", res, res['count'] as number);
 			const data = res['data'] as Array<UTSJSONObject>;
-		
-      if(data !=null){
-       data.forEach((item: UTSJSONObject)=>{
-        const typeArr = item.getArray<UTSJSONObject>("type")??[];
-        let typeObj:FMTypeConfigBean;
-					if(typeArr.length>0){
+
+			if (data != null) {
+				data.forEach((item : UTSJSONObject) => {
+					const typeArr = item.getArray<UTSJSONObject>("type") ?? [];
+					let typeObj : FMTypeConfigBean;
+					if (typeArr.length > 0) {
 						let item = typeArr[0] as UTSJSONObject;
-						typeObj={
-							_id:item.getString("_id")??"",
-							billType:item.getString("billType")??"",
-							name:item.getString("name")??"",
-							text:item.getString("text")??"",
+						typeObj = {
+							_id: item.getString("_id") ?? "",
+							billType: item.getString("billType") ?? "",
+							name: item.getString("name") ?? "",
+							text: item.getString("text") ?? "",
 						}
 						FMList.push({
-							_id: item.getString("_id")??"",
-							amount: item.getNumber("amount")??0,
-							billType:  item.getString("billType")??"",
-							createTime: item.getNumber("amount")??0,,
-							creater:  item.getString("createTime")??"",
+							_id: item.getString("_id") ?? "",
+							amount: item.getNumber("amount") ?? 0,
+							billType: item.getString("billType") ?? "",
+							createTime: item.getNumber("amount") ?? 0,,
+							creater: item.getString("createTime") ?? "",
 							data_status: item.getNumber("data_status"),,
-							hotel_id:item.getString("hotel_id")??"",
-							ioeTime: item.getNumber("ioeTime")??0,,
-							mark:item.getString("mark")??"",
-							type:typeObj,
-							unit:item.getString("unit")??""
+							hotel_id: item.getString("hotel_id") ?? "",
+							ioeTime: item.getNumber("ioeTime") ?? 0,,
+							mark: item.getString("mark") ?? "",
+							type: typeObj,
+							unit: item.getString("unit") ?? ""
 						})
 					}
-				
+
 				})
-				
+
 			}
-			let fMDataListResult:FMDataListResult={
-					  count:res['count'] as number,//总数量
-					  pageNo:pageNo??1,//当前页码
-					  pageSize:pageSize??20,//每页数量
-					  fmList:FMList
+			let fMDataListResult : FMDataListResult = {
+				count: res['count'] as number,//总数量
+				pageNo: pageNo ?? 1,//当前页码
+				pageSize: pageSize ?? 20,//每页数量
+				fmList: FMList
 			}
 			return fMDataListResult;
-		}catch(e){
+		} catch (e) {
 			throw new Error("获取收支列表失败");
 		}
-	
-	  
+
+
 	}
-	
-  //房费统计按店铺分类
-  getRoomOrder(hotel_id:string,st:number,et:number){
-    const db = uniCloud.databaseForJQL()
-      const s1 = `hotel_id=='${hotel_id}'&&orderStatus==5`;
-      const s2 = `checkInStartDateTimeStamp>=${st}&&checkInStartDateTimeStamp<${et}`;
-      let w = `${s1}&&${s2}`;
-     
-    return  db.collection("hm-order").where(w).groupBy('hotel_id').groupField('sum(totalAmount) as amount').get()
-  }
-    //房费统计月分组统计
-    getRoomOrderOrderByMonth(hotel_id:string,st:number,et:number){
-      const db = uniCloud.databaseForJQL();
-        const s1 = `hotel_id=='${hotel_id}'&&orderStatus==5`;
-        const s2 = `checkInStartDateTimeStamp>=${st}&&checkInStartDateTimeStamp<${et}`;
-        let w = `${s1}&&${s2}`;
-       
-      return  db.collection("hm-order").where(w).groupBy('dateToString(timestampToDate(checkInStartDateTimeStamp),"%Y-%m") as month').groupField('sum(totalAmount) as amount').get()
-    }
-  //获取收入与支出分类
-  async getIncomeAndExpenses(hotel_id:string,billType:string='income',st:number,et:number){
-    const db = uniCloud.databaseForJQL();
-    const dbCmd = db.command;
-    const w = {
-      hotel_id:hotel_id,
-      billType:billType,
-      ioeTime:dbCmd.and([dbCmd.gte(st),dbCmd.lte(et)])
-    }
-		try{
-			const res =await db.collection("hm-incomeAndExpenses").where(w).groupBy(' type as name').groupField('sum(amount) as value').get();
+
+	//房费统计按店铺分类
+	getRoomOrder(hotel_id : string, st : number, et : number) {
+		const db = uniCloud.databaseForJQL()
+		const s1 = `hotel_id=='${hotel_id}'&&orderStatus==5`;
+		const s2 = `checkInStartDateTimeStamp>=${st}&&checkInStartDateTimeStamp<${et}`;
+		let w = `${s1}&&${s2}`;
+
+		return db.collection("hm-order").where(w).groupBy('hotel_id').groupField('sum(totalAmount) as amount').get()
+	}
+	//房费统计月分组统计
+	getRoomOrderOrderByMonth(hotel_id : string, st : number, et : number) {
+		const db = uniCloud.databaseForJQL();
+		const s1 = `hotel_id=='${hotel_id}'&&orderStatus==5`;
+		const s2 = `checkInStartDateTimeStamp>=${st}&&checkInStartDateTimeStamp<${et}`;
+		let w = `${s1}&&${s2}`;
+
+		return db.collection("hm-order").where(w).groupBy('dateToString(timestampToDate(checkInStartDateTimeStamp),"%Y-%m") as month').groupField('sum(totalAmount) as amount').get()
+	}
+	//获取收入与支出分类
+	async getIncomeAndExpenses(hotel_id : string, billType : string = 'income', st : number, et : number) {
+		const db = uniCloud.databaseForJQL();
+		const dbCmd = db.command;
+		const w = {
+			hotel_id: hotel_id,
+			billType: billType,
+			ioeTime: dbCmd.and([dbCmd.gte(st), dbCmd.lte(et)])
+		}
+		try {
+			const res = await db.collection("hm-incomeAndExpenses").where(w).groupBy(' type as name').groupField('sum(amount) as value').get();
 			return res;
-		}catch(e){}
+		} catch (e) { }
 
-    
-  }
-   //按月统计
-  getIncomeAndExpensesByMonth(hotel_id:string,billType:string='income',st:number,et:number){
-    const db = uniCloud.databaseForJQL();
-    const dbCmd = db.command;
-    const w = {
-      hotel_id:hotel_id,
-      billType:billType,
-      ioeTime:dbCmd.and([dbCmd.gte(st),dbCmd.lte(et)])
-    }
-    const res =db.collection("hm-incomeAndExpenses").where(w).groupBy(' dateToString(timestampToDate(ioeTime),"%Y-%m-%d") as month').groupField('sum(amount) as value').get();
-    return res
-  }
 
-  //获取当月收入统计
- // async  getIncomeCurrentMonth(hotel_id:string): Promise<Array<UTSJSONObject>> {
- //    const db = uniCloud.databaseForJQL();
- //    const dbCmd = db.command;
- //    const monthFirst =new Date(new Date().getFullYear(),new Date().getMonth(),1).getTime();
+	}
+	//按月统计
+	getIncomeAndExpensesByMonth(hotel_id : string, billType : string = 'income', st : number, et : number) {
+		const db = uniCloud.databaseForJQL();
+		const dbCmd = db.command;
+		const w = {
+			hotel_id: hotel_id,
+			billType: billType,
+			ioeTime: dbCmd.and([dbCmd.gte(st), dbCmd.lte(et)])
+		}
+		const res = db.collection("hm-incomeAndExpenses").where(w).groupBy(' dateToString(timestampToDate(ioeTime),"%Y-%m-%d") as month').groupField('sum(amount) as value').get();
+		return res
+	}
+
+	//获取当月收入统计
+	// async  getIncomeCurrentMonth(hotel_id:string): Promise<Array<UTSJSONObject>> {
+	//    const db = uniCloud.databaseForJQL();
+	//    const dbCmd = db.command;
+	//    const monthFirst =new Date(new Date().getFullYear(),new Date().getMonth(),1).getTime();
 	// 	const monthLast =new Date(new Date().getFullYear(),new Date().getMonth()+1,1).getTime()-1;
- //    const w = {
- //      hotel_id:hotel_id,
- //      billType:'income',
- //      ioeTime:dbCmd.and([dbCmd.gte(monthFirst),dbCmd.lte(monthLast)])
- //    }
- //    //房费
- //    const order = this.getRoomOrder(hotel_id,monthFirst,monthLast);
- //    const mt = db.collection("hm-incomeAndExpenses").where(w).getTemp()
- //    const other =db.collection(mt,"hm-incomeAndExpensesConfig").groupBy('type').groupField('sum(amount) as value').get();
-    
-    
- //    const res= await Promise.all([order,other]);
- //    let arr =[];
- //    res[1].result.data.map(item=>{
- //      arr.push({name:item.type[0].text,value:item.value})
- //    })
- //    if(res[0].result.data.length){
- //      arr.push({name:"房费",value: res[0].result.data[0]['amount']})
- //    }
-  
- //    return arr;
- //  }
- 
+	//    const w = {
+	//      hotel_id:hotel_id,
+	//      billType:'income',
+	//      ioeTime:dbCmd.and([dbCmd.gte(monthFirst),dbCmd.lte(monthLast)])
+	//    }
+	//    //房费
+	//    const order = this.getRoomOrder(hotel_id,monthFirst,monthLast);
+	//    const mt = db.collection("hm-incomeAndExpenses").where(w).getTemp()
+	//    const other =db.collection(mt,"hm-incomeAndExpensesConfig").groupBy('type').groupField('sum(amount) as value').get();
 
-  //获取当月支出统计
-  // async  getExpensesCurrentMonth(hotel_id){
-  //   const db = uniCloud.databaseForJQL();
-  //   const dbCmd = db.command;
-  //   const monthFirst =new Date(new Date().getFullYear(),new Date().getMonth(),1).getTime();
-		// const monthLast =new Date(new Date().getFullYear(),new Date().getMonth()+1,1).getTime()-1;
-  //   const w = {
-  //     hotel_id:hotel_id,
-  //     billType:'expenses',
-  //     ioeTime:dbCmd.and([dbCmd.gte(monthFirst),dbCmd.lte(monthLast)])
-  //   }
-   
-  //   const mt = db.collection("hm-incomeAndExpenses").where(w).getTemp()
-  //   const res =await db.collection(mt,"hm-incomeAndExpensesConfig").groupBy('type').groupField('sum(amount) as value').get();
-  //     let arr =[];
-  //   res.result.data.map(item=>{
-  //     arr.push({name:item.type[0].text,value:item.value})
-  //   })
-  //   return arr;
-  // }
-  //获取当年收入统计
-// async getIncomeCurrentYear(hotel_id){
-//   const db = uniCloud.databaseForJQL();
-//   const dbCmd = db.command;
-//   const yearFirst = new Date(new Date().getFullYear(),0,1).getTime();
-//   const yearLast = 	new Date(new Date().getFullYear(),12,1).getTime()-1;
-//   const w = {
-//     hotel_id:hotel_id,
-//     billType:'income',
-//     ioeTime:dbCmd.and([dbCmd.gte(yearFirst),dbCmd.lte(yearLast)])
-//   }
-//   //房费
-//   const order = this.getRoomOrderOrderByMonth(hotel_id,yearFirst,yearLast);
-//   const mt = db.collection("hm-incomeAndExpenses").where(w).getTemp();
-//   const other =db.collection(mt,"hm-incomeAndExpensesConfig").groupBy('dateToString(timestampToDate(ioeTime),"%Y-%m") as month').groupField('sum(amount) as amount').get(); 
-//   const res:Array<Promise<UTSJSONObject>> = await Promise.all([order,other]);
-//   let xlable=[],simpleXLabel=[],xValue=[],total=0;
 
-//   for(let i=0;i<12;i++){
-//     let xmonth = dayuts(new Date(new Date().getFullYear(),i)).format("yyyy-MM");
-//      let simounth=dayuts(new Date(new Date().getFullYear(),i)).format("MM");
-// 	  let orderItem = res[0].result.data.find(item => item.month == xmonth),
-//       otherItem= res[1].result.data.find(item=>item.month==xmonth);
-//       let val = (orderItem&&orderItem['amount']||0)+(otherItem&&otherItem['amount']||0);
-//       simpleXLabel.push(simounth);
-//     xlable.push(xmonth);
-//     xValue.push(val);
-//     total+=val;
+	//    const res= await Promise.all([order,other]);
+	//    let arr =[];
+	//    res[1].result.data.map(item=>{
+	//      arr.push({name:item.type[0].text,value:item.value})
+	//    })
+	//    if(res[0].result.data.length){
+	//      arr.push({name:"房费",value: res[0].result.data[0]['amount']})
+	//    }
 
-//   }
-//     total=total.toFixed(2);
-//   return {
-//     xlable,
-//     simpleXLabel,
-//     xValue,
-//     total
-//   };
-// }
-  //获取当年支出统计
-// async getExpensesCurrentYear(hotel_id){
-//   const db = uniCloud.databaseForJQL();
-//   const dbCmd = db.command;
-//   const yearFirst = new Date(new Date().getFullYear(),0,1).getTime();
-//   const yearLast = 	new Date(new Date().getFullYear(),12,1).getTime()-1;
-//   const w = {
-//     hotel_id:hotel_id,
-//     billType:'expenses',
-//     ioeTime:dbCmd.and([dbCmd.gte(yearFirst),dbCmd.lte(yearLast)])
-//   }
+	//    return arr;
+	//  }
 
-//   const mt = db.collection("hm-incomeAndExpenses").where(w).getTemp();
-//   const res =await db.collection(mt,"hm-incomeAndExpensesConfig").groupBy('dateToString(timestampToDate(ioeTime),"%Y-%m") as month').groupField('sum(amount) as amount').get(); 
-//   let xlable=[],simpleXLabel=[],xValue=[],total=0;
 
-//   for(let i=0;i<12;i++){
-//     let xmonth = dayuts(new Date(new Date().getFullYear(),i)).format("yyyy-MM");
-//     let simounth=dayuts(new Date(new Date().getFullYear(),i)).format("MM");
-//       let otherItem= res.result.data.find(item=>item.month==xmonth);
-//       let val = otherItem&&otherItem['amount']||0;
-//     simpleXLabel.push(simounth);
-//     xlable.push(xmonth);
-//     xValue.push(val);
-//     total+=val;
+	//获取当月支出统计
+	// async  getExpensesCurrentMonth(hotel_id){
+	//   const db = uniCloud.databaseForJQL();
+	//   const dbCmd = db.command;
+	//   const monthFirst =new Date(new Date().getFullYear(),new Date().getMonth(),1).getTime();
+	// const monthLast =new Date(new Date().getFullYear(),new Date().getMonth()+1,1).getTime()-1;
+	//   const w = {
+	//     hotel_id:hotel_id,
+	//     billType:'expenses',
+	//     ioeTime:dbCmd.and([dbCmd.gte(monthFirst),dbCmd.lte(monthLast)])
+	//   }
 
-//   }
-//     total=total.toFixed(2);
-//   return {
-//     xlable,
-//     simpleXLabel,
-//     xValue,
-//     total
-//   };
-// }
+	//   const mt = db.collection("hm-incomeAndExpenses").where(w).getTemp()
+	//   const res =await db.collection(mt,"hm-incomeAndExpensesConfig").groupBy('type').groupField('sum(amount) as value').get();
+	//     let arr =[];
+	//   res.result.data.map(item=>{
+	//     arr.push({name:item.type[0].text,value:item.value})
+	//   })
+	//   return arr;
+	// }
+	//获取当年收入统计
+	// async getIncomeCurrentYear(hotel_id){
+	//   const db = uniCloud.databaseForJQL();
+	//   const dbCmd = db.command;
+	//   const yearFirst = new Date(new Date().getFullYear(),0,1).getTime();
+	//   const yearLast = 	new Date(new Date().getFullYear(),12,1).getTime()-1;
+	//   const w = {
+	//     hotel_id:hotel_id,
+	//     billType:'income',
+	//     ioeTime:dbCmd.and([dbCmd.gte(yearFirst),dbCmd.lte(yearLast)])
+	//   }
+	//   //房费
+	//   const order = this.getRoomOrderOrderByMonth(hotel_id,yearFirst,yearLast);
+	//   const mt = db.collection("hm-incomeAndExpenses").where(w).getTemp();
+	//   const other =db.collection(mt,"hm-incomeAndExpensesConfig").groupBy('dateToString(timestampToDate(ioeTime),"%Y-%m") as month').groupField('sum(amount) as amount').get(); 
+	//   const res:Array<Promise<UTSJSONObject>> = await Promise.all([order,other]);
+	//   let xlable=[],simpleXLabel=[],xValue=[],total=0;
+
+	//   for(let i=0;i<12;i++){
+	//     let xmonth = dayuts(new Date(new Date().getFullYear(),i)).format("yyyy-MM");
+	//      let simounth=dayuts(new Date(new Date().getFullYear(),i)).format("MM");
+	// 	  let orderItem = res[0].result.data.find(item => item.month == xmonth),
+	//       otherItem= res[1].result.data.find(item=>item.month==xmonth);
+	//       let val = (orderItem&&orderItem['amount']||0)+(otherItem&&otherItem['amount']||0);
+	//       simpleXLabel.push(simounth);
+	//     xlable.push(xmonth);
+	//     xValue.push(val);
+	//     total+=val;
+
+	//   }
+	//     total=total.toFixed(2);
+	//   return {
+	//     xlable,
+	//     simpleXLabel,
+	//     xValue,
+	//     total
+	//   };
+	// }
+	//获取当年支出统计
+	// async getExpensesCurrentYear(hotel_id){
+	//   const db = uniCloud.databaseForJQL();
+	//   const dbCmd = db.command;
+	//   const yearFirst = new Date(new Date().getFullYear(),0,1).getTime();
+	//   const yearLast = 	new Date(new Date().getFullYear(),12,1).getTime()-1;
+	//   const w = {
+	//     hotel_id:hotel_id,
+	//     billType:'expenses',
+	//     ioeTime:dbCmd.and([dbCmd.gte(yearFirst),dbCmd.lte(yearLast)])
+	//   }
+
+	//   const mt = db.collection("hm-incomeAndExpenses").where(w).getTemp();
+	//   const res =await db.collection(mt,"hm-incomeAndExpensesConfig").groupBy('dateToString(timestampToDate(ioeTime),"%Y-%m") as month').groupField('sum(amount) as amount').get(); 
+	//   let xlable=[],simpleXLabel=[],xValue=[],total=0;
+
+	//   for(let i=0;i<12;i++){
+	//     let xmonth = dayuts(new Date(new Date().getFullYear(),i)).format("yyyy-MM");
+	//     let simounth=dayuts(new Date(new Date().getFullYear(),i)).format("MM");
+	//       let otherItem= res.result.data.find(item=>item.month==xmonth);
+	//       let val = otherItem&&otherItem['amount']||0;
+	//     simpleXLabel.push(simounth);
+	//     xlable.push(xmonth);
+	//     xValue.push(val);
+	//     total+=val;
+
+	//   }
+	//     total=total.toFixed(2);
+	//   return {
+	//     xlable,
+	//     simpleXLabel,
+	//     xValue,
+	//     total
+	//   };
+	// }
 }
 
 
 //module.exports =new AccountService();
-export var FMService=new FMServiceClass();
+export var FMService = new FMServiceClass();

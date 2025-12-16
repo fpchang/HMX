@@ -33,7 +33,7 @@
 					<l-tag variant="light">共{{filterRoomList.length}}间</l-tag>
 				</view>
 				<view class="card-item  select-area">
-					<fmSearchComponent :columns="columns" @selectAction="selectFm" @searchAction="getFmList"
+					<fmSearchComponent :columns="columns" @selectAction="selectFm" @dateChange="dateChange" @searchAction="getFmList"
 						placeholder="搜索收入名称"></fmSearchComponent>
 				</view>
 				<view class="card-item search"></view>
@@ -69,7 +69,7 @@
 	</scroll-view>
 	<!-- #endif -->
 	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"> 
-		<l-pagination v-model="currentPage" :total="fmResult?.count" :page-size="fmResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" />
+		<l-pagination v-model="fmResult.pageNo" :disabled="submitLoading" :total="fmResult?.count" :page-size="fmResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange"/>
 	</view>
 </template>
 
@@ -140,16 +140,27 @@
 		pageSize:20,//每页数量
 		fmList:[]//列表
 	})
-	const getFmList = async (billType : string, dateRange : string[], keystr : string) => {
-		//console.log("getFmList",arguments);
-		// if(pageNo==null){
-		// 	pageNo=1;
-		// }
-		const fmr = await FMService.getIncomeAndExpensesDateBySearch(hotel_id.value, billType,dateRange, fmResult.value.pageNo,fmResult.value.pageSize);
+	const getFmList = async () => {
+		submitLoading.value=true;
+		uni.showLoading({
+			title:"",
+			icon:"none"
+		})
+		const fmr = await FMService.getIncomeAndExpensesDateBySearch(hotel_id.value, billType.value,dateRange.value, fmResult.value.pageNo,fmResult.value.pageSize);
 		fmResult.value= fmr as FMDataListResult;
+		uni.hideLoading();
+		submitLoading.value=false;
+	}
+	const dateChange=(range:string[])=>{
+		dateRange.value=range;
+		
 	}
 	const selectFm = (bt : string) => {
 		billType.value = bt;
+	}
+	const pageChange=(pn:number)=>{
+		console.log(pn,fmResult.value);
+		getFmList();
 	}
 	const addFm = async () => {
 		if (!permissionList.value.includes(
@@ -239,7 +250,7 @@
 	}
 	const init = ()=>{
 		//let d:MOONTH_START_END_TIMESTAMP=TIME.getTodayStartTimeAndEndTime(new Date());
-		getFmList("income",  dateRange.value,"");
+		getFmList();
 	}
 	
 </script>

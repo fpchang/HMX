@@ -143,8 +143,7 @@
 	const getFmList = async () => {
 		submitLoading.value=true;
 		uni.showLoading({
-			title:"",
-			icon:"none"
+			title:""
 		})
 		const fmr = await FMService.getIncomeAndExpensesDateBySearch(hotel_id.value, billType.value,dateRange.value, fmResult.value.pageNo,fmResult.value.pageSize);
 		fmResult.value= fmr as FMDataListResult;

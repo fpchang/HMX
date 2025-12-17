@@ -15,8 +15,8 @@ class FMServiceClass {
 
 
 	//获取收入与支出分类
-	async getIncomeAndExpensesDateBySearch(hotel_id : string, billType : string, dateRange : string[], pageNo : number, pageSize : number) : Promise<FMDataListResult> {
-
+	async getIncomeAndExpensesDateBySearch(hotel_id : string, billType : string,keyword:string, dateRange : string[], pageNo : number, pageSize : number) : Promise<FMDataListResult> {
+console.log("keyword",keyword);
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
 		let st : number = TIME.getCurrentMonthFirst(new Date());
@@ -27,6 +27,7 @@ class FMServiceClass {
 		}
 		const w = {
 			hotel_id: hotel_id,
+			mark:new RegExp(`^${keyword}`),
 			billType: billType == 'all' ? dbCmd.neq('') : billType,
 			ioeTime: dbCmd.and([dbCmd.gte(st), dbCmd.lte(et)])
 		}
@@ -45,12 +46,12 @@ class FMServiceClass {
 					const typeArr = item.getArray<UTSJSONObject>("type") ?? [];
 					let typeObj : FMTypeConfigBean;
 					if (typeArr.length > 0) {
-						let item = typeArr[0] as UTSJSONObject;
+						let  typeItem= typeArr[0] as UTSJSONObject;
 						typeObj = {
-							_id: item.getString("_id") ?? "",
-							billType: item.getString("billType") ?? "",
-							name: item.getString("name") ?? "",
-							text: item.getString("text") ?? "",
+							_id: typeItem.getString("_id") ?? "",
+							billType: typeItem.getString("billType") ?? "",
+							name: typeItem.getString("name") ?? "",
+							text: typeItem.getString("text") ?? "",
 						}
 						FMList.push({
 							_id: item.getString("_id") ?? "",
@@ -60,7 +61,7 @@ class FMServiceClass {
 							creater: item.getString("createTime") ?? "",
 							data_status: item.getNumber("data_status"),,
 							hotel_id: item.getString("hotel_id") ?? "",
-							ioeTime: item.getNumber("ioeTime") ?? 0,,
+							ioeTime: item.getNumber("ioeTime") ?? 0,
 							mark: item.getString("mark") ?? "",
 							type: typeObj,
 							unit: item.getString("unit") ?? ""
@@ -70,6 +71,7 @@ class FMServiceClass {
 				})
 
 			}
+			console.log("fmlist:::",FMList);
 			let fMDataListResult : FMDataListResult = {
 				count: res['count'] as number,//总数量
 				pageNo: pageNo ?? 1,//当前页码

@@ -21,6 +21,15 @@ function getRandomRedBall(ballIndex='redBall'){
 	result.sort((a,b)=>a-b);
 	return result;
 }
+function getGroupList(listHistory){
+	let groupList =[]
+	for(let i=0;i<listHistory.length;i++){
+		groupList.push(...listHistory[i].redBall)
+	}
+	groupList = [...new Set(groupList)];
+	groupList.sort((a,b)=>a-b);
+	return groupList;
+}
 //与历史开奖组合重合数量
 function sameHistory(n=2,historyList=[],ballindex='redBall'){
 	const getGroupBall=(index)=>{
@@ -47,7 +56,7 @@ function sameHistory(n=2,historyList=[],ballindex='redBall'){
 		//console.log("groupRedBall",grouplist);
 		//console.log("groupRedBall_",groupRedBall_)
 		//console.log(`与前${n}期比较有${result}个球重复-index${i}`);
-		if(result<2){
+		if(result==0){
 			//console.log(`前${n}期组合为：：`,groupRedBall_);
 			//console.log(`当期为：：`,historyList[i]);
 			//console.log(`与前${n}期比较有${result}个球重复-index${i}`);
@@ -185,7 +194,7 @@ function caculate(fn,num=5,ballIndex='redBall'){
 //将2024年双色球61到90期开奖结束整理成json格式，要全部开奖数据升序排列，生成附件
 // sameHistory(1,dltHistory,"blueBall");
 // sameHistory(2,dltHistory,"blueBall");
-// sameHistory(3,dltHistory,"blueBall");
+//sameHistory(3,dltHistory,"blueBall");
 // sameHistory(4,dltHistory,"blueBall");
 // sameHistory(5,dltHistory,"blueBall");
 // sameHistory(6,dltHistory,"blueBall");
@@ -196,19 +205,30 @@ function caculate(fn,num=5,ballIndex='redBall'){
 // sameHistory(11,dltHistory,"blueBall");
 // sameHistory(12,dltHistory,"blueBall");
 // sameHistory(13,dltHistory,"blueBall");
-// sameHistory(1,dltHistory);
-// sameHistory(2,dltHistory);
-// sameHistory(3,dltHistory);
-// sameHistory(4,dltHistory);
-// sameHistory(5,dltHistory);
-// sameHistory(6,dltHistory);
-// sameHistory(7,dltHistory);
-// sameHistory(8,dltHistory);
-// sameHistory(9,dltHistory);
-// sameHistory(10,dltHistory);
+// sameHistory(14,dltHistory,"blueBall");
+// sameHistory(15,dltHistory,"blueBall");
+// sameHistory(16,dltHistory,"blueBall");
+// sameHistory(17,dltHistory,"blueBall");
+sameHistory(1,dltHistory);
+sameHistory(2,dltHistory);
+sameHistory(3,dltHistory);
+sameHistory(4,dltHistory);
+sameHistory(5,dltHistory);
+sameHistory(6,dltHistory);
+sameHistory(7,dltHistory);
+sameHistory(8,dltHistory);
+sameHistory(9,dltHistory);
+sameHistory(10,dltHistory);
+sameHistory(11,dltHistory);
+sameHistory(12,dltHistory);
 //爆冷号
-console.log(caculate(S3,1));
-console.log(caculate(S3_BLUE,1,"blueBall"));
+// console.log(caculate(S3,1));
+// console.log(caculate(S3_BLUE,1,"blueBall"));
 //热号
-console.log(caculate(S1,1));
-console.log(caculate(S1_BLUE,1,"blueBall"));
+// console.log(caculate(S1,1));
+// console.log(caculate(S1_BLUE,1,"blueBall"));
+const c3=getGroupList(dltHistory.slice(dltHistory.length-3));
+const c4=getGroupList(dltHistory.slice(dltHistory.length-4));
+const c5=getGroupList(dltHistory.slice(dltHistory.length-5));
+const c6=getGroupList(dltHistory.slice(dltHistory.length-6));
+console.log("c3",new Set(c3),new Set(c4),new Set(c5),new Set(c6));

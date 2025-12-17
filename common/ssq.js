@@ -219,9 +219,9 @@ function caculate(fn,n=20){
 // sameHistory(11,history);
 const c3=getGroupList(history.slice(history.length-3));
 const c4=getGroupList(history.slice(history.length-4));
-//const c5=getGroupList(history.slice(history.length-5));
+const c5=getGroupList(history.slice(history.length-5));
 //const c6=getGroupList(history.slice(history.length-6));
-console.log("c3",new Set(c3),"c4",new Set(c4));
+console.log("c3",new Set(c3),"c4",new Set(c4),"c5",new Set(c5));//夹号，冷号
 
 // const list=caculate(S1,18);
 // console.log(list);

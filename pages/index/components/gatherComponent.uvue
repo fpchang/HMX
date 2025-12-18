@@ -193,7 +193,7 @@
 	};
 	const currentData = ():string => {
 
-		return dayuts(new Date()).locale('zh-cn').format("YYYY 年 MM 月 DD 日 dddd");
+		return dayuts(new Date()).format("YYYY 年 MM 月 DD 日 dddd");
 	}
 	// 组件挂载后初始化echarts实例 (也可在请求数据后初始化)
 	function initEchart() {

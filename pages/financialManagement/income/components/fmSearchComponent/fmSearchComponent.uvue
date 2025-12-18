@@ -21,12 +21,12 @@
 			<view class="select">
 				<view class="content" @click="showCalendarEvent">
 					<text class="txt">{{dateRange.join(" ~ ") }}</text>
-					<image src="/static/icons/calendar.png" style="width: 16px;height:16px"></image>
+					<image src="/static/icons/calendar.png" style="width: 20px;height:20px"></image>
 				</view>
 			</view>
 		</view>
 		<view class="select-item">
-			<view class="select">
+			<view class="select" style="padding-right: 8px;">
 				<rice-search v-model="keystr" input-color="#fff" :clearable="false" :placeholder="placeholder"
 					:custom-style="{'padding':0}" @search="searchEvent" @clickLeftIcon="searchEvent"
 					@input="searchInputChange" @clickAction="searchEvent" show-action left-icon=""
@@ -49,10 +49,10 @@
 	//searchInputChange 输入框变化
 	const emit = defineEmits(['selectAction', "searchAction", "searchInputChange","dateChange"]);
 	const props = defineProps({
-		// columns: {
-		// 	type: Array<Array<PickerOption>>,
-		// 	default: []
-		// },
+		initDateRange: {
+			type: Array<String>,
+			default: []
+		},
 		placeholder: {
 			type: String,
 			default: "请输入关键字"
@@ -72,7 +72,7 @@
 	let keystr = ref("");
 	text_val.value = columns.value[0][0]['text'] as string;
 
-	const dateRange = ref<string[]>(getMonthDateArray());
+	const dateRange = ref<string[]>(props.initDateRange);
 	//dateRange.value =getMonthDateArray()
 	const checkBillType=(id:string)=>{
 		billType.value=id;
@@ -120,7 +120,7 @@
 		.select-item {
 			margin-bottom: 12px;
 			min-width: 300px;
-			padding: 0 15px;
+			// padding: 0 15px;
 
 			flex: 1;
 		}
@@ -128,10 +128,10 @@
 		.select {
 
 			position: relative;
-			border: 1px solid #eee;
+			border: 1px solid #dcdfe6;
 			box-sizing: border-box;
 			overflow: visible;
-			padding-right: 8px;
+			border-radius: 4px;
 
 			.content {
 				display: flex;

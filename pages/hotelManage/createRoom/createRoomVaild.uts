@@ -8,7 +8,7 @@ export const  validForm = (roomList:Array<roomBean>):boolean=>{
 		}
 		if(item.room_type_id==""){
 			msg="请选择房型";
-			return；
+			return;
 		}
 		
 	})

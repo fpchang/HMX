@@ -33,8 +33,9 @@
 					<l-tag variant="light">共{{fmResult.count}}条</l-tag>
 				</view>
 				<view class="card-item  select-area">
-					<fmSearchComponent :columns="columns" @searchInputChange="searchInputChange"  @selectAction="selectFm" @dateChange="dateChange" @searchAction="getFmList"
-						placeholder="搜索收入名称"></fmSearchComponent>
+					<fmSearchComponent :columns="columns" :initDateRange="dateRange"
+						@searchInputChange="searchInputChange" @selectAction="selectFm" @dateChange="dateChange"
+						@searchAction="getFmList" placeholder="搜索收入名称"></fmSearchComponent>
 				</view>
 				<view class="card-item search"></view>
 			</view>
@@ -44,16 +45,20 @@
 			<!-- <template v-for="roomType of filterRoomTypeList"> -->
 			<view class="card-list-item" v-for="fm of fmResult.fmList">
 				<view class="card">
+
 					<view class="card-item title">
-						<text>类型：</text> <text class="txt">{{fm.type.text}}</text>
+						<text class="label">收支时间：</text> <text class="val-style">{{formatDate(fm.ioeTime)}}</text>
+					</view>
+					<view class="card-item title">
+						<text class="label">交易类型：</text> <text class="val-style">{{fm.type_text}}</text>
 					</view>
 					<view class="card-item subtitle">
-						<text>金额：</text><text class="txt">
+						<text class="label">收支金额：</text><text class="val-style">
 							{{fm.amount}}
 						</text>
 					</view>
 					<view class="card-item subtitle">
-						<text>备注：</text><text class="txt">
+						<text class="label">备注信息：</text><text class="val-style">
 							{{fm.mark}}
 						</text>
 					</view>
@@ -64,25 +69,26 @@
 			</view>
 			<!-- </template> -->
 		</view>
-		
+
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
-	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"> 
-		<l-pagination v-model="fmResult.pageNo" :disabled="submitLoading" :total="fmResult?.count" :page-size="fmResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange"/>
+	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;">
+		<l-pagination v-model="fmResult.pageNo" :disabled="submitLoading" :total="fmResult?.count"
+			:page-size="fmResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
 	</view>
 </template>
 
 <script setup>
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
-	import {TIME,getMonthDateArray} from "@/static/utils/TIME";
+	import { TIME, getMonthDateArray } from "@/static/utils/TIME";
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { FMService } from "@/services/FMService";
 	import { roomBean } from '@/bean/roomBean';
-	import { FMBean,FMDataListResult } from '@/bean/FMBean';
+	import { FMBean, FMDataListResult } from '@/bean/FMBean';
 	import { state } from "@/store/store";
 	import { comFunction } from "@/pages/index/ComFuc";
 	import fmSearchComponent from "./components/fmSearchComponent/fmSearchComponent";
@@ -98,7 +104,7 @@
 	const permissionList = computed(() => {
 		return state.permissionList;
 	})
-	const currentPage=ref(1);
+	const currentPage = ref(1);
 	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
 		return state.roomTypeList;
 	});
@@ -106,7 +112,7 @@
 	let _select_id = ref("all");
 	let _search_key = ref("");
 	const billType = ref("all");
-	const keyword=ref("");//过滤字段
+	const keyword = ref("");//过滤字段
 	const dateRange = ref<string[]>(getMonthDateArray());
 	const columns = computed<Array<Array<PickerOption>>>(() => {
 		let result : Array<Array<PickerOption>> = [[
@@ -116,40 +122,44 @@
 		return result;
 	});
 
-	
+
 	const fmResult = ref<FMDataListResult>({
-		count:0,//总数量
-		pageNo:1,//当前页码
-		pageSize:20,//每页数量
-		fmList:[]//列表
+		count: 0,//总数量
+		pageNo: 1,//当前页码
+		pageSize: 20,//每页数量
+		fmList: []//列表
 	})
 	const getFmList = async () => {
-		submitLoading.value=true;
+		submitLoading.value = true;
 		uni.showLoading({
-			title:""
+			title: ""
 		})
-		const fmr = await FMService.getIncomeAndExpensesDateBySearch(hotel_id.value, billType.value,keyword.value, dateRange.value, fmResult.value.pageNo,fmResult.value.pageSize);
-		fmResult.value= fmr as FMDataListResult;
+		const fmr = await FMService.getIncomeAndExpensesDateBySearch(hotel_id.value, billType.value, keyword.value, dateRange.value, fmResult.value.pageNo, fmResult.value.pageSize);
+		fmResult.value = fmr as FMDataListResult;
 		uni.hideLoading();
-		submitLoading.value=false;
+		submitLoading.value = false;
 	}
-	const dateChange=(range:string[])=>{
-		dateRange.value=range;
-		
+	const dateChange = (range : string[]) => {
+		dateRange.value = range;
+
 	}
-	const searchInputChange=(k:string)=>{
-		keyword.value=k;
+	const searchInputChange = (k : string) => {
+		keyword.value = k;
 	}
 	const selectFm = (bt : string) => {
 		billType.value = bt;
-	}
-	const pageChange=(pn:number)=>{
-		console.log(pn,fmResult.value);
 		getFmList();
+	}
+	const pageChange = (pn : number) => {
+		console.log(pn, fmResult.value);
+		getFmList();
+	}
+	const formatDate = (timestamp : number) => {
+		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
 	}
 	const addFm = async () => {
 		if (!permissionList.value.includes(
-			"ROOMTYPE_CREATE"
+			"FM_CREATE"
 		)) {
 			showDialog({
 				title: '没有足够的权限',
@@ -161,15 +171,9 @@
 			})
 			return;
 		}
-		if (roomTypeList.value != null && roomTypeList.value.length < 1) {
-			uni.showToast({
-				title: '请先创建房型',
-				icon: 'none'
-			})
-			return;
-		}
+
 		uni.navigateTo({
-			url: `/pages/hotelManage/createRoom/createRoom`
+			url: `/pages/financialManagement/income/createIncomeAndExpense/createIncomeAndExpense`
 		});
 	}
 	const deleteFm = async (fm : FMBean) => {
@@ -233,11 +237,11 @@
 			return;
 		}
 	}
-	const init = ()=>{
+	const init = () => {
 		//let d:MOONTH_START_END_TIMESTAMP=TIME.getTodayStartTimeAndEndTime(new Date());
 		getFmList();
 	}
-	
+	init();
 </script>
 
 <style lang="scss">
@@ -296,7 +300,7 @@
 
 			.card-item {
 				margin-bottom: 15px;
-			
+
 				&:last-child {
 					margin: 0;
 				}
@@ -334,18 +338,31 @@
 
 				.card-item {
 					margin-bottom: 12px;
-	display: flex;
-				flex-direction: row;
-				align-items: center;
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					
+
+
 					&:last-child {
 						margin-bottom: 0;
+					}
+
+					.label {
+						color: #4e5969;
+						font-size: 14px;
+					}
+
+					.val-style {
+						color: #1d2129;
+						font-size: 14px;
 					}
 				}
 
 				.title {
 					.txt {
-						font-size: 18px;
-						font-weight: 700;
+						// font-size: 18px;
+						// font-weight: 700;
 						color: #1d2129;
 					}
 

@@ -25,7 +25,7 @@
 
 			<xt-form-item label="房型" tips="" required>
 				<view>
-					<xt-select :actions="actionList" @selectAction="selectRoomType"></xt-select>
+					<xt-select :columns="columns" @selectAction="selectRoomType" :showKeySearch="false"></xt-select>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="房间名称" tips="" required>
@@ -65,6 +65,7 @@
 	import { state } from "@/store/store";
 	import {comFunction} from "@/pages/index/ComFuc.uts"
 	import {validForm} from "./createRoomVaild.uts";
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -104,34 +105,23 @@
 			room_type_id: ""
 		}]
 	});
-	let _select_index = ref(0);
-	const actionList = computed<Array<ActionSheetAction>>(() => {
+	const columns = computed<Array<Array<PickerOption>>>(() => {
 		if (roomTypeList.value == null) {
 			return []
 		}
-		let result : Array<ActionSheetAction> = roomTypeList.value.map(item => {
-			return { name: item.name, color: "#000" } as ActionSheetAction
+		let result:Array<Array<PickerOption>>=[];
+		let list:Array<PickerOption>=[];
+		roomTypeList.value.forEach(item=>{
+			list.push({ text: item.name, value: item._id } as PickerOption);
 		});
-		result.forEach((item, index) => {
-			if (index == _select_index.value) {
-				item.color = "#1e88e5";
-			}
-		})
-		return result
+		result.push(list);
+		return result;
 	});
-	const selectRoomType = (index : number) => {
-		_select_index.value = index;
-		if (roomTypeList.value != null) {
-			let _id = roomTypeList.value[index]._id;
-			roomForm.value.room_type_id = _id;
-			roomForm.value.roomList = [{
-				_id: "",
-				hotel_id: hotel_id.value,
-				room_name: "",
-				room_type_id: roomForm.value.room_type_id
-			}] as Array<roomBean>;
+	const selectRoomType = (val : string) => {
+		if (roomForm.value.room_type_id == val) {
+			return;
 		}
-
+		roomForm.value.room_type_id=val;
 	}
 	const addNew = () => {
 		let room : roomBean = {

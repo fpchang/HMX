@@ -245,50 +245,6 @@
 </script>
 
 <style lang="scss">
-	.info-area {
-		padding: 18px;
-		color: #6a6a6a;
-		font-size: 12px;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		display: flex;
-		box-sizing: border-box;
-		justify-content: space-between;
-
-		.item {
-			background-color: #fff;
-			border-radius: 8px;
-			width: 110px;
-			margin-left: 12px;
-			flex: 1;
-			box-sizing: border-box;
-			padding: 12px;
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-			color: #fff;
-
-			&:first-child {
-				margin-left: 0;
-			}
-
-			.label-text {
-				line-height: 24px;
-			}
-
-			.num-area {
-				text-align: center;
-				margin-top: 4px;
-
-				.num {
-					font-weight: 700;
-					font-size: 18px;
-					line-height: 28px;
-				}
-			}
-		}
-	}
 
 	.search-area {
 		padding: 18px;

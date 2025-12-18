@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="info-area">
-		   <view class="item">
+		   <view class="item" style="margin-left: 0;">
 		     <view class="title-area">
 				 <text class="label-text" style="color:#4e5969 ;font-size: 16px;">总计</text>
 				 <image  class="icon" src="/static/icons/fm/all.png"></image>
@@ -41,7 +41,7 @@
 	  .item {
 	    background-color: #fff;
 	    border-radius: 8px;
-	    width: 110px;
+	    width: 100px;
 		margin-left: 12px;
 		flex: 1;
 	    box-sizing: border-box;

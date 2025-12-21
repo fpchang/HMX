@@ -45,19 +45,25 @@
 			<!-- <template v-for="roomType of filterRoomTypeList"> -->
 			<view class="card-list-item" v-for="fm of fmResult.fmList">
 				<view class="card">
-
+					<view class="icon-area">
+						<image src="/static/icons/fm/in.png" style="width: 20px;height: 20px;" v-if="fm.billType=='income'"></image>
+						<image src="/static/icons/fm/expense.png" style="width: 20px;height: 20px;" v-if="fm.billType=='expenses'"></image>
+					</view>
 					<view class="card-item title">
+						<text :class="['txt',fm.billType=='income'?'txt-in':'']">￥{{fm.amount}}</text>
+					</view>
+					<view class="card-item">
 						<text class="label">收支时间：</text> <text class="val-style">{{formatDate(fm.ioeTime)}}</text>
 					</view>
-					<view class="card-item title">
+					<view class="card-item">
 						<text class="label">交易类型：</text> <text class="val-style">{{fm.type_text}}</text>
 					</view>
-					<view class="card-item subtitle">
+				<!-- 	<view class="card-item">
 						<text class="label">收支金额：</text><text class="val-style">
 							{{fm.amount}}
 						</text>
-					</view>
-					<view class="card-item subtitle">
+					</view> -->
+					<view class="card-item" style="margin-bottom: 0;">
 						<text class="label">备注信息：</text><text class="val-style">
 							{{fm.mark}}
 						</text>
@@ -189,6 +195,7 @@
 				showCancelButton: false,
 				confirm: () => {
 					hideDialog();
+					
 				}
 			})
 			return;
@@ -198,22 +205,14 @@
 			title: '确认删除此房间',
 			message: "删除后将无法恢复，确认删除吗？",
 			beforeClose: async () : Promise<boolean> => {
-				try {
+		
 					//await roomTypeService.deleteFm(room._id);
 					//await comFunction.getRoomTypeList(hotel_id.value);
-					hideDialog();
-					uni.showToast({
-						title: "删除成功",
-						icon: "none"
-					});
+					await FMService.deleteFm(fm._id);
+					getFmList();
+					hideDialog();				
 					return true;
-				} catch (e) {
-					uni.showToast({
-						title: "系统异常",
-						icon: "none"
-					});
-					return false;
-				}
+				
 			},
 			confirm: () => {
 			}, cancel: () => {
@@ -291,15 +290,17 @@
 				background-color: #fff;
 				border-radius: 12px;
 				padding: 16px;
-
+				position: relative;
+				.icon-area{
+					position: absolute;
+					right: 10px;
+					top: 10px;
+				}
 				.card-item {
 					margin-bottom: 12px;
 					display: flex;
 					flex-direction: row;
-					align-items: center;
-					
-
-
+					align-items: center;					
 					&:last-child {
 						margin-bottom: 0;
 					}
@@ -313,14 +314,24 @@
 						color: #1d2129;
 						font-size: 14px;
 					}
+					
 				}
 
 				.title {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					justify-content: center;
 					.txt {
-						// font-size: 18px;
-						// font-weight: 700;
-						color: #1d2129;
+						font-size: 20px;
+						font-weight: 700;
+						color: #f53f3f;
+						padding-top: 5px;
 					}
+					.txt-in{
+						color: #00b42a;
+					}
+
 
 				}
 

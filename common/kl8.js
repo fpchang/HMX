@@ -202,36 +202,36 @@ function S3(list,history){
 //计算历史开奖中中奖率最高的组合
 //n 代表买几，1-10
 function S5(n=4,minNum=5){
-	console.log(BALL.length)
-	const list = getSpecifiedLengthCombinations(BALL, n);
-	//console.log('示例1：[1,2,3] 长度2的组合 →', example1);
-	//const list=[[43,44]];
-	let result={}
-	for(let i=0;i<list.length;i++){
-		let g=list[i];	
-		for(let j=0;j<history.length;j++){
-			let arr =history[j].redBall;
-			let repeatCount = g.length+arr.length - new Set([...arr,...g]).size;
-				//console.log("repeatCount",repeatCount);
-			if(repeatCount==n){
-				let index = g.toString();
-				
-				if(result[index]){
-				
-					result[index]++;
-				}else{
-					
-					result[index]=1
-				}
-			
+		let result={}
+	history.forEach(item=>{
+		const list = getSpecifiedLengthCombinations(item.redBall, n);
+		list.forEach(it=>{
+			if(result[it]){
+				result[it]++;
+			}else{
+				result[it]=1
 			}
-			
-		}
-	}
-	let listArray = sortObjectByNumberValue(result);
-	listArray=listArray.filter(item=>item[1]>minNum);
-	console.log(listArray)
-	return listArray;
+		})
+	})
+	
+
+
+	// let listArray = sortObjectByNumberValue(result);
+	// listArray=listArray.filter(item=>item[1]>minNum);
+	// console.log(listArray)
+	// return listArray;
+	// let r={}
+	// for(let key in result){
+	// 	if(result[key]>minNum){
+	// 		r[key]=result[key];
+	// 	}
+	// }
+//1,6,16,17,18,44,46,50,61,62
+const sortedByValueDesc = Object.entries(result).sort(([, val1], [, val2]) => val2 - val1).slice(0,20);
+const sortedObjDesc = Object.fromEntries(sortedByValueDesc);
+
+console.log("按值降序的对象：", sortedObjDesc);
+	
 }
 function caculate(fn,n=20){
 	
@@ -274,5 +274,17 @@ function caculate(fn,n=20){
  //console.log(sortObjectByNumberValue(S1_stat(list)));
 
 //set NODE_OPTIONS=--max-old-space-size=4096
-//S5(3,12);
-getWinTime([22,34,56,66],history);//4-75,3-32,2-17,5-23
+S5(4,6);
+//getWinTime([22,34,56,66],history);//4-75,3-32,2-17,5-23
+
+history.forEach(item=>{
+	//console.log(item)
+	const zx=[8,12,22,34,48,50,52,53,68,80]
+	const lh=[1,6,16,17];
+	const rh=[11,19,26,37];
+	if(compare(zx,[item])>4){
+	console.log(compare(zx,[item]));	
+	}
+	
+})
+

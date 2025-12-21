@@ -82,7 +82,35 @@ class FMServiceClass {
 		}
 		
 	}
-
+	async deleteFm(fm_id:string):Promise<boolean>{
+		try {
+			const res = await DB.callFunction("hm_deleteFm", {
+				_id: fm_id,
+			});
+			console.log("res delete",res);
+			const result = res['result'] as UTSJSONObject;
+			const code = result.getNumber('code')??0;
+			const message = result.getString("message")??"";
+			if (code != 0) {
+				console.log("code error", code);
+				uni.showToast({
+					title: message,
+					icon: "none"
+				});
+				throw new Error(result.message as string);
+			}
+			uni.showToast({
+				title: "删除成功",
+				icon: "none"
+			});
+		} catch (error) {
+			uni.showToast({
+				title: "删除失败",
+				icon: "none"
+			});
+		}
+		return true;
+	}
 
 
 	//获取收入与支出分类

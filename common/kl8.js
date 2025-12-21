@@ -68,6 +68,20 @@ function compare(list =[],listHistory=[]){
 	//console.log("newList",newList);
 	return list.length+groupList.length-(newList.length);
 }
+function getWinTime(list,listHistory){
+	let result={};
+	for(let i=0;i<listHistory.length;i++){
+		let itemList  =listHistory[i].redBall;
+		let groupList = new Set([...list,...itemList]);
+		 let time = itemList.length + list.length - groupList.size;
+		 if(result[time]){
+			 result[time]++
+		 }else{
+			 result[time]=1;
+		 }
+	}
+	console.log(`在${listHistory.length}期历史中中奖次数为：`,result);
+}
 //获取数据组合去重排序
 function getGroupList(listHistory){
 	let groupList =[]
@@ -194,8 +208,7 @@ function S5(n=4,minNum=5){
 	//const list=[[43,44]];
 	let result={}
 	for(let i=0;i<list.length;i++){
-		let g=list[i];
-	
+		let g=list[i];	
 		for(let j=0;j<history.length;j++){
 			let arr =history[j].redBall;
 			let repeatCount = g.length+arr.length - new Set([...arr,...g]).size;
@@ -259,28 +272,7 @@ function caculate(fn,n=20){
 //const list=caculate(S1,1018);
 //console.log(list);
  //console.log(sortObjectByNumberValue(S1_stat(list)));
- // '52,61,72,80': 7,
- //  '54,70,72,74': 7,
- //  '7,21,46,59': 8,
- //  '8,10,47,54': 8,
- //  '8,11,15,20': 8,
- //  '8,15,54,56': 8,
- //  '8,15,65,80': 8,
- //  '10,38,52,71': 8,
- //  '13,43,47,61': 8,
- //  '15,18,54,74': 8,
- //  '15,28,48,70': 8,
- //  '15,54,72,74': 8,
- //  '16,23,79,80': 8,
- //  '16,38,62,71': 8,
- //  '19,33,35,59': 8,
- //  '20,48,53,68': 8,
- //  '21,40,58,65': 8,
- //  '22,34,37,55': 8,
- //  '22,34,46,50': 8,
- //  '26,69,72,80': 8,
- //  '28,33,34,37': 8,
- //  '12,53,68,80': 9,
- //  '22,34,50,52': 9
+
 //set NODE_OPTIONS=--max-old-space-size=4096
-S5(3,12);
+//S5(3,12);
+getWinTime([22,34,56,66],history);//4-75,3-32,2-17,5-23

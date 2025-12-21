@@ -227,7 +227,7 @@ function S5(n=4,minNum=5){
 	// 	}
 	// }
 //1,6,16,17,18,44,46,50,61,62
-const sortedByValueDesc = Object.entries(result).sort(([, val1], [, val2]) => val2 - val1).slice(0,20);
+const sortedByValueDesc = Object.entries(result).sort(([, val1], [, val2]) => val2 - val1).slice(0,40);
 const sortedObjDesc = Object.fromEntries(sortedByValueDesc);
 
 console.log("按值降序的对象：", sortedObjDesc);
@@ -265,26 +265,63 @@ function caculate(fn,n=20){
 // sameHistory(10,history);
 // sameHistory(11,history);
 
-// const c4=getGroupList(history.slice(history.length-4));
-// const c5=getGroupList(history.slice(history.length-5));
-// const c6=getGroupList(history.slice(history.length-6));
-// console.log(new Set(c4),new Set(c5),new Set(c6));
-//const list=caculate(S1,1018);
+//  const c4=getGroupList(history.slice(history.length-4));
+//  const c5=getGroupList(history.slice(history.length-5));
+//  const c6=getGroupList(history.slice(history.length-6));
+//  console.log(new Set(c4),new Set(c5),new Set(c6));
+//const list=caculate(S1,10);
 //console.log(list);
  //console.log(sortObjectByNumberValue(S1_stat(list)));
 
 //set NODE_OPTIONS=--max-old-space-size=4096
-S5(4,6);
+//S5(5,6);
 //getWinTime([22,34,56,66],history);//4-75,3-32,2-17,5-23
 
 history.forEach(item=>{
 	//console.log(item)
-	const zx=[8,12,22,34,48,50,52,53,68,80]
-	const lh=[1,6,16,17];
-	const rh=[11,19,26,37];
-	if(compare(zx,[item])>4){
-	console.log(compare(zx,[item]));	
+	const rh=[2,15,55,77,79];
+	if(compare(rh,[item])==5){
+	console.log(item.index);	
 	}
 	
 })
-
+// '1,8,10,47,54': 6,-305
+//   '11,16,38,61,71': 6,-330
+//   '11,16,38,62,71': 6,-292
+//   '22,34,46,50,52': 6,-222
+//   '2,3,46,55,80': 6,-274
+//   '15,54,70,72,74': 6,-288
+//   '13,21,23,69,80': 6,-295
+//   '2,15,55,77,79': 5,
+//   '2,5,35,46,65': 5,
+//   '5,9,33,45,55': 5,
+//   '9,27,50,53,73': 5,
+//   '12,50,53,68,80': 5,
+//   '11,14,20,22,80': 5,
+//   '19,33,35,48,52': 5,
+//   '19,33,35,52,59': 5,
+//   '1,2,54,71,79': 5,
+//   '1,18,27,67,74': 5,
+//   '2,18,25,27,74': 5,
+//   '2,10,54,55,60': 5,
+//   '40,46,47,56,67': 5,
+//   '27,46,48,74,76': 5,
+//   '5,25,34,45,47': 5,
+//   '13,33,35,50,65': 5,
+//   '11,53,65,69,72': 5,
+//   '1,10,16,53,71': 5,
+//   '3,10,11,16,62': 5,
+//   '10,12,16,23,80': 5,
+//   '10,16,38,52,71': 5,
+//   '10,16,38,58,71': 5,
+//   '10,38,53,58,71': 5,
+//   '11,16,38,61,62': 5,
+//   '11,16,61,62,71': 5,
+//   '11,38,61,62,71': 5,
+//   '16,38,52,53,58': 5,
+//   '16,38,61,62,71': 5,
+//   '1,2,15,43,62': 5,
+//   '11,16,43,62,68': 5,
+//   '16,46,53,55,62': 5,
+//   '5,28,33,34,45': 5,
+//   '9,13,28,34,48': 5

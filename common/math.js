@@ -157,3 +157,61 @@ export function sortObjectArrayByNumberValue(arr, key, isAsc = true) {
 
     return newArr;
 }
+
+/**
+ * 统计多个字符串数组中重复元素的数量并排序
+ * @param {Array<Array<string>>} arrayList - 多个字符串数组的集合
+ * @param {Object} options - 配置项
+ * @param {boolean} options.isDesc - 是否按次数降序排序，默认true
+ * @param {boolean} options.ignoreCase - 是否忽略大小写统计，默认false
+ * @param {boolean} options.sortByStr - 是否按字符串字母序排序（次数相同时生效），默认true
+ * @returns {Array<{value: string, count: number}>} 排序后的重复元素及次数
+ */
+export function countStrDuplicatesAndSort(arrayList, options = {}) {
+    // 默认配置
+    const {
+        isDesc = true,
+        ignoreCase = false,
+        sortByStr = true
+    } = options;
+
+    // 1. 合并所有字符串数组为一个总数组
+    const mergedArray = [].concat(...arrayList);
+
+    // 2. 统计每个字符串的出现次数
+    const countMap = new Map();
+    for (const str of mergedArray) {
+        // 处理忽略大小写的情况
+        const key = ignoreCase && typeof str === 'string' ? str.toLowerCase() : str;
+        countMap.set(key, (countMap.get(key) || 0) + 1);
+    }
+
+    // 3. 筛选出重复元素（次数>1），还原原始大小写（若忽略大小写则返回小写）
+    const duplicateList = [];
+    for (const [key, count] of countMap) {
+        if (count > 1) {
+            duplicateList.push({
+                value: key,
+                count
+            });
+        }
+    }
+
+    // 4. 排序：先按次数，次数相同则按字符串字母序
+    duplicateList.sort((a, b) => {
+        // 按次数排序
+        const countDiff = isDesc ? b.count - a.count : a.count - b.count;
+        if (countDiff !== 0) {
+            return countDiff;
+        }
+        // 次数相同时，按字符串字母序排序
+        if (sortByStr) {
+            return a.value.localeCompare(b.value); // 按Unicode字母序排序
+        }
+        return 0;
+    });
+
+    return duplicateList;
+}
+
+// 

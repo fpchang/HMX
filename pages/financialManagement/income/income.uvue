@@ -46,30 +46,63 @@
 			<view class="card-list-item" v-for="fm of fmResult.fmList">
 				<view class="card">
 					<view class="icon-area">
-						<image src="/static/icons/fm/in.png" style="width: 20px;height: 20px;" v-if="fm.billType=='income'"></image>
-						<image src="/static/icons/fm/expense.png" style="width: 20px;height: 20px;" v-if="fm.billType=='expenses'"></image>
+						<image src="/static/icons/fm/in.png" style="width: 20px;height: 20px;"
+							v-if="fm.billType=='income'"></image>
+						<image src="/static/icons/fm/expense.png" style="width: 20px;height: 20px;"
+							v-if="fm.billType=='expenses'"></image>
 					</view>
-					<view class="card-item title">
-						<text :class="['txt',fm.billType=='income'?'txt-in':'']">￥{{fm.amount}}</text>
+					<view :class="['top-area',fm.billType=='expenses'?'top-area-red':'']">
+						<image v-if="fm.billType=='income'" src="/static/icons/fm/down.png" style="width: 16px;height: 16px;"></image>
+						<image v-if="fm.billType=='expenses'"  src="/static/icons/fm/grow.png" style="width: 16px;height: 16px;"></image>
+						<text class="txt">{{fm.billType=='expenses'?'支出':'收入'}}</text>
 					</view>
-					<view class="card-item">
-						<text class="label">收支时间：</text> <text class="val-style">{{formatDate(fm.ioeTime)}}</text>
+					<view class="amount-area">
+						<view><text class="label">{{fm.billType=='expenses'?'本次支出':'本次收入'}}</text></view>
+						<view><text  :class="['num',fm.billType=='expenses'?'num-red':'']">￥{{fm.amount}}</text></view>
 					</view>
-					<view class="card-item">
-						<text class="label">交易类型：</text> <text class="val-style">{{fm.type_text}}</text>
+					<view class="content">
+					<!-- 	<view class="card-item title">
+							<text class="txt">{{formatDate(fm.ioeTime)}}</text>
+						</view> -->
+						<view class="card-item" >
+							<view class="fl-c"> 
+								<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">收支时间：</text> 
+							</view>
+						<text class="val-style">{{formatDate(fm.ioeTime)}}</text>
 					</view>
-				<!-- 	<view class="card-item">
+						<view class="card-item">
+							<view class="fl-c"> 
+							<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
+							<text class="label">交易类型：</text>
+							</view>
+							 <text class="val-style">{{fm.type_text}}</text>
+						</view>
+						<!-- 	<view class="card-item">
 						<text class="label">收支金额：</text><text class="val-style">
 							{{fm.amount}}
 						</text>
 					</view> -->
-					<view class="card-item" style="margin-bottom: 0;">
-						<text class="label">备注信息：</text><text class="val-style">
-							{{fm.mark}}
-						</text>
+						<view class="card-item" style="margin-bottom: 0;">
+							<view class="fl-c"> 
+							<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
+							<text class="label">备注信息：</text>
+							</view>
+							<text class="val-style">
+								{{fm.mark}}
+							</text>
+						</view>
 					</view>
-					<view class="card-item">
-						<xt-control @del="deleteFm(fm)" @edit="editFm(fm)" :show-view="false"></xt-control>
+
+					<view class="control">
+						<!-- 			<view>
+							<text :class="['txt',fm.billType=='income'?'txt-in':'']">￥{{fm.amount}}</text>
+						</view> -->
+						<view>
+							<xt-control @del="deleteFm(fm)" @edit="editFm(fm)" :show-view="false"></xt-control>
+						</view>
+
+
 					</view>
 				</view>
 			</view>
@@ -195,7 +228,7 @@
 				showCancelButton: false,
 				confirm: () => {
 					hideDialog();
-					
+
 				}
 			})
 			return;
@@ -205,14 +238,14 @@
 			title: '确认删除此房间',
 			message: "删除后将无法恢复，确认删除吗？",
 			beforeClose: async () : Promise<boolean> => {
-		
-					//await roomTypeService.deleteFm(room._id);
-					//await comFunction.getRoomTypeList(hotel_id.value);
-					await FMService.deleteFm(fm._id);
-					getFmList();
-					hideDialog();				
-					return true;
-				
+
+				//await roomTypeService.deleteFm(room._id);
+				//await comFunction.getRoomTypeList(hotel_id.value);
+				await FMService.deleteFm(fm._id);
+				getFmList();
+				hideDialog();
+				return true;
+
 			},
 			confirm: () => {
 			}, cancel: () => {
@@ -244,7 +277,6 @@
 </script>
 
 <style lang="scss">
-
 	.search-area {
 		padding: 18px;
 
@@ -283,62 +315,121 @@
 
 		.card-list-item {
 			min-width: 360px;
-			padding: 15px;
+			padding: 7.5px 15px;
 			flex: 1;
 
 			.card {
 				background-color: #fff;
 				border-radius: 12px;
-				padding: 16px;
+
 				position: relative;
-				.icon-area{
+
+				.icon-area {
 					position: absolute;
 					right: 10px;
 					top: 10px;
 				}
-				.card-item {
-					margin-bottom: 12px;
-					display: flex;
-					flex-direction: row;
-					align-items: center;					
-					&:last-child {
-						margin-bottom: 0;
-					}
 
-					.label {
-						color: #4e5969;
-						font-size: 14px;
-					}
-
-					.val-style {
-						color: #1d2129;
-						font-size: 14px;
-					}
-					
-				}
-
-				.title {
+				.top-area {
 					display: flex;
 					flex-direction: row;
 					align-items: center;
-					justify-content: center;
+					height: 60px;
+					border: 1px solid rgba(16, 185, 129, 0.2);
+					background-color: #ecfdf5;
+					padding: 0 24px;
+
+					.txt {
+						line-height: 60px;
+						color: #047857;
+						font-size: 18px;
+						font-weight: 700;
+					}
+					
+				}
+				.top-area-red{
+					border: 1px solid rgba(239, 68, 68, 0.2);
+					background-color: #fef2f2;
+					.txt {
+						line-height: 60px;
+						color: #b91c1c;
+						font-size: 18px;
+						font-weight: 700;
+					}
+					
+				}
+				.amount-area {
+					padding: 0 24px;
+					margin-top: 24px;
+					.label {
+						color: #6b7280;
+						font-size: 14px;
+						margin-bottom: 4px;
+					}
+
+					.num {
+						line-height: 36px;
+						color: #047857;
+						font-size: 30px;
+						font-weight: 700;
+					}
+					.num-red {
+						color: #b91c1c;
+					}
+				}
+
+				.content {
+					padding: 24px;
+
+					.card-item {
+						
+						margin-top: 15px;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						justify-content: space-between;
+
+						&:first-child {
+							margin-top: 0;
+						}
+						.fl-c{
+							display: flex;
+							flex-direction: row;
+							align-items: center;
+						}
+						.label {
+							color: #1f2937;
+							font-size: 16px;
+							padding-left: 8px;
+						}
+
+						.val-style {
+							color: #1f2937;
+							font-size: 16px;
+						}
+
+					}
+				}
+
+
+
+				.control {
+					height: 44px;
+					display: flex;
+					flex-direction: row;
+					justify-content: flex-end;
+					background-color: #f9fafb;
+					align-items: center;
+
 					.txt {
 						font-size: 20px;
 						font-weight: 700;
 						color: #f53f3f;
 						padding-top: 5px;
 					}
-					.txt-in{
+
+					.txt-in {
 						color: #00b42a;
-					}
-
-
-				}
-
-				.subtitle {
-					.txt {
-						color: #6b7280;
-						font-size: 14px;
 					}
 				}
 			}

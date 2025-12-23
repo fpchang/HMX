@@ -32,12 +32,12 @@
 					<text class="txt">收入筛选</text>
 					<l-tag variant="light">共{{fmResult.count}}条</l-tag>
 				</view>
-				<view class="card-item  select-area">
+				<view class="card-item  select-area" style="margin-bottom: 0;">
 					<fmSearchComponent :columns="columns" :initDateRange="dateRange"
 						@searchInputChange="searchInputChange" @selectAction="selectFm" @dateChange="dateChange"
 						@searchAction="getFmList" placeholder="搜索收入名称"></fmSearchComponent>
 				</view>
-				<view class="card-item search"></view>
+				<!-- <view class="card-item search"></view> -->
 			</view>
 
 		</view>
@@ -51,10 +51,13 @@
 						<image src="/static/icons/fm/expense.png" style="width: 20px;height: 20px;"
 							v-if="fm.billType=='expenses'"></image>
 					</view>
-					<view :class="['top-area',fm.billType=='expenses'?'top-area-red':'']">
-						<image v-if="fm.billType=='income'" src="/static/icons/fm/down.png" style="width: 16px;height: 16px;"></image>
-						<image v-if="fm.billType=='expenses'"  src="/static/icons/fm/grow.png" style="width: 16px;height: 16px;"></image>
-						<text class="txt">{{fm.billType=='expenses'?'支出':'收入'}}</text>
+					<view class="top-area" v-if="fm.billType=='income'">
+						<image  src="/static/icons/fm/in.png" style="width: 18px;height: 18px;"></image>
+						<text  class="txt">收入</text>
+					</view>
+					<view   class="top-area-red" v-if="fm.billType=='expenses'">
+						<image src="/static/icons/fm/expense.png" style="width: 18px;height: 18px;"></image>
+						<text  class="txt">支出</text>
 					</view>
 					<view class="amount-area">
 						<view><text class="label">{{fm.billType=='expenses'?'本次支出':'本次收入'}}</text></view>
@@ -196,10 +199,12 @@
 		console.log(pn, fmResult.value);
 		getFmList();
 	}
-	const formatDate = (timestamp : number) => {
+	const formatDate = (timestamp : number) : string => {
 		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
 	}
 	const addFm = async () => {
+		console.log("add",permissionList.value);
+		console.log(33,permissionList.value.includes("FM_CREATE"));
 		if (!permissionList.value.includes(
 			"FM_CREATE"
 		)) {
@@ -213,12 +218,13 @@
 			})
 			return;
 		}
-		
 		uni.navigateTo({
-			url: `/pages/financialManagement/income/createIncomeAndExpense/createIncomeAndExpense?billType=${billType.value}`
+			url: `/pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense?billType=${billType.value}`
 		});
+		
+		
 	}
-	const deleteFm = async (fm : FMBean) => {
+	const deleteFm = async (fm : FMBean)=> {
 		if (submitLoading.value == true) {
 			return;
 		}
@@ -247,7 +253,6 @@
 				await FMService.deleteFm(fm._id);
 				getFmList();
 				hideDialog();
-				return true;
 
 			},
 			confirm: () => {
@@ -348,21 +353,28 @@
 					padding: 0 24px;
 
 					.txt {
-						line-height: 60px;
+						// line-height: 60px;
 						color: #047857;
 						font-size: 18px;
 						font-weight: 700;
+						padding-left: 4px;
 					}
 					
 				}
 				.top-area-red{
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					height: 60px;
+					padding: 0 24px;
 					border-bottom: 1px solid rgba(239, 68, 68, 0.2);
 					background-color: #fef2f2;
 					.txt {
-						line-height: 60px;
+						// line-height: 60px;
 						color: #b91c1c;
 						font-size: 18px;
 						font-weight: 700;
+						padding-left: 4px;
 					}
 					
 				}
@@ -422,12 +434,13 @@
 
 
 				.control {
-					height: 44px;
+				
 					display: flex;
 					flex-direction: row;
 					justify-content: flex-end;
-					background-color: #f9fafb;
+					// background-color: #f9fafb;
 					align-items: center;
+					padding: 0px 20px 24px 0;
 
 					.txt {
 						font-size: 20px;

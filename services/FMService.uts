@@ -120,7 +120,6 @@ class FMServiceClass {
 		const config = db.collection("hm-incomeAndExpensesConfig").getTemp();
 		try {
 			const res = await db.collection(main, config).get({ getCount: true });
-			console.log("fmm", res, res['count'] as number);
 			const data = res['data'] as Array<UTSJSONObject>;
 
 			if (data != null) {

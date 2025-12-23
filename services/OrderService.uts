@@ -1,3 +1,4 @@
+import { orderBean } from '../bean/orderBean';
 import { DB } from '@/api/DB';
 import { dayuts } from '@/uni_modules/lime-dayuts';
 class OrderServiceClass {
@@ -7,9 +8,61 @@ class OrderServiceClass {
 	/**
 	 * 创建订单
 	 */
-	addOrder(orderObj : UTSJSONObject) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return DB.callFunction("hm_addOrder", { orderObj });
+	async addOrder(orderObj : boolean) : Promise<boolean> {
+		const obj = {
+			
+		}
+		try {
+			const res= await DB.callFunction("hm_addOrder", obj);
+			console.log("create order", res);
+			const result = res['result'] as UTSJSONObject;
+			const code = result.getNumber("code") ?? 0;
+			const message = result.getString("message") ?? "";
+			if (code != 0) {
+				console.log("code error", code);
+				uni.showToast({
+					title: message,
+					icon: "none"
+				});
+				throw new Error(message);
+			}
+			uni.showToast({
+				title: "添加成功",
+				icon: "none"
+			});
+			return true
+		} catch (error) {
+			throw new Error("创建失败");
+		}
+		
 	}
+	async getOrderListByCondition(type:string,date:number,pageNo : number, pageSize : number):Promise<Array<orderBean>>{
+		const w = {
+			type,date
+		}
+		//const res = await DB.getCollection("hm-order",w);
+		let skipnum : number = Math.max((pageNo - 1) * pageSize, 0);
+		console.log("过滤条件",pageNo, pageSize, skipnum);
+		const db = uniCloud.databaseForJQL();
+		const dbCmd = db.command;
+		let orderList : Array<orderBean> = [];
+		try {
+			const res =await db.collection("hm-order").where(w).orderBy("createTime desc").skip(skipnum).limit(pageSize).get();
+			console.log("order request",res)
+			const data = res['data'] as Array<UTSJSONObject>;
+			
+			if (data != null) {
+				data.forEach((item : UTSJSONObject) => {
+					
+				})
+		} catch (error) {
+			//TODO handle the exception
+		}
+		
+	
+	}
+	}
+	
 	/**
 	 *  办理入住订单
 	 * st 日期

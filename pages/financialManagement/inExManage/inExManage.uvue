@@ -15,7 +15,7 @@
 			<view class="navbar-btn">
 				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
 
-				<text class="txt" @click="addFm">添加收入</text>
+				<text class="txt" @click="addFm">{{billType=='income'?'添加收入':'添加支出'}}</text>
 
 
 			</view>
@@ -24,8 +24,8 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		<incomeInfoCardComponent v-if="billType=='income'"></incomeInfoCardComponent>
-		<expensesInfoCardComponent v-if="billType=='expenses'"></expensesInfoCardComponent>
+		<!-- <incomeInfoCardComponent v-if="billType=='income'"></incomeInfoCardComponent>
+		<expensesInfoCardComponent v-if="billType=='expenses'"></expensesInfoCardComponent> -->
 		<view class="search-area">
 			<view class="card">
 				<view class="card-item title-area">
@@ -129,6 +129,8 @@
 	import { roomBean } from '@/bean/roomBean';
 	import { FMBean, FMDataListResult } from '@/bean/FMBean';
 	import { state } from "@/store/store";
+	import { fmState } from "@/store/modules/fmStore.uts";
+	
 	import { comFunction } from "@/pages/index/ComFuc";
 	import fmSearchComponent from "./components/fmSearchComponent/fmSearchComponent";
 	import expensesInfoCardComponent from "./components/expensesInfoCardComponent/expensesInfoCardComponent";
@@ -148,9 +150,9 @@
 		return state.roomTypeList;
 	});
 	//选择列表
-	let _select_id = ref("all");
+	let _select_id = ref("income");
 	let _search_key = ref("");
-	const billType = ref("all");
+	const billType = ref("income");
 	const keyword = ref("");//过滤字段
 	const dateRange = ref<string[]>(getMonthDateArray());
 	const columns = computed<Array<Array<PickerOption>>>(() => {
@@ -180,6 +182,7 @@
 	}
 	const dateChange = (range : string[]) => {
 		dateRange.value = range;
+		getFmList();
 
 	}
 	const searchInputChange = (k : string) => {
@@ -210,9 +213,9 @@
 			})
 			return;
 		}
-
+		
 		uni.navigateTo({
-			url: `/pages/financialManagement/income/createIncomeAndExpense/createIncomeAndExpense`
+			url: `/pages/financialManagement/income/createIncomeAndExpense/createIncomeAndExpense?billType=${billType.value}`
 		});
 	}
 	const deleteFm = async (fm : FMBean) => {
@@ -271,9 +274,14 @@
 	}
 	const init = () => {
 		//let d:MOONTH_START_END_TIMESTAMP=TIME.getTodayStartTimeAndEndTime(new Date());
-		getFmList();
+		
 	}
-	init();
+	onPageShow(()=>{
+		getFmList();
+	})
+	defineExpose({
+	  getFmList
+	});
 </script>
 
 <style lang="scss">

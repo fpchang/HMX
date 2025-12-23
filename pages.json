@@ -96,7 +96,7 @@
 			}
 		},
 		{
-			"path": "pages/financialManagement/income/income",
+			"path": "pages/financialManagement/inExManage/inExManage",
 			"style": {
 				"navigationBarTitleText": "",
 				"navigationStyle": "custom"
@@ -209,7 +209,7 @@
 			}
 		},
 		{
-			"path": "pages/financialManagement/income/createIncomeAndExpense/createIncomeAndExpense",
+			"path": "pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense",
 			"style": {
 				"navigationBarTitleText": "",
 				"navigationStyle": "custom"

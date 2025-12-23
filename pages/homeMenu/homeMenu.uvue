@@ -83,16 +83,16 @@
 			title_color: "rgb(30,30,30)",
 			menu_item_list: [{
 				icon: "/static/icons/homemenu/income.png",
-				label: "收入管理",
+				label: "收支管理",
 				bgColor: "rgba(72,187,120,0.1)",
-				url: "/pages/financialManagement/income/income"
+				url: "/pages/financialManagement/inExManage/inExManage"
 			},
-			{
-				icon: "/static/icons/homemenu/expense1.png",
-				label: "支出管理",
-				bgColor: "rgba(72,187,120,0.1)",
-				url: "/pages/financialManagement/expense/expense"
-			},
+			// {
+			// 	icon: "/static/icons/homemenu/expense1.png",
+			// 	label: "支出管理",
+			// 	bgColor: "rgba(72,187,120,0.1)",
+			// 	url: "/pages/financialManagement/expense/expense"
+			// },
 			{
 				icon: "/static/icons/homemenu/financial-statistics1.png",
 				label: "财务统计",

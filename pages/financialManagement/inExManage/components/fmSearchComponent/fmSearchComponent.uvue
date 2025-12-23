@@ -8,8 +8,8 @@
 				</view>
 			</view> -->
 			<view style="display: flex;flex-direction: row;align-items: center;">
-				<view style="width: 50px;margin-right: 8px;"><rice-button :type="billType=='all'?'primary':'info'" size="small"
-						text="全部" @click="checkBillType('all')"></rice-button></view>
+			<!-- 	<view style="width: 50px;margin-right: 8px;"><rice-button :type="billType=='all'?'primary':'info'" size="small"
+						text="全部" @click="checkBillType('all')"></rice-button></view> -->
 				<view style="width: 50px;margin-right: 8px"><rice-button :type="billType=='income'?'primary':'info'" size="small"
 						text="收入"  @click="checkBillType('income')"></rice-button></view>
 				<view style="width: 50px;">
@@ -67,13 +67,12 @@
 	const attrs = useAttrs();
 	let showPicker = ref(false);
 	let showCalendar = ref(false);
-	const billType=ref("all");
+	const billType=ref("income");
 	let text_val = ref("请选择");
 	let keystr = ref("");
 	text_val.value = columns.value[0][0]['text'] as string;
 
 	const dateRange = ref<string[]>(props.initDateRange);
-	//dateRange.value =getMonthDateArray()
 	const checkBillType=(id:string)=>{
 		billType.value=id;
 		emit("selectAction",id);
@@ -87,7 +86,6 @@
 
 
 	const searchEvent = () => {
-		console.log(keystr.value,billType.value,dateRange.value);
 		emit("searchAction", billType.value,dateRange.value,keystr.value);
 	}
 	const searchInputChange = (value : string) => {

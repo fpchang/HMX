@@ -244,15 +244,23 @@
 		}
 		console.log("delete")
 		showDialog({
-			title: '确认删除此房间',
+			title: '确认删除此收支单',
 			message: "删除后将无法恢复，确认删除吗？",
 			beforeClose: async () : Promise<boolean> => {
 
 				//await roomTypeService.deleteFm(room._id);
 				//await comFunction.getRoomTypeList(hotel_id.value);
-				await FMService.deleteFm(fm._id);
-				getFmList();
-				hideDialog();
+				try {
+					await FMService.deleteFm(fm._id);
+					getFmList();
+					hideDialog();
+				} catch (errMsg) {
+					uni.showToast({
+						title:'删除异常，请重试',
+						icon:"none"
+					})
+				}
+			
 
 			},
 			confirm: () => {

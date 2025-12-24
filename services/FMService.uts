@@ -66,7 +66,7 @@ class FMServiceClass {
 		}
 		
 	}
-	async deleteFm(fm_id:string):Promise<boolean>{
+	async deleteFm(fm_id:string){
 		try {
 			const res = await DB.callFunction("hm_deleteFm", {
 				_id: fm_id,
@@ -83,17 +83,11 @@ class FMServiceClass {
 				});
 				throw new Error(result.message as string);
 			}
-			uni.showToast({
-				title: "删除成功",
-				icon: "none"
-			});
 		} catch (error) {
-			uni.showToast({
-				title: "删除失败",
-				icon: "none"
-			});
+			throw new Error("删除失败");
+		
 		}
-		return true;
+		
 	}
 
 

@@ -1,3 +1,38 @@
-export type orderBean={
-	_id:string
+export type OrderRoomTypeBean = {
+	count: number,
+	name: string,
+	roomList: string[],
+	roomType_id: string
 }
+export type orderBean={
+		_id: string,
+		checkInEndDate: string,
+		checkInEndDateTimeStamp: number,
+		checkInStartDate: string,
+		checkInStartDateTimeStamp: number,
+		createTime: number,
+		createrName: string,
+		createrPhone: string,
+		downPayment: number,
+		fromClient: boolean,
+		hotel_id: string,
+		orderSouce_Zn: string,
+		orderSource: number,
+		orderStatus: number,
+		orderType: string,
+		payType: string,
+		phone: string,
+		roomTypeArray: OrderRoomTypeBean[],
+		totalAmount: number,
+		userName: string,
+		wxNickName: string
+}
+export type OrderDataListResult={
+	count: number,
+	pageNo: number,//当前页码
+	pageSize: number,//每页数量
+	orderList: Array<orderBean>//列表
+}
+
+
+

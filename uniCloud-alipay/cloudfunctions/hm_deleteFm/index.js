@@ -5,6 +5,11 @@ exports.main = async (event, context) => {
 	console.log("hm-incomeAndExpenses",event);
 		const db =uniCloud.database();
 		const dCmd=db.command;
-	const result = await db.collection('hm-incomeAndExpenses').doc(_id).remove();
-	return result;
+		try {
+			const result = await db.collection('hm-incomeAndExpenses').doc(_id).remove();
+			return {code:0,data:[],message:""};
+		} catch (error) {
+			throw new Error("删除失败");
+		}
+	
 };

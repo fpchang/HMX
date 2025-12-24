@@ -1,4 +1,4 @@
-import { orderBean } from '../bean/orderBean';
+import { orderBean, OrderRoomTypeBean, OrderDataListResult } from '@/bean/orderBean';
 import { DB } from '@/api/DB';
 import { dayuts } from '@/uni_modules/lime-dayuts';
 class OrderServiceClass {
@@ -36,27 +36,67 @@ class OrderServiceClass {
 		}
 
 	}
-	async getOrderListByCondition(type : string, date : number, pageNo : number, pageSize : number) : Promise<Array<orderBean>> {
-		const w = {
-			type, date
-		}
-		//const res = await DB.getCollection("hm-order",w);
+	async getOrderListBySearch(hotel_id : string, dateRange : number, orderStatus : string, keyword : string, pageNo : number, pageSize : number) : Promise<OrderDataListResult> {
 		let skipnum : number = Math.max((pageNo - 1) * pageSize, 0);
-		console.log("过滤条件", pageNo, pageSize, skipnum);
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
-		let orderList : Array<orderBean> = [];
+		const w = {
+			hotel_id: hotel_id,
+			orderStatus: orderStatus == 'all' ? dbCmd.neq(null) : orderStatus
+		}
+		console.log("过滤条件", w);
 		try {
-			const res = await db.collection("hm-order").where(w).orderBy("createTime desc").skip(skipnum).limit(pageSize).get();
+			const res = await db.collection("hm-order").where(w).orderBy("createTime desc").skip(skipnum).limit(pageSize).get({ getCount: true });
 			console.log("order request", res)
 			const data = res['data'] as Array<UTSJSONObject>;
-
+			let orderList : Array<orderBean> = []
 			if (data != null) {
 				data.forEach((item : UTSJSONObject) => {
-
+					let roomTypeList : Array<OrderRoomTypeBean> = [];
+					let rList : Array<UTSJSONObject> = item.getArray("roomTypeArray") ?? [];
+					rList.forEach(rt => {
+						let formatRt : OrderRoomTypeBean = {
+							count: rt.getNumber("count") ?? 0,
+							name: rt.getString("name") ?? "",
+							roomList: rt.getArray("roomList") ?? [],
+							roomType_id: rt.getString("roomType_id") ?? ""
+						}
+						roomTypeList.push(formatRt)
+					})
+					let order : orderBean = {
+						_id: item.getString("_id") ?? "",
+						checkInEndDate: item.getString("checkInEndDate") ?? "",
+						checkInEndDateTimeStamp: item.getNumber("checkInEndDateTimeStamp") ?? 0,
+						checkInStartDate: item.getString("checkInStartDate") ?? "",
+						checkInStartDateTimeStamp: item.getNumber("checkInStartDateTimeStamp") ?? 0,
+						createTime: item.getNumber("createTime") ?? 0,
+						createrName: item.getString("createrName") ?? "",
+						createrPhone: item.getString("createrPhone") ?? "",
+						downPayment: item.getNumber("downPayment") ?? 0,
+						fromClient: item.getBoolean("fromClient") ?? false,
+						hotel_id: item.getString("hotel_id") ?? "",
+						orderSouce_Zn: item.getString("orderSouce_Zn") ?? "",
+						orderSource: item.getNumber("orderSource") ?? 0,
+						orderStatus: item.getNumber("orderStatus") ?? 0,
+						orderType: item.getString("orderType") ?? "",
+						payType: item.getString("payType") ?? "",
+						phone: item.getString("phone") ?? "",
+						roomTypeArray: roomTypeList,
+						totalAmount: item.getNumber("totalAmount") ?? 0,
+						userName: item.getString("userName") ?? "",
+						wxNickName: item.getString("wxNickName") ?? "",
+					}
+					orderList.push(order);
 				})
 			}
-			return orderList;
+			let OrderDataListResult : OrderDataListResult = {
+				count: res['count'] as number,
+				pageNo: pageNo ?? 1,
+				pageSize: pageSize ?? 20,
+				orderList: orderList
+			}
+			console.log("条件订单列表：",OrderDataListResult);
+			return OrderDataListResult;
 		} catch (error) {
 			throw new Error("获取订单列表失败")
 		}

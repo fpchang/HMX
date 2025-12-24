@@ -2,16 +2,143 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		fmchart
+		<view class="finance-stat-container">
+		    <!-- 页面标题 -->
+		    <view class="page-header">
+		      <text class="page-title">财务统计分析</text>
+		      <text class="date-text">{{ currentDate }}</text>
+		    </view>
+		
+		    <!-- 当月收支饼图区域 -->
+		    <view class="chart-group">
+		      <text class="chart-title">当月收支占比</text>
+		      <view class="pie-charts-row">
+		        <!-- 当月收入饼图 -->
+		        <view class="chart-card" >
+		          <text class="chart-subtitle">当月收入</text>
+		          <view class="chart-container" :style="{ height: chartHeight }" id="incomePieChart">111</view>
+		        </view>
+	
+		      </view>
+			  <view class="pie-charts-row">
+	
+			    <!-- 当月支出饼图 -->
+			    <view class="chart-card" >
+			      <text class="chart-subtitle">当月支出</text>
+			      <view class="chart-container" :style="{ height: chartHeight }" id="expensePieChart">222</view>
+			    </view>
+			  </view>
+		    </view>
+		
+		    <!-- 当年收支柱状图区域 -->
+		    <view class="chart-group">
+		      <text class="chart-title">当年收支趋势</text>
+		      <!-- 当年收入柱状图 -->
+		      <view class="chart-card full-width">
+		        <text class="chart-subtitle">当年收入</text>
+		        <view class="chart-container" :style="{ height: barChartHeight }" id="incomeBarChart">333</view>
+		      </view>
+		      <!-- 当年支出柱状图 -->
+		      <view class="chart-card full-width">
+		        <text class="chart-subtitle">当年支出</text>
+		        <view class="chart-container" :style="{ height: barChartHeight }" id="expenseBarChart">444</view>
+		      </view>
+		    </view>
+		  </view>
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
 </template>
 
 <script setup>
-		
+		const currentDate = ref('');
+		const chartCardWidth = ref('48%');
+		const chartHeight = ref('280px');
+		const barChartHeight = ref('320px');
 </script>
 
-<style>
-		
+<style lang="scss">
+	.finance-stat-container {
+	  padding: 16px;
+	  background-color: #f5f7fa;
+	  min-height: 100vh;
+	}
+	
+	.page-header {
+	  display: flex;
+	  flex-direction: row;
+	  justify-content: space-between;
+	  align-items: center;
+	  margin-bottom: 20px;
+	}
+	
+	.page-title {
+	  font-size: 24px;
+	  font-weight: bold;
+	  color: #303133;
+	}
+	
+	.date-text {
+	  font-size: 14px;
+	  color: #909399;
+	}
+	
+	.chart-group {
+	  margin-bottom: 24px;
+	}
+	
+	.chart-title {
+	  display: block;
+	  font-size: 18px;
+	  font-weight: 600;
+	  color: #4e5969;
+	  margin-bottom: 16px;
+	}
+	
+	.pie-charts-row {
+	}
+	 
+	.chart-card {
+		margin-bottom: 16px;
+	  background-color: #ffffff;
+	  border-radius: 12px;
+	  padding: 16px;
+	  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+	}
+	
+	.full-width {
+	  width: 100% !important;
+	  margin-bottom: 16px;
+	}
+	
+	.chart-subtitle {
+	  display: block;
+	  font-size: 16px;
+	  color: #606266;
+	  margin-bottom: 12px;
+	  font-weight: 500;
+	}
+	
+	.chart-container {
+	  width: 100%;
+	}
+	
+	/* 平板适配：增大内边距和间距 */
+	@media (min-width: 768px) {
+	  .finance-stat-container {
+	    padding: 24px;
+	  }
+	
+	  .page-title {
+	    font-size: 28px;
+	  }
+	
+	  .chart-title {
+	    font-size: 20px;
+	  }
+	
+	  .chart-card {
+	    padding: 20px;
+	  }
+	}	
 </style>

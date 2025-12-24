@@ -24,18 +24,16 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		<!-- <incomeInfoCardComponent v-if="billType=='income'"></incomeInfoCardComponent>
-		<expensesInfoCardComponent v-if="billType=='expenses'"></expensesInfoCardComponent> -->
 		<view class="search-area">
 			<view class="card">
 				<view class="card-item title-area">
-					<text class="txt">收入筛选</text>
-					<l-tag variant="light">共{{fmResult.count}}条</l-tag>
+					<text class="txt">订单筛选</text>
+					<l-tag variant="light">共{{orderResult.count}}条</l-tag>
 				</view>
 				<view class="card-item  select-area">
-					<fmSearchComponent :columns="columns" :initDateRange="dateRange"
-						@searchInputChange="searchInputChange" @selectAction="selectFm" @dateChange="dateChange"
-						@searchAction="getFmList" placeholder="搜索收入名称"></fmSearchComponent>
+					<orderSearchComponent :columns="columns" :initDateRange="dateRange"
+						@searchInputChange="searchInputChange" @selectAction="selectStatus" @dateChange="dateChange"
+						@searchAction="getOrderList" placeholder="搜索收入名称"></orderSearchComponent>
 				</view>
 				<view class="card-item search"></view>
 			</view>
@@ -43,7 +41,7 @@
 		</view>
 		<view class="card-list">
 			<!-- <template v-for="roomType of filterRoomTypeList"> -->
-			<view class="card-list-item" v-for="fm of fmResult.fmList">
+			<view class="card-list-item" v-for="order of orderResult.orderList">
 				<view class="card">
 					<view class="icon-area">
 						<image src="/static/icons/fm/in.png" style="width: 20px;height: 20px;"
@@ -51,45 +49,64 @@
 						<image src="/static/icons/fm/expense.png" style="width: 20px;height: 20px;"
 							v-if="fm.billType=='expenses'"></image>
 					</view>
-					<view :class="['top-area',fm.billType=='expenses'?'top-area-red':'']">
-						<image v-if="fm.billType=='income'" src="/static/icons/fm/down.png" style="width: 16px;height: 16px;"></image>
-						<image v-if="fm.billType=='expenses'"  src="/static/icons/fm/grow.png" style="width: 16px;height: 16px;"></image>
-						<text class="txt">{{fm.billType=='expenses'?'支出':'收入'}}</text>
-					</view>
+					<!-- 		<view :class="['top-area',order.billType=='expenses'?'top-area-red':'']">
+						<image v-if="order.billType=='income'" src="/static/icons/fm/down.png" style="width: 16px;height: 16px;"></image>
+						<image v-if="order.billType=='expenses'"  src="/static/icons/fm/grow.png" style="width: 16px;height: 16px;"></image>
+						<text class="txt">{{order.billType=='expenses'?'支出':'收入'}}</text>
+					</view> -->
 					<view class="amount-area">
-						<view><text class="label">{{fm.billType=='expenses'?'本次支出':'本次收入'}}</text></view>
-						<view><text  :class="['num',fm.billType=='expenses'?'num-red':'']">￥{{fm.amount}}</text></view>
+						<view><text class="label">房价</text></view>
+						<view><text class="num">￥{{order.totalAmount}}</text></view>
 					</view>
 					<view class="content">
-					<!-- 	<view class="card-item title">
-							<text class="txt">{{formatDate(fm.ioeTime)}}</text>
+						<!-- 	<view class="card-item title">
+							<text class="txt">{{formatDate(order.ioeTime)}}</text>
 						</view> -->
-						<view class="card-item" >
-							<view class="fl-c"> 
-								<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
-								<text class="label">收支时间：</text> 
-							</view>
-						<text class="val-style">{{formatDate(fm.ioeTime)}}</text>
-					</view>
 						<view class="card-item">
-							<view class="fl-c"> 
-							<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
-							<text class="label">交易类型：</text>
+							<view class="fl-c">
+								<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">住客：</text>
 							</view>
-							 <text class="val-style">{{fm.type_text}}</text>
+							<text class="val-style">{{order.userName}}</text>
 						</view>
-						<!-- 	<view class="card-item">
-						<text class="label">收支金额：</text><text class="val-style">
-							{{fm.amount}}
-						</text>
-					</view> -->
+						<view class="card-item">
+							<view class="fl-c">
+								<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">时间：</text>
+							</view>
+							<text class="val-style">{{formatDate(order.checkInEndDateTimeStamp)}}</text>
+						</view>
+						<view class="card-item">
+							<view class="fl-c">
+								<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">房型：</text>
+							</view>
+							<view class="val-style" style="display: flex;flex-direction: row;align-items: center;">
+								<view v-for="it of order.roomTypeArray" >
+									<text style="padding-left: 8px">{{it.name}}</text>
+									</view>
+							</view>
+						</view>
+						<view class="card-item">
+							<view class="fl-c">
+								<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">房间：</text>
+								
+							</view>
+							<view class="val-style" style="display: flex;flex-direction: row;align-items: center;flex: 1;flex-wrap: wrap;justify-content: flex-end;">
+								<!-- <view v-for="it of order.roomTypeArray" style="display: flex;flex-direction: row;align-items: center;">
+									<text style="padding-left: 8px" v-for="i of it.roomList">{{formatRoomName(i)}}</text>
+								</view> -->
+								<text v-for="item of parseRoomList(order.roomTypeArray)" style="padding:0 4px">{{item}}</text> 
+							</view>
+						</view>
 						<view class="card-item" style="margin-bottom: 0;">
-							<view class="fl-c"> 
-							<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
-							<text class="label">备注信息：</text>
+							<view class="fl-c">
+								<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">备注信息：</text>
 							</view>
 							<text class="val-style">
-								{{fm.mark}}
+								{{order.mark}}
 							</text>
 						</view>
 					</view>
@@ -99,7 +116,7 @@
 							<text :class="['txt',fm.billType=='income'?'txt-in':'']">￥{{fm.amount}}</text>
 						</view> -->
 						<view>
-							<xt-control @del="deleteFm(fm)" @edit="editFm(fm)" :show-view="false"></xt-control>
+							<xt-control @del="deleteOrder(order)" @edit="editFm(order)" :show-view="false"></xt-control>
 						</view>
 
 
@@ -113,8 +130,8 @@
 	</scroll-view>
 	<!-- #endif -->
 	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;">
-		<l-pagination v-model="fmResult.pageNo" :disabled="submitLoading" :total="fmResult?.count"
-			:page-size="fmResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
+		<l-pagination v-model="orderResult.pageNo" :disabled="submitLoading" :total="orderResult?.count"
+			:page-size="orderResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
 	</view>
 </template>
 
@@ -125,18 +142,17 @@
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
-	import { FMService } from "@/services/FMService";
 	import { OrderService } from "@/services/OrderService";
-	import { roomBean } from '@/bean/roomBean';
-	import { FMBean, FMDataListResult } from '@/bean/FMBean';
+	import { orderBean,OrderRoomTypeBean, OrderDataListResult } from '@/bean/orderBean.uts';
 	import { state } from "@/store/store";
-	import { fmState } from "@/store/modules/fmStore.uts";	
+	import { fmState } from "@/store/modules/fmStore.uts";
 	import { comFunction } from "@/pages/index/ComFuc";
-	import fmSearchComponent from "./components/fmSearchComponent/fmSearchComponent";
+	import orderSearchComponent from "./components/orderSearchComponent/orderSearchComponent";
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
+
 	const user = computed(() => {
 		return state.user;
 	});
@@ -150,7 +166,7 @@
 	//选择列表
 	let _select_id = ref("income");
 	let _search_key = ref("");
-	const billType = ref("income");
+	const orderStatus = ref("all");
 	const keyword = ref("");//过滤字段
 	const dateRange = ref<string[]>(getMonthDateArray());
 	const columns = computed<Array<Array<PickerOption>>>(() => {
@@ -162,40 +178,57 @@
 	});
 
 
-	const fmResult = ref<FMDataListResult>({
+	const orderResult = ref<OrderDataListResult>({
 		count: 0,//总数量
 		pageNo: 1,//当前页码
 		pageSize: 20,//每页数量
-		fmList: []//列表
+		orderList: []//列表
 	})
-	const getFmList = async () => {
+	const getOrderList = async () => {
 		submitLoading.value = true;
 		uni.showLoading({
 			title: ""
 		})
-		const fmr = await FMService.getIncomeAndExpensesDateBySearch(hotel_id.value, billType.value, keyword.value, dateRange.value, fmResult.value.pageNo, fmResult.value.pageSize);
-		fmResult.value = fmr as FMDataListResult;
+		const fmr = await OrderService.getOrderListBySearch(hotel_id.value, dateRange.value, orderStatus.value, keyword.value, orderResult.value.pageNo, orderResult.value.pageSize);
+		orderResult.value = fmr;
 		uni.hideLoading();
 		submitLoading.value = false;
 	}
 	const dateChange = (range : string[]) => {
 		dateRange.value = range;
-		getFmList();
+		getOrderList();
 
 	}
 	const searchInputChange = (k : string) => {
 		keyword.value = k;
 	}
-	const selectFm = (bt : string) => {
-		billType.value = bt;
-		getFmList();
+	const selectStatus = (bt : string) => {
+		orderStatus.value = bt;
+		getOrderList();
 	}
 	const pageChange = (pn : number) => {
-		console.log(pn, fmResult.value);
-		getFmList();
+		console.log(pn, orderResult.value);
+		getOrderList();
 	}
 	const formatDate = (timestamp : number) => {
 		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
+	}
+	const formatRoomName = (room_id : string):string => {
+		if (roomTypeList.value == null) {
+			return "--"
+		}
+		const roomList : Array<roomBean> = roomTypeList.value.map(item => item.roomList).flat();
+		const roomItem = roomList.find((item) => item._id == room_id);
+		return roomItem ? roomItem.room_name : "--";
+	}
+	const parseRoomList = (roomTypeArray:Array<OrderRoomTypeBean>):Array<string>=>{
+		let list:Array<string>=[];
+		roomTypeArray.forEach(item=>{
+			item.roomList.forEach(roomid=>{
+				list.push(formatRoomName(roomid))
+			})	
+		});
+		return list;
 	}
 	const addOrder = async () => {
 		if (!permissionList.value.includes(
@@ -211,17 +244,17 @@
 			})
 			return;
 		}
-		
+
 		uni.navigateTo({
-			url: `/pages/financialManagement/income/createIncomeAndExpense/createIncomeAndExpense?billType=${billType.value}`
+			url: `/pages/order/createOrder/createOrder`
 		});
 	}
-	const deleteFm = async (fm : FMBean) => {
+	const deleteOrder = async (order : orderBean) => {
 		if (submitLoading.value == true) {
 			return;
 		}
 		if (!permissionList.value.includes(
-			"ROOMTYPE_DELETE"
+			"ORDER_DELETE"
 		)) {
 			showDialog({
 				title: '没有足够的权限',
@@ -236,16 +269,15 @@
 		}
 		console.log("delete")
 		showDialog({
-			title: '确认删除此房间',
+			title: '确认删除此订单',
 			message: "删除后将无法恢复，确认删除吗？",
 			beforeClose: async () : Promise<boolean> => {
 
-				//await roomTypeService.deleteFm(room._id);
+				//await roomTypeService.deleteOrder(room._id);
 				//await comFunction.getRoomTypeList(hotel_id.value);
-				await FMService.deleteFm(fm._id);
-				getFmList();
+				//await FMService.deleteOrder(fm._id);
+				getOrderList();
 				hideDialog();
-				return true;
 
 			},
 			confirm: () => {
@@ -272,13 +304,13 @@
 	}
 	const init = () => {
 		//let d:MOONTH_START_END_TIMESTAMP=TIME.getTodayStartTimeAndEndTime(new Date());
-		
+
 	}
-	onPageShow(()=>{
-		getFmList();
+	onPageShow(() => {
+		getOrderList();
 	})
 	defineExpose({
-	  getFmList
+		getOrderList
 	});
 </script>
 
@@ -351,22 +383,26 @@
 						font-size: 18px;
 						font-weight: 700;
 					}
-					
+
 				}
-				.top-area-red{
+
+				.top-area-red {
 					border-bottom: 1px solid rgba(239, 68, 68, 0.2);
 					background-color: #fef2f2;
+
 					.txt {
 						line-height: 60px;
 						color: #b91c1c;
 						font-size: 18px;
 						font-weight: 700;
 					}
-					
+
 				}
+
 				.amount-area {
 					padding: 0 24px;
 					margin-top: 24px;
+
 					.label {
 						color: #6b7280;
 						font-size: 14px;
@@ -379,6 +415,7 @@
 						font-size: 30px;
 						font-weight: 700;
 					}
+
 					.num-red {
 						color: #b91c1c;
 					}
@@ -388,7 +425,7 @@
 					padding: 24px;
 
 					.card-item {
-						
+
 						margin-top: 15px;
 						display: flex;
 						flex-direction: row;
@@ -398,11 +435,13 @@
 						&:first-child {
 							margin-top: 0;
 						}
-						.fl-c{
+
+						.fl-c {
 							display: flex;
 							flex-direction: row;
 							align-items: center;
 						}
+
 						.label {
 							color: #1f2937;
 							font-size: 16px;

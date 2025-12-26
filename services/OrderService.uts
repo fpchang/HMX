@@ -1,6 +1,7 @@
 import { orderBean, OrderRoomTypeBean, OrderDataListResult } from '@/bean/orderBean';
 import { DB } from '@/api/DB';
 import { dayuts } from '@/uni_modules/lime-dayuts';
+import { TIME, MOONTH_START_END_TIMESTAMP } from "@/static/utils/TIME";
 class OrderServiceClass {
 	constructor() {
 
@@ -36,13 +37,21 @@ class OrderServiceClass {
 		}
 
 	}
-	async getOrderListBySearch(hotel_id : string, dateRange : number, orderStatus : string, keyword : string, pageNo : number, pageSize : number) : Promise<OrderDataListResult> {
+	async getOrderListBySearch(hotel_id : string, dateRange :string[], orderStatus : string | number, keyword : string, pageNo : number, pageSize : number) : Promise<OrderDataListResult> {
 		let skipnum : number = Math.max((pageNo - 1) * pageSize, 0);
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
+		let st : number = TIME.getCurrentMonthFirst(new Date());
+		let et : number = TIME.getCurrentMonthLast(new Date());
+		if (dateRange != null && dateRange.length == 2) {
+			st = TIME.startTime(new Date(dateRange[0]));
+			et = TIME.endTime(new Date(dateRange[1]));
+		}
 		const w = {
 			hotel_id: hotel_id,
+			checkInEndDateTimeStamp: dbCmd.and([dbCmd.gte(st), dbCmd.lte(et)]),
 			orderStatus: orderStatus == 'all' ? dbCmd.neq(null) : orderStatus
+			$or:[{userName:new RegExp(`${keyword}`)},{wxNickName:new RegExp(`${keyword}`)},{phone:new RegExp(`${keyword}`)}]					
 		}
 		console.log("过滤条件", w);
 		try {

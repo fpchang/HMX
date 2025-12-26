@@ -43,17 +43,7 @@
 			<!-- <template v-for="roomType of filterRoomTypeList"> -->
 			<view class="card-list-item" v-for="order of orderResult.orderList">
 				<view class="card">
-					<view class="icon-area">
-						<image src="/static/icons/fm/in.png" style="width: 20px;height: 20px;"
-							v-if="fm.billType=='income'"></image>
-						<image src="/static/icons/fm/expense.png" style="width: 20px;height: 20px;"
-							v-if="fm.billType=='expenses'"></image>
-					</view>
-					<!-- 		<view :class="['top-area',order.billType=='expenses'?'top-area-red':'']">
-						<image v-if="order.billType=='income'" src="/static/icons/fm/down.png" style="width: 16px;height: 16px;"></image>
-						<image v-if="order.billType=='expenses'"  src="/static/icons/fm/grow.png" style="width: 16px;height: 16px;"></image>
-						<text class="txt">{{order.billType=='expenses'?'支出':'收入'}}</text>
-					</view> -->
+				
 					<view class="amount-area">
 						<view><text class="label">房价</text></view>
 						<view><text class="num">￥{{order.totalAmount}}</text></view>
@@ -112,9 +102,7 @@
 					</view>
 
 					<view class="control">
-						<!-- 			<view>
-							<text :class="['txt',fm.billType=='income'?'txt-in':'']">￥{{fm.amount}}</text>
-						</view> -->
+			
 						<view>
 							<xt-control @del="deleteOrder(order)" @edit="editFm(order)" :show-view="false"></xt-control>
 						</view>
@@ -171,8 +159,10 @@
 	const dateRange = ref<string[]>(getMonthDateArray());
 	const columns = computed<Array<Array<PickerOption>>>(() => {
 		let result : Array<Array<PickerOption>> = [[
-			{ text: '收入', value: 'income' },
-			{ text: '支出', value: 'expense' }
+				{ text: "全部", value: "all" },
+			      { text: "待入住", value: 1 },
+			      { text: "已完成", value: 5 },
+			      { text: "已撤销", value: 10 },
 		]];
 		return result;
 	});
@@ -190,7 +180,7 @@
 			title: ""
 		})
 		const fmr = await OrderService.getOrderListBySearch(hotel_id.value, dateRange.value, orderStatus.value, keyword.value, orderResult.value.pageNo, orderResult.value.pageSize);
-		orderResult.value = fmr;
+		orderResult.value = fmr as OrderDataListResult;
 		uni.hideLoading();
 		submitLoading.value = false;
 	}
@@ -244,7 +234,10 @@
 			})
 			return;
 		}
-
+		uni.$once("refrushOrderList", ()=>{
+			console.log("刷新orderlist");
+			getOrderList();
+		})
 		uni.navigateTo({
 			url: `/pages/order/createOrder/createOrder`
 		});
@@ -304,14 +297,15 @@
 	}
 	const init = () => {
 		//let d:MOONTH_START_END_TIMESTAMP=TIME.getTodayStartTimeAndEndTime(new Date());
-
+		getOrderList();
 	}
 	onPageShow(() => {
-		getOrderList();
+	//	getOrderList();
 	})
 	defineExpose({
-		getOrderList
+		//getOrderList
 	});
+	init();
 </script>
 
 <style lang="scss">

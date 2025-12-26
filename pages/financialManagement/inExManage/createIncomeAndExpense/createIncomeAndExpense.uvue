@@ -172,6 +172,7 @@
 		})
 		try {
 			await FMService.add(fmForm.value);
+			uni.$emit("refrushfmList");
 			uni.navigateBack();
 			submitLoading.value = false;
 			uni.hideLoading();

@@ -1,17 +1,270 @@
 <template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;align-items: center;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn" v-if="pageType!=2">
+				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
+					textColor="#1e88e5" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+			</view>
+		</template>
+	</rice-navbar>
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		createOrder page
+		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
+			<xt-form-item label="来源" tips="" required>
+				<rice-radio-group v-model="orderForm.orderSource" direction="row">
+					<view style="display: flex;flex-direction: column:wrap;width: 100%;">
+						<view v-for="item of source"> <rice-radio :value="item.value" :label="item.text"
+								style="margin-left:24px;margin-bottom: 12px;"></rice-radio></view>
+					</view>
+
+				</rice-radio-group>
+
+			</xt-form-item>
+			<xt-form-item label="日期" tips="" required>
+				<view class="select">
+					<view class="content" @click="showCalendarEvent">
+						<text class="txt">{{dateRange.join(" ~ ") }}</text>
+						<image src="/static/icons/calendar.png" style="width: 20px;height:20px"></image>
+					</view>
+				</view>
+
+			</xt-form-item>
+			<xt-form-item label="房型房间" tips="" required>
+
+
+			</xt-form-item>
+			<xt-form-item label="客户名" tips="" required>
+
+
+			</xt-form-item>
+			<xt-form-item label="手机号" tips="" required>
+
+
+			</xt-form-item>
+			<xt-form-item label="定金" tips="" required>
+
+
+			</xt-form-item>
+			<xt-form-item label="总价" tips="" required>
+
+
+			</xt-form-item>
+		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
+	<rice-calendar v-model:show="showCalendar" mode="range" :min-date="initDateObj.minDate" :date="dateRange" @confirm="rangeConfirm"></rice-calendar>
 </template>
 
 <script setup>
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { orderBean } from '@/bean/orderBean';
+	import { roomTypeService } from "@/services/roomTypeService.uts";
+	import { state } from "@/store/store";
+	import { comFunction } from "@/pages/index/ComFuc.uts"
+	import { validForm } from "./createOrderVaild.uts";
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { TIME, getMonthDateArray } from "@/static/utils/TIME";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	});
+	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+		return state.roomTypeList;
+	});
+	let pageType = ref(0);
+	let submitLoading = ref(false);
+	const title = computed(() => {
+		if (pageType.value == 0) {
+			return '添加订单';
+		}
+		return pageType.value == 1 ? '修改订单信息' : '订单信息';
+	});
+	const titleImg = computed<string>(() => {
+		if (pageType.value == 0) {
+			return "/static/icons/addpage.png"
+		}
+		return pageType.value == 1 ? "/static/icons/editpage.png" : "/static/icons/detailpage.png"
+	});
+	const source = [{
+		name: "xiechen",
+		text: "携程",
+		value: 1,
+	},
+	{
+		name: "meituan",
+		text: "美团",
+		value: 2,
+	},
+	{
+		name: "meituanminsu",
+		text: "美团民宿",
+		value: 3,
+	},
+	{
+		name: "ticktok",
+		text: "抖音",
+		value: 4,
+	},
+	{
+		name: "tujia",
+		text: "途家",
+		value: 5,
+	},
+	{
+		name: "downline",
+		text: "线下",
+		value: 0,
+	},
+	{
+		name: "ohters",
+		text: "其它",
+		value: 6,
+	}
+
+	]
+	const showCalendar = ref(false);
+	const initDateObj={
+		start_date:dayuts(new Date()).format("YYYY-MM-DD"),
+		end_date:dayuts(new Date()).add(1, 'day').format("YYYY-MM-DD"),
+		minDate:dayuts(new Date()).format("YYYY-MM-DD")
 		
+	}
+	const dateRange = ref<string[]>([initDateObj.start_date, initDateObj.end_date]);
+	let orderForm = ref<orderBean>({
+		_id: "",
+		checkInEndDate: "",
+		checkInEndDateTimeStamp: 0,
+		checkInStartDate: "",
+		checkInStartDateTimeStamp: 0,
+		createTime: 0,
+		createrName: "",
+		createrPhone: "",
+		downPayment: 0,
+		fromClient: false,
+		hotel_id: hotel_id.value,
+		orderSouce_Zn: "",
+		orderSource: 1,
+		orderStatus: 0,
+		orderType: "",
+		payType: "",
+		phone: "",
+		roomTypeArray: [],
+		totalAmount: 0,
+		userName: "",
+		wxNickName: ""
+	});
+	const showCalendarEvent = () => {
+		showCalendar.value = !showCalendar.value;
+	}
+	const rangeConfirm = (e : string[]) => {
+		console.log('rangeConfirm', e)
+		emit("dateChange", e);
+		dateRange.value = e;
+	}
+	const submitForm = async () => {
+		submitLoading.value = true;
+		let flag : boolean = validForm(orderForm.value)
+		if (flag == false) {
+			submitLoading.value = false;
+			return;
+		}
+		try {
+			// await roomTypeService.addRoom(roomForm.value.roomList);
+			// await comFunction.getRoomTypeList(hotel_id.value);
+			uni.navigateBack();
+			submitLoading.value = false;
+		} catch (error) {
+			submitLoading.value = false;
+		}
+
+	}
 </script>
 
-<style>
-		
+<style lang="scss">
+	.room-list-item {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		margin-bottom: 12px;
+
+		.del-style {
+			padding-left: 8px;
+		}
+
+
+	}
+
+	.select {
+
+		position: relative;
+		border: 1px solid #dcdfe6;
+		box-sizing: border-box;
+		overflow: visible;
+		border-radius: 4px;
+
+		.content {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			height: 36px;
+			padding: 0 8px;
+			overflow: visible;
+
+			.txt {
+				line-height: 36px;
+			}
+		}
+
+		.select-panal {
+			overflow: visible;
+			width: 100%;
+			position: relative;
+			top: 40px;
+			left: 0;
+
+			.select-list {
+				overflow: visible;
+				background-color: #fff;
+			}
+		}
+	}
+
+	.addNew-btn {
+		flex: 1;
+		background: #fff;
+		padding: 10px 0;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid #ededed;
+		border-radius: 8px;
+
+		.txt {
+			font-size: 14px;
+			color: #1e88e5;
+
+		}
+	}
 </style>

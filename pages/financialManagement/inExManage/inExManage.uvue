@@ -218,6 +218,10 @@
 			})
 			return;
 		}
+		uni.$once("refrushfmList", ()=>{
+			console.log("刷新fmlist");
+			getFmList();
+		})
 		uni.navigateTo({
 			url: `/pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense?billType=${billType.value}`
 		});
@@ -287,14 +291,12 @@
 	}
 	const init = () => {
 		//let d:MOONTH_START_END_TIMESTAMP=TIME.getTodayStartTimeAndEndTime(new Date());
-		
+		getFmList();
 	}
 	onPageShow(()=>{
-		getFmList();
+		//getFmList();
 	})
-	defineExpose({
-	  getFmList
-	});
+	init();
 </script>
 
 <style lang="scss">

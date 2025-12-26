@@ -41,30 +41,51 @@
 
 			</xt-form-item>
 			<xt-form-item label="房型房间" tips="" required>
-
+			<view> 
+				<view v-for="item in 200" style="padding:10px;">{{203}}</view>
+			</view>
 
 			</xt-form-item>
 			<xt-form-item label="客户名" tips="" required>
 
-
+				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服微信"
+					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.wechat"></rice-input>
 			</xt-form-item>
 			<xt-form-item label="手机号" tips="" required>
-
+				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服电话"
+					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.phone" :maxlength="11"
+					type="number"></rice-input>
 
 			</xt-form-item>
 			<xt-form-item label="定金" tips="" required>
 
-
+				<rice-stepper v-model="orderForm.downPayment" input-width="150" button-size="38" font-size="15"
+					:auto-fixed="false" :disabled="pageType==2" />
 			</xt-form-item>
 			<xt-form-item label="总价" tips="" required>
+				<rice-stepper v-model="orderForm.totalAmount" input-width="150" button-size="38" font-size="15"
+					:auto-fixed="false" :disabled="pageType==2" />
 
-
+			</xt-form-item>
+			<xt-form-item label="备注" tips="" required>
+				<view>
+			
+					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="请输入备注内容"
+						layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
+						v-model="orderForm.mark"></rice-textarea>
+				</view>
 			</xt-form-item>
 		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
-	<rice-calendar v-model:show="showCalendar" mode="range" :min-date="initDateObj.minDate" :date="dateRange" @confirm="rangeConfirm"></rice-calendar>
+	<rice-calendar v-model:show="showCalendar" mode="range" :min-date="initDateObj.minDate" :date="dateRange"
+		@confirm="rangeConfirm"></rice-calendar>
+		<l-popup v-model="showCheckRoomPanal" position="right" :closeable="true">
+			<view style="width:700rpx;padding:50px 0">
+				<checkRoomComponent></checkRoomComponent>
+			</view>
+		</l-popup>
 </template>
 
 <script setup>
@@ -79,6 +100,7 @@
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { TIME, getMonthDateArray } from "@/static/utils/TIME";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import checkRoomComponent from "./components/checkRoomComponent.uvue";
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -92,6 +114,7 @@
 		return state.roomTypeList;
 	});
 	let pageType = ref(0);
+	const showCheckRoomPanal=ref(true);
 	let submitLoading = ref(false);
 	const title = computed(() => {
 		if (pageType.value == 0) {
@@ -143,11 +166,11 @@
 
 	]
 	const showCalendar = ref(false);
-	const initDateObj={
-		start_date:dayuts(new Date()).format("YYYY-MM-DD"),
-		end_date:dayuts(new Date()).add(1, 'day').format("YYYY-MM-DD"),
-		minDate:dayuts(new Date()).format("YYYY-MM-DD")
-		
+	const initDateObj = {
+		start_date: dayuts(new Date()).format("YYYY-MM-DD"),
+		end_date: dayuts(new Date()).add(1, 'day').format("YYYY-MM-DD"),
+		minDate: dayuts(new Date()).format("YYYY-MM-DD")
+
 	}
 	const dateRange = ref<string[]>([initDateObj.start_date, initDateObj.end_date]);
 	let orderForm = ref<orderBean>({

@@ -1,0 +1,164 @@
+<template>
+	<scroll-view class="l-sidebar" ref="rootRef" :scroll-y="true" direction="vertical" :style="[styles]"
+		:scroll-top="scrollTop" @scroll="onScroll">
+		<slot></slot>
+		<view class="l-sidebar__padding" :class="{'l-sidebar--top': round && lastItem }"></view>
+	</scroll-view>
+</template>
+<script lang="uts" setup>
+	/**
+	 * Sidebar 侧边导航组件
+	 * @description 用于实现垂直导航菜单，支持高亮选中状态和自定义样式
+	 * <br>插件类型：LSidebarComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-sidebar
+	 * 
+	 * @property {string} width 侧边栏宽度
+	 * @property {string} fontSize 文字大小
+	 * @property {string} lineHeight 行高
+	 * @property {string} textColor 文字颜色
+	 * @property {string} disabledTextColor 禁用状态文字颜色
+	 * @property {string} bgColor 背景颜色
+	 * @property {string} selectedFontWeight 选中项字重
+	 * @property {string} selectedTextColor 选中项文字颜色
+	 * @property {string} selectedBorderWidth 选中项指示条宽度
+	 * @property {string} selectedBorderHeight 选中项指示条高度
+	 * @property {string} selectedBorderColor 选中项指示条颜色
+	 * @property {string} selectedBgColor 选中项背景色
+	 * @property {boolean} line 线条
+	 * @property {boolean} round 圆角
+	 * @event {Function} change 选项变化时触发（返回选中项索引）
+	 */
+
+
+	import type { SidebarProps, LimeSidebarContext, LimeSidebarValue } from './type'
+	import { sidebarContextSymbol } from './common'
+	
+	import { clamp } from '@/uni_modules/lime-shared/clamp'
+	const emit = defineEmits(['change', 'update:modelValue'])
+	const props = withDefaults(defineProps<SidebarProps>(), {
+		round: false,
+		line: false
+		// #ifdef APP
+		// selectedBorderWidth: '4px',
+		// selectedBorderHeight: '16px',
+		// selectedBorderColor: '#3283ff'
+		// #endif
+	})
+
+	const sidebarItemMap = new Map<number, () => Promise<DOMRect> >();
+	const children = ref<LSidebarItemComponentPublicInstance[]>([])
+	const currentValue = ref<LimeSidebarValue>(props.value ?? props.modelValue ?? props.defaultValue ?? 0)
+	const currentIndex = computed(() : number => Math.max(children.value.findIndex((item, index) : boolean => {
+		if (item.value != null) return item.value == currentValue.value
+		return index == currentValue.value
+	}), 0))
+
+	const lastItem = computed(() : boolean => {
+		return children.value.length == currentIndex.value + 1
+	})
+
+	const styles = computed(() : Map<string, any> => {
+		const style = new Map<string, any>();
+		if(props.selectedBorderWidth != null) {
+		    style.set('--l-sidebar-selected-border-width', props.selectedBorderWidth!)
+		}
+		if(props.selectedBorderHeight != null) {
+		    style.set('--l-sidebar-selected-border-height', props.selectedBorderHeight!)
+		}
+		if(props.selectedBorderColor != null) {
+		    style.set('--l-sidebar-selected-border-color', props.selectedBorderColor!)
+		}
+		if(props.width != null) {
+		    style.set('--l-sidebar-width', props.width!)
+		}
+		if(props.fontSize != null) {
+		    style.set('--l-sidebar-font-size', props.fontSize!)
+		}
+		if(props.lineHeight != null) {
+		    style.set('--l-sidebar-line-height', props.lineHeight!)
+		}
+		if(props.textColor != null) {
+		    style.set('--l-sidebar-text-color', props.textColor!)
+		}
+		if(props.disabledTextColor != null) {
+		    style.set('--l-sidebar-disabled-text-color', props.disabledTextColor!)
+		}
+		if(props.bgColor != null) {
+		    style.set('--l-sidebar-background', props.bgColor!)
+		}
+		if(props.selectedTextColor != null) {
+		    style.set('--l-sidebar-selected-text-color', props.selectedTextColor!)
+		}
+		if(props.selectedBgColor != null) {
+		    style.set('--l-sidebar-selected-background', props.selectedBgColor!)
+		}
+
+		return style
+	})
+
+	const scrollTop = ref(0);
+	const rootRef = ref<UniElement | null>(null);
+	let memoScrollTop = 0;
+	const onScroll = (event : UniScrollEvent) => {
+		memoScrollTop = event.detail.scrollTop;
+	};
+	const scrollIntoView = async () => {
+		if (rootRef.value == null) return
+		const child = children.value[currentIndex.value]
+		const getRect = sidebarItemMap.get(child.$.uid)
+		if (getRect == null) return
+		const itemRect = await getRect();
+		const total = itemRect.height * children.value.length
+		const scrollViewRect = await rootRef.value.getBoundingClientRectAsync()!
+		const maxOffset = total - scrollViewRect.height;
+
+		const offset = memoScrollTop + (itemRect.top - scrollViewRect.top) - (1 / 2) * scrollViewRect.height + itemRect.height / 2;
+		scrollTop.value = clamp(offset, 0, maxOffset)
+	}
+	
+	const onClickItem = (value : LimeSidebarValue) => {
+		if (value == currentValue.value) return
+		currentValue.value = value
+		emit('change', value)
+		emit('update:modelValue', value)
+		scrollIntoView()
+	}
+
+	watch(() : LimeSidebarValue | null => props.value ?? props.modelValue, (value : LimeSidebarValue | null) => {
+		if (value == null || currentValue.value == value) return
+		currentValue.value = value!
+
+		scrollIntoView()
+	})
+
+
+	const register = (child : LSidebarItemComponentPublicInstance, getRect : () => Promise<DOMRect>) => {
+		sidebarItemMap.set(child.$.uid, getRect)
+		const index = children.value.findIndex(item => item == child);
+		if (index == -1) {
+			children.value.push(child);
+		}
+	}
+	const unregister = (child : LSidebarItemComponentPublicInstance) => {
+		// children.value = children.value.filter((item):boolean => item != value);
+		const index = children.value.findIndex(item => item == child);
+		if (index != -1) {
+			children.value.splice(index, 1);
+		}
+		sidebarItemMap.delete(child.$.uid)
+	}
+
+	provide(sidebarContextSymbol, {
+		currentValue,
+		currentIndex,
+		children,
+		onClickItem,
+		register,
+		unregister,
+		round: computed(() : boolean => props.round),
+		line: computed(() : boolean => props.line),
+	} as LimeSidebarContext)
+</script>
+<style lang="scss">
+	@import './index-u';
+</style>

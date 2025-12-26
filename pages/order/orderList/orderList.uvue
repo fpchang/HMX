@@ -21,6 +21,7 @@
 			</view>
 		</template>
 	</rice-navbar>
+	
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
@@ -113,11 +114,11 @@
 			</view>
 			<!-- </template> -->
 		</view>
-
+		<l-empty description="没有数据" v-if="!submitLoading&&orderResult.orderList.length<1" />
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
-	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;">
+	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"  v-if="!submitLoading&&orderResult.orderList.length>0">
 		<l-pagination v-model="orderResult.pageNo" :disabled="submitLoading" :total="orderResult?.count"
 			:page-size="orderResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
 	</view>

@@ -1,0 +1,36 @@
+<template>
+	<l-sidebar v-model="current" @change="onChange">
+	  <l-sidebar-item v-for="section in list" :title="section.title" :key="section.title" :value="section.title"/>
+	</l-sidebar>
+	<view class="right" style="flex: 1; padding: 0 10px;">
+	  <l-anchor v-model="current">
+	    <l-anchor-section v-for="section in list" :name="section.title" :key="section.title">
+	      <template #header>
+	        <text class="section-title">{{section.title}}</text>
+	      </template>
+	      <view class="section-card" v-for="item in section.children" :key="item">
+	        <text class="section-card-text">{{item}}</text>
+	      </view>
+	    </l-anchor-section>
+	  </l-anchor>
+	</view>
+</template>
+
+<script setup>
+	// setup 语法
+	const current = ref<string|number>(0);
+	const onChange = (value: number|string) => {
+	  console.log('value', value);
+	};
+	
+	// 模拟数据
+	const list = ref([
+	  { title: '标签1', children: ['内容1', '内容2', '内容3'] },
+	  { title: '标签2', children: ['内容1', '内容2', '内容3'] },
+	  { title: '标签3', children: ['内容1', '内容2', '内容3'] }
+	]);
+</script>
+
+<style lang="scss">
+
+</style>

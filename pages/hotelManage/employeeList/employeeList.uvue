@@ -87,6 +87,7 @@
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
+	<l-empty description="没有数据" v-if="!submitLoading&&employeeList.length<1" />
 </template>
 
 <script setup>
@@ -95,6 +96,7 @@
 	import { employeeBean } from '@/bean/employeeBean';
 	import { HotelService } from '@/services/HotelService';
 	import { employeeAction } from "./employeeAction.uts";
+	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -223,7 +225,16 @@
 			},
 		});
 	}
-	employeeAction.getEmplolyeeList(hotel_id.value);
+	const init= async ()=>{
+		submitLoading.value=true;
+		uni.showLoading({
+			title:""
+		})
+		await employeeAction.getEmplolyeeList(hotel_id.value);
+		submitLoading.value=false;
+		uni.hideLoading();
+	}
+	init();
 </script>
 
 <style lang="scss">

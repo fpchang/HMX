@@ -1,20 +1,21 @@
 {
-  "id": "lime-shared",
-  "displayName": "lime-shared",
-  "version": "0.4.6",
-  "description": "本人插件的几个公共函数，获取当前页，图片的base64转临时路径，图片的exif信息等",
+  "id": "lime-sidebar",
+  "displayName": "lime-sidebar 侧边导航",
+  "version": "0.0.9",
+  "description": "lime-sidebar 垂直展示的导航栏，用于在不同的内容区域之间进行切换，兼容uniapp/uniappx",
   "keywords": [
-    "lime-shared",
-    "exif"
+    "侧边导航",
+    "导航栏",
+    "sidebar"
 ],
   "repository": "",
   "engines": {
-    "HBuilderX": "^3.1.0",
-    "uni-app": "^4.55",
-    "uni-app-x": "^4.55"
+    "HBuilderX": "^4.26",
+    "uni-app": "^4.75",
+    "uni-app-x": "^4.75"
   },
   "dcloudext": {
-    "type": "sdk-js",
+    "type": "component-vue",
     "sale": {
       "regular": {
         "price": "0.00"
@@ -32,18 +33,22 @@
       "permissions": "无"
     },
     "npmurl": "",
-    "darkmode": "x",
+    "darkmode": "√",
     "i18n": "x",
     "widescreen": "x"
   },
   "uni_modules": {
-    "dependencies": [],
+    "dependencies": [
+      "lime-shared",
+      "lime-style",
+      "lime-badge"
+    ],
     "encrypt": [],
     "platforms": {
       "cloud": {
         "tcb": "√",
         "aliyun": "√",
-        "alipay": "√"
+        "alipay": "x"
       },
       "client": {
         "uni-app": {
@@ -59,17 +64,17 @@
             "vue": "√",
             "nvue": "-",
             "android": {
-              "extVersion": "",
-              "minVersion": "21"
+                "extVersion": "",
+                "minVersion": "21"
             },
             "ios": "√",
             "harmony": "√"
           },
           "mp": {
             "weixin": "√",
-            "alipay": "√",
-            "toutiao": "√",
-            "baidu": "√",
+            "alipay": "-",
+            "toutiao": "-",
+            "baidu": "-",
             "kuaishou": "-",
             "jd": "-",
             "harmony": "-",
@@ -88,8 +93,8 @@
           },
           "app": {
             "android": {
-              "extVersion": "",
-              "minVersion": "21"
+                "extVersion": "",
+                "minVersion": "21"
             },
             "ios": "√",
             "harmony": "√"
@@ -97,12 +102,6 @@
           "mp": {
             "weixin": "√"
           }
-        },
-        "App": {
-          "app-harmony": "u",
-          "app-nvue": "u",
-          "app-uvue": "y",
-          "app-vue": "u"
         }
       }
     }

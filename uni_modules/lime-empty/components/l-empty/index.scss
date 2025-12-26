@@ -1,0 +1,49 @@
+@import '~@/uni_modules/lime-style/index.scss';
+
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+
+$empty-opacity: create-var(empty-opacity, 1);
+$empty-padding-x: create-var(empty-padding-x, 0);
+$empty-padding-y: create-var(empty-padding-y, $spacer-lg);
+$empty-image-size: create-var(empty-image-size, 200px);
+$empty-description-margin-top: create-var(empty-description-margin-top, $spacer-md);
+$empty-description-padding-x: create-var(empty-description-padding-x, 60px);
+$empty-description-padding-y: create-var(empty-description-padding-y, 0);
+$empty-description-color: create-var(empty-description-color, $text-color-3);
+$empty-description-font-size: create-var(empty-description-font-size, $font-size);
+$empty-description-line-height: create-var(empty-description-line-height, $line-height);
+
+
+
+.l-empty {
+	/* #ifndef UNI-APP-X */
+	display: flex;
+	flex-direction: column;
+	/* #endif */
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	// padding: $empty-padding;
+	@include padding($empty-padding-y $empty-padding-x);
+	
+	
+	&__image {
+		width: $empty-image-size;
+		// height: $empty-image-size;
+		opacity: $empty-opacity;
+	}
+	
+	&__description {
+	    margin-top: $empty-description-margin-top;
+	    // padding: $empty-description-padding;
+		@include padding($empty-description-padding-y $empty-description-padding-x);
+	    color: $empty-description-color;
+	    font-size: $empty-description-font-size;
+	    line-height: $empty-description-line-height;
+	}
+	&__bottom {
+		 margin-top: $empty-description-margin-top;
+	}
+}

@@ -115,9 +115,10 @@
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
+	<l-empty description="没有数据" v-if="!submitLoading&&fmResult.fmList.length<1" />
 	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;">
 		<l-pagination v-model="fmResult.pageNo" :disabled="submitLoading" :total="fmResult?.count"
-			:page-size="fmResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
+			:page-size="fmResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange"  v-if="!submitLoading&&fmResult.fmList.length>0"/>
 	</view>
 </template>
 

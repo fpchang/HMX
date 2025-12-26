@@ -25,7 +25,8 @@ export type orderBean={
 		roomTypeArray: OrderRoomTypeBean[],
 		totalAmount: number,
 		userName: string,
-		wxNickName: string
+		wxNickName: string,
+		mark:string
 }
 export type OrderDataListResult={
 	count: number,

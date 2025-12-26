@@ -8,9 +8,10 @@
 				</view>
 			</view> -->
 			<view style="display: flex;flex-direction: row;align-items: center;">
-				<view style="width: 50px;margin-right: 8px" v-for="item of checkType"><rice-button :type="orderType==item.value?'primary':'info'"
-						size="small" :text="item.text" @click="checkTypeEvent(item.value)"></rice-button></view>
-			<!-- 	<view style="width: 50px;">
+				<view style="width: 60px;margin-right: 8px" v-for="item of checkType"><rice-button
+						:type="orderType==item.value?'primary':'info'" size="small" :text="item.text"
+						@click="checkTypeEvent(item.value)"></rice-button></view>
+				<!-- 	<view style="width: 50px;">
 					<rice-button size="small" :type="billType=='expenses'?'primary':'info'" text="支出"
 						@click="checkTypeEvent('expenses')"></rice-button>
 				</view> -->
@@ -58,13 +59,11 @@
 			default: "请输入关键字"
 		}
 	});
-	// const columns = ref<PickerOption[][]>([
-	// 	[
-	// 		{ text: '收入', value: 'income' },
-	// 		{ text: '支出', value: 'expense' }
-	// 	]
-	// ])
-	const checkType = [
+	type TYPE_ORDER = {
+		text : string,
+		value : string | number
+	}
+	const checkType : Array<TYPE_ORDER> = [
 		{ text: "全部", value: 'all' },
 		{ text: "待入住", value: 1 },
 		{ text: "已完成", value: 5 },
@@ -77,9 +76,9 @@
 	let text_val = ref("请选择");
 	let keystr = ref("");
 	//text_val.value = columns.value[0][0]['text'] as string;
-	const orderType=ref('all');
+	const orderType = ref<string | number>('all');
 	const dateRange = ref<string[]>(props.initDateRange);
-	const checkTypeEvent = (id : string) => {
+	const checkTypeEvent = (id : string | number) => {
 		orderType.value = id;
 		emit("selectAction", id);
 	}

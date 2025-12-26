@@ -23,7 +23,7 @@
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
 			<xt-form-item label="来源" tips="" required>
 				<rice-radio-group v-model="orderForm.orderSource" direction="row">
-					<view style="display: flex;flex-direction: column:wrap;width: 100%;">
+					<view style="display: flex;flex-direction: column;width: 100%;">
 						<view v-for="item of source"> <rice-radio :value="item.value" :label="item.text"
 								style="margin-left:24px;margin-bottom: 12px;"></rice-radio></view>
 					</view>
@@ -62,7 +62,7 @@
 			<xt-form-item label="客户名" tips="" required>
 
 				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服微信"
-					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.wechat"></rice-input>
+					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.userName"></rice-input>
 			</xt-form-item>
 			<xt-form-item label="手机号" tips="" required>
 				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服电话"
@@ -182,12 +182,14 @@
 	]
 	const showCalendar = ref(false);
 	const initDateObj = {
-		start_date: dayuts(new Date()).format("YYYY-MM-DD"),
-		end_date: dayuts(new Date()).add(1, 'day').format("YYYY-MM-DD"),
-		minDate: dayuts(new Date()).format("YYYY-MM-DD")
-
+		start_date: dayuts(new Date()).format("YYYY-MM-DD") as string,
+		end_date: dayuts(new Date()).add(1, 'day').format("YYYY-MM-DD") as string,
+		minDate: dayuts(new Date()).format("YYYY-MM-DD") as string
 	}
-	const dateRange = ref<string[]>([initDateObj.start_date, initDateObj.end_date]);
+	const dateRange = ref<string[]>([
+		initDateObj.start_date as string,
+		initDateObj.end_date as string
+	]);
 	let orderForm = ref<orderBean>({
 		_id: "",
 		checkInEndDate: "",
@@ -209,19 +211,20 @@
 		roomTypeArray: [],
 		totalAmount: 0,
 		userName: "",
-		wxNickName: ""
+		wxNickName: "",
+		mark:""
 	});
 	const showCalendarEvent = () => {
 		showCalendar.value = !showCalendar.value;
 	}
 	const rangeConfirm = (e : string[]) => {
-		console.log('rangeConfirm', e)
-		emit("dateChange", e);
+		console.log('rangeConfirm', e)		
 		dateRange.value = e;
 	}
 	const addNewRoom=()=>{
 		showCheckRoomPanal.value=true;
 	}
+	const deleteRoom=(index:number)=>{}
 	const submitForm = async () => {
 		submitLoading.value = true;
 		let flag : boolean = validForm(orderForm.value)

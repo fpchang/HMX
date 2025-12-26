@@ -16,19 +16,27 @@
 	</view>
 </template>
 
-<script setup>
-	// setup 语法
-	const current = ref<string|number>(0);
-	const onChange = (value: number|string) => {
-	  console.log('value', value);
-	};
-	
+<script setup lang="uts">
+	// 定义数据项类型
+	type SectionItem = {
+		title: string
+		children: string[]
+	}
+
+	// 当前选中值
+	const current = ref<string | number>(0)
+
+	// 切换回调
+	const onChange = (value: number | string) => {
+		console.log('value', value)
+	}
+
 	// 模拟数据
-	const list = ref([
-	  { title: '标签1', children: ['内容1', '内容2', '内容3'] },
-	  { title: '标签2', children: ['内容1', '内容2', '内容3'] },
-	  { title: '标签3', children: ['内容1', '内容2', '内容3'] }
-	]);
+	const list = ref<SectionItem[]>([
+		{ title: '标签1', children: ['内容1', '内容2', '内容3'] },
+		{ title: '标签2', children: ['内容1', '内容2', '内容3'] },
+		{ title: '标签3', children: ['内容1', '内容2', '内容3'] }
+	])
 </script>
 
 <style lang="scss">

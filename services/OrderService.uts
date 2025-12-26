@@ -17,8 +17,8 @@ class OrderServiceClass {
 			const res = await DB.callFunction("hm_addOrder", obj);
 			console.log("create order", res);
 			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
+			const code = result.getNumber("code",0) ?? 0;
+			const message = result.getString("message","") ?? "";
 			if (code != 0) {
 				console.log("code error", code);
 				uni.showToast({
@@ -37,7 +37,7 @@ class OrderServiceClass {
 		}
 
 	}
-	async getOrderListBySearch(hotel_id : string, dateRange :string[], orderStatus : string | number, keyword : string, pageNo : number, pageSize : number) : Promise<OrderDataListResult> {
+	async getOrderListBySearch(hotel_id : string, dateRange : string[], orderStatus : string | number, keyword : string, pageNo : number, pageSize : number) : Promise<OrderDataListResult> {
 		let skipnum : number = Math.max((pageNo - 1) * pageSize, 0);
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
@@ -50,8 +50,8 @@ class OrderServiceClass {
 		const w = {
 			hotel_id: hotel_id,
 			checkInEndDateTimeStamp: dbCmd.and([dbCmd.gte(st), dbCmd.lte(et)]),
-			orderStatus: orderStatus == 'all' ? dbCmd.neq(null) : orderStatus
-			$or:[{userName:new RegExp(`${keyword}`)},{wxNickName:new RegExp(`${keyword}`)},{phone:new RegExp(`${keyword}`)}]					
+			orderStatus: orderStatus == 'all' ? dbCmd.neq(999) : orderStatus,
+			$or: [{ userName: new RegExp(`${keyword}`) }, { wxNickName: new RegExp(`${keyword}`) }, { phone: new RegExp(`${keyword}`) }]
 		}
 		console.log("过滤条件", w);
 		try {
@@ -62,12 +62,12 @@ class OrderServiceClass {
 			if (data != null) {
 				data.forEach((item : UTSJSONObject) => {
 					let roomTypeList : Array<OrderRoomTypeBean> = [];
-					let rList : Array<UTSJSONObject> = item.getArray("roomTypeArray") ?? [];
-					rList.forEach(rt => {
+					let rList = item.getArray("roomTypeArray") as Array<UTSJSONObject> ?? []
+					rList.forEach((rt : UTSJSONObject) => {
 						let formatRt : OrderRoomTypeBean = {
 							count: rt.getNumber("count") ?? 0,
 							name: rt.getString("name") ?? "",
-							roomList: rt.getArray("roomList") ?? [],
+							roomList: rt.getArray("roomList") as Array<string> ?? [],
 							roomType_id: rt.getString("roomType_id") ?? ""
 						}
 						roomTypeList.push(formatRt)
@@ -94,6 +94,7 @@ class OrderServiceClass {
 						totalAmount: item.getNumber("totalAmount") ?? 0,
 						userName: item.getString("userName") ?? "",
 						wxNickName: item.getString("wxNickName") ?? "",
+						mark: item.getString("mark") ?? ""
 					}
 					orderList.push(order);
 				})
@@ -104,7 +105,7 @@ class OrderServiceClass {
 				pageSize: pageSize ?? 20,
 				orderList: orderList
 			}
-			console.log("条件订单列表：",OrderDataListResult);
+			console.log("条件订单列表：", OrderDataListResult);
 			return OrderDataListResult;
 		} catch (error) {
 			throw new Error("获取订单列表失败")

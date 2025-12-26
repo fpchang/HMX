@@ -105,7 +105,7 @@
 					<view class="control">
 			
 						<view>
-							<xt-control @del="deleteOrder(order)" @edit="editFm(order)" :show-view="false"></xt-control>
+							<xt-control @del="deleteOrder(order)" @edit="editOrder(order)" :show-view="false"></xt-control>
 						</view>
 
 
@@ -155,7 +155,7 @@
 	//选择列表
 	let _select_id = ref("income");
 	let _search_key = ref("");
-	const orderStatus = ref("all");
+	const orderStatus = ref<string | number>("all");
 	const keyword = ref("");//过滤字段
 	const dateRange = ref<string[]>(getMonthDateArray());
 	const columns = computed<Array<Array<PickerOption>>>(() => {
@@ -193,7 +193,7 @@
 	const searchInputChange = (k : string) => {
 		keyword.value = k;
 	}
-	const selectStatus = (bt : string) => {
+	const selectStatus = (bt : string | number) => {
 		orderStatus.value = bt;
 		getOrderList();
 	}
@@ -205,12 +205,21 @@
 		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
 	}
 	const formatRoomName = (room_id : string):string => {
+			let val="--";
 		if (roomTypeList.value == null) {
-			return "--"
+			return val;
 		}
-		const roomList : Array<roomBean> = roomTypeList.value.map(item => item.roomList).flat();
-		const roomItem = roomList.find((item) => item._id == room_id);
-		return roomItem ? roomItem.room_name : "--";
+		roomTypeList.value.forEach(roomtype=>{
+			let list = roomtype.roomList as Array<roomBean>;
+			list.forEach(room=>{
+				if(room._id ==room_id){
+					val=room.room_name;
+					return;
+				}
+				
+			})
+		})	
+		return val;
 	}
 	const parseRoomList = (roomTypeArray:Array<OrderRoomTypeBean>):Array<string>=>{
 		let list:Array<string>=[];
@@ -281,7 +290,7 @@
 
 		});
 	}
-	const editFm = async (fm : FMBean) => {
+	const editOrder = async (order:orderBean) => {
 		if (!permissionList.value.includes(
 			"ROOMTYPE_UPDATE"
 		)) {

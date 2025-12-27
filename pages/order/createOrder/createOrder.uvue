@@ -94,8 +94,8 @@
 	<!-- #endif -->
 	<rice-calendar v-model:show="showCalendar" mode="range" :min-date="initDateObj.minDate" :date="dateRange"
 		@confirm="rangeConfirm"></rice-calendar>
-		<l-popup v-model="showCheckRoomPanal" position="right" :closeable="true">
-			<view style="width:700rpx;padding:50px 0">
+		<l-popup v-model="showCheckRoomPanal" position="right" :closeable="true" :safeAreaInsetBottom ="true"  :safeAreaInsetTop="true" bgColor="#f5f7fa" :preventScrollThrough="true">
+			<view style="width:700rpx;padding:60px 0">
 				<checkRoomComponent></checkRoomComponent>
 			</view>
 		</l-popup>
@@ -222,7 +222,12 @@
 		dateRange.value = e;
 	}
 	const addNewRoom=()=>{
-		showCheckRoomPanal.value=true;
+			uni.$once("setRoomList", (list:Array<roomBean>)=>{
+					console.log("setRoomList",list);
+				})
+		uni.navigateTo({
+			url:"/pages/order/createOrder/checkOrderRoom/checkOrderRoom"
+		})
 	}
 	const deleteRoom=(index:number)=>{}
 	const submitForm = async () => {

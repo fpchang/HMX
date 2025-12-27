@@ -6,20 +6,24 @@
 
 
 		<scroll-view style="flex:1">
-
+			<rice-checkbox-group v-model="checkVal">
 			<view class="roomType-container" v-for="roomType of roomTypeList">
 				<view class="title">{{roomType.name}}</view>
 				<view class="card-list">
 					<view class="card-list-item" v-for="room of roomType.roomList">
 						<view class="card">
-							<view class="card-item title">
-								<text class="txt">{{room.room_name}}</text>
+							<view class="card-item">
+								<view class="title"><text class="txt">{{room.room_name}}</text></view>
+								<view class="check-area">
+									<rice-checkbox :value="room._id" label=""></rice-checkbox>
+								</view>
+								
 							</view>
-							<view class="card-item subtitle">
+						<!-- 	<view class="card-item subtitle">
 								<text class="txt">
 									{{roomType.name}}
 								</text>
-							</view>
+							</view> -->
 
 						</view>
 					</view>
@@ -27,12 +31,12 @@
 				</view>
 
 			</view>
-
+			</rice-checkbox-group>
 
 
 		</scroll-view>
 
-		<view class="bottom-area">1111</view>
+		<view class="bottom-area">{{checkVal}}</view>
 	</view>
 </template>
 
@@ -56,7 +60,8 @@
 	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
 		return state.roomTypeList;
 	});
-	const activeIndex = ref(0)
+	const activeIndex = ref(0);
+	const checkVal=ref<Array<string>>([]);
 	const list = ref<TabsOptions[]>([
 		{
 			name: '全部房型',
@@ -99,7 +104,7 @@
 
 			.card-list-item {
 				min-width: 360px;
-				padding: 15px;
+				padding: 15px 0;
 				flex: 1;
 
 				.card {
@@ -110,11 +115,22 @@
 					padding: 16px;
 
 					.card-item {
-						margin-bottom: 12px;
-
-						&:last-child {
-							margin-bottom: 0;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						justify-content: space-between;
+						.title {
+							.txt {
+								font-size: 18px;
+								font-weight: 700;
+								color: #1d2129;
+							}
+						
 						}
+						.check-area{
+							
+						}
+					
 					}
 
 					.title {
@@ -126,12 +142,7 @@
 
 					}
 
-					.subtitle {
-						.txt {
-							color: #6b7280;
-							font-size: 14px;
-						}
-					}
+				
 				}
 			}
 		}

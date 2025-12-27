@@ -226,7 +226,7 @@ sameHistory(11,history);
 const c3=getGroupList(history.slice(history.length-3));
 const c4=getGroupList(history.slice(history.length-4));
 const c5=getGroupList(history.slice(history.length-5));
-//const c6=getGroupList(history.slice(history.length-6));
-console.log("c3",new Set(c3),"c4",new Set(c4),"c5",new Set(c5));//夹号，冷号
+const c6=getGroupList(history.slice(history.length-6));
+console.log("c3",new Set(c3),"c4",new Set(c4),"c5",new Set(c5),"c6",new Set(c6));//夹号，冷号
 console.log(caculate(S1))
 //2,6,18,19,27 ,33  [ 3, 11, 16, 26, 29, 30 ] [ 11, 13, 20, 22, 32, 33 ]

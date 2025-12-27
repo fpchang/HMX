@@ -6,7 +6,7 @@
 
 
 		<scroll-view style="flex:1">
-			<rice-checkbox-group v-model="checkVal">
+			<rice-checkbox-group v-model="checkVal"  @change="onGroupChange">
 			<view class="roomType-container" v-for="roomType of roomTypeList">
 				<view class="title">{{roomType.name}}</view>
 				<view class="card-list">
@@ -77,6 +77,9 @@
 			name: '套房',
 		},
 	])
+	const onGroupChange=(values:string[])=>{
+		//set val
+	}
 	const tabClick = (e : TabsClickTab) => {
 		console.log('TabsClickTab', e)
 		uni.showToast({

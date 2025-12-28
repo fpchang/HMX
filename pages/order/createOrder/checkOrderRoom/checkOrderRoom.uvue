@@ -2,20 +2,23 @@
 	<view class="checkRoom">
 		<view class="tab-container">
 			<rice-tabs v-model="activeIndex" :list="menuList" @clickTab="tabClick" line-width="70%" s></rice-tabs>
-		</view>		
+		</view>
 		<scroll-view style="flex:1">
 			<rice-checkbox-group v-model="checkVal" @change="onGroupChange">
 				<view class="roomType-container" v-for="roomType of filterRoomTypeList">
 					<view class="rt-title">
-							<image src="/static/icons/hotel-room.png" style="width: 16px;height: 16px;margin-right: 8px;"></image>
-						<text class="txt">{{roomType.name}}(共{{roomType.remainRoomList.length}}间可订)</text></view>
+						<image src="/static/icons/hotel-room.png" style="width: 16px;height: 16px;margin-right: 8px;">
+						</image>
+						<text class="txt">{{roomType.name}}(共{{roomType.remainRoomList.length}}间可订)</text>
+					</view>
 					<view class="card-list">
 						<view class="card-list-item" v-for="room of roomType.remainRoomList">
 							<view class="card">
 								<view class="card-item">
 									<view class="title">
-									
-										<text class="txt">{{room.room_name}}</text></view>
+
+										<text class="txt">{{room.room_name}}</text>
+									</view>
 									<view class="check-area">
 										<rice-checkbox :value="room._id" label=""></rice-checkbox>
 									</view>
@@ -44,7 +47,8 @@
 					<text>已选择 {{checkVal.length}} 间房</text>
 				</view>
 				<view style="width:100px">
-					<rice-button type="primary" text="确认选择" :disabled="checkVal.length<1"></rice-button>
+					<rice-button type="primary" text="确认选择" :disabled="checkVal.length<1"
+						@click="setRoomSelect"></rice-button>
 				</view>
 			</view>
 		</view>
@@ -57,7 +61,7 @@
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
-	import { orderBean, remainRoomTypeBean, remainRoomBean } from '@/bean/orderBean';
+	import { orderBean, OrderRoomTypeBean, remainRoomTypeBean, remainRoomBean } from '@/bean/orderBean';
 	import { OrderService } from "@/services/OrderService.uts";
 	import { state } from "@/store/store";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
@@ -81,34 +85,34 @@
 	const remainRoomTypeList = ref<remainRoomTypeBean>([]);
 	const menuList = computed<TabsOptions[]>(() => {
 		let list : TabsOptions[] = [];
-		if(checkVal.value.length>0){
+		if (checkVal.value.length > 0) {
 			list.push({
-			name: '全部房型',			
-			value: 'all',
-			  badge: {
-			    value: checkVal.value.length,
-			  }
-		})
+				name: '全部房型',
+				value: 'all',
+				badge: {
+					value: checkVal.value.length,
+				}
+			})
 		}
 		remainRoomTypeList.value.forEach(item => {
-			let roomList:Array<string> = item. remainRoomList.map(item=>item._id);
-			let roomListGroup= new Set([...roomList,...checkVal.value]);
+			let roomList : Array<string> = item.remainRoomList.map(item => item._id);
+			let roomListGroup = new Set([...roomList, ...checkVal.value]);
 			let num = roomList.length + checkVal.value.length - roomListGroup.size;
-			if(num>0){
+			if (num > 0) {
 				list.push({
 					name: item.name,
 					value: item._id,
-					  badge: {
-					    value: num
-					  }
+					badge: {
+						value: num
+					}
 				})
-			}else{
+			} else {
 				list.push({
 					name: item.name,
 					value: item._id
 				})
 			}
-			
+
 		})
 		return list;
 	})
@@ -139,7 +143,7 @@
 		try {
 			const list : Array<remainRoomTypeBean> = await OrderService.getRemainderRoomType(hotel_id.value, startTime, endTime);
 			console.log("剩余房间", list)
-			remainRoomTypeList.value=list;
+			remainRoomTypeList.value = list;
 		} catch (e) {
 			uni.showToast({
 				title: "获取剩余房间失败",
@@ -149,13 +153,22 @@
 
 
 	}
-	onLoad(params=>{
-		if(params==null){
+	const setRoomSelect = () => {
+		let list:Array<OrderRoomTypeBean> = [{
+			count: 1,
+				name: "",
+				roomList: [],
+				roomType_id: ""
+		}]
+		uni.$emit("setRoomTypeList",list);
+	}
+	onLoad(params => {
+		if (params == null) {
 			return;
 		}
 		const startDate = params.getString("startDate");
 		const endDate = params.getString("endDate");
-		dateRange.value=[startDate,endDate];
+		dateRange.value = [startDate, endDate];
 		initValidRoomTypeData();
 	})
 </script>
@@ -176,17 +189,20 @@
 
 	.roomType-container {
 		padding: 16px;
-		.rt-title{
+
+		.rt-title {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
 			margin-bottom: 16px;
-			.txt{
+
+			.txt {
 				color: #1d1e23;
 				font-size: 16px;
 				font-weight: 600;
 			}
 		}
+
 		.card-list {
 			display: flex;
 			flex-direction: row;

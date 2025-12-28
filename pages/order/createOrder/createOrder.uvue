@@ -107,7 +107,7 @@
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
-	import { orderBean ,remainRoomTypeBean,remainRoomBean} from '@/bean/orderBean';
+	import { orderBean ,OrderRoomTypeBean,remainRoomTypeBean,remainRoomBean} from '@/bean/orderBean';
 	import { OrderService } from "@/services/OrderService.uts";
 	import { state } from "@/store/store";
 	import { comFunction } from "@/pages/index/ComFuc.uts"
@@ -221,33 +221,16 @@
 	const rangeConfirm = (e : string[]) => {
 		console.log('rangeConfirm', e)
 		dateRange.value = e;
-		//initValidRoomTypeData();
-	}
-	const initValidRoomTypeData = async () => {
-		//uni.showLoading();
-		let startTime = dayuts(dateRange.value[0]).format("YYYY-MM-DD 14:00:00");
-		let endTime = new Date(dayuts(dateRange.value[1]).format("YYYY-MM-DD 12:00:00")).getTime();
-		let params = {
-			hotel_id: hotel_id.value,
-			startTime: startTime,
-			endTime: endTime
-		}
-		console.log("params", params);
-		try{
-			const list:Array<remainRoomTypeBean> =await OrderService.getRemainderRoomType(hotel_id.value,startTime,endTime);
-			console.log("剩余房间",list)
-		}catch(e){
-			uni.showToast({
-				title:"获取剩余房间失败",
-				icon:"none"
-			})
-		}
-		
-
 	}
 	const addNewRoom = () => {
-		uni.$once("setRoomList", (list : Array<roomBean>) => {
-			console.log("setRoomList", list);
+		uni.$once("setRoomTypeList", (list : Array<OrderRoomTypeBean>) => {
+			let obj = {
+								// count: number,
+								// 	name: string,
+								// 	roomList: string[],
+								// 	roomType_id: string
+							}
+			console.log("setRoomTypeList", list);
 		})
 		uni.navigateTo({
 			url: `/pages/order/createOrder/checkOrderRoom/checkOrderRoom?startDate=${dateRange.value[0]}&endDate=${dateRange.value[1]}`
@@ -262,8 +245,7 @@
 			return;
 		}
 		try {
-			// await roomTypeService.addRoom(roomForm.value.roomList);
-			// await comFunction.getRoomTypeList(hotel_id.value);
+		
 			uni.navigateBack();
 			submitLoading.value = false;
 		} catch (error) {

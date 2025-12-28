@@ -68,7 +68,7 @@ export const showDialog = (options : DialogProps) => {
 		cancelText: options.cancelText ?? '取消',
 		confirmText: options.confirmButtonText ?? '确认',
 		confirmColor: options.confirmButtonColor ?? '#1989fa',
-		success: () => {
+		success: (res) => {
 			if (res.confirm) {
 				options.confirm?.()
 			} else {

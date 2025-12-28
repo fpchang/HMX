@@ -1,7 +1,8 @@
-import { orderBean, OrderRoomTypeBean, OrderDataListResult } from '@/bean/orderBean';
+import { orderBean, OrderRoomTypeBean, OrderDataListResult,remainRoomTypeBean,remainRoomBean } from '@/bean/orderBean';
 import { DB } from '@/api/DB';
 import { dayuts } from '@/uni_modules/lime-dayuts';
 import { TIME, MOONTH_START_END_TIMESTAMP } from "@/static/utils/TIME";
+import { roomTypeBean } from '../bean/roomTypeBean';
 class OrderServiceClass {
 	constructor() {
 
@@ -114,7 +115,46 @@ class OrderServiceClass {
 
 
 	}
-
+	async getRemainderRoomType(hotel_id: string,startTime: number,endTime: number):Promise<Array<remainRoomTypeBean>>{
+		let params = {
+			hotel_id: hotel_id,
+			startTime: startTime,
+			endTime: endTime
+		}
+		console.log("params", params);
+		let list:remainRoomTypeBean[]=[];
+		try {
+			const res = await DB.callFunction("hm_getRemainderRoomType",params);
+			console.log("getRemainderRoomType",res);
+			let result = res['result'] as Array<UTSJSONObject>;
+				if(result ==null){
+					return list;
+				}
+				result.forEach(item=>{
+					let rmlist =item.getArray<UTSJSONObject>("remainRoomList")??[]; //item["remainRoomList"] as Array<UTSJSONObject>;
+					let rmlistF:Array<remainRoomBean>=[];
+					rmlist.forEach(room=>{
+						let rm:remainRoomBean={
+							_id:room.getString("_id")??"",
+							room_name:room.getString("room_name")??"",
+						}
+						rmlistF.push(rm)
+					})
+					
+					let rmt:remainRoomTypeBean = {
+						_id:item.getString("_id")??"",
+						name:item.getString("name")??"",
+						 remainRoomList:rmlistF
+					}
+					list.push(rmt);
+				})
+					uni.hideLoading();
+				return list;
+		} catch (error) {
+			throw new Error("获取剩余房间失败");
+		}
+	
+	}
 	/**
 	 *  办理入住订单
 	 * st 日期

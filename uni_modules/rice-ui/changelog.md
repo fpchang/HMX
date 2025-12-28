@@ -1,3 +1,5 @@
+## 1.0.20（2025-12-26）
+- 修复小程序端 Dialog 使用 Api调用时回调函数缺少参数的bug
 ## 1.0.19（2025-11-23）
 - [新增] 新增 ProgressCircle 圆环进度条组件 [文档](https://riceui.cn/components/progress-circle.html)
 - [提示] picker相关组件在HBuilderx4.80+以上版本的[问题见](https://riceui.cn/components/picker.html)

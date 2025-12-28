@@ -1,42 +1,53 @@
 <template>
 	<view class="checkRoom">
-		<view style="padding:24px">
-			<rice-tabs v-model="activeIndex" :list="list" @clickTab="tabClick"></rice-tabs>
-		</view>
-
-
+		<view class="tab-container">
+			<rice-tabs v-model="activeIndex" :list="menuList" @clickTab="tabClick" line-width="70%" s></rice-tabs>
+		</view>		
 		<scroll-view style="flex:1">
-			<rice-checkbox-group v-model="checkVal"  @change="onGroupChange">
-			<view class="roomType-container" v-for="roomType of roomTypeList">
-				<view class="title">{{roomType.name}}</view>
-				<view class="card-list">
-					<view class="card-list-item" v-for="room of roomType.roomList">
-						<view class="card">
-							<view class="card-item">
-								<view class="title"><text class="txt">{{room.room_name}}</text></view>
-								<view class="check-area">
-									<rice-checkbox :value="room._id" label=""></rice-checkbox>
+			<rice-checkbox-group v-model="checkVal" @change="onGroupChange">
+				<view class="roomType-container" v-for="roomType of filterRoomTypeList">
+					<view class="rt-title">
+							<image src="/static/icons/hotel-room.png" style="width: 16px;height: 16px;margin-right: 8px;"></image>
+						<text class="txt">{{roomType.name}}(共{{roomType.remainRoomList.length}}间可订)</text></view>
+					<view class="card-list">
+						<view class="card-list-item" v-for="room of roomType.remainRoomList">
+							<view class="card">
+								<view class="card-item">
+									<view class="title">
+									
+										<text class="txt">{{room.room_name}}</text></view>
+									<view class="check-area">
+										<rice-checkbox :value="room._id" label=""></rice-checkbox>
+									</view>
+
 								</view>
-								
-							</view>
-						<!-- 	<view class="card-item subtitle">
+								<!-- 	<view class="card-item subtitle">
 								<text class="txt">
 									{{roomType.name}}
 								</text>
 							</view> -->
 
+							</view>
 						</view>
+
 					</view>
 
 				</view>
-
-			</view>
 			</rice-checkbox-group>
 
 
 		</scroll-view>
 
-		<view class="bottom-area">{{checkVal}}</view>
+		<view class="bottom-area">
+			<view class="content">
+				<view>
+					<text>已选择 {{checkVal.length}} 间房</text>
+				</view>
+				<view style="width:100px">
+					<rice-button type="primary" text="确认选择" :disabled="checkVal.length<1"></rice-button>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -46,7 +57,10 @@
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
+	import { orderBean, remainRoomTypeBean, remainRoomBean } from '@/bean/orderBean';
+	import { OrderService } from "@/services/OrderService.uts";
 	import { state } from "@/store/store";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -60,33 +74,90 @@
 	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
 		return state.roomTypeList;
 	});
+	const dateRange = ref<string[]>([]);
 	const activeIndex = ref(0);
-	const checkVal=ref<Array<string>>([]);
-	const list = ref<TabsOptions[]>([
-		{
-			name: '全部房型',
-			value: 'all'
-		}, {
-			name: '大床',
-			value: 'recommedn'
-		}, {
-			name: '标间',
-		}, {
-			name: '亲子',
-		}, {
-			name: '套房',
-		},
-	])
-	const onGroupChange=(values:string[])=>{
+	const active_id = ref('all');
+	const checkVal = ref<Array<string>>([]);
+	const remainRoomTypeList = ref<remainRoomTypeBean>([]);
+	const menuList = computed<TabsOptions[]>(() => {
+		let list : TabsOptions[] = [];
+		if(checkVal.value.length>0){
+			list.push({
+			name: '全部房型',			
+			value: 'all',
+			  badge: {
+			    value: checkVal.value.length,
+			  }
+		})
+		}
+		remainRoomTypeList.value.forEach(item => {
+			let roomList:Array<string> = item. remainRoomList.map(item=>item._id);
+			let roomListGroup= new Set([...roomList,...checkVal.value]);
+			let num = roomList.length + checkVal.value.length - roomListGroup.size;
+			if(num>0){
+				list.push({
+					name: item.name,
+					value: item._id,
+					  badge: {
+					    value: num
+					  }
+				})
+			}else{
+				list.push({
+					name: item.name,
+					value: item._id
+				})
+			}
+			
+		})
+		return list;
+	})
+
+	const onGroupChange = (values : string[]) => {
 		//set val
 	}
 	const tabClick = (e : TabsClickTab) => {
 		console.log('TabsClickTab', e)
-		uni.showToast({
-			title: `点击了：${e.name}${e.disabled ? '（禁用）' : ''}`,
-			icon: 'none'
-		})
+		// uni.showToast({
+		// 	title: `点击了：${e.name}${e.disabled ? '（禁用）' : ''}`,
+		// 	icon: 'none'
+		// })
+		active_id.value = e.value;
 	};
+	const filterRoomTypeList = computed<Array<remainRoomTypeBean>>(() => {
+
+		if (active_id.value == 'all') {
+			return remainRoomTypeList.value;
+		}
+		let list = remainRoomTypeList.value.filter(item => item._id == active_id.value) as Array<remainRoomTypeBean>;
+		return list;
+	})
+	const initValidRoomTypeData = async () => {
+		//uni.showLoading();
+		let startTime = dayuts(dateRange.value[0]).format("YYYY-MM-DD 14:00:00");
+		let endTime = new Date(dayuts(dateRange.value[1]).format("YYYY-MM-DD 12:00:00")).getTime();
+		try {
+			const list : Array<remainRoomTypeBean> = await OrderService.getRemainderRoomType(hotel_id.value, startTime, endTime);
+			console.log("剩余房间", list)
+			remainRoomTypeList.value=list;
+		} catch (e) {
+			uni.showToast({
+				title: "获取剩余房间失败",
+				icon: "none"
+			})
+		}
+
+
+	}
+	onLoad(params=>{
+		if(params==null){
+			return;
+		}
+		const startDate = params.getString("startDate");
+		const endDate = params.getString("endDate");
+		dateRange.value=[startDate,endDate];
+		initValidRoomTypeData();
+	})
 </script>
 
 <style lang="scss">
@@ -95,11 +166,27 @@
 		display: flex;
 		flex-direction: column;
 
+		.tab-container {
+			margin: 0 16px;
+			padding: 8px 0;
+			background-color: #fff;
+			border-radius: 8px;
+		}
 	}
 
 	.roomType-container {
-		padding: 24px;
-
+		padding: 16px;
+		.rt-title{
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			margin-bottom: 16px;
+			.txt{
+				color: #1d1e23;
+				font-size: 16px;
+				font-weight: 600;
+			}
+		}
 		.card-list {
 			display: flex;
 			flex-direction: row;
@@ -122,18 +209,18 @@
 						flex-direction: row;
 						align-items: center;
 						justify-content: space-between;
+
 						.title {
 							.txt {
 								font-size: 18px;
 								font-weight: 700;
 								color: #1d2129;
 							}
-						
+
 						}
-						.check-area{
-							
-						}
-					
+
+						.check-area {}
+
 					}
 
 					.title {
@@ -145,14 +232,21 @@
 
 					}
 
-				
+
 				}
 			}
 		}
 	}
 
 	.bottom-area {
-		padding: 24px;
+		padding: 16px;
 		background-color: #fff;
+
+		.content {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+		}
 	}
 </style>

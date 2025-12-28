@@ -41,23 +41,23 @@
 
 			</xt-form-item>
 			<xt-form-item label="房型房间" tips="" required>
-			<!-- <view> 
+				<!-- <view> 
 				<view v-for="item in 200" style="padding:10px;">{{203}}</view>
 			</view> -->
-			<view class="room-list-item" style="display: flex;flex-direction: row;align-items: center;"
-				v-for="(item, index) of hasCheckRoomList">
-			
-				<view style="flex: 1;">
-					{{item.room_name}}
+				<view class="room-list-item" style="display: flex;flex-direction: row;align-items: center;"
+					v-for="(item, index) of hasCheckRoomList">
+
+					<view style="flex: 1;">
+						{{item.room_name}}
+					</view>
+					<view class="del-style" @click="deleteRoom(index)" v-if="hasCheckRoomList.length>1">
+						<image src="/static/icons/delete.png" style="width:20px;height:20px"></image>
+					</view>
 				</view>
-				<view class="del-style" @click="deleteRoom(index)" v-if="hasCheckRoomList.length>1">
-					<image src="/static/icons/delete.png" style="width:20px;height:20px"></image>
+				<view @click="addNewRoom" class="addNew-btn">
+					<rice-icon name="plus" size="16px" color="#1e88e5" />
+					<text class="txt">选择房间</text>
 				</view>
-			</view>
-			<view @click="addNewRoom" class="addNew-btn">
-								<rice-icon name="plus" size="16px" color="#1e88e5" />
-								<text class="txt">选择房间</text>
-							</view>
 			</xt-form-item>
 			<xt-form-item label="客户名" tips="" required>
 
@@ -82,7 +82,7 @@
 			</xt-form-item>
 			<xt-form-item label="备注" tips="" required>
 				<view>
-			
+
 					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="请输入备注内容"
 						layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
 						v-model="orderForm.mark"></rice-textarea>
@@ -94,11 +94,12 @@
 	<!-- #endif -->
 	<rice-calendar v-model:show="showCalendar" mode="range" :min-date="initDateObj.minDate" :date="dateRange"
 		@confirm="rangeConfirm"></rice-calendar>
-		<l-popup v-model="showCheckRoomPanal" position="right" :closeable="true" :safeAreaInsetBottom ="true"  :safeAreaInsetTop="true" bgColor="#f5f7fa" :preventScrollThrough="true">
-			<view style="width:700rpx;padding:60px 0">
-				<checkRoomComponent></checkRoomComponent>
-			</view>
-		</l-popup>
+	<l-popup v-model="showCheckRoomPanal" position="right" :closeable="true" :safeAreaInsetBottom="true"
+		:safeAreaInsetTop="true" bgColor="#f5f7fa" :preventScrollThrough="true">
+		<view style="width:700rpx;padding:60px 0">
+			<checkRoomComponent></checkRoomComponent>
+		</view>
+	</l-popup>
 </template>
 
 <script setup>
@@ -106,8 +107,8 @@
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
-	import { orderBean } from '@/bean/orderBean';
-	import { roomTypeService } from "@/services/roomTypeService.uts";
+	import { orderBean ,remainRoomTypeBean,remainRoomBean} from '@/bean/orderBean';
+	import { OrderService } from "@/services/OrderService.uts";
 	import { state } from "@/store/store";
 	import { comFunction } from "@/pages/index/ComFuc.uts"
 	import { validForm } from "./createOrderVaild.uts";
@@ -127,9 +128,9 @@
 	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
 		return state.roomTypeList;
 	});
-	const hasCheckRoomList=ref<Array<roomBean>>([]);
+	const hasCheckRoomList = ref<Array<roomBean>>([]);
 	let pageType = ref(0);
-	const showCheckRoomPanal=ref(false);
+	const showCheckRoomPanal = ref(false);
 	let submitLoading = ref(false);
 	const title = computed(() => {
 		if (pageType.value == 0) {
@@ -212,24 +213,47 @@
 		totalAmount: 0,
 		userName: "",
 		wxNickName: "",
-		mark:""
+		mark: ""
 	});
 	const showCalendarEvent = () => {
 		showCalendar.value = !showCalendar.value;
 	}
 	const rangeConfirm = (e : string[]) => {
-		console.log('rangeConfirm', e)		
+		console.log('rangeConfirm', e)
 		dateRange.value = e;
+		//initValidRoomTypeData();
 	}
-	const addNewRoom=()=>{
-			uni.$once("setRoomList", (list:Array<roomBean>)=>{
-					console.log("setRoomList",list);
-				})
+	const initValidRoomTypeData = async () => {
+		//uni.showLoading();
+		let startTime = dayuts(dateRange.value[0]).format("YYYY-MM-DD 14:00:00");
+		let endTime = new Date(dayuts(dateRange.value[1]).format("YYYY-MM-DD 12:00:00")).getTime();
+		let params = {
+			hotel_id: hotel_id.value,
+			startTime: startTime,
+			endTime: endTime
+		}
+		console.log("params", params);
+		try{
+			const list:Array<remainRoomTypeBean> =await OrderService.getRemainderRoomType(hotel_id.value,startTime,endTime);
+			console.log("剩余房间",list)
+		}catch(e){
+			uni.showToast({
+				title:"获取剩余房间失败",
+				icon:"none"
+			})
+		}
+		
+
+	}
+	const addNewRoom = () => {
+		uni.$once("setRoomList", (list : Array<roomBean>) => {
+			console.log("setRoomList", list);
+		})
 		uni.navigateTo({
-			url:"/pages/order/createOrder/checkOrderRoom/checkOrderRoom"
+			url: `/pages/order/createOrder/checkOrderRoom/checkOrderRoom?startDate=${dateRange.value[0]}&endDate=${dateRange.value[1]}`
 		})
 	}
-	const deleteRoom=(index:number)=>{}
+	const deleteRoom = (index : number) => { }
 	const submitForm = async () => {
 		submitLoading.value = true;
 		let flag : boolean = validForm(orderForm.value)

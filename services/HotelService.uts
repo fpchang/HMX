@@ -18,6 +18,11 @@ class HotelServiceClass {
 	constructor() {
 
 	}
+	async updateDateBase(){
+		//await uniCloud.databaseForJQL().collection("hm-order").where({}).update({"reservedRoomList":[]})
+	// const res = await DB.callFunction("hm_order_roomList_task",{});
+	// console.log(res);
+	}
 	/**
 	 * 获取基础设施 配置
 	 * type:base 基础设施，recreation休闲设施，athleticFacility运动设施

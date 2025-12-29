@@ -1,6 +1,6 @@
 {
 	"bsonType": "object",
-	"required": ["hotel_id", "createrPhone", "roomTypeArray"],
+	"required": ["hotel_id", "createrPhone"],
 	"permission": {
 		"read": true,
 		"create": true,
@@ -37,6 +37,11 @@
 		"roomTypeArray": {
 			"description": "房型数据",
 			"bsonType": "array"
+		},
+		"reservedRoomList": {
+			"description": "选择的房间数",
+			"bsonType": "array",
+			"defaultValue":[]
 		},
 		"userName": {
 			"description": "住客名",

@@ -9,6 +9,16 @@ exports.main = async (event, context) => {
 		event,
 		context
 	})
+	if(!orderObj['reservedRoomList']||orderObj['reservedRoomList'].length<1){
+		orderObj.reservedRoomList=getRoomList(orderObj.roomTypeArray);
+	}
+	
 	const result = await dbJQL.collection('hm-order').add(orderObj);
 	return result;
 };
+
+function getRoomList(roomTypeList=[]){
+	let roomlist = roomTypeList.map(rt=>rt.roomList);
+	roomlist=roomlist.flat();
+	return roomlist;
+}

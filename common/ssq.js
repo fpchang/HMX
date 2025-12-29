@@ -223,9 +223,9 @@ const c5=getGroupList(history.slice(history.length-5));
 //const c6=getGroupList(history.slice(history.length-6));
 console.log("c3",new Set(c3),"c4",new Set(c4),"c5",new Set(c5));//夹号，冷号
 
-// const list=caculate(S1,18);
-// console.log(list);
-// console.log(S1_stat(list));
+const list=caculate(S1,18);
+console.log(list);
+console.log(S1_stat(list));
 //[6,7,15,16,20,25,26,28,31]
 //[6,16,20,25,28,31]
 //[6,16,20,25,28,31] [6,7,15,16,26,31] [7,15,20,25,26,28]

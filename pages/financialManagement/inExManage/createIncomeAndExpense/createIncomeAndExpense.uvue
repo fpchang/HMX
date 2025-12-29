@@ -22,7 +22,6 @@
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
-
 			<xt-form-item label="收支类型" tips="" required>
 				<view>
 					<rice-radio-group v-model="fmForm.billType" direction="row">
@@ -36,7 +35,7 @@
 							</rice-radio>
 						</view>
 						<view class="check-container">
-							<rice-radio value="expense" label="收入">
+							<rice-radio value="expenses" label="收入">
 								<view style="display: flex;flex-direction: row;align-items: center;">
 									<rice-icon name="down" color="#f53f3f" />
 									<text style="color:#f53f3f;font-size: 14px;">支出</text>
@@ -142,16 +141,22 @@
 		showCalendar.value = true;
 	}
 	const selectType=(val:string)=>{
-		console.log(val);
 		fmForm.value.type=val;
 		
 	}
 	const incomeAndExpensesConfigList = ref<Array<FMTypeConfigBean>>([]);
+	const getIncomeAndExpensesConfigList = async () => {
+		const list = await FMService.getIncomeAndExpensesConfig();
+		incomeAndExpensesConfigList.value =list;
+	}
 	const columns = computed<Array<Array<PickerOption>>>(() => {
 		let result : Array<Array<PickerOption>> = [];
 		let list : Array<PickerOption> = [];
 		incomeAndExpensesConfigList.value.forEach(item => {
-			list.push({ text: item.text, value: item.name } as PickerOption);
+			if(item.billType==fmForm.value.billType){
+				list.push({ text: item.text, value: item.name } as PickerOption);
+			}
+			
 		});
 		result.push(list);
 		return result;
@@ -159,21 +164,30 @@
 	const checkIoTime = (val : string) => {
 		fmForm.value.ioeTime = new Date(val).getTime();
 	}
+
 	const submitForm = async () => {
 		fmForm.value.amount = parseFloat(amount.value);
+		uni.showLoading({
+			title:""
+		})
 		try {
 			await FMService.add(fmForm.value);
+			uni.$emit("refrushfmList");
 			uni.navigateBack();
 			submitLoading.value = false;
+			uni.hideLoading();
 		} catch (error) {
+			console.log("error",error);
 			submitLoading.value = false;
+			uni.hideLoading();
 		}
 		console.log(fmForm.value);
 	}
-	const getIncomeAndExpensesConfigList = async () => {
-		const list = await FMService.getIncomeAndExpensesConfig();
-		incomeAndExpensesConfigList.value =list;
-	}
+	onLoad(params=>{
+		//console.log("params:",params);
+		const bt = params.getString("billType")??'income';
+		fmForm.value.billType=bt;
+	})
 
 	getIncomeAndExpensesConfigList();
 </script>

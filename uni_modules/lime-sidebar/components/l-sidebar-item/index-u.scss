@@ -1,0 +1,97 @@
+@import '~@/uni_modules/lime-style/index.scss';
+
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+
+$sidebar-item: #{$prefix}-sidebar-item;
+
+// 字体和行高变量
+$sidebar-font-size: create-var(sidebar-font-size, $font-size);
+$sidebar-line-height: create-var(sidebar-line-height, $line-height);
+
+// 颜色变量
+$sidebar-text-color: create-var(sidebar-text-color, $text-color-1);
+$sidebar-disabled-text-color: create-var(sidebar-disabled-text-color, $text-color-4);
+$sidebar-selected-text-color: create-var(sidebar-selected-text-color, $primary-color);
+$sidebar-selected-border-color: create-var(sidebar-selected-border-color, $primary-color);
+$sidebar-selected-bg-color: create-var(sidebar-selected-bg-color, $bg-color-container);
+$sidebar-bg-color: create-var(sidebar-bg-color, $gray-1);
+
+// 尺寸和间距变量
+$sidebar-padding-x: create-var(sidebar-padding-x, $spacer-sm); // 水平内边距
+$sidebar-padding-y: create-var(sidebar-padding-y, $spacer); // 垂直内边距
+$sidebar-selected-border-width: create-var(sidebar-selected-border-width, 4px);
+$sidebar-selected-border-height: create-var(sidebar-selected-border-height, 16px);
+$sidebar-selected-border-radius: create-var(sidebar-selected-border-radius, 10px);
+
+// 字体权重
+$sidebar-selected-font-weight: create-var(sidebar-selected-font-weight, bold);
+
+.#{$sidebar-item} {
+	position: relative;
+	box-sizing: border-box;
+	@include padding($sidebar-padding-y $sidebar-padding-x);
+	background-color: $sidebar-bg-color;
+	
+	&--top {
+		border-top-right-radius: $sidebar-selected-border-radius;
+	}
+	&--bottom {
+		border-bottom-right-radius: $sidebar-selected-border-radius;
+	}
+	
+	&__text {
+		color: $sidebar-text-color;
+		font-size: $sidebar-font-size;
+		line-height: $sidebar-line-height;
+	}
+	&--line {
+		/* #ifndef UNI-APP-X && APP */
+		&::before {
+		  position: absolute;
+		  top: 50%;
+		  left: 0;
+		  width: $sidebar-selected-border-width;
+		  height: $sidebar-selected-border-height;
+		  background-color: $sidebar-selected-border-color;
+		  transform: translateY(-50%);
+		  content: '';
+		  opacity: 0;
+		  transition-property: opacity;
+		  transition-duration: 300ms;
+		}
+		/* #endif */
+		/* #ifdef UNI-APP-X && APP */
+		position: absolute;
+		top: 50%;
+		left: 0;
+		width: $sidebar-selected-border-width;
+		height: $sidebar-selected-border-height;
+		background-color: $sidebar-selected-border-color;
+		transform: translateY(-50%);
+		opacity: 0;
+		transition-property: opacity;
+		transition-duration: 300ms;
+		/* #endif */
+	}
+	&--select {
+		background-color: $sidebar-selected-bg-color;
+		/* #ifndef UNI-APP-X && APP */
+		color: $sidebar-selected-text-color;
+		&::before {
+		  opacity: 1
+		}
+		/* #endif */
+	}
+	.is-selected {
+		color: $sidebar-selected-text-color;
+		font-weight: $sidebar-selected-font-weight;
+	}
+	.is-disabled{
+		color: $sidebar-disabled-text-color;
+	}
+	&--disabled {
+		color: $sidebar-disabled-text-color;
+	}
+}

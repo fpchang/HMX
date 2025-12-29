@@ -1,0 +1,111 @@
+<template>
+	<view class="l-sidebar-item" ref="rootRef" :class="classes" :aria-selected="selected"
+		@click="onClick">
+		<l-badge v-if="badge != null && (title != null || $slots['title'] != null)" :content="badge" :dot="dot"
+			:max="badgeMax">
+			<slot name="title"><text class="l-sidebar-item__text" :class="textClasses">{{title}}</text></slot>
+		</l-badge>
+		<slot v-else-if="title != null || $slots['title'] != null" name="title"><text class="l-sidebar-item__text"
+				:class="textClasses">{{title}}</text></slot>
+		<slot></slot>
+		<!-- #ifdef APP -->
+		<view class="l-sidebar-item--line" v-if="useLine" :style="{opacity : selected ? 1 : 0}"></view>
+		<!-- #endif -->
+	</view>
+</template>
+<script lang="uts" setup>
+	/**
+	 * LimeSidebarItem 侧边栏项
+	 * @description 配合侧边栏
+	 * @tutorial https://ext.dcloud.net.cn/plugin?id=13617
+	 * @property {String} title 标题
+	 * @property {String,Number} badge 图标右上角徽标的内容
+	 * @property {Boolean} disabled 是否禁用该项
+	 * @property {Boolean} dot 是否显示右上角小红点
+	 * @event {Function} click 点击时触发
+	 */
+	// import { unitConvert } from '@/uni_modules/lime-shared/unitConvert'
+	import { SidebarItemProps } from './type'
+	import type { LimeSidebarContext, LimeSidebarValue } from '../l-sidebar/type'
+	import { sidebarContextSymbol } from '../l-sidebar/common'
+	const emit = defineEmits(['click'])
+	const props = withDefaults(defineProps<SidebarItemProps>(), {
+		dot: false,
+		disabled: false
+	})
+	const context = inject<LimeSidebarContext|null>(sidebarContextSymbol, null);
+	const instance = getCurrentInstance()!.proxy!
+	if (context == null) {
+		throw new Error("SidebarItem must be included in Sidebar.");
+	}
+	
+	// 获取元素位置信息的函数
+	const rootRef = ref<UniElement|null>(null)
+	const getElementRect = () : Promise<DOMRect> => {
+		return new Promise((resolve) => {
+			nextTick(() => {
+				rootRef.value?.getBoundingClientRectAsync()?.then(res => {
+					resolve(res as DOMRect)
+				})
+			})
+		})
+		// return getRect('.l-anchor-section', instance);
+	};
+	
+	
+	context?.register(instance as LSidebarItemComponentPublicInstance, getElementRect);
+	
+	const index = computed(() : number => {
+		return Math.max(context?.children.value.indexOf(instance as LSidebarItemComponentPublicInstance) ?? 0, 0)
+	})
+	const currentValue = computed((): LimeSidebarValue => context?.currentValue.value ?? 0)
+	const currentIndex = computed((): number => context?.currentIndex.value ?? 0)
+	const badgeMax = computed(() : number => {
+		if (props.badgeProps == null) return 99
+		return props.badgeProps?.getNumber('max') ?? 99
+	})
+	
+	const useLine = computed(() : boolean => context?.line.value == true)
+	const useRound = computed(() : boolean => context?.round.value == true)
+	const selected = computed(() : boolean => {
+		if(props.value != null) {
+			return props.value == context?.currentValue.value
+		}
+		return index.value == context?.currentIndex.value
+	})
+	
+	const classes = computed(():Map<string, any> => {
+		const cls = new Map<string, any>()
+		// #ifndef APP
+		cls.set(`l-sidebar-item--line`, useLine.value)
+		// #endif
+		cls.set(`l-sidebar-item--select`, selected.value)
+		cls.set(`l-sidebar-item--top`,    useRound.value && index.value - currentIndex.value == 1)
+		cls.set(`l-sidebar-item--bottom`, useRound.value && index.value - currentIndex.value == -1)
+		
+		return cls
+	})
+	
+	const textClasses = computed(() : Map<string, any> => {
+		const cls = new Map<string, any>()
+		cls.set(`is-selected`, selected.value)
+		cls.set(`is-disabled`, props.disabled)
+		return cls
+	})
+	
+	const onClick = () => {
+		if(props.disabled || context == null) return
+		const value = props.value ?? index.value
+		emit('click', value)
+		context?.onClickItem(value)
+	}
+	
+	onBeforeUnmount(()=>{
+		if(context == null) return
+		context?.unregister(instance as LSidebarItemComponentPublicInstance)
+	})
+	
+</script>
+<style lang="scss">
+	@import './index-u';
+</style>

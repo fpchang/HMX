@@ -96,9 +96,9 @@
 
 		</view>
 	<!-- #ifdef APP -->
-	</scroll-view>
+	</scroll-view>	
 	<!-- #endif -->
-
+<l-empty description="没有数据" v-if="!submitLoading&&hotelList.length<1" />
 </template>
 
 <script setup>

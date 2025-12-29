@@ -11,7 +11,7 @@
 						<l-badge content="500">
 							<view class="child"/>
 						</l-badge>
-						<l-badge :content="10">
+						<l-badge :content="0" :show-zero="false">
 							<view class="child" />
 						</l-badge>
 						<l-badge content="Hot">

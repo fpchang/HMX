@@ -2,6 +2,7 @@ import { DB } from '../api/DB';
 import { FMBean, FMTypeConfigBean, FMDataListResult } from '@/bean/FMBean';
 import { dayuts } from '@/uni_modules/lime-dayuts';
 import { TIME, MOONTH_START_END_TIMESTAMP } from "@/static/utils/TIME";
+import { fmState } from "@/store/modules/fmStore.uts";
 class FMServiceClass {
 	constructor() {
 		// this.DB=DB;
@@ -15,7 +16,6 @@ class FMServiceClass {
 				billType:dbCmd.or([dbCmd.eq("income"), dbCmd.eq("expenses")])
 			}
 		const res =	await db.collection("hm-incomeAndExpensesConfig").where(w).orderBy("name asc").get();
-		console.log("1111",res);
 		const data = res['data'] as Array<UTSJSONObject>;
 		let list:Array<FMTypeConfigBean>=[];
 		data.forEach(item=>{
@@ -46,31 +46,14 @@ class FMServiceClass {
 		console.log("add fm",fm);
 		try {
 			const res = await  DB.add("hm-incomeAndExpenses", fm);
-			console.log("ddddd",res);
-			// code
-			// : 
-			// 0
-			// errCode
-			// : 
-			// 0
-			// errMsg
-			// : 
-			// ""
-			// id
-			// : 
-			// "69440f90b90519b461170885"
-			// message
-	
-			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				console.log("code error", code);
+			console.log("ddddd",res);//app {id: "694a8c8c7b64db8e75e0ca69", requestId: null}
+			const id = res['id'] as string;
+			if (id == "") {			
 				uni.showToast({
-					title: message,
+					title: "添加异常",
 					icon: "none"
 				});
-				throw new Error(message);
+				throw new Error("添加失败");
 			}
 			uni.showToast({
 				title: "添加成功",
@@ -78,11 +61,12 @@ class FMServiceClass {
 			});
 			return true;
 		} catch (error) {
+			console.log("添加fm失败",error)
 			throw new Error("添加收支失败");
 		}
 		
 	}
-	async deleteFm(fm_id:string):Promise<boolean>{
+	async deleteFm(fm_id:string){
 		try {
 			const res = await DB.callFunction("hm_deleteFm", {
 				_id: fm_id,
@@ -99,17 +83,11 @@ class FMServiceClass {
 				});
 				throw new Error(result.message as string);
 			}
-			uni.showToast({
-				title: "删除成功",
-				icon: "none"
-			});
 		} catch (error) {
-			uni.showToast({
-				title: "删除失败",
-				icon: "none"
-			});
+			throw new Error("删除失败");
+		
 		}
-		return true;
+		
 	}
 
 
@@ -136,7 +114,6 @@ class FMServiceClass {
 		const config = db.collection("hm-incomeAndExpensesConfig").getTemp();
 		try {
 			const res = await db.collection(main, config).get({ getCount: true });
-			console.log("fmm", res, res['count'] as number);
 			const data = res['data'] as Array<UTSJSONObject>;
 
 			if (data != null) {

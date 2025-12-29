@@ -23,14 +23,14 @@ export function useVModel<T>(options: UseVModelOptions<T>):Ref<T> {
 	const innerValue = ref<T>(value.value || defaultValue);
 	
 	watch(value, (newVal:T) => {
-			innerValue.value = onFormat(newVal)
+			innerValue.value = onFormat?.(newVal) ?? newVal
 		},
 		{ immediate: true }
 	)
 	watch(
 		innerValue,
 		(newVal: T) => {
-			onChange(newVal)
+			onChange?.(newVal)
 		}
 	)
 	

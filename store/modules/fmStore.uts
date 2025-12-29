@@ -1,0 +1,15 @@
+import {FMService} from '@/services/FMService';
+import { FMBean } from '@/bean/FMBean';
+export type FmState = {
+	fmList : Array<FMBean>,//今天及以后的订单
+}
+
+//实例化
+export const fmState = reactive({
+	fmList: [] as Array<FMBean>,//今天及以后的订单
+
+} as FmState)
+
+export const updateFmList = (list : Array<FMBean>) => {
+	fmState.fmList = list;
+}

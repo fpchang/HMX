@@ -1,430 +1,487 @@
 <template>
-  <view class="order-card-container">
-    <!-- iOS 侧滑菜单容器 -->
-    <view class="swipe-menu" 
-          @touchstart="handleTouchStart" 
-          @touchmove="handleTouchMove" 
-          @touchend="handleTouchEnd">
-      <!-- 操作菜单（隐藏在右侧） -->
-      <view class="menu-actions" :style="{ width: menuWidth + 'rpx' }">
-        <button class="menu-btn btn-view" @click="handleView">查看</button>
-        <button class="menu-btn btn-edit" @click="handleEdit">修改</button>
-        <button class="menu-btn btn-delete" @click="handleDelete">删除</button>
-      </view>
-      
-      <!-- 订单卡片（主内容） -->
-      <view class="order-card" :style="{ transform: `translateX(-${menuWidth}rpx)`, transition: menuTransition }">
-        <!-- 卡片头部：状态+价格 -->
-        <view class="card-header">
-          <view class="status-tag" :class="orderInfo.status === '已入住' ? 'status-success' : 'status-pending'">
-            <text class="status-text">{{ orderInfo.status }}</text>
-          </view>
-          <view class="price-wrap">
-            <text class="price-symbol">¥</text>
-            <text class="price-num">{{ orderInfo.price }}</text>
-            <text class="price-unit">/晚</text>
-          </view>
-        </view>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
 
-        <!-- 卡片主内容区 -->
-        <view class="card-content">
-          <!-- 订单编号 -->
-          <text class="order-no">订单号：{{ orderInfo.id }}</text>
-          
-          <!-- 核心信息网格 -->
-          <view class="info-grid">
-            <view class="info-item">
-              <text class="info-label">客户名</text>
-              <text class="info-value">{{ orderInfo.customerName }}</text>
-            </view>
-            <view class="info-item">
-              <text class="info-label">房型</text>
-              <text class="info-value">{{ orderInfo.roomType }}</text>
-            </view>
-            <view class="info-item">
-              <text class="info-label">房间号</text>
-              <text class="info-value">{{ orderInfo.roomNumber }}</text>
-            </view>
-          </view>
+				<image src="/static/icons/list.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">订单列表</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn">
+				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
 
-          <!-- 日期模块（iOS 卡片式内嵌） -->
-          <view class="date-card">
-            <view class="date-item">
-              <text class="date-icon">📅</text>
-              <text class="date-label">入住</text>
-              <text class="date-value">{{ orderInfo.checkInDate }}</text>
-            </view>
-            <view class="date-divider"></view>
-            <view class="date-item">
-              <text class="date-icon">📆</text>
-              <text class="date-label">退房</text>
-              <text class="date-value">{{ orderInfo.checkOutDate }}</text>
-            </view>
-          </view>
-        </view>
+				<text class="txt" @click="addOrder">添加订单</text>
 
-        <!-- 备注区（可选） -->
-        <view class="card-remark" v-if="orderInfo.remark">
-          <text class="remark-text">{{ orderInfo.remark }}</text>
-        </view>
 
-        <!-- iOS 经典右箭头 -->
-        <view class="chevron-wrap">
-          <text class="chevron-icon">›</text>
-        </view>
-      </view>
-    </view>
-  </view>
+			</view>
+		</template>
+	</rice-navbar>
+	
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1">
+	<!-- #endif -->
+		<view class="search-area">
+			<view class="card">
+				<view class="card-item title-area">
+					<text class="txt">订单筛选</text>
+					<l-tag variant="light">共{{orderResult.count}}条</l-tag>
+				</view>
+				<view class="card-item  select-area">
+					<orderSearchComponent :columns="columns" :initDateRange="dateRange"
+						@searchInputChange="searchInputChange" @selectAction="selectStatus" @dateChange="dateChange"
+						@searchAction="getOrderList" placeholder="搜索收入名称"></orderSearchComponent>
+				</view>
+				<view class="card-item search"></view>
+			</view>
+
+		</view>
+		<view class="card-list">
+			<!-- <template v-for="roomType of filterRoomTypeList"> -->
+			<view class="card-list-item" v-for="order of orderResult.orderList">
+				<view class="card">
+				
+					<view class="amount-area">
+						<view><text class="label">房价</text></view>
+						<view><text class="num">￥{{order.totalAmount}}</text></view>
+					</view>
+					<view class="content">
+						<!-- 	<view class="card-item title">
+							<text class="txt">{{formatDate(order.ioeTime)}}</text>
+						</view> -->
+						<view class="card-item">
+							<view class="fl-c">
+								<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">住客：</text>
+							</view>
+							<text class="val-style">{{order.userName}}</text>
+						</view>
+						<view class="card-item">
+							<view class="fl-c">
+								<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">时间：</text>
+							</view>
+							<text class="val-style">{{formatDate(order.checkInEndDateTimeStamp)}}</text>
+						</view>
+						<view class="card-item">
+							<view class="fl-c">
+								<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">房型：</text>
+							</view>
+							<view class="val-style" style="display: flex;flex-direction: row;align-items: center;">
+								<view v-for="it of order.roomTypeArray" >
+									<text style="padding-left: 8px">{{it.name}}</text>
+									</view>
+							</view>
+						</view>
+						<view class="card-item">
+							<view class="fl-c">
+								<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">房间：</text>
+								
+							</view>
+							<view class="val-style" style="display: flex;flex-direction: row;align-items: center;flex: 1;flex-wrap: wrap;justify-content: flex-end;">
+								<!-- <view v-for="it of order.roomTypeArray" style="display: flex;flex-direction: row;align-items: center;">
+									<text style="padding-left: 8px" v-for="i of it.roomList">{{formatRoomName(i)}}</text>
+								</view> -->
+								<text v-for="item of parseRoomList(order.roomTypeArray)" style="padding:0 4px">{{item}}</text> 
+							</view>
+						</view>
+						<view class="card-item" style="margin-bottom: 0;">
+							<view class="fl-c">
+								<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">备注信息：</text>
+							</view>
+							<text class="val-style">
+								{{order.mark}}
+							</text>
+						</view>
+					</view>
+
+					<view class="control">
+			
+						<view>
+							<xt-control @del="deleteOrder(order)" @edit="editOrder(order)" :show-view="false"></xt-control>
+						</view>
+
+
+					</view>
+				</view>
+			</view>
+			<!-- </template> -->
+		</view>
+		<l-empty description="没有数据" v-if="!submitLoading&&orderResult.orderList.length<1" />
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"  v-if="!submitLoading&&orderResult.orderList.length>0">
+		<l-pagination v-model="orderResult.pageNo" :disabled="submitLoading" :total="orderResult?.count"
+			:page-size="orderResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
+	</view>
 </template>
 
-<script setup lang="uts">
+<script setup>
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import { TIME, getMonthDateArray } from "@/static/utils/TIME";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { OrderService } from "@/services/OrderService";
+	import { orderBean,OrderRoomTypeBean, OrderDataListResult } from '@/bean/orderBean.uts';
+	import { state } from "@/store/store";
+	import { fmState } from "@/store/modules/fmStore.uts";
+	import { comFunction } from "@/pages/index/ComFuc";
+	import orderSearchComponent from "./components/orderSearchComponent/orderSearchComponent";
+	let submitLoading = ref(false);
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+
+	const user = computed(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	})
+	const currentPage = ref(1);
+	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+		return state.roomTypeList;
+	});
+	//选择列表
+	let _select_id = ref("income");
+	let _search_key = ref("");
+	const orderStatus = ref<string | number>("all");
+	const keyword = ref("");//过滤字段
+	const dateRange = ref<string[]>(getMonthDateArray());
+	const columns = computed<Array<Array<PickerOption>>>(() => {
+		let result : Array<Array<PickerOption>> = [[
+				{ text: "全部", value: "all" },
+			      { text: "待入住", value: 1 },
+			      { text: "已完成", value: 5 },
+			      { text: "已撤销", value: 10 },
+		]];
+		return result;
+	});
 
 
-// 订单信息类型定义
-interface OrderInfo {
-  id: string;
-  customerName: string;
-  roomType: string;
-  roomNumber: string;
-  price: number;
-  checkInDate: string;
-  checkOutDate: string;
-  status: string;
-  remark?: string;
-}
+	const orderResult = ref<OrderDataListResult>({
+		count: 0,//总数量
+		pageNo: 1,//当前页码
+		pageSize: 20,//每页数量
+		orderList: []//列表
+	})
+	const getOrderList = async () => {
+		submitLoading.value = true;
+		uni.showLoading({
+			title: ""
+		})
+		const fmr = await OrderService.getOrderListBySearch(hotel_id.value, dateRange.value, orderStatus.value, keyword.value, orderResult.value.pageNo, orderResult.value.pageSize);
+		orderResult.value = fmr as OrderDataListResult;
+		uni.hideLoading();
+		submitLoading.value = false;
+	}
+	const dateChange = (range : string[]) => {
+		dateRange.value = range;
+		getOrderList();
 
-// 模拟订单数据
-const orderInfo = ref<OrderInfo>({
-  id: '20251220001',
-  customerName: '张三',
-  roomType: '豪华大床房',
-  roomNumber: '801',
-  price: 588,
-  checkInDate: '2025-12-20',
-  checkOutDate: '2025-12-22',
-  status: '已入住',
-  remark: '含双早，延迟退房至14点，免费停车1天'
-});
+	}
+	const searchInputChange = (k : string) => {
+		keyword.value = k;
+	}
+	const selectStatus = (bt : string | number) => {
+		orderStatus.value = bt;
+		getOrderList();
+	}
+	const pageChange = (pn : number) => {
+		console.log(pn, orderResult.value);
+		getOrderList();
+	}
+	const formatDate = (timestamp : number) => {
+		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
+	}
+	const formatRoomName = (room_id : string):string => {
+			let val="--";
+		if (roomTypeList.value == null) {
+			return val;
+		}
+		roomTypeList.value.forEach(roomtype=>{
+			let list = roomtype.roomList as Array<roomBean>;
+			list.forEach(room=>{
+				if(room._id ==room_id){
+					val=room.room_name;
+					return;
+				}
+				
+			})
+		})	
+		return val;
+	}
+	const parseRoomList = (roomTypeArray:Array<OrderRoomTypeBean>):Array<string>=>{
+		let list:Array<string>=[];
+		roomTypeArray.forEach(item=>{
+			item.roomList.forEach(roomid=>{
+				list.push(formatRoomName(roomid))
+			})	
+		});
+		return list;
+	}
+	const addOrder = async () => {
+		if (!permissionList.value.includes(
+			"FM_CREATE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+		uni.$once("refrushOrderList", ()=>{
+			console.log("刷新orderlist");
+			getOrderList();
+		})
+		uni.navigateTo({
+			url: `/pages/order/createOrder/createOrder`
+		});
+	}
+	const deleteOrder = async (order : orderBean) => {
+		if (submitLoading.value == true) {
+			return;
+		}
+		if (!permissionList.value.includes(
+			"ORDER_DELETE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
 
-// 侧滑菜单状态
-const startX = ref<number>(0); // 触摸起始X坐标
-const menuWidth = ref<number>(0); // 菜单展开宽度
-const menuTransition = ref<string>('transform 0.2s ease'); // 过渡动画
+				}
+			})
+			return;
+		}
+		console.log("delete")
+		showDialog({
+			title: '确认删除此订单',
+			message: "删除后将无法恢复，确认删除吗？",
+			beforeClose: async () : Promise<boolean> => {
 
-// 触摸开始事件
-const handleTouchStart = (e: any) => {
-  startX.value = e.touches[0].clientX;
-  menuTransition.value = 'none'; // 取消过渡，跟随滑动
-};
+				//await roomTypeService.deleteOrder(room._id);
+				//await comFunction.getRoomTypeList(hotel_id.value);
+				//await FMService.deleteOrder(fm._id);
+				getOrderList();
+				hideDialog();
 
-// 触摸移动事件
-const handleTouchMove = (e: any) => {
-  const moveX = e.touches[0].clientX;
-  const diffX = startX.value - moveX; // 左滑为正
-  // 限制滑动范围：0 ~ 240rpx（菜单总宽度）
-  if (diffX >= 0 && diffX <= 240) {
-    menuWidth.value = diffX;
-  }
-};
+			},
+			confirm: () => {
+			}, cancel: () => {
+				hideDialog();
+			}
 
-// 触摸结束事件
-const handleTouchEnd = () => {
-  menuTransition.value = 'transform 0.2s ease'; // 恢复过渡
-  // 滑动超过120rpx则完全展开，否则收起
-  if (menuWidth.value > 120) {
-    menuWidth.value = 240;
-  } else {
-    menuWidth.value = 0;
-  }
-};
-
-// 菜单操作事件
-const handleView = () => {
-  showToast({ title: '查看订单详情', icon: 'none' });
-  menuWidth.value = 0; // 收起菜单
-};
-
-const handleEdit = () => {
-  showToast({ title: '进入订单修改页面', icon: 'none' });
-  menuWidth.value = 0; // 收起菜单
-};
-
-const handleDelete = () => {
-  // 二次确认弹窗（iOS 风格）
-  showModal({
-    title: '删除订单',
-    content: '确定要删除该订单吗？删除后将无法恢复',
-    success: (res) => {
-      if (res.confirm) {
-        showToast({ title: '订单已删除', icon: 'success' });
-        menuWidth.value = 0; // 收起菜单
-      }
-    }
-  });
-};
+		});
+	}
+	const editOrder = async (order:orderBean) => {
+		if (!permissionList.value.includes(
+			"ROOMTYPE_UPDATE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+	}
+	const init = () => {
+		//let d:MOONTH_START_END_TIMESTAMP=TIME.getTodayStartTimeAndEndTime(new Date());
+		getOrderList();
+	}
+	onPageShow(() => {
+	//	getOrderList();
+	})
+	defineExpose({
+		//getOrderList
+	});
+	init();
 </script>
 
-<style scoped>
-/* 卡片容器（iOS 间距规范） */
-.order-card-container {
-  padding: 12rpx 16rpx;
-  display: flex;
-  flex-direction: column;
-}
+<style lang="scss">
+	.search-area {
+		padding: 18px;
 
-/* 侧滑菜单容器 */
-.swipe-menu {
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  overflow: hidden;
-  border-radius: 16rpx;
-}
+		.card {
+			background-color: #fff;
+			border-radius: 8px;
+			padding: 16px;
 
-/* 操作菜单（右侧隐藏） */
-.menu-actions {
-  display: flex;
-  flex-direction: row;
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 100%;
-  z-index: 1;
-}
+			.card-item {
+				margin-bottom: 15px;
 
-/* 菜单按钮样式（iOS 原生配色） */
-.menu-btn {
-  flex: 1;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  color: #ffffff;
-  font-size: 28rpx;
-  font-weight: 500;
-  width: 80rpx; /* 每个按钮宽度80rpx，总宽度240rpx */
-}
+				&:last-child {
+					margin: 0;
+				}
+			}
 
-/* 查看按钮（iOS 蓝色） */
-.btn-view {
-  background-color: #007aff;
-}
+			.title-area {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
 
-/* 修改按钮（iOS 绿色） */
-.btn-edit {
-  background-color: #34c759;
-}
+				.txt {
+					padding-right: 8px;
+					font-size: 18px;
+					font-weight: 700;
+				}
+			}
 
-/* 删除按钮（iOS 红色） */
-.btn-delete {
-  background-color: #ff3b30;
-}
+		}
+	}
 
-/* iOS 轻奢风格卡片核心 */
-.order-card {
-  background: #ffffff;
-  width: 100%;
-  padding: 24rpx;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 20rpx;
-  /* iOS 细腻阴影 */
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.03), 0 1rpx 2rpx rgba(0, 0, 0, 0.05);
-  /* 点击反馈 */
-  transition: all 0.2s ease;
-  z-index: 2;
-}
+	.card-list {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
 
-.order-card:active {
-  background-color: #f8f8f8;
-  transform: translateX(-240rpx) translateY(1rpx) !important;
-}
+		.card-list-item {
+			min-width: 360px;
+			padding: 7.5px 15px;
+			flex: 1;
 
-/* 卡片头部：状态+价格 */
-.card-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
+			.card {
+				background-color: #fff;
+				border-radius: 12px;
 
-/* 状态标签（iOS 圆角胶囊） */
-.status-tag {
-  padding: 6rpx 12rpx;
-  border-radius: 16rpx;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
+				position: relative;
 
-.status-success {
-  background-color: rgba(52, 199, 89, 0.1);
-  border: 0.5rpx solid rgba(52, 199, 89, 0.2);
-}
+				.icon-area {
+					position: absolute;
+					right: 10px;
+					top: 10px;
+				}
 
-.status-pending {
-  background-color: rgba(255, 204, 0, 0.1);
-  border: 0.5rpx solid rgba(255, 204, 0, 0.2);
-}
+				.top-area {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					height: 60px;
+					border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+					background-color: #ecfdf5;
+					padding: 0 24px;
 
-.status-text {
-  font-size: 22rpx;
-  font-weight: 500;
-}
+					.txt {
+						line-height: 60px;
+						color: #047857;
+						font-size: 18px;
+						font-weight: 700;
+					}
 
-.status-success .status-text {
-  color: #34c759; /* iOS 原生绿 */
-}
+				}
 
-.status-pending .status-text {
-  color: #ffcc00; /* iOS 原生黄 */
-}
+				.top-area-red {
+					border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+					background-color: #fef2f2;
 
-/* 价格区域 */
-.price-wrap {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-}
+					.txt {
+						line-height: 60px;
+						color: #b91c1c;
+						font-size: 18px;
+						font-weight: 700;
+					}
 
-.price-symbol {
-  font-size: 24rpx;
-  color: #ff3b30; /* iOS 原生红 */
-  margin-right: 4rpx;
-}
+				}
 
-.price-num {
-  font-size: 36rpx;
-  font-weight: 600;
-  color: #ff3b30;
-}
+				.amount-area {
+					padding: 0 24px;
+					margin-top: 24px;
 
-.price-unit {
-  font-size: 22rpx;
-  color: #ff3b30;
-  opacity: 0.8;
-  margin-left: 4rpx;
-}
+					.label {
+						color: #6b7280;
+						font-size: 14px;
+						margin-bottom: 4px;
+					}
 
-/* 卡片主内容区 */
-.card-content {
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
-}
+					.num {
+						line-height: 36px;
+						color: #047857;
+						font-size: 30px;
+						font-weight: 700;
+					}
 
-/* 订单编号 */
-.order-no {
-  font-size: 22rpx;
-  color: #8e8e93; /* iOS 次要文本色 */
-  padding-bottom: 8rpx;
-  border-bottom: 0.5rpx solid #f0f0f0;
-}
+					.num-red {
+						color: #b91c1c;
+					}
+				}
 
-/* 信息网格 */
-.info-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
-}
+				.content {
+					padding: 24px;
 
-.info-item {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
+					.card-item {
 
-.info-label {
-  font-size: 28rpx;
-  color: #1c1c1e; /* iOS 主要文本色（深灰） */
-  font-weight: 400;
-}
+						margin-top: 15px;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						justify-content: space-between;
 
-.info-value {
-  font-size: 28rpx;
-  color: #636366; /* iOS 次要文本色（中灰） */
-  font-weight: 500;
-}
+						&:first-child {
+							margin-top: 0;
+						}
 
-/* 日期卡片（内嵌式设计） */
-.date-card {
-  background-color: #f9f9f9;
-  border-radius: 12rpx;
-  padding: 16rpx;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 4rpx;
-}
+						.fl-c {
+							display: flex;
+							flex-direction: row;
+							align-items: center;
+						}
 
-.date-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4rpx;
-  flex: 1;
-}
+						.label {
+							color: #1f2937;
+							font-size: 16px;
+							padding-left: 8px;
+						}
 
-.date-icon {
-  font-size: 24rpx;
-  margin-bottom: 4rpx;
-}
+						.val-style {
+							color: #1f2937;
+							font-size: 16px;
+						}
 
-.date-label {
-  font-size: 20rpx;
-  color: #8e8e93;
-}
+					}
+				}
 
-.date-value {
-  font-size: 26rpx;
-  color: #1c1c1e;
-  font-weight: 500;
-}
 
-.date-divider {
-  width: 0.5rpx;
-  height: 40rpx;
-  background-color: #e5e5e5;
-  margin: 0 16rpx;
-}
 
-/* 备注区 */
-.card-remark {
-  padding-top: 12rpx;
-  border-top: 0.5rpx solid #f0f0f0;
-}
+				.control {
+					height: 44px;
+					display: flex;
+					flex-direction: row;
+					justify-content: flex-end;
+					background-color: #f9fafb;
+					align-items: center;
 
-.remark-text {
-  font-size: 24rpx;
-  color: #636366;
-  line-height: 1.5;
-  padding-left: 4rpx;
-}
+					.txt {
+						font-size: 20px;
+						font-weight: 700;
+						color: #f53f3f;
+						padding-top: 5px;
+					}
 
-/* iOS 经典右箭头 */
-.chevron-wrap {
-  position: absolute;
-  right: 24rpx;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 36rpx;
-  height: 36rpx;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-
-.chevron-icon {
-  font-size: 36rpx;
-  color: #c7c7cc;
-  font-weight: 300;
-  opacity: 0.8;
-}
+					.txt-in {
+						color: #00b42a;
+					}
+				}
+			}
+		}
+	}
 </style>

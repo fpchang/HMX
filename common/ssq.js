@@ -106,7 +106,13 @@ function S1(list,history){
 	let count6 = compare(list,history.slice(history.length-6));
 	let count7 = compare(list,history.slice(history.length-7));
 	//console.log("count:",count1,count2,count3,count4,count5);
-	if(count1<3&&count2>0&&count2<4&&count3>1&&count3<5&&count4<6&&count4>1&&count5>2&&count5<6&&count6>3&&count6<6&&count7>3&&count7<6){
+	const s1=count1<3;
+	const s2=count2>0&&count2<4;
+	const s3=count3>1&&count3<5;
+	const s4=count4<6&&count4>1;
+	const s5=count5>2&&count5<6;
+	const s6=count6>2;
+	if(s1&&s1&&s3&&s4&&s5){
 		return true
 	}
 	return false;
@@ -220,6 +226,7 @@ sameHistory(11,history);
 const c3=getGroupList(history.slice(history.length-3));
 const c4=getGroupList(history.slice(history.length-4));
 const c5=getGroupList(history.slice(history.length-5));
+<<<<<<< HEAD
 //const c6=getGroupList(history.slice(history.length-6));
 console.log("c3",new Set(c3),"c4",new Set(c4),"c5",new Set(c5));//夹号，冷号
 
@@ -230,3 +237,9 @@ console.log(S1_stat(list));
 //[6,16,20,25,28,31]
 //[6,16,20,25,28,31] [6,7,15,16,26,31] [7,15,20,25,26,28]
 // console.log(validSelfCheck([2,4,6,10,12,13]));
+=======
+const c6=getGroupList(history.slice(history.length-6));
+console.log("c3",new Set(c3),"c4",new Set(c4),"c5",new Set(c5),"c6",new Set(c6));//夹号，冷号
+console.log(caculate(S1))
+//2,6,18,19,27 ,33  [ 3, 11, 16, 26, 29, 30 ] [ 11, 13, 20, 22, 32, 33 ]
+>>>>>>> 562d27d575d3c48b94d47e83c29350f12d2b1936

@@ -1,0 +1,144 @@
+<template>
+	<view class="checkRoom">
+		<view style="padding:24px">
+			<rice-tabs v-model="activeIndex" :list="list" @clickTab="tabClick"></rice-tabs>
+		</view>
+
+
+		<scroll-view style="flex:1">
+
+			<view class="roomType-container" v-for="roomType of roomTypeList">
+				<view class="title">{{roomType.name}}</view>
+				<view class="card-list">
+					<view class="card-list-item" v-for="room of roomType.roomList">
+						<view class="card">
+							<view class="card-item title">
+								<text class="txt">{{room.room_name}}</text>
+							</view>
+							<view class="card-item subtitle">
+								<text class="txt">
+									{{roomType.name}}
+								</text>
+							</view>
+
+						</view>
+					</view>
+
+				</view>
+
+			</view>
+
+
+
+		</scroll-view>
+
+		<view class="bottom-area">1111</view>
+	</view>
+</template>
+
+<script setup lang="uts">
+	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { roomBean } from '@/bean/roomBean';
+	import { state } from "@/store/store";
+	let submitLoading = ref(false);
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	});
+	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+		return state.roomTypeList;
+	});
+	const activeIndex = ref(0)
+	const list = ref<TabsOptions[]>([
+		{
+			name: '全部房型',
+			value: 'all'
+		}, {
+			name: '大床',
+			value: 'recommedn'
+		}, {
+			name: '标间',
+		}, {
+			name: '亲子',
+		}, {
+			name: '套房',
+		},
+	])
+	const tabClick = (e : TabsClickTab) => {
+		console.log('TabsClickTab', e)
+		uni.showToast({
+			title: `点击了：${e.name}${e.disabled ? '（禁用）' : ''}`,
+			icon: 'none'
+		})
+	};
+</script>
+
+<style lang="scss">
+	.checkRoom {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+
+	}
+
+	.roomType-container {
+		padding: 24px;
+
+		.card-list {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+
+			.card-list-item {
+				min-width: 360px;
+				padding: 15px;
+				flex: 1;
+
+				.card {
+
+
+					background-color: #fff;
+					border-radius: 12px;
+					padding: 16px;
+
+					.card-item {
+						margin-bottom: 12px;
+
+						&:last-child {
+							margin-bottom: 0;
+						}
+					}
+
+					.title {
+						.txt {
+							font-size: 18px;
+							font-weight: 700;
+							color: #1d2129;
+						}
+
+					}
+
+					.subtitle {
+						.txt {
+							color: #6b7280;
+							font-size: 14px;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.bottom-area {
+		padding: 24px;
+		background-color: #fff;
+	}
+</style>

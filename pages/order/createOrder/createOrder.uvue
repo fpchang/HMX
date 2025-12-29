@@ -1,17 +1,325 @@
 <template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;align-items: center;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn" v-if="pageType!=2">
+				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
+					textColor="#1e88e5" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+			</view>
+		</template>
+	</rice-navbar>
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		createOrder page
+		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
+			<xt-form-item label="来源" tips="" required>
+				<rice-radio-group v-model="orderForm.orderSource" direction="row">
+					<view style="display: flex;flex-direction: column;width: 100%;">
+						<view v-for="item of source"> <rice-radio :value="item.value" :label="item.text"
+								style="margin-left:24px;margin-bottom: 12px;"></rice-radio></view>
+					</view>
+
+				</rice-radio-group>
+
+			</xt-form-item>
+			<xt-form-item label="日期" tips="" required>
+				<view class="select">
+					<view class="content" @click="showCalendarEvent">
+						<text class="txt">{{dateRange.join(" ~ ") }}</text>
+						<image src="/static/icons/calendar.png" style="width: 20px;height:20px"></image>
+					</view>
+				</view>
+
+			</xt-form-item>
+			<xt-form-item label="房型房间" tips="" required>
+				<!-- <view> 
+				<view v-for="item in 200" style="padding:10px;">{{203}}</view>
+			</view> -->
+				<view class="room-list-item" style="display: flex;flex-direction: row;align-items: center;"
+					v-for="(item, index) of hasCheckRoomList">
+
+					<view style="flex: 1;">
+						{{item.room_name}}
+					</view>
+					<view class="del-style" @click="deleteRoom(index)" v-if="hasCheckRoomList.length>1">
+						<image src="/static/icons/delete.png" style="width:20px;height:20px"></image>
+					</view>
+				</view>
+				<view @click="addNewRoom" class="addNew-btn">
+					<rice-icon name="plus" size="16px" color="#1e88e5" />
+					<text class="txt">选择房间</text>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="客户名" tips="" required>
+
+				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服微信"
+					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.userName"></rice-input>
+			</xt-form-item>
+			<xt-form-item label="手机号" tips="" required>
+				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服电话"
+					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.phone" :maxlength="11"
+					type="number"></rice-input>
+
+			</xt-form-item>
+			<xt-form-item label="定金" tips="" required>
+
+				<rice-stepper v-model="orderForm.downPayment" input-width="150" button-size="38" font-size="15"
+					:auto-fixed="false" :disabled="pageType==2" />
+			</xt-form-item>
+			<xt-form-item label="总价" tips="" required>
+				<rice-stepper v-model="orderForm.totalAmount" input-width="150" button-size="38" font-size="15"
+					:auto-fixed="false" :disabled="pageType==2" />
+
+			</xt-form-item>
+			<xt-form-item label="备注" tips="" required>
+				<view>
+
+					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="请输入备注内容"
+						layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
+						v-model="orderForm.mark"></rice-textarea>
+				</view>
+			</xt-form-item>
+		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
+	<rice-calendar v-model:show="showCalendar" mode="range" :min-date="initDateObj.minDate" :date="dateRange"
+		@confirm="rangeConfirm"></rice-calendar>
+	<l-popup v-model="showCheckRoomPanal" position="right" :closeable="true" :safeAreaInsetBottom="true"
+		:safeAreaInsetTop="true" bgColor="#f5f7fa" :preventScrollThrough="true">
+		<view style="width:700rpx;padding:60px 0">
+			<checkRoomComponent></checkRoomComponent>
+		</view>
+	</l-popup>
 </template>
 
 <script setup>
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { roomBean } from '@/bean/roomBean';
+	import { orderBean ,OrderRoomTypeBean,remainRoomTypeBean,remainRoomBean} from '@/bean/orderBean';
+	import { OrderService } from "@/services/OrderService.uts";
+	import { state } from "@/store/store";
+	import { comFunction } from "@/pages/index/ComFuc.uts"
+	import { validForm } from "./createOrderVaild.uts";
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { TIME, getMonthDateArray } from "@/static/utils/TIME";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import checkRoomComponent from "./components/checkRoomComponent.uvue";
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	});
+	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+		return state.roomTypeList;
+	});
+	const hasCheckRoomList = ref<Array<roomBean>>([]);
+	let pageType = ref(0);
+	const showCheckRoomPanal = ref(false);
+	let submitLoading = ref(false);
+	const title = computed(() => {
+		if (pageType.value == 0) {
+			return '添加订单';
+		}
+		return pageType.value == 1 ? '修改订单信息' : '订单信息';
+	});
+	const titleImg = computed<string>(() => {
+		if (pageType.value == 0) {
+			return "/static/icons/addpage.png"
+		}
+		return pageType.value == 1 ? "/static/icons/editpage.png" : "/static/icons/detailpage.png"
+	});
+	const source = [{
+		name: "xiechen",
+		text: "携程",
+		value: 1,
+	},
+	{
+		name: "meituan",
+		text: "美团",
+		value: 2,
+	},
+	{
+		name: "meituanminsu",
+		text: "美团民宿",
+		value: 3,
+	},
+	{
+		name: "ticktok",
+		text: "抖音",
+		value: 4,
+	},
+	{
+		name: "tujia",
+		text: "途家",
+		value: 5,
+	},
+	{
+		name: "downline",
+		text: "线下",
+		value: 0,
+	},
+	{
+		name: "ohters",
+		text: "其它",
+		value: 6,
+	}
+
+	]
+	const showCalendar = ref(false);
+	const initDateObj = {
+		start_date: dayuts(new Date()).format("YYYY-MM-DD") as string,
+		end_date: dayuts(new Date()).add(1, 'day').format("YYYY-MM-DD") as string,
+		minDate: dayuts(new Date()).format("YYYY-MM-DD") as string
+	}
+	const dateRange = ref<string[]>([
+		initDateObj.start_date as string,
+		initDateObj.end_date as string
+	]);
+	let orderForm = ref<orderBean>({
+		_id: "",
+		checkInEndDate: "",
+		checkInEndDateTimeStamp: 0,
+		checkInStartDate: "",
+		checkInStartDateTimeStamp: 0,
+		createTime: 0,
+		createrName: "",
+		createrPhone: "",
+		downPayment: 0,
+		fromClient: false,
+		hotel_id: hotel_id.value,
+		orderSouce_Zn: "",
+		orderSource: 1,
+		orderStatus: 0,
+		orderType: "",
+		payType: "",
+		phone: "",
+		roomTypeArray: [],
+		totalAmount: 0,
+		userName: "",
+		wxNickName: "",
+		mark: ""
+	});
+	const showCalendarEvent = () => {
+		showCalendar.value = !showCalendar.value;
+	}
+	const rangeConfirm = (e : string[]) => {
+		console.log('rangeConfirm', e)
+		dateRange.value = e;
+	}
+	const addNewRoom = () => {
+		uni.$once("setRoomTypeList", (list : Array<OrderRoomTypeBean>) => {
+			let obj = {
+								// count: number,
+								// 	name: string,
+								// 	roomList: string[],
+								// 	roomType_id: string
+							}
+			console.log("setRoomTypeList", list);
+		})
+		uni.navigateTo({
+			url: `/pages/order/createOrder/checkOrderRoom/checkOrderRoom?startDate=${dateRange.value[0]}&endDate=${dateRange.value[1]}`
+		})
+	}
+	const deleteRoom = (index : number) => { }
+	const submitForm = async () => {
+		submitLoading.value = true;
+		let flag : boolean = validForm(orderForm.value)
+		if (flag == false) {
+			submitLoading.value = false;
+			return;
+		}
+		try {
 		
+			uni.navigateBack();
+			submitLoading.value = false;
+		} catch (error) {
+			submitLoading.value = false;
+		}
+
+	}
 </script>
 
-<style>
-		
+<style lang="scss">
+	.room-list-item {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		margin-bottom: 12px;
+
+		.del-style {
+			padding-left: 8px;
+		}
+
+
+	}
+
+	.select {
+
+		position: relative;
+		border: 1px solid #dcdfe6;
+		box-sizing: border-box;
+		overflow: visible;
+		border-radius: 4px;
+
+		.content {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			height: 36px;
+			padding: 0 8px;
+			overflow: visible;
+
+			.txt {
+				line-height: 36px;
+			}
+		}
+
+		.select-panal {
+			overflow: visible;
+			width: 100%;
+			position: relative;
+			top: 40px;
+			left: 0;
+
+			.select-list {
+				overflow: visible;
+				background-color: #fff;
+			}
+		}
+	}
+
+	.addNew-btn {
+		flex: 1;
+		background: #fff;
+		padding: 10px 0;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid #ededed;
+		border-radius: 8px;
+
+		.txt {
+			font-size: 14px;
+			color: #1e88e5;
+
+		}
+	}
 </style>

@@ -1,0 +1,12 @@
+	import { orderBean } from "@/bean/orderBean.uts";
+export const  validForm = (order:orderBean):boolean=>{
+	let msg ="";
+	if(msg!=""){
+		uni.showToast({
+			title:msg,
+			icon:"none"
+		})
+		return false;
+	}
+	return true;
+}

@@ -239,12 +239,6 @@
 	}
 	const addNewRoom = () => {
 		uni.$once("setRoomTypeList", (list : Array<string>) => {
-			let obj = {
-								// count: number,
-								// 	name: string,
-								// 	roomList: string[],
-								// 	roomType_id: string
-							}
 			console.log("setRoomTypeList", list);
 			orderForm.value.reservedRoomList=list;
 		})
@@ -253,6 +247,10 @@
 		})
 	}
 	const editRoom = () => {
+		uni.$once("setRoomTypeList", (list : Array<string>) => {
+			console.log("setRoomTypeList", list);
+			orderForm.value.reservedRoomList=list;
+		})
 		uni.navigateTo({
 			url: `/pages/order/createOrder/checkOrderRoom/checkOrderRoom?startDate=${dateRange.value[0]}&endDate=${dateRange.value[1]}&checkRoomList=${orderForm.value.reservedRoomList.toString()}`
 		})

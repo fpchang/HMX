@@ -94,7 +94,10 @@
 				name:item.name,
 				remainRoomList:remainRoomList.value.filter(room=>room.room_type_id==item._id) as Array<roomBean>
 			}
-			list.push(rt);
+			if(rt.remainRoomList.length>0){
+				list.push(rt);
+			}
+			
 		})
 		return list;
 	})
@@ -170,15 +173,17 @@
 
 	// }
 	const getRemainRoomList = async () => {
-		//uni.showLoading();
+		uni.showLoading();
 		let startTime = dayuts(dateRange.value[0]).format("YYYY-MM-DD 14:00:00");
 		let endTime = new Date(dayuts(dateRange.value[1]).format("YYYY-MM-DD 12:00:00")).getTime();
 		try {
 			const list : Array<roomBean> = await OrderService.getRemainderRoomList(hotel_id.value, startTime, endTime);
 			console.log("剩余房间", list)
 			remainRoomList.value = list;
+			uni.hideLoading();
 		} catch (e) {
 			console.log(e);
+			uni.hideLoading();
 			uni.showToast({
 				title: "获取剩余房间失败",
 				icon: "none"
@@ -191,13 +196,8 @@
 	
 	//确认选择
 	const setRoomSelect = () => {
-		let list:Array<OrderRoomTypeBean> = [{
-				count: 1,
-				name: "",
-				roomList: [],
-				roomType_id: ""
-		}]
-		uni.$emit("setRoomTypeList",list);
+		uni.$emit("setRoomTypeList",checkVal.value);
+		uni.navigateBack();
 	}
 	onLoad(params => {
 		if (params == null) {
@@ -205,7 +205,12 @@
 		}
 		const startDate = params.getString("startDate");
 		const endDate = params.getString("endDate");
+		const checkRoomList = params.getString("checkRoomList")??"";
 		dateRange.value = [startDate, endDate];
+		if(checkRoomList!=""&&checkRoomList!=null){
+			checkVal.value=checkRoomList.split(",");
+		}
+		
 		getRemainRoomList();
 	})
 </script>

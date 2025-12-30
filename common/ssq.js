@@ -226,20 +226,10 @@ sameHistory(11,history);
 const c3=getGroupList(history.slice(history.length-3));
 const c4=getGroupList(history.slice(history.length-4));
 const c5=getGroupList(history.slice(history.length-5));
-<<<<<<< HEAD
-//const c6=getGroupList(history.slice(history.length-6));
-console.log("c3",new Set(c3),"c4",new Set(c4),"c5",new Set(c5));//夹号，冷号
 
-const list=caculate(S1,18);
+const list=caculate(S1,14);
 console.log(list);
 console.log(S1_stat(list));
-//[6,7,15,16,20,25,26,28,31]
-//[6,16,20,25,28,31]
-//[6,16,20,25,28,31] [6,7,15,16,26,31] [7,15,20,25,26,28]
-// console.log(validSelfCheck([2,4,6,10,12,13]));
-=======
 const c6=getGroupList(history.slice(history.length-6));
 console.log("c3",new Set(c3),"c4",new Set(c4),"c5",new Set(c5),"c6",new Set(c6));//夹号，冷号
-console.log(caculate(S1))
-//2,6,18,19,27 ,33  [ 3, 11, 16, 26, 29, 30 ] [ 11, 13, 20, 22, 32, 33 ]
->>>>>>> 562d27d575d3c48b94d47e83c29350f12d2b1936
+

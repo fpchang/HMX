@@ -41,20 +41,25 @@
 
 			</xt-form-item>
 			<xt-form-item label="房型房间" tips="" required>
-				<!-- <view> 
-				<view v-for="item in 200" style="padding:10px;">{{203}}</view>
-			</view> -->
-				<view class="room-list-item" style="display: flex;flex-direction: row;align-items: center;"
-					v-for="(item, index) of hasCheckRoomList">
+				<!-- <view class="room-list-item" style="display: flex;flex-direction: row;align-items: center;"
+					v-for="room_id of orderForm.reservedRoomList">
 
-					<view style="flex: 1;">
-						{{item.room_name}}
+					<view class="room-label-container" style="flex: 1">
+						{{formatRoomName(room_id)}}
 					</view>
-					<view class="del-style" @click="deleteRoom(index)" v-if="hasCheckRoomList.length>1">
+					<view class="del-style" @click="deleteRoom(index)" v-if="orderForm.reservedRoomList.length>1">
 						<image src="/static/icons/delete.png" style="width:20px;height:20px"></image>
 					</view>
+				</view> -->
+				<view class="select-room-style" v-if="!showAddRoom">
+					<view class="room-content" > 
+						<text class="txt" v-for="room_id of orderForm.reservedRoomList">{{formatRoomName(room_id)}}</text>
+					</view>
+					<view class="edit-style" @click="editRoom()">
+						<image src="/static/icons/editpage.png" style="width:20px;height:20px"></image>
+					</view>
 				</view>
-				<view @click="addNewRoom" class="addNew-btn">
+				<view @click="addNewRoom" class="addNew-btn" v-if="showAddRoom">
 					<rice-icon name="plus" size="16px" color="#1e88e5" />
 					<text class="txt">选择房间</text>
 				</view>
@@ -125,10 +130,16 @@
 	const permissionList = computed(() => {
 		return state.permissionList;
 	});
-	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+	const roomTypeList = computed<Array<roomTypeBean>>(() => {
 		return state.roomTypeList;
 	});
-	const hasCheckRoomList = ref<Array<roomBean>>([]);
+	const roomList = computed<Array<roomBean>>(() => {
+		return state.roomList;
+	});
+	const formatRoomName=(room_id:string):string=>{
+		let room = roomList.value.find(item=>item._id == room_id) as roomBean;
+		return room.room_name;
+	}
 	let pageType = ref(0);
 	const showCheckRoomPanal = ref(false);
 	let submitLoading = ref(false);
@@ -210,11 +221,15 @@
 		payType: "",
 		phone: "",
 		roomTypeArray: [],
+		reservedRoomList:[],
 		totalAmount: 0,
 		userName: "",
 		wxNickName: "",
 		mark: ""
 	});
+	const showAddRoom=computed<boolean>(()=>{
+		return orderForm.value.reservedRoomList.length<1;
+	})
 	const showCalendarEvent = () => {
 		showCalendar.value = !showCalendar.value;
 	}
@@ -223,7 +238,7 @@
 		dateRange.value = e;
 	}
 	const addNewRoom = () => {
-		uni.$once("setRoomTypeList", (list : Array<OrderRoomTypeBean>) => {
+		uni.$once("setRoomTypeList", (list : Array<string>) => {
 			let obj = {
 								// count: number,
 								// 	name: string,
@@ -231,13 +246,20 @@
 								// 	roomType_id: string
 							}
 			console.log("setRoomTypeList", list);
+			orderForm.value.reservedRoomList=list;
 		})
 		uni.navigateTo({
 			url: `/pages/order/createOrder/checkOrderRoom/checkOrderRoom?startDate=${dateRange.value[0]}&endDate=${dateRange.value[1]}`
 		})
 	}
-	const deleteRoom = (index : number) => { }
+	const editRoom = () => {
+		uni.navigateTo({
+			url: `/pages/order/createOrder/checkOrderRoom/checkOrderRoom?startDate=${dateRange.value[0]}&endDate=${dateRange.value[1]}&checkRoomList=${orderForm.value.reservedRoomList.toString()}`
+		})
+	}
 	const submitForm = async () => {
+		console.log("form submit",orderForm.value);
+		return;
 		submitLoading.value = true;
 		let flag : boolean = validForm(orderForm.value)
 		if (flag == false) {
@@ -256,12 +278,37 @@
 </script>
 
 <style lang="scss">
+	.select-room-style{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		.room-content{
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			border:1px solid #dcdfe6;
+			flex: 1;
+			padding:8px;
+			margin-right: 8px;
+		}
+		.txt{
+			margin-right: 8px;
+		}
+	}
 	.room-list-item {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		margin-bottom: 12px;
-
+		.room-label-container{
+			display: flex;
+			height: 36px;
+			padding-left: 8px;
+			line-height: 36px;
+			border-radius: 4px;
+			border:1px solid #dcdfe6;
+		}
 		.del-style {
 			padding-left: 8px;
 		}

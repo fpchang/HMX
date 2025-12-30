@@ -25,6 +25,7 @@ export type orderBean={
 		payType: string,
 		phone: string,
 		roomTypeArray: OrderRoomTypeBean[],
+		reservedRoomList:Array<string>,
 		totalAmount: number,
 		userName: string,
 		wxNickName: string,

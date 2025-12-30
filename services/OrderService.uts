@@ -11,12 +11,25 @@ class OrderServiceClass {
 	/**
 	 * 创建订单
 	 */
-	async addOrder(orderObj : boolean) : Promise<boolean> {
+	async addOrder(orderObj : orderBean) : Promise<boolean> {
 		const obj = {
-
+			hotel_id: orderObj.hotel_id,
+			userName: orderObj.userName,
+			checkInStartDateTimeStamp: orderObj.checkInStartDateTimeStamp,
+			checkInEndDateTimeStamp: orderObj.checkInEndDateTimeStamp,
+			checkInStartDate: orderObj.checkInStartDate,
+			checkInEndDate: orderObj.checkInEndDate,
+			phone: orderObj.phone,
+			createrPhone: orderObj.createrPhone,
+			createrName: orderObj.userName,
+			orderSource: orderObj.orderSource,
+			orderSouce_Zn: orderObj.orderSouce_Zn,
+			downPayment: orderObj.downPayment,
+			totalAmount: orderObj.totalAmount,
+			reservedRoomList: orderObj.reservedRoomList
 		}
 		try {
-			const res = await DB.callFunction("hm_addOrder", obj);
+			const res = await DB.callFunction("hm_addOrder", {orderObj:obj});
 			console.log("create order", res);
 			const result = res['result'] as UTSJSONObject;
 			const code = result.getNumber("code", 0) ?? 0;
@@ -29,10 +42,6 @@ class OrderServiceClass {
 				});
 				throw new Error(message);
 			}
-			uni.showToast({
-				title: "添加成功",
-				icon: "none"
-			});
 			return true
 		} catch (error) {
 			throw new Error("创建失败");
@@ -93,6 +102,7 @@ class OrderServiceClass {
 						payType: item.getString("payType") ?? "",
 						phone: item.getString("phone") ?? "",
 						roomTypeArray: roomTypeList,
+						reservedRoomList:item.getArray<string>("reservedRoomList")??[],
 						totalAmount: item.getNumber("totalAmount") ?? 0,
 						userName: item.getString("userName") ?? "",
 						wxNickName: item.getString("wxNickName") ?? "",
@@ -134,18 +144,18 @@ class OrderServiceClass {
 				return list;
 			}
 			result.forEach(item => {
-				let room:roomBean={
+				let room : roomBean = {
 					_id: item.getString("_id"),
-					data_status: item.getNumber("data_status")??1,
-					hotel_id: item.getString("hotel_id")??"",
-					room_name: item.getString("room_name")??"",
-					room_type_id: item.getString("room_type_id")??""
+					data_status: item.getNumber("data_status") ?? 1,
+					hotel_id: item.getString("hotel_id") ?? "",
+					room_name: item.getString("room_name") ?? "",
+					room_type_id: item.getString("room_type_id") ?? ""
 				}
 				list.push(room)
 			})
 			return list;
 		} catch (error) {
-	
+
 			throw new Error("获取剩余房间失败");
 		}
 	}

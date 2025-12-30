@@ -22,7 +22,7 @@
 	<!-- #endif -->
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
 			<xt-form-item label="来源" tips="" required>
-				<rice-radio-group v-model="orderForm.orderSource" direction="row">
+				<rice-radio-group v-model="orderForm.orderSource" direction="row" @change="orderSourceChange">
 					<view style="display: flex;flex-direction: column;width: 100%;">
 						<view v-for="item of source"> <rice-radio :value="item.value" :label="item.text"
 								style="margin-left:24px;margin-bottom: 12px;"></rice-radio></view>
@@ -52,7 +52,7 @@
 					</view>
 				</view> -->
 				<view class="select-room-style" v-if="!showAddRoom">
-					<view class="room-content" > 
+					<view class="room-content">
 						<text class="txt">{{formatRoomList(orderForm.reservedRoomList)}}</text>
 					</view>
 					<view class="edit-style" @click="editRoom()">
@@ -69,7 +69,7 @@
 				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服微信"
 					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.userName"></rice-input>
 			</xt-form-item>
-			<xt-form-item label="手机号" tips="" required>
+			<xt-form-item label="联系电话" tips="">
 				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服电话"
 					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.phone" :maxlength="11"
 					type="number"></rice-input>
@@ -112,7 +112,7 @@
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
-	import { orderBean ,OrderRoomTypeBean,remainRoomTypeBean} from '@/bean/orderBean';
+	import { orderBean, OrderRoomTypeBean, remainRoomTypeBean } from '@/bean/orderBean';
 	import { OrderService } from "@/services/OrderService.uts";
 	import { state } from "@/store/store";
 	import { comFunction } from "@/pages/index/ComFuc.uts"
@@ -136,13 +136,13 @@
 	const roomList = computed<Array<roomBean>>(() => {
 		return state.roomList;
 	});
-	const formatRoomList=(list:Array<string>):string=>{
-		let result:string=[];
-		list.forEach(room_id=>{
-			let room = roomList.value.find(item=>item._id == room_id) as roomBean;
+	const formatRoomList = (list : Array<string>) : string => {
+		let result : string = [];
+		list.forEach(room_id => {
+			let room = roomList.value.find(item => item._id == room_id) as roomBean;
 			result.push(room.room_name);
 		})
-		
+
 		return result.toString();
 	}
 	let pageType = ref(0);
@@ -207,45 +207,57 @@
 		initDateObj.start_date as string,
 		initDateObj.end_date as string
 	]);
+
 	let orderForm = ref<orderBean>({
 		_id: "",
 		checkInEndDate: "",
 		checkInEndDateTimeStamp: 0,
 		checkInStartDate: "",
-		checkInStartDateTimeStamp: 0,
+		checkInStartDateTimeStamp: new Date(dayuts(new Date(dateRange[0])).format("YYYY/MM/DD  14:00:00")).getTime(),
 		createTime: 0,
 		createrName: "",
-		createrPhone: "",
+		createrPhone: user.value.phone,
 		downPayment: 0,
 		fromClient: false,
 		hotel_id: hotel_id.value,
-		orderSouce_Zn: "",
+		orderSouce_Zn: "线下",
 		orderSource: 1,
 		orderStatus: 0,
-		orderType: "",
+		orderType: "normal",
 		payType: "",
 		phone: "",
 		roomTypeArray: [],
-		reservedRoomList:[],
+		reservedRoomList: [],
 		totalAmount: 0,
 		userName: "",
 		wxNickName: "",
 		mark: ""
 	});
-	const showAddRoom=computed<boolean>(()=>{
-		return orderForm.value.reservedRoomList.length<1;
+	
+	const orderSourceChange = (val : number) => {
+		orderForm.value.orderSouce_Zn = source.find(item => item.value == val)['text'];
+	}
+	const showAddRoom = computed<boolean>(() => {
+		return orderForm.value.reservedRoomList.length < 1;
 	})
 	const showCalendarEvent = () => {
 		showCalendar.value = !showCalendar.value;
 	}
+	const formatDateTime = (str : string) : number => {
+		let startDate = dayuts(new Date(str)).format("YYYY/MM/DD  14:00:00");
+		let endDate = dayuts(new Date(e[1])).format("YYYY/MM/DD  12:00:00");
+	}
 	const rangeConfirm = (e : string[]) => {
 		console.log('rangeConfirm', e)
 		dateRange.value = e;
+
+		//orderForm.value.checkInStartDateTimeStamp= new Date(startDate).getTime();
+		//orderForm.value.checkInEndDateTimeStamp=new Date(endDate).getTime();
 	}
 	const addNewRoom = () => {
 		uni.$once("setRoomTypeList", (list : Array<string>) => {
 			console.log("setRoomTypeList", list);
-			orderForm.value.reservedRoomList=list;
+			orderForm.value.reservedRoomList = list;
 		})
 		uni.navigateTo({
 			url: `/pages/order/createOrder/checkOrderRoom/checkOrderRoom?startDate=${dateRange.value[0]}&endDate=${dateRange.value[1]}`
@@ -254,64 +266,82 @@
 	const editRoom = () => {
 		uni.$once("setRoomTypeList", (list : Array<string>) => {
 			console.log("setRoomTypeList", list);
-			orderForm.value.reservedRoomList=list;
+			orderForm.value.reservedRoomList = list;
 		})
 		uni.navigateTo({
 			url: `/pages/order/createOrder/checkOrderRoom/checkOrderRoom?startDate=${dateRange.value[0]}&endDate=${dateRange.value[1]}&checkRoomList=${orderForm.value.reservedRoomList.toString()}`
 		})
 	}
 	const submitForm = async () => {
-		console.log("form submit",orderForm.value);
-		return;
-		submitLoading.value = true;
+
+		console.log("form submit", orderForm.value);
+		
+		
 		let flag : boolean = validForm(orderForm.value)
 		if (flag == false) {
-			submitLoading.value = false;
 			return;
 		}
+
 		try {
-		
+			await OrderService.addOrder(orderForm.value);
 			uni.navigateBack();
 			submitLoading.value = false;
 		} catch (error) {
 			submitLoading.value = false;
+			uni.showToast({
+				title:"添加订单失败",
+				icon:"none"
+			})
 		}
 
 	}
+	watch(dateRange,(n, o)=> {
+		orderForm.value.checkInEndDate=dateRange.value[1];
+		orderForm.value.checkInStartDate=dateRange.value[0]
+		orderForm.value.checkInStartDateTimeStamp = new Date(dayuts(new Date(dateRange.value[0])).format("YYYY/MM/DD  14:00:00")).getTime();
+		orderForm.value.checkInEndDateTimeStamp = new Date(dayuts(new Date(dateRange.value[1])).format("YYYY/MM/DD  12:00:00")).getTime();
+	}, {
+		immediate: true//先执行一次
+	})
 </script>
 
 <style lang="scss">
-	.select-room-style{
+	.select-room-style {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		justify-content: space-between;
-		.room-content{
+
+		.room-content {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
-			border:1px solid #dcdfe6;
+			border: 1px solid #dcdfe6;
 			flex: 1;
-			padding:8px;
+			padding: 8px;
 			border-radius: 4px;
 		}
-		.txt{
+
+		.txt {
 			margin-right: 8px;
 		}
 	}
+
 	.room-list-item {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		margin-bottom: 12px;
-		.room-label-container{
+
+		.room-label-container {
 			display: flex;
 			height: 36px;
 			padding-left: 8px;
 			line-height: 36px;
 			border-radius: 4px;
-			border:1px solid #dcdfe6;
+			border: 1px solid #dcdfe6;
 		}
+
 		.del-style {
 			padding-left: 8px;
 		}

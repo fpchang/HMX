@@ -36,7 +36,8 @@
 		},
 		"roomTypeArray": {
 			"description": "房型数据",
-			"bsonType": "array"
+			"bsonType": "array",
+			"defaultValue":[]
 		},
 		"reservedRoomList": {
 			"description": "选择的房间数",
@@ -45,7 +46,8 @@
 		},
 		"userName": {
 			"description": "住客名",
-			"bsonType": "string"
+			"bsonType": "string",
+			"defaultValue":""
 		},
 		"checkInStartDateTimeStamp": {
 			"description": "入住时间戳",

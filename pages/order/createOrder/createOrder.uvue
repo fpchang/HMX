@@ -53,7 +53,7 @@
 				</view> -->
 				<view class="select-room-style" v-if="!showAddRoom">
 					<view class="room-content" > 
-						<text class="txt" v-for="room_id of orderForm.reservedRoomList">{{formatRoomName(room_id)}}</text>
+						<text class="txt">{{formatRoomList(orderForm.reservedRoomList)}}</text>
 					</view>
 					<view class="edit-style" @click="editRoom()">
 						<image src="/static/icons/editpage.png" style="width:20px;height:20px"></image>
@@ -136,9 +136,14 @@
 	const roomList = computed<Array<roomBean>>(() => {
 		return state.roomList;
 	});
-	const formatRoomName=(room_id:string):string=>{
-		let room = roomList.value.find(item=>item._id == room_id) as roomBean;
-		return room.room_name;
+	const formatRoomList=(list:Array<string>):string=>{
+		let result:string=[];
+		list.forEach(room_id=>{
+			let room = roomList.value.find(item=>item._id == room_id) as roomBean;
+			result.push(room.room_name);
+		})
+		
+		return result.toString();
 	}
 	let pageType = ref(0);
 	const showCheckRoomPanal = ref(false);
@@ -288,7 +293,7 @@
 			border:1px solid #dcdfe6;
 			flex: 1;
 			padding:8px;
-			margin-right: 8px;
+			border-radius: 4px;
 		}
 		.txt{
 			margin-right: 8px;

@@ -61,7 +61,7 @@
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
-	import { orderBean, OrderRoomTypeBean, remainRoomTypeBean, remainRoomBean } from '@/bean/orderBean';
+	import { orderBean, OrderRoomTypeBean, remainRoomTypeBean } from '@/bean/orderBean';
 	import { OrderService } from "@/services/OrderService.uts";
 	import { state } from "@/store/store";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
@@ -82,7 +82,22 @@
 	const activeIndex = ref(0);
 	const active_id = ref('all');
 	const checkVal = ref<Array<string>>([]);
-	const remainRoomTypeList = ref<remainRoomTypeBean>([]);
+	const remainRoomList = ref<Array<roomBean>>([]);
+	const remainRoomTypeList=computed<Array<remainRoomTypeBean>>(()=>{
+		let list:Array<remainRoomTypeBean>=[];
+		if(roomTypeList.value==null){
+			return list;
+		}
+		roomTypeList.value.forEach(item=>{
+			let rt:remainRoomTypeBean={
+				_id:item._id,
+				name:item.name,
+				remainRoomList:remainRoomList.value.filter(room=>room.room_type_id==item._id) as Array<roomBean>
+			}
+			list.push(rt);
+		})
+		return list;
+	})
 	const menuList = computed<TabsOptions[]>(() => {
 		let list : TabsOptions[] = [];
 		if (checkVal.value.length > 0) {
@@ -95,9 +110,9 @@
 			})
 		}
 		remainRoomTypeList.value.forEach(item => {
-			let roomList : Array<string> = item.remainRoomList.map(item => item._id);
-			let roomListGroup = new Set([...roomList, ...checkVal.value]);
-			let num = roomList.length + checkVal.value.length - roomListGroup.size;
+			let room_idList = item.remainRoomList.map(room=>room._id);
+			let roomListGroup = new Set([...room_idList, ...checkVal.value]);
+			let num =room_idList.length + checkVal.value.length - roomListGroup.size;
 			if (num > 0) {
 				list.push({
 					name: item.name,
@@ -136,26 +151,48 @@
 		let list = remainRoomTypeList.value.filter(item => item._id == active_id.value) as Array<remainRoomTypeBean>;
 		return list;
 	})
-	const initValidRoomTypeData = async () => {
+
+	// const initValidRoomTypeData = async () => {
+	// 	//uni.showLoading();
+	// 	let startTime = dayuts(dateRange.value[0]).format("YYYY-MM-DD 14:00:00");
+	// 	let endTime = new Date(dayuts(dateRange.value[1]).format("YYYY-MM-DD 12:00:00")).getTime();
+	// 	try {
+	// 		const list : Array<remainRoomTypeBean> = await OrderService.getRemainderRoomType(hotel_id.value, startTime, endTime);
+	// 		console.log("剩余房间", list)
+	// 		remainRoomTypeList.value = list;
+	// 	} catch (e) {
+	// 		uni.showToast({
+	// 			title: "获取剩余房间失败",
+	// 			icon: "none"
+	// 		})
+	// 	}
+
+
+	// }
+	const getRemainRoomList = async () => {
 		//uni.showLoading();
 		let startTime = dayuts(dateRange.value[0]).format("YYYY-MM-DD 14:00:00");
 		let endTime = new Date(dayuts(dateRange.value[1]).format("YYYY-MM-DD 12:00:00")).getTime();
 		try {
-			const list : Array<remainRoomTypeBean> = await OrderService.getRemainderRoomType(hotel_id.value, startTime, endTime);
+			const list : Array<roomBean> = await OrderService.getRemainderRoomList(hotel_id.value, startTime, endTime);
 			console.log("剩余房间", list)
-			remainRoomTypeList.value = list;
+			remainRoomList.value = list;
 		} catch (e) {
+			console.log(e);
 			uni.showToast({
 				title: "获取剩余房间失败",
 				icon: "none"
 			})
 		}
-
-
+	
+	
 	}
+	
+	
+	//确认选择
 	const setRoomSelect = () => {
 		let list:Array<OrderRoomTypeBean> = [{
-			count: 1,
+				count: 1,
 				name: "",
 				roomList: [],
 				roomType_id: ""
@@ -169,7 +206,7 @@
 		const startDate = params.getString("startDate");
 		const endDate = params.getString("endDate");
 		dateRange.value = [startDate, endDate];
-		initValidRoomTypeData();
+		getRemainRoomList();
 	})
 </script>
 

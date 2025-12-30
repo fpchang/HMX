@@ -1,3 +1,5 @@
+import { roomBean } from "./roomBean"
+
 export type OrderRoomTypeBean = {
 	count: number,
 	name: string,
@@ -34,14 +36,10 @@ export type OrderDataListResult={
 	pageSize: number,//每页数量
 	orderList: Array<orderBean>//列表
 }
-export type remainRoomBean={
-	room_name:string,
-	_id:string
-}
 export type remainRoomTypeBean={
 	_id:string,
 	name:string,
-	remainRoomList:Array<remainRoomBean>
+	remainRoomList:Array<roomBean>
 }
 
 

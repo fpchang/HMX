@@ -107,7 +107,7 @@
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
-	import { orderBean ,OrderRoomTypeBean,remainRoomTypeBean,remainRoomBean} from '@/bean/orderBean';
+	import { orderBean ,OrderRoomTypeBean,remainRoomTypeBean} from '@/bean/orderBean';
 	import { OrderService } from "@/services/OrderService.uts";
 	import { state } from "@/store/store";
 	import { comFunction } from "@/pages/index/ComFuc.uts"

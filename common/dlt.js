@@ -30,6 +30,22 @@ function getGroupList(listHistory){
 	groupList.sort((a,b)=>a-b);
 	return groupList;
 }
+//与历史每期比较，获取重复数量
+function repeatSinglHistory(list,history){
+	let result={};
+	for(let i =0;i<history.length;i++){
+		let redBall = history[i].redBall;
+		
+		let num = list.length + redBall.length - new Set([...redBall,...list]).size;
+		//console.log(num)
+		if(result[num]){
+			result[num]++
+		}else{
+			result[num]=1;
+		}
+	}
+	return result;
+}
 //与历史开奖组合重合数量
 function sameHistory(n=2,historyList=[],ballindex='redBall'){
 	const getGroupBall=(index)=>{
@@ -84,6 +100,22 @@ function compare(list =[],listHistory=[],ballindex='redBall'){
 	newList=[...new Set(newList)];
 	//console.log("newList",newList);
 	return list.length+groupList.length-(newList.length);
+}
+//与所有历史数据相比
+function S0(list,history){
+	let result =true;
+	
+	for(let i=0;i<history.length;i++){
+		 let newList = new Set([...history[i].redBall,...list]);
+		 if(newList.size<8){
+			// console.log("repeat and:"+history[i].index);
+			 result=false;
+			 break;
+		 }
+	}
+	
+	return result;
+	
 }
 //console.log(getRandomRedBall());
 //sameHistory(2,history);
@@ -179,7 +211,7 @@ function caculate(fn,num=5,ballIndex='redBall'){
 	let result =[];
 	while(thread<num){
 		let list =getRandomRedBall(ballIndex);		
-		if(fn&&fn(list,history)){
+		if(fn&&S0(list,dltHistory)&&fn(list,dltHistory)){
 			result.push({valueBall:list})
 			thread++;
 		}
@@ -237,3 +269,4 @@ const c9=getGroupList(dltHistory.slice(dltHistory.length-9));
 const c10=getGroupList(dltHistory.slice(dltHistory.length-10));
 const c11=getGroupList(dltHistory.slice(dltHistory.length-11));
 console.log("c3",new Set(c3),new Set(c4),new Set(c5),new Set(c6),new Set(c7),new Set(c8),"c9",new Set(c9),new Set(c10),new Set(c11));
+

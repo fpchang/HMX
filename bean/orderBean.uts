@@ -1,5 +1,10 @@
 import { roomBean } from "./roomBean"
 
+export type orderSourceBean={
+	name: string,
+	text:string,
+	value: number
+}
 export type OrderRoomTypeBean = {
 	count: number,
 	name: string,

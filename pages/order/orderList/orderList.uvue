@@ -55,15 +55,22 @@
 						</view> -->
 						<view class="card-item">
 							<view class="fl-c">
-								<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
+								<image src="/static/icons/hotelcustomer.png" style="width: 16px;height: 16px;"></image>
 								<text class="label">住客：</text>
 							</view>
 							<text class="val-style">{{order.userName}}</text>
 						</view>
 						<view class="card-item">
 							<view class="fl-c">
-								<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
-								<text class="label">时间：</text>
+								<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">入住时间：</text>
+							</view>
+							<text class="val-style">{{formatDate(order.checkInStartDateTimeStamp)}}</text>
+						</view>
+						<view class="card-item">
+							<view class="fl-c">
+								<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">退房时间：</text>
 							</view>
 							<text class="val-style">{{formatDate(order.checkInEndDateTimeStamp)}}</text>
 						</view>
@@ -80,7 +87,7 @@
 						</view> -->
 						<view class="card-item">
 							<view class="fl-c">
-								<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
+								<image src="/static/icons/roomReserve.png" style="width: 16px;height: 16px;"></image>
 								<text class="label">房间：</text>
 								
 							</view>
@@ -165,8 +172,8 @@
 	const columns = computed<Array<Array<PickerOption>>>(() => {
 		let result : Array<Array<PickerOption>> = [[
 				{ text: "全部", value: "all" },
-			      { text: "待入住", value: 1 },
-			      { text: "已完成", value: 5 },
+			      { text: "待入住", value: 0 },
+			      { text: "已完成", value: 1 },
 			      { text: "已撤销", value: 10 },
 		]];
 		return result;
@@ -202,7 +209,6 @@
 		getOrderList();
 	}
 	const pageChange = (pn : number) => {
-		console.log(pn, orderResult.value);
 		getOrderList();
 	}
 	const formatDate = (timestamp : number) => {
@@ -477,10 +483,11 @@
 
 				.control {
 					height: 44px;
+					padding:0 12px 12px 0;
 					display: flex;
 					flex-direction: row;
 					justify-content: flex-end;
-					background-color: #f9fafb;
+			
 					align-items: center;
 
 					.txt {

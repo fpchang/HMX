@@ -174,7 +174,7 @@
 	// }
 	const getRemainRoomList = async () => {
 		uni.showLoading();
-		let startTime = dayuts(dateRange.value[0]).format("YYYY-MM-DD 14:00:00");
+		let startTime = new Date(dayuts(dateRange.value[0]).format("YYYY-MM-DD 14:00:00")).getTime();
 		let endTime = new Date(dayuts(dateRange.value[1]).format("YYYY-MM-DD 12:00:00")).getTime();
 		try {
 			const list : Array<roomBean> = await OrderService.getRemainderRoomList(hotel_id.value, startTime, endTime);

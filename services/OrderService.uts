@@ -1,4 +1,4 @@
-import { orderBean, OrderRoomTypeBean, OrderDataListResult, remainRoomTypeBean } from '@/bean/orderBean';
+import { orderSourceBean,orderBean, OrderRoomTypeBean, OrderDataListResult, remainRoomTypeBean } from '@/bean/orderBean';
 import { DB } from '@/api/DB';
 import { dayuts } from '@/uni_modules/lime-dayuts';
 import { TIME, MOONTH_START_END_TIMESTAMP } from "@/static/utils/TIME";
@@ -7,6 +7,27 @@ import { roomBean } from '../bean/roomBean';
 class OrderServiceClass {
 	constructor() {
 
+	}
+	async getSource():Promise<Array<orderSourceBean>>{
+		console.log(2222222222)
+		let list:Array<orderSourceBean>=[];
+		try {
+			const res = await DB.getCollection("hm-orderSouce",{});
+			console.log("orderSource",res);
+			let resultList = res['data'] as Array<UTSJSONObject>;
+			resultList.forEach(item=>{
+				let os:orderSourceBean={
+					name: item.getString("name")??"",
+					text:item.getString("text")??"",
+					value: item.getNumber("value")??0
+				}
+				list.push(os);
+			})
+			return list;
+		} catch (error) {
+			throw new Error("获取订单来源失败");
+		}
+	
 	}
 	/**
 	 * 创建订单
@@ -58,9 +79,11 @@ class OrderServiceClass {
 			st = TIME.startTime(new Date(dateRange[0]));
 			et = TIME.endTime(new Date(dateRange[1]));
 		}
+		console.log("wwww",st,et);
 		const w = {
 			hotel_id: hotel_id,
-			checkInEndDateTimeStamp: dbCmd.and([dbCmd.gte(st), dbCmd.lte(et)]),
+			//checkInEndDateTimeStamp: dbCmd.and([dbCmd.gte(st), dbCmd.lte(et)]),
+			checkInStartDateTimeStamp:dbCmd.and([dbCmd.gte(st), dbCmd.lte(et)]),
 			orderStatus: orderStatus == 'all' ? dbCmd.neq(999) : orderStatus,
 			$or: [{ userName: new RegExp(`${keyword}`) }, { wxNickName: new RegExp(`${keyword}`) }, { phone: new RegExp(`${keyword}`) }]
 		}
@@ -137,22 +160,56 @@ class OrderServiceClass {
 		let list : roomBean[] = [];
 
 		try {
-			const res = await DB.callFunction("hm_getRemainderRoomList", params);
-			console.log("hm_getRemainderRoomList", res);
-			let result = res['result'] as Array<UTSJSONObject>;
-			if (result == null) {
-				return list;
-			}
-			result.forEach(item => {
-				let room : roomBean = {
-					_id: item.getString("_id"),
-					data_status: item.getNumber("data_status") ?? 1,
-					hotel_id: item.getString("hotel_id") ?? "",
-					room_name: item.getString("room_name") ?? "",
-					room_type_id: item.getString("room_type_id") ?? ""
-				}
-				list.push(room)
-			})
+			const db = uniCloud.databaseForJQL();
+			let jql =`hotel_id=='${hotel_id}'&&orderType=='normal'&&(orderStatus==0||orderStatus==1)&&(`+
+				`${endTime}<=checkInEndDateTimeStamp&&${endTime}>checkInStartDateTimeStamp||` +
+				`${startTime}>=checkInStartDateTimeStamp&&${endTime}<=checkInEndDateTimeStamp||` +
+				`${startTime}>=checkInStartDateTimeStamp&&${startTime}<checkInEndDateTimeStamp||` +
+				`${startTime}<=checkInStartDateTimeStamp&&${endTime}>=checkInEndDateTimeStamp)`;
+				console.log("jql",jql);
+				const orderListRes= await db.collection('hm-order').where(jql).get();
+				console.log("orderlist",orderListRes);
+				const roomListRes = await db.collection('hm-room').where(`hotel_id=='${hotel_id}'`).get();
+				const orderList=orderListRes.data;
+				let hasUseRoomList= new Set<string>([]);
+				let remainRoomList:Array<roomBean>=[];
+				let roomList:Array<roomBean>=[];
+				roomListRes.data.forEach(item=>{
+						let room : roomBean = {
+							_id: item.getString("_id"),
+							data_status: item.getNumber("data_status") ?? 1,
+							hotel_id: item.getString("hotel_id") ?? "",
+							room_name: item.getString("room_name") ?? "",
+							room_type_id: item.getString("room_type_id") ?? ""
+						}
+						roomList.push(room)
+				})
+				orderList.forEach(item=>{
+					let list =item.getArray<string>("reservedRoomList")??[];
+					list.forEach(room=>{
+						hasUseRoomList.add(room);
+					})
+					
+				});
+				remainRoomList=roomList.filter(item=>!hasUseRoomList.has(item._id));
+				console.log("remainlist",remainRoomList);
+				return remainRoomList;
+			// const res = await DB.callFunction("hm_getRemainderRoomList", params);
+			// console.log("hm_getRemainderRoomList", res);
+			// let result = res['result'] as Array<UTSJSONObject>;						
+			// if (result == null) {
+			// 	return list;
+			// }
+			// result.forEach(item => {
+			// 	let room : roomBean = {
+			// 		_id: item.getString("_id"),
+			// 		data_status: item.getNumber("data_status") ?? 1,
+			// 		hotel_id: item.getString("hotel_id") ?? "",
+			// 		room_name: item.getString("room_name") ?? "",
+			// 		room_type_id: item.getString("room_type_id") ?? ""
+			// 	}
+			// 	list.push(room)
+			// })
 			return list;
 		} catch (error) {
 

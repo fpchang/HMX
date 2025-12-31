@@ -160,43 +160,44 @@
 		}
 		return pageType.value == 1 ? "/static/icons/editpage.png" : "/static/icons/detailpage.png"
 	});
-	const source = [{
-		name: "xiechen",
-		text: "携程",
-		value: 1,
-	},
-	{
-		name: "meituan",
-		text: "美团",
-		value: 2,
-	},
-	{
-		name: "meituanminsu",
-		text: "美团民宿",
-		value: 3,
-	},
-	{
-		name: "ticktok",
-		text: "抖音",
-		value: 4,
-	},
-	{
-		name: "tujia",
-		text: "途家",
-		value: 5,
-	},
-	{
-		name: "downline",
-		text: "线下",
-		value: 0,
-	},
-	{
-		name: "ohters",
-		text: "其它",
-		value: 6,
-	}
+	const source = ref<Array<orderSourceBean>>([]);
+	// const source = [{
+	// 	name: "xiechen",
+	// 	text: "携程",
+	// 	value: 1,
+	// },
+	// {
+	// 	name: "meituan",
+	// 	text: "美团",
+	// 	value: 2,
+	// },
+	// {
+	// 	name: "meituanminsu",
+	// 	text: "美团民宿",
+	// 	value: 3,
+	// },
+	// {
+	// 	name: "ticktok",
+	// 	text: "抖音",
+	// 	value: 4,
+	// },
+	// {
+	// 	name: "tujia",
+	// 	text: "途家",
+	// 	value: 5,
+	// },
+	// {
+	// 	name: "downline",
+	// 	text: "线下",
+	// 	value: 0,
+	// },
+	// {
+	// 	name: "ohters",
+	// 	text: "其它",
+	// 	value: 6,
+	// }
 
-	]
+	// ]
 	const showCalendar = ref(false);
 	const initDateObj = {
 		start_date: dayuts(new Date()).format("YYYY-MM-DD") as string,
@@ -233,9 +234,9 @@
 		wxNickName: "",
 		mark: ""
 	});
-	
+
 	const orderSourceChange = (val : number) => {
-		orderForm.value.orderSouce_Zn = source.find(item => item.value == val)['text'];
+		orderForm.value.orderSouce_Zn = source.value.find(item => item.value == val)['text'];
 	}
 	const showAddRoom = computed<boolean>(() => {
 		return orderForm.value.reservedRoomList.length < 1;
@@ -250,9 +251,18 @@
 	const rangeConfirm = (e : string[]) => {
 		console.log('rangeConfirm', e)
 		dateRange.value = e;
+	}
+	const getSource = async () => {
+		try {
+			const list : Array<orderSourceBean> = await OrderService.getSource();
+			source.value = list;
+		} catch (error) {
+			uni.showToast({
+				title: "获取订单来源失败",
+				icon: "none"
+			})
+		}
 
-		//orderForm.value.checkInStartDateTimeStamp= new Date(startDate).getTime();
-		//orderForm.value.checkInEndDateTimeStamp=new Date(endDate).getTime();
 	}
 	const addNewRoom = () => {
 		uni.$once("setRoomTypeList", (list : Array<string>) => {
@@ -275,29 +285,42 @@
 	const submitForm = async () => {
 
 		console.log("form submit", orderForm.value);
-		
-		
+
+
 		let flag : boolean = validForm(orderForm.value)
 		if (flag == false) {
 			return;
 		}
-
+		submitLoading.value=true;
 		try {
 			await OrderService.addOrder(orderForm.value);
+			uni.$emit("refrushOrderList");
 			uni.navigateBack();
 			submitLoading.value = false;
 		} catch (error) {
 			submitLoading.value = false;
 			uni.showToast({
-				title:"添加订单失败",
-				icon:"none"
+				title: "添加订单失败",
+				icon: "none"
 			})
 		}
 
 	}
-	watch(dateRange,(n, o)=> {
-		orderForm.value.checkInEndDate=dateRange.value[1];
-		orderForm.value.checkInStartDate=dateRange.value[0]
+	const init = async () => {
+		uni.showLoading()
+		try {
+			
+			await getSource();
+			uni.hideLoading();
+		} catch (error) {
+			uni.hideLoading();
+		}
+
+	}
+	init();
+	watch(dateRange, (n, o) => {
+		orderForm.value.checkInEndDate = dateRange.value[1];
+		orderForm.value.checkInStartDate = dateRange.value[0]
 		orderForm.value.checkInStartDateTimeStamp = new Date(dayuts(new Date(dateRange.value[0])).format("YYYY/MM/DD  14:00:00")).getTime();
 		orderForm.value.checkInEndDateTimeStamp = new Date(dayuts(new Date(dateRange.value[1])).format("YYYY/MM/DD  12:00:00")).getTime();
 	}, {

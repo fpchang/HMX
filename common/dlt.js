@@ -257,7 +257,11 @@ sameHistory(12,dltHistory);
 // console.log(caculate(S3,1));
 // console.log(caculate(S3_BLUE,1,"blueBall"));
 //热号
+<<<<<<< HEAD
 console.log(caculate(S1,14));
+=======
+console.log(caculate(S1,10));
+>>>>>>> 44f77e2e9464001d88492787a998be065d0c0510
 //console.log(caculate(S1_BLUE,10,"blueBall"));
 const c3=getGroupList(dltHistory.slice(dltHistory.length-3));
 const c4=getGroupList(dltHistory.slice(dltHistory.length-4));

@@ -2,15 +2,24 @@
  * 将2025年大乐透开奖结束整理成json格式，要全部开奖数据升序排列，生成附件
  */
 let list =[
-	// {
-	//   "issueNumber": "25149",
-	//   "redBall": [24,26,30,31,32],
-	//   "blueBall": [
-	//     5,
-	//     12
-	//   ],
-	//   "drawDate": ""
-	// },
+	{
+	  "issueNumber": "25150",
+	  "redBall": [13,14,15,28,31],
+	  "blueBall": [
+	    1,
+	    5
+	  ],
+	  "drawDate": ""
+	},
+	{
+	  "issueNumber": "25149",
+	  "redBall": [24,26,30,31,32],
+	  "blueBall": [
+	    5,
+	    12
+	  ],
+	  "drawDate": ""
+	},
 	{
 	  "issueNumber": "25148",
 	  "redBall": [

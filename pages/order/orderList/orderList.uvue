@@ -113,7 +113,7 @@
 					<view class="control">
 			
 						<view>
-							<xt-control @del="deleteOrder(order)" @edit="editOrder(order)" :show-view="false"></xt-control>
+							<xt-control @del="deleteOrder(order)" @edit="editOrder(order)" :show-view="false" :show-edit="false"></xt-control>
 						</view>
 
 

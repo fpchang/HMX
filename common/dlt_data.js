@@ -3,6 +3,15 @@
  */
 let list =[
 	{
+	  "issueNumber": "26001",
+	  "redBall": [7,9,23,27,32],
+	  "blueBall": [
+	    2,
+	    8
+	  ],
+	  "drawDate": ""
+	},
+	{
 	  "issueNumber": "25150",
 	  "redBall": [13,14,15,28,31],
 	  "blueBall": [

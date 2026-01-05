@@ -107,7 +107,7 @@
 							<text class="val-style">
 								{{order.mark}}
 							</text>
-						</view>
+						</view> 
 					</view>
 
 					<view class="control">
@@ -145,6 +145,7 @@
 	import { fmState } from "@/store/modules/fmStore.uts";
 	import { comFunction } from "@/pages/index/ComFuc";
 	import orderSearchComponent from "./components/orderSearchComponent/orderSearchComponent";
+	import { roomBean } from "@/bean/roomBean";
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -241,7 +242,7 @@
 	// 	return list;
 	// }
 	const formatRoomList = (list : Array<string>) : Array<string> => {
-		let result : string = [];
+		let result : Array<string> = [];
 		list.forEach(room_id => {
 			let room = roomList.value.find(item => item._id == room_id) as roomBean;
 			result.push(room.room_name);

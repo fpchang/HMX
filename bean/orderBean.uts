@@ -29,7 +29,7 @@ export type orderBean={
 		orderType: string,
 		payType: string,
 		phone: string,
-		roomTypeArray: OrderRoomTypeBean[],
+		roomTypeArray: Array<OrderRoomTypeBean>,
 		reservedRoomList:Array<string>,
 		totalAmount: number,
 		userName: string,

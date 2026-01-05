@@ -1,0 +1,77 @@
+<template>
+	<view>
+		<view class="chart-container" id="incomePieChart">
+			<l-echart ref="chartRef" @finished="initChart"></l-echart>
+		</view>
+	</view>
+</template>
+
+<script setup>
+	//#ifdef H5
+	import * as echarts from 'echarts';
+	//#endif
+	const chartRef = ref<LEchartComponentPublicInstance | null>(null)
+	const chartOption = {
+		dataset: [
+			{
+				dimensions: ['name', 'age', 'profession', 'score', 'date'],
+				source: [
+					['Hannah Krause', 41, 'Engineer', 314, '2011-02-12'],
+					['Zhao Qian', 20, 'Teacher', 351, '2011-03-01'],
+					['Jasmin Krause ', 52, 'Musician', 287, '2011-02-14'],
+					['Li Lei', 37, 'Teacher', 219, '2011-02-18'],
+					['Karle Neumann', 25, 'Engineer', 253, '2011-04-02'],
+					['Adrian Groß', 19, 'Teacher', '-', '2011-01-16'],
+					['Mia Neumann', 71, 'Engineer', 165, '2011-03-19'],
+					['Böhm Fuchs', 36, 'Musician', 318, '2011-02-24'],
+					['Han Meimei', 67, 'Engineer', 366, '2011-03-12']
+				]
+			},
+			{
+				transform: {
+					type: 'sort',
+					config: { dimension: 'score', order: 'desc' }
+				}
+			}
+		],
+		xAxis: {
+			type: 'category',
+			axisLabel: { interval: 0, rotate: 30 }
+		},
+		yAxis: {},
+		series: {
+			type: 'bar',
+			encode: { x: 'name', y: 'score' },
+			datasetIndex: 1
+		}
+	};
+
+
+	// 使用上面定义的图表配置项
+	const option = chartOption;
+
+	// 初始化图表
+	const initChart = async () => {
+		if (chartRef.value == null) return
+
+		try {
+			// 仅在 H5 平台下使用 echarts，小程序端 l-echart 内部已集成
+			//#ifdef H5
+			const chart = await chartRef.value.init(echarts)
+			//#endif
+			//#ifndef H5
+			const chart = await chartRef.value.init(null)
+			//#endif
+			chart.setOption(option)
+		} catch (error) {
+			console.error('图表初始化失败:', error)
+		}
+	}
+</script>
+
+<style lang="scss">
+	.chart-container {
+		width: 100%;
+		height: 400px;
+	}
+</style>

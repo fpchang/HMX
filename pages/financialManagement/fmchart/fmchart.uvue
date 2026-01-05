@@ -16,7 +16,13 @@
 		        <!-- 当月收入饼图 -->
 		        <view class="chart-card" >
 		          <text class="chart-subtitle">当月收入</text>
-		          <view class="chart-container" :style="{ height: chartHeight }" id="incomePieChart">111</view>
+					<view> 
+					 <monthIncomeComponent></monthIncomeComponent>
+					</view>
+					 
+					    
+					  
+				
 		        </view>
 	
 		      </view>
@@ -25,7 +31,7 @@
 			    <!-- 当月支出饼图 -->
 			    <view class="chart-card" >
 			      <text class="chart-subtitle">当月支出</text>
-			      <view class="chart-container" :style="{ height: chartHeight }" id="expensePieChart">222</view>
+			    <view> <monthExpensesComponent></monthExpensesComponent></view>
 			    </view>
 			  </view>
 		    </view>
@@ -36,13 +42,13 @@
 		      <!-- 当年收入柱状图 -->
 		      <view class="chart-card full-width">
 		        <text class="chart-subtitle">当年收入</text>
-		        <view class="chart-container" :style="{ height: barChartHeight }" id="incomeBarChart">333</view>
+		         <view> <yearIncomeComponent></yearIncomeComponent></view>
 		      </view>
 		      <!-- 当年支出柱状图 -->
 		      <view class="chart-card full-width">
 		        <text class="chart-subtitle">当年支出</text>
-		        <view class="chart-container" :style="{ height: barChartHeight }" id="expenseBarChart">444</view>
-		      </view>
+		         <view> <yearExpensesComponent></yearExpensesComponent></view>
+		      </view>	<Q2>13</Q2>
 		    </view>
 		  </view>
 	<!-- #ifdef APP -->
@@ -51,10 +57,26 @@
 </template>
 
 <script setup>
+	import monthIncomeComponent from "./components/monthIncomeComponent";
+	import monthExpensesComponent from "./components/monthExpensesComponent";
+	import yearIncomeComponent from "./components/yearIncomeComponent";
+	import yearExpensesComponent from "./components/yearExpensesComponent";
+	
 		const currentDate = ref('');
 		const chartCardWidth = ref('48%');
 		const chartHeight = ref('280px');
 		const barChartHeight = ref('320px');
+	
+		
+		// 仅在小程序环境下引入 ECharts
+		// // #ifdef MP
+		// const echarts = require('../../static/echarts.min.js') // 根据实际路径调整
+		// // #endif
+		// // #ifndef MP
+		// const echarts = null
+		// // #endif
+		// 图表配置项示例 - 柱状图
+		
 </script>
 
 <style lang="scss">

@@ -80,7 +80,7 @@
 	});
 	const dateRange = ref<string[]>([]);
 	const activeIndex = ref(0);
-	const active_id = ref('all');
+	const active_id = ref<string>('all');
 	const checkVal = ref<Array<string>>([]);
 	const remainRoomList = ref<Array<roomBean>>([]);
 	const remainRoomTypeList=computed<Array<remainRoomTypeBean>>(()=>{
@@ -144,14 +144,16 @@
 		// 	title: `点击了：${e.name}${e.disabled ? '（禁用）' : ''}`,
 		// 	icon: 'none'
 		// })
-		active_id.value = e.value;
+		if (e.value != null) {
+			active_id.value = e.value as string;
+		}
 	};
 	const filterRoomTypeList = computed<Array<remainRoomTypeBean>>(() => {
 
 		if (active_id.value == 'all') {
 			return remainRoomTypeList.value;
 		}
-		let list = remainRoomTypeList.value.filter(item => item._id == active_id.value) as Array<remainRoomTypeBean>;
+		let list = remainRoomTypeList.value.filter((item : remainRoomTypeBean) => item._id == active_id.value);
 		return list;
 	})
 
@@ -173,12 +175,12 @@
 
 	// }
 	const getRemainRoomList = async () => {
-		uni.showLoading();
+		uni.showLoading({title:""});
 		let startTime = new Date(dayuts(dateRange.value[0]).format("YYYY-MM-DD 14:00:00")).getTime();
 		let endTime = new Date(dayuts(dateRange.value[1]).format("YYYY-MM-DD 12:00:00")).getTime();
 		try {
 			const list : Array<roomBean> = await OrderService.getRemainderRoomList(hotel_id.value, startTime, endTime);
-			console.log("剩余房间", list)
+			//console.log("剩余房间", list)
 			remainRoomList.value = list;
 			uni.hideLoading();
 		} catch (e) {
@@ -206,9 +208,12 @@
 		const startDate = params.getString("startDate");
 		const endDate = params.getString("endDate");
 		const checkRoomList = params.getString("checkRoomList")??"";
-		dateRange.value = [startDate, endDate];
+		if(startDate!=null&&endDate!=null){
+			dateRange.value = [startDate, endDate];
+		}
+		
 		if(checkRoomList!=""&&checkRoomList!=null){
-			checkVal.value=checkRoomList.split(",");
+		checkVal.value = checkRoomList.split(",");
 		}
 		
 		getRemainRoomList();

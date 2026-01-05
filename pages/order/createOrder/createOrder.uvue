@@ -112,7 +112,7 @@
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
-	import { orderBean, OrderRoomTypeBean, remainRoomTypeBean } from '@/bean/orderBean';
+	import {orderSourceBean, orderBean } from '@/bean/orderBean';
 	import { OrderService } from "@/services/OrderService.uts";
 	import { state } from "@/store/store";
 	import { comFunction } from "@/pages/index/ComFuc.uts"
@@ -137,13 +137,14 @@
 		return state.roomList;
 	});
 	const formatRoomList = (list : Array<string>) : string => {
-		let result : string = [];
-		list.forEach(room_id => {
-			let room = roomList.value.find(item => item._id == room_id) as roomBean;
-			result.push(room.room_name);
+		let result : Array<string> = [];
+		list.forEach((room_id : string) => {
+			let room = roomList.value.find((item : roomBean) => item._id == room_id) as roomBean|null;
+			if (room != null) {
+				result.push(room.room_name);
+			}
 		})
-
-		return result.toString();
+		return result.join(",");
 	}
 	let pageType = ref(0);
 	const showCheckRoomPanal = ref(false);
@@ -161,43 +162,6 @@
 		return pageType.value == 1 ? "/static/icons/editpage.png" : "/static/icons/detailpage.png"
 	});
 	const source = ref<Array<orderSourceBean>>([]);
-	// const source = [{
-	// 	name: "xiechen",
-	// 	text: "携程",
-	// 	value: 1,
-	// },
-	// {
-	// 	name: "meituan",
-	// 	text: "美团",
-	// 	value: 2,
-	// },
-	// {
-	// 	name: "meituanminsu",
-	// 	text: "美团民宿",
-	// 	value: 3,
-	// },
-	// {
-	// 	name: "ticktok",
-	// 	text: "抖音",
-	// 	value: 4,
-	// },
-	// {
-	// 	name: "tujia",
-	// 	text: "途家",
-	// 	value: 5,
-	// },
-	// {
-	// 	name: "downline",
-	// 	text: "线下",
-	// 	value: 0,
-	// },
-	// {
-	// 	name: "ohters",
-	// 	text: "其它",
-	// 	value: 6,
-	// }
-
-	// ]
 	const showCalendar = ref(false);
 	const initDateObj = {
 		start_date: dayuts(new Date()).format("YYYY-MM-DD") as string,
@@ -208,19 +172,19 @@
 		initDateObj.start_date as string,
 		initDateObj.end_date as string
 	]);
-
+// new Date(dayuts(new Date(dateRange[0])).format("YYYY/MM/DD  14:00:00")).getTime()
 	let orderForm = ref<orderBean>({
 		_id: "",
 		checkInEndDate: "",
-		checkInEndDateTimeStamp: 0,
+		checkInEndDateTimeStamp:  0,
 		checkInStartDate: "",
-		checkInStartDateTimeStamp: new Date(dayuts(new Date(dateRange[0])).format("YYYY/MM/DD  14:00:00")).getTime(),
+		checkInStartDateTimeStamp:  0,
 		createTime: 0,
 		createrName: "",
-		createrPhone: user.value.phone,
+		createrPhone:"",
 		downPayment: 0,
 		fromClient: false,
-		hotel_id: hotel_id.value,
+		hotel_id: "",
 		orderSouce_Zn: "线下",
 		orderSource: 1,
 		orderStatus: 0,
@@ -236,7 +200,10 @@
 	});
 
 	const orderSourceChange = (val : number) => {
-		orderForm.value.orderSouce_Zn = source.value.find(item => item.value == val)['text'];
+		const found = source.value.find(item => item.value == val)
+		if (found != null) {
+			orderForm.value.orderSouce_Zn = found.text
+		}
 	}
 	const showAddRoom = computed<boolean>(() => {
 		return orderForm.value.reservedRoomList.length < 1;
@@ -244,10 +211,10 @@
 	const showCalendarEvent = () => {
 		showCalendar.value = !showCalendar.value;
 	}
-	const formatDateTime = (str : string) : number => {
-		let startDate = dayuts(new Date(str)).format("YYYY/MM/DD  14:00:00");
-		let endDate = dayuts(new Date(e[1])).format("YYYY/MM/DD  12:00:00");
-	}
+	// const formatDateTime = (str : string) : number => {
+	// 	let startDate = dayuts(new Date(str)).format("YYYY/MM/DD  14:00:00");
+	// 	let endDate = dayuts(new Date(e[1])).format("YYYY/MM/DD  12:00:00");
+	// }
 	const rangeConfirm = (e : string[]) => {
 		console.log('rangeConfirm', e)
 		dateRange.value = e;
@@ -307,7 +274,7 @@
 
 	}
 	const init = async () => {
-		uni.showLoading()
+		uni.showLoading({title:""})
 		try {
 			
 			await getSource();
@@ -318,7 +285,7 @@
 
 	}
 	init();
-	watch(dateRange, (n, o) => {
+	watch(dateRange, (n: string[], o: string[]) => {
 		orderForm.value.checkInEndDate = dateRange.value[1];
 		orderForm.value.checkInStartDate = dateRange.value[0]
 		orderForm.value.checkInStartDateTimeStamp = new Date(dayuts(new Date(dateRange.value[0])).format("YYYY/MM/DD  14:00:00")).getTime();

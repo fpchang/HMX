@@ -43,11 +43,12 @@
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
 	import { state } from "@/store/store";
+import {userBean} from '@/bean/userBean';
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
-	const user = computed(() => {
+	const user = computed<userBean>(() => {
 		return state.user;
 	});
 	const permissionList = computed(() => {

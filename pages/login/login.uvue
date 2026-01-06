@@ -89,6 +89,7 @@
 	import { AccountService } from "../../services/AccountService";
 	import { state, setUser } from '@/store/store.uts';
 	import {userFormBean} from "@/bean/loginBean.uts";
+	import {userBean} from "@/bean/userBean";
 	// type userFormBean = {
 	// 	tk : string,
 	// 	smsCode : string,
@@ -269,7 +270,7 @@
 			userForm.value.phone = "";
 		}
 	};
-	const user = computed(() : UTSJSONObject => {
+	const user = computed<userBean>(() => {
 		return state.user;
 	});
 	createdEvent();

@@ -65,11 +65,12 @@
 	import { OrderService } from "@/services/OrderService.uts";
 	import { state } from "@/store/store";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import {userBean} from '@/bean/userBean';
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
-	const user = computed(() => {
+	const user = computed<userBean>(() => {
 		return state.user;
 	});
 	const permissionList = computed(() => {

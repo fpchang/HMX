@@ -105,7 +105,7 @@
 			"description": "订单状态,0待审核，1已生效(线上已经付款，或线下订单), 2，拒绝，5，完成9，已过期,10 已撤消",
 			"bsonType": "int",
 			"enum": [0, 1, 2, 5, 9, 10],
-			"defaultValue":0
+			"defaultValue":1
 		},
 		"payStatus": {
 			"description": "支付状态,0等待支付，1已经支付 9过期",

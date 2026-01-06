@@ -95,12 +95,13 @@
 	import { state } from "@/store/store";
 	import { comFunction } from "@/pages/index/ComFuc";
 	import { FMBean, FMTypeConfigBean } from "@/bean/FMBean";
+	import {userBean} from "@/bean/userBean";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import { FMService } from "@/services/FMService";
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
-	const user = computed(() => {
+	const user = computed<userBean>(() => {
 		return state.user;
 	});
 	const permissionList = computed(() => {
@@ -129,7 +130,7 @@
 		amount: 0,
 		billType: "income",
 		//createTime: number,
-		creater: user.value.getString("phone")?? "",
+		creater: user.value.phone,
 		//data_status?: number,
 		hotel_id: hotel_id.value,
 		ioeTime: new Date().getTime(),

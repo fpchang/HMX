@@ -99,6 +99,7 @@
 	import { HotelService } from "@/services/HotelService.uts";
 	import { roomTypeService } from "@/services/roomTypeService.uts";
 	import { validRoomTypeForm } from "./roomTypeFormVaild.uts";
+	import {userBean} from "@/bean/userBean";
 	type bedType = {
 		name : string,
 		checked : boolean,
@@ -115,7 +116,7 @@
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
-	const user = computed(() => {
+	const user = computed<userBean>(() => {
 		return state.user;
 	});
 	const cloudPath = `/${hotel_id.value}/roomType/`;

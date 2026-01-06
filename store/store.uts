@@ -3,13 +3,14 @@ import { PermissionService } from "@/services/PermissionService";
 import { employeeBean } from "../bean/employeeBean";
 //import {hotelBean} from "@/bean/hotelBean";
 import { roomTypeBean } from "../bean/roomTypeBean";
-import { roomBean } from "../bean/roomBean";
+import { roomBean } from "@/bean/roomBean";
+import { userBean ,getInitUser} from "@/bean/userBean";
 export type State = {
 	//存放状态
 	isLogin : boolean,
 	config : UTSJSONObject, //配置信息
 	viewWidth : number, //可视宽度
-	user : UTSJSONObject,
+	user : userBean,
 	hotelList : Array<UTSJSONObject>,
 	employeeList : Array<employeeBean>,
 	hotel_id : string,
@@ -24,7 +25,7 @@ export const state = reactive({
 	isLogin: false,
 	config: {} as UTSJSONObject,
 	viewWidth: 0,
-	user: {} as UTSJSONObject,
+	user: getInitUser(),
 	hotelList: [] as Array<UTSJSONObject>,
 	employeeList: [] as Array<employeeBean>,
 	hotel_id: "",
@@ -50,7 +51,7 @@ export const setConfig = (obj : UTSJSONObject) => {
 };
 
 
-export const setUser = (user : UTSJSONObject) => {
+export const setUser = (user : userBean) => {
 	state.user = user;
 };
 export const setHotelList = (list : Array<UTSJSONObject>) => {

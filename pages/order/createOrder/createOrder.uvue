@@ -112,6 +112,7 @@
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
+	import {userBean} from "@/bean/userBean";
 	import {orderSourceBean, orderBean } from '@/bean/orderBean';
 	import { OrderService } from "@/services/OrderService.uts";
 	import { state } from "@/store/store";
@@ -124,7 +125,7 @@
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
-	const user = computed(() => {
+	const user = computed<userBean>(() => {
 		return state.user;
 	});
 	const permissionList = computed(() => {
@@ -181,13 +182,13 @@
 		checkInStartDateTimeStamp:  0,
 		createTime: 0,
 		createrName: "",
-		createrPhone:"",
+		createrPhone:user.value.phone,
 		downPayment: 0,
 		fromClient: false,
-		hotel_id: "",
+		hotel_id: hotel_id.value,
 		orderSouce_Zn: "线下",
 		orderSource: 1,
-		orderStatus: 0,
+		orderStatus: 1,
 		orderType: "normal",
 		payType: "",
 		phone: "",

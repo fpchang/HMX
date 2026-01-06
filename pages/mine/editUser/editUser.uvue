@@ -48,6 +48,7 @@
 		import {AccountService} from "@/services/AccountService.uts";
 		import { state, setUser } from '@/store/store.uts';
 		import { comFunction } from "@/pages/index/ComFuc.uts";
+		import {userBean} from "@/bean/userBean";
 		type formBean = {
 		  username : string,
 		  avatar:string
@@ -62,7 +63,7 @@
 		  padding: '0px',
 		  backgroundColor: 'transparent',
 		});
-		const user=computed(() => {
+		const user=computed<userBean>(() => {
 			return state.user;
 		});
 		const uploadAvatarSuccess=(list : string[])=>{

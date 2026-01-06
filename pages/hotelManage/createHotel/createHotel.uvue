@@ -152,6 +152,7 @@
 	import { Location } from "@/services/LocationService.uts";
 	import { validForm } from "./hotelFormVaild.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
+	import {userBean} from "@/bean/userBean";
 	// const props = defineProps({
 	// 	type: {
 	// 		type: Number,
@@ -168,7 +169,7 @@
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
-	const user = computed(() => {
+	const user = computed<userBean>(() => {
 		return state.user;
 	});
 	let hotelForm = ref<hotelBean>({

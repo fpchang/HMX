@@ -66,10 +66,11 @@
 	import {comFunction} from "@/pages/index/ComFuc.uts"
 	import {validForm} from "./createRoomVaild.uts";
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import {userBean} from "@/bean/userBean";
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
-	const user = computed(() => {
+	const user = computed<userBean>(() => {
 		return state.user;
 	});
 	const permissionList = computed(() => {

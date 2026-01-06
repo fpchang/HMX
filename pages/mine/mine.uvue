@@ -67,8 +67,9 @@
 <script setup>
 	import { state } from "@/store/store";
 	import operation from "./components/operation.uvue";
-	import {emergency_phone_number} from "@/static/utils/telphone_transform.uts"
-	const user = computed(() => {
+	import {emergency_phone_number} from "@/static/utils/telphone_transform.uts";
+	import {userBean} from "@/bean/userBean";
+	const user = computed<userBean>(() => {
 		return state.user;
 	});
 	const hotel = computed(() => {

@@ -4,15 +4,17 @@ import { HotelService } from "@/services/HotelService";
 import {roomTypeService} from "@/services/roomTypeService.uts";
 import { PermissionService } from "@/services/PermissionService";
 import { roomTypeBean,formatRoomTypeList } from "@/bean/roomTypeBean";
+import { userBean } from "../../bean/userBean";
 
 class ComFuc {
 	constructor() { }
 	async getUser() : Promise<UTSJSONObject> {
-		const res = await AccountService.getuserByToken();
-		console.log("getuser", res);
-		const user = res.data[0] as UTSJSONObject;
-		uni.setStorageSync("user", user);
+		const user = await AccountService.getuserByToken();
+		if(user!=null){
+uni.setStorageSync("user", user);
 		setUser(user);
+		}
+		
 		return user;
 	}
 	// updateUser(){
@@ -92,9 +94,9 @@ class ComFuc {
 			setHotelId(hotel_id);
 		}
 		
-		const user = uni.getStorageSync("user") as UTSJSONObject| null;
+		const user = uni.getStorageSync("user") as userBean;
 		if (user != null) {
-			setUser(user as UTSJSONObject)
+			setUser(user)
 		}
 		const roomTypeList_local = uni.getStorageSync("roomTypeList") as Array<UTSJSONObject> | null;
 		if (roomTypeList_local != null) {

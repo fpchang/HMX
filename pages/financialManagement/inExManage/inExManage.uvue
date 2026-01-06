@@ -134,6 +134,7 @@
 	import { FMBean, FMDataListResult } from '@/bean/FMBean';
 	import { state } from "@/store/store";
 	import { fmState } from "@/store/modules/fmStore.uts";
+	import {userBean} from "@/bean/userBean";
 	
 	import { comFunction } from "@/pages/index/ComFuc";
 	import fmSearchComponent from "./components/fmSearchComponent/fmSearchComponent";
@@ -143,7 +144,7 @@
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
-	const user = computed(() => {
+	const user = computed<userBean>(() => {
 		return state.user;
 	});
 	const permissionList = computed(() => {

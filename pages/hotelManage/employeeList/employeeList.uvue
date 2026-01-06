@@ -96,11 +96,12 @@
 	import { employeeBean } from '@/bean/employeeBean';
 	import { HotelService } from '@/services/HotelService';
 	import { employeeAction } from "./employeeAction.uts";
+	import {userBean} from "@/bean/userBean";
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
-	const user = computed(() => {
+	const user = computed<userBean>(() => {
 		return state.user;
 	});
 	const permissionList = computed(() => {

@@ -1,60 +1,85 @@
-import{DB} from '../api/DB';
-import {callFunctionRes} from "@/bean/DBBean";
-class AccountServiceClass{
-	
-	constructor(){
-       
-    }
+import { DB } from '../api/DB';
+import { callFunctionRes } from "@/bean/DBBean";
+import { userBean } from '@/bean/userBean';
+class AccountServiceClass {
+
+	constructor() {
+
+	}
 	/**
 	 * 发送短信验证吗
 	 */
-sendSmsCode(phone:string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-	const data:UTSJSONObject={phone};
-	return DB.callFunction("hm-sendSms",data);
-}
-//腾讯地图 web secret =   qvQRgL3QqGosrlh7BrIyleFrs3Phs0X9
-  getConfig():Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
-	//  const data:UTSJSONObject={"a":1};
-    return DB.callFunction("hm_getConfig") ;
-  }
-  validToken():Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
-   // const token:string = uni.getStorageSync('hm_token').toString();
-    return DB.callFunction("hm_validToken") ;
-  }
-  login(userForm: UTSJSONObject):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
-	 return DB.callFunction("hm_login", {userForm});
-  }
-  /**
-   * 注销账号
-   */
-  closeAccount():Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
-    return DB.callFunction("hm_closeAccount") ;
-  }
-  recoverAccount(_id:string):Promise<UniCloudDBUpdateResult>{
-    return DB.update("hm-user",_id,{accountStatus:1})
-  }
-  getUserInfoByPhone(phone:string):Promise<UniCloudDBGetResult>{
-	   return DB.getCollection("hm-user",{phone});
-  }
-  getuserByToken():Promise<UniCloudDBGetResult>{
-    return DB.getCollection("hm-user",{hm_token:uni.getStorageSync("hm_token")});
-  }
-  updateUserName(_id:string,userName:string):Promise<UniCloudDBUpdateResult>{
-    return DB.update("hm-user",_id,{userName} as UTSJSONObject);
-  }
-  getRechargeConfig():Promise<UniCloudDBGetResult>{
-	   return DB.getCollection("hm-rechargeConfig",{status:true});
-  }
-  createRechargeOrder(rechargeConfig_id:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
-	  return DB.callFunction("hm_createRechargeOrder",{rechargeConfig_id});
-  }
+	sendSmsCode(phone : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+		const data : UTSJSONObject = { phone };
+		return DB.callFunction("hm-sendSms", data);
+	}
+	//腾讯地图 web secret =   qvQRgL3QqGosrlh7BrIyleFrs3Phs0X9
+	getConfig() : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+		//  const data:UTSJSONObject={"a":1};
+		return DB.callFunction("hm_getConfig");
+	}
+	validToken() : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+		// const token:string = uni.getStorageSync('hm_token').toString();
+		return DB.callFunction("hm_validToken");
+	}
+	login(userForm : UTSJSONObject) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+		return DB.callFunction("hm_login", { userForm });
+	}
+	/**
+	 * 注销账号
+	 */
+	closeAccount() : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+		return DB.callFunction("hm_closeAccount");
+	}
+	recoverAccount(_id : string) : Promise<UniCloudDBUpdateResult> {
+		return DB.update("hm-user", _id, { accountStatus: 1 })
+	}
+	getUserInfoByPhone(phone : string) : Promise<UniCloudDBGetResult> {
+		return DB.getCollection("hm-user", { phone });
+	}
+	async getuserByToken() : Promise<userBean | null> {
+		const res = await DB.getCollection("hm-user", { hm_token: uni.getStorageSync("hm_token") });
+		const list =res['data'] as Array<UTSJSONObject>;
+		let user:userBean | null =null;
+		if(list!=null&&list.length>0){
+			const userObj=list[0];
+			user={
+				_id: userObj.getString("_id")??"",
+				idCard: userObj.getString("idCard")??"",
+				ipStartDateStamp: userObj.getString("ipStartDateStamp")??"",
+				isVip: userObj.getBoolean("isVip")??false,
+				nickName: userObj.getString("nickName")??"",
+				phone: userObj.getString("phone")??"",
+				userId: userObj.getString("userId")??"",
+				userName: userObj.getString("userName")??"",
+				vipEndDate: userObj.getString("vipEndDate")??"",
+				vipEndDateStamp: userObj.getString("vipEndDateStamp")??"",
+				vipStartDate: userObj.getString("vipStartDate")??"",
+				wxNickName: userObj.getString("wxNickName")??"",
+				wxOpenId: userObj.getString("wxOpenId")??"",
+				hm_token: userObj.getString("hm_token")??"",
+				accountStatus: userObj.getNumber("accountStatus")??1
+			}
+			
+		}
+		return user;
+	}
+	updateUserName(_id : string, userName : string) : Promise<UniCloudDBUpdateResult> {
+		return DB.update("hm-user", _id, { userName } as UTSJSONObject);
+	}
+	getRechargeConfig() : Promise<UniCloudDBGetResult> {
+		return DB.getCollection("hm-rechargeConfig", { status: true });
+	}
+	createRechargeOrder(rechargeConfig_id : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+		return DB.callFunction("hm_createRechargeOrder", { rechargeConfig_id });
+	}
 
-  getMpPhoneNumber(code:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
-     return DB.callFunction("getMpPhoneNumber",{code} as UTSJSONObject);
-  }
-  loginMp(code:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
-    return DB.callFunction("hm_loginMp",{code} as UTSJSONObject);
-  }
+	getMpPhoneNumber(code : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+		return DB.callFunction("getMpPhoneNumber", { code } as UTSJSONObject);
+	}
+	loginMp(code : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+		return DB.callFunction("hm_loginMp", { code } as UTSJSONObject);
+	}
 }
 //module.exports =new AccountService();
-export var AccountService=new AccountServiceClass();
+export var AccountService = new AccountServiceClass();

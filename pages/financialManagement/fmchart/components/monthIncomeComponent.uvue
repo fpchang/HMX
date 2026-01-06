@@ -36,9 +36,7 @@
 	}
 	// 初始化图表
 	const initChart = async () => {
-		console.log("009999999999999999999999999999")
 		if (chartRef.value == null) {
-			console.log('none-------------')
 			return;
 		}
 
@@ -97,8 +95,6 @@
 			console.error('图表初始化失败:', error)
 		}
 	}
-
-	getIncomeMonth();
 </script>
 
 <style lang="scss">

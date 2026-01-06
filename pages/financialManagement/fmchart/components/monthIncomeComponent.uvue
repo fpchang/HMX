@@ -43,7 +43,6 @@
 		}
 
 		try {
-			console.log("000000000000000000000000000")
 			// 仅在 H5 平台下使用 echarts，小程序端 l-echart 内部已集成
 			//#ifdef H5
 			const chart = await chartRef.value.init(echarts)
@@ -51,12 +50,7 @@
 			//#ifndef H5
 			const chart = await chartRef.value.init(null)
 			//#endif
-			// console.log("START")
 			let dataList = await FMService.getIncomeCurrentMonth(hotel_id.value);
-			console.log("11111111111",dataList);
-
-		
-		// 	console.log("3333333333333333",chartOption);
 			const chartOption = {
 			
 				tooltip: {
@@ -68,7 +62,7 @@
 				},
 				series: [
 					{
-						name: 'Access From',
+						name: '当月收入',
 						type: 'pie',
 						radius: ['40%', '70%'],
 						avoidLabelOverlap: false,

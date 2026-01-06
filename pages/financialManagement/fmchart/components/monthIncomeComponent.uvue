@@ -58,6 +58,13 @@
 					top: '5%',
 					left: 'center'
 				},
+				  color: [
+				     '#4ECDC4', // 主色：青绿（核心收入）
+				       '#74B9FF', // 浅蓝（次要收入）
+				       '#00B894', // 薄荷绿（投资收入）
+				       '#81E6D9', // 淡青（副业收入）
+				       '#00A8CC'  // 湖蓝（其他收入）
+				  ],
 				series: [
 					{
 						name: '当月收入',
@@ -94,7 +101,7 @@
 		} catch (error) {
 			console.error('图表初始化失败:', error)
 		}
-	}
+	} 
 </script>
 
 <style lang="scss">

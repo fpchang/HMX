@@ -1,88 +1,112 @@
 <template>
 	<view>
-		 <view class="chart-container"  id="incomePieChart">
-		  <l-echart ref="chartRef" @finished="initChart"></l-echart>
-		  </view>
+		<view class="chart-container" id="incomePieChart">
+			<l-echart ref="chartRef" @finished="initChart"></l-echart>
+		</view>
 	</view>
 </template>
 
 <script setup>
+	import { FMService } from "@/services/FMService";
+	import { state } from '@/store/store.uts';
+	import { charPietItem } from "@/bean/chartBean.uts";
+	import { userBean } from "@/bean/userBean";
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const hotel = computed(() => {
+		return state.hotel;
+	});
+	const hotelList = computed(() => {
+		return state.hotelList;
+	});
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
 	//#ifdef H5
 	import * as echarts from 'echarts';
 	//#endif
-		const chartRef = ref<LEchartComponentPublicInstance | null>(null)
-	const chartOption = {
-	
-	   tooltip: {
-	     trigger: 'item'
-	   },
-	   legend: {
-	     top: '5%',
-	     left: 'center'
-	   },
-	   series: [
-	     {
-	       name: 'Access From',
-	       type: 'pie',
-	       radius: ['40%', '70%'],
-	       avoidLabelOverlap: false,
-	       itemStyle: {
-	         borderRadius: 10,
-	         borderColor: '#fff',
-	         borderWidth: 2
-	       },
-	       label: {
-	         show: false,
-	         position: 'center'
-	       },
-	       emphasis: {
-	         label: {
-	           show: true,
-	           fontSize: 40,
-	           fontWeight: 'bold'
-	         }
-	       },
-	       labelLine: {
-	         show: false
-	       },
-	       data: [
-	         { value: 1048, name: 'Search Engine' },
-	         { value: 735, name: 'Direct' },
-	         { value: 580, name: 'Email' },
-	         { value: 484, name: 'Union Ads' },
-	         { value: 300, name: 'Video Ads' }
-	       ]
-	     }
-	   ]
-	 
-	 
 
+	const chartRef = ref<LEchartComponentPublicInstance | null>(null);
+
+	const getIncomeMonth = async () : Promise<Array<charPietItem>> => {
+		const list = await FMService.getIncomeCurrentMonth(hotel_id.value);
+		console.log("当月统计", list);
+		return list;
 	}
-	// 使用上面定义的图表配置项
-	const option = chartOption;
-	
 	// 初始化图表
 	const initChart = async () => {
-	  if (chartRef.value == null) return
-	  
-	  try {
-	    // 仅在 H5 平台下使用 echarts，小程序端 l-echart 内部已集成
-	    //#ifdef H5
-	    const chart = await chartRef.value.init(echarts)
-	    //#endif
-	    //#ifndef H5
-	    const chart = await chartRef.value.init(null)
-	    //#endif
-	    chart.setOption(option)
-	  } catch (error) {
-	    console.error('图表初始化失败:', error)
-	  }
-	}
+		if (chartRef.value == null) {
+			return;
+		}
+
+		try {
+			// 仅在 H5 平台下使用 echarts，小程序端 l-echart 内部已集成
+			//#ifdef H5
+			const chart = await chartRef.value.init(echarts)
+			//#endif
+			//#ifndef H5
+			const chart = await chartRef.value.init(null)
+			//#endif
+			let dataList = await FMService.getExpensesCurrentMonth(hotel_id.value);
+			const chartOption = {
+			
+				tooltip: {
+					trigger: 'item'
+				},
+				legend: {
+					top: '5%',
+					left: 'center'
+				},
+				color:[
+					 '#FF7043', // 主色：橙红（生活消费）
+					    '#FDC040', // 暖黄（交通出行）
+					    '#E84393', // 玫红（娱乐休闲）
+					    '#E53E3E', // 砖红（人情往来）
+					    '#F7971E'  // 橘黄（其他支出）
+				],
+				series: [
+					{
+						name: '当月支出',
+						type: 'pie',
+						radius: ['40%', '70%'],
+						avoidLabelOverlap: false,
+						itemStyle: {
+							borderRadius: 10,
+							borderColor: '#fff',
+							borderWidth: 2
+						},
+						label: {
+							show: false,
+							position: 'center'
+						},
+						emphasis: {
+							label: {
+								show: true,
+								fontSize: 40,
+								fontWeight: 'bold'
+							}
+						},
+						labelLine: {
+							show: false
+						},
+						data: dataList
+					}
+				]
+			
+			
+			
+			}
+			chart.setOption(chartOption)
+		} catch (error) {
+			console.error('图表初始化失败:', error)
+		}
+	} 
 </script>
 
 <style lang="scss">
-.chart-container {
-	  width: 100%;
-	  height: 400px;
+	.chart-container {
+		width: 100%;
+		height: 450px;
 	}
 </style>

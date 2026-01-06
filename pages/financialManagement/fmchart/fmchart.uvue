@@ -48,7 +48,7 @@
 		      <view class="chart-card full-width">
 		        <text class="chart-subtitle">当年支出</text>
 		         <view> <yearExpensesComponent></yearExpensesComponent></view>
-		      </view>	<Q2>13</Q2>
+		      </view>
 		    </view>
 		  </view>
 	<!-- #ifdef APP -->

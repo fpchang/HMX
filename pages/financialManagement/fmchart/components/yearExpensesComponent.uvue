@@ -1,9 +1,20 @@
 <template>
 	<view>
 		<view class="chart-container" id="incomePieChart">
+			<view class="title-area">
+				<text class="chart-subtitle">当年支出</text>
+				<view>
+			
+					<view class="select" @click="showDatePicker=!showDatePicker">
+						<text class="txt">{{year}}年</text>
+						<image src="/static/images/arrow.png" style="width: 16px;height: 16px;"></image>
+					</view>
+				</view>
+			</view>
 			<l-echart ref="chartRef" @finished="initChart"></l-echart>
 		</view>
 	</view>
+	<rice-datetime-picker v-model:show="showDatePicker" type="year" @confirm="onConfirm"/>
 </template>
 
 <script setup>
@@ -11,6 +22,7 @@
 	import { state } from '@/store/store.uts';
 	import { charPietItem } from "@/bean/chartBean.uts";
 	import { userBean } from "@/bean/userBean";
+	import {DateTimePickerExtend } from "@/uni_modules/rice-ui"
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -23,6 +35,8 @@
 	const user = computed<userBean>(() => {
 		return state.user;
 	});
+	const showDatePicker=ref(false);
+	const year=ref<string>(new Date().getFullYear().toString());
 	//#ifdef H5
 	import * as echarts from 'echarts';
 	//#endif
@@ -43,8 +57,8 @@
 			//#ifndef H5
 			const chart = await chartRef.value.init(null)
 			//#endif
-			const year=new Date().getFullYear().toString();
-			const list = await FMService.getIncomeAndExpensesCurrentYear(hotel_id.value,year,'expenses');
+			chart.showLoading();
+			const list = await FMService.getIncomeAndExpensesCurrentYear(hotel_id.value,year.value,'expenses');
 			const chartOption = {
 				  legend: {},
 				  tooltip: {},
@@ -59,10 +73,16 @@
 				  series: [{ type: 'bar' }]
 				
 			};
-			chart.setOption(chartOption)
+			chart.setOption(chartOption);
+			chart.hideLoading();
 		} catch (error) {
 			console.error('图表初始化失败:', error)
 		}
+	}
+	const onConfirm=(value:string, extend:DateTimePickerExtend)=>{
+		console.log('value',value,'extend', extend)
+		year.value=value;
+		initChart();
 	}
 </script>
 
@@ -70,5 +90,37 @@
 	.chart-container {
 		width: 100%;
 		height: 400px;
+	}
+	
+	.title-area {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	
+	.chart-subtitle {
+		display: block;
+		font-size: 16px;
+		color: #606266;
+		margin-bottom: 12px;
+		font-weight: 500;
+	}
+	
+	.select {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		padding: 4px 12px;
+		border-radius: 6px;
+		border: 1px solid #e5e7eb;
+		background-color: #fff;
+	
+		.txt {
+			font-size: 14px;
+			color: #303133;
+			margin-right: 4px;
+		}
 	}
 </style>

@@ -212,11 +212,11 @@ class FMServiceClass {
 	}
 
 	//获取当月收入统计
-	async getIncomeCurrentMonth(hotel_id : string) : Promise<Array<charPietItem>> {
+	async getIncomeCurrentMonth(hotel_id : string，month:string) : Promise<Array<charPietItem>> {
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
-		const monthFirst = getMonthFirstDay();
-		const monthLast = getMonthLastDay();
+		const monthFirst = getMonthFirstDay(month);
+		const monthLast = getMonthLastDay(month);
 		const w = {
 			hotel_id: hotel_id,
 			billType: 'income',
@@ -252,11 +252,11 @@ class FMServiceClass {
 
 
 	//获取当月支出统计
-	async getExpensesCurrentMonth(hotel_id : string) : Promise<Array<Array<number | string>>> {
+	async getExpensesCurrentMonth(hotel_id : string,month:string) : Promise<Array<charPietItem>> {
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
-		const monthFirst = getMonthFirstDay();
-		const monthLast = getMonthLastDay();
+		const monthFirst = getMonthFirstDay(month);
+		const monthLast = getMonthLastDay(month);
 		const w = {
 			hotel_id: hotel_id,
 			billType: 'expenses',

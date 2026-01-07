@@ -1,9 +1,20 @@
 <template>
 	<view>
 		<view class="chart-container" id="incomePieChart">
+			<view class="title-area">
+				<text class="chart-subtitle">当月支出</text>
+				<view>
+			
+					<view class="select" @click="showDatePicker=!showDatePicker">
+						<text class="txt">{{month}}月</text>
+						<image src="/static/images/arrow.png" style="width: 16px;height: 16px;"></image>
+					</view>
+				</view>
+			</view>
 			<l-echart ref="chartRef" @finished="initChart"></l-echart>
 		</view>
 	</view>
+	<rice-datetime-picker v-model:show="showDatePicker" type="month" @confirm="onConfirm"/>
 </template>
 
 <script setup>
@@ -11,6 +22,8 @@
 	import { state } from '@/store/store.uts';
 	import { charPietItem } from "@/bean/chartBean.uts";
 	import { userBean } from "@/bean/userBean";
+	import {DateTimePickerExtend } from "@/uni_modules/rice-ui";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -23,6 +36,8 @@
 	const user = computed<userBean>(() => {
 		return state.user;
 	});
+	const showDatePicker=ref(false);
+	const month=ref<string>(dayuts(new Date()).format("YYYY-MM"));
 	//#ifdef H5
 	import * as echarts from 'echarts';
 	//#endif
@@ -48,7 +63,15 @@
 			//#ifndef H5
 			const chart = await chartRef.value.init(null)
 			//#endif
-			let dataList = await FMService.getExpensesCurrentMonth(hotel_id.value);
+			chart.showLoading();
+			let dataList = await FMService.getExpensesCurrentMonth(hotel_id.value,month.value);
+			const labelStyle = {
+			   color: '#303133',
+			   fontSize: 14,
+			   fontWeight: 'bold',
+			   align: 'center'
+			 };
+			   const total = dataList.reduce((sum, item) => sum + item.value, 0);
 			const chartOption = {
 			
 				tooltip: {
@@ -77,8 +100,25 @@
 							borderWidth: 2
 						},
 						label: {
-							show: false,
-							position: 'center'
+							show: true,
+							position: 'center',
+							formatter: [
+							  `{title|总支出}`,
+							  `{value|${total}元}`
+							].join('\n'),
+							rich: {
+							  title: {
+							    ...labelStyle,
+							    fontSize: 16,
+								 padding: [0, 0, 8, 0], 
+							    marginBottom: 4
+							  },
+							  value: {
+							    ...labelStyle,
+							    fontSize: 20,
+							    color: '#FF7043'
+							  }
+							}
 						},
 						emphasis: {
 							label: {
@@ -97,16 +137,54 @@
 			
 			
 			}
-			chart.setOption(chartOption)
+			chart.setOption(chartOption);
+				chart.hideLoading();
 		} catch (error) {
 			console.error('图表初始化失败:', error)
 		}
 	} 
+	const onConfirm=(value:string, extend:DateTimePickerExtend)=>{
+		console.log('value',value,'extend', extend)
+		month.value=value;
+		initChart();
+	}
 </script>
 
 <style lang="scss">
 	.chart-container {
 		width: 100%;
-		height: 450px;
+		height: 400px;
+	}
+	
+	.title-area {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	
+	.chart-subtitle {
+		display: block;
+		font-size: 16px;
+		color: #606266;
+		margin-bottom: 12px;
+		font-weight: 500;
+	}
+	
+	.select {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		padding: 4px 12px;
+		border-radius: 6px;
+		border: 1px solid #e5e7eb;
+		background-color: #fff;
+	
+		.txt {
+			font-size: 14px;
+			color: #303133;
+			margin-right: 4px;
+		}
 	}
 </style>

@@ -130,13 +130,23 @@ class TimeClass {
 
 }
 export var TIME = new TimeClass();
-//本月第一天开始时间戳
-export const getMonthFirstDay = () => new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime();
+//本月第一天开始时间戳 month:2025-01
+export const getMonthFirstDay = (month:string|null):number =>{
+	if(month==null){
+		return new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime();
+	}
+	return new Date(new Date(month).getFullYear(), new Date(month).getMonth(), 1).getTime();
+} 
 /**
  * 简化版：本地时区本月最后一天 23:59:59.999 时间戳
  */
-export const getMonthLastDay = () =>
-	new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1).getTime() - 1;
+export const getMonthLastDay = (month:string|null) =>{
+	if(month==null){
+		return new Date(new Date(month).getFullYear(), new Date(month).getMonth() + 1, 1).getTime() - 1;
+	}
+	return new Date(new Date(month).getFullYear(), new Date(month).getMonth() + 1, 1).getTime() - 1;
+}
+	
 /**
  * 简化版：本地时区本月日期数组（补零）
  */

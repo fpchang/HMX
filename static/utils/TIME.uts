@@ -142,7 +142,7 @@ export const getMonthFirstDay = (month:string|null):number =>{
  */
 export const getMonthLastDay = (month:string|null) =>{
 	if(month==null){
-		return new Date(new Date(month).getFullYear(), new Date(month).getMonth() + 1, 1).getTime() - 1;
+		return new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1).getTime() - 1;
 	}
 	return new Date(new Date(month).getFullYear(), new Date(month).getMonth() + 1, 1).getTime() - 1;
 }

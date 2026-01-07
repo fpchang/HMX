@@ -202,21 +202,20 @@
 		//   });
 
 	}
-	const getUserInfo = async () => {
-		console.log("getuserinfo")
+	// const getUserInfo = async () => {
+	// 	console.log("getuserinfo")
 
-		const userRes = await AccountService.getUserInfoByPhone(userForm.value.phone)
+	// 	const userRes = await AccountService.getUserInfoByPhone(userForm.value.phone)
 
-		const data = userRes['data'] as Array<UTSJSONObject>;
-		uni.setStorageSync("user", data[0]);
-		//this.$store.commit("setUser", userRes.result.data[0]);
-		setUser(data[0]);
-		submitLoading.value = false;
+	// 	const data = userRes['data'] as Array<UTSJSONObject>;
+	// 	uni.setStorageSync("user", data[0]);
+	// 	setUser(data[0]);
+	// 	submitLoading.value = false;
 
-		uni.reLaunch({
-			url: "/pages/index/index",
-		});
-	}
+	// 	uni.reLaunch({
+	// 		url: "/pages/index/index",
+	// 	});
+	// }
 	const submit = async () => {
 		console.log("submit")
 		if (!isAgree.value) {
@@ -253,7 +252,10 @@
 				uni.setStorageSync("hm_token", token as string);
 			}
 			uni.setStorageSync("phone", userForm.value.phone);
-			getUserInfo();
+			//getUserInfo();
+			uni.reLaunch({
+				url: "/pages/index/index",
+			});
 		} catch (error) {
 			console.log("登录失败", error);
 			submitLoading.value = false;

@@ -34,8 +34,32 @@ class AccountServiceClass {
 	recoverAccount(_id : string) : Promise<UniCloudDBUpdateResult> {
 		return DB.update("hm-user", _id, { accountStatus: 1 })
 	}
-	getUserInfoByPhone(phone : string) : Promise<UniCloudDBGetResult> {
-		return DB.getCollection("hm-user", { phone });
+	async getUserInfoByPhone(phone : string) : Promise<userBean |null> {
+		const res = await  DB.getCollection("hm-user", { phone } as UTSJSONObject);
+		const list =res['data'] as Array<UTSJSONObject>;
+		let user:userBean | null =null;
+		if(list!=null&&list.length>0){
+			const userObj=list[0];
+			user={
+				_id: userObj.getString("_id")??"",
+				idCard: userObj.getString("idCard")??"",
+				ipStartDateStamp: userObj.getString("ipStartDateStamp")??"",
+				isVip: userObj.getBoolean("isVip")??false,
+				nickName: userObj.getString("nickName")??"",
+				phone: userObj.getString("phone")??"",
+				userId: userObj.getString("userId")??"",
+				userName: userObj.getString("userName")??"",
+				vipEndDate: userObj.getString("vipEndDate")??"",
+				vipEndDateStamp: userObj.getString("vipEndDateStamp")??"",
+				vipStartDate: userObj.getString("vipStartDate")??"",
+				wxNickName: userObj.getString("wxNickName")??"",
+				wxOpenId: userObj.getString("wxOpenId")??"",
+				hm_token: userObj.getString("hm_token")??"",
+				accountStatus: userObj.getNumber("accountStatus")??1
+			}
+			
+		}
+		return user;
 	}
 	async getuserByToken() : Promise<userBean | null> {
 		const res = await DB.getCollection("hm-user", { hm_token: uni.getStorageSync("hm_token") });

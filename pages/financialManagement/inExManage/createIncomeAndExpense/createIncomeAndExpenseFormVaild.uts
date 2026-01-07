@@ -1,0 +1,20 @@
+	import { FMBean } from "@/bean/FMBean.uts";
+export const  validForm = (fm:FMBean):boolean=>{
+	let msg ="";
+	
+	if(fm.type==""){
+		msg="请选择收入类型";
+	}
+	if(fm.amount<1){
+		msg="请输入金额";
+	}
+	if(msg!=""){
+		uni.showToast({
+			title:msg,
+			icon:"none"
+		})
+		return false;
+	}
+	
+	return true;
+}

@@ -48,7 +48,7 @@
 				</view>
 			</xt-form-item>
 			<xt-form-item label="收入类型" tips="" required>
-				<view>					
+				<view>
 					<xt-select :columns="columns" @selectAction="selectType" :showKeySearch="false"></xt-select>
 				</view>
 			</xt-form-item>
@@ -67,8 +67,7 @@
 				<view class="room-list-item" style="flex: 1;">
 
 					<rice-input style="height: 40px;" type="digit" placeholderStyle="font-size:14px" classic
-						placeholder="请输入金额" borderColor="#dcdfe6" :disabled="pageType==2"
-						v-model="amount"></rice-input>
+						placeholder="请输入金额" borderColor="#dcdfe6" :disabled="pageType==2" v-model="amount"></rice-input>
 
 					<!-- <rice-stepper v-model="fmForm.amount" input-width="150px" button-size="38" font-size="15" :auto-fixed ="false" :disabled="pageType==2" />
 			 -->
@@ -95,9 +94,10 @@
 	import { state } from "@/store/store";
 	import { comFunction } from "@/pages/index/ComFuc";
 	import { FMBean, FMTypeConfigBean } from "@/bean/FMBean";
-	import {userBean} from "@/bean/userBean";
+	import { userBean } from "@/bean/userBean";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import { FMService } from "@/services/FMService";
+	import { validForm } from "./createIncomeAndExpenseFormVaild";
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -124,7 +124,7 @@
 	});
 	const iotimeStr = ref(dayuts(new Date()).format("YYYY-MM-DD"));
 	const showCalendar = ref(false);
-	const amount=ref("0");
+	const amount = ref("");
 	const fmForm = ref<FMBean>({
 		_id: "",
 		amount: 0,
@@ -141,23 +141,23 @@
 	const showCalendarEvent = () => {
 		showCalendar.value = true;
 	}
-	const selectType=(val:string)=>{
-		fmForm.value.type=val;
-		
+	const selectType = (val : string) => {
+		fmForm.value.type = val;
+
 	}
 	const incomeAndExpensesConfigList = ref<Array<FMTypeConfigBean>>([]);
 	const getIncomeAndExpensesConfigList = async () => {
 		const list = await FMService.getIncomeAndExpensesConfig();
-		incomeAndExpensesConfigList.value =list;
+		incomeAndExpensesConfigList.value = list;
 	}
 	const columns = computed<Array<Array<PickerOption>>>(() => {
 		let result : Array<Array<PickerOption>> = [];
 		let list : Array<PickerOption> = [];
 		incomeAndExpensesConfigList.value.forEach(item => {
-			if(item.billType==fmForm.value.billType){
+			if (item.billType == fmForm.value.billType) {
 				list.push({ text: item.text, value: item.name } as PickerOption);
 			}
-			
+
 		});
 		result.push(list);
 		return result;
@@ -167,9 +167,16 @@
 	}
 
 	const submitForm = async () => {
-		fmForm.value.amount = parseFloat(amount.value);
+		if(amount.value!=""){
+			fmForm.value.amount = parseFloat(amount.value);
+		}
+		
+		let flag : boolean = validForm(fmForm.value)
+		if (flag == false) {
+			return;
+		}
 		uni.showLoading({
-			title:""
+			title: ""
 		})
 		try {
 			await FMService.add(fmForm.value);
@@ -178,16 +185,16 @@
 			submitLoading.value = false;
 			uni.hideLoading();
 		} catch (error) {
-			console.log("error",error);
+			console.log("error", error);
 			submitLoading.value = false;
 			uni.hideLoading();
 		}
 		console.log(fmForm.value);
 	}
-	onLoad(params=>{
+	onLoad(params => {
 		//console.log("params:",params);
-		const bt = params.getString("billType")??'income';
-		fmForm.value.billType=bt;
+		const bt = params.getString("billType") ?? 'income';
+		fmForm.value.billType = bt;
 	})
 
 	getIncomeAndExpensesConfigList();

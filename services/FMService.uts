@@ -44,10 +44,8 @@ class FMServiceClass {
 			type: item.type,
 			mark: item.mark
 		}
-		console.log("add fm", fm);
 		try {
 			const res = await DB.add("hm-incomeAndExpenses", fm);
-			console.log("ddddd", res);//app {id: "694a8c8c7b64db8e75e0ca69", requestId: null}
 			const id = res['id'] as string;
 			if (id == "") {
 				uni.showToast({
@@ -62,7 +60,6 @@ class FMServiceClass {
 			});
 			return true;
 		} catch (error) {
-			console.log("添加fm失败", error)
 			throw new Error("添加收支失败");
 		}
 
@@ -72,12 +69,10 @@ class FMServiceClass {
 			const res = await DB.callFunction("hm_deleteFm", {
 				_id: fm_id,
 			});
-			console.log("res delete", res);
 			const result = res['result'] as UTSJSONObject;
 			const code = result.getNumber('code') ?? 0;
 			const message = result.getString("message") ?? "";
 			if (code != 0) {
-				console.log("code error", code);
 				uni.showToast({
 					title: message,
 					icon: "none"
@@ -110,7 +105,6 @@ class FMServiceClass {
 		}
 		let FMList : Array<FMBean> = [];
 		let skipnum : number = Math.max((pageNo - 1) * pageSize, 0);
-		console.log("过滤条件", w, st, et, pageNo, pageSize, skipnum);
 		const main = db.collection("hm-incomeAndExpenses").where(w).orderBy("ioeTime desc").skip(skipnum).limit(pageSize).getTemp();
 		const config = db.collection("hm-incomeAndExpensesConfig").getTemp();
 		try {
@@ -149,7 +143,6 @@ class FMServiceClass {
 				})
 
 			}
-			console.log("fmlist:::", FMList);
 			let fMDataListResult : FMDataListResult = {
 				count: res['count'] as number,//总数量
 				pageNo: pageNo ?? 1,//当前页码
@@ -266,7 +259,6 @@ class FMServiceClass {
 		// const mt = db.collection("hm-incomeAndExpenses").where(w).getTemp()
 		// const res =await db.collection(mt,"hm-incomeAndExpensesConfig").groupBy('type').groupField('sum(amount) as value').get();
 		const res = await db.collection("hm-incomeAndExpenses", "hm-incomeAndExpensesConfig").where(w).groupBy('type').groupField('sum(amount) as value').get()
-		console.log("res", res);
 		const expensesList = res["data"] as Array<UTSJSONObject> ?? [];
 		//   let arr =[];
 		// res.result.data.map(item=>{
@@ -322,7 +314,6 @@ class FMServiceClass {
 			}
 			resultList.push([label, count])
 		}
-		console.log("年收支列表列表",billType, resultList);
 		return resultList;
 	}
 	

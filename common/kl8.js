@@ -341,7 +341,7 @@ function S5(n = 4, minNum = 5) {
 		// 执行统计（指定统计选2-10，也可自定义如[2,5,10]）
 		const statResult = happy8Statistics(mockHistoryData, {
 			isDesc: true, // 降序排序
-			selectNums: [10]
+			selectNums: [n]
 		});
 
 		// 输出整体统计信息
@@ -353,7 +353,7 @@ function S5(n = 4, minNum = 5) {
 		// 输出选2组合的TOP5
 		//console.log('\n选2组合TOP5：', statResult.select2.slice(0, 5));
 		// 输出选10组合的TOP5
-		console.log('\n选10组合TOP5：', statResult.select10.slice(0, 5));
+		console.log('\n选${n}组合TOP5：', statResult.select2.slice(0, 5));
 		// 输出选5组合的TOP5
 		//console.log('\n选5组合TOP5：', statResult.select5.slice(0, 5));
 	} catch (error) {
@@ -405,7 +405,7 @@ function caculate(fn, n = 20) {
 //console.log(sortObjectByNumberValue(S1_stat(list)));
 
 //set NODE_OPTIONS=--max-old-space-size=4096
-S5(10,6);
+S5(2,3);
 //getWinTime([22,34,56,66],history);//4-75,3-32,2-17,5-23
 
 // history.forEach(item=>{

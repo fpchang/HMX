@@ -1,20 +1,20 @@
 import { state, setHotelId, setUser, setHotelList, setHotel, setPermissionList, setRoomTypeList } from "@/store/store.uts";
 import { AccountService } from "@/services/AccountService";
 import { HotelService } from "@/services/HotelService";
-import {roomTypeService} from "@/services/roomTypeService.uts";
+import { roomTypeService } from "@/services/roomTypeService.uts";
 import { PermissionService } from "@/services/PermissionService";
-import { roomTypeBean,formatRoomTypeList } from "@/bean/roomTypeBean";
+import { roomTypeBean, formatRoomTypeList } from "@/bean/roomTypeBean";
 import { userBean } from "../../bean/userBean";
 
 class ComFuc {
 	constructor() { }
-	async getUser() : Promise<UTSJSONObject> {
+	async getUser() : Promise<userBean | null> {
 		const user = await AccountService.getuserByToken();
-		if(user!=null){
-uni.setStorageSync("user", user);
-		setUser(user);
+		if (user != null) {
+			uni.setStorageSync("user", user);
+			setUser(user);
 		}
-		
+
 		return user;
 	}
 	// updateUser(){
@@ -30,8 +30,8 @@ uni.setStorageSync("user", user);
 		return list;
 	}
 	async getRoomTypeList(hotel_id : string) : Promise<Array<roomTypeBean>> {
-		if(hotel_id==null || hotel_id==""){
-			hotel_id=state.hotel_id;
+		if (hotel_id == null || hotel_id == "") {
+			hotel_id = state.hotel_id;
 		}
 		const list = await roomTypeService.getRoomTypeList(hotel_id);
 		console.log("房型列表", list);
@@ -82,25 +82,25 @@ uni.setStorageSync("user", user);
 	*/
 	async loadStorage() {
 		const hotelList = uni.getStorageSync("hotelList") as Array<UTSJSONObject> | null;
-		console.log("hotel-list - storeage",hotelList);
+		console.log("hotel-list - storeage", hotelList);
 		if (hotelList != null) {
-			
+
 			setHotelList(hotelList)
 		}
 
 		const hotel_id = uni.getStorageSync("hotel_id") as string | null;
-		console.log("hotel-id - storeage",hotel_id);
+		console.log("hotel-id - storeage", hotel_id);
 		if (hotel_id != null) {
 			setHotelId(hotel_id);
 		}
-		
+
 		const user = uni.getStorageSync("user") as userBean;
 		if (user != null) {
 			setUser(user)
 		}
 		const roomTypeList_local = uni.getStorageSync("roomTypeList") as Array<UTSJSONObject> | null;
 		if (roomTypeList_local != null) {
-			let roomtypelist = formatRoomTypeList(roomTypeList_local) 
+			let roomtypelist = formatRoomTypeList(roomTypeList_local)
 			setRoomTypeList(roomtypelist)
 		}
 		const permissionList = uni.getStorageSync("permissionList") as Array<string> | null;

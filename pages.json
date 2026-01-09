@@ -62,8 +62,12 @@
 			"path" : "pages/financialManagement/financiaHome/financiaHome",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "财务中心",
+				"navigationBarBackgroundColor":"#2563eb", //"linear-gradient(135deg, #2563eb, #3b82f6)",
+				"navigationBarTextStyle": "white"
+				
 			}
+			
 		},
 		{
 			"path" : "pages/homeMenu/homeMenu",

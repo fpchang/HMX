@@ -1,0 +1,327 @@
+<template>
+	<!-- #ifdef APP -->
+	<scroll-view  :refresher-enabled="false" style="flex:1;background:#f5f5f5;display: flex;flex-direction: column" :show-scrollbar="false">
+	<!-- #endif -->
+
+		<view class="index-page-style">
+			<view style="width: 750rpx;height: 422rpx;max-height:253px;position: relative;">
+				<!-- <view style="height:44px;width:750rpx;z-index:999; background-color:rgba(0,0,0,0.6);position: absolute;top:0;left: 0;">
+					
+				</view> -->
+				<image style="width: 100%;height: 100%;"
+					:src="topImg()"
+					mode="aspectFill">
+				</image>
+				<!-- <ux-blur style="width: 100%;height: 81px;position: absolute;left:0;bottom:0;" :radius="10"></ux-blur> -->
+				
+				<view @click="showCheckHotel"
+					style="position:absolute;bottom:0;left:0;border-top-right-radius: 18px;border-top-left-radius: 18px; background-color: rgba(0,0,0,0.4); width:100%;  padding:5px 20px 20px 20px ;display: flex;flex-direction: row;align-items: center;">
+					<text
+						style="font-size: 22px;padding:15px;color:#fff;min-width:200px;font-family: cursive;font-weight: 400;">{{hotel.hotelName}}</text>
+					<rice-icon name="arrow-down" color="#fff" size="22px" />
+				</view>
+			</view>
+
+			<view class="view-item" style="margin-top: -15px;">
+					<gatherComponent></gatherComponent>
+	
+			</view>
+			<view class="view-item">
+					<operation></operation>
+								
+			</view>
+		</view>
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+	
+	<rice-popup v-model:show="showPopup" position="bottom" :closeable="true" radius="15px">
+
+		<view class="left-container">
+			<view style="flex: 1; min-height: 330px">
+				<view class="black-area">
+					<text>
+					
+						
+					</text>
+				</view>
+				<view class="title-area">
+					<view><image src="/static/icons/list-hotel.png" style="width:50px;height:50px" mode="aspectFit"></image></view>
+					<view class="title">
+						<text class="txt">酒店列表</text>
+					</view>
+					<navigator url="/pages/hotelManage/hotelList/hotelList" hover-class="none">
+						<view class="btn"><text class="txt">管理</text></view>
+					</navigator>
+				</view>
+				<scroll-view style="background:#fff;height:500px">
+					<view style="display: flex;flex-wrap:wrap;flex-direction: row;">
+						<view  v-for="item of hotelList" style="padding: 10px;flex:1;min-width:360px;" @click="checkHotel((item._id as string))">
+							<view style="display: flex" :class="['zcard', item._id==hotel_id? 'zcard-active':'']"
+								@click="checkHotel(item._id as string)">
+								<view class="img-container">
+									<image
+										style="width: 100%; height: 100%" mode="aspectFill"
+										:src="(item['firstImages'] != ''&&item['firstImages'] !=null)?item['firstImages']:'/static/images/hotel.png'" />
+								</view>
+								<view style="padding: 15px 10px" class="zcard-right">
+									<view class="item">
+										<view class="title"><text class="txt">{{item.hotelName}}</text></view>
+									</view>
+									<view class="item">
+										<view class="subtitle"><text class="txt">{{
+			                        item.hotelAddress
+			                      }}</text></view>
+									</view>
+								</view>
+								<view class="select">
+									<image :src="item._id==hotel_id?'/static/icons/checked.png':'/static/icons/uncheck.png'"
+										class="form-icon" style="width:35px;height:35px"></image>
+								
+								</view>
+							</view>
+						</view>
+						<view v-for="item in 5" style="height: 0;min-width:360px;padding:0 10px;flex:1"></view>
+				
+					</view>
+				</scroll-view>
+			</view>
+		</view>
+
+	</rice-popup>
+
+</template>
+
+<script setup>
+	//import {ref} from "vue";
+	import gatherComponent from "./components/gatherComponent";
+	import operation from "./components/operation";
+	
+	import { state, setUser } from '@/store/store.uts';
+	import { comFunction } from "./ComFuc.uts";	
+	import {userBean} from "@/bean/userBean";
+	const showRange = ref(false);
+	const showPopup = ref(false);
+	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"]);
+	const rangeConfirm = (e : string[]) => {
+		//console.log(e)
+	}
+	const showPickTime = () => {
+		showRange.value = true;
+	}
+	const showCheckHotel = () => {
+		showPopup.value = !showPopup.value;
+	}
+	let dataReading=ref(false);
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const hotel = computed(() => {
+		return state.hotel;
+	});
+	const hotelList = computed(() => {
+		return state.hotelList;
+	});
+	const user=computed<userBean>(() => {
+		return state.user;
+	});
+	const topImg =():string=>{	
+		// if(hotel.value==null){
+		// 	return '/static/images/hotel.png';
+		// }
+		const firstImages = hotel.value['firstImages'] as string | null;
+		if(firstImages==''||firstImages==null){
+			return '/static/images/hotel.png';
+		}
+		return firstImages;
+	};
+	const checkHotel = async (h_id : string) => {
+		if (h_id != hotel_id.value) {
+			uni.showLoading({ title: "" });
+			await comFunction.checkHotel(h_id);
+			showPopup.value = false;
+			uni.hideLoading();
+
+		}
+
+	};
+	 // onLoad(async ():Promise<void>=>{
+		//  await comFunction.init();
+		//  dataReading.value=true;
+	 // })
+	 // onBeforeMount(async ()=>{
+		//  console.log("index onBeforeMound");
+		//     comFunction.init();
+		//    dataReading.value=true;
+		//    //return Promise.resolve({aa:111});
+	 // })
+	 const init = async ()=>{
+		 //comFunction.loadStorage();
+		 await comFunction.init();
+		 dataReading.value=true;
+	 }
+	 watch(hotel_id,(hotel_idNew:string,hotel_idOld:string):void=>{
+	 	//console.log("hotel_id change index ",hotel_idNew,hotel_idOld)
+	 }); 
+	    init(); 
+	
+	
+</script>
+
+<style lang="scss">
+	.index-page-style {
+		display: flex;
+		flex-direction: column;
+		/*background: linear-gradient(to bottom, #457fe0, #fff);*/
+		.view-item {
+			background-color: #fff;
+			// padding:15px;
+			border-radius: 15px;
+			margin-bottom: 20px;
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: column;
+
+		}
+	}
+
+	.left-container {
+		display: flex;
+		flex-direction: column;
+		background: #f4f5f9;
+
+		.black-area {
+			height: 40px;
+			padding: 0 15px;
+			display: flex;
+			flex-direction: row;
+			align-items: flex-end;
+			justify-content: flex-start;
+		}
+
+		.title-area {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			padding: 10px 15px;
+
+			.title {
+				height: 30px;
+				color: #000101;
+				font-weight:700;
+
+				.txt {
+					font-size: 18px;
+					font-weight: 400;
+					height: 30px;
+					line-height: 30px;
+					color: #1d1d1f;
+				}
+			}
+
+			.btn {
+
+				background-color: #004af6;
+				
+				padding: 8px 20px;
+				border-radius: 22px;
+				
+				.txt {
+					color: #fff;
+					font-size: 14px;
+				}
+			}
+		}
+
+		.zcard {
+			/*padding: 10px 0;
+			box-shadow: 2px 4px 12px #f5f5f5;
+			*/
+
+			background-color: #fffffe;
+			border-radius: 10px;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-around;
+			border:1px solid #e5e7eb;
+			.select {
+				display: flex;
+				flex-direction: row;
+				align-items: flex-start;
+				justify-content: center;
+				padding: 8px;
+				height: 100%;
+			}
+
+			.img-container {
+				width: 120px;
+				height: 90px;				
+				overflow: hidden;
+				
+			}
+
+			.zcard-right {
+				flex: 1;
+				
+				height: 100%;
+				display: flex;
+				min-width: 0;
+				flex-direction: column;
+
+				.item {
+					min-width: 0;
+				}
+
+				.title {
+
+
+					.txt {
+						text-overflow: ellipsis;
+						overflow: hidden;
+						white-space: nowrap;
+						color: #1f2937;
+						font-weight: 700;
+						font-size: 16px;
+					}
+				}
+
+				.subtitle {
+
+					.txt {
+						color: #666666;
+						/*text-overflow: ellipsis;
+						overflow: hidden;
+						white-space: nowrap;*/
+						font-size: 14px;
+					}
+				}
+
+				.item {
+					padding: 3px 0;
+
+					.tabscontainer {
+						display: flex;
+						flex-direction: row;
+						justify-content: flex-start;
+						align-items: center;
+						flex-wrap: wrap;
+						margin-right: -8px;
+						margin-bottom: -8px;
+					}
+				}
+
+				.bottom {
+					flex: 1;
+					display: flex;
+					flex-direction: row;
+					justify-content: flex-end;
+					align-items: flex-end;
+				}
+			}
+		}
+
+
+	}
+</style>

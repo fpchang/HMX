@@ -10,14 +10,14 @@
 						<view class="header-date"><text class="txt">{{currentData()}}</text></view>
 					</view>
 				</view>
-				<view style="padding-top:8px">
+				<!-- <view style="padding-top:8px">
 					<rice-tabs v-model="activeIndex" :list="list" @clickTab="tabClick" bg-color="rgba(255,255,255,0)"
 						:shrink="true" :item-style="itemStyle" line-width="60%" title-active-color="#000"
 						line-color="#000" :active-style="activeStyle"></rice-tabs>
 
-				</view>
+				</view> -->
 			</view>
-			<view class="swiper" :style="{transform: `translateX(${swiperx})`}" @touchmove="swiperMove">
+			<!-- <view class="swiper" :style="{transform: `translateX(${swiperx})`}" @touchmove="swiperMove">
 				<view class="swiper-item">
 					<view class="stats-body">
 						<view class="stat-item">
@@ -145,7 +145,145 @@
 
 					</view>
 				</view>
-			</view>
+			</view> -->
+		<l-tabs :value="activeIndex" @click="onClick" :spaceEvenly="false" :swipeable="true" :animated="true" :split="false" :lStyle="itemStyle" lineWidth="50px" >
+					    <l-tab-panel :value="0" label="今日入住">
+					        <view class="content-panel">
+								<view class="swiper-item">
+									<view class="stats-body">
+										<view class="stat-item">
+											<view class="card check-out">
+												<view class="stat-icon">
+													<image class="img-style" src="/static/icons/accessin-mount.png"></image>
+												</view>
+												<view class="stat-number"><text class="txt">{{numOrderToday}}</text></view>
+												<view class="stat-label"><text class="txt">今日入住</text></view>
+											</view>
+								
+										</view>
+										<view class="stat-item">
+											<view class="card check-in">
+												<view class="stat-icon">
+													<image class="img-style" src="/static/icons/accessout-mount.png"></image>
+												</view>
+												<view class="stat-number"><text class="txt">{{numAccessOutToday}}</text></view>
+												<view class="stat-label"><text class="txt">今日退房</text></view>
+											</view>
+								
+										</view>
+								
+										<view class="stat-item">
+											<view class="card occupied-rooms">
+												<view class="stat-icon">
+													<image class="img-style" src="/static/icons/ykmn.png"></image>
+												</view>
+												<view style="padding:10px 0">
+								
+								
+													<l-circle :percent="numCustomerOrderToday_percent" size="100px" strokeColor="green"  trailColor="#eee" strokeWidth="12"
+														trailWidth="12">
+														<text class="val-text">{{numCustomerOrderToday}}</text>
+													</l-circle>
+								
+								
+												</view>
+												<view class="stat-label"><text class="txt">当前在住</text></view>
+											</view>
+								
+										</view>
+										<view class="stat-item">
+											<view class="card available-rooms">
+												<view class="stat-icon">
+													<image class="img-style" src="/static/icons/empty-room.png"></image>
+												</view>
+												<view style="padding:10px 0">
+								
+								
+													<l-circle :percent="(100 - numCustomerOrderToday_percent)" trailColor="#eee" size="100px" strokeColor="orange" strokeWidth="12"
+														trailWidth="12">
+														<text class="val-text">{{ roomCount - numCustomerOrderToday}}</text>
+													</l-circle>
+								
+												</view>
+												<view class="stat-label"><text class="txt">空房数量</text></view>
+											</view>
+								
+										</view>
+								
+								
+									</view>
+								</view>
+							</view>
+					    </l-tab-panel>
+					    <l-tab-panel :value="1" label="明日入住">
+					        <view class="content-panel">
+								<view class="swiper-item">
+									<view class="stats-body">
+										<view class="stat-item">
+											<view class="card check-out">
+												<view class="stat-icon">
+													<image class="img-style" src="/static/icons/accessin-mount.png"></image>
+												</view>
+												<view class="stat-number"><text class="txt">{{numOrderTommorow}}</text></view>
+												<view class="stat-label"><text class="txt">明日入住</text></view>
+											</view>
+								
+										</view>
+										<view class="stat-item">
+											<view class="card check-in">
+												<view class="stat-icon">
+													<image class="img-style" src="/static/icons/accessout-mount.png"></image>
+												</view>
+												<view class="stat-number"><text class="txt">{{numAccessOutTommorow}}</text></view>
+												<view class="stat-label"><text class="txt">今日退房</text></view>
+											</view>
+								
+										</view>
+								
+										<view class="stat-item">
+											<view class="card occupied-rooms">
+												<view class="stat-icon">
+													<image class="img-style" src="/static/icons/ykmn.png"></image>
+												</view>
+												<view style="padding:10px 0">
+								
+								
+													<l-circle :percent="numCustomerOrderTommorw_percent" size="100px" strokeColor="green" strokeWidth="12"
+														trailWidth="12">
+														<text class="val-text">{{numCustomerOrderTommorw}}</text>
+													</l-circle>
+								
+												</view>
+												<view class="stat-label"><text class="txt">当前在住</text></view>
+											</view>
+								
+										</view>
+										<view class="stat-item">
+											<view class="card available-rooms">
+												<view class="stat-icon">
+													<image class="img-style" src="/static/icons/empty-room.png"></image>
+												</view>
+												<view style="padding:10px 0">
+								
+								
+													<l-circle :percent="(100 - numCustomerOrderTommorw_percent)" size="100px" strokeColor="orange" strokeWidth="12"
+														trailWidth="12">
+														<text class="val-text">{{roomCount - numCustomerOrderTommorw}}</text>
+													</l-circle>
+								
+												</view>
+												<view class="stat-label"><text class="txt">空房数量</text></view>
+											</view>
+								
+										</view>
+								
+								
+									</view>
+								</view>
+							</view>
+					    </l-tab-panel>
+					    
+					</l-tabs>
 
 		</view>
 
@@ -192,7 +330,6 @@
 		tooltip: { show: true },
 	};
 	const currentData = ():string => {
-
 		return dayuts(new Date()).format("YYYY 年 MM 月 DD 日 dddd");
 	}
 	// 组件挂载后初始化echarts实例 (也可在请求数据后初始化)
@@ -201,6 +338,10 @@
 	}
 	function tabClick(e : TabsClickTab) {
 		activeIndex.value = e.index as number;
+	}
+	const onClick = (index:number) => {
+	    // 在切换前执行一些逻辑，如数据校验
+	   activeIndex.value=index;
 	}
 	let clientx = ref(0);
 	const swiperMove = (event : UniTouchEvent) : void => {

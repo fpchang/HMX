@@ -6,7 +6,7 @@
     </view> -->
 
 		<!-- 内容区 -->
-		<scroll-view class="content" scroll-y>
+		<scroll-view class="content" style="flex:1">
 			<!-- 核心指标卡片 -->
 			<view class="card" @click="goToDetail('kpi')">
 				<text class="card-title">核心财务指标</text>
@@ -15,25 +15,25 @@
 					<view class="kpi-item">
 						<view class="container">
 							<text class="kpi-label">本月收入</text>
-							<view><text class="kpi-value income">¥125,800.50</text></view>
+							<view><text class="kpi-value income">¥{{incomeAmount}}</text></view>
 						</view>
 					</view>
 					<view class="kpi-item">
 						<view class="container">
 							<text class="kpi-label">本月支出</text>
-							<view><text class="kpi-value expense">¥89,650.80</text></view>
+							<view><text class="kpi-value expense">¥{{expensesAmount}}</text></view>
 						</view>
 					</view>
 					<view class="kpi-item">
 						<view class="container">
 							<text class="kpi-label">本年收入</text>
-							<view><text class="kpi-value income">¥1,568,900.75</text></view>
+							<view><text class="kpi-value income">¥{{incomeYearAmount}}</text></view>
 						</view>
 					</view>
 					<view class="kpi-item">
 						<view class="container">
 							<text class="kpi-label">本年支出</text>
-							<view><text class="kpi-value expense">¥987,650.20</text></view>
+							<view><text class="kpi-value expense">¥{{expensesYearAmount}}</text></view>
 						</view>
 					</view>
 				</view>
@@ -41,35 +41,22 @@
 
 			<!-- 本月财务详情 -->
 			<view class="card" @click="goToDetail('month')">
-				<text class="card-title">本月财务详情</text>
-
-				<view class="item">
+				<text class="card-title">本月收入财务详情</text>
+				<view class="item" v-for="income of incomeMonthList">
 					<view class="container">
-						<text class="label">客房收入</text>
-						<text class="value income">¥89,500.00</text>
+						<text class="label">{{income.name}}</text>
+						<text class="value income">¥{{income.value}}</text>
 					</view>
-
 				</view>
-				<view class="item">
+			</view>
+			
+			<view class="card" @click="goToDetail('month')">							
+				<text class="card-title">本月支出详情</text>				
+				<view class="item" v-for="expenses of expensesMonthList">
 					<view class="container">
-						<text class="label">餐饮收入</text>
-						<text class="value income">¥32,300.50</text>
-					</view>
-
-				</view>
-				<view class="item">
-					<view class="container">
-						<text class="label">运营成本</text>
-						<text class="value expense">¥65,200.30</text>
-					</view>
-
-				</view>
-				<view class="item">
-					<view class="container">
-						<text class="label">本月利润</text>
-						<text class="value profit">¥36,149.70</text>
-					</view>
-
+						<text class="label">{{expenses.name}}</text>
+						<text class="value expense">¥{{expenses.value}}</text>
+					</view>				
 				</view>
 			</view>
 
@@ -79,15 +66,15 @@
 
 				<view class="item">
 					<text class="label">总收入</text>
-					<text class="value income">¥1,568,900.75</text>
+					<text class="value income">¥{{incomeYearAmount}}</text>
 				</view>
 				<view class="item">
 					<text class="label">总支出</text>
-					<text class="value expense">¥987,650.20</text>
+					<text class="value expense">¥{{expensesYearAmount}}</text>
 				</view>
 				<view class="item">
 					<text class="label">本年利润</text>
-					<text class="value profit">¥581,250.55</text>
+					<text class="value profit">¥{{incomeYearAmount-expensesYearAmount}}</text>
 				</view>
 			</view>
 		</scroll-view>
@@ -115,6 +102,37 @@
 	});
 	const month = ref<string>(dayuts(new Date()).format("YYYY-MM"));
 	const year = ref<string>(new Date().getFullYear().toString());
+	
+	const incomeMonthList=ref<Array<charPietItem>>([]);
+	const expensesMonthList=ref<Array<charPietItem>>([]);
+	const incomeYearList=ref<Array<Array<string|number>>>([]);
+	const expensesYearList=ref<Array<Array<string| number>>>([]);
+	//月收入金额
+	const incomeAmount=computed<number>(()=>{
+		return incomeMonthList.value.reduce((acc, item) => acc + item.value, 0);
+	})
+	//月支出金额
+	const expensesAmount=computed<number>(()=>{
+		return expensesMonthList.value.reduce((acc, item) => acc + item.value, 0);
+	})
+	//年收入金额
+	const incomeYearAmount=computed<number>(()=>{	
+		let amount=0;
+		 incomeYearList.value.forEach(item=>{
+			const num = item[1] as number;
+			amount+=num;
+		})
+		return amount;
+	})
+	//年支出金额
+	const expensesYearAmount=computed<number>(()=>{
+		let amount=0;
+		 expensesYearList.value.forEach(item=>{
+			const num = item[1] as number;
+			amount+=num;
+		})
+		return amount;
+	})
 	const init = async () => {
 		//当月支出
 		let expensesMonthRes = FMService.getExpensesCurrentMonth(hotel_id.value, month.value);
@@ -129,15 +147,19 @@
 	//console.log("11111",a,b,c,d)expensesMonthRes
 	expensesMonthRes.then(list=>{
 		console.log("list1---",list);
+		expensesMonthList.value= list as Array<charPietItem>;
 	})
 	incomeMonthRes.then(list=>{
 		console.log("list2---",list);
+		incomeMonthList.value=list as Array<charPietItem>;
 	})
 	empensesYearRes.then(list=>{
 		console.log("list---",list);
+		expensesYearList.value = list as Array<Array<string | number>>;
 	})
 	incomeYearRes.then(list=>{
 		console.log("list4---",list);
+		incomeYearList.value=list as Array<Array<string | number>>;
 	})
 
 	}
@@ -236,6 +258,7 @@
 	.value {
 		font-size: 15px;
 		font-weight: 600;
+		padding:4px 0;
 	}
 
 	.income {

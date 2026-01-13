@@ -256,7 +256,7 @@ sameHistory(12,dltHistory);
 //爆冷号
 // console.log(caculate(S3,1));
 // console.log(caculate(S3_BLUE,1,"blueBall"));
-//热号
+//热号 7,5,9,4,
 console.log("上期开奖",dltHistory[dltHistory.length-1])
 console.log(caculate(S1,14));
 //console.log(caculate(S1_BLUE,10,"blueBall"));

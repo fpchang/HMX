@@ -1,0 +1,99 @@
+	$borderColor: #ebeef5;
+	$backgroundColor: white;
+	$tabHdColor: #909399;
+	$tabBdColor: #606266;
+	$tabTrBack: #fafafa;
+	$tabTrActiveBack: #f5f7fa;
+
+	.itme-box {
+		overflow: visible;
+		background-color: $backgroundColor;
+		// margin: -1px;
+
+		.h-table {
+			width: auto;
+			// min-width: 100%;
+			border-left: 1px solid #ebeef5;
+			border-top: 1px solid #ebeef5;
+
+			.h-head {
+				.h-text {
+					font-size: 14px;
+					font-weight: 700;
+					color: #909399;
+				}
+			}
+
+			.h-body {
+				.h-text {
+					font-size: 14px;
+					color: #606266;
+				}
+			}
+
+			.h-tr {
+				flex-direction: row;
+			}
+
+			.h-td {
+				padding: 12px 10px;
+				width: 80px;
+				// flex: 1;
+				min-width: 100px;
+				// justify-items: center;
+				align-items: center;
+				border-right: 1px solid $borderColor;
+				border-bottom: 1px solid $borderColor;
+			}
+
+			/* .h-body:nth-child(2n+1) {
+				background-color: $tabTrBack;
+			}
+
+			.h-body:hover {
+				background-color: $tabTrActiveBack;
+			} */
+
+		}
+	}
+	.h-tr-zebra{
+		background-color: $tabTrBack;
+	}
+	
+	.h-tr-hover{
+		background-color: $tabTrActiveBack;
+	}
+	
+	.listTitle {
+		padding: 8px 12px;
+		background-color: #F1F1F1;
+
+		.listText {
+			color: #8f8f94;
+			font-size: 14px;
+		}
+	}
+
+	.box-pad {
+		padding: 5px;
+		width: 500px;
+	}
+
+	.success {
+		color: #51C99B;
+	}
+
+	.warning {
+		color: #FFB24E;
+	}
+
+	.danger {
+		color: #FA5151;
+	}
+
+	.text-cut {
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+		font-size: 14px;
+	}

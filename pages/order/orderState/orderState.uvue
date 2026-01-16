@@ -1,84 +1,126 @@
-
-
 <template>
-    <view class="listTitle">
-        <text class="listText">普通表格</text>
-    </view>
-    <scroll-view class="scroll-view" direction="horizontal" scroll-x="true">
-        <view class="box-pad">
-            <h-table>
-                <h-tr :head="true">
-                    <h-td>流程</h-td>
-                    <h-td :width="120">状态</h-td>
-                    <h-td :width="120">计划开始</h-td>
-                    <h-td :width="120">计划完成</h-td>
-                </h-tr>
-                <h-tr v-for="(item,index) in (list as List[])" :key="index">
-                    <h-td>
-						<view style="width: 100px;height:100px;background:green;"></view>
-					</h-td>
-                    <h-td :width="120">
-                        <text v-if="item.StatusName == '已完成'" class="text-cut success">{{item.StatusName}}</text>
-                        <text v-else-if="item.StatusName == '处理中'" class="text-cut warning">{{item.StatusName}}</text>
-                        <text v-else class="text-cut danger">{{item.StatusName}}</text>
-                    </h-td>
-                    <h-td :width="120">{{item.PlanEndDateStr}}</h-td>
-                    <h-td :width="120">{{item.ActualEndDateStr}}</h-td>
-                </h-tr>
-            </h-table>
-        </view>
-    </scroll-view>
-    <view class="listTitle">
-        <text class="listText">斑马线</text>
-    </view>
-    <scroll-view class="scroll-view" direction="horizontal" scroll-x="true">
-        <view class="box-pad">
-            <h-table>
-                <h-tr :head="true">
-                    <h-td>流程</h-td>
-                    <h-td :width="120">状态</h-td>
-                    <h-td :width="120">计划开始</h-td>
-                    <h-td :width="120">计划完成</h-td>
-                </h-tr>
-                <h-tr v-for="(item,index) in (list as List[])" :key="index" :class="index%2 == 1?'h-tr-zebra':''">
-                    <h-td>{{item.NodeLabel}}</h-td>
-                    <h-td :width="120">
-                        <text v-if="item.StatusName == '已完成'" class="text-cut success">{{item.StatusName}}</text>
-                        <text v-else-if="item.StatusName == '处理中'" class="text-cut warning">{{item.StatusName}}</text>
-                        <text v-else class="text-cut danger">{{item.StatusName}}</text>
-                    </h-td>
-                    <h-td :width="120">{{item.PlanEndDateStr}}</h-td>
-                    <h-td :width="120">{{item.ActualEndDateStr}}</h-td>
-                </h-tr>
-            </h-table>
-        </view>
-    </scroll-view>
+	<scroll-view style="flex:1">
+
+		<view style="display: flex;flex-direction: row;">
+			<view>
+				<view class="table-container">
+					<view class="table">
+						<view :class="['row',index==0?'row-first-child':'']" v-for="(item,index) of listleft">
+							<view :class="['cell',ind==0?'cell-first-child':''] " v-for="(it,ind) of item.value">
+								<view class="cell-content">
+									<text class="txt">{{it}}</text>
+								</view>
+							</view>
+
+						</view>
+
+					</view>
+				</view>
+			</view>
+			<view class="table-container">
+				<rice-scroll-x>
+					<view class="table">
+					<view :class="['row',index==0?'row-first-child':'']" v-for="(item,index) of list">
+						<view :class="['cell',ind==0?'cell-first-child':''] " v-for="(it,ind) of item.value">
+								<view class="cell-content">
+									<text class="txt">{{it}}</text>
+								</view>
+							</view>
+
+						</view>
+
+					</view>
+				</rice-scroll-x>
+			</view>
+		</view>
+
+
+
+	</scroll-view>
+
+
+
+
+
+
+
 </template>
 <script setup>
-		type List = {
-		    NodeLabel : string;
-		    PlanEndDateStr : string;
-		    ActualEndDateStr : string;
-		    StatusName : string;
+	type RowItem = {
+		name: string
+		value: string[]
+	}
+	let listleft : RowItem[] = [];
+	let list : RowItem[] = [];
+	for (let i = 0; i < 100; i++) {
+		let objleft:RowItem = {
+			name: `row${i}`,
+			value: [`房间${i}`]
+		};
+		let obj:RowItem = {
+			name: `row${i}`,
+			value: ["cell1", "cell2", "cell3", "cell4", "cell5", "cell6", "cell7", "cell8"]
 		}
-		const list= [{
-		    NodeLabel: '流程',
-		    PlanEndDateStr: '2024-02-01',
-		    ActualEndDateStr: '2024-02-02',
-		    StatusName: '已完成'
-		}, {
-		    NodeLabel: '流程',
-		    PlanEndDateStr: '2024-02-01',
-		    ActualEndDateStr: '2024-02-02',
-		    StatusName: '处理中'
-		}, {
-		    NodeLabel: '流程',
-		    PlanEndDateStr: '2024-02-01',
-		    ActualEndDateStr: '2024-02-02',
-		    StatusName: '未开始'
-		}] as List[]
+		listleft.push(objleft)
+		list.push(obj);
+	}
 </script>
 
 <style lang="scss">
-	@import "@/uni_modules/h-table/components/h-table/h-table.scss"	
+	.table-container {
+		flex: 1;
+		box-sizing: border-box;
+	}
+
+	.table {
+		display: flex;
+		flex-direction: column;
+
+		.row {
+			display: flex;
+			flex-direction: row;
+
+			.cell {
+				flex: 1;
+				padding: 4px;
+				border-right: 1px solid #e5e7eb;
+				border-bottom: 1px solid #e5e7eb;
+
+				.cell-content {
+					min-height: 60px;
+					min-width: 60px;
+					display: flex;
+					flex-direction: row;
+					justify-content: center;
+					align-items: center;
+
+					.txt {
+						color: #1f2937;
+					}
+				}
+
+			}
+
+			.cell-first-child {
+				border-left: 1px solid #e5e7eb;
+			}
+
+			.cell:first-child {
+				border-left: 1px solid #e5e7eb;
+
+			}
+		}
+
+		.row-first-child {
+			.cell {
+				border-top: 1px solid #e5e7eb;
+			}
+		}
+
+		.row:first-child {
+			.cell {
+				border-top: 1px solid #e5e7eb;
+			}
+		}
+	}
 </style>

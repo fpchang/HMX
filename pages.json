@@ -55,7 +55,8 @@
 			"path" : "pages/order/orderState/orderState",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "房态",
+				"navigationStyle": "custom"
 			}
 		},
 		{

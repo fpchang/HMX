@@ -1,5 +1,5 @@
 <template>
-	<view class="page">
+	
 		<!-- 导航栏 -->
 		<!-- <view class="navbar">
       <text class="navbar-title">财务中心</text>
@@ -78,7 +78,7 @@
 				</view>
 			</view>
 		</scroll-view>
-	</view>
+
 </template>
 
 <script setup>

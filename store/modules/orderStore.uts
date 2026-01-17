@@ -107,13 +107,12 @@ export const getOrderListTommorow = async (hotel_id : string):Promise<Array<UTSJ
 export const getGatherEvent = async (hotel_id : string):Promise<boolean> => {
 	const s1 = getOrderListByCheckInToday(hotel_id);//今日办理入住的客户
 	const s2 = getOrderListByCheckOutToday(hotel_id);//今天退房订单
-
 	const s3 = getOrderListByCheckOutTommorow(hotel_id);//明天退房订单
 	const s4 = getOrderListByCheckInTommorow(hotel_id);//明日办理入住的客户
-
 	const s5 = getOrderListToday(hotel_id);	//今日订单
 	const s6 =getOrderListTommorow(hotel_id);//明日订单
-	const res = await Promise.all([s1, s2, s3, s4, s5, s6]);
+	const s7 = getOrderListTodayAfter(hotel_id);
+	const res = await Promise.all([s1, s2, s3, s4, s5, s6,s7]);
 	console.log("组合查询结束",res);
 	return true;
 }

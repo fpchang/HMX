@@ -299,6 +299,7 @@
 	import { state } from "@/store/store";
 	import { orderState, getGatherEvent } from "@/store/modules/orderStore";
 	import { roomTypeBean } from '@/bean/roomTypeBean.uts';
+	import { orderBean } from '@/bean/orderBean';
 	const activeIndex = ref(0);
 	const itemStyle = {
 		fontSize: "20px"
@@ -360,15 +361,12 @@
 		// swiperx.value= `${x}px`;
 	}
 	//订单列表中计算有多少房间
-	const getRoomCountFromOrderList = (orderList : Array<UTSJSONObject>) : number => {
-		let numCount = 0;
+	const getRoomCountFromOrderList = (orderList : Array<orderBean>) : number => {
+		let numCount = 0;		
 		orderList.map(item => {
-			let num = 0;
-			let list = item['roomTypeArray'] as Array<UTSJSONObject>;
-			list.map(it => {
-				num += it.count as number;
-			});
-			numCount += num;
+			let num = item.reservedRoomList.length;
+			numCount+=num;
+			
 		});
 		return numCount;
 	}
@@ -411,6 +409,7 @@
 	// });
 	const numOrderTommorow = computed(() : number => {
 		let orderList = orderState.orderListByCheckInTommorow;
+		console.log("》》》》》》计算明晶入住",orderList)
 		let num = getRoomCountFromOrderList(orderList);
 		return num;
 	});

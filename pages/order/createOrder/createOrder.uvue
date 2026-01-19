@@ -122,6 +122,7 @@
 	import { TIME, getMonthDateArray } from "@/static/utils/TIME";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import checkRoomComponent from "./components/checkRoomComponent.uvue";
+	import { orderState, getGatherEvent } from "@/store/modules/orderStore";
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -263,6 +264,7 @@
 		try {
 			await OrderService.addOrder(orderForm.value);
 			uni.$emit("refrushOrderList");
+			getGatherEvent(hotel_id.value);//nm==刷新首页
 			uni.navigateBack();
 			submitLoading.value = false;
 		} catch (error) {

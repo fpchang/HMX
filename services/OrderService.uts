@@ -395,8 +395,8 @@ try {
 		try {
 
 
-			const res = DB.getCollectionOrderBy("hm-order", jql, "checkInStartDateTimeStamp asc");
-
+			const res = await DB.getCollectionOrderBy("hm-order", jql, "checkInStartDateTimeStamp asc");
+			console.log("今天以后的订单：：",res)
 			const data = res['data'] as Array<UTSJSONObject>;
 			let orderList : Array<orderBean> = []
 			if (data != null) {

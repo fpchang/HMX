@@ -13,11 +13,9 @@ class OrderServiceClass {
 
 	}
 	async getSource() : Promise<Array<orderSourceBean>> {
-		console.log(2222222222)
 		let list : Array<orderSourceBean> = [];
 		try {
 			const res = await DB.getCollection("hm-orderSouce", {});
-			console.log("orderSource", res);
 			let resultList = res['data'] as Array<UTSJSONObject>;
 			resultList.forEach(item => {
 				let os : orderSourceBean = {
@@ -55,12 +53,12 @@ class OrderServiceClass {
 		}
 		try {
 			const res = await DB.callFunction("hm_addOrder", { orderObj: obj });
-			console.log("create order", res);
+			//console.log("create order", res);
 			const result = res['result'] as UTSJSONObject;
 			const code = result.getNumber("code", 0) ?? 0;
 			const message = result.getString("message", "") ?? "";
 			if (code != 0) {
-				console.log("code error", code);
+				//console.log("code error", code);
 				uni.showToast({
 					title: message,
 					icon: "none"
@@ -83,7 +81,7 @@ class OrderServiceClass {
 			st = TIME.startTime(new Date(dateRange[0]));
 			et = TIME.endTime(new Date(dateRange[1]));
 		}
-		console.log("wwww", st, et);
+		//console.log("wwww", st, et);
 		const w = {
 			hotel_id: hotel_id,
 			//checkInEndDateTimeStamp: dbCmd.and([dbCmd.gte(st), dbCmd.lte(et)]),
@@ -91,10 +89,10 @@ class OrderServiceClass {
 			orderStatus: orderStatus == 'all' ? dbCmd.neq(999) : orderStatus,
 			$or: [{ userName: new RegExp(`${keyword}`) }, { wxNickName: new RegExp(`${keyword}`) }, { phone: new RegExp(`${keyword}`) }]
 		}
-		console.log("过滤条件", w);
+		//console.log("过滤条件", w);
 		try {
 			const res = await db.collection("hm-order").where(w).orderBy("createTime desc").skip(skipnum).limit(pageSize).get({ getCount: true });
-			console.log("order request", res)
+			//console.log("order request", res)
 			const data = res['data'] as Array<UTSJSONObject>;
 			let orderList : Array<orderBean> = []
 			if (data != null) {
@@ -144,7 +142,7 @@ class OrderServiceClass {
 				pageSize: pageSize ?? 20,
 				orderList: orderList
 			}
-			console.log("条件订单列表：", OrderDataListResult);
+			//console.log("条件订单列表：", OrderDataListResult);
 			return OrderDataListResult;
 		} catch (error) {
 			throw new Error("获取订单列表失败")
@@ -160,7 +158,7 @@ class OrderServiceClass {
 			startTime: startTime,
 			endTime: endTime
 		}
-		console.log("params", params);
+		//console.log("params", params);
 		let list : roomBean[] = [];
 
 		try {
@@ -170,9 +168,9 @@ class OrderServiceClass {
 				`${startTime}>=checkInStartDateTimeStamp&&${endTime}<=checkInEndDateTimeStamp||` +
 				`${startTime}>=checkInStartDateTimeStamp&&${startTime}<checkInEndDateTimeStamp||` +
 				`${startTime}<=checkInStartDateTimeStamp&&${endTime}>=checkInEndDateTimeStamp)`;
-			console.log("jql", jql);
+			//console.log("jql", jql);
 			const orderListRes = await db.collection('hm-order').where(jql).get();
-			console.log("orderlist", orderListRes);
+			//console.log("orderlist", orderListRes);
 			const roomListRes = await db.collection('hm-room').where(`hotel_id=='${hotel_id}'`).get();
 			const orderList = orderListRes.data;
 			let hasUseRoomList = new Set<string>([]);
@@ -196,10 +194,10 @@ class OrderServiceClass {
 
 			});
 			remainRoomList = roomList.filter(item => !hasUseRoomList.has(item._id));
-			console.log("remainlist", remainRoomList);
+			//console.log("remainlist", remainRoomList);
 			return remainRoomList;
 			// const res = await DB.callFunction("hm_getRemainderRoomList", params);
-			// console.log("hm_getRemainderRoomList", res);
+			// //console.log("hm_getRemainderRoomList", res);
 			// let result = res['result'] as Array<UTSJSONObject>;						
 			// if (result == null) {
 			// 	return list;
@@ -226,12 +224,12 @@ class OrderServiceClass {
 	// 		startTime: startTime,
 	// 		endTime: endTime
 	// 	}
-	// 	console.log("params", params);
+	// 	//console.log("params", params);
 	// 	let list : remainRoomTypeBean[] = [];
 
 	// 	try {
 	// 		const res = await DB.callFunction("hm_getRemainderRoomType", params);
-	// 		console.log("getRemainderRoomType", res);
+	// 		//console.log("getRemainderRoomType", res);
 	// 		let result = res['result'] as Array<UTSJSONObject>;
 	// 		if (result == null) {
 	// 			return list;
@@ -280,7 +278,7 @@ class OrderServiceClass {
 					orderList.push(order);
 				})
 			}
-			console.log("条件订单列表：", orderList);
+			//console.log("条件订单列表：", orderList);
 			return orderList;
 		} catch (error) {
 			throw new Error("通过日期请求订单失败")
@@ -306,7 +304,7 @@ class OrderServiceClass {
 					orderList.push(order);
 				})
 			}
-			console.log("条件订单列表：", orderList);
+			//console.log("条件订单列表：", orderList);
 			return orderList;
 		} catch (error) {
 			throw new Error("通过退房请求订单失败")
@@ -332,7 +330,7 @@ try {
 					orderList.push(order);
 				})
 			}
-			console.log("条件订单列表：", orderList);
+			//console.log("条件订单列表：", orderList);
 			return orderList;
 		} catch (error) {
 			throw new Error("通过日期请求订单失败")
@@ -360,7 +358,7 @@ try {
 					orderList.push(order);
 				})
 			}
-			console.log("条件订单列表：", orderList);
+			////console.log("条件订单列表：", orderList);
 			return orderList;
 		} catch (error) {
 			throw new Error("通过日期请求订单失败")
@@ -371,7 +369,7 @@ try {
 	 */
 
    getOrderListByCondition(hotel_id : string, st : string | number, et : string | number) : Promise<UniCloudDBGetResult> {
-	//console.log(arguments);
+	////console.log(arguments);
 	let startTime = dayuts(st).startOf('day').add(14,'hour').valueOf();
 	let endTime   = dayuts(et).startOf('day').add(12,'hour').valueOf();
 		const s1 = `checkInStartDateTimeStamp<${startTime}&&checkInEndDateTimeStamp>${startTime}`;
@@ -396,7 +394,7 @@ try {
 
 
 			const res = await DB.getCollectionOrderBy("hm-order", jql, "checkInStartDateTimeStamp asc");
-			console.log("今天以后的订单：：",res)
+			////console.log("今天以后的订单：：",res)
 			const data = res['data'] as Array<UTSJSONObject>;
 			let orderList : Array<orderBean> = []
 			if (data != null) {
@@ -405,7 +403,7 @@ try {
 					orderList.push(order);
 				})
 			}
-			console.log("条件订单列表：", orderList);
+			////console.log("条件订单列表：", orderList);
 			return orderList;
 		} catch (error) {
 			throw new Error("请求房态失败")
@@ -418,7 +416,7 @@ try {
 	async deleteOrder(_id : string) : Promise<boolean> {
 		try {
 			const res = await DB.callFunction('hm-deleteOrder', { _id });
-			console.log("删除订单",res)
+			////console.log("删除订单",res)
 			return true;
 		} catch (error) {
 			throw new Error("删除订单失败")
@@ -428,7 +426,7 @@ try {
 	}
 	//更改订单状态
 	updateOrder(_id : string, obj : UTSJSONObject) : Promise<UniCloudDBUpdateResult> {
-		//console.log("更新",_id,obj)
+		////console.log("更新",_id,obj)
 		return DB.update("hm-order", _id, obj);
 	}
 }

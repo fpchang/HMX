@@ -56,28 +56,28 @@ export const getOrderListTodayAfter = async (hotel_id : string):Promise<Array<or
 //今天退房订单
 export const getOrderListByCheckOutToday = async (hotel_id : string):Promise<Array<orderBean>> => {
 	const list = await OrderService.getOrderListByCheckOut(hotel_id, new Date().getTime());
-	console.log("今日退房订单",list);
+	//console.log("今日退房订单",list);
 	updateOrderListByCheckOutToday(list);
 	return list;
 }
 //明天退房订单
 export const getOrderListByCheckOutTommorow = async (hotel_id : string):Promise<Array<orderBean>> => {
 	const list = await OrderService.getOrderListByCheckOut(hotel_id, new Date().getTime() + 1000 * 60 * 60 * 24);
-	console.log("明日退房订单",list);
+	//console.log("明日退房订单",list);
 	updateOrderListByCheckOutTommorow(list);
 	return list;
 }
 //今日办理入住的客户
 export const getOrderListByCheckInToday = async (hotel_id : string):Promise<Array<orderBean>> => {
 	const list = await OrderService.getOrderListByCheckIn(hotel_id, new Date().getTime());
-	console.log("今日办理入住。。。。。",list);
+	//console.log("今日办理入住。。。。。",list);
 	updateOrderListByCheckInToday(list);
 	return list;
 }
 //今日订单
 export const getOrderListToday = async (hotel_id : string):Promise<Array<orderBean>> => {
 	const list = await OrderService.getOrderListByDate(hotel_id,new Date().getTime());
-	console.log("今日订单",list);
+	//console.log("今日订单",list);
 	updateOrderListToday(list);
 	return list
 }
@@ -85,14 +85,14 @@ export const getOrderListToday = async (hotel_id : string):Promise<Array<orderBe
 //明日办理入住的客户
 export const getOrderListByCheckInTommorow = async (hotel_id : string):Promise<Array<orderBean>> => {
 	const list = await OrderService.getOrderListByCheckIn(hotel_id, new Date().getTime() + 1000 * 60 * 60 * 24);
-	console.log("明日办理入住。。。。。",list);
+	//console.log("明日办理入住。。。。。",list);
 	updateOrderListByCheckInTommorow(list);
 	return list;
 }
 //明日订单
 export const getOrderListTommorow = async (hotel_id : string):Promise<Array<orderBean>> => {
 	const list = await OrderService.getOrderListByDate(hotel_id, new Date().getTime() + 1000 * 60 * 60 * 24);
-	console.log("明日订单",list);
+	//console.log("明日订单",list);
 	updateOrderListTommorow(list);
 	return list
 }
@@ -107,6 +107,6 @@ export const getGatherEvent = async (hotel_id : string):Promise<boolean> => {
 	const s7 = getOrderListTodayAfter(hotel_id);
 	const res = await Promise.all([s1, s2, s3,s4,s5,s6,s7]);
 	//const res= await Promise.all([s1, s2]);
-	console.log("组合查询结束",res);
+	//console.log("组合查询结束",res);
 	return true;
 }

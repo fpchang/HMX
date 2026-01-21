@@ -463,11 +463,11 @@
 	});
 
 	const init = async () => {
-		await getGatherEvent(hotel_id.value);
+		 getGatherEvent(hotel_id.value);
 		//console.log("getGatherEvent",res);
 	}
 	watch(hotel_id, (hotel_idNew : string, hotel_idOld : string) : void => {
-		console.log("hotel_id change", hotel_idNew, hotel_idOld);
+		//console.log("hotel_id change", hotel_idNew, hotel_idOld);
 		init();
 	});
 	onBeforeMount(() => {

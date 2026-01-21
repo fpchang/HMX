@@ -27,7 +27,7 @@
 				<view class="table-container">
 					<view class="table">
 					<view class="row row-first-child">
-						<view class="cell cell-th cell-first-child">
+						<view class="cell cell-th" style="border-left: 1px solid #e5e7eb;">
 							<view class="cell-content">
 								<text class="txt" style="color:#1f2937;font-size: 16px;">房间/日期</text>
 								
@@ -36,7 +36,7 @@
 					
 					</view>
 						<view class="row" v-for="(item,index) of roomList">
-							<view :class="['cell',index==0?'cell-first-child':''] ">
+							<view class="cell " style="border-left: 1px solid #e5e7eb;">
 								<view class="cell-content">
 									<text class="txt" style="color:#1f2937;font-size: 16px;">{{item.room_name}}</text>
 									<text class="txt-sub"
@@ -53,8 +53,8 @@
 				<rice-scroll-x>
 					<view class="table">
 					
-						<view class="row" >
-							<view :class="['cell cell-th',index==0?'cell-first-child':''] " v-for="(item,index) of orderDateRangeFormat">
+						<view class="row row-first-child" >
+							<view  class="cell cell-th " v-for="(item,index) of orderDateRangeFormat">
 								<view class="cell-content">
 									<!-- <text class="txt" style="color:#1f2937;font-size: 16px;">{{item}}</text>
 									<text class="txt-sub"
@@ -63,15 +63,15 @@
 										 <view>
 										   <view><text class="txt" style="padding-bottom: 4px;">{{item.de}}</text></view>
 										   <view><text class="txt"  style="padding-bottom: 4px;">{{item.dy}}</text></view>
-										   <view style="color: green"><text class="txt" ></text>剩余（{{getRemainRoomCountByDate(item.name)}}）</view>
+										   <view><text class="txt" style="color: green">剩余（{{getRemainRoomCountByDate(item.timestamp)}}）</text></view>
 										 </view>
 								</view>
 							</view>
 						
 						</view>
-						<view :class="['row',index==0?'row-first-child':'']"
+						<view class="row"
 							v-for="(list,index) of checkInOrderListFormat">
-							<view :class="['cell',ind==0?'cell-first-child':''] " v-for="(it,ind) of list">
+							<view class="cell" v-for="(it,ind) of list">
 								<view :class="['cell-content', it.name!=''?'cell-content-red':'']">
 									<text class="txt">{{it.name}}</text>
 								</view>
@@ -144,7 +144,7 @@
 	type table_th = {
 		de : string,
 		dy : string,
-		name : string,
+		timestamp : number,
 		label : string
 	}
 	type table_td = {
@@ -166,7 +166,7 @@
 			arr.push({
 				de: dayuts(item).format("MM-DD"),
 				dy: dyStr[new Date(item).getDay()],
-				name: item.toString(),
+				timestamp: item,
 				label: dayuts(item).format("MM-dd") + dyStr[new Date(item).getDay()]
 			});
 		});
@@ -205,13 +205,11 @@
 		return result;
 	});
 	const getRoomTypeName = (room_type_id : string) : string => {
-		if (roomTypeList.value != null) {
+		
 			let obj = roomTypeList.value.find(item => item._id == room_type_id) as roomTypeBean;
-			return obj.name;
-		}
-		return "-"
+			return obj.name??"-";
 	}
-	const getRemainRoomCountByDate=(time)=> {
+	const getRemainRoomCountByDate=(time:Number)=> {
 	  let count = 0;
 	  for (let item of checkInOrderList.value) {
 	    let s1 =
@@ -307,19 +305,21 @@
 
 			}
 			.cell-th{
+				
 				.cell-content {
 					height: 100px;
+					background-color: #f9fafb;
 				}
 			}
 
-			.cell-first-child {
-				border-left: 1px solid #e5e7eb;
-			}
+			// .cell-first-child {
+			// 	border-left: 1px solid #e5e7eb;
+			// }
 
-			.cell:first-child {
-				border-left: 1px solid #e5e7eb;
+			// .cell:first-child {
+			// 	border-left: 1px solid #e5e7eb;
 
-			}
+			// }
 		}
 
 		.row-first-child {
@@ -328,10 +328,10 @@
 			}
 		}
 
-		.row:first-child {
-			.cell {
-				border-top: 1px solid #e5e7eb;
-			}
-		}
+		// .row:first-child {
+		// 	.cell {
+		// 		border-top: 1px solid #e5e7eb;
+		// 	}
+		// }
 	}
 </style>

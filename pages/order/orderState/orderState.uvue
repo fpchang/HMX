@@ -27,10 +27,11 @@
 				<view class="table-container">
 					<view class="table">
 						<view :class="['row',index==0?'row-first-child':'']" v-for="(item,index) of roomList">
-							<view :class="['cell',ind==0?'cell-first-child':''] ">
+							<view :class="['cell',index==0?'cell-first-child':''] ">
 								<view class="cell-content">
 									<text class="txt" style="color:#1f2937;font-size: 16px;">{{item.room_name}}</text>
-									<text class="txt-sub" style="color:#6b7280;font-size: 12px;">{{getRoomTypeName(item.room_type_id)}}</text>
+									<text class="txt-sub"
+										style="color:#6b7280;font-size: 12px;">{{getRoomTypeName(item.room_type_id)}}</text>
 								</view>
 							</view>
 
@@ -42,7 +43,8 @@
 			<view class="table-container">
 				<rice-scroll-x>
 					<view class="table">
-						<view :class="['row',index==0?'row-first-child':'']" v-for="(list,index) of checkInOrderListFormat">
+						<view :class="['row',index==0?'row-first-child':'']"
+							v-for="(list,index) of checkInOrderListFormat">
 							<view :class="['cell',ind==0?'cell-first-child':''] " v-for="(it,ind) of list">
 								<view :class="['cell-content', it.name!=''?'cell-content-red':'']">
 									<text class="txt">{{it.name}}</text>
@@ -74,9 +76,11 @@
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { roomBean } from "@/bean/roomBean";
 	import { OrderService } from "@/services/OrderService";
 	import { orderBean, OrderRoomTypeBean, OrderDataListResult } from '@/bean/orderBean.uts';
 	import { state } from "@/store/store";
+	import { userBean } from "@/bean/userBean";
 	import { orderState, getGatherEvent } from "@/store/modules/orderStore";
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
@@ -89,7 +93,7 @@
 	const permissionList = computed(() => {
 		return state.permissionList;
 	})
-	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+	const roomTypeList = computed<Array<roomTypeBean>>(() => {
 		return state.roomTypeList;
 	});
 	const roomList = computed<Array<roomBean>>(() => {
@@ -98,18 +102,18 @@
 	const checkInOrderList = computed<orderBean[]>(() => {
 		return orderState.orderListTodayAfter;
 	});
-	const orderDateRange=computed<number[]>(()=> {
-	  let rangeDate = [];
-	  let minTime = Math.min(
-	    ...checkInOrderList.value.map((item) => item.checkInStartDateTimeStamp)
-	  );
-	  let maxTime = Math.max(
-	    ...checkInOrderList.value.map((item) => item.checkInEndDateTimeStamp),(new Date().getTime()+30*1000*60*60*24)
-	  );
-	  for (let i = minTime; i <= maxTime; i = i + 1000 * 60 * 60 * 24) {
-	    rangeDate.push(i);
-	  }
-	  return rangeDate;
+	const orderDateRange = computed<number[]>(() => {
+		let rangeDate : Number[] = [];
+		let minTime = Math.min(
+			...checkInOrderList.value.map((item) => item.checkInStartDateTimeStamp)
+		);
+		let maxTime = Math.max(
+			...checkInOrderList.value.map((item) => item.checkInEndDateTimeStamp), (new Date().getTime() + 30 * 1000 * 60 * 60 * 24)
+		);
+		for (let i = minTime; i <= maxTime; i = i + 1000 * 60 * 60 * 24) {
+			rangeDate.push(i);
+		}
+		return rangeDate;
 	});
 	type table_th = {
 		de : string,
@@ -118,9 +122,9 @@
 		label : string
 	}
 	type table_td = {
-		name:string
+		name : string
 	}
-	const orderDateRangeFormat = computed<table_th[]>(()=>{
+	const orderDateRangeFormat = computed<table_th[]>(() => {
 		let dyStr = [
 			"星期日",
 			"星期一",
@@ -131,52 +135,52 @@
 			"星期六"
 		];
 		// let arr=[{name:"roomName",  fixed: true, width: 90 }];
-		let arr : table_th_list = [];
+	let arr : table_th[] = [];
 		orderDateRange.value.map((item) => {
 			arr.push({
 				de: dayuts(item).format("MM-dd"),
 				dy: dyStr[new Date(item).getDay()],
-				name:item.toString(),
+				name: item.toString(),
 				label: dayuts(item).format("MM-dd") + dyStr[new Date(item).getDay()]
 			});
 		});
 		return arr;
 	});
-	const  checkInOrderListFormat= computed<table_td[][]>(()=> {
-      if (
-        checkInOrderList.value.length < 1 ||
-       roomList.value.length < 1
-      ) {
-        return [];
-      }
-      let result:table_td[][] = [];	  
-		  roomList.value.forEach(room=>{
-		let rowList:table_td[]=[];
-		orderDateRange.value.forEach(time=>{				 
-				  const orderObj=  checkInOrderList.value.find(order=>{
-				  	  const s =
-				  	    Number(time) >=
-				  	      Number(order.checkInStartDateTimeStamp) &&
-				  	    Number(time) <
-				  	      Number(order.checkInEndDateTimeStamp);
-				  		  const s2= order.reservedRoomList.includes(room._id);
-				  		return s&&s2;
-				    })
-					const userName =orderObj?.userName??"";
-				  
-				  	 rowList.push({
-						 name:userName
-					 })
-				   
-		  })
-		  result.push(rowList);		  
-	  })
-		
-      return result;
-    });
-	const getRoomTypeName=(room_type_id:string):string=>{
-		if( roomTypeList.value!=null){
-			let obj = roomTypeList.value.find(item=>item._id == room_type_id) as roomTypeBean;
+	const checkInOrderListFormat = computed<table_td[][]>(() => {
+		if (
+			checkInOrderList.value.length < 1 ||
+			roomList.value.length < 1
+		) {
+			return [];
+		}
+		let result : table_td[][] = [];
+		roomList.value.forEach(room => {
+			let rowList : table_td[] = [];
+			orderDateRange.value.forEach(time => {
+				const orderObj = checkInOrderList.value.find(order => {
+					const s =
+						time >=
+						order.checkInStartDateTimeStamp &&
+						time <
+						order.checkInEndDateTimeStamp;
+					const s2 = order.reservedRoomList.includes(room._id);
+					return s && s2;
+				})
+				const userName = orderObj?.userName ?? "";
+
+				rowList.push({
+					name: userName
+				})
+
+			})
+			result.push(rowList);
+		})
+
+		return result;
+	});
+	const getRoomTypeName = (room_type_id : string) : string => {
+		if (roomTypeList.value != null) {
+			let obj = roomTypeList.value.find(item => item._id == room_type_id) as roomTypeBean;
 			return obj.name;
 		}
 		return "-"
@@ -244,8 +248,9 @@
 						font-size: 16px;
 						text-align: center;
 					}
-					.txt-sub{
-						padding-top:4px;
+
+					.txt-sub {
+						padding-top: 4px;
 						text-align: center;
 					}
 				}

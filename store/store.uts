@@ -80,10 +80,10 @@ export const setHotelId = (hotel_id : string) => {
 
 export const setHotel = () => {
 	let hotel = state.hotelList.find(item => item._id == state.hotel_id) as UTSJSONObject;
-	if(hotel!=null){
+
 		state.hotel = hotel;
 		uni.setStorage({key:"hotel",data:hotel});
-	}
+	
 	
 };
 export const setPermissionList = (list : Array<string>) => {

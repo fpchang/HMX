@@ -266,8 +266,8 @@ class OrderServiceClass {
 	 * st 日期
 	 */
 	async getOrderListByCheckIn(hotel_id : string, st : number | string) : Promise<orderBean[]> {
-		const datestr = dayuts(new Date(st)).format("YYYY/MM/DD  14:00:00");
-		let startTime = new Date(datestr).getTime();
+		const datestr = dayuts(st as number).format("YYYY/MM/DD  14:00:00");
+		let startTime = dayuts(datestr).valueOf();
 		let jql = `hotel_id=='${hotel_id}'&&orderStatus==1&&checkInStartDateTimeStamp==${startTime}`;
 		
 		try {
@@ -290,9 +290,9 @@ class OrderServiceClass {
  *  退房订单
  * ed 日期
  */
-	async getOrderListByCheckOut(hotel_id : string, ed : string | number) : Promise<orderBean[]> {
-		const datestr = dayuts(new Date(ed)).format("YYYY/MM/DD  12:00:00");
-		let endTime = new Date(datestr).getTime();
+   async getOrderListByCheckOut(hotel_id : string, ed : string | number) : Promise<orderBean[]> {
+	const datestr = dayuts(ed).format("YYYY/MM/DD  12:00:00");
+	let endTime = dayuts(datestr).valueOf();
 		let jql = `hotel_id=='${hotel_id}'&&orderStatus==1&&checkInEndDateTimeStamp==${endTime}`;
 		
 
@@ -343,7 +343,7 @@ try {
    *  特定日期住客订单
    */
 	async getOrderListByDate(hotel_id : string, date : string | number) : Promise<orderBean[]> {
-		let startTime = new Date(dayuts(new Date(date)).format("YYYY/MM/DD  14:00:00")).getTime();
+		let startTime = dayuts(date).startOf('day').add(14,'hour').valueOf();
 		const s0 = `hotel_id=='${hotel_id}'&&orderStatus==1`
 		const s1 = `${startTime}>=checkInStartDateTimeStamp&&${startTime}<checkInEndDateTimeStamp`;
 
@@ -370,10 +370,10 @@ try {
 	 *  根据日期范围查找订单
 	 */
 
-	getOrderListByCondition(hotel_id : string, st : string | number, et : string | number) : Promise<UniCloudDBGetResult> {
-		//console.log(arguments);
-		let startTime = new Date(dayuts(new Date(st)).format("YYYY/MM/DD  14:00:00")).getTime();
-		let endTime = new Date(dayuts(new Date(et)).format("YYYY/MM/DD  12:00:00")).getTime();
+   getOrderListByCondition(hotel_id : string, st : string | number, et : string | number) : Promise<UniCloudDBGetResult> {
+	//console.log(arguments);
+	let startTime = dayuts(st).startOf('day').add(14,'hour').valueOf();
+	let endTime   = dayuts(et).startOf('day').add(12,'hour').valueOf();
 		const s1 = `checkInStartDateTimeStamp<${startTime}&&checkInEndDateTimeStamp>${startTime}`;
 		const s2 = `checkInStartDateTimeStamp>=${startTime}&&checkInEndDateTimeStamp<=${endTime}`;
 		const s3 = `checkInStartDateTimeStamp<${endTime}&&checkInStartDateTimeStamp>=${startTime}&&checkInEndDateTimeStamp>=${endTime}`

@@ -93,9 +93,9 @@ export let formatRoomTypeList =(list:Array<UTSJSONObject>):Array<roomTypeBean>=>
 			}
 			
 			const temp = formatRoomTypeBean(item);
-			if (temp != null) {
+		
 				returnList.push(temp);
-			}
+			
 	
 		})；
 	return returnList;

@@ -268,8 +268,11 @@
 				
 					.txt{
 						font-size: 18px;
-						color: #666;
+						color: #e6e6e6;
+					
 						letter-spacing: 2px;
+						text-align: justify;
+						color: #666;
 						line-height: 30px;
 					}
 				}
@@ -333,10 +336,10 @@
 				padding: 0px 100px;
 				background-color:#004af6 ;
 				border-radius: 33px;
-	.btn-txt{
+				.btn-txt{
 					color: #fff;
 					font-size: 14px;
-					letter-spacing: 2rpx;
+					letter-spacing: 2px;
 				}
 			}
 		}

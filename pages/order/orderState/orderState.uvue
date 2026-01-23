@@ -346,7 +346,7 @@
 		  /* 斜线 */
 		  .slash {
 		    position: absolute;
-		    display: block;
+    display: flex;
 		    top: 0;
 		    left: 0;
 		    /* 斜边边长 */

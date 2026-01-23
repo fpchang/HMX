@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-	import { state, loginOut } from "/store/store.uts";
+	import { state, loginOut } from "@/store/store.uts";
 	import { userBean } from "@/bean/userBean";
 	import {MineService} from "@/services/MineService.uts";
 	const submitLoading = ref(false);

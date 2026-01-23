@@ -9,6 +9,7 @@ export type userBean={
 	userName: string,
 	vipEndDate: string,
 	vipEndDateStamp: string,
+	closeAccountDateTime:number|null,
 	vipStartDate: string,
 	wxNickName: string,
 	wxOpenId: string,
@@ -27,6 +28,7 @@ export const  getInitUser=():userBean=>{
 		userName: "",
 		vipEndDate: "",
 		vipEndDateStamp: "",
+		closeAccountDateTime:null
 		vipStartDate: "",
 		wxNickName: "",
 		wxOpenId: "",

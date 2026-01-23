@@ -2,16 +2,91 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		accountsafe
+		<rice-cell-group border>
+			<rice-cell title="会员名" :value="user.userName" />
+			<rice-cell title="手机号" :value="user.phone" />
+			<rice-cell v-if="accountIsValid" title="账号注销" :arrow="true" @click="closeAccount" />
+			<rice-cell v-if="!accountIsValid" title="账号恢复" :label="closeDateStr" :arrow="true" @click="recoverAccount" />
+		</rice-cell-group>
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
 </template>
 
 <script setup>
-		
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { state, loginOut } from "/store/store.uts";
+	import { userBean } from "@/bean/userBean";
+	import { HotelService } from "/services/HotelService.uts";
+	import { AccountService } from "/services/AccountService.uts";
+	import {comFunction} from "/pages/index/ComFuc.uts";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const accountIsValid=computed(()=>{
+					return user.value.accountStatus!=9&&user.value.accountStatus!=10;
+				})
+	const closeDateStr=computed<string>(()=>{
+		if(accountIsValid.value){
+			return "";
+		}
+		return `将在${dayuts(user.value.closeAccountDateTime+1000*60*60*24*7).format("YYYY-MM-DD")}日注销`;
+	})
+	const closeAccount = () => {
+		showDialog({
+			title: '确认注销',
+			message: "注销后7天内可恢复，超过7天将失去账号数据",
+			beforeClose: async () : Promise<boolean> => {
+
+			},
+			confirm: async () => {
+				
+					try {
+						const phone = user.value.phone;
+						const res = await HotelService.getHotelListOfUser(phone);
+						const list = res['data'] as UTSJSONObject [];
+						if (list !=null &&list.length>0) {
+							uni.showToast({ title: "当前用户名下有关联酒店", icon: "none" });
+							return;
+						}
+						await AccountService.closeAccount();
+						loginOut();
+						
+					} catch (e) {
+						throw new Error("注销账号失败");
+				
+					}
+			}, cancel: () => {
+				hideDialog();
+			}
+
+		});
+	}
+const recoverAccount=()=>{
+	showDialog({
+		title: '确认恢复',
+		message: "恢复到注销前数据状态",
+		beforeClose: async () : Promise<boolean> => {
+			try {
+				await AccountService.recoverAccount(user.value._id);
+				await comFunction.getUser();
+				return true;
+			} catch (e) {
+				throw new Error("失败");
+	
+			}
+	
+		},
+		confirm: () => {
+		}, cancel: () => {
+			hideDialog();
+		}
+	
+	});
+}
 </script>
 
 <style>
-		
+
 </style>

@@ -28,8 +28,15 @@ class AccountServiceClass {
 	/**
 	 * 注销账号
 	 */
-	closeAccount() : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return DB.callFunction("hm_closeAccount");
+	async closeAccount() : Promise<boolean> {
+		try {
+			const res = await DB.callFunction("hm_closeAccount");
+			console.log("11111注销账号",res)
+			return true;
+		} catch (error) {
+			throw new Error("账号注销失败")
+		}
+		
 	}
 	recoverAccount(_id : string) : Promise<UniCloudDBUpdateResult> {
 		return DB.update("hm-user", _id, { accountStatus: 1 })
@@ -51,6 +58,7 @@ class AccountServiceClass {
 				userName: userObj.getString("userName")??"",
 				vipEndDate: userObj.getString("vipEndDate")??"",
 				vipEndDateStamp: userObj.getString("vipEndDateStamp")??"",
+				closeAccountDateTime:userObj.getNumber("closeAccountDateTime")??null,
 				vipStartDate: userObj.getString("vipStartDate")??"",
 				wxNickName: userObj.getString("wxNickName")??"",
 				wxOpenId: userObj.getString("wxOpenId")??"",
@@ -63,6 +71,7 @@ class AccountServiceClass {
 	}
 	async getuserByToken() : Promise<userBean | null> {
 		const res = await DB.getCollection("hm-user", { hm_token: uni.getStorageSync("hm_token") });
+		console.log("用户信息：：",res);
 		const list =res['data'] as Array<UTSJSONObject>;
 		let user:userBean | null =null;
 		if(list!=null&&list.length>0){
@@ -78,6 +87,7 @@ class AccountServiceClass {
 				userName: userObj.getString("userName")??"",
 				vipEndDate: userObj.getString("vipEndDate")??"",
 				vipEndDateStamp: userObj.getString("vipEndDateStamp")??"",
+					closeAccountDateTime:userObj.getNumber("closeAccountDateTime")??null,
 				vipStartDate: userObj.getString("vipStartDate")??"",
 				wxNickName: userObj.getString("wxNickName")??"",
 				wxOpenId: userObj.getString("wxOpenId")??"",

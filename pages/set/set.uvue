@@ -2,16 +2,57 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		set
+		<rice-cell-group border>
+			<rice-cell title="账号安全" url="/pages/set/accountSafe/accountSafe" :arrow="true" />
+			<rice-cell title="清除缓存" :clickable="true" @click="clearCache" />
+			<rice-cell title="关于议宿" url="/pages/set/aboutYisu/aboutYisu" :arrow="true" />
+		</rice-cell-group>
+		<view style="margin-top:20px">
+			<rice-cell-group border>
+				<rice-cell title="用户协议" url="/pages/common/userAgreement/userAgreement" :arrow="true" />
+				<rice-cell title="隐私政策" url="/pages/common/privacyPolicy/privacyPolicy" :arrow="true" />
+			</rice-cell-group>
+		</view>
+		<view style="margin-top: 20px;">
+			<rice-button text="退出登录" @click="loginOutEvent"></rice-button>
+		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
 </template>
 
 <script setup>
-		
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { loginOut } from "@/store/store.uts";
+	const clearCache = () => {
+		uni.showToast({
+			title: '清除成功',
+			icon: 'none'
+		})
+	}
+	const loginOutEvent = () => {
+		showDialog({
+			title: '确认退出',
+			message: "",
+			beforeClose: async () : Promise<boolean> => {
+				try {
+					loginOut();
+					return true;
+				} catch (e) {
+					throw new Error("登录失败");
+
+				}
+
+			},
+			confirm: () => {
+			}, cancel: () => {
+				hideDialog();
+			}
+
+		});
+	}
 </script>
 
 <style>
-		
+
 </style>

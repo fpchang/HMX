@@ -28,9 +28,13 @@
 					<view class="table">
 					<view class="row row-first-child">
 						<view class="cell cell-th" style="border-left: 1px solid #e5e7eb;">
-							<view class="cell-content">
-								<text class="txt" style="color:#1f2937;font-size: 16px;">房间/日期</text>
-								
+							<view class="cell-content" style="padding:0">
+								<!-- <text class="txt" style="color:#1f2937;font-size: 16px;">房间/日期</text> -->
+								   <view class="slash-wrap">
+								          <text class="left">房间</text>
+								          <text class="slash"></text>
+								          <text class="right">日期</text>
+								        </view>
 							</view>
 						</view>
 					
@@ -334,4 +338,48 @@
 		// 	}
 		// }
 	}
+	.slash-wrap {
+	      position: relative;
+	      box-sizing: border-box;
+	      width: 80px;
+	      height: 100px;
+		  /* 斜线 */
+		  .slash {
+		    position: absolute;
+		    display: block;
+		    top: 0;
+		    left: 0;
+		    /* 斜边边长 */
+		    /* Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)) */
+		    /* Math.sqrt(Math.pow(150, 2) + Math.pow(80, 2)) = 170 */
+		    width: 128px;
+		    height: 1px;
+		    background-color:#e5e7eb;
+		    /* 旋转角度计算公式 */ 
+		    /*  Math.atan(height / width) * 180 / Math.PI  */
+		    /*  Math.atan(80 / 150) * 180 / Math.PI  = 28.072486935852954 */
+		    transform: rotate(51deg); 
+		    transform-origin: top left;
+		  }
+		  	
+		  /* 左下角文字 */
+		  .left {
+		    position: absolute;
+		    /* 左下角 left:0; bottom: 0; */
+		    left: 10px;
+		    bottom: 20px;
+			transform: rotate(45deg);
+		  }
+		  	
+		  /* 右上角文字 */
+		  .right {
+		    position: absolute;
+		    /* 右上角 right:0; top: 0; */
+		    right: 10px;
+		    top: 20px;
+			transform: rotate(45deg);
+		  }
+	    }
+	
+	  
 </style>

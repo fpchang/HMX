@@ -130,7 +130,7 @@
 		{
 			"path": "pages/set/set",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "设置"
 			}
 		},
 		{
@@ -142,13 +142,14 @@
 		{
 			"path": "pages/set/accountSafe/accountSafe",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "账号信息"
 			}
 		},
 		{
 			"path": "pages/mine/feedback/feedback",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
 			}
 		},
 		{

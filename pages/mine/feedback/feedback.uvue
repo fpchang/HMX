@@ -1,17 +1,91 @@
 <template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;align-items: center;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image src="/static/icons/detailpage.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">意见反馈</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn">
+				<!-- <text class="txt">保存</text> -->
+				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
+					textColor="#1e88e5" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+			</view>
+		</template>
+	</rice-navbar>
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		feedback
+		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
+			<xt-form-item label="标题" tips="" required>
+				<view>
+					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入标题名称"
+						borderColor="#dcdfe6" v-model="feedbackForm.title"></rice-input>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="内容" tips="" required>
+				<view>
+					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="请输入内容"
+						layout="vertical" borderColor="#dcdfe6" v-model="feedbackForm.content"></rice-textarea>
+				</view>
+			</xt-form-item>
+
+		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
 </template>
 
 <script setup>
-		
+	import { state, loginOut } from "/store/store.uts";
+	import { userBean } from "@/bean/userBean";
+	import {MineService} from "@/services/MineService.uts";
+	const submitLoading = ref(false);
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	type feedForm = {
+		title : string,
+		content : string
+	}
+	const feedbackForm = ref<feedForm>({
+		title: "",
+		content: ""
+	})
+	const submitForm = async () => {
+
+		submitLoading.value = true;
+		//let obj = Object.assign(feedbackForm, { phone: this.user.phone });
+		try {
+			let obj ={
+				title : feedbackForm.value.title,
+				content : feedbackForm.value.content,
+				phone:user.value.phone
+			} as UTSJSONObject;
+			 await MineService.add(obj);
+			uni.hideLoading();
+			submitLoading.value = false;
+			//console.log("意见反馈添加成功");
+
+			uni.navigateBack();
+		} catch (error) {
+			console.error("添加意见反馈失败");
+			uni.hideLoading();
+			submitLoading.value = false;
+			uni.showToast({
+				title:"添加失败",
+				icon:"none"
+			})
+		}
+	}
 </script>
 
 <style>
-		
+
 </style>

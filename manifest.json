@@ -9,7 +9,7 @@
 	"quickapp": {},
 	/* 小程序特有相关 */
 	"mp-weixin": {
-		"appid": "",
+		"appid": "wx1e656e3fd064719a",
 		"setting": {
 			"urlCheck": false
 		},
@@ -99,7 +99,7 @@
 		"devServer": {
 			//"host": "localhost", // 指定服务器应该监听哪个IP地址,默认：localhost
 			//"port": 5173,
-			"disableHostCheck" : true,
+			"disableHostCheck": true,
 			"proxy": {
 				"/txmapKey": {
 					"target": "https://apis.map.qq.com",

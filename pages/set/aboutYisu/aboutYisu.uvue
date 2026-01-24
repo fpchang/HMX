@@ -2,7 +2,19 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		aboutyisu
+		<view>
+			<view class="container">
+				<view class="img-container"> 
+					<image style="width: 200px; height: 150px;"  src="https://cdn.hotelsys.fun/HM/images/app.png"></image>
+				</view>
+				<rice-cell-group border>
+					<rice-cell title="企业"  value="湖州玄天科技有限公司" />
+					<rice-cell title="联系人"  value="19083441181" />
+					<rice-cell title="备案号"  value="浙ICP备2024130639号-3A" />
+				</rice-cell-group>
+
+			</view>
+		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
@@ -12,6 +24,17 @@
 		
 </script>
 
-<style>
-		
+<style lang="scss">
+	.container{
+		margin:auto;
+		width: 100vw;
+		max-width:800px ;
+		box-sizing: border-box;
+		.img-container{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding:10px;
+		}
+	}	
 </style>

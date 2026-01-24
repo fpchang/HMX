@@ -136,7 +136,7 @@
 		{
 			"path": "pages/set/aboutYisu/aboutYisu",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "关于议宿"
 			}
 		},
 		{
@@ -226,6 +226,14 @@
 			"style": {
 				"navigationBarTitleText": ""
 			}
+		},
+		{
+			"path": "pages/hotelDisplay/hotelDisplay",
+			"style": {
+				"navigationBarTitleText": "", 
+				"navigationStyle": "custom",
+				"backgroundColorContent": "#f8f9fa"
+			}
 		}
 	],
 	"globalStyle": {
@@ -248,7 +256,7 @@
 			"backgroundColor":"#ffffff",
 			//"spacing":"5px",
 			//"fontSize":"12px",
-			//"iconWidth":"28px",
+			"iconWidth":"20px",
 			//"height":"80px",
 			"list": [{
 					"pagePath": "pages/index/index",

@@ -73,7 +73,7 @@
 				icon: "/static/icons/homemenu/hotel2.png",
 				label: "酒店展示",
 				bgColor: "rgba(22, 93, 255, 0.1)",
-				url: "/pages/order/createOrder/createOrder"
+				url: "/pages/hotelDisplay/hotelDisplay"
 			}],
 
 		},

@@ -1,0 +1,139 @@
+<template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image src="/static/icons/mine/hotel.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 20px;font-weight: 700;color:#2a5d98;">汉廷酒店</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn">
+				<rice-tabs v-model="activeIndex" :list="list" @clickTab="tabClick" line-color="#2a5d98"
+					title-inactive-color="#4b5563" title-active-color="#2a5d98 "></rice-tabs>
+
+			</view>
+		</template>
+	</rice-navbar>
+
+
+	<swiper :current="activeIndex" style="height: auto;flex: 1;background-color:#f8f9fa;" @change="swiperChange"
+		:circular="true">
+		<swiper-item>
+			<!-- #ifdef APP -->
+			<scroll-view style="flex:1">
+			<!-- #endif -->
+				<view>
+					<imageSwiperComponent></imageSwiperComponent>
+				</view>
+				<view class="information">
+					<view class="title"><text class="txt">汉庭酒店火车站分店</text></view>
+					<view class="subtitle">
+						<image src="/static/icons/hoteldisplay/location.png" style="width: 16px;height: 16px;"></image>
+						<text class="txt">上海市野生动物园</text>
+						</view>
+				</view>
+				<view class="cotent-list-container">
+					<view class="title">
+						<text class="txt">酒店特色</text>
+					</view>
+				</view>
+				
+				<view class="cotent-list-container">
+					<view class="title">
+						<text class="txt">酒店设施</text>
+					</view>
+				</view>
+			<!-- #ifdef APP -->
+			</scroll-view>
+			<!-- #endif -->
+		</swiper-item>
+		<swiper-item>
+			<!-- #ifdef APP -->
+			<scroll-view style="flex:1">
+			<!-- #endif -->
+				<view style="height: 1300px;background-color: green;"></view>
+				<text>22222</text>
+			<!-- #ifdef APP -->
+			</scroll-view>
+			<!-- #endif -->
+		</swiper-item>
+	</swiper>
+
+</template>
+
+<script setup>
+	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
+	import imageSwiperComponent from "./components/imageSwiperComponent.uvue";
+	const activeIndex = ref(0)
+	const list = ref<TabsOptions[]>([{
+		name: '首页',
+		value: 'recommedn'
+	}, {
+		name: '房型',
+	}
+
+	])
+	const tabClick = (e : TabsClickTab) => {
+		console.log('TabsClickTab', e)
+		uni.showToast({
+			title: `点击了：${e.name}${e.disabled ? '（禁用）' : ''}`,
+			icon: 'none'
+		})
+	}
+	const swiperChange = (event : UniSwiperChangeEvent) => {
+		activeIndex.value = event.detail.current;
+		console.log(event)
+	}
+</script>
+
+<style lang="scss">
+	.hotel-display {
+		background-color: #f8f9fa;
+	}
+
+	.information {
+		padding: 24px;
+
+		.title {
+			.txt {
+				color: #111827;
+				font-size: 24px;
+				color: rgb(17, 24, 39);
+				font-weight: 700;
+			}
+		}
+
+		.subtitle {
+
+			margin-top: 8px;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+
+			.txt {
+				color: #4b5563;
+				font-size: 16px;
+				margin-left: 4px;
+			}
+		}
+	}
+	.cotent-list-container{
+		margin-bottom: 32px;
+			padding: 24px;
+		.title{
+			border-left: 4px solid #2a5d98;
+			padding-left: 12px;
+			.txt {
+				color: #111827;
+				font-size: 24px;
+				color: rgb(17, 24, 39);
+				font-weight: 700;
+			}
+		}
+	}
+</style>

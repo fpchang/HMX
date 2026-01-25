@@ -135,7 +135,7 @@
 	const orderDateRange = computed<number[]>(() => {
 		let rangeDate : Number[] = [];
 		let minTime = Math.min(
-			...checkInOrderList.value.map((item) => item.checkInStartDateTimeStamp)
+			...checkInOrderList.value.map((item) => item.checkInStartDateTimeStamp),new Date().getTime()
 		);
 		let maxTime = Math.max(
 			...checkInOrderList.value.map((item) => item.checkInEndDateTimeStamp), (new Date().getTime() + 30 * 1000 * 60 * 60 * 24)

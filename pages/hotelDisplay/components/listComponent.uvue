@@ -1,0 +1,150 @@
+<template>
+	<view>
+		<view class="card">
+			<view class="list">		
+				<view class="list-item" v-for="it in menuList" :key="it.label">
+					<navigator :url="it.url" hover-class="none">
+						<view class="item-content">
+							<view class="groupIcon">
+								<image :src="it.icon" class="icon-style" mode="aspectFit"></image>
+							</view>
+							<view>
+								<text class="label">{{it.label}}</text>
+							</view>
+						</view>
+		
+					</navigator>
+				</view>
+		
+				<view v-for="item in 8" style="height:0;padding:0 15px"></view>
+		
+			</view>
+		</view>
+	</view>
+</template>
+
+<script setup>
+	type menu= {
+		icon : string,
+		label : string,
+		bgColor : string,
+		url : string
+	}
+	
+	
+	const menuList : Array<menu>=[{
+				icon: "/static/icons/homemenu/room-type1.png",
+				label: "房型管理",
+				bgColor: "rgba(22, 93, 255, 0.1)",
+				url: "/pages/hotelManage/roomTypeList/roomTypeList"
+			},
+			{
+				icon: "/static/icons/homemenu/room1.png",
+				label: "房间管理",
+				bgColor: "rgba(22, 93, 255, 0.1)",
+				url: "/pages/hotelManage/roomList/roomList"
+			},
+			{
+				icon: "/static/icons/homemenu/employee1.png",
+				label: "员工管理",
+				bgColor: "rgba(22, 93, 255, 0.1)",
+				url: "/pages/hotelManage/employeeList/employeeList"
+			},
+			{
+				icon: "/static/icons/homemenu/hotel2.png",
+				label: "酒店展示",
+				bgColor: "rgba(22, 93, 255, 0.1)",
+				url: "/pages/hotelDisplay/hotelDisplay"
+			}
+	
+	
+	
+		
+	]
+</script>
+
+<style lang="scss">
+	.card {
+		padding:15px 10px;
+		background-color: #fff;
+		border-radius: 12px;
+
+		.title {
+			padding: 5px 5px 15px 5px;
+			color: #1f2937;
+			font-weight: 700;
+			font-size: 24px;
+			display: flex;
+			flex-direction: row;
+			align-items: flex-end;
+
+			.icon-stye {
+				width: 18px;
+				height: 18px;
+				margin-right: 4px;
+			}
+
+			.txt {
+				color: #1f2937;
+				font-weight: 700;
+				color: #1f2937;
+			}
+		}
+
+		.list {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: space-between;
+
+			.list-item {
+
+				min-width: 65px;
+				max-width: 65px;
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				padding: 15px 0;
+
+				.item-content {
+					// background-color: #fff;
+					// padding: 18px;
+					border-radius: 12px;
+
+					/*&:hover{
+						transform: scale(1.1);
+					}
+					*/
+					.groupIcon {
+						width: 60px;
+						height: 60px;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						justify-content: center;
+						border-radius: 12px;
+						//  background-color: #fff;
+						// box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+						.icon-style {
+							width: 38px;
+							height: 38px;
+						}
+					}
+
+					.label {
+						font-size: 14px;
+						padding-top: 8px;
+						color: #64748b;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
+				}
+
+			}
+		}
+	}
+</style>

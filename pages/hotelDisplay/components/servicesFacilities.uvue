@@ -1,0 +1,13 @@
+<template>
+	<view>
+		<listComponent></listComponent>
+	</view>
+</template>
+
+<script setup>
+	import listComponent from "./listComponent.uvue";
+</script>
+
+<style>
+
+</style>

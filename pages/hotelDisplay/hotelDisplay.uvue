@@ -24,9 +24,9 @@
 	<swiper :current="activeIndex" style="height: auto;flex: 1;background-color:#f8f9fa;" @change="swiperChange"
 		:circular="true">
 		<swiper-item>
-			<!-- #ifdef APP -->
+		
 			<scroll-view style="flex:1">
-			<!-- #endif -->
+		
 				<view>
 					<imageSwiperComponent></imageSwiperComponent>
 				</view>
@@ -41,16 +41,22 @@
 					<view class="title">
 						<text class="txt">酒店特色</text>
 					</view>
+					<view class="content"> 
+						<listComponent></listComponent>
+					</view>
 				</view>
 				
 				<view class="cotent-list-container">
 					<view class="title">
 						<text class="txt">酒店设施</text>
 					</view>
+				<view class="content">
+					<servicesFacilities></servicesFacilities>
 				</view>
-			<!-- #ifdef APP -->
+				</view>
+		
 			</scroll-view>
-			<!-- #endif -->
+		
 		</swiper-item>
 		<swiper-item>
 			<!-- #ifdef APP -->
@@ -69,6 +75,8 @@
 <script setup>
 	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
 	import imageSwiperComponent from "./components/imageSwiperComponent.uvue";
+	import listComponent from "./components/listComponent.uvue";
+	import servicesFacilities from "./components/servicesFacilities.uvue"
 	const activeIndex = ref(0)
 	const list = ref<TabsOptions[]>([{
 		name: '首页',
@@ -133,7 +141,10 @@
 				font-size: 24px;
 				color: rgb(17, 24, 39);
 				font-weight: 700;
-			}
+			} 
+		}
+		.content{
+			margin-top: 16px;
 		}
 	}
 </style>

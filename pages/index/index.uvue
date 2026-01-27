@@ -126,9 +126,9 @@
 		return state.user;
 	});
 	const topImg =():string=>{	
-		// if(hotel.value==null){
-		// 	return '/static/images/hotel.png';
-		// }
+		if(hotel.value==null){
+			return '/static/images/hotel.png';
+		}
 		const firstImages = hotel.value['firstImages'] as string | null;
 		if(firstImages==''||firstImages==null){
 			return '/static/images/hotel.png';

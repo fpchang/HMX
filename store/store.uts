@@ -5,16 +5,17 @@ import { employeeBean } from "../bean/employeeBean";
 import { roomTypeBean } from "../bean/roomTypeBean";
 import { roomBean } from "@/bean/roomBean";
 import { userBean ,getInitUser} from "@/bean/userBean";
+import { hotelBean } from "../bean/hotelBean";
 export type State = {
 	//存放状态
 	isLogin : boolean,
 	config : UTSJSONObject, //配置信息
 	viewWidth : number, //可视宽度
 	user : userBean,
-	hotelList : Array<UTSJSONObject>,
+	hotelList : Array<hotelBean>,
 	employeeList : Array<employeeBean>,
 	hotel_id : string,
-	hotel : UTSJSONObject,
+	hotel : hotelBean | null,
 	roomTypeList : Array<roomTypeBean>,
 	roomList:Array<roomBean>,
 	permissionList : Array<string>,//s权限列表
@@ -26,10 +27,10 @@ export const state = reactive({
 	config: {} as UTSJSONObject,
 	viewWidth: 0,
 	user: getInitUser(),
-	hotelList: [] as Array<UTSJSONObject>,
+	hotelList: [] as Array<hotelBean>,
 	employeeList: [] as Array<employeeBean>,
 	hotel_id: "",
-	hotel: {} as UTSJSONObject,
+	hotel: null,
 	roomTypeList: [] as Array<roomTypeBean>,
 	roomList:[],
 	permissionList: [] as Array<string>,
@@ -54,10 +55,10 @@ export const setConfig = (obj : UTSJSONObject) => {
 export const setUser = (user : userBean) => {
 	state.user = user;
 };
-export const setHotelList = (list : Array<UTSJSONObject>) => {
+export const setHotelList = (list : Array<hotelBean>) => {
 	state.hotelList = list;
 	uni.setStorageSync("hotelList",list);
-	const t =  uni.getStorageSync("hotelList") as  Array<UTSJSONObject>;
+	const t =  uni.getStorageSync("hotelList") as  Array<hotelBean>;
 };
 export const setRoomTypeList = (list : Array<roomTypeBean>) => {
 	state.roomTypeList = list;
@@ -79,7 +80,7 @@ export const setHotelId = (hotel_id : string) => {
 };
 
 export const setHotel = () => {
-	let hotel = state.hotelList.find(item => item._id == state.hotel_id) as UTSJSONObject;
+	let hotel = state.hotelList.find(item => item._id == state.hotel_id) as hotelBean;
 
 		state.hotel = hotel;
 		uni.setStorage({key:"hotel",data:hotel});

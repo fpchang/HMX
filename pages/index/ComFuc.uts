@@ -5,6 +5,7 @@ import { roomTypeService } from "@/services/roomTypeService.uts";
 import { PermissionService } from "@/services/PermissionService";
 import { roomTypeBean, formatRoomTypeList } from "@/bean/roomTypeBean";
 import { userBean } from "../../bean/userBean";
+import {hotelBean} from "@/bean/hotelBean.uts";
 
 class ComFuc {
 	constructor() { }
@@ -24,8 +25,8 @@ class ComFuc {
 	//   }
 	// }
 
-	async getHotelList() : Promise<Array<UTSJSONObject>> {
-		const list = await HotelService.getHotelList() as Array<UTSJSONObject>;
+	async getHotelList() : Promise<Array<hotelBean>> {
+		const list = await HotelService.getHotelList();
 		setHotelList(list);
 		return list;
 	}
@@ -81,7 +82,7 @@ class ComFuc {
 	*默认加载本地数据
 	*/
 	async loadStorage() {
-		const hotelList = uni.getStorageSync("hotelList") as Array<UTSJSONObject> | null;
+		const hotelList = uni.getStorageSync("hotelList") as Array<hotelBean>;
 		console.log("hotel-list - storeage", hotelList);
 		if (hotelList != null) {
 

@@ -132,12 +132,34 @@ class HotelServiceClass {
 	/** 
 	 * 获取当前用户关联酒店列表(包括老板与用户)
 	*/
-	async getHotelList() : Promise<Array<UTSJSONObject>> {
+	async getHotelList() : Promise<Array<hotelBean>> {
 		const res = await DB.callFunction("hm_getHotelList_x");
 		const result = res.result as UTSJSONObject;
 		const data = result.get('data') as Array<UTSJSONObject>;
-
-		return data;
+		let hotelList:Array<hotelBean>=[];
+		data.forEach(item=>{
+			const hotel:hotelBean={
+				_id:item.getString("_id")??"",
+				 belong: item.getString("belong")??"",
+				 hotelCoordinate: item.getArray<number>("hotelCoordinate")??[],
+				 hotelIntroduction: item.getString("hotelIntroduction")??"",
+				 hotelName:  item.getString("hotelName")??"",
+				 firstImages:  item.getString("firstImages")??"" ,
+				  imagesList: item.getArray<string>("imagesList")??[] ,
+				 athleticFacility:item.getArray<string>("athleticFacility")??[] ,
+				 cateringServices: item.getArray<string>("cateringServices")??[],
+				 recreationFacility: item.getArray<string>("recreationFacility")??[],
+				 feature: item.getArray<string>("feature")??[],
+				 serviceTel:  item.getString("serviceTel")??"" ,
+				 wechat:  item.getString("wechat")??"" ,
+				 hotelAddress:  item.getString("hotelAddress")??"",
+				 hotelAddressArea:  item.getString("hotelAddressArea")??"" ,
+				 hotelAddressCode:  item.getString("hotelAddressCode")??"",
+				 baseFacility: item.getArray<string>("baseFacility")??[] 
+			}
+			hotelList.push(hotel)
+		})
+		return hotelList;
 
 
 

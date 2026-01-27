@@ -5,7 +5,77 @@
 </template>
 
 <script setup>
+	import { state } from "@/store/store";
 	import listComponent from "./listComponent.uvue";
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { roomBean } from '@/bean/roomBean';
+	import { hotelBean } from "@/bean/hotelBean";
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const hotel = computed<hotelBean | null>(() => {
+		return state.hotel;
+	});
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	});
+	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+		return state.roomTypeList;
+	});
+	type sf = {
+		name : string,
+		icon : string,
+		liIcon : string,
+		type : string,
+		support : Array<string>
+	}
+	const getServicesFacilities_data = computed<Array<sf>>(() => {
+		if (roomTypeList.value == null ||hotel.value ==null) {
+			return []
+		}
+		let arr : string[] = [];
+		roomTypeList.value.map((item) => {
+			let facility : string[] = item["facility"] || [];
+			arr = arr.concat(facility);
+		});
+		arr = Array.from(new Set(arr));
+		const list:Array<sf> = [
+			{
+				name: "房型设施",
+				icon: "home.svg",
+				liIcon: "ri:building-4-fill",
+				type: "roomType",
+				support: arr
+			},
+
+			{
+				name: "餐饮设施",
+				icon: "canying.svg",
+				type: "catering",
+				liIcon: "emojione-monotone:fork-and-knife",
+				support: hotel.value.cateringServices,
+			},
+			{
+				name: "休闲设施",
+				icon: "yule.svg",
+				type: "recreation",
+				liIcon: "streamline-plump:card-game-diamond-solid",
+				support: hotel.value.recreationFacility,
+			},
+			{
+				name: "运动",
+				icon: "sport.svg",
+				type: "athleticFacility",
+				liIcon: "material-symbols:sports-volleyball",
+				support: hotel.value.athleticFacility,
+			}
+		];
+		return list;
+	})
+	console.log("1111", getServicesFacilities_data.value)
 </script>
 
 <style>

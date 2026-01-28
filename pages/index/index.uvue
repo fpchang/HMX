@@ -17,7 +17,7 @@
 				<view @click="showCheckHotel"
 					style="position:absolute;bottom:0;left:0;border-top-right-radius: 18px;border-top-left-radius: 18px; background-color: rgba(0,0,0,0.4); width:100%;  padding:5px 20px 20px 20px ;display: flex;flex-direction: row;align-items: center;">
 					<text
-						style="font-size: 22px;padding:15px;color:#fff;min-width:200px;font-family: cursive;font-weight: 400;">{{hotel.hotelName}}</text>
+						style="font-size: 22px;padding:15px;color:#fff;min-width:200px;font-family: cursive;font-weight: 400;">{{hotel?.hotelName}}</text>
 					<rice-icon name="arrow-down" color="#fff" size="22px" />
 				</view>
 			</view>
@@ -66,7 +66,7 @@
 								</view>
 								<view style="padding: 15px 10px" class="zcard-right">
 									<view class="item">
-										<view class="title"><text class="txt">{{item.hotelName}}</text></view>
+										<view class="title"><text class="txt">{{item?.hotelName}}</text></view>
 									</view>
 									<view class="item">
 										<view class="subtitle"><text class="txt">{{
@@ -100,6 +100,7 @@
 	import { state, setUser } from '@/store/store.uts';
 	import { comFunction } from "./ComFuc.uts";	
 	import {userBean} from "@/bean/userBean";
+	import { hotelBean } from "@/bean/hotelBean";
 	const showRange = ref(false);
 	const showPopup = ref(false);
 	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"]);

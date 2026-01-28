@@ -42,7 +42,7 @@
 						<text class="txt">酒店特色</text>
 					</view>
 					<view class="content"> 
-						<listComponent></listComponent>
+						<!-- <listComponent></listComponent> -->
 					</view>
 				</view>
 				
@@ -75,7 +75,7 @@
 <script setup>
 	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
 	import imageSwiperComponent from "./components/imageSwiperComponent.uvue";
-	import listComponent from "./components/listComponent.uvue";
+	import listComponent from "./components/listComponent/listComponent.uvue";
 	import servicesFacilities from "./components/servicesFacilities.uvue"
 	const activeIndex = ref(0)
 	const list = ref<TabsOptions[]>([{
@@ -88,10 +88,7 @@
 	])
 	const tabClick = (e : TabsClickTab) => {
 		console.log('TabsClickTab', e)
-		uni.showToast({
-			title: `点击了：${e.name}${e.disabled ? '（禁用）' : ''}`,
-			icon: 'none'
-		})
+		
 	}
 	const swiperChange = (event : UniSwiperChangeEvent) => {
 		activeIndex.value = event.detail.current;

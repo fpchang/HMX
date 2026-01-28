@@ -1,0 +1,7 @@
+export   type sf= {
+		name : string,
+		icon : string,
+		liIcon : string,
+		type : string,
+		support : Array<string>
+	}

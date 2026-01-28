@@ -1,15 +1,16 @@
 <template>
 	<view>
-		<listComponent></listComponent>
+		<listComponent :list="servicesFacilities_data"></listComponent>
 	</view>
 </template>
 
 <script setup>
 	import { state } from "@/store/store";
-	import listComponent from "./listComponent.uvue";
+	import listComponent from "./listComponent/listComponent.uvue";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
 	import { hotelBean } from "@/bean/hotelBean";
+	import {sf} from "./listComponent/type.uts";
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -25,14 +26,15 @@
 	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
 		return state.roomTypeList;
 	});
-	type sf = {
-		name : string,
-		icon : string,
-		liIcon : string,
-		type : string,
-		support : Array<string>
-	}
-	const getServicesFacilities_data = computed<Array<sf>>(() => {
+	// type sf = {
+	// 	name : string,
+	// 	icon : string,
+	// 	liIcon : string,
+	// 	type : string,
+	// 	support : Array<string>
+	// }
+	
+	const servicesFacilities_data = computed<Array<sf>>(() => {
 		if (roomTypeList.value == null ||hotel.value ==null) {
 			return []
 		}
@@ -75,7 +77,7 @@
 		];
 		return list;
 	})
-	console.log("1111", getServicesFacilities_data.value)
+	console.log("1111", servicesFacilities_data.value)
 </script>
 
 <style>

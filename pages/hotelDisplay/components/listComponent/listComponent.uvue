@@ -2,18 +2,18 @@
 	<view>
 		<view class="card">
 			<view class="list">		
-				<view class="list-item" v-for="it in menuList" :key="it.label">
-					<navigator :url="it.url" hover-class="none">
+				<view class="list-item" v-for="it in list">
+					
 						<view class="item-content">
 							<view class="groupIcon">
-								<image :src="it.icon" class="icon-style" mode="aspectFit"></image>
+								<image src="/static/icons/role.png" class="icon-style" mode="aspectFit"></image>
 							</view>
 							<view>
-								<text class="label">{{it.label}}</text>
+								<text class="label">1111</text>
 							</view>
 						</view>
 		
-					</navigator>
+					
 				</view>
 		
 				<view v-for="item in 8" style="height:0;padding:0 15px"></view>
@@ -24,43 +24,45 @@
 </template>
 
 <script setup>
-	type menu= {
-		icon : string,
-		label : string,
-		bgColor : string,
-		url : string
-	}
 	
-	
-	const menuList : Array<menu>=[{
-				icon: "/static/icons/homemenu/room-type1.png",
-				label: "房型管理",
-				bgColor: "rgba(22, 93, 255, 0.1)",
-				url: "/pages/hotelManage/roomTypeList/roomTypeList"
-			},
-			{
-				icon: "/static/icons/homemenu/room1.png",
-				label: "房间管理",
-				bgColor: "rgba(22, 93, 255, 0.1)",
-				url: "/pages/hotelManage/roomList/roomList"
-			},
-			{
-				icon: "/static/icons/homemenu/employee1.png",
-				label: "员工管理",
-				bgColor: "rgba(22, 93, 255, 0.1)",
-				url: "/pages/hotelManage/employeeList/employeeList"
-			},
-			{
-				icon: "/static/icons/homemenu/hotel2.png",
-				label: "酒店展示",
-				bgColor: "rgba(22, 93, 255, 0.1)",
-				url: "/pages/hotelDisplay/hotelDisplay"
-			}
+	import {sf} from "./type.uts";
+	const props = defineProps({
+		list:{
+			type:Array<sf>,
+			default:[]
+		}
+	});
+	console.log("list::",props.list)
+	// const menuList : Array<menu>=[{
+	// name: "房型设施",
+	// 			icon: "home.svg",
+	// 			liIcon: "ri:building-4-fill",
+	// 			type: "roomType",
+	// 			support: arr
+	// 		},
+	// 		{
+	// 			icon: "/static/icons/homemenu/room1.png",
+	// 			label: "房间管理",
+	// 			bgColor: "rgba(22, 93, 255, 0.1)",
+	// 			url: "/pages/hotelManage/roomList/roomList"
+	// 		},
+	// 		{
+	// 			icon: "/static/icons/homemenu/employee1.png",
+	// 			label: "员工管理",
+	// 			bgColor: "rgba(22, 93, 255, 0.1)",
+	// 			url: "/pages/hotelManage/employeeList/employeeList"
+	// 		},
+	// 		{
+	// 			icon: "/static/icons/homemenu/hotel2.png",
+	// 			label: "酒店展示",
+	// 			bgColor: "rgba(22, 93, 255, 0.1)",
+	// 			url: "/pages/hotelDisplay/hotelDisplay"
+	// 		}
 	
 	
 	
 		
-	]
+	// ]
 </script>
 
 <style lang="scss">
@@ -141,6 +143,7 @@
 						overflow: hidden;
 						text-overflow: ellipsis;
 						white-space: nowrap;
+						text-align:center;
 					}
 				}
 

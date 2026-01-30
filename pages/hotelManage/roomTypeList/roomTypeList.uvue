@@ -120,18 +120,19 @@
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { roomTypeService } from "@/services/roomTypeService";
 	import {roomTypeBean} from "@/bean/roomTypeBean.uts";
+	import { hotelBean } from "@/bean/hotelBean";
 	let submitLoading = ref(false);
 	
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
-	const hotelList = computed(() => {
+	const hotelList = computed<Array<hotelBean>>(() => {
 		return state.hotelList;
 	});
-	const permissionList = computed(() => {
+	const permissionList = computed<Array<string>>(() => {
 		return state.permissionList;
 	});
-	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+	const roomTypeList = computed<Array<roomTypeBean>>(() => {
 		return state.roomTypeList;
 	});
 	console.log("roomTypeList", roomTypeList);

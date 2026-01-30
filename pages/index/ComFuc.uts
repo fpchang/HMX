@@ -53,14 +53,15 @@ class ComFuc {
 
 	}
 	async setDefaultHotel() {
-		if (state.hotelList.length < 1) {
+		const hotelList:hotelBean [] = state.hotelList;
+		if (hotelList.length < 1) {
 			return;
 		}
 		let _hotel_id = uni.getStorageSync("hotel_id") as string;
 
-		let h = state.hotelList.find((item) => {
+		let h = hotelList.find((item) => {
 			return item._id == _hotel_id;
-		}) as (UTSJSONObject | null);
+		});
 		let n_hotel_id : string = state.hotelList[0]._id as string;
 		if (h != null) {
 			n_hotel_id = _hotel_id as string;

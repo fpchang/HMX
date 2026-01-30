@@ -44,12 +44,12 @@
 							<view class="card-subtitle" style="margin-top: 15px;">
 								<image src="/static/icons/administrator.png"
 									style="width:18px;height:18px;margin-right: 4px;"></image>
-								<text class="txt">店主:{{belong((hotel.belong??'') as string)}}</text>
+								<text class="txt">店主:{{belong(hotel.belong??"")}}</text>
 							</view>
 							<view class="card-subtitle">
 								<image src="/static/icons/role.png" style="width:18px;height:18px;margin-right: 4px;">
 								</image>
-								<text class="txt">角色:{{roleFormat(hotel.curRole as string)}}</text>
+								<text class="txt">角色:{{roleFormat(hotel.curRole ?? '')}}</text>
 							</view>
 							
 						</view>
@@ -107,8 +107,9 @@
 	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { HotelService } from "@/services/HotelService.uts";
+	import {hotelBean} from "@/bean/hotelBean.uts"
 	let submitLoading = ref(false);
-	const hotelList = computed(() => {
+	const hotelList = computed<Array<hotelBean>>(() => {
 		return state.hotelList;
 	});
 	const topImg = (imgUrl : string | null) : string => {
@@ -128,7 +129,7 @@
 		]);
 		return p.get(val) ?? val;
 	}
-	const editHotel = (hotel_item : UTSJSONObject) => {
+	const editHotel = (hotel_item : hotelBean) => {
 		if (hotel_item.curRole != "administrator") {
 			//alert.alertNoPermisson();
 			return;
@@ -143,7 +144,7 @@
 			url: "/pages/hotelManage/createHotel/createHotel"
 		});
 	}
-	const deleteHotel = async (targetObj : UTSJSONObject) => {
+	const deleteHotel = async (targetObj : hotelBean) => {
 		if (targetObj.curRole != "administrator") {
 			showDialog({
 				title: '没有足够的权限',
@@ -184,7 +185,7 @@
 
 		});
 	}
-	const viewDetail = (hotel_item : UTSJSONObject) => {
+	const viewDetail = (hotel_item : hotelBean) => {
 		// this.type = 2;
 		//this.targetObj = JSON.parse(JSON.stringify(targetObj));
 		uni.navigateTo({

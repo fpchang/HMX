@@ -20,5 +20,6 @@ export type hotelBean = {
   hotelAddress: string,
   hotelAddressArea: string ,
   hotelAddressCode?: string,
-  baseFacility: Array<string> 
+  baseFacility: Array<string>,
+  curRole?:string
 }

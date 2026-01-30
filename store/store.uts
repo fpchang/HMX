@@ -9,7 +9,7 @@ import { hotelBean } from "../bean/hotelBean";
 export type State = {
 	//存放状态
 	isLogin : boolean,
-	config : UTSJSONObject, //配置信息
+	config : UTSJSONObject, //配置信息 | null
 	viewWidth : number, //可视宽度
 	user : userBean,
 	hotelList : Array<hotelBean>,
@@ -26,8 +26,8 @@ export const state = reactive({
 	isLogin: false,
 	config: {} as UTSJSONObject,
 	viewWidth: 0,
-	user: getInitUser(),
-	hotelList: [] as Array<hotelBean>,
+	user: getInitUser() as userBean,
+	hotelList: [],
 	employeeList: [] as Array<employeeBean>,
 	hotel_id: "",
 	hotel: null,

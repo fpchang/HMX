@@ -17,7 +17,7 @@
 	const hotel = computed<hotelBean | null>(() => {
 		return state.hotel;
 	});
-	const user = computed<userBean>(() => {
+	const user = computed(() => {
 		return state.user;
 	});
 	const permissionList = computed(() => {
@@ -26,6 +26,7 @@
 	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
 		return state.roomTypeList;
 	});
+	
 	// type sf = {
 	// 	name : string,
 	// 	icon : string,
@@ -40,10 +41,10 @@
 		}
 		let arr : string[] = [];
 		roomTypeList.value.map((item) => {
-			let facility : string[] = item["facility"] || [];
+			let facility : string[] = item.facility != null ? item.facility : [];
 			arr = arr.concat(facility);
 		});
-		arr = Array.from(new Set(arr));
+		arr = Array.from(new Set<string>(arr)) as string[];
 		const list:Array<sf> = [
 			{
 				name: "房型设施",

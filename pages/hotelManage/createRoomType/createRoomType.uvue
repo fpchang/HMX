@@ -100,6 +100,7 @@
 	import { roomTypeService } from "@/services/roomTypeService.uts";
 	import { validRoomTypeForm } from "./roomTypeFormVaild.uts";
 	import {userBean} from "@/bean/userBean";
+	import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
 	type bedType = {
 		name : string,
 		checked : boolean,
@@ -157,7 +158,7 @@
 		}
 		return pageType.value==1?"/static/icons/editpage.png":"/static/icons/detailpage.png"
 	})
-	let facilityConfig_roomType = ref<Array<UTSJSONObject> | null>(null);
+	let facilityConfig_roomType = ref<Array<facilityConfig_type> | null>(null);
 	HotelService.getConfig_facilityConfig('roomType').then(list => {
 		facilityConfig_roomType.value = list;
 	});

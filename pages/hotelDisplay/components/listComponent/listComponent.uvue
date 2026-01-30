@@ -1,21 +1,22 @@
 <template>
 	<view>
-		<view class="card">
+	<view class="card" v-for="item of list">
+		<view class="title">
+			<image  :src="item.icon" class="icon-stye"></image>
+			<text class="txt">{{item.name}}</text>
+		</view>
 			<view class="list">		
-				<view class="list-item" v-for="it in list">
+				<view class="list-item" v-for="it in item.support">
 					
 						<view class="item-content">
 							<view class="groupIcon">
-								<image src="/static/icons/role.png" class="icon-style" mode="aspectFit"></image>
+								<image :src="getConfig(it).icon" class="icon-style" mode="aspectFit"></image>
 							</view>
-							<view>
-								<text class="label">1111</text>
+							<view style="">
+								<text class="label">{{getConfig(it).name}}</text>
 							</view>
-						</view>
-		
-					
-				</view>
-		
+						</view>					
+				</view>		
 				<view v-for="item in 8" style="height:0;padding:0 15px"></view>
 		
 			</view>
@@ -24,7 +25,8 @@
 </template>
 
 <script setup>
-	
+	import { HotelService } from "@/services/HotelService.uts";
+	import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
 	import {sf} from "./type.uts";
 	const props = defineProps({
 		list:{
@@ -32,7 +34,34 @@
 			default:[]
 		}
 	});
-	console.log("list::",props.list)
+	console.log("list::",props.list);
+	const facilityConfigList = ref<Array<facilityConfig_type>>([]);
+	const getConfigList=async ()=>{
+		const list:Array<facilityConfig_type> = await HotelService.getConfig_facilityConfig("all");
+		console.log("getConfig_facilityConfig",list);
+		facilityConfigList.value=list;
+	}
+	const getConfig = (id:string):facilityConfig_type=>{
+		if(facilityConfigList.value.length<1){
+			return {
+				_id:"",
+				icon:"",
+				name:"",
+				type:""
+			}
+		}
+		const item = facilityConfigList.value.find(item=>item._id == id);
+		if(item==null){
+			return {
+				_id:"",
+				icon:"",
+				name:"",
+				type:""
+			}
+		}
+		return item;
+	}
+	getConfigList();
 	// const menuList : Array<menu>=[{
 	// name: "房型设施",
 	// 			icon: "home.svg",
@@ -89,7 +118,7 @@
 			.txt {
 				color: #1f2937;
 				font-weight: 700;
-				color: #1f2937;
+				font-size: 16px;
 			}
 		}
 
@@ -101,8 +130,8 @@
 
 			.list-item {
 
-				min-width: 65px;
-				max-width: 65px;
+				min-width: 75px;
+				
 				flex: 1;
 				display: flex;
 				flex-direction: column;
@@ -114,13 +143,13 @@
 					// background-color: #fff;
 					// padding: 18px;
 					border-radius: 12px;
-
+					min-width: 75px;
 					/*&:hover{
 						transform: scale(1.1);
 					}
 					*/
 					.groupIcon {
-						width: 60px;
+						// width: 60px;
 						height: 60px;
 						display: flex;
 						flex-direction: row;

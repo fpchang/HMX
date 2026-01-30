@@ -153,6 +153,7 @@
 	import { validForm } from "./hotelFormVaild.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import {userBean} from "@/bean/userBean";
+	import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
 	// const props = defineProps({
 	// 	type: {
 	// 		type: Number,
@@ -289,10 +290,10 @@
 		// }
 
 	}
-	const facilityConfig_base = ref<Array<UTSJSONObject> | null>(null);
-	const facilityConfig_catering = ref<Array<UTSJSONObject> | null>(null);
-	const facilityConfig_recreation = ref<Array<UTSJSONObject> | null>(null);
-	const facilityConfig_athleticFacility = ref<Array<UTSJSONObject> | null>(null);
+	const facilityConfig_base = ref<Array<facilityConfig_type> | null>(null);
+	const facilityConfig_catering = ref<Array<facilityConfig_type> | null>(null);
+	const facilityConfig_recreation = ref<Array<facilityConfig_type> | null>(null);
+	const facilityConfig_athleticFacility = ref<Array<facilityConfig_type> | null>(null);
 	const cateringCheckboxChange = (e : string[]) => {
 		hotelForm.value.cateringServices = e;
 	}

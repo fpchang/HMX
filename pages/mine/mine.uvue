@@ -43,10 +43,10 @@
 				</view>
 				<view class="card-title-group">
 					<view class="card-title-area">
-						<view class="card-title"><text class="txt">{{hotel.hotelName}}</text></view>
+						<view class="card-title"><text class="txt">{{hotel?.hotelName}}</text></view>
 						<view class="card-subtitle">
 							<image src="/static/icons/position_black.png" style="width:14px;height:14px;margin-right: 4px;"></image>
-							<text class="txt">{{hotel.hotelAddress}}</text>
+							<text class="txt">{{hotel?.hotelAddress}}</text>
 							</view>
 					</view>
 					<view class="state">

@@ -4,6 +4,7 @@ import { hotelBean } from '../bean/hotelBean';
 import { roomTypeBean, formatRoomTypeList } from "@/bean/roomTypeBean.uts";
 import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
+import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
 type employeeList_Res = {
 	code : number;
 	errCode : number;
@@ -28,10 +29,24 @@ class HotelServiceClass {
 	 * type:base 基础设施，recreation休闲设施，athleticFacility运动设施
 	 * roomType 屋内设施
 	 */
-	async getConfig_facilityConfig(type : string) : Promise<Array<UTSJSONObject>> {
-		const res = await DB.getCollection("hm-facilityConfig", { type: type });
+	async getConfig_facilityConfig(type : string) : Promise<Array<facilityConfig_type>> {
+		let params:string | UTSJSONObject={ type: type };
+		if(type=='all'){
+			params="";
+		}
+		const res = await DB.getCollection("hm-facilityConfig", params);
 		const data = res['data'] as Array<UTSJSONObject>;
-		return data;
+		let list:Array<facilityConfig_type> =[];
+		data.forEach(item=>{
+			const fc:facilityConfig_type={
+				_id:item.getString("_id")??"",
+				icon:item.getString("icon")??"",
+				name:item.getString("name")??"",
+				type:item.getString("type")??""
+			}
+			list.push(fc)
+		})
+		return list;
 	}
 	async getOpendbCityChina(type : number) : Promise<Array<UTSJSONObject>> {
 		const db = uniCloud.databaseForJQL();
@@ -155,7 +170,8 @@ class HotelServiceClass {
 				 hotelAddress:  item.getString("hotelAddress")??"",
 				 hotelAddressArea:  item.getString("hotelAddressArea")??"" ,
 				 hotelAddressCode:  item.getString("hotelAddressCode")??"",
-				 baseFacility: item.getArray<string>("baseFacility")??[] 
+				 baseFacility: item.getArray<string>("baseFacility")??[] ,
+				 curRole:item.getString("curRole")??""
 			}
 			hotelList.push(hotel)
 		})

@@ -16,7 +16,11 @@ class DBConnect{
 	  })
   }
    getCollection(dbName:string,w:(string | UTSJSONObject)):Promise<UniCloudDBGetResult>{
-    return  uniCloud.databaseForJQL().collection(dbName).where(w).limit(50000).get();
+	   let wh = w;
+	   if(w==""){
+		   wh ={}
+	   }
+    return  uniCloud.databaseForJQL().collection(dbName).where(wh).limit(50000).get();
   
   }
    getCollectionOrderBy(dbName:string,w:(string | UTSJSONObject),orderBy="_id desc"):Promise<UniCloudDBGetResult>{

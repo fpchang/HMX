@@ -5,7 +5,6 @@
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
-
 				<image src="/static/icons/mine/hotel.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
 				<text style="font-size: 20px;font-weight: 700;color:#2a5d98;">汉廷酒店</text>
@@ -24,9 +23,9 @@
 	<swiper :current="activeIndex" style="height: auto;flex: 1;background-color:#f8f9fa;" @change="swiperChange"
 		:circular="true">
 		<swiper-item>
-		
+
 			<scroll-view style="flex:1">
-		
+
 				<view>
 					<imageSwiperComponent></imageSwiperComponent>
 				</view>
@@ -35,28 +34,28 @@
 					<view class="subtitle">
 						<image src="/static/icons/hoteldisplay/location.png" style="width: 16px;height: 16px;"></image>
 						<text class="txt">上海市野生动物园</text>
-						</view>
+					</view>
 				</view>
 				<view class="cotent-list-container">
 					<view class="title">
 						<text class="txt">酒店特色</text>
 					</view>
-					<view class="content"> 
+					<view class="content">
 						<!-- <listComponent></listComponent> -->
 					</view>
 				</view>
-				
+
 				<view class="cotent-list-container">
 					<view class="title">
 						<text class="txt">酒店设施</text>
 					</view>
-				<view class="content">
-					<servicesFacilities></servicesFacilities>
+					<view class="content">
+						<services-facilities ref="servicesFacilitiesRes" :hotel_id="hotel_id"></services-facilities>
+					</view>
 				</view>
-				</view>
-		
+
 			</scroll-view>
-		
+
 		</swiper-item>
 		<swiper-item>
 			<!-- #ifdef APP -->
@@ -73,11 +72,22 @@
 </template>
 
 <script setup>
+	import { ref } from 'vue';
 	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
 	import imageSwiperComponent from "./components/imageSwiperComponent.uvue";
 	import listComponent from "./components/listComponent/listComponent.uvue";
-	import servicesFacilities from "./components/servicesFacilities.uvue"
-	const activeIndex = ref(0)
+	import  servicesFacilities from "./components/servicesFacilities.uvue"
+	import { roomTypeService } from '@/services/roomTypeService';
+	import { hotelBean } from '@/bean/hotelBean';
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { HotelService } from '@/services/HotelService';
+	
+	// 在 uni-app-x 中不支持 InstanceType<typeof Component>，直接声明为 any
+	const servicesFacilitiesRes = ref<ComponentPublicInstance | null>(null);
+	const hotel_id = ref("");
+	const hotel =ref<hotelBean | null>(null);
+	const roomTypeList=ref<Array<roomTypeBean >| null>(null);
+	const activeIndex = ref(0);
 	const list = ref<TabsOptions[]>([{
 		name: '首页',
 		value: 'recommedn'
@@ -88,12 +98,45 @@
 	])
 	const tabClick = (e : TabsClickTab) => {
 		console.log('TabsClickTab', e)
-		
+
 	}
 	const swiperChange = (event : UniSwiperChangeEvent) => {
 		activeIndex.value = event.detail.current;
 		console.log(event)
 	}
+	
+	const initData=async ()=>{
+		//roomTypeList.value =await roomTypeService.getRoomTypeList(hotel_id.value);
+		hotel.value = await HotelService.getHotelInfoById(hotel_id.value);
+		console.log("hotel====",hotel.value)		
+	}
+	onReady(()=>{
+		// const instance = getCurrentInstance();
+		// if(instance!=null){
+		// 	servicesFacilitiesRes.value=instance.refs['servicesFacilitiesRes'] as ComponentPublicInstance;
+		// 	console.log("ssss33333",servicesFacilitiesRes.value)
+		// 	servicesFacilitiesRes.value.$callMethod("setHotelId",hotel_id.value)
+		// }
+		
+		// if (servicesFacilitiesRes.value != null) {
+		// 	servicesFacilitiesRes.value.setHotelId(hotel_id.value);
+		// 	if (hotel.value != null) {
+		// 		// 使用安全调用，避免 setHotel 方法不存在导致运行时异常
+		// 		(servicesFacilitiesRes.value as any)?.setHotel?.(hotel.value);
+		// 	}
+		// 	if (roomTypeList.value != null) {
+		// 		servicesFacilitiesRes.value.setRoomTypeList(roomTypeList.value);
+		// 	}
+		// }
+	})
+	onLoad(params => {
+		console.log("params:", params);
+		const h_id : string = params.getString("hotel_id")??"";
+		if (h_id != null) {
+			hotel_id.value =h_id;
+			initData()
+		}
+	})
 </script>
 
 <style lang="scss">
@@ -127,20 +170,24 @@
 			}
 		}
 	}
-	.cotent-list-container{
+
+	.cotent-list-container {
 		margin-bottom: 32px;
-			padding: 24px;
-		.title{
+		padding: 24px;
+
+		.title {
 			border-left: 4px solid #2a5d98;
 			padding-left: 12px;
+
 			.txt {
 				color: #111827;
 				font-size: 24px;
 				color: rgb(17, 24, 39);
 				font-weight: 700;
-			} 
+			}
 		}
-		.content{
+
+		.content {
 			margin-top: 16px;
 		}
 	}

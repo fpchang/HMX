@@ -32,6 +32,10 @@
 </template>
 
 <script setup>
+	import { state } from "@/store/store";
+		import { roomTypeBean } from '@/bean/roomTypeBean';
+		import { roomBean } from '@/bean/roomBean';
+		import { hotelBean } from "@/bean/hotelBean";
 	type menu= {
 		icon : string,
 		label : string,
@@ -45,7 +49,9 @@
 		title_color : string,
 		menu_item_list : Array<menu>
 	}
-
+	const hotel=computed(()=>{
+		return state.hotel;
+	})
 	const menuList : Array<MenuItem>=[
 		{
 			title: "酒店设置",
@@ -73,7 +79,7 @@
 				icon: "/static/icons/homemenu/hotel2.png",
 				label: "酒店展示",
 				bgColor: "rgba(22, 93, 255, 0.1)",
-				url: "/pages/hotelDisplay/hotelDisplay"
+				url: `/pages/hotelDisplay/hotelDisplay?hotel_id=${hotel.value?._id}`
 			}],
 
 		},

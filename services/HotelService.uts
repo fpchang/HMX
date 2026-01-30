@@ -190,8 +190,37 @@ class HotelServiceClass {
 	/**
 	 * 根据id获取酒店信息
 	 */
-	getHotelInfoById(hotel_id : string) : Promise<UniCloudDBGetResult> {
-		return DB.getCollection("hm-hotel", { _id: hotel_id })
+	async getHotelInfoById(hotel_id : string):Promise<hotelBean>{
+		try{
+			const res = await DB.getCollection("hm-hotel", { _id: hotel_id } as UTSJSONObject);
+			console.log("hotel::",res)
+			const data = res['data'] as Array<UTSJSONObject>;
+			const item = data[0] as UTSJSONObject;
+			const hotel:hotelBean={
+				_id:item.getString("_id")??"",
+				 belong: item.getString("belong")??"",
+				 hotelCoordinate: item.getArray<number>("hotelCoordinate")??[],
+				 hotelIntroduction: item.getString("hotelIntroduction")??"",
+				 hotelName:  item.getString("hotelName")??"",
+				 firstImages:  item.getString("firstImages")??"" ,
+				  imagesList: item.getArray<string>("imagesList")??[] ,
+				 athleticFacility:item.getArray<string>("athleticFacility")??[] ,
+				 cateringServices: item.getArray<string>("cateringServices")??[],
+				 recreationFacility: item.getArray<string>("recreationFacility")??[],
+				 feature: item.getArray<string>("feature")??[],
+				 serviceTel:  item.getString("serviceTel")??"" ,
+				 wechat:  item.getString("wechat")??"" ,
+				 hotelAddress:  item.getString("hotelAddress")??"",
+				 hotelAddressArea:  item.getString("hotelAddressArea")??"" ,
+				 hotelAddressCode:  item.getString("hotelAddressCode")??"",
+				 baseFacility: item.getArray<string>("baseFacility")??[] ,
+				 curRole:item.getString("curRole")??""
+			}
+			return hotel;
+		}catch(e){
+			throw new Error("获取酒店信息失败")
+		}
+		
 	}
 
 

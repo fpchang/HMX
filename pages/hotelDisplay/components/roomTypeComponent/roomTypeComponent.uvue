@@ -1,0 +1,225 @@
+<template>
+	<!-- #ifdef APP||H5 -->
+	<scroll-view style="flex:1" @scroll="scrollPage">
+	<!-- #endif -->
+		<view class="card-list">
+			
+			<view class="card-list-item" v-for="(roomType,index) of roomTypeList">
+				<view class="card">
+					<view class="img-area">
+						<image :src="topImg(roomType.firstImages)"
+							style="height: 100%;width: 100%;" mode="aspectFill">
+						</image>
+					</view>
+					<view class="card-title-group">
+						<view class="card-title-area">
+							<view class="card-title">
+								<text class="txt">{{roomType.name}}</text>
+								<text class="price">¥{{roomType.priceBase}}</text>
+							</view>
+							<view class="card-subtitle" style="justify-content: flex-start;margin-bottom: 16px;">
+								<view>
+									<rice-tag :text="`${roomType.area}㎡`" text-color="#4e5969" color="#f2f3f5"
+										:round="true" />
+
+								</view>
+								<view style="margin-left: 8px;"
+									v-for="it of roomType.bedList">
+									<rice-tag :text="`${it['count']}张${it['name']}床`" text-color="#4e5969"
+										color="#f2f3f5" text-size="12px" :round="true" />
+
+								</view>
+
+
+
+							</view>
+
+
+			
+				
+						
+						</view>
+
+					</view>
+
+					
+				</view>
+			</view>
+		</view>
+
+	<!-- #ifdef APP || H5 -->
+	</scroll-view>
+	<!-- #endif -->
+
+</template>
+
+<script setup>
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { state } from "@/store/store";
+	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
+	import { comFunction } from "@/pages/index/ComFuc.uts";
+	import { roomTypeService } from "@/services/roomTypeService";
+	import {roomTypeBean} from "@/bean/roomTypeBean.uts";
+	import { hotelBean } from "@/bean/hotelBean";
+	let submitLoading = ref(false);
+	
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const hotelList = computed<Array<hotelBean>>(() => {
+		return state.hotelList;
+	});
+	const permissionList = computed<Array<string>>(() => {
+		return state.permissionList;
+	});
+	const roomTypeList = computed<Array<roomTypeBean>>(() => {
+		return state.roomTypeList;
+	});
+	console.log("roomTypeList", roomTypeList);
+	const topImg = (imgUrl : string) : string => {
+		if (imgUrl == '') {
+			return '/static/images/hotel.png';
+		}
+		return imgUrl;
+	};
+	const belong = (phone : string) : string => {
+		return emergency_phone_number(phone)
+	}
+	const roleFormat = (val : string) : string => {
+		const p : Map<string, string> = new Map([
+			["administrator", "超级管理员"],
+			["manager", "管理员"],
+			["normal", "员工"]
+		]);
+		return p.get(val) ?? val;
+	}
+	let showControl_id = ref("");
+	const getRoomTypeId = (roomType: UTSJSONObject): string => {
+		const idObj = roomType["_id"] as UTSJSONObject;
+		return idObj["_value"] as string;
+	}
+	const viewDetail = (roomType : roomTypeBean) => {
+		// this.type = 2;
+		//this.targetObj = JSON.parse(JSON.stringify(targetObj));
+		uni.navigateTo({
+			url: `/pages/hotelManage/createRoomType/createRoomType?pageType=2&roomType_id=${roomType._id}`,
+		});
+	}
+	let scrollTop_val = ref(0);
+	const scrollPage = (event : UniScrollEvent) => {
+		//event.detail = {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY}
+		let { scrollTop } = event.detail;
+		scrollTop_val.value = scrollTop
+	}
+</script>
+
+<style lang="scss">
+	.navbar-btn {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		padding: 12px 15px;
+		border-radius: 8px;
+
+		.txt {
+			color: #1e88e5;
+			font-size: 15px;
+			padding-left: 4px;
+		}
+	}
+
+	.card-list {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+
+		.card-list-item {
+			min-width: 360px;
+			padding: 15px;
+			flex: 1;
+
+			.card {
+
+
+				background-color: #fff;
+				border-radius: 12px;
+
+				.img-area {
+					height: 350rpx;
+					max-height: 200px;
+					background-color: #eee;
+				}
+
+				.card-title-group {
+					display: flex;
+					flex-direction: row;
+
+					justify-content: space-between;
+					padding: 15px;
+
+					.card-title-area {
+						flex: 1;
+
+						.card-title {
+							display: flex;
+							flex-direction: row;
+							justify-content: space-between;
+							align-items: center;
+							margin-bottom: 12px;
+
+							.price {
+								color: #165dff;
+								font-size: 20px;
+								font-weight: 700;
+							}
+
+							.txt {
+								color: #1d2129;
+								font-weight: 700;
+								font-size: 18px;
+							}
+						}
+
+						.card-subtitle {
+							margin-top: 8px;
+							display: flex;
+							flex-direction: row;
+							align-items: center;
+							justify-content: space-between;
+
+							.txt {
+								color: rgb(144, 147, 153);
+								font-size: 14px;
+								padding-left: 4px;
+							}
+						}
+					}
+
+					.state {
+
+
+						.txt {
+							background-color: rgba(255, 152, 0, 0.1);
+							color: rgb(255, 152, 0);
+							font-size: 14px;
+							padding: 8px;
+							border-radius: 4px;
+						}
+					}
+				}
+
+				.control-icons {
+					display: flex;
+					flex-direction: row;
+
+					.control-icons-item {
+						padding: 6px 8px;
+					}
+				}
+
+			}
+		}
+
+	}
+</style>

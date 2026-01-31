@@ -59,21 +59,21 @@
 				icon: "canying.svg",
 				type: "catering",
 				liIcon: "emojione-monotone:fork-and-knife",
-				support: hotel.cateringServices != null ? hotel.cateringServices : [],
+				support: hotel.value.cateringServices != null ? hotel.value.cateringServices : [],
 			},
 			{
 				name: "休闲设施",
 				icon: "yule.svg",
 				type: "recreation",
 				liIcon: "streamline-plump:card-game-diamond-solid",
-				support: hotel.recreationFacility != null ? hotel.recreationFacility : [],
+				support: hotel.value.recreationFacility != null ? hotel.value.recreationFacility : [],
 			},
 			{
 				name: "运动",
 				icon: "sport.svg",
 				type: "athleticFacility",
 				liIcon: "material-symbols:sports-volleyball",
-				support: hotel.athleticFacility != null ? hotel.athleticFacility : [],
+				support: hotel.value.athleticFacility != null ? hotel.value.athleticFacility : [],
 			}
 		];
 		return list;

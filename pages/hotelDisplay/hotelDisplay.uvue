@@ -61,8 +61,7 @@
 			<!-- #ifdef APP -->
 			<scroll-view style="flex:1">
 			<!-- #endif -->
-				<view style="height: 1300px;background-color: green;"></view>
-				<text>22222</text>
+				<roomTypeComponent></roomTypeComponent>
 			<!-- #ifdef APP -->
 			</scroll-view>
 			<!-- #endif -->
@@ -75,6 +74,7 @@
 	import { ref } from 'vue';
 	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
 	import imageSwiperComponent from "./components/imageSwiperComponent.uvue";
+	import roomTypeComponent from "./components/roomTypeComponent/roomTypeComponent.uvue"
 	import listComponent from "./components/listComponent/listComponent.uvue";
 	import  servicesFacilities from "./components/servicesFacilities.uvue"
 	import { roomTypeService } from '@/services/roomTypeService';

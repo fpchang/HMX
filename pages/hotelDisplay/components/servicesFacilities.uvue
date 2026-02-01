@@ -87,6 +87,6 @@
 	console.log("1111", servicesFacilities_data.value)
 </script>
 
-<style>
+<style lang="scss" scoped>
 
 </style>

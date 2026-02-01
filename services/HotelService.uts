@@ -27,7 +27,7 @@ class HotelServiceClass {
 	/**
 	 * 获取基础设施 配置
 	 * type:base 基础设施，recreation休闲设施，athleticFacility运动设施
-	 * roomType 屋内设施
+
 	 */
 	async getConfig_facilityConfig(type : string) : Promise<Array<facilityConfig_type>> {
 		let params:string | UTSJSONObject={ type: type };

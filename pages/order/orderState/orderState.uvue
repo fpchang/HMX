@@ -2,9 +2,7 @@
 	<rice-navbar title="" border>
 		<template #left>
 			<view style="display: flex;flex-direction: row;">
-				<navigator open-type="navigateBack">
-					<rice-icon name="arrow-left" size="22px" />
-				</navigator>
+				<!-- s -->
 
 				<image src="/static/icons/orderstate.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>

@@ -30,10 +30,10 @@
 					<imageSwiperComponent></imageSwiperComponent>
 				</view>
 				<view class="information">
-					<view class="title"><text class="txt">汉庭酒店火车站分店</text></view>
+					<view class="title"><text class="txt">{{hotel?.hotelName}}</text></view>
 					<view class="subtitle">
 						<image src="/static/icons/hoteldisplay/location.png" style="width: 16px;height: 16px;"></image>
-						<text class="txt">上海市野生动物园</text>
+						<text class="txt">{{hotel?.hotelAddress}}</text>
 					</view>
 				</view>
 				<view class="cotent-list-container">

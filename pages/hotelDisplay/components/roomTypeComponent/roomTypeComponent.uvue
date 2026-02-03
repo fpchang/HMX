@@ -58,16 +58,13 @@
 	})
 	const roomTypeList= ref<Array<roomTypeBean> | null>(null);
 	
-	const getRoomTypeList = async ():void=>{
+	const getRoomTypeList = async ()=>{
 		if (props.hotel_id == null || props.hotel_id == "") {
 			return ;
 		}
 		const list = await roomTypeService.getRoomTypeList(props.hotel_id);
 		console.log("房型列表", list);
-		roomTypeList.value=list;
-		
-		
-	
+		roomTypeList.value=list;		
 	}
 	const topImg = (imgUrl : string) : string => {
 		if (imgUrl == '') {

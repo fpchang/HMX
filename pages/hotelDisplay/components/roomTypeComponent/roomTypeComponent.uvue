@@ -2,7 +2,7 @@
 	<!-- #ifdef APP||H5 -->
 	<scroll-view style="flex:1" @scroll="scrollPage">
 	<!-- #endif -->
-		<view class="card-list">
+		<view class="card-list" v-if="roomTypeList!=null">
 			
 			<view class="card-list-item" v-for="(roomType,index) of roomTypeList">
 				<view class="card">
@@ -27,22 +27,10 @@
 									v-for="it of roomType.bedList">
 									<rice-tag :text="`${it['count']}张${it['name']}床`" text-color="#4e5969"
 										color="#f2f3f5" text-size="12px" :round="true" />
-
 								</view>
-
-
-
-							</view>
-
-
-			
-				
-						
+							</view>										
 						</view>
-
-					</view>
-
-					
+					</view>					
 				</view>
 			</view>
 		</view>
@@ -62,20 +50,25 @@
 	import {roomTypeBean} from "@/bean/roomTypeBean.uts";
 	import { hotelBean } from "@/bean/hotelBean";
 	let submitLoading = ref(false);
+	const props = defineProps({
+		hotel_id:{
+			type:String,
+			default:""
+		}
+	})
+	const roomTypeList= ref<Array<roomTypeBean> | null>(null);
 	
-	const hotel_id = computed(() => {
-		return state.hotel_id;
-	});
-	const hotelList = computed<Array<hotelBean>>(() => {
-		return state.hotelList;
-	});
-	const permissionList = computed<Array<string>>(() => {
-		return state.permissionList;
-	});
-	const roomTypeList = computed<Array<roomTypeBean>>(() => {
-		return state.roomTypeList;
-	});
-	console.log("roomTypeList", roomTypeList);
+	const getRoomTypeList = async ():void=>{
+		if (props.hotel_id == null || props.hotel_id == "") {
+			return ;
+		}
+		const list = await roomTypeService.getRoomTypeList(props.hotel_id);
+		console.log("房型列表", list);
+		roomTypeList.value=list;
+		
+		
+	
+	}
 	const topImg = (imgUrl : string) : string => {
 		if (imgUrl == '') {
 			return '/static/images/hotel.png';
@@ -111,6 +104,7 @@
 		let { scrollTop } = event.detail;
 		scrollTop_val.value = scrollTop
 	}
+	getRoomTypeList();
 </script>
 
 <style lang="scss">

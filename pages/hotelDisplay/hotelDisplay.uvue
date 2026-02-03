@@ -26,8 +26,8 @@
 
 			<scroll-view style="flex:1">
 
-				<view>
-					<imageSwiperComponent></imageSwiperComponent>
+				<view v-if="hotel!=null">
+					<imageSwiperComponent :hotel="hotel"></imageSwiperComponent>
 				</view>
 				<view class="information">
 					<view class="title"><text class="txt">{{hotel?.hotelName}}</text></view>
@@ -61,7 +61,7 @@
 			<!-- #ifdef APP -->
 			<scroll-view style="flex:1">
 			<!-- #endif -->
-				<roomTypeComponent></roomTypeComponent>
+				<roomTypeComponent :hotel_id="hotel_id"></roomTypeComponent>
 			<!-- #ifdef APP -->
 			</scroll-view>
 			<!-- #endif -->

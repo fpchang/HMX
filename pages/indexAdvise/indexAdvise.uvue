@@ -108,11 +108,12 @@
 		});
 	};
 	const toLoginEvent = () => {
+		toLogin();
 		//#ifdef MP
-		popup_confirm.value.open();
+		//popup_confirm.value.open();
 		return;
 		//#endif
-		toLogin();
+		
 	};
 
 	const agreeGetPhoneEvent = (f:boolean):void => {

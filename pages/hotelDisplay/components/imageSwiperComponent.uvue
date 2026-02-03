@@ -1,6 +1,28 @@
 <template>
 	<view>
 		<view style="position: relative">
+			<view class="share-area">
+			  <view class="container">
+			    <!-- #ifdef MP -->
+			
+			    <view class="icon-item">
+			      <button class="clearBtn" :plain="true" open-type="share">
+			       <!-- <l-icon name="ri:share-forward-fill" color="#fff" size="24px"></l-icon> -->
+				   <image src="/static/icons/hoteldisplay/share.png" style="width: 20px;height: 20px;"></image>
+			      </button>
+			    </view>
+			    <!-- #endif -->
+			    <!-- #ifndef MP -->
+			
+			    <view class="icon-item">
+			      <button class="clearBtn" :plain="true" @click="shareWx()">
+			       <!-- <l-icon   name="ri:share-forward-fill" color="#fff" size="20px"></l-icon> -->
+				     <image src="/static/icons/hoteldisplay/share.png" style="width: 20px;height: 20px;"></image>
+			      </button>
+			    </view>
+			    <!-- #endif -->
+			  </view>
+			</view>
 		  <swiper style="height: 562.5rpx" :current="current" @change="onChange" :autoplay="true" :interval="3000">
 		    <swiper-item class="slide slide1">
 				<image src="/static/images/hotel1.png" style="width: 100%;height: 100%;" mode="aspectFill"></image>
@@ -18,13 +40,97 @@
 </template>
 
 <script setup>
+	const props = defineProps({
+		hotel:{
+			type:Object,
+			default:{}
+		}
+		
+	});
+	const hotel_id:string = props.hotel['_id']??"";
+	const firstImages:string = props.hotel['firstImages']??""
+	const hotelName:string = props.hotel['hotelName']??"";
+	const hotelAddress:string = props.hotel['hotelAddress']??"";
 	const current = ref(0)
-	const type = ref('dot')
+	const type = ref('dot');
 	const onChange = (e: UniSwiperChangeEvent) => {
 		current.value = e.detail.current
 	}
+	const shareWx=()=> {
+	  let imgurl ='https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/images/app.png';
+	  if(firstImages!=null &&firstImages!=""){
+		 imgurl =firstImages;
+	  }
+	  uni.share({
+	          provider: "weixin", //分享服务提供商（即weixin|qq|sinaweibo）
+	          type: 5, //小程序
+	          scene: "WXSceneSession", //provider 为 weixin 时必选 WXSceneSession分享到聊天界面，WXSceneTimeline分享到朋友圈，WXSceneFavorite分享到微信收藏
+	          title: `${hotelName}`, //分享内容的标题
+	          summary: `${hotelAddress}`, //分享内容的摘要
+	          miniProgram: {
+	            id: "gh_5557133bdd5e",
+	            type: 0,
+	            webUrl: "http://uniapp.dcloud.io",
+	            path: `/pages_client/hotelHome/hotelHome?hotel_id=${hotel_id}`,
+	          },
+	          //imageUrl: `https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/images/app.png`,
+	          imageUrl:`${imgurl}`, //图片地址，type 为 0、2、5 时必选
+	          success(r) {
+	            //成功返回的参数
+	            //console.log(r);
+	          },
+	          fail(err) {
+	            //失败返回的参数
+	            //console.log(err);
+	          },
+	        });
+	 
+	}
 </script>
 
-<style>
+<style lang="scss">
+	.share-area {
+	  position: absolute;
+	  width: 100%;
+	  top: 0;
+	  left: 0;
+	  height: 55px;
+	  padding: 0 20px;
+	  box-sizing: border-box;
+	  background-color: transparent;
+	  z-index: 999;
+	  display: flex;
+	  flex-direction: row;
+	  align-items: center;
+	  justify-content: flex-end;
+	  .container {
+	    display: flex;
+		flex-direction: row;
+	    align-items: center;
+	    justify-content: center;
+	    gap: 12px;
+	    .icon-item {
+	      cursor: pointer;
+	      background-color: rgba(0, 0, 0, 0.3);
+	      padding: 5px;
+	      width: 30px;
+	      height: 30px;
+	      box-sizing: border-box;
+	      border-radius: 50%;
+	      display: flex;
+	      align-items: center;
+	      justify-content: center;
+	      &:hover {
+	        background-color: rgba(0, 0, 0, 0.5);
+	      }
+	      .clearBtn{
+	        display: flex;
+			flex-direction: row;
+	        align-items: center;
+	        justify-content: center;
+	      }
+	    }
+	  }
+	}
 
 </style>

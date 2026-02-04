@@ -25,8 +25,8 @@
 		<swiper-item>
 
 			<scroll-view style="flex:1">
-
-				<view v-if="hotel!=null">
+				
+				<view>
 					<imageSwiperComponent :hotel="hotel"></imageSwiperComponent>
 				</view>
 				<view class="information">
@@ -74,6 +74,7 @@
 	import { ref } from 'vue';
 	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
 	import imageSwiperComponent from "./components/imageSwiperComponent.uvue";
+	// import share from "./components/share.uvue";
 	import roomTypeComponent from "./components/roomTypeComponent/roomTypeComponent.uvue"
 	import listComponent from "./components/listComponent/listComponent.uvue";
 	import  servicesFacilities from "./components/servicesFacilities.uvue"

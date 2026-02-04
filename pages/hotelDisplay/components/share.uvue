@@ -1,0 +1,110 @@
+<template>
+  <button class="share-btn" @click="shareToWxFriendCrossPlatform">
+    分享给微信好友（打开小程序）
+  </button>
+</template>
+
+<script setup>
+import { onLoad } from '@dcloudio/uni-app';
+const hotel_id = "ddddddd";
+// 全局配置（替换为你的实际信息）
+const GLOBAL_CONFIG = {
+  miniAppAppId: 'wx1e656e3fd064719a', // 小程序正式AppID
+  targetPath: `/pages_client/hotelHome/hotelHome?hotel_id=${hotel_id}`, // 小程序目标页面
+  // 后端生成URL Link的接口地址（App端用）
+  getWxLinkApi: '/api/wechat/generate-mini-link'
+};
+
+/**
+ * 跨端核心方法：分享链接给微信好友（适配App/微信小程序）
+ */
+const shareToWxFriendCrossPlatform = async () => {
+  try {
+    uni.showLoading({ title: '准备分享链接...', mask: true });
+    const systemInfo = uni.getSystemInfoSync();
+    let shareLink = ''; // 最终要分享的小程序跳转链接
+
+    // 1. 平台判断：Android/iOS App 端（核心处理）
+    if (systemInfo.platform === 'android' || systemInfo.platform === 'ios') {
+      // ① 调用后端接口，获取微信小程序 URL Link（App端专属）
+      const linkRes = await uni.request({
+        url: GLOBAL_CONFIG.getWxLinkApi,
+        method: 'POST',
+        data: {
+          path: GLOBAL_CONFIG.targetPath,
+          query: `goodsId=123&from=app_share&time=${Date.now()}` // 动态传参
+        }
+      });
+      // 校验接口返回结果
+      if (!linkRes.data || !linkRes.data.data?.url_link) {
+        throw new Error('链接生成失败，请检查后端接口');
+      }
+	  console.log("links",linkRes)
+     // shareLink = linkRes.data.data.url_link;
+
+      // ② 调用App端原生分享API：uni.shareWithSystem（系统分享面板）
+       uni.shareWithSystem({
+        type: "1111111", // 0=文字/链接类型（固定）
+       // title: '推荐一款好物，速看！', // 分享标题（微信好友端展示）
+        summary: '这款商品性价比超高，点击直接打开小程序查看', // 分享描述
+        href: shareLink, // 核心：小程序URL Link（好友点击即跳转）
+        success: () => {console.log('App端系统分享面板调起成功')},
+        fail: (err) => { throw new Error(`分享面板调起失败：${err.errMsg}`); }
+      });
+
+    // 2. 平台判断：微信小程序端（沿用之前的URL Scheme方案）
+    } else if (systemInfo.platform === 'mp-weixin') {
+      // 调用微信原生接口生成URL Scheme
+      // const schemeRes = wx.generateScheme({
+      //   jumpWxa: {
+      //     path: GLOBAL_CONFIG.targetPath,
+      //     query: 'goodsId=123&from=wx_share'
+      //   },
+      //   isExpire: false,
+      //   envVersion: 'release'
+      // });
+      // shareLink = schemeRes.openlink;
+
+      // // 调用微信小程序端专属share API
+      // await uni.share({
+      //   provider: 'weixin',
+      //   scene: 'WXSceneSession',
+      //   type: 1,
+      //   title: '推荐一款好物，速看！',
+      //   summary: '这款商品性价比超高，点击链接直接查看',
+      //   href: shareLink
+      // });
+
+    // 3. 其他平台（H5/支付宝小程序等）：兜底提示
+    } else {
+      throw new Error('当前平台暂不支持该分享功能');
+    }
+
+    // 分享成功通用提示
+    uni.hideLoading();
+    uni.showToast({
+      title: '分享成功，好友点击即可打开小程序',
+      icon: 'success',
+      duration: 3000
+    });
+
+  } catch (err) {
+    // 全局失败兜底
+    uni.hideLoading();
+    console.error('分享失败：', err);
+    const errMsg = err.message || '分享失败，请稍后重试';
+    uni.showToast({ title: errMsg, icon: 'none', duration: 3000 });
+  }
+};
+</script>
+
+<style scoped>
+.share-btn {
+  margin: 40rpx;
+  padding: 24rpx 60rpx;
+  background: #07c160;
+  color: #fff;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+}
+</style>

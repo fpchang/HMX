@@ -20,7 +20,7 @@
 		</template>
 	</rice-navbar>
 	<scroll-view style="flex:1">
-		<view style="display: flex;flex-direction: row;padding:8px;">
+		<view style="display: flex;flex-direction: row;">
 			<view>
 				<view class="table-container">
 					<view class="table">
@@ -285,8 +285,8 @@
 					background-color: #fff;
 
 					.txt {
-						color: #1f2937;
-						font-size: 16px;
+						color: #707684;
+						font-size: 15px;
 						text-align: center;
 					}
 					

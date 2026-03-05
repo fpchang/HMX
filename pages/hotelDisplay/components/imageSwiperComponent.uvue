@@ -15,7 +15,7 @@
 			    <!-- #endif -->
 			    <!-- #ifndef MP -->
 			
-			    <view class="icon-item" @click="shareWx()">
+			    <view class="icon-item" @click="shareWx()" v-if="false">
 			     
 			       <!-- <l-icon   name="ri:share-forward-fill" color="#fff" size="20px"></l-icon> -->
 				     <image src="/static/icons/hoteldisplay/share.png" style="width: 20px;height: 20px;"></image>
@@ -41,18 +41,22 @@
 </template>
 
 <script setup>
+	import { hotelBean } from '@/bean/hotelBean';
 	const props = defineProps({
 		hotel:{
-			type:UTSJSONObject,
+			type:hotelBean,
 			default:{}
 		}
 		
 	});
-	const hotelObj = props.hotel as UTSJSONObject;
-	const hotel_id:string = (hotelObj.getString('_id'))??"";
-	const firstImages:string = (hotelObj.getString('firstImages'))??"";
-	const hotelName:string = (hotelObj.getString('hotelName'))??"";
-	const hotelAddress:string = (hotelObj.getString('hotelAddress'))??"";
+	
+	const hotelObj = props.hotel;
+	console.log("hotelobj==",hotelObj,props.hotel)
+	const hotel_id:string = hotelObj?._id??"";
+	const firstImages:string =hotelObj?.firstImages??""; 
+	const hotelName:string =hotelObj?.hotelName??""; 
+	const hotelAddress:string =hotelObj?.hotelAddress??"";
+	
 	const current = ref(0)
 	const type = ref('dot');
 	const onChange = (e: UniSwiperChangeEvent) => {

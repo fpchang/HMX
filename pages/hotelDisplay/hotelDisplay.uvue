@@ -7,7 +7,7 @@
 				</navigator>
 				<image src="/static/icons/mine/hotel.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 20px;font-weight: 700;color:#2a5d98;">汉廷酒店</text>
+				<text style="font-size: 20px;font-weight: 700;color:#2a5d98;">{{hotel?.hotelName}}</text>
 			</view>
 		</template>
 		<template #right>
@@ -25,9 +25,8 @@
 		<swiper-item>
 
 			<scroll-view style="flex:1">
-				
 				<view>
-					<imageSwiperComponent :hotel="hotel"></imageSwiperComponent>
+					<imageSwiperComponent :hotel="hotel" v-if="hotel!=null"></imageSwiperComponent>
 				</view>
 				<view class="information">
 					<view class="title"><text class="txt">{{hotel?.hotelName}}</text></view>
@@ -42,6 +41,11 @@
 					</view>
 					<view class="content">
 						<!-- <listComponent></listComponent> -->
+						<view class="tag-list" style="display: flex;flex-direction: row;" v-if="hotel!=null"> 
+							<view class="tag-list-item" v-for="item of hotel.feature"><rice-tag type="warning" :text="item"  size="large"/></view>
+							
+						</view>
+						
 					</view>
 				</view>
 
@@ -109,7 +113,7 @@
 	const initData=async ()=>{
 		//roomTypeList.value =await roomTypeService.getRoomTypeList(hotel_id.value);
 		hotel.value = await HotelService.getHotelInfoById(hotel_id.value);
-		console.log("hotel====",hotel.value)		
+			
 	}
 	onReady(()=>{
 		// const instance = getCurrentInstance();
@@ -192,4 +196,11 @@
 			margin-top: 16px;
 		}
 	}
+.tag-list{
+	display: flex;
+	flex-direction: row;
+	.tag-list-item{
+		padding:4px 8px;
+	}
+}
 </style>

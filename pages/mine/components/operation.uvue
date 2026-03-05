@@ -43,12 +43,12 @@
 		bgColor:"#722ed11a",
 		url: "/pages/mine/feedback/feedback"
 	},
-	{
-		icon: "/static/icons/mine/kf.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
-		label: "客服中心",
-		bgColor:"#faad141a",
-		url: "/pages/order/createOrder/createOrder"
-	}
+	// {
+	// 	icon: "/static/icons/mine/kf.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
+	// 	label: "客服中心",
+	// 	bgColor:"#faad141a",
+	// 	url: "/pages/order/createOrder/createOrder"
+	// }
 	]
 </script>
 

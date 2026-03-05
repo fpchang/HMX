@@ -48,7 +48,7 @@
 		const list : Array<sf> = [
 			{
 				name: "房型设施",
-				icon: "home.svg",
+				icon: "/static/icons/hoteldisplay/roomtype.png",
 				liIcon: "ri:building-4-fill",
 				type: "roomType",
 				support: arr
@@ -56,21 +56,21 @@
 
 			{
 				name: "餐饮设施",
-				icon: "canying.svg",
+				icon: "/static/icons/hoteldisplay/canying.png",
 				type: "catering",
 				liIcon: "emojione-monotone:fork-and-knife",
 				support: hotel.value.cateringServices != null ? hotel.value.cateringServices : [],
 			},
 			{
 				name: "休闲设施",
-				icon: "yule.svg",
+				icon: "/static/icons/hoteldisplay/solarium.png",
 				type: "recreation",
 				liIcon: "streamline-plump:card-game-diamond-solid",
 				support: hotel.value.recreationFacility != null ? hotel.value.recreationFacility : [],
 			},
 			{
 				name: "运动",
-				icon: "sport.svg",
+				icon: "/static/icons/hoteldisplay/sports.png",
 				type: "athleticFacility",
 				liIcon: "material-symbols:sports-volleyball",
 				support: hotel.value.athleticFacility != null ? hotel.value.athleticFacility : [],

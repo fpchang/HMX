@@ -205,8 +205,6 @@
 		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
 	}
 	const addFm = async () => {
-		console.log("add",permissionList.value);
-		console.log(33,permissionList.value.includes("FM_CREATE"));
 		if (!permissionList.value.includes(
 			"FM_CREATE"
 		)) {

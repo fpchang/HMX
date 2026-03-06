@@ -25,41 +25,35 @@
 </template>
 
 <script setup>
+	import { state } from "@/store/store";
 	type menu = {
 		icon : string,
 		label : string,
 		bgColor:string,
 		url : string
 	}
+	const permissionList = computed(() => {
+		return state.permissionList;
+	})
 	const menuList : Array<menu> = [{
 		icon: "/static/icons/operation/add-bold.png",
 		label: "添加订单",
 		bgColor:"#165dff1a",
-		url: "/pages/order/createOrder/createOrder"
+		url: "/pages/order/createOrder/createOrder",
+		show:permissionList.value.includes("FM_CREATE")
 	},
 	{
 		icon: "/static/icons/operation/addincome.png",
-		label: "添加收入",
+		label: "添加收支",
 		bgColor:"#722ed11a",
-		url: "/pages/order/createOrder/createOrder"
+		url: "/pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense?billType=income",
+		show:permissionList.value.includes("FM_CREATE")
 	},
 	{
-		icon: "/static/icons/operation/addincome.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
-		label: "添加收入1",
+		icon: "/static/icons/homemenu/order1.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
+		label: "订单管理",
 		bgColor:"#faad141a",
-		url: "/pages/order/createOrder/createOrder"
-	},
-	{
-		icon: "/static/icons/operation/addincome.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
-		label: "添加收入2",
-		bgColor:"rgba(82 ,196, 26,0.1)",//rgb(250 173 20 / var(--tw-text-opacity, 1))
-		url: "/pages/order/createOrder/createOrder"
-	},
-	{
-		icon: "/static/icons/operation/addincome.png",//rgb(107 114 128 / var(--tw-text-opacity, 1))
-		label: "添加收入3",
-		bgColor:"rgba(243 244 246,0.1)",
-		url: "/pages/order/createOrder/createOrder"
+		url: "/pages/order/orderList/orderList"
 	}
 	]
 </script>

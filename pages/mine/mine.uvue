@@ -10,7 +10,7 @@
 			</view>
 			<view class="info" style="flex:1">
 				<view class="info-item"  style="margin-bottom: 4px;">
-					<text style="color: rgb(30,30,30);font-weight: 700;font-size: 24px;">{{user.userName}}</text>
+					<text style="color: rgb(30,30,30);font-weight: 700;font-size: 24px;">{{formatUserName}}</text>
 					<!-- <text style="margin-left:14px; padding:4px 10px ;border-radius: 12px; background-color:rgba(30,136,229,0.1) ;color:rgb(30,136,229)">酒店管理员</text> -->
 					</view>
 					<navigator url="./editUser/editUser">
@@ -37,6 +37,9 @@
 				</navigator>
 				
 			</view>
+			<block v-if="hotel_id!=''">
+				
+			
 			<view class="card"> 
 				<view class="img-area">
 					<image :src="topImg()" style="height: 100%;width: 100%;" mode="aspectFill"></image>
@@ -54,10 +57,12 @@
 					</view>
 				</view>
 			</view>
+			</block>
 			<view class="card">
 					<operation></operation>
 								
 			</view>
+			
 		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
@@ -72,10 +77,21 @@
 	const user = computed<userBean>(() => {
 		return state.user;
 	});
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
 	const hotel = computed(() => {
 		return state.hotel;
 	});
-	
+	const hotelList = computed(() => {
+		return state.hotelList;
+	});
+	const formatUserName=computed<string>(()=>{
+		if(user.value.userName != null && user.value.userName != '' ){
+			return  user.value.userName;
+		}
+		return `用户${user.value.phone.slice(-4)}`;
+	})
 	const topImg = (): string => {
 		if (hotel.value == null) {
 			return '/static/images/hotel.png';

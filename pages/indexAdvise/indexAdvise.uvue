@@ -24,30 +24,11 @@
 				</view>
 				<view class="card">
 					<view class="list-content">
-						<view class="control-item-group">
-							<!-- <view><l-icon name="icon-park-outline:transaction-order" size="40px"  color="#004af6" /></view>
-							 --><view><text class="txt">订单管理</text></view>
+						<view class="control-item-group" v-for="item of list">
+							<view><image :src="item.img" style="width: 38px;height: 38px;"></image></view>
+							<view><text class="txt">{{item.title}}</text></view>
 						</view>
-						<view class="control-item-group">
-							<!-- <view><l-icon name="solar:calendar-date-linear" size="40px"  color="#004af6" /></view>
-							 --><view><text class="txt">房态管理</text></view>
-						</view>
-						<view class="control-item-group">
-							<!-- <view><l-icon name="hugeicons:home-10" size="40px"  color="#004af6" /></view>
-							 --><view><text class="txt">房型管理</text></view>
-						</view>
-						<view class="control-item-group">
-							<!-- <view><l-icon name="lucide:chart-no-axes-combined" size="40px"  color="#004af6" /></view>
-							 --><view><text class="txt">财务管理</text></view>
-						</view>
-						<view class="control-item-group">
-							<!-- <view><l-icon name="clarity:employee-line" size="40px"  color="#004af6" /></view>
-							 --><view><text class="txt">员工账号</text></view>
-						</view>
-						<view class="control-item-group">
-							<!-- <view><l-icon name="solar:display-outline" size="40px"  color="#004af6" /></view>
-							 --><view><text class="txt">酒店展示</text></view>
-						</view>
+						
 						<!-- <view class="cs"></view>
 						<view class="cs"></view>
 						<view class="cs"></view>
@@ -58,7 +39,7 @@
 			<view style="height: 320px;"></view>
 			<view class="control">
 				
-				<rice-button type="primary" text="登录体验" class="btn"  shape="round" color="#004af6" @click="toLoginEvent"/>
+				<rice-button type="primary" text="登录体验" class="btn"  shape="round" color="#165dff" @click="toLoginEvent"/>
 			</view>
 			</view>
 			
@@ -128,70 +109,31 @@
 
 	const list = [
 		{
-			title: "首页",
-			img: "https://cdn.hotelsys.fun/HM/images/advise/1.png",
-			info: "酒店管理",
-		},
-		{
-			title: "房态",
-			img: "https://cdn.hotelsys.fun/HM/images/advise/2.png",
-			info: "酒店管理",
-		},
-		{
-			title: "财务",
-			img: "https://cdn.hotelsys.fun/HM/images/advise/3.png",
-			info: "酒店管理",
-		},
-		{
-			title: "功能",
-			img: "https://cdn.hotelsys.fun/HM/images/advise/4.png",
-			info: "酒店管理",
-		},
-		{
-			title: "收入",
-			img: "https://cdn.hotelsys.fun/HM/images/advise/5.png",
-			info: "酒店管理",
-		},
-		{
-			title: "房型",
-			img: "https://cdn.hotelsys.fun/HM/images/advise/6.png",
-			info: "酒店管理",
-		},
-		{
-			title: "员工管理",
-			img: "https://cdn.hotelsys.fun/HM/images/advise/7.png",
-			info: "酒店管理",
-		},
-		{
-			title: "房间管理",
-			img: "https://cdn.hotelsys.fun/HM/images/advise/8.png",
-			info: "酒店管理",
-		},
-		{
-			title: "财务统计",
-			img: "https://cdn.hotelsys.fun/HM/images/advise/9.png",
-			info: "酒店管理",
-		},
-		{
-			title: "收入管理",
-			img: "https://cdn.hotelsys.fun/HM/images/advise/10.png",
-			info: "酒店管理",
-		},
-		{
 			title: "订单管理",
-			img: "https://cdn.hotelsys.fun/HM/images/advise/11.png",
+			img: "/static/icons/homemenu/order1.png",
 			info: "酒店管理",
 		},
 		{
-			title: "店铺展示",
-			img: "https://cdn.hotelsys.fun/HM/images/advise/12.png",
+			title: "房态管理",
+			img: "/static/icons/order-blue.png",
 			info: "酒店管理",
-		},
-		{
-			title: "房型展示",
-			img: "https://cdn.hotelsys.fun/HM/images/advise/13.png",
+		},{
+			title: "房型管理",
+			img: "/static/icons/homemenu/room-type1.png",
 			info: "酒店管理",
-		},
+		},{
+			title: "财务管理",
+			img: "/static/icons/homemenu/income.png",
+			info: "酒店管理",
+		},{
+			title: "员工账号",
+			img: "/static/icons/homemenu/employee1.png",
+			info: "酒店管理",
+		},{
+			title: "酒店展示",
+			img: "/static/icons/homemenu/hotel2.png",
+			info: "酒店管理",
+		}
 	];
 	const navTopHeight = computed(() => {
 		// #ifdef MP-WEIXIN
@@ -260,13 +202,14 @@
 					font-weight: 400;
 					font-size: 24px;
 					padding: 20px 0;
-					color: #004af6;
+					color: #2a5d98;
 					font-weight: bold;
 				}
 
 				.txt-content {
 				
 					.txt{
+						text-indent:36px;
 						font-size: 18px;
 						color: #e6e6e6;
 					
@@ -290,15 +233,16 @@
 					.control-item-group {
 						display: flex;
 						align-items: center;
-
 						justify-content: center;
 						flex-direction: column;
 						padding:20px;
+						min-width: 100px;
+						flex:1;
 						.txt{
 							font-weight: 400;
 							font-size: 15px;
-							color: #004af6;
-							padding-top:5px;
+							color: #2a5d98;
+							padding-top:10px;
 						}
 						
 					}
@@ -334,7 +278,7 @@
 			.btn {
 			
 				padding: 0px 100px;
-				background-color:#004af6 ;
+				background-color:#2a5d98 ;
 				border-radius: 33px;
 				.btn-txt{
 					color: #fff;
@@ -392,12 +336,12 @@
 				text-align: center;
 				line-height: 35px;
 				border-radius: 5px;
-				color: #007aff;
+				color: #165dff;
 			}
 
 			.btn-confirm {
 				color: #fff;
-				background: #007aff;
+				background: #165dff;
 			}
 		}
 	}

@@ -22,7 +22,7 @@
 		</template>
 	</rice-navbar>
 	<!-- #ifdef APP -->
-	<scroll-view style="flex:1">
+	<scroll-view style="flex:1" v-if="!submitLoading&&hotelList.length>0">
 	<!-- #endif -->
 		<view class="card-list">
 			<view class="card-list-item" v-for="hotel of hotelList">

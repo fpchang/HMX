@@ -30,7 +30,8 @@
 		icon : string,
 		label : string,
 		bgColor:string,
-		url : string
+		url : string,
+		show ?: boolean
 	}
 	const permissionList = computed(() => {
 		return state.permissionList;

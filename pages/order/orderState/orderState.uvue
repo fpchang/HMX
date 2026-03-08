@@ -1,5 +1,5 @@
 <template>
-	<rice-navbar title="" border>
+	<rice-navbar title="" border v-if="hotel_id!=''">
 		<template #left>
 			<view style="display: flex;flex-direction: row;">
 				<!-- s -->
@@ -19,7 +19,7 @@
 			</view>
 		</template>
 	</rice-navbar>
-	<scroll-view style="flex:1">
+	<scroll-view style="flex:1" v-if="hotel_id!=''">
 		<view style="display: flex;flex-direction: row;">
 			<view>
 				<view class="table-container">
@@ -89,7 +89,9 @@
 
 
 	</scroll-view>
-
+	<view style="margin-top: 168px;">
+		<l-empty description="没有数据" v-if="hotel_id==''" />
+	</view>
 
 
 

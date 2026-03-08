@@ -28,7 +28,7 @@ exports.main = async (event, context) => {
 			//console.log("aaa",verifT)
 			if(!verifT||verifT.value.smsCode!=smsCode){
 				//短信验证码校验通过
-				 return {code:4001,msg:"短信验证码不正确"};			
+				 return {code:4001,msg:"短信验证码不正确",data:{token:""}};			
 			}
 		}
 		

@@ -236,7 +236,7 @@
 			const data = result.data as UTSJSONObject;
 			const code = result.code as number;
 			const msg = result.msg as string;
-
+			console.log("code====",code);
 			if (code != 0) {
 				uni.showToast({
 					title: msg,

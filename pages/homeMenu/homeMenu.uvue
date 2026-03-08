@@ -1,5 +1,5 @@
 <template>
-	<scroll-view style="flex: 1;">
+	<scroll-view style="flex: 1;" v-if="hotel_id!=''">
 		<view class="homemenu">
 			<view class="card" v-for="item in menuList">
 				<view class="title">
@@ -28,7 +28,9 @@
 			</view>
 		</view>
 	</scroll-view>
-
+	<view style="margin-top: 80px;">
+		<l-empty description="没有数据" v-if="hotel_id==''" />
+	</view>
 </template>
 
 <script setup>
@@ -49,9 +51,15 @@
 		title_color : string,
 		menu_item_list : Array<menu>
 	}
-	const hotel=computed(()=>{
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const hotel = computed(() => {
 		return state.hotel;
-	})
+	});
+	const hotelList = computed(() => {
+		return state.hotelList;
+	});
 	const menuList : Array<MenuItem>=[
 		{
 			title: "酒店设置",

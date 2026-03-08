@@ -77,7 +77,7 @@
 	}
 	const roleFormat = (val : string) : string => {
 		const p : Map<string, string> = new Map([
-			["administrator", "超级管理员"],
+			["a3dministrator", "超级管理员"],
 			["manager", "管理员"],
 			["normal", "员工"]
 		]);

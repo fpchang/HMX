@@ -35,7 +35,10 @@
 	</scroll-view>
 	<!-- #endif -->
 	<view style="margin-top: 168px;">
-		<l-empty description="没有数据" v-if="hotelList.length<1" />
+		<l-empty description="没有酒店" v-if="hotelList.length<1" />
+		<view style="display: flex;flex-direction: row;align-items: center;justify-content: center;">
+			<rice-button type="primary" icon="plus" text="创建酒店" @click="createHotel"></rice-button>
+		</view>
 	</view>
 	
 	<rice-popup v-model:show="showPopup" position="bottom" :closeable="true" radius="15px">
@@ -149,6 +152,11 @@
 		}
 
 	};
+	const createHotel = ()=>{
+		uni.navigateTo({
+			url:"/pages/hotelManage/createHotel/createHotel"
+		})
+	}
 	 // onLoad(async ():Promise<void>=>{
 		//  await comFunction.init();
 		//  dataReading.value=true;

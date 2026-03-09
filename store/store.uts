@@ -126,6 +126,7 @@ export const loginEvent = async () : Promise<string> => {
 				icon: "none",
 			});
 		}
+		clearCache();
 		return Promise.reject("token验证失败");
 	}
 	return Promise.resolve('token验证通过')

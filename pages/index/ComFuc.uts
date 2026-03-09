@@ -55,6 +55,7 @@ class ComFuc {
 	async setDefaultHotel() {
 		const hotelList:hotelBean [] = state.hotelList;
 		if (hotelList.length < 1) {
+			setHotelId("");
 			return;
 		}
 		let _hotel_id = uni.getStorageSync("hotel_id") as string;

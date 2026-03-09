@@ -76,12 +76,14 @@ export const setEmployeeList = (list : Array<employeeBean>) => {
 };
 export const setHotelId = (hotel_id : string) => {
 	state.hotel_id = hotel_id;
-	setHotel();
+	if(hotel_id!=""){
+		setHotel();
+	}
+	
 };
 
 export const setHotel = () => {
 	let hotel = state.hotelList.find(item => item._id == state.hotel_id) as hotelBean;
-
 		state.hotel = hotel;
 		uni.setStorage({key:"hotel",data:hotel});
 	
@@ -128,15 +130,28 @@ export const loginEvent = async () : Promise<string> => {
 	}
 	return Promise.resolve('token验证通过')
 };
-export const clearCache = () : void => {
-	uni.removeStorageSync("hm_token");
-	uni.removeStorageSync("user");
-	//context.commit("setUser",null);
-	// context.commit("setHotelId", "");
+export const clearCache =  () : void => {
+	// uni.removeStorageSync("hm_token");
+	// uni.removeStorageSync("user");
+	// uni.removeStorageSync("permissionList");
+	// uni.removeStorageSync("hotel");
+	// uni.removeStorageSync("config");
+	// uni.removeStorageSync("employeeList");
+	 
+	 setHotelId("");
+	setHotelList([]);
+	 const phone = uni.getStorageSync("phone");
+	 uni.clearStorageSync();
+	 if(phone!=null && phone !=""){
+		  uni.setStorageSync("phone", phone);
+	 }
+	
+	 
 };
 export const loginOut = () : void => {
 	console.log("退出登录");
 	clearCache();
+	console.log("344444444")
 	uni.reLaunch({
 		url: "/pages/indexAdvise/indexAdvise",
 	});

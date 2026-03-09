@@ -1,8 +1,5 @@
 <template>
-	<!-- #ifdef APP -->
-	<scroll-view v-if="hotelList.length>0"  :refresher-enabled="false" style="flex:1;background:#f5f5f5;display: flex;flex-direction: column" :show-scrollbar="false">
-	<!-- #endif -->
-
+	<scroll-view v-if="dataReading&&hotel_id!=''"  :refresher-enabled="false" style="flex:1;background:#f5f5f5;display: flex;flex-direction: column" :show-scrollbar="false">
 		<view class="index-page-style" >
 			<view style="width: 750rpx;height: 422rpx;max-height:253px;position: relative;">
 				<!-- <view style="height:44px;width:750rpx;z-index:999; background-color:rgba(0,0,0,0.6);position: absolute;top:0;left: 0;">
@@ -31,11 +28,10 @@
 								
 			</view>
 		</view>
-	<!-- #ifdef APP -->
+
 	</scroll-view>
-	<!-- #endif -->
-	<view style="margin-top: 168px;">
-		<l-empty description="没有酒店" v-if="hotelList.length<1" />
+	<view style="margin-top: 168px;" v-if="dataReading&&hotel_id==''">
+		<l-empty description="没有酒店" />
 		<view style="display: flex;flex-direction: row;align-items: center;justify-content: center;">
 			<rice-button type="primary" icon="plus" text="创建酒店" @click="createHotel"></rice-button>
 		</view>

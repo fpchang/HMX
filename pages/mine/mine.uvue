@@ -2,67 +2,75 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-	<rice-navbar title="" bg-color="rgba(0,0,0,0)" :left-arrow="false" :auto-back="false"></rice-navbar>
+		<rice-navbar title="" bg-color="rgba(0,0,0,0)" :left-arrow="false" :auto-back="false"></rice-navbar>
 		<view class="user-area">
-			<view class="card"> 
-			<view class="avator">
-				<image src="/static/icons/mine/avator.png" style="height:60px;width:60px" mode="aspectFit"></image>
-			</view>
-			<view class="info" style="flex:1">
-				<view class="info-item"  style="margin-bottom: 4px;">
-					<text style="color: rgb(30,30,30);font-weight: 700;font-size: 24px;">{{formatUserName}}</text>
-					<!-- <text style="margin-left:14px; padding:4px 10px ;border-radius: 12px; background-color:rgba(30,136,229,0.1) ;color:rgb(30,136,229)">酒店管理员</text> -->
+			<view class="card">
+				<view class="avator">
+					<image src="/static/icons/mine/avator.png" style="height:60px;width:60px" mode="aspectFit"></image>
+				</view>
+				<view class="info" style="flex:1">
+					<view class="info-item" style="margin-bottom: 4px;">
+						<text style="color: rgb(30,30,30);font-weight: 700;font-size: 24px;">{{formatUserName}}</text>
+						<!-- <text style="margin-left:14px; padding:4px 10px ;border-radius: 12px; background-color:rgba(30,136,229,0.1) ;color:rgb(30,136,229)">酒店管理员</text> -->
 					</view>
 					<navigator url="./editUser/editUser">
-				<view class="info-item" style="margin-bottom: 12px;display: flex;flex-direction: row;justify-content: space-between;">					
-					<text style="color: rgb(144,147,153);font-size: 16px;">{{emergency_phone_number((user.phone ?? '') as string)}}</text>					
-							<rice-icon size="16px" name="arrow-right"/>					
-					</view>
+						<view class="info-item"
+							style="margin-bottom: 12px;display: flex;flex-direction: row;justify-content: space-between;">
+							<text
+								style="color: rgb(144,147,153);font-size: 16px;">{{emergency_phone_number((user.phone ?? '') as string)}}</text>
+							<rice-icon size="16px" name="arrow-right" />
+						</view>
 					</navigator>
-			<!-- 	<view class="info-item"><text style="color:rgb(30,136,229);font-size: 16px;font-weight: 700;">编辑个人资料></text></view> -->
-				<!-- <rice-cell-group border>
+					<!-- 	<view class="info-item"><text style="color:rgb(30,136,229);font-size: 16px;font-weight: 700;">编辑个人资料></text></view> -->
+					<!-- <rice-cell-group border>
 				  <rice-cell :title="user.userName" :title-style="titleStyle" size="medium" /> 
 				  <rice-cell :title="emergency_phone_number((user.phone ?? '') as string)"   :border="false"  arrow arrow-direction="right" size="medium"/>
 				</rice-cell-group> -->
+				</view>
 			</view>
-			</view>
-			
+
 		</view>
-	
+
 		<view class="hotel-area">
 			<view class="title">
 				<text class="txt">当前酒店</text>
 				<navigator url="/pages/hotelManage/hotelList/hotelList">
 					<text class="btn-txt">查看全部</text>
 				</navigator>
-				
+
 			</view>
-			<block v-if="hotel_id!=''">
-				
-			
-			<view class="card"> 
-				<view class="img-area">
-					<image :src="topImg()" style="height: 100%;width: 100%;" mode="aspectFill"></image>
-				</view>
-				<view class="card-title-group">
-					<view class="card-title-area">
-						<view class="card-title"><text class="txt">{{hotel?.hotelName}}</text></view>
-						<view class="card-subtitle">
-							<image src="/static/icons/position_black.png" style="width:14px;height:14px;margin-right: 4px;"></image>
-							<text class="txt">{{hotel?.hotelAddress}}</text>
-							</view>
-					</view>
-					<view class="state">
-						<text class="txt">正常运营</text>
-					</view>
-				</view>
-			</view>
-			</block>
+
+
+
 			<view class="card">
-					<operation></operation>
-								
+				<block v-if="hotel_id!=''">
+					<view class="img-area">
+						<image :src="topImg()" style="height: 100%;width: 100%;" mode="aspectFill"></image>
+					</view>
+					<view class="card-title-group">
+						<view class="card-title-area">
+							<view class="card-title"><text class="txt">{{hotel?.hotelName}}</text></view>
+							<view class="card-subtitle">
+								<image src="/static/icons/position_black.png"
+									style="width:14px;height:14px;margin-right: 4px;"></image>
+								<text class="txt">{{hotel?.hotelAddress}}</text>
+							</view>
+						</view>
+						<view class="state">
+							<text class="txt">正常运营</text>
+						</view>
+					</view>
+				</block>
+				<view  v-if="hotel_id==''"  style="height:300px">
+					<l-empty description="没有数据"/>
+				</view>
 			</view>
-			
+
+			<view class="card">
+				<operation></operation>
+
+			</view>
+
 		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
@@ -72,8 +80,8 @@
 <script setup>
 	import { state } from "@/store/store";
 	import operation from "./components/operation.uvue";
-	import {emergency_phone_number} from "@/static/utils/telphone_transform.uts";
-	import {userBean} from "@/bean/userBean";
+	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
+	import { userBean } from "@/bean/userBean";
 	const user = computed<userBean>(() => {
 		return state.user;
 	});
@@ -86,13 +94,13 @@
 	const hotelList = computed(() => {
 		return state.hotelList;
 	});
-	const formatUserName=computed<string>(()=>{
-		if(user.value.userName != null && user.value.userName != '' ){
-			return  user.value.userName;
+	const formatUserName = computed<string>(() => {
+		if (user.value.userName != null && user.value.userName != '') {
+			return user.value.userName;
 		}
 		return `用户${user.value.phone.slice(-4)}`;
 	})
-	const topImg = (): string => {
+	const topImg = () : string => {
 		if (hotel.value == null) {
 			return '/static/images/hotel.png';
 		}
@@ -103,116 +111,133 @@
 		return firstImages;
 	};
 	console.log(user.value)
-	const titleStyle={
-		fontSize:'24px',
-		fontWeight:'700'
+	const titleStyle = {
+		fontSize: '24px',
+		fontWeight: '700'
 	}
 </script>
 
 <style lang="scss">
-.user-area{
-	
-	
-	padding:15px;
-	.card{
-		
-		box-sizing: border-box;
-		padding:18px;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		background-color: #fff;
-		border-radius: 12px;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-		// box-shadow: 0 4px 12px rgba(0,0,0,0.85);
-		.avator{
-			width: 80px;
-			height: 80px;
-			background-color: silver;
-			margin-right: 25px;
-			border-radius: 40px;
+	.user-area {
+
+
+		padding: 15px;
+
+		.card {
+
+			box-sizing: border-box;
+			padding: 18px;
 			display: flex;
 			flex-direction: row;
 			align-items: center;
-			justify-content: center;
-		}
-		.info{
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-			height: 100%;
-			.info-item{
-				display: flex;flex-direction: row;align-items: center;
-				
+			background-color: #fff;
+			border-radius: 12px;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+			// box-shadow: 0 4px 12px rgba(0,0,0,0.85);
+			.avator {
+				width: 80px;
+				height: 80px;
+				background-color: silver;
+				margin-right: 25px;
+				border-radius: 40px;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: center;
 			}
-		}
-	}
-	
-}
-.hotel-area{
-	padding:15px;
-	.title{
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		padding:18px 0;
-		.txt{
-			color: rgb(30,30,30);
-			font-weight: 700;
-			font-size: 22px;
-		}
-		.btn-txt{
-			font-size: 16px;
-			color: rgb(30 ,136 ,229);
-		}
-	}
-	.card{
-		background-color: #fff;
-		border-radius: 12px;
-		margin-bottom: 32px;
-		.img-area{
-			height: 350rpx;
-			max-height: 300px;
-			background-color: #eee;
-		}
-		.card-title-group{
-			display: flex;
-			flex-direction: row;
-	
-			justify-content: space-between;
-			padding:15px;
-			.card-title-area{
-				.card-title{
-					.txt{
-						color: rgb(30,30,30);
-						font-weight: 700;
-						font-size: 20px;
-					}
-				}
-				.card-subtitle{
-					margin-top: 8px;
+
+			.info {
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				height: 100%;
+
+				.info-item {
 					display: flex;
 					flex-direction: row;
 					align-items: center;
-					.txt{
-						color: rgb(144,147,153 );
-						font-size: 14px;
-					}
-				}
-			}
-			.state{
-				
-				
-				.txt{
-					background-color: rgba(255, 152, 0,0.1);
-					color: rgb(255, 152 ,0);
-					font-size: 14px;
-					padding: 8px;
-					border-radius: 4px;
+
 				}
 			}
 		}
-		
+
 	}
-}
+
+	.hotel-area {
+		padding: 15px;
+
+		.title {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			padding: 18px 0;
+
+			.txt {
+				color: #64748b;
+				font-weight: 700;
+				font-size: 22px;
+			}
+
+			.btn-txt {
+				font-size: 16px;
+				color: rgb(30, 136, 229);
+			}
+		}
+
+		.card {
+			background-color: #fff;
+			border-radius: 12px;
+			margin-bottom: 32px;
+
+			.img-area {
+				height: 350rpx;
+				max-height: 300px;
+				background-color: #eee;
+			}
+
+			.card-title-group {
+				display: flex;
+				flex-direction: row;
+
+				justify-content: space-between;
+				padding: 15px;
+
+				.card-title-area {
+					.card-title {
+						.txt {
+							color: rgb(30, 30, 30);
+							font-weight: 700;
+							font-size: 20px;
+						}
+					}
+
+					.card-subtitle {
+						margin-top: 8px;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+
+						.txt {
+							color: rgb(144, 147, 153);
+							font-size: 14px;
+						}
+					}
+				}
+
+				.state {
+
+
+					.txt {
+						background-color: rgba(255, 152, 0, 0.1);
+						color: rgb(255, 152, 0);
+						font-size: 14px;
+						padding: 8px;
+						border-radius: 4px;
+					}
+				}
+			}
+
+		}
+	}
 </style>

@@ -82,7 +82,7 @@
 				<rice-checkbox-group @change="recreationCheckboxChange" direction="row"
 					v-model="hotelForm.recreationFacility">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
-						v-for="item in facilityConfig_base">
+						v-for="item in facilityConfig_recreation">
 						<rice-checkbox :disabled="pageType==2" :value="item ['_id']" :label="item.name" />
 					</view>
 				</rice-checkbox-group>

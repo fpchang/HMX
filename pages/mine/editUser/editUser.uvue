@@ -31,6 +31,7 @@
 		  </rice-form-item>
 		   <rice-form-item name="username" label="头像">
 		  		<xt-file-upload :max-count="1" :filePath="`HM/user`"
+				:default_files_list="[userForm.avatar]"
 		  			 @uploadSuccess="uploadAvatarSuccess"
 		  			accept="image"></xt-file-upload>
 		  	 </rice-form-item>
@@ -49,22 +50,23 @@
 		import { state, setUser } from '@/store/store.uts';
 		import { comFunction } from "@/pages/index/ComFuc.uts";
 		import {userBean} from "@/bean/userBean";
+		
 		type formBean = {
 		  username : string,
 		  avatar:string
 		}
+		const user = computed<userBean>(() => {
+			return state.user;
+		});
 		const userForm = ref<formBean>({
-		  username: '',
-		  avatar:""
+		  username: user.value.userName,
+		  avatar:user.value.avatar
 		})
 		//自定义 rice-input 的样式
 		const inputStyle = ref({
 		  height: '24px',
 		  padding: '0px',
 		  backgroundColor: 'transparent',
-		});
-		const user=computed<userBean>(() => {
-			return state.user;
 		});
 		const uploadAvatarSuccess=(list : string[])=>{
 			userForm.value.avatar=list[0];
@@ -80,8 +82,14 @@
 			      uni.showLoading({title:""});
 			      try {
 			       if (user.value != null && user.value._id != null) {
-			         await AccountService.updateUserName(user.value._id as string, userForm.value.username);
-			       } else {
+					   const userObj = {
+						   userName: userForm.value.username,
+						   avatar:userForm.value.avatar
+					   }
+			       //  await AccountService.updateUserName(user.value._id as string, userForm.value.username);
+			       await AccountService.updateUser(user.value._id as string, userObj);
+			      			      
+				   } else {
 			         throw new Error("用户信息异常");
 			       }
 				   await comFunction.getUser();

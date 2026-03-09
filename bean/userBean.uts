@@ -14,6 +14,7 @@ export type userBean={
 	wxNickName: string,
 	wxOpenId: string,
 	hm_token: string,
+	avatar:string,
 	accountStatus: number
 }
 export const  getInitUser=():userBean=>{
@@ -33,6 +34,7 @@ export const  getInitUser=():userBean=>{
 		wxNickName: "",
 		wxOpenId: "",
 		hm_token: "",
+		avatar:"",
 		accountStatus: 1
 	}
 }

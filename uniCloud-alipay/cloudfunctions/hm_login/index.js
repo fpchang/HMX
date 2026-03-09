@@ -86,13 +86,14 @@ function getUser(phone,token) {
 		"nickName": "",
 		"phone": phone,
 		"userId": phone,
-		"userName": "",
+		"userName": `用户${phone.substr(-4)}`,
 		"vipEndDate": dateFormat(new Date(vipEndDateStamp),"yyyy-MM-dd HH:mm:ss"),
 		"vipEndDateStamp":vipEndDateStamp,
 		"vipStartDate": dateFormat(new Date(vipStartDateStamp),"yyyy-MM-dd HH:mm:ss"),
 		"wxNickName": "",
 		"wxOpenId": "",
 		"hm_token":token,
+		"avatar":"",
 		"blongEmployment": []
 	}
 }

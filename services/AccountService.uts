@@ -63,6 +63,7 @@ class AccountServiceClass {
 				wxNickName: userObj.getString("wxNickName")??"",
 				wxOpenId: userObj.getString("wxOpenId")??"",
 				hm_token: userObj.getString("hm_token")??"",
+				avatar: userObj.getString("avatar")??"",
 				accountStatus: userObj.getNumber("accountStatus")??1
 			}
 			
@@ -92,11 +93,21 @@ class AccountServiceClass {
 				wxNickName: userObj.getString("wxNickName")??"",
 				wxOpenId: userObj.getString("wxOpenId")??"",
 				hm_token: userObj.getString("hm_token")??"",
+				avatar: userObj.getString("avatar")??"",
 				accountStatus: userObj.getNumber("accountStatus")??1
 			}
 			
 		}
 		return user;
+	}
+	async updateUser(_id : string, userObj:UTSJSONObject) : Promise<boolean> {
+		try{
+			await DB.update("hm-user", _id, userObj);
+			return true;
+		}catch(e){
+			throw new Error("更新失败");
+		}
+		
 	}
 	updateUserName(_id : string, userName : string) : Promise<UniCloudDBUpdateResult> {
 		return DB.update("hm-user", _id, { userName } as UTSJSONObject);

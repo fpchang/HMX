@@ -163,7 +163,7 @@
 			beforeClose: async () : Promise<boolean> => {
 				try {
 					await HotelService.deleteHotel(targetObj._id as string);
-					await comFunction.getHotelList();
+					await comFunction.init();
 					hideDialog();
 					uni.showToast({
 						title: "删除成功",

@@ -217,7 +217,7 @@
 			const res = await HotelService.createHotel(hotelForm.value);
 			console.log("res:::::::", res);
 			submitLoading.value = false;
-			comFunction.getHotelList();
+			comFunction.init();
 			uni.navigateBack();
 		} catch (e) {
 			submitLoading.value = false;

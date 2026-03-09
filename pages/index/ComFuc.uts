@@ -119,8 +119,8 @@ class ComFuc {
 		uni.showLoading({ title: '' });
 		this.getUser();
 		await this.getHotelList();
-		await this.getRoomTypeList(state.hotel_id);
 		await this.setDefaultHotel();
+		await this.getRoomTypeList(state.hotel_id);
 		console.log("all thing is ok;");
 		uni.hideLoading();
 

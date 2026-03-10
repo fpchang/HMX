@@ -35,6 +35,9 @@
 		}
 		for(let i =0;i<props.default_files_list.length;i++){
 			let url =  props.default_files_list[i] as string;
+			if(url==""){
+				continue;
+			}
 			if(url.includes("?")){
 				url=url.split("?")[0];
 			}

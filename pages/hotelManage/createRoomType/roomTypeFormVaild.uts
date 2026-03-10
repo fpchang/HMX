@@ -13,7 +13,9 @@ export const  validRoomTypeForm = (roomTypeForm:roomTypeBean):boolean=>{
 		msg="入住人数最少1人";
 	
 	}
-	
+	if(roomTypeForm.priceBase<1){
+		msg="房型价格不得低于1元";
+	}
 	if(msg!=""){
 		uni.showToast({
 			title:msg,

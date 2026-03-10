@@ -274,11 +274,12 @@ class HotelServiceClass {
 		try {
 			const res = await DB.callFunction("hm_deleteEmployee", { _id });
 			console.log("res", res);
+			return true;
 		} catch (error) {
 			//TODO handle the exception
 			throw new Error("删除员工失败");
 		}
-		return false;
+
 	}
 	async addEmployee(employeeForm : employeeBean) : Promise<boolean> {
 		try {

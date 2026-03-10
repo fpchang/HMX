@@ -204,6 +204,34 @@
 			return;
 		}
 		console.log("delete");
+		showDialog({
+			title: '确认删除此员工',
+			message: "删除后将无法恢复，确认删除吗？",
+			beforeClose: async () : Promise<boolean> => {
+				try {
+					await HotelService.deleteEmployee(em._id);
+					uni.showToast({
+						title:"删除成功",
+						icon:"none"
+					});
+					await employeeAction.getEmplolyeeList(hotel_id.value);
+					return true;
+				} catch (e) {
+					uni.showToast({
+						title: "系统异常",
+						icon: "none"
+					});
+					return false;
+				}
+			},
+			confirm: () => {
+			}, cancel: () => {
+				hideDialog();
+			}
+		
+		});
+	
+		
 	}
 	const makePhone = (phone : string) => {
 		let deviceType = uni.getSystemInfoSync().deviceType;

@@ -17,7 +17,6 @@ export const  validEmployeeForm = (employeeForm:employeeBean):boolean=>{
 		msg=telStr;
 	
 	}
-	
 	if(msg!=""){
 		uni.showToast({
 			title:msg,

@@ -21,9 +21,7 @@
 			</view>
 		</template>
 	</rice-navbar>
-	<!-- #ifdef APP -->
-	<scroll-view style="flex:1" @scroll="scrollPage">
-	<!-- #endif -->
+	<scroll-view style="flex:1" @scroll="scrollPage" v-if="roomTypeList.length>0">
 		<view class="card-list">
 			
 			<view class="card-list-item" v-for="(roomType,index) of roomTypeList">
@@ -107,9 +105,10 @@
 
 		</view>
 
-	<!-- #ifdef APP -->
 	</scroll-view>
-	<!-- #endif -->
+	<view style="margin-top:80px">
+		<l-empty description="没有数据" v-if="roomTypeList.length<1" />
+	</view>
 
 </template>
 

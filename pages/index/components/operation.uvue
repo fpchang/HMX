@@ -6,7 +6,7 @@
 				
 				<view class="list-item" v-for="item in menuList" >
 					<navigator :url="item.url" hover-class="none">
-					<view class="groupIcon" :style="{'backgroundColor':item.bgColor}">
+					<view class="groupIcon">
 						<image :src="item.icon" class="icon-style" mode="aspectFit"></image>
 					</view>
 					<view>
@@ -89,26 +89,27 @@
 				justify-content: center;
 
 				.groupIcon {
-					width:60px;
-					height:60px;
+					// width:60px;
+					// height:60px;
 					display: flex;
 					flex-direction: row;
 					align-items: center;
 					justify-content: center;
 					border-radius: 30px;
-					background-color: #165dff1a;
+					/*background-color: #165dff1a;*/
 					
 
 					.icon-style {
-						width: 18px;
-						height: 18px;
+						width: 35px;
+						height: 35px;
 					}
 				}
 
 				.label {
-					font-size: 14px;
+					font-size: 13px;
 					padding-top: 8px;
 					color: #64748b;
+					text-align: center;
 				}
 			}
 		}

@@ -133,16 +133,17 @@ class RoomTypeClass {
 				independentBathroom
 			}
 			const res = await DB.callFunction("hm_addRoomType", { roomTypeObj });
+			console.log("res::",res);
 			const result = res['result'] as UTSJSONObject;
-			const code = result['code'] as string;
-			const message = result.message as string;
-			if (code != '0') {
+			const code = result.getNumber("code");
+			const message = result.getString("message")??'';
+			if (code != 0) {
 				console.log("code error", code);
 				uni.showToast({
 					title: message,
 					icon: "none"
 				});
-				throw new Error(result.message as string);
+				throw new Error(message);
 			}
 			uni.showToast({
 				title: "添加成功",

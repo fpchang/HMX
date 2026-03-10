@@ -6,7 +6,7 @@
 		<view class="user-area">
 			<view class="card">
 				<view class="avator">
-					<image src="/static/icons/mine/avator.png" style="height:60px;width:60px" mode="aspectFit"></image>
+					<image :src="avator" style="height:80px;width:80px" mode="aspectFill"></image>
 				</view>
 				<view class="info" style="flex:1">
 					<view class="info-item" style="margin-bottom: 4px;">
@@ -93,6 +93,12 @@
 	const hotelList = computed(() => {
 		return state.hotelList;
 	});
+	const avator = computed<string>(()=>{
+		if(user.value.avatar!=""&&user.value.avatar!=null){
+			return user.value.avatar;
+		}
+		return "/static/icons/mine/avator.png";
+	})
 	const formatUserName = computed<string>(() => {
 		if (user.value.userName != null && user.value.userName != '') {
 			return user.value.userName;

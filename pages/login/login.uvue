@@ -1,108 +1,137 @@
 <template>
-	<view class="login">
-
-		<!-- <view class="left-panal">
-		
-			<image style="width:100%;height:100%" src="https://cdn.hotelsys.fun/HM/images/advise/bg9.png" mode="aspectFill"></image>
-		</view> -->
-		<view class="center-panal">
-			<view class="container">
-				
-				<view class="form-content-style">
-					<view class="form-item">
-						<view class="log-area">
-						
-							<!-- <image style="width:200px;height:150px" src="https://cdn.hotelsys.fun/HM/images/blue-logo.jpg" /> -->
-							<view class="log-img-area"><image style="width:80px;height:80px" src="/static/images/ysw.png" /></view>
-							<view class="txt-area"><text class="txt">登录</text></view>
-						</view>
-					</view>
-					<view class="form-item">
-						<view class="input-area">
-							<view style="padding-right: 15px">
-								<!-- <l-icon name="material-symbols-light:phone-android-outline" size="25px" color="#9aa4bb" /> -->
-							<image src="/static/icons/phone.png" class="form-icon"></image>
-							</view>
-							<view class="input-style">
-								<input type="tel" maxlength="11" inputmode="tel" v-model="userForm.phone"
-									placeholder="请输入手机号" style="font-size: 14px;" />
-							</view>
-						
-						</view>
-					</view>
-					<view class="form-item">
-						<view class="input-area">
-							<view style="padding-right: 15px">
-								<!-- <l-icon name="solar:lock-password-broken" size="25px" color="#9aa4bb" /> -->
-								<image src="/static/icons/code.png" class="form-icon"></image>
-							</view>
-							<view class="input-style">
-								<input type="number" maxlength="4" v-model="userForm.smsCode" placeholder="请输入验证码"
-									style="font-size: 14px;" />
-							</view>
-							<view>
-								<text @click="getCode"
-									:class="['smstext', sendSmsDisabled? 'smstext-disable':'']">{{tips}}</text>
-							</view>
-						
-						
-						</view>
-						
-					</view>
-					<view class="form-item" style="padding-top:15px">
-						<rice-button type="primary" text="登录体验" class="btn"  shape="round" color="#165dff" :disabled="submitDisabled || submitLoading" @click="submit"  :loading="submitLoading"/>
-					</view>
-					<view class="form-item"> 
-					<view class="up">
-						<view @click="agreeEvent" style="padding-right: 2px;">
-							<!-- <l-icon v-show="isAgree" name="material-symbols:check-circle" size="20"
-								color="#165dff"></l-icon>
-							<l-icon v-show="!isAgree" name="material-symbols-light:circle-outline" size="20"
-								color="#165dff"></l-icon> -->
-								<image v-show="!isAgree" src="/static/icons/circle.png" class="form-icon"></image>
-										<image v-show="isAgree" src="/static/icons/confirm_selcted.png" class="form-icon"></image>
-								
-						</view>
-						<view>
-							<text class="ct">我已阅读并同意<text class="txt-btn"
-									@click="openUserAgreement">《用户协议》</text>和<text
-									class="txt-btn"
-									@click="openUserPrivacyPolicy">《隐私政策》</text></text>
-						</view>
-					
-					</view>
-					</view>
-				
-				
+	<view class="container">
+		<!-- 分屏左右风格 Split Screen -->
+		<view class="left-panel">
+			<view class="left-content">
+				<text class="brand-text">议宿</text>
+				<text class="slogan-text">轻松管理\n解放束缚</text>
+				<view class="feature-list">
+					<text class="feature-item">✓ 人事管理</text>
+					<text class="feature-item">✓ 房型管理</text>
+					<text class="feature-item">✓ 房间管理</text>
+					<text class="feature-item">✓ 订单管理</text>
+					<text class="feature-item">✓ 财务管理</text>
+					<text class="feature-item">✓ 分享信息</text>
 				</view>
 			</view>
-
+			<view class="decoration-circle"></view>
 		</view>
 
+		<view class="right-panel">
+			<view class="right-header">
+				<text class="welcome-text">欢迎回来</text>
+				<text class="sub-text">请登录您的账户</text>
+			</view>
 
+			<!-- 登录表单 -->
+			<view class="form-box">
+				<view class="segment-control">
+					<view :class="['segment-item',loginType == 'app'? 'segment-item-active':'']" @click="switchLoginType('app')">
+						<text class="segment-item-text">一键登录</text>
+					</view>
+					<view  :class="['segment-item',loginType == 'code'? 'segment-item-active':'']"
+						@click="switchLoginType('code')">
+						<text class="segment-item-text">验证码</text>
+					</view>
+				</view>
+
+				<view class="input-list">
+					<view class="split-input" v-if="loginType === 'code'">
+						<text class="input-label">手机号</text>
+						<input type="number" placeholder="请输入手机号" placeholder-style="color: #bbbbbb;"
+							v-model="input_phone" maxlength="11" />
+					</view>
+
+					<view class="split-input" v-if="loginType === 'code'">
+						<text class="input-label">验证码</text>
+						<view class="code-flex">
+							<input type="number" placeholder="请输入验证码" placeholder-style="color: #bbbbbb;" v-model="code"
+								maxlength="6" style="flex:1" />
+							<button class="send-split" @click="sendCode">
+								{{ countdown > 0 ? countdown + 's' : '获取验证码' }}
+							</button>
+						</view>
+					</view>
+
+					<view class="split-input" v-if="loginType === 'password'">
+						<text class="input-label">密码</text>
+						<view class="pwd-flex">
+							<input :type="showPassword ? 'text' : 'password'" placeholder="请输入密码"
+								placeholder-style="color: #bbbbbb;" v-model="password" />
+							<text class="eye-split" @click="showPassword = !showPassword">
+								{{ showPassword ? '隐藏' : '显示' }}
+							</text>
+						</view>
+					</view>
+				</view>
+
+				<button v-if="loginType != 'app'" class="split-btn" @click="handleLogin"><text class="split-btn-text">登 录</text></button>
+
+				<text class="forgot-split" v-if="loginType === 'password'" @click="forgotPwd">忘记密码?</text>
+			</view>
+
+			<!-- 一键登录 -->
+			<view class="wechat-split" v-if="loginType==='app'">
+				<view class="split-line-wrapper">
+					<view class="split-line"></view>
+					<!-- <text class="split-line-text">其他方式</text> -->
+					<view class="split-line"></view>
+				</view>
+				<view class="wechat-icon-box" @click="verify(false)">
+					<image src="/static/icons/phone.png" style="width: 16px;height: 16px;"></image>
+					<text class="w-text">手机一键登录</text>
+				</view>
+			</view>
+			<view class="up">
+				<view @click="agreeEvent" style="padding-right: 2px;">
+					<!-- <l-icon v-show="isAgree" name="material-symbols:check-circle" size="20"
+						color="#165dff"></l-icon>
+					<l-icon v-show="!isAgree" name="material-symbols-light:circle-outline" size="20"
+						color="#165dff"></l-icon> -->
+					<image v-show="!isAgree" src="/static/icons/circle.png" class="form-icon"></image>
+					<image v-show="isAgree" src="/static/icons/confirm_selcted.png" class="form-icon"></image>
+
+				</view>
+				<view style="flex: 1;display: flex;flex-direction: row;">
+					<text class="ct">同意</text>
+					<text class="ct-txt-btn" @click="openUserAgreement">《用户协议》</text>
+					<text class="ct">和</text>
+					<text class="ct-txt-btn" @click="openUserPrivacyPolicy">《隐私政策》</text>
+
+
+					<!-- 	<text class="ct">我已阅读并同意</text> -->
+				</view>
+
+			</view>
+		</view>
 	</view>
 </template>
-
-<script setup>
+<script setup lang="uts">
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
 	import { ref, computed } from "vue";
 	import { AccountService } from "../../services/AccountService";
 	import { state, setUser } from '@/store/store.uts';
-	import {userFormBean} from "@/bean/loginBean.uts";
-	import {userBean} from "@/bean/userBean";
-	// type userFormBean = {
-	// 	tk : string,
-	// 	smsCode : string,
-	// 	phone : string
-	// };
-	let userForm = ref<userFormBean>({
-		tk: "",
-		smsCode: "",
-		phone: ""
-	});
+	import { userFormBean } from "@/bean/loginBean.uts";
+	import { userBean } from "@/bean/userBean";
+	const loginType = ref("app");
+	const input_phone = ref("");
+	const code = ref("");
+	const tk = ref("");
+	const password = ref("");
+	const showPassword = ref(false);
+	const countdown = ref(0);
+
+	const uniVerifyManager = ref(null as UniVerifyManager | null)
+	const phone = ref('')
+	const slogan = ref('')
+	const privacyName = ref('')
+	const privacyUrl = ref('')
+
 	let submitLoading = ref(false);
-	let tips = ref<string>("获取验证码");
 	let isAgree = ref(false);
+	const switchLoginType=(type:string)=>{
+		loginType.value=type;
+	}
 	const agreeEvent = () => {
 		console.log(isAgree.value)
 		isAgree.value = !isAgree.value;
@@ -117,65 +146,40 @@
 			url: "/pages/common/privacyPolicy/privacyPolicy",
 		});
 	};
-	const sendSmsDisabled = computed<boolean>(() => {
-		return userForm.value.phone.length != 11;
-	});
-	const submitDisabled = computed<boolean>(() => {
-		return userForm.value.phone.length != 11 || userForm.value.smsCode.length != 4
-	});
-
-
-
-	//rules 校验规则，注意写在Form上面的为 Map 类型
-	const loginRules = new Map<string, FormRules[]>([
-		[
-			"smsCode",
-			[
-				{ required: true, message: '请输入验证码' },
-				{ min: 4, max: 4, message: '字数需为 4', trigger: 'blur' },
-			]
-		],
-		[
-			"phone",
-			//正则校验
-			[{ pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'all' }]
-		]
-	])
-
-	const loginFormRef = ref<RiceFormComponentPublicInstance | null>(null);
-	let canGetCode = ref(true);
-	const sendSmsSuccess = () => {
-		let t : number = 30;
-		tips.value = `${t}S`;
-		canGetCode.value = false;
-		let timevent : number = 0;
-		timevent = setInterval(() => {
-			if (t < 1) {
-				clearInterval(timevent);
-				tips.value = `重新发送`;
-				canGetCode.value = true;
-				return;
-			}
-			t--;
-			tips.value = `${t}S`;
-		}, 1000);
+	const wechatLogin = () => {
+		uni.showToast({ title: '微信登录', icon: 'none' })
 	}
-	const getCode = async () => {
-		console.log("getcode");
-		if (!canGetCode.value) {
+
+
+	const sendSmsSuccess = () => {
+		countdown.value = 60;
+		let timer : number | null = null
+		timer = setInterval(() => {
+			countdown.value--
+			if (countdown.value <= 0) {
+				if (timer != null) {
+					clearInterval(timer as number)
+				}
+			}
+		}, 1000)
+	}
+	const sendCode = async () => {
+		if (countdown.value > 0) {
 			uni.showToast({ title: "倒计时结束后再发送", icon: "none" });
 			return;
 		}
-		if (sendSmsDisabled.value) {
-			return;
+		if (input_phone.value == '' || input_phone.value.length != 11) {
+			uni.showToast({ title: '请输入正确的手机号', icon: 'none' })
+			return
 		}
+
 		uni.showLoading({ title: "" });
 		try {
-			const res = await AccountService.sendSmsCode(userForm.value.phone);
+			const res = await AccountService.sendSmsCode(input_phone.value);
 			const data = res.result as UTSJSONObject;
 			console.log("res", res);
-			const tk = data.tk as string;
-			userForm.value.tk = tk;
+			const tkstr = data.tk as string;
+			tk.value = tkstr;
 			uni.setStorageSync("tk", tk);
 			uni.hideLoading();
 			sendSmsSuccess();
@@ -184,39 +188,23 @@
 				title: "发送短信失败"
 			})
 		}
-
-		// uniCloud
-		//   .callFunction({
-		//     name: "hm-sendSms",
-		//     data: {
-		//       phone: this.userForm.phone,
-		//       templateId: "100",
-		//     },
-		//   })
-		//   .then((res) => {
-		//     //console.log("sendsms value", res);
-		//     userForm.value.tk = res.result.tk;
-		//     uni.setStorageSync("tk", res.result.tk);
-		//     uni.hideLoading();
-		//    sendSmsSuccess();
-		//   });
-
+		//uni.showToast({ title: '验证码已发送', icon: 'none' })
 	}
-	// const getUserInfo = async () => {
-	// 	console.log("getuserinfo")
+	const handleLogin = async () => {
+		if (input_phone.value == '') {
+			uni.showToast({ title: '请输入手机号', icon: 'none' })
+			return
+		}
+		if (loginType.value === 'code' && code.value == '') {
+			uni.showToast({ title: '请输入验证码', icon: 'none' })
+			return
+		}
+		if (loginType.value === 'password' && password.value == '') {
+			uni.showToast({ title: '请输入密码', icon: 'none' })
+			return
+		}
+		//uni.showToast({ title: '登录成功', icon: 'success' })
 
-	// 	const userRes = await AccountService.getUserInfoByPhone(userForm.value.phone)
-
-	// 	const data = userRes['data'] as Array<UTSJSONObject>;
-	// 	uni.setStorageSync("user", data[0]);
-	// 	setUser(data[0]);
-	// 	submitLoading.value = false;
-
-	// 	uni.reLaunch({
-	// 		url: "/pages/index/index",
-	// 	});
-	// }
-	const submit = async () => {
 		console.log("submit")
 		if (!isAgree.value) {
 			uni.showToast({
@@ -228,7 +216,11 @@
 		submitLoading.value = true;
 
 		try {
-			const res = await AccountService.login({ ...userForm.value });
+			const res = await AccountService.login({
+				tk: tk.value,
+				smsCode: code.value,
+				phone: input_phone.value
+			});
 			console.log("ressss", res)
 
 
@@ -236,7 +228,7 @@
 			const data = result.data as UTSJSONObject;
 			const code = result.code as number;
 			const msg = result.msg as string;
-			console.log("code====",code);
+			console.log("code====", code);
 			if (code != 0) {
 				uni.showToast({
 					title: msg,
@@ -251,7 +243,7 @@
 			if (token != null) {
 				uni.setStorageSync("hm_token", token as string);
 			}
-			uni.setStorageSync("phone", userForm.value.phone);
+			uni.setStorageSync("phone", input_phone.value);
 			//getUserInfo();
 			uni.reLaunch({
 				url: "/pages/index/index",
@@ -260,225 +252,411 @@
 			console.log("登录失败", error);
 			submitLoading.value = false;
 		}
+	}
+	const forgotPwd = () => {
+		uni.showToast({ title: '忘记密码', icon: 'none' })
+	}
 
-	};
-	const createdEvent=() => {
-		try {
-			let phone = uni.getStorageSync("phone") as string;
-			if (phone != "") {
-				userForm.value.phone = phone.toString();
+
+	const preLogin = (callback : (() => void)) => {
+		uniVerifyManager.value?.preLogin({
+			success: (res) => {
+				phone.value = res.number;
+				slogan.value = res.slogan;
+				privacyName.value = res.privacyName;
+				privacyUrl.value = res.privacyUrl;
+				console.log("pre login success");
+				callback();
+			},
+			fail: (err) => {
+				console.error("pre login fail => " + JSON.stringify(err));
+				const hasCauseMessage = (err.cause?.cause?.message ?? '').length > 0
+				uni.showModal({
+					title: '预登录失败',
+					content: hasCauseMessage ? JSON.parseObject(err.cause?.cause?.message ?? '')?.getString("errorDesc") : err.errMsg,
+					showCancel: false
+				});
 			}
+		});
+	}
+	const takePhoneNumber = async (accessToken : string, openId : string) => {
+		// 云函数取号
+		try {
+
+			const res = await uniCloud.callFunction({
+				name: 'hm_login',
+				data: {
+					userForm: {
+						phone: "",
+						smsCode: "",
+						loginType: "app"
+					},
+					access_token: accessToken, // 客户端一键登录接口返回的access_token
+					openid: openId // 客户端一键登录接口返回的openid
+				}
+			});
+			console.log("取号结果", res);
+			const result = res.result as UTSJSONObject;
+			const data = result.data as UTSJSONObject;
+			const code = result.code as number;
+			const msg = result.msg as string;
+			console.log("code====", code);
+			submitLoading.value = false;
+			if (code != 0) {
+				uni.showToast({
+					title: msg,
+					duration: 2000,
+					icon: "error",
+				});
+				submitLoading.value = false;
+				return;
+			}
+
+			const token = data['token'] as string | null;
+			if (token != null) {
+				uni.setStorageSync("hm_token", token as string);
+			}
+			uni.setStorageSync("phone", phone.value);
+			uni.reLaunch({
+				url: "/pages/index/index",
+			});
+			// 关闭登录页
+			uniVerifyManager.value?.close();
 		} catch (error) {
-			userForm.value.phone = "";
+			submitLoading.value = false;
+			uniVerifyManager.value?.close();
+			uni.showModal({
+				title: '登录失败',
+				content: "请用其它方式登录",
+				showCancel: false
+			});
+
+
 		}
-	};
-	const user = computed<userBean>(() => {
-		return state.user;
-	});
-	createdEvent();
+
+	}
+
+	const login = (fullScreen : boolean) => {
+
+		uniVerifyManager.value?.login({
+			uniVerifyStyle: {
+				fullScreen: fullScreen,
+				loginBtnText: "一键登录",
+				logoPath: "/static/images/ys.png"
+			},
+			success: (res) => {
+				console.log("login success => " + JSON.stringify(res));
+				//takePhoneNumber(res.accessToken, res.openId);
+			},
+			fail: (err) => {
+				console.error("login fail => " + err);
+				submitLoading.value = false;
+			}
+		});
+	}
+
+	const verify = (fullScreen : boolean) => {
+		if (!isAgree.value) {
+			uni.showToast({
+				title: "请先阅读并同意协议",
+				icon: "none",
+			});
+			return;
+		}
+		if (submitLoading.value == true) {
+			return;
+		}
+		if ('production' === process.env.NODE_ENV && '__UNI__HelloUniAppX' === uni.getAppBaseInfo().appId) {
+			uni.showModal({
+				title: '提示',
+				content: '一键登录为收费功能，当前环境暂不支持',
+				showCancel: false
+			})
+			return
+		}
+		// 校验预登录是否有效
+		submitLoading.value = true;
+		const isPreLoginValid = uniVerifyManager.value?.isPreLoginValid() ?? false;
+		if (isPreLoginValid) {
+			// 预登录有效，执行登录
+			login(fullScreen);
+		} else {
+			// 预登录无效，执行预登录
+			preLogin(() => {
+				login(fullScreen);
+			})
+		}
+	}
+
+	onLoad(() => {
+		uniVerifyManager.value = uni.getUniVerifyManager();
+		// 预登录
+		preLogin(() => { });
+	})
 </script>
 
-<style lang="scss">
-	.flex-center {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
 
-	.flex-left {
-		display: flex;
-		align-items: center;
-	}
-
-	.flex-end {
-		display: flex;
-		justify-content: flex-end;
-	}
-
-	.flex-between {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-
-	.flx-column {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.btn {
+<style lang="scss" scoped>
+	.container {
 		flex: 1;
-	}
-
-	.btn-area {
-		width: 100%;
-		margin: auto;
-		height: 45px;
-
-	}
-
-	.login {
-		min-width: 375px;
-		width: 750rpx;
-		overflow: hidden;
-		flex: 1;
-		background-color: #fff;
-		display: flex;
 		flex-direction: row;
-		justify-content: center;
-		.left-panal {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-content: center;
-			width: 105rpx;
-			overflow: hidden;
-			
-			background-image:url("https://cdn.hotelsys.fun/HM/images/advise/bg9.png");
-			.subtitle {
-				display: flex;
-				flex-direction: row;
-
-				.txt-style {
-					font-size: 16px;
-					color: #fff;
-				}
-
-			}
-
-
-		}
-
-		.center-panal {
-			width: 645rpx;
-			display: flex;
-			flex-direction: row;
-			justify-content: center;
-			align-items: center;
-			.container {
-				
-				/* box-shadow: 0px 0px 12px #00000014;*/
-				padding:18px;
-				border-radius: 18px;
-				min-height: 100rpx;
-				box-sizing: border-box;
-				overflow: hidden;
-				display: flex;
-				flex-direction: row;
-				justify-content: center;
-				.form-content-style {
-					flex: 1;
-					max-width: 300px;
-
-					box-sizing: border-box;
-					overflow: hidden;
-					.form-item{
-						display: flex;
-						flex-direction: row;
-						margin-bottom: 25px;
-						&:last-child{
-							margin-bottom: 0;
-						}
-						.input-area {
-							flex: 1;
-							box-sizing: border-box;
-							margin: auto;
-							border: 1px solid #9aa4bb;
-							height: 45px;
-							padding: 8px;
-							border-radius: 8px;
-							box-sizing: border-box;
-							display: flex;
-							align-items: center;
-							flex-direction: row;
-							font-size: 16px;
-							
-							.input-style {
-								flex: 1;
-							}
-							.form-icon{
-								width:20px;
-								height:20px;
-							}
-						}
-						
-						.input-area-error {
-							border: 1px solid #ff0000;
-						}
-						
-						.sms-btn {
-							border-radius: 22.5px;
-							color: #fff;
-							background-color: #165dff;
-						
-						}
-						
-						.smstext {
-							color: #165dff;
-							margin-right: 6px;
-							font-size: 14px;
-							text-align: right;
-						}
-						
-						.smstext-disable {
-							color: #bbb;
-						}
-						.log-area{
-							display: flex;
-							flex: 1;
-							flex-direction: row;
-							align-items: flex-end;
-							justify-content: center;
-							.log-img-area{
-								width: 80px;
-								height: 80px;
-								background:#165dff;
-								border-radius: 12px;
-							}
-							.txt-area{
-								display: flex;
-								flex-direction: row;
-								align-items: flex-end;
-								height: 80px;
-								.txt{
-									font-size: 20px;
-									font-weight: bold;
-									padding-left: 25px;
-									padding-bottom: 12px;
-								}
-							}
-							
-						}
-						.up {
-							display: flex;
-							flex: 1;
-							flex-direction: row;
-							align-items: center;
-							justify-content: center;
-						
-							.ct {
-								font-size: 12px;
-								color:gray;
-								.txt-btn{
-									color:#165dff;
-									font-size: 12px;
-								}
-							}
-							.form-icon{
-								width:20px;
-								height:20px;
-							}
-						}
-					}
-					
-					
-				}
-			}
-
-
-		}
-
-		.right-panal {}
 	}
 
+	/* 左侧装饰面板 */
+	.left-panel {
+		width: 30%;
+		background-image: linear-gradient(to bottom left, #0091ff, #3949ab);
+		padding: 30px 20px;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.left-content {
+		position: relative;
+		z-index: 1;
+	}
+
+	.brand-text {
+		font-size: 24px;
+		color: #ffffff;
+		font-weight: bold;
+		letter-spacing: 4px;
+		margin-bottom: 20px;
+	}
+
+	.slogan-text {
+		font-size: 18px;
+		color: rgba(255, 255, 255, 0.9);
+		line-height: 1.6;
+		margin-bottom: 30px;
+	}
+
+	.feature-list {
+		margin-top: 20px;
+	}
+
+	.feature-item {
+		font-size: 12px;
+		color: rgba(255, 255, 255, 0.7);
+		margin-bottom: 8px;
+	}
+
+	.decoration-circle {
+		position: absolute;
+		width: 200px;
+		height: 200px;
+		border-radius: 100px;
+		background: rgba(255, 255, 255, 0.05);
+		bottom: -50px;
+		right: -50px;
+	}
+
+	/* 右侧登录面板 */
+	.right-panel {
+		flex: 1;
+		background-color: #ffffff;
+		padding: 40px 25px 25px;
+	}
+
+	.right-header {
+		margin-bottom: 25px;
+	}
+
+	.welcome-text {
+		font-size: 20px;
+		color: #333333;
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+
+	.sub-text {
+		font-size: 13px;
+		color: #999999;
+	}
+
+	.form-box {
+		margin-bottom: 20px;
+	}
+
+	.segment-control {
+		flex-direction: row;
+		background-color: #f5f5f5;
+		border-radius: 6px;
+		padding: 3px;
+		margin-bottom: 20px;
+	}
+
+	.segment-item {
+		flex: 1;
+		height: 30px;
+		justify-content: center;
+		align-items: center;
+		border-radius: 5px;
+		.segment-item-text {
+			font-size: 13px;
+			color: #666666;
+		}
+	}
+
+	
+
+	.segment-item-active {
+		background-color: #ffffff;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+		.segment-item-text {
+			color: #1a237e!important;
+			font-weight: bold;
+			
+		}
+	}
+
+
+	.input-list {
+		margin-bottom: 15px;
+	}
+
+	.split-input {
+		margin-bottom: 15px;
+	}
+
+	.input-label {
+		font-size: 12px;
+		color: #666666;
+		margin-bottom: 6px;
+	}
+
+	.split-input-field {
+		font-size: 16px;
+		color: #333333;
+		height: 30px;
+		border-bottom: 1px solid #e0e0e0;
+		padding: 0;
+	}
+
+	.code-flex,
+	.pwd-flex {
+		flex: 1;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.code-flex .split-input-field,
+	.pwd-flex .split-input-field {
+		flex: 1;
+	}
+
+	.send-split {
+		width: 80px;
+		height: 30px;
+		background-color: #0091ff;
+		border-radius: 4px;
+		font-size: 11px;
+		color: #ffffff;
+		margin-left: 10px;
+		padding: 0;
+		line-height: 30px;
+	}
+
+	.send-split::after {
+		border: none;
+	}
+
+	.eye-split {
+		font-size: 12px;
+		color: #0091ff;
+		margin-left: 10px;
+	}
+
+	.split-btn {
+		width: 100%;
+		height: 45px;
+		background-color: #0091ff;
+		border-radius: 6px;
+		margin-top: 10px;
+	}
+
+	.split-btn::after {
+		border: none;
+	}
+
+	.split-btn-text {
+		font-size: 16px;
+		color: #ffffff;
+		letter-spacing: 4px;
+	}
+
+	.forgot-split {
+		font-size: 12px;
+		color: #0091ff;
+		text-align: center;
+		margin-top: 10px;
+	}
+
+	/* 微信登录 */
+	.wechat-split {
+		align-items: center;
+	}
+
+	.split-line-wrapper {
+		flex-direction: row;
+		align-items: center;
+		margin-bottom: 15px;
+	}
+
+	.split-line {
+		flex: 1;
+		height: 0.5px;
+		background-color: #e0e0e0;
+	}
+
+	.split-line-text {
+		padding: 0 10px;
+		font-size: 12px;
+		color: #999999;
+	}
+
+	.wechat-icon-box {
+		flex-direction: row;
+		align-items: center;
+		padding: 8px 20px;
+		background-color: #f5f5f5;
+		border-radius: 20px;
+	}
+
+	.w-icon {
+		font-size: 16px;
+		margin-right: 6px;
+	}
+
+	.w-text {
+		font-size: 13px;
+		color: #333333;
+	}
+
+	.up {
+		margin: 24px 0;
+		max-height: 40px;
+		display: flex;
+		flex: 1;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+
+		.ct {
+			font-size: 12px;
+			color: gray;
+
+
+		}
+
+		.ct-txt-btn {
+			color: #165dff;
+			font-size: 12px;
+		}
+
+		.form-icon {
+			width: 20px;
+			height: 20px;
+		}
+	}
 </style>

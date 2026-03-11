@@ -3,7 +3,7 @@ import { warn, isObject } from './util'
 
 type Token = {
 	type : 'text' | 'named' | 'list' | 'unknown',
-	value : string
+	value? : string
 }
 
 const RE_TOKEN_LIST_VALUE = /^(?:\d)+/

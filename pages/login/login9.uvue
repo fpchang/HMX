@@ -1,0 +1,484 @@
+<template>
+	<view class="login">
+	<navigator url="/pages/login/loginapp/loginapp">gggg</navigator>
+		<!-- <view class="left-panal">
+		
+			<image style="width:100%;height:100%" src="https://cdn.hotelsys.fun/HM/images/advise/bg9.png" mode="aspectFill"></image>
+		</view> -->
+		<view class="center-panal">
+			<view class="container">
+				
+				<view class="form-content-style">
+					<view class="form-item">
+						<view class="log-area">
+						
+							<!-- <image style="width:200px;height:150px" src="https://cdn.hotelsys.fun/HM/images/blue-logo.jpg" /> -->
+							<view class="log-img-area"><image style="width:80px;height:80px" src="/static/images/ysw.png" /></view>
+							<view class="txt-area"><text class="txt">登录</text></view>
+						</view>
+					</view>
+					<view class="form-item">
+						<view class="input-area">
+							<view style="padding-right: 15px">
+								<!-- <l-icon name="material-symbols-light:phone-android-outline" size="25px" color="#9aa4bb" /> -->
+							<image src="/static/icons/phone.png" class="form-icon"></image>
+							</view>
+							<view class="input-style">
+								<input type="tel" maxlength="11" inputmode="tel" v-model="userForm.phone"
+									placeholder="请输入手机号" style="font-size: 14px;" />
+							</view>
+						
+						</view>
+					</view>
+					<view class="form-item">
+						<view class="input-area">
+							<view style="padding-right: 15px">
+								<!-- <l-icon name="solar:lock-password-broken" size="25px" color="#9aa4bb" /> -->
+								<image src="/static/icons/code.png" class="form-icon"></image>
+							</view>
+							<view class="input-style">
+								<input type="number" maxlength="4" v-model="userForm.smsCode" placeholder="请输入验证码"
+									style="font-size: 14px;" />
+							</view>
+							<view>
+								<text @click="getCode"
+									:class="['smstext', sendSmsDisabled? 'smstext-disable':'']">{{tips}}</text>
+							</view>
+						
+						
+						</view>
+						
+					</view>
+					<view class="form-item" style="padding-top:15px">
+						<rice-button type="primary" text="登录体验" class="btn"  shape="round" color="#165dff" :disabled="submitDisabled || submitLoading" @click="submit"  :loading="submitLoading"/>
+					</view>
+					<view class="form-item"> 
+					<view class="up">
+						<view @click="agreeEvent" style="padding-right: 2px;">
+							<!-- <l-icon v-show="isAgree" name="material-symbols:check-circle" size="20"
+								color="#165dff"></l-icon>
+							<l-icon v-show="!isAgree" name="material-symbols-light:circle-outline" size="20"
+								color="#165dff"></l-icon> -->
+								<image v-show="!isAgree" src="/static/icons/circle.png" class="form-icon"></image>
+										<image v-show="isAgree" src="/static/icons/confirm_selcted.png" class="form-icon"></image>
+								
+						</view>
+						<view>
+							<text class="ct">我已阅读并同意<text class="txt-btn"
+									@click="openUserAgreement">《用户协议》</text>和<text
+									class="txt-btn"
+									@click="openUserPrivacyPolicy">《隐私政策》</text></text>
+						</view>
+					
+					</view>
+					</view>
+				
+				
+				</view>
+			</view>
+
+		</view>
+
+
+	</view>
+</template>
+
+<script setup>
+	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
+	import { ref, computed } from "vue";
+	import { AccountService } from "../../services/AccountService";
+	import { state, setUser } from '@/store/store.uts';
+	import {userFormBean} from "@/bean/loginBean.uts";
+	import {userBean} from "@/bean/userBean";
+	// type userFormBean = {
+	// 	tk : string,
+	// 	smsCode : string,
+	// 	phone : string
+	// };
+	let userForm = ref<userFormBean>({
+		tk: "",
+		smsCode: "",
+		phone: ""
+	});
+	let submitLoading = ref(false);
+	let tips = ref<string>("获取验证码");
+	let isAgree = ref(false);
+	const agreeEvent = () => {
+		console.log(isAgree.value)
+		isAgree.value = !isAgree.value;
+	};
+	const openUserAgreement = () => {
+		uni.navigateTo({
+			url: "/pages/common/userAgreement/userAgreement",
+		});
+	};
+	const openUserPrivacyPolicy = () => {
+		uni.navigateTo({
+			url: "/pages/common/privacyPolicy/privacyPolicy",
+		});
+	};
+	const sendSmsDisabled = computed<boolean>(() => {
+		return userForm.value.phone.length != 11;
+	});
+	const submitDisabled = computed<boolean>(() => {
+		return userForm.value.phone.length != 11 || userForm.value.smsCode.length != 4
+	});
+
+
+
+	//rules 校验规则，注意写在Form上面的为 Map 类型
+	const loginRules = new Map<string, FormRules[]>([
+		[
+			"smsCode",
+			[
+				{ required: true, message: '请输入验证码' },
+				{ min: 4, max: 4, message: '字数需为 4', trigger: 'blur' },
+			]
+		],
+		[
+			"phone",
+			//正则校验
+			[{ pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'all' }]
+		]
+	])
+
+	const loginFormRef = ref<RiceFormComponentPublicInstance | null>(null);
+	let canGetCode = ref(true);
+	const sendSmsSuccess = () => {
+		let t : number = 30;
+		tips.value = `${t}S`;
+		canGetCode.value = false;
+		let timevent : number = 0;
+		timevent = setInterval(() => {
+			if (t < 1) {
+				clearInterval(timevent);
+				tips.value = `重新发送`;
+				canGetCode.value = true;
+				return;
+			}
+			t--;
+			tips.value = `${t}S`;
+		}, 1000);
+	}
+	const getCode = async () => {
+		console.log("getcode");
+		if (!canGetCode.value) {
+			uni.showToast({ title: "倒计时结束后再发送", icon: "none" });
+			return;
+		}
+		if (sendSmsDisabled.value) {
+			return;
+		}
+		uni.showLoading({ title: "" });
+		try {
+			const res = await AccountService.sendSmsCode(userForm.value.phone);
+			const data = res.result as UTSJSONObject;
+			console.log("res", res);
+			const tk = data.tk as string;
+			userForm.value.tk = tk;
+			uni.setStorageSync("tk", tk);
+			uni.hideLoading();
+			sendSmsSuccess();
+		} catch (error) {
+			uni.showToast({
+				title: "发送短信失败"
+			})
+		}
+
+		// uniCloud
+		//   .callFunction({
+		//     name: "hm-sendSms",
+		//     data: {
+		//       phone: this.userForm.phone,
+		//       templateId: "100",
+		//     },
+		//   })
+		//   .then((res) => {
+		//     //console.log("sendsms value", res);
+		//     userForm.value.tk = res.result.tk;
+		//     uni.setStorageSync("tk", res.result.tk);
+		//     uni.hideLoading();
+		//    sendSmsSuccess();
+		//   });
+
+	}
+	// const getUserInfo = async () => {
+	// 	console.log("getuserinfo")
+
+	// 	const userRes = await AccountService.getUserInfoByPhone(userForm.value.phone)
+
+	// 	const data = userRes['data'] as Array<UTSJSONObject>;
+	// 	uni.setStorageSync("user", data[0]);
+	// 	setUser(data[0]);
+	// 	submitLoading.value = false;
+
+	// 	uni.reLaunch({
+	// 		url: "/pages/index/index",
+	// 	});
+	// }
+	const submit = async () => {
+		console.log("submit")
+		if (!isAgree.value) {
+			uni.showToast({
+				title: "请先阅读并同意协议",
+				icon: "none",
+			});
+			return;
+		}
+		submitLoading.value = true;
+
+		try {
+			const res = await AccountService.login({ ...userForm.value });
+			console.log("ressss", res)
+
+
+			const result = res.result as UTSJSONObject;
+			const data = result.data as UTSJSONObject;
+			const code = result.code as number;
+			const msg = result.msg as string;
+			console.log("code====",code);
+			if (code != 0) {
+				uni.showToast({
+					title: msg,
+					duration: 2000,
+					icon: "error",
+				});
+				submitLoading.value = false;
+				return;
+			}
+
+			const token = data['token'] as string | null;
+			if (token != null) {
+				uni.setStorageSync("hm_token", token as string);
+			}
+			uni.setStorageSync("phone", userForm.value.phone);
+			//getUserInfo();
+			uni.reLaunch({
+				url: "/pages/index/index",
+			});
+		} catch (error) {
+			console.log("登录失败", error);
+			submitLoading.value = false;
+		}
+
+	};
+	const createdEvent=() => {
+		try {
+			let phone = uni.getStorageSync("phone") as string;
+			if (phone != "") {
+				userForm.value.phone = phone.toString();
+			}
+		} catch (error) {
+			userForm.value.phone = "";
+		}
+	};
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	createdEvent();
+</script>
+
+<style lang="scss">
+	.flex-center {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.flex-left {
+		display: flex;
+		align-items: center;
+	}
+
+	.flex-end {
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	.flex-between {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.flx-column {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.btn {
+		flex: 1;
+	}
+
+	.btn-area {
+		width: 100%;
+		margin: auto;
+		height: 45px;
+
+	}
+
+	.login {
+		min-width: 375px;
+		width: 750rpx;
+		overflow: hidden;
+		flex: 1;
+		background-color: #fff;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		.left-panal {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-content: center;
+			width: 105rpx;
+			overflow: hidden;
+			
+			background-image:url("https://cdn.hotelsys.fun/HM/images/advise/bg9.png");
+			.subtitle {
+				display: flex;
+				flex-direction: row;
+
+				.txt-style {
+					font-size: 16px;
+					color: #fff;
+				}
+
+			}
+
+
+		}
+
+		.center-panal {
+			width: 645rpx;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			.container {
+				
+				/* box-shadow: 0px 0px 12px #00000014;*/
+				padding:18px;
+				border-radius: 18px;
+				min-height: 100rpx;
+				box-sizing: border-box;
+				overflow: hidden;
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+				.form-content-style {
+					flex: 1;
+					max-width: 300px;
+
+					box-sizing: border-box;
+					overflow: hidden;
+					.form-item{
+						display: flex;
+						flex-direction: row;
+						margin-bottom: 25px;
+						&:last-child{
+							margin-bottom: 0;
+						}
+						.input-area {
+							flex: 1;
+							box-sizing: border-box;
+							margin: auto;
+							border: 1px solid #9aa4bb;
+							height: 45px;
+							padding: 8px;
+							border-radius: 8px;
+							box-sizing: border-box;
+							display: flex;
+							align-items: center;
+							flex-direction: row;
+							font-size: 16px;
+							
+							.input-style {
+								flex: 1;
+							}
+							.form-icon{
+								width:20px;
+								height:20px;
+							}
+						}
+						
+						.input-area-error {
+							border: 1px solid #ff0000;
+						}
+						
+						.sms-btn {
+							border-radius: 22.5px;
+							color: #fff;
+							background-color: #165dff;
+						
+						}
+						
+						.smstext {
+							color: #165dff;
+							margin-right: 6px;
+							font-size: 14px;
+							text-align: right;
+						}
+						
+						.smstext-disable {
+							color: #bbb;
+						}
+						.log-area{
+							display: flex;
+							flex: 1;
+							flex-direction: row;
+							align-items: flex-end;
+							justify-content: center;
+							.log-img-area{
+								width: 80px;
+								height: 80px;
+								background:#165dff;
+								border-radius: 12px;
+							}
+							.txt-area{
+								display: flex;
+								flex-direction: row;
+								align-items: flex-end;
+								height: 80px;
+								.txt{
+									font-size: 20px;
+									font-weight: bold;
+									padding-left: 25px;
+									padding-bottom: 12px;
+								}
+							}
+							
+						}
+						.up {
+							display: flex;
+							flex: 1;
+							flex-direction: row;
+							align-items: center;
+							justify-content: center;
+						
+							.ct {
+								font-size: 12px;
+								color:gray;
+								.txt-btn{
+									color:#165dff;
+									font-size: 12px;
+								}
+							}
+							.form-icon{
+								width:20px;
+								height:20px;
+							}
+						}
+					}
+					
+					
+				}
+			}
+
+
+		}
+
+		.right-panal {}
+	}
+
+</style>

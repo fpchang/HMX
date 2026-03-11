@@ -123,21 +123,21 @@ class FMServiceClass {
 					// 	name: typeItem.getString("name") ?? "",
 					// 	text: typeItem.getString("text") ?? "",
 					// }
-					FMList.push({
-						_id: item.getString("_id") ?? "",
-						amount: item.getNumber("amount") ?? 0,
-						billType: item.getString("billType") ?? "",
-						createTime: item.getNumber("amount") ?? 0,,
-						creater: item.getString("createTime") ?? "",
-						data_status: item.getNumber("data_status"),,
-						hotel_id: item.getString("hotel_id") ?? "",
-						ioeTime: item.getNumber("ioeTime") ?? 0,
-						mark: item.getString("mark") ?? "",
-						type: typeItem.getString("_id") ?? "",
-						type_name: typeItem.getString("name") ?? "",
-						type_text: typeItem.getString("text") ?? "",
-						unit: item.getString("unit") ?? ""
-					})
+		FMList.push({
+			_id: item.getString("_id") ?? "",
+			amount: item.getNumber("amount") ?? 0,
+			billType: item.getString("billType") ?? "",
+			createTime: item.getNumber("createTime") ?? 0,
+			creater: item.getString("creater") ?? "",
+			data_status: item.getNumber("data_status") ?? 0,
+			hotel_id: item.getString("hotel_id") ?? "",
+			ioeTime: item.getNumber("ioeTime") ?? 0,
+			mark: item.getString("mark") ?? "",
+			type: typeItem.getString("_id") ?? "",
+			type_name: typeItem.getString("name") ?? "",
+			type_text: typeItem.getString("text") ?? "",
+			unit: item.getString("unit") ?? ""
+		})
 					//}
 
 				})
@@ -205,7 +205,7 @@ class FMServiceClass {
 	}
 
 	//获取当月收入统计
-	async getIncomeCurrentMonth(hotel_id : string，month:string) : Promise<Array<charPietItem>> {
+	async getIncomeCurrentMonth(hotel_id : string, month:string) : Promise<Array<charPietItem>> {
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
 		const monthFirst = getMonthFirstDay(month);

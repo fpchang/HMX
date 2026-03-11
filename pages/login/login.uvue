@@ -26,10 +26,11 @@
 			<!-- 登录表单 -->
 			<view class="form-box">
 				<view class="segment-control">
-					<view :class="['segment-item',loginType == 'app'? 'segment-item-active':'']" @click="switchLoginType('app')">
+					<view :class="['segment-item',loginType == 'app'? 'segment-item-active':'']"
+						@click="switchLoginType('app')">
 						<text class="segment-item-text">一键登录</text>
 					</view>
-					<view  :class="['segment-item',loginType == 'code'? 'segment-item-active':'']"
+					<view :class="['segment-item',loginType == 'code'? 'segment-item-active':'']"
 						@click="switchLoginType('code')">
 						<text class="segment-item-text">验证码</text>
 					</view>
@@ -66,8 +67,10 @@
 				</view>
 
 				<!-- <button v-if="loginType != 'app'" class="split-btn" @click="handleLogin"><text class="split-btn-text">登 录</text></button> -->
-	<rice-button v-if="loginType != 'app'" type="primary" text="登录" class="btn"  shape="round" color="#165dff" :disabled="submitDisabled || submitLoading" @click="handleLogin"  :loading="submitLoading"/>
-					
+				<rice-button v-if="loginType != 'app'" type="primary" text="登录" class="btn" shape="round"
+					color="#165dff" :disabled="submitDisabled || submitLoading" @click="handleLogin"
+					:loading="submitLoading" />
+
 				<text class="forgot-split" v-if="loginType === 'password'" @click="forgotPwd">忘记密码?</text>
 			</view>
 
@@ -136,8 +139,8 @@
 	const submitDisabled = computed<boolean>(() => {
 		return input_phone.value.length != 11 || code.value.length != 4
 	});
-	const switchLoginType=(type:string)=>{
-		loginType.value=type;
+	const switchLoginType = (type : string) => {
+		loginType.value = type;
 	}
 	const agreeEvent = () => {
 		console.log(isAgree.value)
@@ -224,7 +227,7 @@
 
 		try {
 			const res = await AccountService.login({
-				loginType:'code',
+				loginType: 'code',
 				tk: tk.value,
 				smsCode: code.value,
 				phone: input_phone.value
@@ -387,7 +390,7 @@
 		}
 		// 校验预登录是否有效
 		submitLoading.value = true;
-		uni.showLoading({title:""});
+		uni.showLoading({ title: "" });
 		const isPreLoginValid = uniVerifyManager.value?.isPreLoginValid() ?? false;
 		if (isPreLoginValid) {
 			// 预登录有效，执行登录
@@ -504,21 +507,23 @@
 		justify-content: center;
 		align-items: center;
 		border-radius: 5px;
+
 		.segment-item-text {
 			font-size: 13px;
 			color: #666666;
 		}
 	}
 
-	
+
 
 	.segment-item-active {
 		background-color: #ffffff;
 		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
 		.segment-item-text {
-			color: #1a237e!important;
+			color: #1a237e !important;
 			font-weight: bold;
-			
+
 		}
 	}
 

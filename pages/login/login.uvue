@@ -65,8 +65,9 @@
 					</view>
 				</view>
 
-				<button v-if="loginType != 'app'" class="split-btn" @click="handleLogin"><text class="split-btn-text">登 录</text></button>
-
+				<!-- <button v-if="loginType != 'app'" class="split-btn" @click="handleLogin"><text class="split-btn-text">登 录</text></button> -->
+	<rice-button v-if="loginType != 'app'" type="primary" text="登录" class="btn"  shape="round" color="#165dff" :disabled="submitDisabled || submitLoading" @click="handleLogin"  :loading="submitLoading"/>
+					
 				<text class="forgot-split" v-if="loginType === 'password'" @click="forgotPwd">忘记密码?</text>
 			</view>
 
@@ -129,6 +130,12 @@
 
 	let submitLoading = ref(false);
 	let isAgree = ref(false);
+	const sendSmsDisabled = computed<boolean>(() => {
+		return input_phone.value.length != 11;
+	});
+	const submitDisabled = computed<boolean>(() => {
+		return input_phone.value.length != 11 || code.value.length != 4
+	});
 	const switchLoginType=(type:string)=>{
 		loginType.value=type;
 	}

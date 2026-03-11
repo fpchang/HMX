@@ -210,12 +210,12 @@
 				
 					.txt{
 						text-indent:36px;
-						font-size: 18px;
+						font-size: 14px;
 						color: #e6e6e6;
 					
 						letter-spacing: 2px;
 						text-align: justify;
-						color: #666;
+						color: #999;
 						line-height: 30px;
 					}
 				}

@@ -15,7 +15,7 @@ exports.main = async (event, context) => {
 	}
 	if (loginType == 'code') {
 		console.log('2222', loginType)
-		return loginBySmsCode(phone, tk)
+		return loginBySmsCode(event,context);
 	}
 
 
@@ -97,7 +97,10 @@ async function loginBySmsCode(event,context) {
 	let {userForm} = event;
 	let {smsCode,phone,tk} = userForm;
 	const secret = tokenEvent.getSecret();
-	
+	const dbJQL = uniCloud.databaseForJQL({ // 获取JQL database引用，此处需要传入云函数的event和context，必传
+		event,
+		context
+	});
 	//小程序或测试账号
 	if (!isTestAccount(phone) && client != 'MP') {
 		//检验短信正确性

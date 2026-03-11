@@ -217,6 +217,7 @@
 
 		try {
 			const res = await AccountService.login({
+				loginType:'code',
 				tk: tk.value,
 				smsCode: code.value,
 				phone: input_phone.value
@@ -302,6 +303,7 @@
 			const msg = result.msg as string;
 			console.log("code====", code);
 			submitLoading.value = false;
+			uni.hideLoading();
 			if (code != 0) {
 				uni.showToast({
 					title: msg,
@@ -309,6 +311,7 @@
 					icon: "error",
 				});
 				submitLoading.value = false;
+				uni.hideLoading();
 				return;
 			}
 
@@ -324,6 +327,7 @@
 			uniVerifyManager.value?.close();
 		} catch (error) {
 			submitLoading.value = false;
+			uni.hideLoading();
 			uniVerifyManager.value?.close();
 			uni.showModal({
 				title: '登录失败',
@@ -346,7 +350,7 @@
 			},
 			success: (res) => {
 				console.log("login success => " + JSON.stringify(res));
-				//takePhoneNumber(res.accessToken, res.openId);
+				takePhoneNumber(res.accessToken, res.openId);
 			},
 			fail: (err) => {
 				console.error("login fail => " + err);
@@ -376,6 +380,7 @@
 		}
 		// 校验预登录是否有效
 		submitLoading.value = true;
+		uni.showLoading({title:""});
 		const isPreLoginValid = uniVerifyManager.value?.isPreLoginValid() ?? false;
 		if (isPreLoginValid) {
 			// 预登录有效，执行登录

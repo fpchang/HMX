@@ -46,7 +46,7 @@
 					<view class="split-input" v-if="loginType === 'code'">
 						<text class="input-label">验证码</text>
 						<view class="code-flex">
-							<input type="number" placeholder="请输入验证码" placeholder-style="color: #bbbbbb;" v-model="code"
+							<input type="number" placeholder="请输入验证码" placeholder-style="color: #bbbbbb;" v-model="smsCode"
 								maxlength="6" style="flex:1" />
 							<button class="send-split" @click="sendCode">
 								{{ countdown > 0 ? countdown + 's' : '获取验证码' }}
@@ -138,7 +138,7 @@
 	import { userBean } from "@/bean/userBean";
 	const loginType = ref("app");
 	const input_phone = ref("");
-	const code = ref("");
+	const smsCode = ref("");
 	const tk = ref("");
 	const password = ref("");
 	const showPassword = ref(false);
@@ -156,7 +156,7 @@
 		return input_phone.value.length != 11;
 	});
 	const submitDisabled = computed<boolean>(() => {
-		return input_phone.value.length != 11 || code.value.length != 4
+		return input_phone.value.length != 11 || smsCode.value.length != 4
 	});
 	const switchLoginType = (type : string) => {
 		loginType.value = type;
@@ -224,7 +224,7 @@
 			uni.showToast({ title: '请输入手机号', icon: 'none' })
 			return
 		}
-		if (loginType.value === 'code' && code.value == '') {
+		if (loginType.value === 'code' && smsCode.value == '') {
 			uni.showToast({ title: '请输入验证码', icon: 'none' })
 			return
 		}
@@ -248,15 +248,15 @@
 			const res = await AccountService.login({
 				loginType: 'code',
 				tk: tk.value,
-				smsCode: code.value,
+				smsCode: smsCode.value,
 				phone: input_phone.value
 			});
 			console.log("ressss", res)
 
 
 			const result = res.result as UTSJSONObject;
-			const data = result.data as UTSJSONObject;
-			const code = result.code as number;
+			const data = result.getJSON("data")??{}
+			const code = result.getNumber("code",99);
 			const msg = result.msg as string;
 			console.log("code====", code);
 			if (code != 0) {
@@ -459,7 +459,7 @@
 	}
 
 	.slogan-text {
-		font-size: 18px;
+		font-size: 16px;
 		color: rgba(255, 255, 255, 0.9);
 		line-height: 1.6;
 		margin-bottom: 30px;
@@ -552,13 +552,14 @@
 	}
 
 	.split-input {
-		margin-bottom: 15px;
+		// height:50px;
+		margin-bottom: 24px;
 	}
 
 	.input-label {
 		font-size: 12px;
 		color: #666666;
-		margin-bottom: 6px;
+		margin-bottom: 8px;
 	}
 
 	.split-input-field {
@@ -683,10 +684,8 @@
 	}
 
 	.up {
-		margin: 24px 0 12px 0;
-		max-height: 30px;
+		margin: 0px 0 12px 0;
 		display: flex;
-		flex: 1;
 		flex-direction: row;
 		justify-content: center;
 

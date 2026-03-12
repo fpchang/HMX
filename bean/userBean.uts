@@ -29,7 +29,7 @@ export const  getInitUser=():userBean=>{
 		userName: "",
 		vipEndDate: "",
 		vipEndDateStamp: "",
-		closeAccountDateTime:null
+		closeAccountDateTime:null,
 		vipStartDate: "",
 		wxNickName: "",
 		wxOpenId: "",

@@ -23,6 +23,7 @@ class AccountServiceClass {
 		return DB.callFunction("hm_validToken");
 	}
 	login(userForm : UTSJSONObject) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+		console.log("login",userForm)
 		return DB.callFunction("hm_login", { userForm });
 	}
 	/**

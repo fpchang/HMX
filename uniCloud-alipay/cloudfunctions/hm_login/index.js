@@ -17,7 +17,7 @@ exports.main = async (event, context) => {
 	}
 
 
-
+  
 
 };
 //注册
@@ -119,7 +119,7 @@ async function loginBySmsCode(event,context) {
 
 	try {
 		const userRes = await dbJQL.collection('hm-user').where(`phone=='${phone}'`).get();
-		//console.log("MMMMuser",userRes)
+		console.log("MMMMuser",userRes)
 		if (userRes.data.length > 0) {
 			const user = userRes.data[0];
 			//更新token

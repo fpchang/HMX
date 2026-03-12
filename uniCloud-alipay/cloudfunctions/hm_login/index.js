@@ -10,11 +10,9 @@ exports.main = async (event, context) => {
 	let {loginType} = userForm;
 	console.log("登录参数", event);
 	if (loginType == 'app') {
-		console.log('11111111', loginType)
 		return loginByApp(event,context)
 	}
-	if (loginType == 'code') {
-		console.log('2222', loginType)
+	if (loginType == 'code' || !loginType) {
 		return loginBySmsCode(event,context);
 	}
 

@@ -1,9 +1,6 @@
 <template>
-	<!-- #ifdef APP -->
-	<scroll-view  :refresher-enabled="false" style="flex:1;background:#f5f5f5;display: flex;flex-direction: column" :show-scrollbar="false">
-	<!-- #endif -->
-
-		<view class="index-page-style">
+	<scroll-view v-if="dataReading&&hotel_id!=''"  :refresher-enabled="false" style="flex:1;background:#f5f5f5;display: flex;flex-direction: column" :show-scrollbar="false">
+		<view class="index-page-style" >
 			<view style="width: 750rpx;height: 422rpx;max-height:253px;position: relative;">
 				<!-- <view style="height:44px;width:750rpx;z-index:999; background-color:rgba(0,0,0,0.6);position: absolute;top:0;left: 0;">
 					
@@ -17,13 +14,14 @@
 				<view @click="showCheckHotel"
 					style="position:absolute;bottom:0;left:0;border-top-right-radius: 18px;border-top-left-radius: 18px; background-color: rgba(0,0,0,0.4); width:100%;  padding:5px 20px 20px 20px ;display: flex;flex-direction: row;align-items: center;">
 					<text
-						style="font-size: 22px;padding:15px;color:#fff;min-width:200px;font-family: cursive;font-weight: 400;">{{hotel.hotelName}}</text>
+						style="font-size: 22px;padding:15px;color:#fff;min-width:200px;font-family: cursive;font-weight: 400;">{{hotel?.hotelName}}</text>
 					<rice-icon name="arrow-down" color="#fff" size="22px" />
 				</view>
 			</view>
 
 			<view class="view-item" style="margin-top: -15px;">
-					<gatherComponent></gatherComponent>
+					<!-- <gatherComponent></gatherComponent> -->
+					<tt></tt>
 	
 			</view>
 			<view class="view-item">
@@ -31,9 +29,14 @@
 								
 			</view>
 		</view>
-	<!-- #ifdef APP -->
+
 	</scroll-view>
-	<!-- #endif -->
+	<view style="margin-top: 168px;" v-if="dataReading&&hotel_id==''">
+		<l-empty description="没有酒店" />
+		<view style="display: flex;flex-direction: row;align-items: center;justify-content: center;">
+			<rice-button type="primary" icon="plus" text="创建酒店" @click="createHotel"></rice-button>
+		</view>
+	</view>
 	
 	<rice-popup v-model:show="showPopup" position="bottom" :closeable="true" radius="15px">
 
@@ -66,7 +69,7 @@
 								</view>
 								<view style="padding: 15px 10px" class="zcard-right">
 									<view class="item">
-										<view class="title"><text class="txt">{{item.hotelName}}</text></view>
+										<view class="title"><text class="txt">{{item?.hotelName}}</text></view>
 									</view>
 									<view class="item">
 										<view class="subtitle"><text class="txt">{{
@@ -95,11 +98,13 @@
 <script setup>
 	//import {ref} from "vue";
 	import gatherComponent from "./components/gatherComponent";
+	import tt from "./components/tt";
 	import operation from "./components/operation";
 	
 	import { state, setUser } from '@/store/store.uts';
 	import { comFunction } from "./ComFuc.uts";	
 	import {userBean} from "@/bean/userBean";
+	import { hotelBean } from "@/bean/hotelBean";
 	const showRange = ref(false);
 	const showPopup = ref(false);
 	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"]);
@@ -126,9 +131,9 @@
 		return state.user;
 	});
 	const topImg =():string=>{	
-		// if(hotel.value==null){
-		// 	return '/static/images/hotel.png';
-		// }
+		if(hotel.value==null){
+			return '/static/images/hotel.png';
+		}
 		const firstImages = hotel.value['firstImages'] as string | null;
 		if(firstImages==''||firstImages==null){
 			return '/static/images/hotel.png';
@@ -145,6 +150,11 @@
 		}
 
 	};
+	const createHotel = ()=>{
+		uni.navigateTo({
+			url:"/pages/hotelManage/createHotel/createHotel"
+		})
+	}
 	 // onLoad(async ():Promise<void>=>{
 		//  await comFunction.init();
 		//  dataReading.value=true;
@@ -222,7 +232,7 @@
 
 			.btn {
 
-				background-color: #004af6;
+				background-color: #2a5d98;
 				
 				padding: 8px 20px;
 				border-radius: 22px;

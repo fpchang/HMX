@@ -1,25 +1,23 @@
 <template>
 	<view class="operation">
-		<view class="card">
-			<view class="title"><text class="txt">快速操作</text></view>
-			<view class="list">
-				
-				<view class="list-item" v-for="item in menuList" >
-					<navigator :url="item.url" hover-class="none">
-					<view class="groupIcon">
-						<image :src="item.icon" class="icon-style" mode="aspectFit"></image>
-					</view>
-					<view>
-						<text class="label">{{item.label}}</text>
-					</view>
-					</navigator>
-				</view>
-
-				<view class="list-item" style="height:0"></view>
-				<view class="list-item" style="height:0"></view>
-				<view class="list-item" style="height:0"></view>
-				<view class="list-item" style="height:0"></view>
-			</view>
+		<!-- 快速操作入口 -->
+		<view class="quick-actions">
+		  <text class="action-title">快速操作</text>
+		  <view class="action-grid">
+		    <view class="action-item">
+		      <uni-icons type="compose" size="32" color="#007AFF"></uni-icons>
+		      <text class="action-text">创建订单</text>
+		    </view>
+		    <view class="action-item" >
+		      <uni-icons type="plus" size="32" color="#007AFF"></uni-icons>
+		      <text class="action-text">添加收支</text>
+		    </view>
+		    <view class="action-item"  style="margin-right: 0;">
+		     <uni-icons type="list" size="32" color="#007AFF"></uni-icons>
+			<!-- <rice-icon name="bars" size="32" color="#007AFF"></rice-icon> -->
+		      <text class="action-text">订单管理</text>
+		    </view>
+		  </view>
 		</view>
 	</view>
 </template>
@@ -60,58 +58,39 @@
 </script>
 
 <style lang="scss">
-	.card {
-		background-color: #fff;
-		padding: 15px;
+/* 快速操作 */
+.quick-actions {
+  padding: 0 20px 20px;
+  flex: 1;
+}
 
-		.title {
-			padding: 5px 5px 15px 5px;
+.action-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+  display: block;
+}
 
-			.txt {
-				color: #1f2937;
-				font-weight: 700;
-				color: #1f2937;
-			}
-		}
+.action-grid {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+ flex-direction: row;
 
-		.list {
-			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-			justify-content: space-evenly;
+}
 
-			.list-item {
-				width: 85px;
-				height: 100px;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: center;
+.action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+}
 
-				.groupIcon {
-					// width:60px;
-					// height:60px;
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-					justify-content: center;
-					border-radius: 30px;
-					/*background-color: #165dff1a;*/
-					
-
-					.icon-style {
-						width: 35px;
-						height: 35px;
-					}
-				}
-
-				.label {
-					font-size: 13px;
-					padding-top: 8px;
-					color: #64748b;
-					text-align: center;
-				}
-			}
-		}
-	}
+.action-text {
+  font-size: 14px;
+  color: #333;
+  padding:8px;
+}
 </style>

@@ -1,287 +1,102 @@
 <template>
-	<view class="gather">
+  <view class="container">
+    <!-- 顶部导航栏：酒店名称 + 切换按钮 -->
+   <!-- <view class="header">
+      <view class="hotel-info">
+        <text class="hotel-name">{{ currentHotel.name }}</text>
+        <button class="switch-btn" @click="showHotelSelector = true">
+          <text>切换</text>
+          <uni-icons type="arrowdown" size="16" color="#fff"></uni-icons>
+        </button>
+      </view>
+    </view> -->
 
-		<view class="stats-card">
-			<view class="stats-header">
-				<view class="header-title">
-					<image src="/static/icons/analysis.png" style="width:55px;height:55px"></image>
-					<view style="padding-left: 8px;">
-						<view><text class="txt">住房数据统计</text></view>
-						<view class="header-date"><text class="txt">{{currentData()}}</text></view>
-					</view>
-				</view>
-				<!-- <view style="padding-top:8px">
-					<rice-tabs v-model="activeIndex" :list="list" @clickTab="tabClick" bg-color="rgba(255,255,255,0)"
-						:shrink="true" :item-style="itemStyle" line-width="60%" title-active-color="#000"
-						line-color="#000" :active-style="activeStyle"></rice-tabs>
+    <!-- 酒店选择弹窗 -->
+ <!--   <uni-popup v-model:show="showHotelSelector" type="bottom" :height="60%">
+      <view class="popup-content">
+        <text class="popup-title">选择酒店</text>
+        <scroll-view class="hotel-list" scroll-y>
+          <view 
+            class="hotel-item" 
+            v-for="(hotel, index) in hotelList" 
+            :key="index"
+            @click="switchHotel(hotel)"
+          >
+            <text class="hotel-item-name">{{ hotel.name }}</text>
+            <uni-icons 
+              type="checkmark" 
+              size="20" 
+              color="#007AFF" 
+              v-if="hotel.id === currentHotel.id"
+            ></uni-icons>
+          </view>
+        </scroll-view>
+        <button class="close-btn" @click="showHotelSelector = false">取消</button>
+      </view>
+    </uni-popup> -->
 
-				</view> -->
-			</view>
-			<!-- <view class="swiper" :style="{transform: `translateX(${swiperx})`}" @touchmove="swiperMove">
-				<view class="swiper-item">
-					<view class="stats-body">
-						<view class="stat-item">
-							<view class="card check-out">
-								<view class="stat-icon">
-									<image class="img-style" src="/static/icons/accessin-mount.png"></image>
-								</view>
-								<view class="stat-number"><text class="txt">{{numOrderToday}}</text></view>
-								<view class="stat-label"><text class="txt">今日入住</text></view>
-							</view>
+    <!-- 住房统计模块：今日/明日切换 -->
+    <view class="stats-section">
+      <view class="stats-tab">
+        <button 
+          class="tab-btn" 
+          :class="{ active: activeIndex == 0 }"
+          @click="tabClick(0)"
+		  style="margin-right: 10px;"
+        >
+          今日
+        </button>
+        <button 
+          class="tab-btn" 
+          :class="{ active: activeIndex == 1 }"
+          @click="tabClick(1)"
+        >
+          明日
+        </button>
+      </view>
 
-						</view>
-						<view class="stat-item">
-							<view class="card check-in">
-								<view class="stat-icon">
-									<image class="img-style" src="/static/icons/accessout-mount.png"></image>
-								</view>
-								<view class="stat-number"><text class="txt">{{numAccessOutToday}}</text></view>
-								<view class="stat-label"><text class="txt">今日退房</text></view>
-							</view>
-
-						</view>
-
-						<view class="stat-item">
-							<view class="card occupied-rooms">
-								<view class="stat-icon">
-									<image class="img-style" src="/static/icons/ykmn.png"></image>
-								</view>
-								<view style="padding:10px 0">
-
-
-									<l-circle :percent="numCustomerOrderToday_percent" size="100px" strokeColor="green"  trailColor="#eee" strokeWidth="12"
-										trailWidth="12">
-										<text class="val-text">{{numCustomerOrderToday}}</text>
-									</l-circle>
-				
-
-								</view>
-								<view class="stat-label"><text class="txt">当前在住</text></view>
-							</view>
-
-						</view>
-						<view class="stat-item">
-							<view class="card available-rooms">
-								<view class="stat-icon">
-									<image class="img-style" src="/static/icons/empty-room.png"></image>
-								</view>
-								<view style="padding:10px 0">
-
-
-									<l-circle :percent="(100 - numCustomerOrderToday_percent)" trailColor="#eee" size="100px" strokeColor="orange" strokeWidth="12"
-										trailWidth="12">
-										<text class="val-text">{{ roomCount - numCustomerOrderToday}}</text>
-									</l-circle>
-
-								</view>
-								<view class="stat-label"><text class="txt">空房数量</text></view>
-							</view>
-
-						</view>
-
-
-					</view>
-				</view>
-				<view class="swiper-item">
-					<view class="stats-body">
-						<view class="stat-item">
-							<view class="card check-out">
-								<view class="stat-icon">
-									<image class="img-style" src="/static/icons/accessin-mount.png"></image>
-								</view>
-								<view class="stat-number"><text class="txt">{{numOrderTommorow}}</text></view>
-								<view class="stat-label"><text class="txt">明日入住</text></view>
-							</view>
-
-						</view>
-						<view class="stat-item">
-							<view class="card check-in">
-								<view class="stat-icon">
-									<image class="img-style" src="/static/icons/accessout-mount.png"></image>
-								</view>
-								<view class="stat-number"><text class="txt">{{numAccessOutTommorow}}</text></view>
-								<view class="stat-label"><text class="txt">今日退房</text></view>
-							</view>
-
-						</view>
-
-						<view class="stat-item">
-							<view class="card occupied-rooms">
-								<view class="stat-icon">
-									<image class="img-style" src="/static/icons/ykmn.png"></image>
-								</view>
-								<view style="padding:10px 0">
-
-
-									<l-circle :percent="numCustomerOrderTommorw_percent" size="100px" strokeColor="green" strokeWidth="12"
-										trailWidth="12">
-										<text class="val-text">{{numCustomerOrderTommorw}}</text>
-									</l-circle>
-
-								</view>
-								<view class="stat-label"><text class="txt">当前在住</text></view>
-							</view>
-
-						</view>
-						<view class="stat-item">
-							<view class="card available-rooms">
-								<view class="stat-icon">
-									<image class="img-style" src="/static/icons/empty-room.png"></image>
-								</view>
-								<view style="padding:10px 0">
-
-
-									<l-circle :percent="(100 - numCustomerOrderTommorw_percent)" size="100px" strokeColor="orange" strokeWidth="12"
-										trailWidth="12">
-										<text class="val-text">{{roomCount - numCustomerOrderTommorw}}</text>
-									</l-circle>
-
-								</view>
-								<view class="stat-label"><text class="txt">空房数量</text></view>
-							</view>
-
-						</view>
-
-
-					</view>
-				</view>
-			</view> -->
-			<l-tabs :value="activeIndex" @click="onClick" :spaceEvenly="false" :swipeable="true" :animated="true"
-				:split="false" :lStyle="itemStyle" lineWidth="50px">
-				<l-tab-panel :value="0" label="今日入住">
-					<view class="content-panel">
-						<view class="swiper-item">
-							<view class="stats-body">
-								<view class="stat-item">
-									<view class="card check-out">
-										<view class="stat-icon">
-											<image class="img-style" src="/static/icons/accessin-mount.png"></image>
-										</view>
-										<view class="stat-number"><text class="txt">{{numOrderToday}}</text></view>
-										<view class="stat-label"><text class="txt">今日入住</text></view>
-									</view>
-
-								</view>
-								<view class="stat-item">
-									<view class="card check-in">
-										<view class="stat-icon">
-											<image class="img-style" src="/static/icons/accessout-mount.png"></image>
-										</view>
-										<view class="stat-number"><text class="txt">{{numAccessOutToday}}</text></view>
-										<view class="stat-label"><text class="txt">今日退房</text></view>
-									</view>
-
-								</view>
-
-								<view class="stat-item">
-									<view class="card occupied-rooms">
-										<view class="stat-icon">
-											<image class="img-style" src="/static/icons/ykmn.png"></image>
-										</view>
-										<view style="padding:10px 0">
-
-
-											<l-circle :percent="numCustomerOrderToday_percent" size="100px"
-												strokeColor="green" trailColor="#eee" strokeWidth="12" trailWidth="12">
-												<text class="val-text">{{numCustomerOrderToday}}</text>
-											</l-circle>
-
-
-										</view>
-										<view class="stat-label"><text class="txt">当前在住</text></view>
-									</view>
-
-								</view>
-								<view class="stat-item">
-									<view class="card available-rooms">
-										<view class="stat-icon">
-											<image class="img-style" src="/static/icons/empty-room.png"></image>
-										</view>
-										<view style="padding:10px 0">
-
-
-											<l-circle :percent="(100 - numCustomerOrderToday_percent)" trailColor="#eee"
-												size="100px" strokeColor="orange" strokeWidth="12" trailWidth="12">
-												<text class="val-text">{{ roomCount - numCustomerOrderToday}}</text>
-											</l-circle>
-
-										</view>
-										<view class="stat-label"><text class="txt">空房数量</text></view>
-									</view>
-
-								</view>
-
-
-							</view>
-						</view>
-					</view>
-				</l-tab-panel>
-				<l-tab-panel :value="1" label="明日入住">
-					<view class="content-panel">
-						<view class="swiper-item">
-							<view class="stats-body">
-								<view class="stat-item">
-									<view class="card check-out">
-										<view class="stat-icon">
-											<image class="img-style" src="/static/icons/accessin-mount.png"></image>
-										</view>
-										<view class="stat-number"><text class="txt">{{numOrderTommorow}}</text></view>
-										<view class="stat-label"><text class="txt">明日入住</text></view>
-									</view>
-								</view>
-								<view class="stat-item">
-									<view class="card check-in">
-										<view class="stat-icon">
-											<image class="img-style" src="/static/icons/accessout-mount.png"></image>
-										</view>
-										<view class="stat-number"><text class="txt">{{numAccessOutTommorow}}</text>
-										</view>
-										<view class="stat-label"><text class="txt">今日退房</text></view>
-									</view>
-								</view>
-								<view class="stat-item">
-									<view class="card occupied-rooms">
-										<view class="stat-icon">
-											<image class="img-style" src="/static/icons/ykmn.png"></image>
-										</view>
-										<view style="padding:10px 0">
-											<l-circle :percent="numCustomerOrderTommorw_percent" size="100px"
-												strokeColor="green" strokeWidth="12" trailWidth="12">
-												<text class="val-text">{{numCustomerOrderTommorw}}</text>
-											</l-circle>
-
-										</view>
-										<view class="stat-label"><text class="txt">当前在住</text></view>
-									</view>
-								</view>
-								<view class="stat-item">
-									<view class="card available-rooms">
-										<view class="stat-icon">
-											<image class="img-style" src="/static/icons/empty-room.png"></image>
-										</view>
-										<view style="padding:10px 0">
-											<l-circle :percent="(100 - numCustomerOrderTommorw_percent)" size="100px"
-												strokeColor="orange" strokeWidth="12" trailWidth="12">
-												<text class="val-text">{{roomCount - numCustomerOrderTommorw}}</text>
-											</l-circle>
-										</view>
-										<view class="stat-label"><text class="txt">空房数量</text></view>
-									</view>
-								</view>
-							</view>
-						</view>
-					</view>
-				</l-tab-panel>
-
-			</l-tabs>
-
-		</view>
-
-
-	</view>
+      <!-- 统计数据卡片 -->
+	  <view class="stats-card" v-if="activeIndex==0">
+	    <view class="stats-item">
+	      <text class="stats-label">今日入住</text>
+	      <text class="stats-value">11</text>
+	    </view>
+	    <view class="stats-item">
+	      <text class="stats-label">今日退房</text>
+	      <text class="stats-value">33</text>
+	    </view>
+	    <view class="stats-item">
+	      <text class="stats-label">当前在住</text>
+	      <text class="stats-value">44</text>
+	    </view>
+	    <view class="stats-item">
+	      <text class="stats-label">空房数量</text>
+	      <text class="stats-value">55</text>
+	    </view>
+	  </view>
+      <view class="stats-card" v-if="activeIndex==1">
+        <view class="stats-item">
+          <text class="stats-label">明日入住</text>
+          <text class="stats-value">11</text>
+        </view>
+        <view class="stats-item">
+          <text class="stats-label">明日退房</text>
+          <text class="stats-value">33</text>
+        </view>
+        <view class="stats-item">
+          <text class="stats-label">当前在住</text>
+          <text class="stats-value">44</text>
+        </view>
+        <view class="stats-item">
+          <text class="stats-label">空房数量</text>
+          <text class="stats-value">55</text>
+        </view>
+      </view>
+    </view>
+  </view>
 </template>
 
-<script setup>
+<script setup lang="ts">
 	import { ref, watch } from 'vue';
 	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
 	import { dayuts } from '@/uni_modules/lime-dayuts';
@@ -325,10 +140,10 @@
 	}
 	// 组件挂载后初始化echarts实例 (也可在请求数据后初始化)
 	function initEchart() {
-
+	
 	}
-	function tabClick(e : TabsClickTab) {
-		activeIndex.value = e.index as number;
+	function tabClick(index:number) {
+		activeIndex.value = index;
 	}
 	const onClick = (index : number) => {
 		// 在切换前执行一些逻辑，如数据校验
@@ -356,7 +171,7 @@
 		orderList.map(item => {
 			let num = item.reservedRoomList.length;
 			numCount += num;
-
+	
 		});
 		return numCount;
 	}
@@ -450,7 +265,7 @@
 		}
 		swiperx.value = '0'
 	});
-
+	
 	const init = async () => {
 		getGatherEvent(hotel_id.value);
 		//console.log("getGatherEvent",res);
@@ -461,7 +276,7 @@
 	});
 	onBeforeMount(() => {
 		//console.log("gather component onBeforeMound");
-
+	
 	})
 	onMounted(() => {
 		initEchart();
@@ -469,180 +284,107 @@
 	init();
 </script>
 
-<style lang="scss">
-	.gather {
-		display: flex;
-		flex-direction: row;
-		flex: 1;
+<style scoped>
+/* 全局容器 */
+.container {
+  width: 100%;
+  height: 100vh;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+}
 
-	}
+/* 顶部导航栏 */
+.header {
+  background-color: #007AFF;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-	.swiper {
-		width: 200%;
-		display: flex;
-		flex-direction: row;
-		transition: transform 0.4s ease-out;
+.hotel-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
 
-		.swiper-item {
-			flex: 1;
+.hotel-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
 
-		}
-
-	}
-
-	.stats-card {
-		flex: 1;
-		background: #fff;
-		border-radius: 15px;
-		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-		overflow: hidden;
-	}
-
-	.stats-header {
-		// background: #2563eb;
-		padding: 18px 24px;
-		box-sizing: border-box;
-		border-top-right-radius: 15px;
-		border-top-left-radius: 15px;
-
-		.txt {
-			color: #999;
-			font-size: 14px;
-		}
-	}
-
-	.header-title {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-
-		.txt {
-			font-size: 18px;
-			font-weight: 500;
-		}
-
-	}
-
-	.header-date {
-
-		opacity: 0.9;
-		margin-top: 4px;
-
-		.txt {
-			font-size: 14px;
-		}
-	}
-
-	.stats-body {
-		padding: 15px 0;
-		display: flex;
-		flex-direction: row;
-		/*gap: 24px;*/
-		flex-wrap: wrap;
-		justify-content: center;
-
-	}
-
-	.stat-item {
-		min-width: 132px;
-		flex: 1;
-		padding: 10px;
-		width: fit-content;
-
-		.card {
-			flex: 1;
-			display: flex;
-			flex-direction: row;
-			min-width: 112px;
-			padding: 20px 12px;
-			box-sizing: border-box;
-			border-radius: 12px;
-			transition: all 0.3s ease;
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-			align-items: center;
-
-			.val-text {
-				font-size: 32px;
-				font-weight: 700;
-			}
-
-		}
+.switch-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 
 
-	}
 
-	.stat-item:hover {
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-	}
+/* 统计模块 */
+.stats-section {
+  padding: 20px;
+}
 
-	.check-in {
-		border: 1px solid #dbeafe;
-		background-color: #f0f9ff;
-	}
+.stats-tab {
+  display: flex;
+  margin-bottom: 16px;
+  flex-direction: row;
+}
 
-	.check-out {
-		border: 1px solid #fee2e2;
-		background-color: #fff5f5;
-	}
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #333;
+  border: none;
+  font-size: 15px;
+}
 
-	.occupied-rooms {
-		border: 1px solid #e0e7ff;
-		background-color: #f5f7ff;
-	}
+.tab-btn.active {
+  background-color: #007AFF;
+  color: #fff;
+}
 
-	.available-rooms {
-		border: 1px solid #dcfce7;
-		background-color: #f0fdf4;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
+.stats-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding:0 20px 20px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
 
-	.stat-icon {
-		margin-bottom: 10px;
+}
 
-		.img-style {
-			width: 40px;
-			height: 40px;
-		}
-	}
+.stats-item {
+	margin-top: 20px;
+	flex: 1;
+	min-width: 140px;
 
-	.stat-number {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-		margin-bottom: 6px;
+.stats-label {
+  font-size: 14px;
+  color: #666;
+  padding:8px;
+}
 
-		.txt {
-			font-size: 32px;
-			font-weight: 700;
-			color: #1e293b;
-		}
-	}
+.stats-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
 
-	.stat-label {
 
-		.txt {
-			font-size: 14px;
-			color: #64748b;
-		}
-	}
-
-	.chart-container {
-		width: 160px;
-		height: 160px;
-		position: relative;
-		margin-bottom: 12px;
-	}
-
-	.chart-value {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		font-size: 24px;
-		font-weight: 700;
-		color: #1e293b;
-	}
 </style>

@@ -17,7 +17,7 @@
     
   </template>
 </rice-navbar>
-	<scroll-view v-if="dataReading&&hotel_id!=''"  :refresher-enabled="false" style="flex:1;background:#f5f5f5;display: flex;flex-direction: column" :show-scrollbar="false">
+	<scroll-view v-if="dataReading&&hotel_id!=''"  :refresher-enabled="true" :refresher-triggered="refreshState" @refresherrefresh="refreshData" style="flex:1;background:#f5f5f5;display: flex;flex-direction: column" :show-scrollbar="false" >
 		<gatherComponent></gatherComponent>
 		<operation></operation>
 	</scroll-view>
@@ -88,8 +88,9 @@
 			  							</view>
 			  						</view>
 			  						<view class="select">
-			  							<image :src="item._id==hotel_id?'/static/icons/checked.png':'/static/icons/uncheck.png'"
-			  								class="form-icon" style="width:35px;height:35px"></image>
+			  							<!-- <image :src="item._id==hotel_id?'/static/icons/checked.png':'/static/icons/uncheck.png'"
+			  								class="form-icon" style="width:35px;height:35px"></image> -->
+											 <rice-icon v-if="item._id==hotel_id"  name="checked-circle-fill" size="25px" color="#007aff"></rice-icon>
 			  						
 			  						</view>
 			  					</view>
@@ -105,7 +106,7 @@
 </template>
 
 <script setup>
-	//import {ref} from "vue";
+
 	import gatherComponent from "./components/gatherComponent";
 	import operation from "./components/operation";
 	
@@ -173,6 +174,7 @@
 		//    dataReading.value=true;
 		//    //return Promise.resolve({aa:111});
 	 // })
+	
 	 const init = async ()=>{
 		 //comFunction.loadStorage();
 		 await comFunction.init();
@@ -181,6 +183,13 @@
 	 watch(hotel_id,(hotel_idNew:string,hotel_idOld:string):void=>{
 	 	//console.log("hotel_id change index ",hotel_idNew,hotel_idOld)
 	 }); 
+	 const refreshState = ref(false);
+	 const refreshData= async ()=>{
+		   refreshState.value=true;
+			await init();
+			refreshState.value=false;
+			
+	 }
 	    init(); 
 	
 	

@@ -98,6 +98,7 @@ export const getOrderListTommorow = async (hotel_id : string):Promise<Array<orde
 }
 
 export const getGatherEvent = async (hotel_id : string):Promise<boolean> => {
+	console.log("getGatherEvent");
 	// const s1 = getOrderListByCheckInToday(hotel_id);//今日办理入住的客户
 	// const s2 = getOrderListByCheckOutToday(hotel_id);//今天退房订单
 	// const s3 = getOrderListByCheckOutTommorow(hotel_id);//明天退房订单

@@ -2,24 +2,32 @@
 	<view class="operation">
 		<!-- 快速操作入口 -->
 		<view class="quick-actions">
-		  <text class="action-title">快速操作</text>
-		  <view class="action-grid">
-		    <view class="action-item">
-		      <uni-icons type="compose" size="32" color="#007AFF"></uni-icons>
-		      <text class="action-text">创建订单</text>
-		    </view>
-		    <view class="action-item" >
-		      <uni-icons type="plus" size="32" color="#007AFF"></uni-icons>
-		      <text class="action-text">添加收支</text>
-		    </view>
-		    <view class="action-item"  style="margin-right: 0;">
-		     <uni-icons type="list" size="32" color="#007AFF"></uni-icons>
-			<!-- <rice-icon name="bars" size="32" color="#007AFF"></rice-icon> -->
-		      <text class="action-text">订单管理</text>
-		    </view>
-		  </view>
+			<text class="action-title">快速操作</text>
+			<view class="action-grid">
+				<view v-for="item of menuList">
+					<navigator :url="item.url" hover-class="none">
+						<view class="action-item">
+
+							<rice-icon :name="item.icon" size="32" color="#007AFF"></rice-icon>
+							<text class="action-text">{{item.label}}</text>
+
+						</view>
+					</navigator>
+				</view>
+
+			<!-- 	<view class="action-item">
+					<uni-icons type="plus" size="32" color="#007AFF"></uni-icons>
+					<text class="action-text">添加收支</text>
+				</view>
+				<view class="action-item" style="margin-right: 0;">
+					<uni-icons type="list" size="32" color="#007AFF"></uni-icons>
+					<rice-icon name="bars" size="32" color="#007AFF"></rice-icon>
+					<text class="action-text">订单管理</text>
+				</view> -->
+			</view>
 		</view>
 	</view>
+
 </template>
 
 <script setup>
@@ -27,7 +35,7 @@
 	type menu = {
 		icon : string,
 		label : string,
-		bgColor:string,
+		bgColor : string,
 		url : string,
 		show ?: boolean
 	}
@@ -35,62 +43,62 @@
 		return state.permissionList;
 	})
 	const menuList : Array<menu> = [{
-		icon: "/static/icons/operation/add-bold.png",
-		label: "添加订单",
-		bgColor:"#165dff1a",
+		icon: "plus",
+		label: "创建订单",
+		bgColor: "#165dff1a",
 		url: "/pages/order/createOrder/createOrder",
-		show:permissionList.value.includes("FM_CREATE")
+		show: permissionList.value.includes("FM_CREATE")
 	},
 	{
-		icon: "/static/icons/operation/addincome.png",
+		icon: "add",
 		label: "添加收支",
-		bgColor:"#722ed11a",
+		bgColor: "#722ed11a",
 		url: "/pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense?billType=income",
-		show:permissionList.value.includes("FM_CREATE")
+		show: permissionList.value.includes("FM_CREATE")
 	},
 	{
-		icon: "/static/icons/homemenu/order1.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
+		icon: "bars",//rgb(250 173 20 / var(--tw-text-opacity, 1))
 		label: "订单管理",
-		bgColor:"#faad141a",
+		bgColor: "#faad141a",
 		url: "/pages/order/orderList/orderList"
 	}
 	]
 </script>
 
 <style lang="scss">
-/* 快速操作 */
-.quick-actions {
-  padding: 0 20px 20px;
-  flex: 1;
-}
+	/* 快速操作 */
+	.quick-actions {
+		padding: 0 20px 20px;
+		flex: 1;
+	}
 
-.action-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 16px;
-  display: block;
-}
+	.action-title {
+		font-size: 16px;
+		font-weight: 600;
+		color: #333;
+		margin-bottom: 16px;
+		display: block;
+	}
 
-.action-grid {
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  display: flex;
- flex-direction: row;
+	.action-grid {
+		background-color: #fff;
+		border-radius: 12px;
+		padding: 20px;
+		display: flex;
+		flex-direction: row;
 
-}
+	}
 
-.action-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-right: 20px;
-}
+	.action-item {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-right: 20px;
+	}
 
-.action-text {
-  font-size: 14px;
-  color: #333;
-  padding:8px;
-}
+	.action-text {
+		font-size: 14px;
+		color: #333;
+		padding: 8px;
+	}
 </style>

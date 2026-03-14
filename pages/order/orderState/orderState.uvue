@@ -19,7 +19,7 @@
 			</view>
 		</template>
 	</rice-navbar>
-	<scroll-view style="flex:1" v-if="hotel_id!=''">
+	<scroll-view style="flex:1" v-if="hotel_id!=''" :refresher-enabled="true" :refresher-triggered="refreshState" @refresherrefresh="refreshData">
 		<view style="display: flex;flex-direction: row;">
 			<view>
 				<view class="table-container">
@@ -251,6 +251,14 @@
 		}
 		listleft.push(objleft)
 		list.push(obj);
+	}
+	
+	const refreshState = ref(false);
+	const refreshData= async ()=>{
+			   refreshState.value=true;
+				await getGatherEvent(hotel_id.value);
+				refreshState.value=false;
+				
 	}
 </script>
 

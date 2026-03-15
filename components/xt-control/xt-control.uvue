@@ -1,7 +1,7 @@
 <template>
 	<view class="xt-control" v-if="showControl_com">
 		<view class="control-container">
-			<view class="control-item" v-if="!showControl" @click="showControlEvent">
+			<view class="control-item" v-if="!showControl" @click="showControlEvent" style="margin-left: 0;">
 				<image src="/static/icons/more-control.png" style="width:32px;height:32px" @click="showControl"></image>
 			</view>
 			<view v-if="showControl" class="show-container"> 
@@ -102,6 +102,8 @@
 				flex-direction: row;
 				align-items: center;
 				justify-content: center;
+				border-radius: 50%;
+				margin-left: 8px;
 				
 			}
 			.show-container{

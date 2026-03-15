@@ -21,7 +21,7 @@
 	></image>
 	
 	<!-- SVG图标（包括Iconify和带有颜色的SVG图片） -->
-	<l-svg 
+	<!-- <l-svg 
 		v-else-if="iconifyUrl != null || (type == 'image' && parsed.isSvg && color != null)" 
 		class="l-icon l-icon--image l-class"
 		:class="classes"
@@ -31,7 +31,7 @@
 		:inherit="inherit"
 		:web="web"
 		@click="handleClick"
-	></l-svg>
+	></l-svg> -->
 </template>
 <script lang="uts" setup>
 	/**

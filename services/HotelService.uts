@@ -69,7 +69,7 @@ class HotelServiceClass {
 		try {
 			const res = await DB.callFunction("hm_createHotel", { hotelObj });
 			console.log("create hotel", res);
-			const result = res['result'] as UTSJSONObject;
+			const result = res.get("result") as UTSJSONObject;
 			const code = result.getNumber("code") ?? 0;
 			const message = result.getString("message") ?? "";
 			if (code != 0) {

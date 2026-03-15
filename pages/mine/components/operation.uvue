@@ -1,9 +1,12 @@
 <template>
 	<view class="operation">
-		11111
-		<rice-grid :column-num="4" :border="false">
+		<l-grid :inset="true">
+			<l-grid-item  v-for="item of menuList" :text="item.label" :image="item.icon" :url="item.url" openType="navigateTo" />
+			
+		</l-grid>
+		<!-- <rice-grid :column-num="4" :border="false">
 		  <rice-grid-item v-for="item of menuList" :key="item.label" :icon="item.icon" text="内容" />
-		</rice-grid>
+		</rice-grid> -->
 	</view>
 </template>
 
@@ -36,6 +39,10 @@
 </script>
 
 <style lang="scss">
+	.operation{
+		background-color: #fff;
+		border-radius: 8px;
+	}
 	.card {
 		// background-color: #fff;
 		padding: 15px;

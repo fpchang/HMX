@@ -45,7 +45,7 @@
 	const chartRef = ref<LEchartComponentPublicInstance | null>(null);
 
 	const getIncomeMonth = async () : Promise<Array<charPietItem>> => {
-		const list = await FMService.getIncomeCurrentMonth(hotel_id.value);
+		const list = await FMService.getIncomeCurrentMonth(hotel_id.value,month.value);
 		console.log("当月统计", list);
 		return list;
 	}

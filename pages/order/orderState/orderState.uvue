@@ -6,7 +6,7 @@
 
 				<image src="/static/icons/orderstate.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">房态</text>
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">房态</text>
 			</view>
 		</template>
 		<template #right>
@@ -40,7 +40,7 @@
 						<view class="row" v-for="(item,index) of roomList">
 							<view class="cell " style="border-left: 1px solid #e5e7eb;">
 								<view class="cell-content">
-									<text class="txt" style="color:#1f2937;font-size: 16px;">{{item.room_name}}</text>
+									<text class="txt" style="color:#1f2937;font-size: 12px;">{{item.room_name}}</text>
 									<text class="txt-sub"
 										style="color:#6b7280;font-size: 12px;">{{getRoomTypeName(item.room_type_id)}}</text>
 								</view>
@@ -295,8 +295,8 @@
 					background-color: #fff;
 
 					.txt {
-						color: #707684;
-						font-size: 15px;
+						color: #787878;
+						font-size: 12px;
 						text-align: center;
 					}
 					
@@ -319,7 +319,7 @@
 			.cell-th{
 				
 				.cell-content {
-					height: 100px;
+					height: 70px;
 					background-color: #f9fafb;
 				}
 			}
@@ -368,6 +368,7 @@
 		    /*  Math.atan(80 / 150) * 180 / Math.PI  = 28.072486935852954 */
 		    transform: rotate(51deg); 
 		    transform-origin: top left;
+			color: #787878;
 		  }
 		  	
 		  /* 左下角文字 */
@@ -375,8 +376,10 @@
 		    position: absolute;
 		    /* 左下角 left:0; bottom: 0; */
 		    left: 10px;
-		    bottom: 20px;
+		    bottom: 25px;
 			transform: rotate(45deg);
+			color: #787878;
+			font-size: 13px;
 		  }
 		  	
 		  /* 右上角文字 */
@@ -384,8 +387,10 @@
 		    position: absolute;
 		    /* 右上角 right:0; top: 0; */
 		    right: 10px;
-		    top: 20px;
+		    top: 25px;
 			transform: rotate(45deg);
+			color: #787878;
+			font-size: 13px;
 		  }
 	    }
 	

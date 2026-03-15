@@ -7,7 +7,7 @@
 				</navigator>
 				<image src="/static/icons/mine/hotel.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 20px;font-weight: 700;color:#2a5d98;">{{hotel?.hotelName}}</text>
+				<text style="font-size: 18px;font-weight: 700;color:#2a5d98;">{{hotel?.hotelName}}</text>
 			</view>
 		</template>
 		<template #right>
@@ -150,7 +150,7 @@
 	}
 
 	.information {
-		padding: 24px;
+		padding: 18px;
 
 		.title {
 			.txt {
@@ -177,7 +177,7 @@
 	}
 
 	.cotent-list-container {
-		margin-bottom: 32px;
+		// margin-bottom: 32px;
 		padding: 24px;
 
 		.title {
@@ -186,7 +186,7 @@
 
 			.txt {
 				color: #111827;
-				font-size: 24px;
+				font-size: 18px;
 				color: rgb(17, 24, 39);
 				font-weight: 700;
 			}

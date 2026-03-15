@@ -7,7 +7,7 @@
 				</navigator>
 
 				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 20px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
 			</view>
 		</template>
 		<template #right>
@@ -288,7 +288,7 @@
 
 	}
 	init();
-	watch(dateRange, (n: string[], o: string[]) => {
+	watch(dateRange.value, (n: string[], o: string[]) => {
 		orderForm.value.checkInEndDate = dateRange.value[1];
 		orderForm.value.checkInStartDate = dateRange.value[0]
 		orderForm.value.checkInStartDateTimeStamp = new Date(dayuts(new Date(dateRange.value[0])).format("YYYY/MM/DD  14:00:00")).getTime();

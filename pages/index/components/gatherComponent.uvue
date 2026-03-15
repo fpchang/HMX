@@ -69,23 +69,23 @@
 	    <view class="stats-item">
 	      <text class="stats-label">当前在住</text>
 	      <!-- <text class="stats-value">44</text> -->
-		  <!-- <l-circle :percent="numCustomerOrderToday_percent" size="100px"
+		 <l-circle :percent="numCustomerOrderToday_percent" size="100px"
 		  	strokeColor="green" trailColor="#eee" strokeWidth="12" trailWidth="12">
 		  	<text class="stats-value">{{numCustomerOrderToday}}</text>
-		  </l-circle> -->
-		 <!-- <rice-progress-circle :percentage="numCustomerOrderToday_percent" color="green" inactive-color="#eee" text-size="18px">
+		  </l-circle>
+		<!-- <rice-progress-circle :percentage="numCustomerOrderToday_percent" color="green" inactive-color="#eee" text-size="18px">
 			   <text class="slot-text" style="text-align: center;font-size: 24px;font-weight: 600;color: #333;">{{numCustomerOrderToday}}</text>
 		  </rice-progress-circle> -->
-		<!--  <rice-progress-circle :percentage="50" /> -->
+		
 	    </view>
 	    <view class="stats-item">
 	      <text class="stats-label">空房数量</text>
 	      <!-- <text class="stats-value">55</text> -->
-		  <!-- <l-circle :percent="(100 - numCustomerOrderToday_percent)" trailColor="#eee"
+		  <l-circle :percent="(100 - numCustomerOrderToday_percent)" trailColor="#eee"
 		  	size="100px" strokeColor="orange" strokeWidth="12" trailWidth="12">
 		  	<text class="stats-value">{{ roomCount - numCustomerOrderToday}}</text>
-		  </l-circle> -->
-		 <!-- <rice-progress-circle :percentage=" 40" text-color="green" text-size="18px">
+		  </l-circle>
+		<!-- <rice-progress-circle :percentage=" 40" text-color="green" text-size="18px">
 		  			   <text class="slot-text" style="text-align: center;font-size: 24px;font-weight: 600;color: #333;">{{roomCount - numCustomerOrderToday}}</text>
 		  </rice-progress-circle> -->
 	    </view>
@@ -102,10 +102,10 @@
         <view class="stats-item">
           <text class="stats-label">当前在住</text>
          <!-- <text class="stats-value">44</text> -->
-		 <!-- <l-circle :percent="numCustomerOrderTommorw_percent" size="100px"
+		 <l-circle :percent="numCustomerOrderTommorw_percent" size="100px"
 		 	strokeColor="green" strokeWidth="12" trailWidth="12">
 		 	<text class="stats-value">{{numCustomerOrderTommorw}}</text>
-		 </l-circle> -->
+		 </l-circle>
         </view>
         <view class="stats-item">
           <text class="stats-label">空房数量</text>

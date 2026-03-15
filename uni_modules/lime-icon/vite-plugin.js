@@ -48,12 +48,12 @@ function processFile(file, options) {
 	// 检查文件是否包含目标组件
 	if (content.includes(targetComponent) && (!file.includes('l-icon.vue') || !file.includes('l-icon.uvue')) && files[file] !== content) {
 		const icons = extractAttributes(content)
-		if(icons && icons.length) {
+		if(icons != null && icons.length > 0) {
 			files[file] = content
 			iconCollections[file] = icons
 		}
 		Object.values(iconCollections).forEach(icons => {
-			if(options.icons) {
+			if(options.icons != null) {
 				options.icons = options.icons.concat(icons);
 			} else {
 				options.icons = icons
@@ -72,7 +72,7 @@ function processFile(file, options) {
 // 插件的钩子函数
 function vitePlugin(options = {}) {
 	const {useInDevelopment = false} = options
-	const isDev = process.env.NODE_ENV === 'development'
+	const isDev = process.env.NODE_ENV == 'development'
 	return {
 		name: pluginName,
 		transform(code, id) {

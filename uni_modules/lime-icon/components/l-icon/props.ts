@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const ariaProps = {
 	ariaHidden: Boolean,
 	ariaRole: String,
@@ -5,27 +6,42 @@ export const ariaProps = {
 	ariaLabelledby: String,
 	ariaDescribedby: String,
 	ariaBusy: Boolean,
-	// lStyle: String
 }
 
 export default {
-	...ariaProps,
-	lClass: String,
+	// ...ariaProps,
 	name: {
 		type: String,
-		required: true,
+		default: ''
+		// required: true
 	},
-	color: String,
-	size: [String, Number],
-	prefix: String,
-	// type: String,
+	color: {
+		type: String
+	},
+	color2: {
+		type: String
+	},
+	size: {
+		type: [String, Number]
+	},
+	prefix: {
+		type: String,
+		default: 'l'
+	},
 	inherit: {
-		type: Boolean,
-		default: false
-	},
-	web: {
 		type: Boolean,
 		default: true
 	},
-	lStyle:[String, Object, Array],
+	web: {
+		type: Boolean,
+		default: false
+	},
+	lClass: {
+		type: String,
+		// default: ''
+	},
+	lStyle: {
+		type: [String, Object, Array],
+		// default: ''
+	}
 }

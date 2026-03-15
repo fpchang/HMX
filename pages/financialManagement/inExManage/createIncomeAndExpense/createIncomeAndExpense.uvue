@@ -14,7 +14,7 @@
 			<view class="navbar-btn" v-if="pageType!=2">
 				<!-- <text class="txt">保存</text> -->
 				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
-					textColor="#1e88e5" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+					textColor="#007aff" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
 			</view>
 		</template>
 	</rice-navbar>

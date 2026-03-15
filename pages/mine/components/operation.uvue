@@ -1,26 +1,9 @@
 <template>
 	<view class="operation">
-		<view class="card">
-			<view class="title"><text class="txt">功能菜单</text></view>
-			<view class="list">
-				
-				<view class="list-item" v-for="item in menuList" >
-					<navigator :url="item.url" hover-class="none">
-					<view class="groupIcon">
-						<image :src="item.icon" class="icon-style" mode="aspectFit"></image>
-					</view>
-					<view>
-						<text class="label">{{item.label}}</text>
-					</view>
-					</navigator>
-				</view>
-
-				<view class="list-item" style="height:0"></view>
-				<view class="list-item" style="height:0"></view>
-				<view class="list-item" style="height:0"></view>
-				<view class="list-item" style="height:0"></view>
-			</view>
-		</view>
+		11111
+		<rice-grid :column-num="4" :border="false">
+		  <rice-grid-item v-for="item of menuList" :key="item.label" :icon="item.icon" text="内容" />
+		</rice-grid>
 	</view>
 </template>
 

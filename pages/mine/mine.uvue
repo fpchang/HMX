@@ -1,82 +1,40 @@
 <template>
-	<!-- #ifdef APP -->
-	<scroll-view style="flex:1">
-	<!-- #endif -->
-		<rice-navbar title="" bg-color="rgba(0,0,0,0)" :left-arrow="false" :auto-back="false"></rice-navbar>
-		<view class="user-area">
-			<view class="card">
-				<view class="avator">
-					<image :src="avator" style="height:80px;width:80px" mode="aspectFill"></image>
-				</view>
-				<view class="info" style="flex:1">
-					<view class="info-item" style="margin-bottom: 4px;">
-						<text style="color: rgb(30,30,30);font-weight: 700;font-size: 24px;">{{formatUserName}}</text>
-						<!-- <text style="margin-left:14px; padding:4px 10px ;border-radius: 12px; background-color:rgba(30,136,229,0.1) ;color:rgb(30,136,229)">酒店管理员</text> -->
-					</view>
-					<navigator url="./editUser/editUser">
-						<view class="info-item"
-							style="margin-bottom: 12px;display: flex;flex-direction: row;justify-content: space-between;">
-							<text
-								style="color: rgb(144,147,153);font-size: 16px;">{{emergency_phone_number((user.phone ?? '') as string)}}</text>
-							<rice-icon size="16px" name="arrow-right" />
-						</view>
-					</navigator>
-					<!-- 	<view class="info-item"><text style="color:rgb(30,136,229);font-size: 16px;font-weight: 700;">编辑个人资料></text></view> -->
-					<!-- <rice-cell-group border>
-				  <rice-cell :title="user.userName" :title-style="titleStyle" size="medium" /> 
-				  <rice-cell :title="emergency_phone_number((user.phone ?? '') as string)"   :border="false"  arrow arrow-direction="right" size="medium"/>
-				</rice-cell-group> -->
-				</view>
+	<view style="padding:20px">
+		<view class="personal-container">
+			<!-- 1. 用户信息区域 -->
+			<view class="user-info-section" style="flex-direction: column;">
+				<image class="avatar" :src="avator" mode="aspectFill"></image>
+				<text class="user-name">{{user.userName}}</text>
+				<text class="user-phone">{{user.phone}}</text>
 			</view>
-
 		</view>
-		<view class="hotel-area">
-			<view class="title">
-				<text class="txt">当前酒店</text>
-				<navigator url="/pages/hotelManage/hotelList/hotelList">
-					<text class="btn-txt">查看全部</text>
-				</navigator>
-
+		<view class=" split-item">
+			
+			
+			<l-card v-if="hotel_id" :title="hotel?.hotelName" :note="hotel?.hotelAddress" :cover="hotel?.firstImages" coverMode="aspectFill" extra="查看全部"
+				more lStyle="margin:0" @more="viewAll()">
+			
+			</l-card>
+			<view  v-if="hotel_id==''"  style="height:300px">
+				<l-empty description="没有数据"/>
 			</view>
-
-
-
-			<view class="card">
-				<block v-if="hotel_id!=''">
-					<view class="img-area">
-						<image :src="topImg()" style="height: 100%;width: 100%;" mode="aspectFill"></image>
-					</view>
-					<view class="card-title-group">
-						<view class="card-title-area">
-							<view class="card-title"><text class="txt">{{hotel?.hotelName}}</text></view>
-							<view class="card-subtitle">
-								<image src="/static/icons/position_black.png"
-									style="width:14px;height:14px;margin-right: 4px;"></image>
-								<text class="txt">{{hotel?.hotelAddress}}</text>
-							</view>
-						</view>
-						<view class="state">
-							<text class="txt">正常运营</text>
-						</view>
-					</view>
-				</block>
-				<view  v-if="hotel_id==''"  style="height:300px">
-					<l-empty description="没有数据"/>
-				</view>
-			</view>
-
-			<view class="card">
-				<operation></operation>
-
-			</view>
-
 		</view>
-	<!-- #ifdef APP -->
-	</scroll-view>
-	<!-- #endif -->
+		
+		<!-- 2. 当前酒店区域 -->
+		<view class="split-item">
+		<!-- 	<rice-cell-group border>
+				<rice-cell icon="set-fill" title="设置" url="/pages/set/set" :arrow="true" />
+				<rice-cell icon="chat-fill" title="意见反馈" url="/pages/mine/feedback/feedback" :arrow="true" />
+			</rice-cell-group> -->
+			
+			<operation></operation>
+		</view>
+
+	</view>
+
 </template>
 
-<script setup>
+<script setup lang="uts">
 	import { state } from "@/store/store";
 	import operation from "./components/operation.uvue";
 	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
@@ -93,8 +51,8 @@
 	const hotelList = computed(() => {
 		return state.hotelList;
 	});
-	const avator = computed<string>(()=>{
-		if(user.value.avatar!=""&&user.value.avatar!=null){
+	const avator = computed<string>(() => {
+		if (user.value.avatar != "" && user.value.avatar != null) {
 			return user.value.avatar;
 		}
 		return "/static/icons/mine/avator.png";
@@ -115,134 +73,135 @@
 		}
 		return firstImages;
 	};
-	console.log(user.value)
+	const viewAll=()=>{
+		uni.navigateTo({
+			url:"/pages/hotelManage/hotelList/hotelList"
+		})
+	}
 	const titleStyle = {
 		fontSize: '24px',
 		fontWeight: '700'
 	}
+	const valueStyle = {
+		color: "#007aff"
+	}
 </script>
 
-<style lang="scss">
-	.user-area {
-
-
-		padding: 15px;
-
-		.card {
-
-			box-sizing: border-box;
-			padding: 18px;
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			background-color: #fff;
-			border-radius: 12px;
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-
-			// box-shadow: 0 4px 12px rgba(0,0,0,0.85);
-			.avator {
-				width: 80px;
-				height: 80px;
-				background-color: silver;
-				margin-right: 25px;
-				border-radius: 40px;
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-				justify-content: center;
-			}
-
-			.info {
-				display: flex;
-				flex-direction: column;
-				justify-content: space-between;
-				height: 100%;
-
-				.info-item {
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-
-				}
-			}
-		}
-
+<style scoped>
+	.split-item{
+		margin-bottom: 20px;
+	}
+	/* 整体容器 */
+	.personal-container {
+		background-color: #f5f5f5;
+		padding: 20px 15px;
+		box-sizing: border-box;
 	}
 
-	.hotel-area {
+	/* 用户信息区域 */
+	.user-info-section {
+		align-items: center;
+		padding: 30px 0;
+		border-bottom: 1px solid #eee;
+		margin-bottom: 20px;
+	}
+
+	.avatar {
+		width: 80px;
+		height: 80px;
+		border-radius: 40px;
+		margin-bottom: 10px;
+	}
+
+	.user-name {
+		font-size: 20px;
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+
+	.user-phone {
+		font-size: 14px;
+		color: #999;
+	}
+
+	/* 酒店区域 */
+	.hotel-section {
+		background-color: #fff;
 		padding: 15px;
+		border-radius: 8px;
+		margin-bottom: 20px;
+	}
 
-		.title {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			padding: 18px 0;
+	.hotel-header {
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 10px;
+	}
 
-			.txt {
-				color: #64748b;
-				font-weight: 700;
-				font-size: 22px;
-			}
+	.hotel-title {
+		font-size: 16px;
+		font-weight: bold;
+	}
 
-			.btn-txt {
-				font-size: 16px;
-				color: rgb(30, 136, 229);
-			}
-		}
+	.all-entrance {
+		font-size: 14px;
+		color: #007aff;
+	}
 
-		.card {
-			background-color: #fff;
-			border-radius: 12px;
-			margin-bottom: 32px;
+	.current-hotel {
+		align-items: center;
+	}
 
-			.img-area {
-				height: 350rpx;
-				max-height: 300px;
-				background-color: #eee;
-			}
+	.hotel-img {
+		width: 60px;
+		height: 60px;
+		border-radius: 4px;
+		margin-right: 10px;
+	}
 
-			.card-title-group {
-				display: flex;
-				flex-direction: row;
+	.hotel-info {
+		flex: 1;
+	}
 
-				justify-content: space-between;
-				padding: 15px;
+	.hotel-name {
+		font-size: 15px;
+		margin-bottom: 5px;
+	}
 
-				.card-title-area {
-					.card-title {
-						.txt {
-							color: rgb(30, 30, 30);
-							font-weight: 700;
-							font-size: 20px;
-						}
-					}
+	.hotel-address {
+		font-size: 12px;
+		color: #999;
+	}
 
-					.card-subtitle {
-						margin-top: 8px;
-						display: flex;
-						flex-direction: row;
-						align-items: center;
+	/* 功能入口区域 */
+	.function-section {
+		background-color: #fff;
+		border-radius: 8px;
+	}
 
-						.txt {
-							color: rgb(144, 147, 153);
-							font-size: 14px;
-						}
-					}
-				}
+	.function-item {
+		justify-content: space-between;
+		align-items: center;
+		padding: 15px;
+		border-bottom: 1px solid #eee;
+	}
 
-				.state {
+	.function-item:last-child {
+		border-bottom: none;
+	}
 
+	.item-icon {
+		font-size: 20px;
+		margin-right: 10px;
+	}
 
-					.txt {
-						background-color: rgba(255, 152, 0, 0.1);
-						color: rgb(255, 152, 0);
-						font-size: 14px;
-						padding: 8px;
-						border-radius: 4px;
-					}
-				}
-			}
+	.item-text {
+		flex: 1;
+		font-size: 16px;
+	}
 
-		}
+	.item-arrow {
+		font-size: 14px;
+		color: #999;
 	}
 </style>

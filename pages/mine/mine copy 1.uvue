@@ -1,0 +1,363 @@
+<template>
+  <view class="my-page">
+    <!-- 顶部渐变背景栏 -->
+    <view class="top-bg"></view>
+    
+    <!-- 会员信息区域（悬浮在背景上） -->
+    <view class="user-info-card">
+      <!-- 会员头像（带边框和阴影） -->
+      <view class="avatar-wrap">
+        <image class="avatar" :src="user.avatar" mode="aspectFill"></image>
+        <view class="edit-badge">
+          <text class="edit-icon">✏️</text>
+        </view>
+      </view>
+      
+      <!-- 会员信息 -->
+      <view class="user-info">
+        <text class="user-name">{{ user.userName }}</text>
+        <text class="user-level">111</text>
+      </view>
+      
+      <!-- 右箭头 -->
+      <text class="arrow-icon">></text>
+    </view>
+
+    <!-- 当前酒店卡片区域 -->
+    <view class="hotel-section">
+      <view class="section-header">
+        <text class="section-title">当前酒店</text>
+        <text class="view-all" @click="">查看全部 ></text>
+      </view>
+      
+      <!-- 酒店卡片（带阴影和圆角） -->
+      <view class="hotel-card">
+        <image class="hotel-img" :src="hotel?.firstImages" mode="aspectFill"></image>
+        <view class="hotel-info">
+          <text class="hotel-name">{{ hotel?.hotelName }}</text>
+          <text class="hotel-address">{{ hotel?.hotelAddress }}</text>
+          <view class="hotel-contact">
+            <text class="contact-icon">📞</text>
+            <text class="hotel-phone">{{ hotel?.serviceTel }}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 功能入口区域（卡片式） -->
+    <view class="function-card">
+      <view class="function-item" >
+        <view class="icon-wrap setting-icon">
+          <text class="function-icon">⚙️</text>
+        </view>
+        <text class="function-text">设置</text>
+        <text class="arrow-icon">></text>
+      </view>
+      
+      <view class="function-item" >
+        <view class="icon-wrap feedback-icon">
+          <text class="function-icon">💬</text>
+        </view>
+        <text class="function-text">意见反馈</text>
+        <text class="arrow-icon">></text>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script setup lang="ts">
+
+import { state } from "@/store/store";
+	import operation from "./components/operation.uvue";
+	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
+	import { userBean } from "@/bean/userBean";
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const hotel = computed(() => {
+		return state.hotel;
+	});
+	const hotelList = computed(() => {
+		return state.hotelList;
+	});
+	const avator = computed<string>(()=>{
+		if(user.value.avatar!=""&&user.value.avatar!=null){
+			return user.value.avatar;
+		}
+		return "/static/icons/mine/avator.png";
+	})
+	const formatUserName = computed<string>(() => {
+		if (user.value.userName != null && user.value.userName != '') {
+			return user.value.userName;
+		}
+		return `用户${user.value.phone.slice(-4)}`;
+	})
+	const topImg = () : string => {
+		if (hotel.value == null) {
+			return '/static/images/hotel.png';
+		}
+		const firstImages = hotel.value['firstImages'] as string | null;
+		if (firstImages == '' || firstImages == null) {
+			return '/static/images/hotel.png';
+		}
+		return firstImages;
+	};
+	console.log(user.value)
+	const titleStyle = {
+		fontSize: '24px',
+		fontWeight: '700'
+	}
+</script>
+
+<style scoped>
+/* 页面整体样式 */
+.my-page {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding-bottom: 40px;
+}
+
+/* 顶部渐变背景 */
+.top-bg {
+  width: 100%;
+  height: 150px;
+  background:#007AFF;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+/* 会员信息卡片（悬浮效果） */
+.user-info-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #fff;
+  margin: 0 15px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  position: relative;
+  top: 100px;
+  z-index: 2;
+  transition: transform 0.2s ease;
+}
+
+.user-info-card:active {
+  transform: scale(0.98);
+}
+
+/* 头像容器 */
+.avatar-wrap {
+  position: relative;
+  margin-right: 15px;
+}
+
+.avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 编辑徽章 */
+.edit-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  background-color: #007aff;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0, 122, 255, 0.3);
+}
+
+.edit-icon {
+  font-size: 12px;
+  color: #fff;
+}
+
+/* 会员信息 */
+.user-info {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1d1d1f;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.user-level {
+  font-size: 12px;
+  color: #86868b;
+  display: block;
+}
+
+/* 箭头图标 */
+.arrow-icon {
+  font-size: 14px;
+  color: #c7c7cc;
+}
+
+/* 酒店区域 */
+.hotel-section {
+  margin: 140px 15px 15px;
+}
+
+/* 区域标题 */
+.section-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1d1d1f;
+}
+
+.view-all {
+  font-size: 13px;
+  color: #007aff;
+  padding: 4px 6px;
+  border-radius: 8px;
+  background-color: rgba(0, 122, 255, 0.05);
+}
+
+/* 酒店卡片 */
+.hotel-card {
+  display: flex;
+  flex-direction: row;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+}
+
+.hotel-card:active {
+  transform: scale(0.98);
+}
+
+.hotel-img {
+  width: 100px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.hotel-info {
+  flex: 1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hotel-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 5px;
+}
+
+.hotel-address {
+  font-size: 12px;
+  color: #86868b;
+  line-height: 1.4;
+  margin-bottom: 5px;
+}
+
+.hotel-contact {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.contact-icon {
+  font-size: 12px;
+  color: #007aff;
+  margin-right: 4px;
+}
+
+.hotel-phone {
+  font-size: 12px;
+  color: #86868b;
+}
+
+/* 功能卡片 */
+.function-card {
+  margin: 0 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* 功能项 */
+.function-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 14px 15px;
+  border-bottom: 1px solid #f2f2f7;
+  transition: background-color 0.2s ease;
+}
+
+.function-item:last-child {
+  border-bottom: none;
+}
+
+.function-item:active {
+  background-color: #f8f9fa;
+}
+
+/* 图标容器 */
+.icon-wrap {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.setting-icon {
+  background-color: rgba(0, 122, 255, 0.1);
+}
+
+.feedback-icon {
+  background-color: rgba(52, 199, 89, 0.1);
+}
+
+.function-icon {
+  font-size: 16px;
+  color: #007aff;
+}
+
+.feedback-icon .function-icon {
+  color: #34c759;
+}
+
+.function-text {
+  flex: 1;
+  font-size: 15px;
+  color: #1d1d1f;
+}
+</style>

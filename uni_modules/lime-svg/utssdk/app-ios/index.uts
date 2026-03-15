@@ -1,0 +1,205 @@
+import { UIImage, UIView, UIImageView } from "UIKit"
+import { CIImage, CIFilter, CIVector, CIContext, kCIInputImageKey } from "CoreImage"
+// import { SVGKImage } from "SVGKit"
+import { SVGKImage } from "SVGKit"  assert { type: "implementationOnly" };
+// import { URL, Data, URLSession } from 'Foundation'
+import { getResourcePath, svgDataURLPrefix, readFileContent } from './fileUtils'
+import { processSvgString, getSvgImage, createColoredUIImage } from './utils'
+
+type ImageTask = {
+    svg: UIImage | null,
+    color: string | null 
+}
+
+export class NativeImage {
+    $element: UniNativeViewElement;
+    svg: UIImage | null
+    imageView: UIImageView | null
+    color: string | null = null
+    svgMap: Map<string, UIImage> = new Map<string, UIImage>()
+    
+    // 任务队列相关属性
+    private taskQueue: ImageTask[] = []
+    private isProcessing: boolean = false
+    private currentTaskId: number = 0
+    private taskCounter: number = 0
+    
+    constructor(element: UniNativeViewElement) {
+        this.$element = element;
+        super.init()
+        this.bindView();
+    }
+    
+    bindView() {
+        this.imageView = new UIImageView()
+        this.imageView!.contentMode = UIView.ContentMode.scaleAspectFit // 保持宽高比
+        this.imageView!.isUserInteractionEnabled = true
+        this.imageView!.clipsToBounds = true
+        this.$element.bindIOSView(this.imageView!);
+    }
+
+    private emit(type: string, detail: UTSJSONObject) {
+        let event = new UniNativeViewEvent(type, detail)
+        this.$element.dispatchEvent(event)
+    }
+
+    /**
+     * 将更新任务添加到队列
+     */
+    private enqueueUpdateTask(): number {
+        this.taskCounter += 1
+        const taskId = this.taskCounter
+        
+        this.taskQueue.push({
+            svg: this.svg,
+            color: this.color
+        })
+        
+        // 如果没有正在处理的任务，则开始处理队列
+        if (!this.isProcessing) {
+            this.processQueue()
+        }
+        
+        return taskId
+    }
+
+    /**
+     * 处理任务队列
+     */
+    private async processQueue() {
+        this.isProcessing = true
+        
+        while (this.taskQueue.length > 0) {
+            // 获取队列中的第一个任务
+            const task = this.taskQueue.shift() as ImageTask
+            
+            // 处理当前任务
+            await this.processTask(task)
+            
+            // 给UI线程一个机会处理其他事件
+            await this.yieldToUI()
+        }
+        
+        this.isProcessing = false
+    }
+
+    /**
+     * 处理单个任务
+     */
+    private processTask(task: ImageTask): Promise<void> {
+        const { svg, color } = task
+        
+        if (svg == null) {
+            return Promise.resolve()  as Promise<void>
+        }
+        
+        if (color == null || color.length == 0) {
+            // 主线程更新UI
+			return new Promise<void>((resolve)=> {
+				DispatchQueue.main.async(execute = () => {
+				    this.imageView!.image = svg!
+					// if (color != null && color.length != 0) {
+					// 	// 创建颜色覆盖层视图
+					// 	let colorView = new UIView();
+					// 	colorView.frame = this.imageView!.bounds;
+					// 	colorView.backgroundColor = UTSiOS.colorWithString(color);
+					// 	colorView.layer.compositingFilter = "sourceAtop";
+					// 	this.imageView!.addSubview(colorView);
+					// }
+					resolve()
+				})
+			})
+            
+        } else {
+            // 在后台线程处理颜色
+            return new Promise<void>((resolve) => {
+                DispatchQueue.global(qos = DispatchQoS.QoSClass.userInitiated).async(execute = () => {
+                    const coloredImage = createColoredUIImage(svg!, color)
+                    
+                    // 回到主线程更新UI
+                    DispatchQueue.main.async(execute = () => {
+                        this.imageView!.image = coloredImage
+                        resolve()
+                    })
+                })
+            })
+        }
+    }
+
+    /**
+     * 让出CPU时间，避免阻塞
+     */
+    private yieldToUI(): Promise<void> {
+        return new Promise<void>((resolve) => {
+            DispatchQueue.main.async(execute = () => {
+                resolve()
+            })
+        })
+    }
+
+    /**
+     * 清空任务队列
+     */
+    clearQueue() {
+        this.taskQueue = []
+    }
+
+    /**
+     * 更新方法 - 将任务加入队列
+     */
+    private update() {
+        this.enqueueUpdateTask()
+    }
+
+    updateSrc(src: string) {
+        const path = getResourcePath(src);
+        if (path == null) return
+        
+        try {
+            if (this.svgMap.has(src)) {
+                this.svg = this.svgMap.get(src)!
+            }
+            else if (path!.startsWith('<svg') || path!.startsWith(svgDataURLPrefix)) {
+                const svgString = processSvgString(path!)
+                if (svgString == null) return
+                const svgImage = getSvgImage(svgString!, this.$element)
+                if (svgImage == null) return
+                this.svg = svgImage
+                this.svgMap.set(src, svgImage!)
+            } else {
+                if (path!.startsWith('http')) return
+                const _svgContent = readFileContent(path!)
+                if (_svgContent == null) return
+                const svgString = processSvgString(_svgContent ?? '')
+                const svgImage = getSvgImage(svgString!, this.$element)
+                if (svgImage == null) return
+                this.svg = svgImage
+                this.svgMap.set(src, svgImage!)
+            }
+
+            this.update()
+            this.emit('load', {
+                detail: {
+                    width: this.$element.offsetWidth,
+                    height: this.$element.offsetHeight
+                }
+            })
+        } catch (e) {
+            this.emit('error', { errMsg: e.message })
+        }
+    }
+    
+    updateColor(color: string) {
+        this.color = color
+        this.update()
+    }
+    
+    destroy() {
+        // 清空任务队列
+        this.clearQueue()
+        this.isProcessing = false
+        
+        // 释放 UTS 实例对象，避免内存泄露
+        UTSiOS.destroyInstance(this)
+    }
+}

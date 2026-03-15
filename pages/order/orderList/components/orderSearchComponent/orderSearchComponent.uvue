@@ -31,7 +31,7 @@
 				<rice-search v-model="keystr" input-color="#fff" :clearable="false" :placeholder="placeholder"
 					:custom-style="{'padding':0}" @search="searchEvent" @clickLeftIcon="searchEvent"
 					@input="searchInputChange" @clickAction="searchEvent" show-action left-icon=""
-					action-color="#1e88e5" />
+					action-color="#007aff" />
 			</view>
 		</view>
 		<!-- 	<rice-picker v-model:show="showPicker" :columns="columns" @confirm="onColumnsConfirm"></rice-picker> -->

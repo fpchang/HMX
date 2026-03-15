@@ -27,8 +27,8 @@ export function cssToObj(css : string | UTSJSONObject | null) : UTSJSONObject {
 		if(res.length > 1) {
 			const [prop, val] = res;
 			if (prop != '' && val != '') {
-				const camelProp = prop!.replace(/-([a-z])/g, (_a: string|null, b: string, _c: number, _d: string):string => {
-					return b.toUpperCase()
+				const camelProp = prop!.replace(/-([a-z])/g, (_a: string|null, b: string|null, _c: number, _d: string):string => {
+					return b?.toUpperCase() ?? ''
 				});
 				style[camelProp] = val!;
 			}

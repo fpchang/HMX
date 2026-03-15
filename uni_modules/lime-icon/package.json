@@ -1,7 +1,7 @@
 {
   "id": "lime-icon",
   "displayName": "lime-icon 图标 iconify 图标集合",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "description": "lime-icon 图标插件可方便快捷按需的使用iconify图标，iconify超过150,000个开源矢量图标，插件内置tdesign icon。使用兼容uniapp/uniappx",
   "keywords": [
     "icon",
@@ -80,7 +80,8 @@
             "jd": "-",
             "harmony": "-",
             "qq": "-",
-            "lark": "-"
+            "lark": "-",
+            "xhs": "-"
           },
           "quickapp": {
             "huawei": "-",

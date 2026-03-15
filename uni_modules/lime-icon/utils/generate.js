@@ -28,7 +28,7 @@ async function fetchIconsData(icons) {
 				console.log(`Icon '${iconName}' not found in '${collectionName}' collection.`)
 			}
 		} else if(collectionName) {
-			if(!collections[collectionName]) {
+			if(collections[collectionName] == null) {
 				collections[collectionName] = blankIconSet(collectionName)
 			} 
 			Object.keys(icons.icons).forEach(iconName => {
@@ -46,7 +46,7 @@ async function fetchIconsData(icons) {
 
 async function generate(config){
 	try {
-		if(!config) {
+		if(config == null) {
 			// 从配置文件中读取选项
 			const rootConfigPath = path.join(rootPath, 'lime-icons.config.js');
 			let configPath = ''

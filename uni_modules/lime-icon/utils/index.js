@@ -21,7 +21,7 @@ function encodeSvg(svg) {
 
 function isDirectoryEmpty(path) {
 	const files = fs.readdirSync(path);
-	return files.length === 0;
+	return files.length == 0;
   }
 function deleteFolderBFS(folderPath) {
 	const outputPath = /^\.|\/|\\/.test(folderPath)  ? path.join(rootPath, folderPath): folderPath

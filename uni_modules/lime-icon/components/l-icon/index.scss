@@ -1,6 +1,6 @@
 // 公共前缀
 @import '@/uni_modules/lime-style/index.scss';
-@import './icon';
+@import './icon.scss';
 
 $use-css-var: true;
 
@@ -29,10 +29,10 @@ $icon-color: create-var(icon-color, currentColor);
 	display: inline-flex;
 	position: relative;
 	/* #endif */
-	
 	&--font {
 		font-family: $prefix;
 		text-align: center;
+		
 		// font-size: $icon-size;
 		// color: $icon-color;
 		/* #ifndef APP-NVUE || UNI-APP-X && APP */

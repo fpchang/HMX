@@ -33,7 +33,7 @@ $cascader-close-icon-color: create-var(cascader-close-icon-color, $text-color-2)
 
 .#{$cascader} {
 	background-color: $cascader-bg-color;
-	/* #ifndef APP-ANDROID || APP-IOS || APP-HARMONY */
+	/* #ifndef UNI-APP-X && APP */
 	color: $cascader-title-color;
 	/* #endif */
 	// border-radius: 12px 12px 0 0;
@@ -60,7 +60,7 @@ $cascader-close-icon-color: create-var(cascader-close-icon-color, $text-color-2)
 		    right: $cascader-cell-padding-x;
 		    top: 12px;
 		    position: absolute;
-			/* #ifndef APP-ANDROID || APP-IOS || APP-HARMONY */
+			/* #ifndef UNI-APP-X && APP */
 			color: $cascader-close-icon-color !important;
 			/* #endif */
 		}
@@ -75,10 +75,10 @@ $cascader-close-icon-color: create-var(cascader-close-icon-color, $text-color-2)
 	}
 	&__options {
 		// flex: 1;
-		/* #ifndef APP-ANDROID || APP-IOS || APP-HARMONY */
+		/* #ifndef UNI-APP-X && APP */
 		width: 100vw;
 		/* #endif */
-		/* #ifdef APP-ANDROID || APP-IOS || APP-HARMONY */
+		/* #ifdef UNI-APP-X && APP */
 		width: 750rpx;
 		/* #endif */
 		height: $cascader-height;

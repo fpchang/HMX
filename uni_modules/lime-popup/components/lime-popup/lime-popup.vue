@@ -26,9 +26,9 @@
 					<button class="button" @click="visible1 = true">底部弹出层-带标题及操作</button>
 					<l-popup v-model="visible1" position="bottom" lStyle="height: 258px">
 						<view class="header">
-							<text class="btn btn--cancel" aria-role="button" @click="onHide">取消</text>
+							<!-- <text class="btn btn--cancel" aria-role="button" @click="onHide">取消</text> -->
 							<text class="title">标题文字</text>
-							<text class="btn btn--confirm" aria-role="button" @click="onHide">确定</text>
+							<!-- <text class="btn btn--confirm" aria-role="button" @click="onHide">确定</text> -->
 						</view>
 					</l-popup>
 

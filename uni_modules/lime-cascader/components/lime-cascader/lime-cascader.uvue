@@ -87,7 +87,7 @@
 						@change="onChange5"/>
 				</view>	
 			</view>
-			<view class="demo-block">
+			<!-- <view class="demo-block">
 				<text class="demo-block__title-text">中国城市 uniCloud</text>
 				<view class="demo-block__body">
 					<view class="cell" @click="visible6 = true">
@@ -103,7 +103,7 @@
 						title="请选择所在地区" 
 						@change="onChange6"/>
 				</view>	
-			</view>
+			</view> -->
 			<view class="demo-block">
 				<text class="demo-block__title-text">中国城市 本地</text>
 				<view class="demo-block__body">

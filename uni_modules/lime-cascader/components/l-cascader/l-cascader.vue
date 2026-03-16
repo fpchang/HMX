@@ -92,12 +92,12 @@
 	 */
 	import { defineComponent, ref, computed, watch, reactive, onMounted ,onUnmounted, toRaw, watchEffect } from '@/uni_modules/lime-shared/vue';
 	import cascaderProps from './props';
-	import { CascaderOption, KeysType, ChildrenInfoType } from './type';
+	import type { CascaderOption, KeysType, ChildrenInfoType } from './type';
 	import { getIndexesByValue, parseOptions, parseKeys, splitEveryTwo, getUniCloudArea, pickUniCloudArea, getIndexByValue, updateChildren } from './utils';
 	
 	
 	export default defineComponent({
-		name: 'l-cascader',
+		// name: 'l-cascader',
 		emits: ['pick', 'change', 'close', 'finish', 'update:modelValue', 'input', 'update:visible'],
 		props: cascaderProps,
 		setup(props, {emit}) {

@@ -1,7 +1,7 @@
 {
   "id": "lime-cascader",
   "displayName": "lime-cascader 级联选择",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "description": "lime-cascader 级联选择 用于多层级数据选择，省市区等选择，主要为树形结构，可展示更多的数据。兼容uniapp/uniappx",
   "keywords": [
     "lime-cascader",

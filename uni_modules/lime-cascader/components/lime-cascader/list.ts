@@ -1,3 +1,7 @@
+// @ts-nocheck
+// #ifndef UNI-APP-X
+type UTSJSONObject = Record<string, any>
+// #endif
 export const areaList = [
 	{
 		label: '北京市',
@@ -175,10 +179,10 @@ export function useCascaderAreaData() : Promise<UTSJSONObject[]> {
 					}
 				});
 				
-				// #ifndef APP-ANDROID || APP-IOS || APP-HARMONY
+				// #ifndef UNI-APP-X && APP
 				resolve(Array.from(provinceMap.values()))
 				// #endif
-				// #ifdef APP-ANDROID || APP-IOS || APP-HARMONY
+				// #ifdef UNI-APP-X && APP
 				const obj : UTSJSONObject[] = []
 				provinceMap.forEach((value, code) => {
 					obj.push(value)

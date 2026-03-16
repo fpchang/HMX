@@ -3,8 +3,8 @@
 		<view ref="cascaderRef" class="l-cascader" :style="[styles]">
 			<text class="l-cascader__title">{{title}}</text>
 			<view class="l-cascader__close-btn"  @click="onCloseBtn" v-if="closeable">
-				<text class="l-cascader__close-icon">&#xE1EB</text>
-				<!-- <l-icon class="l-cascader__close-icon" name="close" size="24px"></l-icon> -->
+				<!-- <text class="l-cascader__close-icon">&#xE1EB</text> -->
+				<l-icon class="l-cascader__close-icon" name="close" size="24px"></l-icon>
 			</view>
 			<view class="l-cascader__content">
 				<l-tabs 
@@ -99,7 +99,7 @@
 	 * @event {Function} close 关闭时触发
 	 * @event {Function} finish 点击完成时触发
 	 */
-	import { CascaderProps, KeysType, ChildrenInfoType } from './type';
+	import { CascaderProps,type KeysType, type ChildrenInfoType } from './type';
 	import { getIndexesByValue, parseOptions, parseKeys, splitEveryTwo, pushAt, getUniCloudArea, pickUniCloudArea, getIndexByValue, updateChildren } from './utils';
 	
 	const emit = defineEmits(['pick', 'change', 'close', 'finish'])

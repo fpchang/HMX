@@ -57,6 +57,7 @@ export function useTransition(options : UseTransitionOptions) : UseTransitionRet
 	let isTransitionEnd = false;
 	let isTransitioning = false;
 	let timeoutId = -1
+	let finishTimeoutId = -1
 
 	const emitEvent = (event : TransitionEmitStatus) => {
 		options.emits?.(event);
@@ -67,12 +68,13 @@ export function useTransition(options : UseTransitionOptions) : UseTransitionRet
 		if (isTransitionEnd) return;
 		isTransitionEnd = true;
 		
+		clearTimeout(finishTimeoutId)
+		
 		if (options.removeClasses ?? false) {
 		    classes.value = '';
 		}
 		emitEvent(`after-${status}`)
 		
-		// classes.value = ''
 		if (display.value && !state.value) {
 			display.value = false
 		}
@@ -82,7 +84,7 @@ export function useTransition(options : UseTransitionOptions) : UseTransitionRet
 		return new Promise((resolve) => {
 			nextTick(() => {
 				raf(() => {
-					// #ifdef APP-ANDROID || APP-IOS || APP-HARMONY
+					// #ifdef UNI-APP-X && APP
 					if (options.element?.value != null) {
 						options.element?.value?.getBoundingClientRectAsync()?.then(res => {
 							resolve()
@@ -91,7 +93,7 @@ export function useTransition(options : UseTransitionOptions) : UseTransitionRet
 						resolve()
 					}
 					// #endif
-					// #ifndef APP-ANDROID || APP-IOS || APP-HARMONY
+					// #ifndef UNI-APP-X && APP
 					resolve()
 					// #endif
 				})
@@ -182,9 +184,12 @@ export function useTransition(options : UseTransitionOptions) : UseTransitionRet
 	}
 
 	let init = false;
+	let lastState:boolean|null = null
 	watchEffect(() => {
 		if (options.visible == null) return
 		state.value = options.visible!();
+		if(lastState == state.value) return
+		lastState = state.value
 		if (!appear && !init) {
 			init = true
 			return

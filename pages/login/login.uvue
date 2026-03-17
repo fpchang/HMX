@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<!-- 分屏左右风格 Split Screen -->
-		<view class="left-panel">
+		<view class="left-panel" v-if="false">
 			<view class="left-content">
 				<text class="brand-text">议宿</text>
 				<text class="slogan-text">轻松管理\n解放束缚</text>
@@ -92,6 +92,15 @@
 					<view><text class="ct">未注册的手机号验证后自动创建议宿账号</text></view>
 				</view>
 			</view>
+		
+			<view> 
+			<rice-button v-if="loginType != 'app'" type="primary" text="登录" class="submit-btn" shape="round"
+				color="#165dff" :disabled="submitDisabled || submitLoading" @click="handleLogin"
+				:loading="submitLoading" />
+			<rice-button v-if="loginType == 'app'" type="primary" text="本机号码一键登录" class="submit-btn" shape="round"
+				color="#165dff" @click="verify(false)"
+				:loading="submitLoading" />
+			</view>
 			<view class="up">
 				<view @click="agreeEvent" style="padding-right: 2px;">
 					<!-- <l-icon v-show="isAgree" name="material-symbols:check-circle" size="20"
@@ -100,26 +109,18 @@
 						color="#165dff"></l-icon> -->
 					<image v-show="!isAgree" src="/static/icons/circle.png" class="form-icon"></image>
 					<image v-show="isAgree" src="/static/icons/confirm_selcted.png" class="form-icon"></image>
-
+			
 				</view>
-				<view style="flex: 1;display: flex;flex-direction: row;flex-wrap:wrap">
+				<view style="display: flex;flex-direction: row;flex-wrap:wrap">
 					<text class="ct">我已经同意</text>
 					<text class="ct-txt-btn" @click="openUserAgreement">《用户协议》</text>
 					<text class="ct">和</text>
 					<text class="ct-txt-btn" @click="openUserPrivacyPolicy">《隐私政策》</text>
-
-
+			
+			
 					<!-- 	<text class="ct">我已阅读并同意</text> -->
 				</view>
-
-			</view>
-			<view> 
-			<rice-button v-if="loginType != 'app'" type="primary" text="登录" class="btn" shape="round"
-				color="#165dff" :disabled="submitDisabled || submitLoading" @click="handleLogin"
-				:loading="submitLoading" />
-			<rice-button v-if="loginType == 'app'" type="primary" text="本机号码一键登录" class="btn" shape="round"
-				color="#165dff" @click="verify(false)"
-				:loading="submitLoading" />
+			
 			</view>
 			<view class="bottom-control">
 				<view class="control-item" v-if="loginType!='code'" @click="switchLoginType('code')"><image class="imgstyle" src="/static/icons/phone-control.png"></image></view>
@@ -213,6 +214,7 @@
 			uni.hideLoading();
 			sendSmsSuccess();
 		} catch (error) {
+			console.error(error);
 			uni.showToast({
 				title: "发送短信失败"
 			})
@@ -635,7 +637,7 @@
 		.con{
 			.tit{
 				text-align: center;
-				font-size: 18px;
+				font-size: 24px;
 			}
 			.ct {
 				font-size: 12px;
@@ -682,13 +684,15 @@
 		font-size: 13px;
 		color: #333333;
 	}
-
+	.submit-btn{
+		margin-top: 24px;
+	}
 	.up {
-		margin: 0px 0 12px 0;
+		margin: 12px 0 12px 0;
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
-
+		align-items: center;
 		.ct {
 			font-size: 13px;
 			color: gray;

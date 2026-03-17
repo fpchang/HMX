@@ -164,6 +164,7 @@
 	});
 	const checkIoTime = (val : string) => {
 		fmForm.value.ioeTime = new Date(val).getTime();
+		iotimeStr.value = dayuts(new Date(val)).format("YYYY-MM-DD");
 	}
 
 	const submitForm = async () => {

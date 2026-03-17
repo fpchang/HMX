@@ -1,68 +1,78 @@
 <template>
-	<!-- #ifdef APP -->
-	<scroll-view class="indexAdvise-page" :refresher-enabled="false" v-if="isReading" :show-scrollbar="false">
-	<!-- #endif -->
-	<view style="height:40px;"></view>
-	<view class="indexAdvise">
-		
-	
-		<view class="introduce">
-				<view class="card" style="padding:0">
-					<view class="video-content">
-						<video style="width:750rpx;height:562rpx" :muted="true" src="https://cdn.hotelsys.fun/HM/images/advise/advise.mp4" :autoplay="true" :show-mute-btn="true" object-fit="contain" :controls="true"></video>
-					</view>
-		
-				</view>
-				<view class="card">
-					<view ><text class="title">议宿管理系统</text></view>
-					<view class="txt-content">
-						<text class="txt"> 
+<scroll-view class="indexAdvise-page" :refresher-enabled="false" v-if="isReading" :show-scrollbar="false">
+	<view class="hotel-container">
+		<!-- 1. 视频宣传区域 -->
+		<view class="video-section">
+			<video style="width:750rpx;height:562rpx" :muted="true"
+				src="https://cdn.hotelsys.fun/HM/images/advise/advise.mp4" :autoplay="true" :show-mute-btn="true"
+				object-fit="contain" :controls="true"></video>
+
+			<!-- <view class="video-mask">
+        <text class="mask-title">尊享品质 · 智享入住</text>
+        <text class="mask-subtitle">一键预订 · 智能管理 · 全程无忧</text>
+        <button class="book-btn" @click="goToBook">立即预订</button>
+      </view> -->
+		</view>
+
+		<!-- 2. APP介绍区域 -->
+		<view class="intro-section">
+			<view class="section-title">
+				<text class="title-text">关于我们</text>
+				<view class="title-line"></view>
+			</view>
+			<view class="intro-content">
+				<image class="intro-img" src="/static/images/ys.png" mode="widthFix"></image>
+				<view class="intro-text">
+					<text class="intro-heading">议宿酒店管理系统</text>
+					<text class="intro-desc">
 						议宿是一款基于酒店民宿日常事务管理开发的工具类软件，提供基础的房型房间管理，收入与支出的财务管理，财务统计图表。订单与房态管理，并自动生成店铺个性化信息展示，并且能分享给其它用户，方便快速预览。酒店管理员随身管理类必备工具。
-						
-						</text>
-					</view>
+
+					</text>
 				</view>
-				<view class="card">
-					<view class="list-content">
-						<view class="control-item-group" v-for="item of list">
-							<view><image :src="item.img" style="width: 38px;height: 38px;"></image></view>
-							<view><text class="txt">{{item.title}}</text></view>
-						</view>
-						
-						<!-- <view class="cs"></view>
-						<view class="cs"></view>
-						<view class="cs"></view>
-						<view class="cs"></view> -->
-					</view>
-				</view>
-			</view>
-			<view style="height: 320px;"></view>
-			<view class="control">
-				
-				<rice-button type="primary" text="登录体验" class="btn"  shape="round" color="#165dff" @click="toLoginEvent"/>
-			</view>
-			</view>
-			
-			
-	<!-- #ifdef APP -->			
-	</scroll-view>
-	<!-- #endif -->
-	<l-popup v-model="showPopu">
-		<view class="popup-con">
-			<view class="tit">议宿申请</view>
-			<view class="txt-content">此系统需要使用手机号登录后才能使用全部功能，确认是否手机号登录</view>
-			<view class="control">
-				<view class="btn-style" @click="agreeGetPhoneEvent(false)">拒绝</view>
-				<view class="btn-style btn-confirm" @click="agreeGetPhoneEvent(true)">允许</view>
 			</view>
 		</view>
-	</l-popup>
 
+		<!-- 3. 功能展示区域 -->
+		<view class="feature-section">
+			<view class="section-title">
+				<text class="title-text">核心功能</text>
+				<view class="title-line"></view>
+			</view>
+			<view> 
+			<rice-grid :column-num="2" :border="false" :clickable="false">
+			  <rice-grid-item v-for="item  of list">
+			    <template #default>
+			      <view class="feature-item">
+			      					<image class="feature-icon" :src="item.img" mode="widthFix"></image>
+			      					<text class="feature-name">{{item.title}}</text>
+			      					<text class="feature-desc">{{item.info}}</text>
+			      				</view>
+			    </template>
+			  </rice-grid-item>
+			</rice-grid>
+			</view>
+		<!-- 	<view class="feature-list">
+				
+				<view class="feature-item" v-for="item of list">
+					<image class="feature-icon" :src="item.img" mode="widthFix"></image>
+					<text class="feature-name">{{item.title}}</text>
+					<text class="feature-desc">{{item.info}}</text>
+				</view>
+
+			</view> -->
+		</view>
+		<view style="height: 100px;"></view>
+		<!-- 底部下载提示 -->
+		<view class="download-section">
+			<button class="download-btn" @click="toLoginEvent">登录体验APP</button>
+		</view>
+	</view>
+</scroll-view>
 </template>
 
-<script setup>
-	import {loginEvent,loginOut} from "@/store/store.uts";
-	 
+<script setup lang="uts">
+	import { loginEvent, loginOut } from "@/store/store.uts";
+
 	//import { ref, onMounted, computed } from "vue";
 	//import { AccountService } from "@/services/AccountService";
 	// const props = defineProps({
@@ -78,9 +88,9 @@
 	let agreeGetPhone = ref(false);
 	let showPopu = ref(false);
 	const accessin = () => {
-		  uni.reLaunch({
-		        url: "/pages/index/index",
-		      });
+		uni.reLaunch({
+			url: "/pages/index/index",
+		});
 	};
 	const popup_confirm = ref(null);
 	const toLogin = () => {
@@ -94,10 +104,10 @@
 		//popup_confirm.value.open();
 		return;
 		//#endif
-		
+
 	};
 
-	const agreeGetPhoneEvent = (f:boolean):void => {
+	const agreeGetPhoneEvent = (f : boolean) : void => {
 		if (f) {
 			showPopu.value = false;
 			toLogin();
@@ -106,33 +116,32 @@
 		}
 		showPopu.value = false;
 	};
-
 	const list = [
 		{
 			title: "订单管理",
 			img: "/static/icons/homemenu/order1.png",
-			info: "酒店管理",
+			info: "订单管理，快速查看入住与退房",
 		},
 		{
 			title: "房态管理",
 			img: "/static/icons/order-blue.png",
-			info: "酒店管理",
-		},{
+			info: "一图看清入住数据",
+		}, {
 			title: "房型管理",
 			img: "/static/icons/homemenu/room-type1.png",
-			info: "酒店管理",
-		},{
+			info: "酒店房型设施数据管理",
+		}, {
 			title: "财务管理",
 			img: "/static/icons/homemenu/income.png",
-			info: "酒店管理",
-		},{
+			info: "酒店收支管理与统计，一图看清营业状况",
+		}, {
 			title: "员工账号",
 			img: "/static/icons/homemenu/employee1.png",
-			info: "酒店管理",
-		},{
+			info: "提供员工子账号与员工数据管理",
+		}, {
 			title: "酒店展示",
 			img: "/static/icons/homemenu/hotel2.png",
-			info: "酒店管理",
+			info: "个性化展示与分享",
 		}
 	];
 	const navTopHeight = computed(() => {
@@ -158,11 +167,11 @@
 			accessin();
 		} catch (error) {
 			console.log("err", error);
-	
+
 			isReading.value = true;
 		}
 	});
-	onLoad(()=>{
+	onLoad(() => {
 		initData();
 	})
 	onMounted(() => {
@@ -173,176 +182,252 @@
 	});
 </script>
 
-
-<style lang="scss">
+<style scoped lang="scss">
 	.indexAdvise-page{
 			flex:1;
 			/* background: linear-gradient(to bottom, rgba(0,74,246,0.2), #fff);*/
 			
 	}
-	.indexAdvise {
-		background: #eee;
-		background-color: transparent;
-		
-    /* height: fit-content; */ /* 注释掉不支持的属性 */
-		border-top-right-radius: 15px;
-		border-top-left-radius: 15px;
-		.introduce {
-			margin-top: 10px;
-			display: flex;
-			flex-direction: column;
-			.card {
-				padding: 0 15px 15px 15px;
-				box-sizing: border-box;
-				/*border-radius: 12px;*/
-				/*background: rgba(0, 0, 0, 0.48);*/
-				overflow: hidden;
-
-				.title {
-					font-weight: 400;
-					font-size: 24px;
-					padding: 20px 0;
-					color: #2a5d98;
-					font-weight: bold;
-				}
-
-				.txt-content {
-				
-					.txt{
-						text-indent:36px;
-						font-size: 14px;
-						color: #e6e6e6;
-					
-						letter-spacing: 2px;
-						text-align: justify;
-						color: #999;
-						line-height: 30px;
-					}
-				}
-
-				.list-content {
-					display: flex;
-					flex-direction: row;
-					flex-flow:row wrap;
-					
-					
-					.cs {
-						height: 0;
-					}
-
-					.control-item-group {
-						display: flex;
-						align-items: center;
-						justify-content: center;
-						flex-direction: column;
-						padding:20px;
-						min-width: 100px;
-						flex:1;
-						.txt{
-							font-weight: 400;
-							font-size: 15px;
-							color: #2a5d98;
-							padding-top:10px;
-						}
-						
-					}
-
-					.img-area {
-						width: 140px;
-					}
-
-
-				}
-
-				.video-content {
-					display: flex;
-					justify-content: center;
-					position: relative;
-					/*height:fit-content;*/
-					padding: 0;
-					
-				}
-			}
-		}
-
-		.control {
-			position: fixed;
-			bottom: 20px;
-			width: 750rpx;
-			padding: 0 20px 20px 20px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			box-sizing: border-box;
-
-			.btn {
-			
-				padding: 0px 100px;
-				background-color:#2a5d98 ;
-				border-radius: 33px;
-				.btn-txt{
-					color: #fff;
-					font-size: 14px;
-					letter-spacing: 2px;
-				}
-			}
-		}
-	}
-
-	.glass {
-		position: relative;
-		background: rgba(255, 255, 255, 0.15);
-		/*backdrop-filter: blur(2px) saturate(180%);*/
-		border: 1px solid rgba(255, 255, 255, 0.8);
-		border-radius: 4px;
-		box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2),
-			inset 0 4px 20px rgba(255, 255, 255, 0.3);
-	}
-
-	.popup-con {
-		height: 150px;
-		padding: 15px;
-		background: #fafafa;
+	/* 全局容器 - 明确flex布局和direction */
+	.hotel-container {
+		width: 100%;
+		min-height: 100vh;
+		background-color: #f5f5f5;
 		display: flex;
 		flex-direction: column;
-		/* gap: 10px;*/
+		/* 垂直排列所有模块 */
+	}
+
+	/* 1. 视频宣传区域 */
+	.video-section {
+		position: relative;
+		width: 100%;
+		//height: 60vh;
+		overflow: hidden;
+	}
+
+	.promo-video {
+		width: 100%;
+		height: 100%;
+	}
+
+	.video-mask {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5));
+		display: flex;
+		flex-direction: column;
+		/* 垂直排列文字和按钮 */
+		justify-content: center;
+		align-items: center;
+		color: #fff;
+		padding: 0 15px;
+		/* 30rpx → 15px */
+		box-sizing: border-box;
+	}
+
+	.mask-title {
+		font-size: 24px;
+		/* 48rpx → 24px */
+		font-weight: bold;
+		margin-bottom: 10px;
+		/* 20rpx → 10px */
+	}
+
+	.mask-subtitle {
+		font-size: 14px;
+		/* 28rpx → 14px */
+		margin-bottom: 30px;
+		/* 60rpx → 30px */
+		opacity: 0.9;
+	}
+
+	.book-btn {
+		width: 60%;
+		height: 40px;
+		/* 80rpx → 40px */
+		line-height: 40px;
+		/* 80rpx → 40px */
+		background-color: #ff6700;
+		color: #fff;
+		border: none;
+		border-radius: 20px;
+		/* 40rpx → 20px */
 		font-size: 16px;
-		border-top-left-radius: 12px;
-		border-top-right-radius: 12px;
+		/* 32rpx → 16px */
+	}
 
-		.tit {
-			font-weight: 400;
-			font-size: 18px;
+	/* 2. APP介绍区域 */
+	.intro-section {
+		width: 100%;
+		padding: 30px 15px;
+		/* 60rpx/30rpx → 30px/15px */
+		background-color: #fff;
+		margin-bottom: 10px;
+		/* 20rpx → 10px */
+	}
+
+	.section-title {
+		display: flex;
+		flex-direction: row;
+		/* 水平排列标题和分割线 */
+		align-items: center;
+		margin-bottom: 20px;
+		/* 40rpx → 20px */
+	}
+
+	.title-text {
+		font-size: 18px;
+		/* 36rpx → 18px */
+		font-weight: bold;
+		color: #333;
+		margin-right: 10px;
+		/* 20rpx → 10px */
+	}
+
+	.title-line {
+		flex: 1;
+		height: 1px;
+		/* 2rpx → 1px */
+		background-color: #eee;
+	}
+
+	.intro-content {
+		display: flex;
+		flex-direction: row;
+		/* 水平排列图片和文字 */
+		align-items: center;
+	}
+
+	.intro-img {
+		width: 75px;
+		/* 150rpx → 75px */
+		height: 75px;
+		/* 150rpx → 75px */
+		border-radius: 5px;
+		/* 10rpx → 5px */
+		margin-right: 15px;
+		/* 30rpx → 15px */
+	}
+
+	.intro-heading {
+		font-size: 16px;
+		/* 32rpx → 16px */
+		font-weight: bold;
+		color: #333;
+		display: block;
+		margin-bottom: 10px;
+		/* 20rpx → 10px */
+	}
+
+	.intro-text {
+		flex: 1;
+
+		.intro-desc {
+			font-size: 14px;
+			/* 28rpx → 14px */
 			color: #666;
+			line-height: 1.6;
 		}
+	}
 
-		.txt-content {
-			font-size: 16px;
-			/*text-indent: 16px;*/
-			color: #999;
-		}
 
-		.control {
-			display: flex;
-			align-items: center;
-			justify-content: center;
+	/* 3. 功能展示区域 */
+	.feature-section {
+		width: 100%;
+		padding: 30px 15px;
+		/* 60rpx/30rpx → 30px/15px */
+		background-color: #fff;
+		margin-bottom: 10px;
+		/* 20rpx → 10px */
+	}
 
-			/* gap: 15px;*/
-			.btn-style {
-				background: #fff;
-				width: 100px;
-				height: 35px;
-				border: 1px solid #eee;
-				text-align: center;
-				line-height: 35px;
-				border-radius: 5px;
-				color: #165dff;
-			}
+	.feature-list {
+		display: flex;
+		flex-direction: row;
+		/* 水平排列功能项 */
+		flex-wrap: wrap;
+		justify-content: space-between;
+		flex-wrap: wrap;
+	}
 
-			.btn-confirm {
-				color: #fff;
-				background: #165dff;
-			}
-		}
+	.feature-item {
+		width:100%;
+		flex:1;
+		/* 原15px → 7.5px，适配比例 */
+		background-color: #f9f9f9;
+		/* 40rpx/20rpx → 20px/10px */
+		border-radius: 8px;
+		padding:15px;
+		/* 10rpx → 5px */
+		display: flex;
+		flex-direction: column;
+		/* 垂直排列图标、名称、描述 */
+		align-items: center;
+		text-align: center;
+		box-sizing: border-box;
+		/* 30rpx → 15px */
+	}
+
+	.feature-icon {
+		width: 40px;
+		/* 80rpx → 40px */
+		height: 40px;
+		/* 80rpx → 40px */
+		margin-bottom: 10px;
+		/* 20rpx → 10px */
+	}
+
+	.feature-name {
+		font-size: 15px;
+		/* 30rpx → 15px */
+		font-weight: bold;
+		color: #333;
+		margin-bottom: 5px;
+		/* 10rpx → 5px */
+	}
+
+	.feature-desc {
+		font-size: 12px;
+		/* 24rpx → 12px */
+		color: #999;
+		line-height: 1.5;
+	}
+
+	/* 4. 底部下载区域 */
+	.download-section {
+		width: 100%;
+		background-color: #fff;
+		display: flex;
+		flex-direction: row;
+		/* 水平居中按钮 */
+		justify-content: center;
+		align-items: center;
+		position: fixed;
+		bottom: 0px;
+		width: 750rpx;
+		padding: 20px 15px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+	}
+
+	.download-btn {
+		width: 80%;
+		height: 44px;
+		/* 88rpx → 44px */
+		line-height: 44px;
+		/* 88rpx → 44px */
+		background-color: #2f80ed;
+		color: #fff;
+		border: none;
+		border-radius: 22px;
+		/* 44rpx → 22px */
+		font-size: 16px;
+		/* 32rpx → 16px */
 	}
 </style>

@@ -3,7 +3,7 @@
     "configurations" : [
         {
             "app" : {
-                "launchtype" : "remote"
+                "launchtype" : "local"
             },
             "default" : {
                 "launchtype" : "local"
@@ -28,7 +28,7 @@
             "bundleId" : "ys.hotelsys.fun",
             "certificateFile" : "/Volumes/hanfeng/工作资料/ios开发者证书/hanfengcfp@outlook.com.p12",
             "certificateProfileFile" : "/Volumes/hanfeng/工作资料/ios开发者证书/hanfengcfpoutlookcom.mobileprovision",
-            "customPlaygroundType" : "local",
+            "customPlaygroundType" : "device",
             "playground" : "custom",
             "runSignStatus" : 0,
             "type" : "uni-app:app-ios"

@@ -40,9 +40,58 @@
 			</view>
 
 		</view>
-		<view class="card-list">
-			<!-- <template v-for="roomType of filterRoomTypeList"> -->
-			<view class="card-list-item" v-for="fm of fmResult.fmList">
+		<view style="padding:20px;border-radius: 8px;"> 
+		<rice-collapse  :custom-style="{borderRadius:'8px'}">
+		  <rice-collapse-item  v-for="fm of fmResult.fmList" :name="fm._id" :title="`${fm.type_text}:￥${fm.amount}`" :value="formatDate(fm.ioeTime)" :title-style="{color:fm.billType=='expenses'?'#b91c1c':'#047857'}">
+			  <view class="l-card">		
+			  	<view class="amount-area">
+			  		<view><text class="label">{{fm.billType=='expenses'?'本次支出':'本次收入'}}</text></view>
+			  		<view><text  :class="['num',fm.billType=='expenses'?'num-red':'']">￥{{fm.amount}}</text></view>
+			  	</view>
+			  	<view class="content">
+			  	<!-- 	<view class="card-item title">
+			  			<text class="txt">{{formatDate(fm.ioeTime)}}</text>
+			  		</view> -->
+			  		<view class="card-item" >
+			  			<view class="fl-c"> 
+			  				<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
+			  				<text class="label">收支时间：</text> 
+			  			</view>
+			  		<text class="val-style">{{formatDate(fm.ioeTime)}}</text>
+			  	</view>
+			  		<view class="card-item">
+			  			<view class="fl-c"> 
+			  			<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
+			  			<text class="label">交易类型：</text>
+			  			</view>
+			  			 <text class="val-style">{{fm.type_text}}</text>
+			  		</view>
+			  		<view class="card-item" style="margin-bottom: 0;">
+			  			<view class="fl-c"> 
+			  			<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
+			  			<text class="label">备注信息：</text>
+			  			</view>
+			  			<text class="val-style">
+			  				{{fm.mark}}
+			  			</text>
+			  		</view>
+			  	</view>
+			  
+			  	<view class="control">
+			  		<view>
+			  			<xt-control @del="deleteFm(fm)" @edit="editFm(fm)" :show-view="false"></xt-control>
+			  		</view>
+			  
+			  
+			  	</view>
+			  </view>
+		  </rice-collapse-item>
+		 
+		</rice-collapse>
+		</view >
+		<view class="card-list"  v-if="false&&!submitLoading&&fmResult.fmList.length>0">
+		
+			<view  class="card-list-item" v-for="fm of fmResult.fmList">
 				<view class="card">
 					<view class="icon-area">
 						<image src="/static/icons/fm/in.png" style="width: 20px;height: 20px;"
@@ -108,13 +157,14 @@
 					</view>
 				</view>
 			</view>
-			<!-- </template> -->
+		
+		
 		</view>
-
+		<view  v-if="!submitLoading&&fmResult.fmList.length<1">
+			<l-empty description="没有数据" />
+		</view>
 	</scroll-view>
-	<view style="flex:1"> 
-		<l-empty description="没有数据" v-if="!submitLoading&&fmResult.fmList.length<1" />
-	</view>
+
 	
 	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;" v-if="!submitLoading&&fmResult.fmList.length>0">
 		<l-pagination v-model="fmResult.pageNo" :disabled="submitLoading" :total="fmResult?.count"
@@ -463,6 +513,129 @@
 						color: #00b42a;
 					}
 				}
+			}
+		}
+	}
+	.l-card {
+		background-color: #fff;
+		border-radius: 12px;
+	
+		position: relative;
+	
+		.icon-area {
+			position: absolute;
+			right: 10px;
+			top: 10px;
+		}
+	
+		.top-area {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 60px;
+			border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+			background-color: #ecfdf5;
+			padding: 0 24px;
+	
+			.txt {
+				// line-height: 60px;
+				color: #047857;
+				font-size: 18px;
+				font-weight: 700;
+				padding-left: 4px;
+			}
+			
+		}
+		.top-area-red{
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 60px;
+			padding: 0 24px;
+			border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+			background-color: #fef2f2;
+			.txt {
+				// line-height: 60px;
+				color: #b91c1c;
+				font-size: 18px;
+				font-weight: 700;
+				padding-left: 4px;
+			}
+			
+		}
+		.amount-area {
+			padding: 0 24px;
+			margin-top: 24px;
+			.label {
+				color: #6b7280;
+				font-size: 14px;
+				margin-bottom: 4px;
+			}
+	
+			.num {
+				line-height: 36px;
+				color: #047857;
+				font-size: 30px;
+				font-weight: 700;
+			}
+			.num-red {
+				color: #b91c1c;
+			}
+		}
+	
+		.content {
+			padding: 24px;
+	
+			.card-item {
+				
+				margin-top: 15px;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: space-between;
+	
+				&:first-child {
+					margin-top: 0;
+				}
+				.fl-c{
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+				}
+				.label {
+					color: #1f2937;
+					font-size: 16px;
+					padding-left: 8px;
+				}
+	
+				.val-style {
+					color: #1f2937;
+					font-size: 16px;
+				}
+	
+			}
+		}
+	
+	
+	
+		.control {
+		
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-end;
+			// background-color: #f9fafb;
+			align-items: center;
+			padding: 0px 20px 24px 0;
+	
+			.txt {
+				font-size: 20px;
+				font-weight: 700;
+				color: #f53f3f;
+				padding-top: 5px;
+			}
+	
+			.txt-in {
+				color: #00b42a;
 			}
 		}
 	}

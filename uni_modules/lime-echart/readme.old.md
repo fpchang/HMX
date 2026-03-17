@@ -70,7 +70,7 @@ export default {
 							}
 						},
 						axisLabel: {
-							color: '#666666'
+							color: '#787878'
 						}
 					}
 				],
@@ -85,7 +85,7 @@ export default {
 							}
 						},
 						axisLabel: {
-							color: '#666666'
+							color: '#787878'
 						}
 					}
 				],
@@ -192,7 +192,7 @@ const option = {
 				}
 			},
 			axisLabel: {
-				color: '#666666'
+				color: '#787878'
 			}
 		}
 	],
@@ -207,7 +207,7 @@ const option = {
 				}
 			},
 			axisLabel: {
-				color: '#666666'
+				color: '#787878'
 			}
 		}
 	],

@@ -6,7 +6,7 @@
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
 
-				<image src="/static/icons/detailpage.png"
+				<image src="/static/icons/addpage.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
 				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">意见反馈</text>
 			</view>

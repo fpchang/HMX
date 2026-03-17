@@ -195,7 +195,7 @@ import { state } from "@/store/store";
 .user-name {
   font-size: 18px;
   font-weight: 600;
-  color: #1d1d1f;
+  color: #787878;
   display: block;
   margin-bottom: 4px;
 }
@@ -229,7 +229,7 @@ import { state } from "@/store/store";
 .section-title {
   font-size: 16px;
   font-weight: 600;
-  color: #1d1d1f;
+  color: #787878;
 }
 
 .view-all {
@@ -272,7 +272,7 @@ import { state } from "@/store/store";
 .hotel-name {
   font-size: 15px;
   font-weight: 600;
-  color: #1d1d1f;
+  color: #787878;
   margin-bottom: 5px;
 }
 
@@ -358,6 +358,6 @@ import { state } from "@/store/store";
 .function-text {
   flex: 1;
   font-size: 15px;
-  color: #1d1d1f;
+  color: #787878;
 }
 </style>

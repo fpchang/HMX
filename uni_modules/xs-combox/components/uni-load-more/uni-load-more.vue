@@ -180,7 +180,7 @@
 	}
 
 	.uni-load-more__img--nvue {
-		color: #666666;
+		color: #787878;
 	}
 
 	.uni-load-more__img--android,

@@ -64,7 +64,7 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "财务中心",
-				"navigationBarBackgroundColor":"#2563eb", //"linear-gradient(135deg, #2563eb, #3b82f6)",
+				"navigationBarBackgroundColor":"#007aff", //"linear-gradient(135deg, #2563eb, #3b82f6)",
 				"navigationBarTextStyle": "white"
 				
 			}

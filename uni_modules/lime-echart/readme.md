@@ -110,7 +110,7 @@ const chartOption = {
         }
       },
       axisLabel: {
-        color: '#666666'
+        color: '#787878'
       }
     }
   ],
@@ -125,7 +125,7 @@ const chartOption = {
         }
       },
       axisLabel: {
-        color: '#666666'
+        color: '#787878'
       }
     }
   ],

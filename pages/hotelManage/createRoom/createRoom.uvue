@@ -148,7 +148,8 @@
 		roomForm.value.roomList.forEach(item=>{
 			let roomtypeid = roomForm.value.room_type_id;
 			if(roomtypeid=="" && roomTypeList.value!=null){
-				roomtypeid=roomTypeList.value[0]._id
+				//roomtypeid=roomTypeList.value[0]._id				
+				return;
 			}
 			item.room_type_id=roomtypeid;
 		});

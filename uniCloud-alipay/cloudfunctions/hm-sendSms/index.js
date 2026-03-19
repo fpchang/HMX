@@ -32,8 +32,8 @@ exports.main = async (event, context) => {
 		return {code:0,tk:newToken};
 	  } catch(err) {
 	    // 调用失败
-	    // console.log(err)
-	    // console.log(err)
+	     console.log(JSON.stringify(err))
+	     console.log(err.errMsg)
 	    // return {
 	    //   code: err.errCode,
 	    //   msg: err.errMsg

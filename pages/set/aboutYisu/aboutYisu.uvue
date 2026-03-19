@@ -26,9 +26,6 @@
 
 <style lang="scss">
 	.container{
-		margin:auto;
-		width: 100vw;
-		max-width:800px ;
 		box-sizing: border-box;
 		.img-container{
 			display: flex;

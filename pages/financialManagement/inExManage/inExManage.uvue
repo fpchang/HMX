@@ -44,10 +44,10 @@
 		<rice-collapse  :custom-style="{borderRadius:'8px'}">
 		  <rice-collapse-item  v-for="fm of fmResult.fmList" :name="fm._id" :title="`${fm.type_text}:￥${fm.amount}`" :value="formatDate(fm.ioeTime)" :title-style="{color:fm.billType=='expenses'?'#b91c1c':'#047857'}">
 			  <view class="l-card">		
-			  	<view class="amount-area">
+			  <!-- 	<view class="amount-area">
 			  		<view><text class="label">{{fm.billType=='expenses'?'本次支出':'本次收入'}}</text></view>
 			  		<view><text  :class="['num',fm.billType=='expenses'?'num-red':'']">￥{{fm.amount}}</text></view>
-			  	</view>
+			  	</view> -->
 			  	<view class="content">
 			  	<!-- 	<view class="card-item title">
 			  			<text class="txt">{{formatDate(fm.ioeTime)}}</text>
@@ -66,6 +66,27 @@
 			  			</view>
 			  			 <text class="val-style">{{fm.type_text}}</text>
 			  		</view>
+					<view class="card-item" v-if="fm.billType=='income'">
+						<view class="fl-c"> 
+						<image src="/static/icons/fm/income.png" style="width: 16px;height: 16px;"></image>
+						<text class="label">收入金额：</text>
+						</view>
+						 <text class="val-style" style="color:#047857">¥{{fm.amount}}</text>
+					</view>
+					<view class="card-item" v-if="fm.billType=='expenses'">
+						<view class="fl-c"> 
+						<image src="/static/icons/fm/expenses.png" style="width: 16px;height: 16px;"></image>
+						<text class="label">支出金额：</text>
+						</view>
+						 <text class="val-style" style="color:#b91c1c">¥{{fm.amount}}</text>
+					</view>
+					<view class="card-item">
+						<view class="fl-c"> 
+						<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
+						<text class="label">支出：</text>
+						</view>
+						 <text class="val-style">{{fm.type_text}}</text>
+					</view>
 			  		<view class="card-item" style="margin-bottom: 0;">
 			  			<view class="fl-c"> 
 			  			<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
@@ -107,10 +128,10 @@
 						<image src="/static/icons/fm/expense.png" style="width: 18px;height: 18px;"></image>
 						<text  class="txt">支出</text>
 					</view>
-					<view class="amount-area">
+					<!-- <view class="amount-area">
 						<view><text class="label">{{fm.billType=='expenses'?'本次支出':'本次收入'}}</text></view>
 						<view><text  :class="['num',fm.billType=='expenses'?'num-red':'']">￥{{fm.amount}}</text></view>
-					</view>
+					</view> -->
 					<view class="content">
 					<!-- 	<view class="card-item title">
 							<text class="txt">{{formatDate(fm.ioeTime)}}</text>
@@ -129,11 +150,11 @@
 							</view>
 							 <text class="val-style">{{fm.type_text}}</text>
 						</view>
-						<!-- 	<view class="card-item">
+							<view class="card-item">
 						<text class="label">收支金额：</text><text class="val-style">
 							{{fm.amount}}
 						</text>
-					</view> -->
+					</view>
 						<view class="card-item" style="margin-bottom: 0;">
 							<view class="fl-c"> 
 							<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
@@ -564,7 +585,6 @@
 			
 		}
 		.amount-area {
-			padding: 0 24px;
 			margin-top: 24px;
 			.label {
 				color: #6b7280;
@@ -584,7 +604,7 @@
 		}
 	
 		.content {
-			padding: 24px;
+			padding: 24px 0;
 	
 			.card-item {
 				
@@ -625,7 +645,7 @@
 			justify-content: flex-end;
 			// background-color: #f9fafb;
 			align-items: center;
-			padding: 0px 20px 24px 0;
+			
 	
 			.txt {
 				font-size: 20px;

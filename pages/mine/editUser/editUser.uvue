@@ -6,7 +6,7 @@
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
 	
-				<image src="/static/icons/hotel-manage.png"
+				<image src="/static/icons/editpage.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
 				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">用户信息</text>
 			</view>
@@ -69,7 +69,11 @@
 		  backgroundColor: 'transparent',
 		});
 		const uploadAvatarSuccess=(list : string[])=>{
-			userForm.value.avatar=list[0];
+			if(list.length>0){
+				userForm.value.avatar=list[0];
+			}
+			userForm.value.avatar="";
+			
 		}
 		const saveUser= async ()=>{
 			      if (userForm.value.username=="") {

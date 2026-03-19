@@ -1,7 +1,7 @@
 	import { roomBean } from "@/bean/roomBean.uts";
 export const  validForm = (roomList:Array<roomBean>):boolean=>{
 	let msg ="";
-	let obj =roomList.forEach(item=>{
+	roomList.forEach(item=>{
 		if(item.room_name==""){
 			msg="房间名不能为空";
 			return;

@@ -89,8 +89,8 @@
 
 
 	</scroll-view>
-	<view style="margin-top: 168px;">
-		<l-empty description="没有数据" v-if="hotel_id==''" />
+	<view style="margin-top: 168px;" v-if="hotel_id==''">
+		<l-empty description="没有数据"  />
 	</view>
 
 

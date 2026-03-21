@@ -1,7 +1,6 @@
 <template>
 	<view class="xt-input-tab">
 		<view class="input-area">
-
 			<view v-if="showInput" style="flex: 1;;height: 100%;;padding-left: 8px;">
 				<input class="in-input-style" v-model="name_label" placeholder="请输入标签名称" />
 			</view>
@@ -31,9 +30,11 @@
 			default: true
 		},
 		modelValue: {
-			type: String
+			type: Array<string>,
+			default:[]
 
 		},
+		
 		btnText: {
 			type: String,
 			default: "添加标签"
@@ -43,8 +44,11 @@
 
 
 	// /const showInput:boolean=props.showInput;
-	let name_label = ref("");
+	let name_label = ref<string>("");
 	let tablist = ref<Array<string>>([]);
+	if(props.modelValue!=null){
+		tablist.value = props.modelValue;
+	}
 	const onUPdate = () => {
 		// 更新
 		emit("update:modelValue", tablist.value);

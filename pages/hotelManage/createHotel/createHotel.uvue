@@ -1,6 +1,7 @@
 <template>
 	<rice-navbar title="" border>
 		<template #left>
+			
 			<view style="display: flex;flex-direction: row;align-items: center;">
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
@@ -49,10 +50,10 @@
 				</view>
 			</xt-form-item>
 			<xt-form-item label="特点" tips="如：免费停车，宠物免费，户外泳池，草地烧烤等" :showTips="pageType!=2" required>
-				<view v-if="pageType==0">
-					<xt-input-tab v-model="hotelForm.feature" btnText="添加特点"></xt-input-tab>
+				<view v-if="pageType==0 ||pageType==1">
+					<xt-input-tab v-model="hotelForm.feature" btnText="添加特点" list=""></xt-input-tab>
 				</view>
-				<view v-if="pageType!=0" class="feature-show-area">
+				<view v-if="pageType!=0 &&pageType!=1" class="feature-show-area">
 					<view v-for="txtstr of hotelForm.feature" class="feature-item" style="margin-right: 4px;"><rice-tag
 							size="small" type="primary" :text="txtstr" color="#f2f3f5" text-color="#4e5969" /></view>
 
@@ -327,7 +328,7 @@
 				let decoded = decodeURIComponent(h as string);
 				if (decoded != null) {				
 					hotelForm.value = JSON.parse<hotelBean>(decoded)!;
-					//console.log("bbbbbbb",hotelForm.value);
+					console.log("bbbbbbb",hotelForm.value);
 				}
 			}
 		} catch (e) {

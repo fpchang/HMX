@@ -34,7 +34,7 @@
 				<view class="card-item  select-area" style="margin-bottom: 0;">
 					<fmSearchComponent :columns="columns" :initDateRange="dateRange"
 						@searchInputChange="searchInputChange" @selectAction="selectFm" @dateChange="dateChange"
-						@searchAction="getFmList" placeholder="搜索收入名称"></fmSearchComponent>
+						@searchAction="getFmList" placeholder="搜索备注信息"></fmSearchComponent>
 				</view>
 				<!-- <view class="card-item search"></view> -->
 			</view>
@@ -80,13 +80,7 @@
 						</view>
 						 <text class="val-style" style="color:#b91c1c">¥{{fm.amount}}</text>
 					</view>
-					<view class="card-item">
-						<view class="fl-c"> 
-						<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
-						<text class="label">支出：</text>
-						</view>
-						 <text class="val-style">{{fm.type_text}}</text>
-					</view>
+				
 			  		<view class="card-item" style="margin-bottom: 0;">
 			  			<view class="fl-c"> 
 			  			<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
@@ -187,7 +181,7 @@
 	</scroll-view>
 
 	
-	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;" v-if="!submitLoading&&fmResult.fmList.length>0">
+	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;" v-if="!submitLoading&&fmResult!=null&&fmResult.count>fmResult.pageSize">
 		<l-pagination v-model="fmResult.pageNo" :disabled="submitLoading" :total="fmResult?.count"
 			:page-size="fmResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange"  />
 	</view>
@@ -480,7 +474,6 @@
 				}
 
 				.content {
-					padding: 24px;
 
 					.card-item {
 						
@@ -499,13 +492,13 @@
 							align-items: center;
 						}
 						.label {
-							color: #1f2937;
+							color: #787878;
 							font-size: 16px;
 							padding-left: 8px;
 						}
 
 						.val-style {
-							color: #1f2937;
+							color: #787878;
 							font-size: 16px;
 						}
 
@@ -604,7 +597,6 @@
 		}
 	
 		.content {
-			padding: 24px 0;
 	
 			.card-item {
 				
@@ -623,14 +615,14 @@
 					align-items: center;
 				}
 				.label {
-					color: #1f2937;
-					font-size: 16px;
+					color: #787878;
+					font-size: 13px;
 					padding-left: 8px;
 				}
 	
 				.val-style {
-					color: #1f2937;
-					font-size: 16px;
+					color: #787878;
+					font-size: 13px;
 				}
 	
 			}

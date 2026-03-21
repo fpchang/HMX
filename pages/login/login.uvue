@@ -100,6 +100,7 @@
 			<rice-button v-if="loginType == 'app'" type="primary" text="本机号码一键登录" class="submit-btn" shape="round"
 				color="#165dff" @click="verify(false)"
 				:loading="submitLoading" />
+				<!-- <rice-button @click="uniVerifyLogin" text="测试"></rice-button> -->
 			</view>
 			<view class="up">
 				<view @click="agreeEvent" style="padding-right: 2px;">
@@ -429,6 +430,9 @@
 		// 预登录
 		preLogin(() => { });
 	})
+	
+	
+	// 页面/组件中的方法（以 Vue3 + UniApp X 为例）
 </script>
 
 

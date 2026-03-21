@@ -71,6 +71,7 @@
 		const uploadAvatarSuccess=(list : string[])=>{
 			if(list.length>0){
 				userForm.value.avatar=list[0];
+				return;
 			}
 			userForm.value.avatar="";
 			

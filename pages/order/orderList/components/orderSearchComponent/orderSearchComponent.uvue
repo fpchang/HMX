@@ -65,8 +65,8 @@
 	}
 	const checkType : Array<TYPE_ORDER> = [
 		{ text: "全部", value: 'all' },
-		{ text: "待入住", value: 0 },
-		{ text: "已完成", value: 1 },
+		{ text: "待入住", value: 1 },
+		{ text: "已完成", value: 5 },
 		{ text: "已撤销", value: 10 }
 	]
 	const attrs = useAttrs();

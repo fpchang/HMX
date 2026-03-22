@@ -72,6 +72,7 @@ class OrderServiceClass {
 
 	}
 	async getOrderListBySearch(hotel_id : string, dateRange : string[], orderStatus : string | number, keyword : string, pageNo : number, pageSize : number) : Promise<OrderDataListResult> {
+		console.log("zjjjjjj",orderStatus);
 		let skipnum : number = Math.max((pageNo - 1) * pageSize, 0);
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
@@ -416,7 +417,7 @@ try {
 	async deleteOrder(_id : string) : Promise<boolean> {
 		try {
 			const res = await DB.callFunction('hm-deleteOrder', { _id });
-			////console.log("删除订单",res)
+			console.log("删除订单",res)
 			return true;
 		} catch (error) {
 			throw new Error("删除订单失败")

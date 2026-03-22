@@ -44,7 +44,14 @@
 			<!-- <template v-for="roomType of filterRoomTypeList"> -->
 			<view class="card-list-item" v-for="order of orderResult.orderList">
 				<view class="card">
-				
+					<view style="display: flex;flex-direction: row;justify-content: flex-end;">
+						<view> 
+						<rice-tag v-if="order.orderStatus==1" type="primary" text="待入住" />
+						<rice-tag v-if="order.orderStatus==5" type="success" text="已完成" />
+						<rice-tag v-if="order.orderStatus==10" type="error" text="已撤销" />
+						</view>
+					
+					</view>
 					
 					<view class="content">
 						<!-- 	<view class="card-item title">
@@ -123,7 +130,7 @@
 					<view class="control">
 			
 						<view>
-							<xt-control @del="deleteOrder(order)" @edit="editOrder(order)" :show-view="false" :show-edit="false"></xt-control>
+							<xt-control @del="deleteOrder(order)" @edit="editOrder(order)" :show-view="false" :show-edit="false" :show-delete="order.orderStatus!=10"></xt-control>
 						</view>
 
 
@@ -157,6 +164,7 @@
 	import orderSearchComponent from "./components/orderSearchComponent/orderSearchComponent";
 	import { roomBean } from "@/bean/roomBean";
 	import {userBean} from "@/bean/userBean";
+	import {getGatherEvent } from "@/store/modules/orderStore";
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -184,8 +192,8 @@
 	const columns = computed<Array<Array<PickerOption>>>(() => {
 		let result : Array<Array<PickerOption>> = [[
 				{ text: "全部", value: "all" },
-			      { text: "待入住", value: 0 },
-			      { text: "已完成", value: 1 },
+			      { text: "待入住", value: 1 },
+			      { text: "已完成", value: 5 },
 			      { text: "已撤销", value: 10 },
 		]];
 		return result;
@@ -306,11 +314,14 @@
 			title: '确认删除此订单',
 			message: "删除后将无法恢复，确认删除吗？",
 			beforeClose: async () : Promise<boolean> => {
-
-				//await roomTypeService.deleteOrder(room._id);
-				//await comFunction.getRoomTypeList(hotel_id.value);
-				//await FMService.deleteOrder(fm._id);
-				getOrderList();
+			console.log(1111);
+				// await roomTypeService.deleteOrder(room._id);
+				// await comFunction.getRoomTypeList(hotel_id.value);
+				// await FMService.deleteOrder(fm._id);
+				await OrderService.deleteOrder(order._id);
+				
+				await getOrderList();
+				getGatherEvent(hotel_id.value);
 				hideDialog();
 
 			},

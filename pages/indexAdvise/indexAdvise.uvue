@@ -1,9 +1,11 @@
 <template>
+
 <scroll-view class="indexAdvise-page" :refresher-enabled="false" v-if="isReading" :show-scrollbar="false">
 	<view class="hotel-container">
 		<!-- 1. 视频宣传区域 -->
 		<view class="video-section">
-			<video style="width:750rpx;height:562rpx" :muted="true"
+			<view style="height: 60px;background-color: #000;"></view>
+			<video style="width:750rpx;height:562rpx;" :muted="true"
 				src="https://cdn.hotelsys.fun/HM/images/advise/advise.mp4" :autoplay="true" :show-mute-btn="true"
 				object-fit="contain" :controls="true"></video>
 

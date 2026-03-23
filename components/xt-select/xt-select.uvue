@@ -58,8 +58,8 @@
 			const val = item['value'] as string;
 			return val == props.modelValue; 
 			
-		})
-		text_val.value = target['text'] as string;
+		}) as PickerOption;
+		text_val.value = target.text as string;
 	}
 	let keystr=ref("");
 	const showSelect=()=>{

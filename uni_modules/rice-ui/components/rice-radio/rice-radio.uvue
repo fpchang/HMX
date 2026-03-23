@@ -48,7 +48,8 @@
 	import { RadioProps } from './type.uts';
 
 	defineOptions({
-		name: 'rice-radio'
+		name: 'rice-radio',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('radio')

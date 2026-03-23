@@ -70,7 +70,8 @@
 	import { CascaderProps, CascaderOption, CascaderEvent, CascaderClickDisabledEvent, GetSelectedOptionsByValue } from "./type.uts"
 
 	defineOptions({
-		name: 'rice-cascader'
+		name: 'rice-cascader',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace('cascader')
 	const { safeBottom } = useSafeArea()

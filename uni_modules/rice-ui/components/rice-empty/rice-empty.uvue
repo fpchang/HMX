@@ -31,7 +31,8 @@
 	import { EmptyProps } from './type.uts';
 
 	defineOptions({
-		name: 'rice-empty'
+		name: 'rice-empty',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace('empty')
 	const props = withDefaults(defineProps<EmptyProps>(), {

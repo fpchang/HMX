@@ -19,7 +19,8 @@
 	import { collapseInjectKey } from "./index"
 
 	defineOptions({
-		name: 'rice-collapse'
+		name: 'rice-collapse',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('collapse')

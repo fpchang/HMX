@@ -20,7 +20,8 @@
 	import { CellGroupProps } from "./type.uts"
 
 	defineOptions({
-		name: 'rice-cell-group'
+		name: 'rice-cell-group',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace("cell-group")

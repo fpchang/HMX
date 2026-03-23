@@ -39,7 +39,8 @@
 	import { addUnit, clamp, getRandomStr, toNum, hasStrValue, getPxNum } from "../../libs/utils"
 	import { ProgressCircleProps, ProgressCircleDrawParams } from './type.uts';
 	defineOptions({
-		name: 'rice-progress-circle'
+		name: 'rice-progress-circle',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace('progress-circle')
 	const canvasId = 'rice-progress-circle-' + getRandomStr()

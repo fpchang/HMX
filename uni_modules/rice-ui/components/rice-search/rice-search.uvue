@@ -69,7 +69,8 @@
 	import { SearchProps } from './type.uts';
 
 	defineOptions({
-		name: 'rice-search'
+		name: 'rice-search',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('search')

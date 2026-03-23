@@ -51,7 +51,8 @@
 	import { CheckboxProps } from './type.uts';
 
 	defineOptions({
-		name: 'rice-checkbox'
+		name: 'rice-checkbox',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('checkbox')

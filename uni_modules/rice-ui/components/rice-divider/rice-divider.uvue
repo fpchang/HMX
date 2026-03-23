@@ -30,7 +30,8 @@
 	import { DividerProps } from './type.uts';
 
 	defineOptions({
-		name: 'rice-divider'
+		name: 'rice-divider',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('divider')

@@ -67,7 +67,8 @@
 	import { formItemBlurInjectKey } from "../rice-form-item"
 	import { TextareaProps } from "./type.uts"
 	defineOptions({
-		name: 'rice-textarea'
+		name: 'rice-textarea',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace("textarea")
 	const emit = defineEmits<{

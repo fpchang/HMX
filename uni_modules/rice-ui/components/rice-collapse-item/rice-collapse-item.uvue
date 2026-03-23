@@ -58,7 +58,8 @@
 	import { CollapseItemProps } from './type.uts';
 
 	defineOptions({
-		name: 'rice-collapse-item'
+		name: 'rice-collapse-item',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('collapse-item')

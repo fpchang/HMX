@@ -110,7 +110,8 @@
 	import { UploaderProps, UploaderFileItem, UploaderComplete, UploaderSuccess, UploaderFail } from "./type.uts"
 
 	defineOptions({
-		name: 'rice-uploader'
+		name: 'rice-uploader',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace("uploader")
 	const emit = defineEmits<{

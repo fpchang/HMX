@@ -38,7 +38,8 @@
 	import { BackTopProps } from './type.uts'
 
 	defineOptions({
-		name: 'rice-back-top'
+		name: 'rice-back-top',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('back-top')

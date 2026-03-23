@@ -75,7 +75,8 @@
 	import { iconSizeTypes, loadingSizeTypes } from "./utils"
 
 	defineOptions({
-		name: 'rice-button'
+		name: 'rice-button',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('button')

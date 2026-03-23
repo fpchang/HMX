@@ -47,7 +47,8 @@
 	import { showActionSheet } from "./index.uts"
 	import { useCssVar, useNamespace, useSafeArea, usePopup } from "../../libs/use"
 	defineOptions({
-		name: 'rice-action-sheet'
+		name: 'rice-action-sheet',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace('action-sheet')
 	const { safeBottom } = useSafeArea()

@@ -46,7 +46,8 @@
 	import { hasStrValue, addUnit } from '../../libs/utils';
 	import { BadgeProps } from "./type.uts"
 	defineOptions({
-		name: 'rice-badge'
+		name: 'rice-badge',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('badge')

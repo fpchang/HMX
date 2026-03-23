@@ -96,7 +96,8 @@
 	import { CalendarProps, CalendarData, GridItem } from "./type.uts"
 
 	defineOptions({
-		name: 'rice-calendar'
+		name: 'rice-calendar',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace('calendar')
 	const { safeBottom } = useSafeArea()

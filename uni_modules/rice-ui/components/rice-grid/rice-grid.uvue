@@ -23,7 +23,8 @@
 	import { GridProps, GridProvice } from "./type.uts"
 
 	defineOptions({
-		name: 'rice-grid'
+		name: 'rice-grid',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('grid')

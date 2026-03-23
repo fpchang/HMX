@@ -52,7 +52,8 @@
 	import { CellProps } from "./type.uts"
 
 	defineOptions({
-		name: 'rice-cell'
+		name: 'rice-cell',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('cell')

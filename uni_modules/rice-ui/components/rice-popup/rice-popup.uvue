@@ -43,7 +43,8 @@
 	import { BeforeChangeInterceptor } from "../../libs/types"
 	import { PopupProps } from "./type.uts"
 	defineOptions({
-		name: 'rice-popup'
+		name: 'rice-popup',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace('popup')
 	const emit = defineEmits<{

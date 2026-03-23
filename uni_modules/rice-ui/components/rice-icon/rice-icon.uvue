@@ -23,7 +23,8 @@
 	import { IconProps, fontData } from './index.uts';
 
 	defineOptions({
-		name: 'rice-icon'
+		name: 'rice-icon',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('icon')
@@ -88,7 +89,7 @@
 <style scoped lang="scss">
 	@font-face {
 		font-family: riceIcon;
-		src: url('../../static/font/riceIcons.ttf');
+		src:url('../../static/font/riceIcon.ttf');
 	}
 
 	.rice-icon {

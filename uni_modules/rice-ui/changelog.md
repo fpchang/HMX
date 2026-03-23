@@ -1,3 +1,15 @@
+## 1.0.22（2026-03-23）
+- [修复] 修复 HBuilderX5.0+ 版本编译不通过的问题
+- [修复] 修复 Icon 组件用户引入自定义图标时，部分情况下在 iOS端 不显示的问题
+- [优化] 适配 HBuilderX5.0+ class样式隔离策略2.0 策略，[官方文档](https://doc.dcloud.net.cn/uni-app-x/css/common/style-isolation.html)
+- [新增] ActionSheet 组件 ActionSheetAction类型 新增 `value` 字段
+- [预告] 即将支持鸿蒙的蒸汽模式
+## 1.0.21（2026-03-23）
+- [修复] 修复 HBuilderX5.0+ 版本编译不通过的问题
+- [修复] 修复 Icon 组件用户引入自定义图标时，部分情况下在 iOS端 不显示的问题
+- [优化] 适配 HBuilderX5.0+ class样式隔离策略2.0 策略，[官方文档](https://doc.dcloud.net.cn/uni-app-x/css/common/style-isolation.html)
+- [新增] ActionSheet 组件 ActionSheetAction类型 新增 `value` 字段
+- [预告] 即将支持鸿蒙的蒸汽模式
 ## 1.0.20（2025-12-26）
 - 修复小程序端 Dialog 使用 Api调用时回调函数缺少参数的bug
 ## 1.0.19（2025-11-23）

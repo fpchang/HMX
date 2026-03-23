@@ -89,7 +89,8 @@
 	import { DialogProps } from './type.uts';
 
 	defineOptions({
-		name: 'rice-dialog'
+		name: 'rice-dialog',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('dialog')

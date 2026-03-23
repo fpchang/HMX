@@ -37,7 +37,8 @@
 	import { RateProps, RateStatus } from "./type.uts"
 
 	defineOptions({
-		name: 'rice-rate'
+		name: 'rice-rate',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace('rate')
 	const emit = defineEmits<{

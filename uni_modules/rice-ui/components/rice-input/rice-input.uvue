@@ -104,7 +104,8 @@
 	import { formItemBlurInjectKey } from "../rice-form-item"
 	import { InputProps } from "./type.uts"
 	defineOptions({
-		name: 'rice-input'
+		name: 'rice-input',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace("input")
 	const slots = useSlots();

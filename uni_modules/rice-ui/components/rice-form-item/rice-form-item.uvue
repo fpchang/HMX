@@ -67,7 +67,8 @@
 	import { FormItemProps, FormItemState } from "./type.uts"
 
 	defineOptions({
-		name: 'rice-form-item'
+		name: 'rice-form-item',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('form-item')

@@ -85,7 +85,8 @@
 	import { PickerProps, PickerOption, PickerColumnType, PickerModelValue, PickerEvent, PickerOptions } from "./type.uts"
 
 	defineOptions({
-		name: 'rice-picker'
+		name: 'rice-picker',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('picker')

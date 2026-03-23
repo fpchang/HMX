@@ -36,7 +36,8 @@
 	import { ProgressProps, ProgressColors } from './type.uts';
 
 	defineOptions({
-		name: 'rice-progress'
+		name: 'rice-progress',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('progress')
@@ -79,7 +80,7 @@
 			}
 		})
 
-		obServer.value!.observe(wrapperRef.value)
+		obServer.value!.observe(wrapperRef.value!)
 	}
 	// #endif
 

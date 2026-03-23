@@ -23,7 +23,8 @@
 	import { CountDownProps } from "./type.uts"
 
 	defineOptions({
-		name: 'rice-count-down'
+		name: 'rice-count-down',
+		styleIsolation: 'app-and-page'
 	})
 
 	defineSlots<{

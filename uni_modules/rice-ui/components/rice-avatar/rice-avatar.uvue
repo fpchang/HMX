@@ -35,7 +35,8 @@
 	import { AvatarProps } from './type.uts'
 
 	defineOptions({
-		name: 'rice-avatar'
+		name: 'rice-avatar',
+		styleIsolation: 'app-and-page'
 	})
 
 	const base64Avatar =

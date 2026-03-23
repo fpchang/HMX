@@ -48,7 +48,8 @@
 	import { isDark } from "../../libs/store";
 	import { ImageProps } from "./type.uts"
 	defineOptions({
-		name: 'rice-image'
+		name: 'rice-image',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace('image')
 	const emit = defineEmits<{

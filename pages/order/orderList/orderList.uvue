@@ -263,8 +263,14 @@
 	const formatRoomList = (list : Array<string>) : Array<string> => {
 		let result : Array<string> = [];
 		list.forEach(room_id => {
-			let room = roomList.value.find(item => item._id == room_id) as roomBean;
-			result.push(room.room_name);
+			let room = roomList.value.find(item => item._id == room_id);
+			if(room==null){
+				result.push("-");
+				
+			}else{
+				result.push(room.room_name);
+			}
+			
 		})
 	
 		return result;

@@ -55,7 +55,8 @@
 	import { NavbarProps } from "./type.uts"
 
 	defineOptions({
-		name: 'rice-navbar'
+		name: 'rice-navbar',
+		styleIsolation: 'app-and-page'
 	})
 	const slot = defineSlots()
 	const emit = defineEmits<{

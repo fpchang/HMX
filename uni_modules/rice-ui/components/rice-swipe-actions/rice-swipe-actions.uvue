@@ -18,7 +18,8 @@
 	import { SwipeActionsProps, SwipeActionsProvide } from './type.uts';
 
 	defineOptions({
-		name: 'rice-swipe-actions'
+		name: 'rice-swipe-actions',
+		styleIsolation: 'app-and-page'
 	})
 
 	const { linkChildren, childrenList } = useChildren(swipeActionsName)

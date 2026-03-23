@@ -51,7 +51,8 @@
 	// #endif
 
 	defineOptions({
-		name: 'rice-loading'
+		name: 'rice-loading',
+		styleIsolation: 'app-and-page'
 	})
 
 	const slot = useSlots()

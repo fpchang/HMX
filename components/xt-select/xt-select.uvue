@@ -17,7 +17,7 @@
 		</view>
 		<!-- <rice-action-sheet v-model:show="show" :close-on-click-action="true"
 					@select="onSelect"  v-bind="$attrs"/> -->
-		<rice-picker   v-model:show="show" :columns="columns" @confirm="onColumnsConfirm"></rice-picker>
+		<rice-picker   v-model:show="show"  :columns="columns" @confirm="onColumnsConfirm"></rice-picker>
 					
 		
 	</view>
@@ -29,8 +29,13 @@
 	//selectAction下拉 选择
 	//searchAction input点击搜索
 	//searchInputChange 输入框变化
-	const emit =defineEmits(['selectAction',"searchAction","searchInputChange"]);
+	const emit =defineEmits(['update:modelValue','selectAction',"searchAction","searchInputChange"]);
 	const props = defineProps({
+		modelValue: {
+			type: String,
+			default:""
+		
+		},
 		columns:{
 			type:Array<Array<PickerOption>>,
 			default:[]
@@ -48,9 +53,15 @@
 	const attrs = useAttrs();
 	let show=ref(false);
 	let text_val =ref("请选择");
+	if(props.modelValue!=""){
+		const target = props.columns[0].find(item=>{
+			const val = item['value'] as string;
+			return val == props.modelValue; 
+			
+		})
+		text_val.value = target['text'] as string;
+	}
 	let keystr=ref("");
-	
-	
 	const showSelect=()=>{
 		show.value=!show.value;
 	}
@@ -75,7 +86,9 @@
 		console.log('PickerEvent', e)
 		let val: string = e.selectedValues[0] as string
 		let index: number = e.selectedIndex[0] as number
-		text_val.value = props.columns[0][index]['text'] as string
+		text_val.value = props.columns[0][index]['text'] as string;
+		
+		emit("update:modelValue", val);
 		emit("selectAction",val);
 	}
 	if( props.columns.length>0){

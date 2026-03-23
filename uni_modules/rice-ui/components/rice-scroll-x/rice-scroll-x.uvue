@@ -29,7 +29,8 @@
 	import { addUnit, getPxNum, hasStrValue } from "../../libs/utils"
 	import { ScrollXProps } from "./type.uts"
 	defineOptions({
-		name: 'rice-scroll-x'
+		name: 'rice-scroll-x',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace('scroll-x')
 	const emit = defineEmits<{

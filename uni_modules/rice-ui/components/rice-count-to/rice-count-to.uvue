@@ -21,7 +21,8 @@
 	import { addUnit, hasStrValue, str2num } from "../../libs/utils"
 	import { CountToProps, StartCountFn } from './type.uts';
 	defineOptions({
-		name: 'rice-count-to'
+		name: 'rice-count-to',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace('count-to')
 

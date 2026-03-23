@@ -36,7 +36,8 @@
 	import { FormProps, FormItemContext, FormItemContextProvide, FormRules, FormValidateErrors } from "./type.uts";
 
 	defineOptions({
-		name: 'rice-form'
+		name: 'rice-form',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace('form')
 	const props = withDefaults(defineProps<FormProps>(), {

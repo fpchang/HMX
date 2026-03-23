@@ -41,6 +41,11 @@
 	import { addUnit, debugWarn, hasStrValue, getRandomStr } from "../../libs/utils"
 	import { SignatureProps, SignaturePoint, SignatureCanvasSize } from "./type.uts"
 
+	defineOptions({
+		name:'rice-signature',
+		styleIsolation: 'app-and-page'
+	})
+
 	const ns = useNamespace('signature')
 
 	const emit = defineEmits<{

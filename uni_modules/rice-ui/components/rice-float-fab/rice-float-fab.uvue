@@ -58,7 +58,8 @@
 	 */
 
 	defineOptions({
-		name: 'rice-float-fab'
+		name: 'rice-float-fab',
+		styleIsolation: 'app-and-page'
 	})
 	import { useNamespace, useTouch } from "../../libs/use"
 	import { addUnit, clamp, closeto, hasStrValue, getPxNum } from "../../libs/utils"

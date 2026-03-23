@@ -28,7 +28,8 @@
 	import { RadioGroupProps, RadioValueType, RadioGroupProvide, RadioIconPosition, RadioShape, RadioDirection } from "./type.uts"
 	
 	defineOptions({
-		name: 'rice-radio-group'
+		name: 'rice-radio-group',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('radio-group')

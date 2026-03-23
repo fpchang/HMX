@@ -28,7 +28,8 @@
 	import { hasStrValue } from "../../libs/utils"
 	import { OverlayProps } from "./type.uts"
 	defineOptions({
-		name: 'rice-overlay'
+		name: 'rice-overlay',
+		styleIsolation: 'app-and-page'
 	})
 
 	const emit = defineEmits<{

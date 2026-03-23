@@ -53,7 +53,8 @@
 	import { StepperProps, StepperCurrent } from './type.uts';
 
 	defineOptions({
-		name: 'rice-stepper'
+		name: 'rice-stepper',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('stepper')

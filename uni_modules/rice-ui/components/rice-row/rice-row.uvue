@@ -24,7 +24,8 @@
 	import { RowProps, RowProvide, rowInjectKey } from './index.uts';
 	
 	defineOptions({
-		name: 'rice-row'
+		name: 'rice-row',
+		styleIsolation: 'app-and-page'
 	})
 
 	const props = withDefaults(defineProps<RowProps>(), {

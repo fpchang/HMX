@@ -39,6 +39,11 @@
 	import { addUnit, hasStrValue, getPxNum } from "../../libs/utils";
 	import { useNamespace } from "../../libs/use";
 	import { CodeInputProps } from "./type.uts"
+	
+	defineOptions({
+		name:'rice-code-input',
+		styleIsolation: 'app-and-page'
+	})
 
 	const ns = useNamespace('code-input')
 	const emit = defineEmits<{

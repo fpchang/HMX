@@ -33,7 +33,8 @@
 	import { CheckboxDirection, CheckboxShape, CheckboxIconPosition, CheckboxGroupProvide } from "./type.uts"
 
 	defineOptions({
-		name: 'rice-checkbox-group'
+		name: 'rice-checkbox-group',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace('checkbox-group')
 	const emit = defineEmits<{

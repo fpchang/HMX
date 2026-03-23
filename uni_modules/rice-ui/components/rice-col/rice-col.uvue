@@ -16,7 +16,8 @@
 	import { ColProps } from './type.uts';
 
 	defineOptions({
-		name: 'rice-col'
+		name: 'rice-col',
+		styleIsolation: 'app-and-page'
 	})
 
 	const props = withDefaults(defineProps<ColProps>(), {

@@ -27,7 +27,8 @@
 	import { GridItemProps } from "./type.uts";
 
 	defineOptions({
-		name: 'rice-grid-item'
+		name: 'rice-grid-item',
+		styleIsolation: 'app-and-page'
 	})
 
 	const emit = defineEmits<{

@@ -62,7 +62,8 @@
 	import { SwipeActionsItemProps, SwipeActionsMenu, SwipeActionsPosition, SwipeActionsState, SwipeActionsMenuRect, SwipeActionsItemOpen, SwipeActionsItemClose, SwipeActionsItemClick } from './type.uts';
 
 	defineOptions({
-		name: 'rice-swipe-actions-item'
+		name: 'rice-swipe-actions-item',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace('swipe-actions-item')
 	const slot = useSlots()

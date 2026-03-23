@@ -54,7 +54,8 @@
 	import { TagProps, TagType } from './type.uts';
 
 	defineOptions({
-		name: 'rice-tag'
+		name: 'rice-tag',
+		styleIsolation: 'app-and-page'
 	})
 
 	const ns = useNamespace('tag')

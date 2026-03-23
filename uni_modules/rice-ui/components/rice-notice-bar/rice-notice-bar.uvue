@@ -50,7 +50,8 @@
 	import { NoticeBarProps, NoticeBarState } from './type.uts';
 
 	defineOptions({
-		name: 'rice-notice-bar'
+		name: 'rice-notice-bar',
+		styleIsolation: 'app-and-page'
 	})
 	const ns = useNamespace('notice-bar')
 

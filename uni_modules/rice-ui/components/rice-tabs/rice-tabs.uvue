@@ -50,7 +50,8 @@
 	import { TabsProps, TabsOptions, TabsClickTab, TabsChange } from './type.uts';
 
 	defineOptions({
-		name: 'rice-tabs'
+		name: 'rice-tabs',
+		styleIsolation: 'app-and-page'
 	})
 
 	const emit = defineEmits<{

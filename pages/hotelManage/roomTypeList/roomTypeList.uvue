@@ -23,12 +23,11 @@
 	</rice-navbar>
 	<scroll-view style="flex:1" @scroll="scrollPage" v-if="roomTypeList.length>0">
 		<view class="card-list">
-			
+
 			<view class="card-list-item" v-for="(roomType,index) of roomTypeList">
 				<view class="card">
 					<view class="img-area">
-						<image :src="topImg(roomType.firstImages)"
-							style="height: 100%;width: 100%;" mode="aspectFill">
+						<image :src="topImg(roomType.firstImages)" style="height: 100%;width: 100%;" mode="aspectFill">
 						</image>
 					</view>
 					<view class="card-title-group">
@@ -43,8 +42,7 @@
 										:round="true" />
 
 								</view>
-								<view style="margin-left: 8px;"
-									v-for="it of roomType.bedList">
+								<view style="margin-left: 8px;" v-for="it of roomType.bedList">
 									<rice-tag :text="`${it['count']}张${it['name']}床`" text-color="#4e5969"
 										color="#f2f3f5" text-size="12px" :round="true" />
 
@@ -55,21 +53,26 @@
 							</view>
 
 
-			
-				<view class="card-subtitle">
+
+							<view class="card-subtitle">
+								<navigator :url="`/pages/hotelManage/roomList/roomList?roomType_id=${roomType._id}`">
 									<view style="display: flex;flex-direction: row;">
-										<text style=" font-weight:400;color: #1d2129;font-size: 14px;">房间数量：</text>
+										<text style=" font-weight:400;color: #1d2129;font-size: 14px;">房间数：</text>
 										<text class="txt-num"
-											style="color: #00b42f;font-size: 14px;padding:0 5px;">{{roomType.roomList.length}}</text>
+											style="color: #00b42f;font-size: 14px;padding:0 4px;">{{roomType.roomList.length}}</text>
 										<text style="color: #4e5969;font-size: 14px;"> 间</text>
+										<rice-icon name="arrow-right"/>
 									</view>
-									<view style="display: flex;flex-direction:row; align-items: center;">
+								</navigator>
 								
-										<xt-control @del="deleteRoomType(roomType)" @view="viewDetail(roomType)" @edit="editRoomType(roomType)"></xt-control>
-									</view>
+								<view style="display: flex;flex-direction:row; align-items: center;">
+
+									<xt-control @del="deleteRoomType(roomType)" @view="viewDetail(roomType)"
+										@edit="editRoomType(roomType)"></xt-control>
 								</view>
-						
-	
+							</view>
+
+
 							<!-- <view v-if="false" class="control-icons" style="display: flex;flex-direction: row;">
 								<view class="control-icons-item" @click="viewDetail(roomType)">
 									
@@ -106,8 +109,8 @@
 		</view>
 
 	</scroll-view>
-	<view style="margin-top:80px">
-		<l-empty description="没有数据" v-if="roomTypeList.length<1" />
+	<view style="margin-top:80px" v-if="roomTypeList.length<1">
+		<l-empty description="没有数据"  />
 	</view>
 
 </template>
@@ -118,10 +121,10 @@
 	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { roomTypeService } from "@/services/roomTypeService";
-	import {roomTypeBean} from "@/bean/roomTypeBean.uts";
+	import { roomTypeBean } from "@/bean/roomTypeBean.uts";
 	import { hotelBean } from "@/bean/hotelBean";
 	let submitLoading = ref(false);
-	
+
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -153,14 +156,14 @@
 		return p.get(val) ?? val;
 	}
 	let showControl_id = ref("");
-	const getRoomTypeId = (roomType: UTSJSONObject): string => {
+	const getRoomTypeId = (roomType : UTSJSONObject) : string => {
 		const idObj = roomType["_id"] as UTSJSONObject;
 		return idObj["_value"] as string;
 	}
-	const showControl = (roomType:UTSJSONObject) => {
+	const showControl = (roomType : UTSJSONObject) => {
 		showControl_id.value = getRoomTypeId(roomType);
 	}
-	const isShowMenu=(roomType:UTSJSONObject)=>{
+	const isShowMenu = (roomType : UTSJSONObject) => {
 		return getRoomTypeId(roomType) == showControl_id.value;
 	}
 	const editRoomType = (roomType : roomTypeBean) => {
@@ -200,7 +203,7 @@
 			url: "/pages/hotelManage/createRoomType/createRoomType"
 		});
 	}
-	const deleteRoomType = async (roomType :roomTypeBean) => {
+	const deleteRoomType = async (roomType : roomTypeBean) => {
 		if (!permissionList.value.includes(
 			"ROOMTYPE_DELETE"
 		)) {

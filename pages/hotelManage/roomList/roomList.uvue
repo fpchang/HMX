@@ -16,7 +16,7 @@
 				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
 
 				<text class="txt" @click="addRoom">添加房间</text>
-				
+
 
 			</view>
 		</template>
@@ -32,7 +32,7 @@
 					<l-tag variant="light">共{{filterRoomList.length}}间</l-tag>
 				</view>
 				<view class="card-item  select-area">
-					<xt-select :columns="columns" @selectAction="selectRoomType" placeholder="搜索房间名称"
+					<xt-select :columns="columns"  v-model="_select_id" placeholder="搜索房间名称"
 						@searchInputChange="searchInputChange"></xt-select>
 				</view>
 				<view class="card-item search"></view>
@@ -41,24 +41,24 @@
 		</view>
 		<view class="card-list">
 			<!-- <template v-for="roomType of filterRoomTypeList"> -->
-				<view class="card-list-item" v-for="room of filterRoomList">
-					<view class="card">
-						<view class="card-item title">
-							<text class="txt">{{room.room_name}}</text>
-						</view>
-						<view class="card-item subtitle">
-							<text class="txt">
-								{{getRoomTypeName(room.room_type_id)}}
-							</text>
-						</view>
-						<view class="card-item">
-							<xt-control @del="deleteRoom(room)" @edit="editRoom(room)" :show-view="false"></xt-control>
-						</view>
+			<view class="card-list-item" v-for="room of filterRoomList">
+				<view class="card">
+					<view class="card-item title">
+						<text class="txt">{{room.room_name}}</text>
+					</view>
+					<view class="card-item subtitle">
+						<text class="txt">
+							{{getRoomTypeName(room.room_type_id)}}
+						</text>
+					</view>
+					<view class="card-item">
+						<xt-control @del="deleteRoom(room)" @edit="editRoom(room)" :show-view="false"></xt-control>
 					</view>
 				</view>
+			</view>
 			<!-- </template> -->
 		</view>
-		
+
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
@@ -74,7 +74,7 @@
 	import { state } from "@/store/store";
 	import { roomTypeService } from "@/services/roomTypeService";
 	import { comFunction } from "@/pages/index/ComFuc";
-	import {userBean} from "@/bean/userBean";
+	import { userBean } from "@/bean/userBean";
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -95,15 +95,15 @@
 		if (roomTypeList.value == null) {
 			return []
 		}
-		let result:Array<Array<PickerOption>>=[];
-		let list:Array<PickerOption>=[{ text: "全部房型", value: "all" }];
+		let result : Array<Array<PickerOption>> = [];
+		let list : Array<PickerOption> = [{ text: "全部房型", value: "all" }];
 		// let result : Array<Array<PickerOption>> = [];
 		// let list = roomTypeList.value.map(item => {
 		// 	return { text: item.name, value: item._id } as PickerOption
 		// }) as Array<PickerOption>;
 		// result[0].unshift({ text: "全部房型", value: "all" } as PickerOption);
 		// return result;
-		roomTypeList.value.forEach(item=>{
+		roomTypeList.value.forEach(item => {
 			list.push({ text: item.name, value: item._id } as PickerOption);
 		});
 		result.push(list);
@@ -111,20 +111,20 @@
 	});
 
 	let filterRoomList = computed<Array<roomBean>>(() => {
-		if(roomTypeList.value==null){
+		if (roomTypeList.value == null) {
 			return []
 		}
-		let roomList:Array<roomBean>=[];
-		roomTypeList.value.forEach(item=>{
-			if(_select_id.value=="all"||_select_id.value==item._id){
-				item.roomList.forEach(it=>{
-					if(it.room_name.includes(_search_key.value)){
+		let roomList : Array<roomBean> = [];
+		roomTypeList.value.forEach(item => {
+			if (_select_id.value == "all" || _select_id.value == item._id) {
+				item.roomList.forEach(it => {
+					if (it.room_name.includes(_search_key.value)) {
 						roomList.push(it);
 					}
-					
+
 				})
 			}
-			
+
 		});
 		return roomList;
 	});
@@ -132,6 +132,7 @@
 		_search_key.value = value;
 	}
 	const selectRoomType = (val : string) => {
+		console.log("val",val)
 		if (_select_id.value == val) {
 			return;
 		}
@@ -147,9 +148,9 @@
 	// 	return num;
 
 	// })
-	const getRoomTypeName=(room_type_id:string):string=>{
-		if( roomTypeList.value!=null){
-			let obj = roomTypeList.value.find(item=>item._id == room_type_id) as roomTypeBean;
+	const getRoomTypeName = (room_type_id : string) : string => {
+		if (roomTypeList.value != null) {
+			let obj = roomTypeList.value.find(item => item._id == room_type_id) as roomTypeBean;
 			return obj.name;
 		}
 		return "-"
@@ -240,6 +241,17 @@
 			return;
 		}
 	}
+	onLoad(params => {
+		console.log("params",params);
+		try {
+			const roomType_id = params.getString("roomType_id") ?? "";
+			console.log("2222",roomType_id)
+			if (roomType_id != "") {
+				selectRoomType(roomType_id);
+			}
+
+		} catch (e) { }
+	})
 </script>
 
 <style lang="scss">

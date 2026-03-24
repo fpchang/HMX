@@ -186,7 +186,7 @@
 		}
 		const id = em._id;
 		uni.navigateTo({
-			url: `/pages/hotelManage/createEmployee/createEmployee?pageType=2&id=${id}`
+			url: `/pages/hotelManage/createEmployee/createEmployee?pageType=1&id=${id}`
 		})
 	}
 	const deleteEmployee = async (em : employeeBean) => {

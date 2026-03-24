@@ -307,7 +307,32 @@ class HotelServiceClass {
 		}
 
 	}
-	
+	async editEmployee(employeeForm : employeeBean): Promise<boolean> {
+		
+			try {
+				const {_id, employee_name, hotel_id, phone, role, mark } = employeeForm;
+				const res = await DB.callFunction("hm_editEmployee", {_id:_id ,employeeObj: { employee_name, hotel_id, phone, role, mark } });
+				const result = res['result'] as UTSJSONObject;
+				const code = result.getNumber("code") ?? 0;
+				const message = result.getString("message") ?? "";
+				if (code != 0) {
+					console.log("code error", code);
+					uni.showToast({
+						title: message,
+						icon: "none"
+					});
+					throw new Error(message);
+				}
+				uni.showToast({
+					title: "更新成功",
+					icon: "none"
+				});
+				return true;
+			} catch (error) {
+				console.log(error)
+				throw new Error("修改员工失败");
+			}
+	}
 	//h5 {
 	//     "errCode": 0,
 	//     "success": true,

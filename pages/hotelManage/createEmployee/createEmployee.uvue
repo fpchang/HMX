@@ -106,8 +106,26 @@
 			   }
 			   return false
 		 });
-		 const editEmployee=()=>{
+		 const editEmployee= async ()=>{
 			 
+				submitLoading.value=true;
+				try {
+					await HotelService.editEmployee(employeeForm.value);
+					submitLoading.value=false;
+					employeeAction.getEmplolyeeList(hotel_id.value);
+					uni.navigateBack();
+				} catch (error) {
+					showDialog({
+						title: '更新失败',
+						message: "请稍候再试",
+						showCancelButton: false,
+						confirm: () => {
+							submitLoading.value=false;
+							hideDialog();
+						}
+					})
+					
+				}
 		 }
 		 const addEmployee= async()=>{
 				submitLoading.value=true;
@@ -132,11 +150,10 @@
 		 }
 		const submitForm=()=>{
 			
-			if(!validEmployeeForm(employeeForm.value)){
+			if(!validEmployeeForm(employeeForm.value,pageType.value)){
 				return;
 			}
 			employeeAction.getEmplolyeeList(hotel_id.value);
-			console.log(employeeForm.value);
 			 if(pageType.value==1){
 			         editEmployee();
 			          return;
@@ -145,14 +162,21 @@
 		}
 		onLoad(params => {
 			try {
-				console.log("params::",params);
-				const pt = params.getNumber("pageType")??0;
+				//console.log("params::",params);
+				const pt = params.getString("pageType")??"0";
 				const id = params.getString("id")??"";
-				pageType.value=pt;
+				pageType.value= parseInt(pt);
 				_id.value=id;				
 				const found = employeeList.value.find(item=>item._id == id);
 				if (found != null) {
-					employeeForm.value = found;
+					employeeForm.value = {
+						_id:found._id,
+						employee_name: found.employee_name,
+						hotel_id: found.hotel_id,
+						phone: found.phone,
+						role: found.role,
+						mark: found.mark
+					};
 				} 
 				// else {
 				// 	employeeForm.value = {
@@ -164,7 +188,7 @@
 				// 		mark: ""
 				// 	};
 				// }
-				console.log("employeeForm",employeeForm);
+				//console.log("employeeForm",employeeForm);
 			} catch (error) {
 				throw new Error("参数转换失败");
 			}

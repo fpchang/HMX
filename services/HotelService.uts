@@ -65,11 +65,11 @@ class HotelServiceClass {
 	 * @return {*} 
 	 * @memberof HotelService
 	 */
-	async createHotel(hotelObj : hotelBean) : Promise<UTSJSONObject> {
+	async createHotel(hotelObj : hotelBean) : Promise<boolean> {
 		try {
 			const res = await DB.callFunction("hm_createHotel", { hotelObj });
 			console.log("create hotel", res);
-			const result = res.get("result") as UTSJSONObject;
+			const result = res["result") as UTSJSONObject;
 			const code = result.getNumber("code") ?? 0;
 			const message = result.getString("message") ?? "";
 			if (code != 0) {
@@ -80,11 +80,8 @@ class HotelServiceClass {
 				});
 				throw new Error(message);
 			}
-			uni.showToast({
-				title: "添加成功",
-				icon: "none"
-			});
-			return { code: 0, message: "" } as UTSJSONObject;
+			
+			return true;
 		} catch (error) {
 			console.error(error);
 			throw new Error("创建失败");
@@ -132,12 +129,7 @@ class HotelServiceClass {
 					icon: "none"
 				});
 				throw new Error(message);
-			}
-			uni.showToast({
-				title: "删除成功",
-				icon: "none"
-			});
-			
+			}			
 			return true;
 		} catch (error) {
 			throw new Error("删除失败");

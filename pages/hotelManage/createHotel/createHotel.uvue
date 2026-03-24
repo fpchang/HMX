@@ -49,7 +49,7 @@
 					</view>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="特点" tips="如：免费停车，宠物免费，户外泳池，草地烧烤等" :showTips="pageType!=2" required>
+			<xt-form-item label="特点" tips="如：免费停车，宠物免费，户外泳池，草地烧烤等" :showTips="pageType!=2" >
 				<view v-if="pageType==0 ||pageType==1">
 					<xt-input-tab v-model="hotelForm.feature" btnText="添加特点" list=""></xt-input-tab>
 				</view>
@@ -59,7 +59,7 @@
 
 				</view>
 			</xt-form-item>
-			<xt-form-item label="餐饮" tips="" required>
+			<xt-form-item label="餐饮" tips="" >
 				<rice-checkbox-group @change="cateringCheckboxChange" direction="row"
 					v-model="hotelForm.cateringServices">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
@@ -68,7 +68,7 @@
 					</view>
 				</rice-checkbox-group>
 			</xt-form-item>
-			<xt-form-item label="基础设施" tips="" required>
+			<xt-form-item label="基础设施" tips="" >
 				<rice-checkbox-group @change="baseCheckboxChange" direction="row" v-model="hotelForm.baseFacility">
 
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
@@ -79,7 +79,7 @@
 
 				</rice-checkbox-group>
 			</xt-form-item>
-			<xt-form-item label="休闲设施" tips="" required>
+			<xt-form-item label="休闲设施" tips="" >
 				<rice-checkbox-group @change="recreationCheckboxChange" direction="row"
 					v-model="hotelForm.recreationFacility">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
@@ -88,7 +88,7 @@
 					</view>
 				</rice-checkbox-group>
 			</xt-form-item>
-			<xt-form-item label="运动设施" tips="" required>
+			<xt-form-item label="运动设施" tips="">
 
 				<rice-checkbox-group @change="athleticFacilityCheckboxChange" direction="row"
 					v-model="hotelForm.athleticFacility">
@@ -110,7 +110,7 @@
 						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.wechat"></rice-input>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="备注" tips="" required>
+			<xt-form-item label="备注" tips="" >
 				<view>
 
 					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="备注内容"
@@ -215,11 +215,17 @@
 	
 	const addHotel = async () => {
 		try {
-			const res = await HotelService.createHotel(hotelForm.value);
+			 const res = await HotelService.createHotel(hotelForm.value);
 			console.log("res:::::::", res);
 			submitLoading.value = false;
+			uni.showToast({
+							title: "添加成功",
+							icon: "none"
+						});
 			comFunction.init();
 			uni.navigateBack();
+			
+			
 		} catch (e) {
 			submitLoading.value = false;
 			console.error("保存失败", e)

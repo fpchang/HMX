@@ -13,13 +13,11 @@
 		<template #right>
 			<view class="navbar-btn">
 				<rice-tabs v-model="activeIndex" :list="list" @clickTab="tabClick" line-color="#2a5d98"
-					title-inactive-color="#4b5563" title-active-color="#2a5d98 "></rice-tabs>
+					title-inactive-color="#4b5563" title-active-color="#2a5d98"></rice-tabs>
 
 			</view>
 		</template>
 	</rice-navbar>
-
-
 	<swiper :current="activeIndex" style="height: auto;flex: 1;background-color:#f8f9fa;" @change="swiperChange"
 		:circular="true">
 		<swiper-item>

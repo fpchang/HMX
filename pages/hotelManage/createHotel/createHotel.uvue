@@ -320,10 +320,19 @@
 	}
 	const uploadFirstImageSuccess = (list : string[]) => {
 		console.log("得到的list：", list);
-		hotelForm.value.firstImages = list[0];
+		if(list.length>0){
+			hotelForm.value.firstImages = list[0];
+			return;
+		}
+		hotelForm.value.firstImages="";
 	}
 	const uploadImageListSuccess = (list : string[]) => {
-		hotelForm.value.imagesList = list;
+		
+		if(list.length>0){
+			hotelForm.value.imagesList = list;
+			return;
+		}
+		hotelForm.value.imagesList = [];
 	}
 
 	onLoad(params => {

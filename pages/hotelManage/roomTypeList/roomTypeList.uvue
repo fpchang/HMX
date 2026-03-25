@@ -137,10 +137,10 @@
 	const roomTypeList = computed<Array<roomTypeBean>>(() => {
 		return state.roomTypeList;
 	});
-	console.log("roomTypeList", roomTypeList);
+	//console.log("roomTypeList", roomTypeList);
 	const topImg = (imgUrl : string) : string => {
 		if (imgUrl == '') {
-			return '/static/images/hotel.png';
+			return '/static/images/noimg.png';
 		}
 		return imgUrl;
 	};

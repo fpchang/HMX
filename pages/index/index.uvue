@@ -78,7 +78,7 @@
 			  						<view class="img-container">
 			  							<image
 			  								style="width: 100%; height: 100%" mode="aspectFill"
-			  								:src="(item['firstImages'] != ''&&item['firstImages'] !=null)?item['firstImages']:'/static/images/hotel.png'" />
+			  								:src="(item['firstImages'] != ''&&item['firstImages'] !=null)?item['firstImages']:'/static/images/noimg.png'" />
 			  						</view>
 			  						<view style="padding: 15px 10px" class="zcard-right">
 			  							<view class="item">
@@ -144,11 +144,11 @@
 	});
 	const topImg =():string=>{	
 		if(hotel.value==null){
-			return '/static/images/hotel.png';
+			return '/static/images/noimg.png';
 		}
 		const firstImages = hotel.value['firstImages'] as string | null;
 		if(firstImages==''||firstImages==null){
-			return '/static/images/hotel.png';
+			return '/static/images/noimg.png';
 		}
 		return firstImages;
 	};

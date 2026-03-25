@@ -68,7 +68,7 @@
 	}
 	const topImg = (imgUrl : string) : string => {
 		if (imgUrl == '') {
-			return '/static/images/hotel.png';
+			return '/static/images/noimg.png';
 		}
 		return imgUrl;
 	};

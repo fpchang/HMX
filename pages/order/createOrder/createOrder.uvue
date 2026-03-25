@@ -75,7 +75,7 @@
 					type="number"></rice-input>
 
 			</xt-form-item>
-			<xt-form-item label="定金" tips="" required>
+			<xt-form-item label="定金" tips="">
 
 				<rice-stepper v-model="orderForm.downPayment" input-width="150" button-size="38" font-size="15"
 					:auto-fixed="false" :disabled="pageType==2" />
@@ -85,7 +85,7 @@
 					:auto-fixed="false" :disabled="pageType==2" />
 
 			</xt-form-item>
-			<xt-form-item label="备注" tips="" required>
+			<xt-form-item label="备注" tips="">
 				<view>
 
 					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="请输入备注内容"
@@ -267,12 +267,16 @@
 			getGatherEvent(hotel_id.value);//nm==刷新首页
 			uni.navigateBack();
 			submitLoading.value = false;
+			uni.showToast({
+				title: "添加成功",
+				icon: "none"
+			});
 		} catch (error) {
 			submitLoading.value = false;
 			uni.showToast({
 				title: "添加订单失败",
 				icon: "none"
-			})
+			});
 		}
 
 	}

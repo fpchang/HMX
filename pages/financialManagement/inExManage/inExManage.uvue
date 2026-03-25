@@ -42,7 +42,7 @@
 		</view>
 		<view style="padding:20px;border-radius: 8px;"> 
 		<rice-collapse  :custom-style="{borderRadius:'8px'}">
-		  <rice-collapse-item  v-for="fm of fmResult.fmList" :name="fm._id" :title="`${fm.type_text}:￥${fm.amount}`" :value="formatDate(fm.ioeTime)" :title-style="{color:fm.billType=='expenses'?'#b91c1c':'#047857'}">
+		  <rice-collapse-item  v-for="fm of fmResult.fmList" :name="fm._id" :title="`${fm.type_text}:￥${fm.amount}`" :value="formatDate(fm.ioeTime)" :title-style="{color:fm.billType=='expenses'?'#b91c1c':'#047857'}" :border="false">
 			  <view class="l-card">		
 			  <!-- 	<view class="amount-area">
 			  		<view><text class="label">{{fm.billType=='expenses'?'本次支出':'本次收入'}}</text></view>

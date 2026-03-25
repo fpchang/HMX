@@ -68,8 +68,8 @@ class HotelServiceClass {
 	async createHotel(hotelObj : hotelBean) : Promise<boolean> {
 		try {
 			const res = await DB.callFunction("hm_createHotel", { hotelObj });
-			console.log("create hotel", res);
-			const result = res["result") as UTSJSONObject;
+			//console.log("create hotel", res);
+			const result = res["result"] as UTSJSONObject;
 			const code = result.getNumber("code") ?? 0;
 			const message = result.getString("message") ?? "";
 			if (code != 0) {
@@ -83,7 +83,7 @@ class HotelServiceClass {
 			
 			return true;
 		} catch (error) {
-			console.error(error);
+			//console.error(error);
 			throw new Error("创建失败");
 		}
 
@@ -325,53 +325,7 @@ class HotelServiceClass {
 				throw new Error("修改员工失败");
 			}
 	}
-	//h5 {
-	//     "errCode": 0,
-	//     "success": true,
-	//     "requestId": "6dc1b1b7-85ff-4041-8e20-ad0f07649b03",
-	//     "result": {
-	//         "code": 0,
-	//         "errCode": 0,
-	//         "message": "",
-	//         "errMsg": "",
-	//         "systemInfo": [],
-	//         "updated": 1
-	//     }
-	// }
-	//ios == {
-	//     "errCode": 0,
-	//     "success": true,
-	//     "requestId": "b10c5a03-11b0-4c74-bb62-36f214a41710",
-	//     "result": {
-	//         "errCode": 0,
-	//         "message": "",
-	//         "code": 0,
-	//         "systemInfo": [],
-	//         "updated": 1,
-	//         "errMsg": ""
-	//     }
-	// }
-	// android{
-	// 	"requestId": "",
-	// 	"result":
-	// 	//‍[⁠UTSJSONObject⁠]‍
-	// 	{
-	// 		"code":
-	// 			//‍[number]‍
-	// 			0,
-	// 		"errCode":
-	// 			//‍[number]‍
-	// 			0,
-	// 		"message": "",
-	// 		"errMsg": "",
-	// 		"systemInfo":
-	// 			//‍[Array]‍
-	// 			[],
-	// 		"updated":
-	// 			//‍[number]‍
-	// 			1
-	// 	}
-	// }
+	
 }
 
 //module.exports =new HotelService();

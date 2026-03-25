@@ -45,7 +45,7 @@
 <script setup>
 	import { state, loginOut } from "@/store/store.uts";
 	import { userBean } from "@/bean/userBean";
-	import {MineService} from "@/services/MineService.uts";
+	import { MineService } from "@/services/MineService.uts";
 	const submitLoading = ref(false);
 	const user = computed<userBean>(() => {
 		return state.user;
@@ -58,29 +58,52 @@
 		title: "",
 		content: ""
 	})
+	const validForm = () : boolean => {
+		let msg = "";
+		if (feedbackForm.value.title == "") {
+			msg = "请填写标题";
+		}
+		if (feedbackForm.value.content == "") {
+			msg = "请填写内容";
+		}
+		if (msg != "") {
+			uni.showToast({
+				title: msg,
+				icon: "none"
+			})
+			return false;
+		}
+		return true;
+	}
 	const submitForm = async () => {
-
+		if (validForm() == false) {
+			return;
+		}
 		submitLoading.value = true;
 		//let obj = Object.assign(feedbackForm, { phone: this.user.phone });
 		try {
-			let obj ={
-				title : feedbackForm.value.title,
-				content : feedbackForm.value.content,
-				phone:user.value.phone
+			let obj = {
+				title: feedbackForm.value.title,
+				content: feedbackForm.value.content,
+				phone: user.value.phone
 			} as UTSJSONObject;
-			 await MineService.add(obj);
+			await MineService.add(obj);
 			uni.hideLoading();
 			submitLoading.value = false;
 			//console.log("意见反馈添加成功");
 
 			uni.navigateBack();
+			uni.showToast({
+				title: "添加成功",
+				icon: "none"
+			})
 		} catch (error) {
 			console.error("添加意见反馈失败");
 			uni.hideLoading();
 			submitLoading.value = false;
 			uni.showToast({
-				title:"添加失败",
-				icon:"none"
+				title: "添加失败",
+				icon: "none"
 			})
 		}
 	}

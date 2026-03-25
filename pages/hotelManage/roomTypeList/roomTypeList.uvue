@@ -235,7 +235,7 @@
 					return true;
 				} catch (e) {
 					uni.showToast({
-						title: "系统异常",
+						title: "删除房型失败",
 						icon: "none"
 					});
 					return false;

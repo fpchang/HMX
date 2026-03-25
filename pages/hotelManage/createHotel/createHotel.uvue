@@ -1,14 +1,13 @@
 <template>
 	<rice-navbar title="" border>
 		<template #left>
-			
+
 			<view style="display: flex;flex-direction: row;align-items: center;">
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
 
-				<image  :src="titleImg"
-					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
 				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
 			</view>
 		</template>
@@ -49,7 +48,7 @@
 					</view>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="特点" tips="如：免费停车，宠物免费，户外泳池，草地烧烤等" :showTips="pageType!=2" >
+			<xt-form-item label="特点" tips="如：免费停车，宠物免费，户外泳池，草地烧烤等" :showTips="pageType!=2">
 				<view v-if="pageType==0 ||pageType==1">
 					<xt-input-tab v-model="hotelForm.feature" btnText="添加特点" list=""></xt-input-tab>
 				</view>
@@ -59,7 +58,7 @@
 
 				</view>
 			</xt-form-item>
-			<xt-form-item label="餐饮" tips="" >
+			<xt-form-item label="餐饮" tips="">
 				<rice-checkbox-group @change="cateringCheckboxChange" direction="row"
 					v-model="hotelForm.cateringServices">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
@@ -68,7 +67,7 @@
 					</view>
 				</rice-checkbox-group>
 			</xt-form-item>
-			<xt-form-item label="基础设施" tips="" >
+			<xt-form-item label="基础设施" tips="">
 				<rice-checkbox-group @change="baseCheckboxChange" direction="row" v-model="hotelForm.baseFacility">
 
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
@@ -79,7 +78,7 @@
 
 				</rice-checkbox-group>
 			</xt-form-item>
-			<xt-form-item label="休闲设施" tips="" >
+			<xt-form-item label="休闲设施" tips="">
 				<rice-checkbox-group @change="recreationCheckboxChange" direction="row"
 					v-model="hotelForm.recreationFacility">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
@@ -101,7 +100,8 @@
 			<xt-form-item label="客服电话" tips="" required>
 				<view>
 					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服电话"
-						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.serviceTel" :maxlength="11" type="number"></rice-input>
+						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.serviceTel" :maxlength="11"
+						type="number"></rice-input>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="客服微信" tips="" required>
@@ -110,7 +110,7 @@
 						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.wechat"></rice-input>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="备注" tips="" >
+			<xt-form-item label="备注" tips="">
 				<view>
 
 					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="备注内容"
@@ -138,8 +138,8 @@
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
-	 <l-cascader v-model:visible="showSelectAreaPopup" v-model="hotelForm.hotelAddressArea" uniCloud
-		:subTitles="subTitles" title="请选择所在地区"  @change="transformAddress" />
+	<l-cascader v-model:visible="showSelectAreaPopup" v-model="hotelForm.hotelAddressArea" uniCloud
+		:subTitles="subTitles" title="请选择所在地区" @change="transformAddress" />
 
 </template>
 
@@ -153,8 +153,8 @@
 	import { Location } from "@/services/LocationService.uts";
 	import { validForm } from "./hotelFormVaild.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
-	import {userBean} from "@/bean/userBean";
-	import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
+	import { userBean } from "@/bean/userBean";
+	import { facilityConfig_type } from "@/bean/facilityConfig_type.uts";
 	// const props = defineProps({
 	// 	type: {
 	// 		type: Number,
@@ -192,43 +192,48 @@
 		wechat: "",
 		feature: []
 	});
-	
+
 	const title = computed(() => {
 		if (pageType.value == 0) {
 			return '创建酒店';
 		}
 		return pageType.value == 1 ? '修改酒店信息' : '酒店信息';
 	});
-	const titleImg=computed<string>(()=>{
-		if(pageType.value==0){
+	const titleImg = computed<string>(() => {
+		if (pageType.value == 0) {
 			return "/static/icons/addpage.png"
 		}
-		return pageType.value==1?"/static/icons/editpage.png":"/static/icons/detailpage.png"
+		return pageType.value == 1 ? "/static/icons/editpage.png" : "/static/icons/detailpage.png"
 	});
 	let submitLoading = ref(false);
-	const getFirstImagesList=():Array<string>=>{
-		if(hotelForm.value.firstImages!=""){
+	const getFirstImagesList = () : Array<string> => {
+		if (hotelForm.value.firstImages != "") {
 			return [hotelForm.value.firstImages];
 		}
 		return []
 	}
-	
+
 	const addHotel = async () => {
 		try {
-			 const res = await HotelService.createHotel(hotelForm.value);
+			const res = await HotelService.createHotel(hotelForm.value);
 			console.log("res:::::::", res);
 			submitLoading.value = false;
-			uni.showToast({
-							title: "添加成功",
-							icon: "none"
-						});
+
 			comFunction.init();
 			uni.navigateBack();
-			
-			
+			uni.showToast({
+				title: "添加酒店成功",
+				icon: "none"
+			});
+
+
 		} catch (e) {
 			submitLoading.value = false;
-			console.error("保存失败", e)
+			//console.error("保存失败", e)
+			uni.showToast({
+				title: "添加酒店失败",
+				icon: "none"
+			});
 		}
 
 	}
@@ -280,8 +285,8 @@
 	const subTitles = ['请选择省份', '请选择城市', '请选择区/县'];
 	//const cascaderValue7 = ref('');
 	const fieldValue7 = ref<string | null>(null);
-	const transformAddress =(value: string, options: UTSJSONObject[]) => {
-		hotelForm.value.hotelAddressArea = options.map((item: UTSJSONObject):any|null => (item['name'])).join('/');
+	const transformAddress = (value : string, options : UTSJSONObject[]) => {
+		hotelForm.value.hotelAddressArea = options.map((item : UTSJSONObject) : any | null => (item['name'])).join('/');
 	};
 	const selectAddress = async () => {
 		if (pageType.value == 2) {
@@ -332,9 +337,9 @@
 			}
 			if (h != null) {
 				let decoded = decodeURIComponent(h as string);
-				if (decoded != null) {				
+				if (decoded != null) {
 					hotelForm.value = JSON.parse<hotelBean>(decoded)!;
-					console.log("bbbbbbb",hotelForm.value);
+					console.log("bbbbbbb", hotelForm.value);
 				}
 			}
 		} catch (e) {

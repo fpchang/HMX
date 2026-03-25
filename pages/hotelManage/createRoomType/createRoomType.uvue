@@ -164,10 +164,22 @@
 	});
 	const addRoomType = async () => {
 		submitLoading.value = true;
-		await roomTypeService.addRoomType(roomTypeForm.value);
-		await comFunction.getRoomTypeList(hotel_id.value);
-		submitLoading.value = false;
-		uni.navigateBack();
+		try {
+			await roomTypeService.addRoomType(roomTypeForm.value);
+			await comFunction.getRoomTypeList(hotel_id.value);
+			submitLoading.value = false;
+			uni.navigateBack();
+			uni.showToast({
+				title: "房型添加成功",
+				icon: "none"
+			});
+		} catch (error) {
+			uni.showToast({
+							title: "添加失败",
+							icon: "none"
+						});
+		}
+		
 	}
 	const updateRoomType = async () => {
 		submitLoading.value = true;

@@ -163,8 +163,16 @@
 			await comFunction.getRoomTypeList(hotel_id.value);
 			uni.navigateBack();
 			submitLoading.value=false;
+			uni.showToast({
+				title: "添加房间成功",
+				icon: "none"
+			});
 		} catch (error) {
 			submitLoading.value=false;
+			uni.showToast({
+				title: "添加房间失败",
+				icon: "none"
+			});
 		}
 		
 	}

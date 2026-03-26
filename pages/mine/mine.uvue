@@ -40,7 +40,13 @@
 			<view class="card">
 				<block v-if="hotel_id!=''">
 					<view class="img-area">
-						<image :src="topImg()" style="height: 100%;width: 100%;" mode="aspectFill"></image>
+						<!-- <image :src="topImg()" style="height: 100%;width: 100%;" mode="aspectFill"></image> -->
+						<image :src="hotel?.firstImages" v-if=" hotel!=null&&hotel?.firstImages!=''"
+							style="height: 100%;width: 100%;" mode="aspectFill">
+						</image>
+						<image src="/static/images/noimg.png" v-if="hotel?.firstImages==''"
+							style="height: 80%;width: 80%;" mode="aspectFit">
+						</image>
 					</view>
 					<view class="card-title-group">
 						<view class="card-title-area">
@@ -83,14 +89,15 @@
 	import operation from "./components/operation.uvue";
 	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
 	import { userBean } from "@/bean/userBean";
+	import { hotelBean } from "@/bean/hotelBean.uts";
 	const user = computed<userBean>(() => {
 		return state.user;
 	});
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
-	const hotel = computed(() => {
-		return state.hotel;
+	const hotel = computed<hotelBean | null>(() => {
+			return state.hotel;	
 	});
 	const hotelList = computed(() => {
 		return state.hotelList;
@@ -113,7 +120,7 @@
 		}
 		const firstImages = hotel.value['firstImages'] as string | null;
 		if (firstImages == '' || firstImages == null) {
-			return '/static/images/hotel.png';
+			return '/static/images/noimg.png';
 		}
 		return firstImages;
 	};
@@ -162,6 +169,10 @@
 				height: 350rpx;
 				max-height: 300px;
 				background-color: #eee;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: center;
 			}
 
 			.card-title-group {

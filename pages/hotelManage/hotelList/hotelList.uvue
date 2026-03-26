@@ -28,8 +28,11 @@
 			<view class="card-list-item" v-for="hotel of hotelList">
 				<view class="card">
 					<view class="img-area">
-						<image :src="topImg((hotel['firstImages'] as string | null) ?? null)"
+						<image :src="hotel.firstImages" v-if="hotel.firstImages!=''"
 							style="height: 100%;width: 100%;" mode="aspectFill">
+						</image>
+						<image src="/static/images/noimg.png" v-if="hotel.firstImages==''"
+							style="height: 80%;width: 80%;" mode="aspectFit">
 						</image>
 					</view>
 					<view class="card-title-group">
@@ -231,6 +234,10 @@
 					height: 350rpx;
 					max-height: 200px;
 					background-color: #eee;
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					justify-content: center;
 				}
 
 				.card-title-group {

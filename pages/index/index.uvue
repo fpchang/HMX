@@ -1,23 +1,25 @@
 <template>
-<rice-navbar :fixed="false"  :safe-area-inset-top="true" bg-color="#007AFF" :left-arrow="false">
-  
-  <template #title>
-    <view class="header">
-         <view class="hotel-info"  @click="showCheckHotel">
-           <text class="hotel-name">{{hotel?.hotelName}}</text>
-          <!-- <button class="switch-btn" @click="showCheckHotel">
+	<rice-navbar :fixed="false" :safe-area-inset-top="true" bg-color="#007AFF" :left-arrow="false">
+
+		<template #title>
+			<view class="header">
+				<view class="hotel-info" @click="showCheckHotel">
+					<text class="hotel-name">{{hotel?.hotelName}}</text>
+					<!-- <button class="switch-btn" @click="showCheckHotel">
              <text>切换</text>
              <uni-icons type="arrowdown" size="16" color="#fff"></uni-icons>
            </button> -->
-		   <rice-icon name="arrow-down" color="#fff" size="22px" style="margin-left: 8px;"/>
-         </view>
-       </view> 
-  </template>
-  <template #right>
-    
-  </template>
-</rice-navbar>
-	<scroll-view v-if="dataReading&&hotel_id!=''"  :refresher-enabled="true" :refresher-triggered="refreshState" @refresherrefresh="refreshData" style="flex:1;background:#f5f5f5;display: flex;flex-direction: column" :show-scrollbar="false" >
+					<rice-icon name="arrow-down" color="#fff" size="22px" style="margin-left: 8px;" />
+				</view>
+			</view>
+		</template>
+		<template #right>
+
+		</template>
+	</rice-navbar>
+	<scroll-view v-if="dataReading&&hotel_id!=''" :refresher-enabled="true" :refresher-triggered="refreshState"
+		@refresherrefresh="refreshData" style="flex:1;background:#f5f5f5;display: flex;flex-direction: column"
+		:show-scrollbar="false">
 		<gatherComponent></gatherComponent>
 		<operation></operation>
 	</scroll-view>
@@ -27,8 +29,8 @@
 			<rice-button type="primary" icon="plus" text="创建酒店" @click="createHotel"></rice-button>
 		</view>
 	</view>
-	
-	<rice-popup v-model:show="showPopup" position="bottom" :closeable="true" radius="15px">
+
+	<rice-popup v-model:show="showPopup" position="bottom" :closeable="true" radius="15px" @closed="closePupop">
 
 		<!-- <view class="popup-content">
 		        <text class="popup-title">选择酒店</text>
@@ -50,72 +52,75 @@
 		        </scroll-view>
 
 		      </view> -->
-			  <view class="left-container">
-			  	<view style="flex: 1; min-height: 330px">
-			  		<view class="black-area">
-			  			<text>
-			  			
-			  				
-			  			</text>
-			  		</view>
-			  		<view class="title-area">
-			  			<view>
-							<!-- <image src="/static/icons/list-hotel.png" style="width:50px;height:50px" mode="aspectFit"></image> -->
-							<rice-icon name="bars" size="32px" color="#007AFF"></rice-icon>
-						</view>
-			  			<view class="title">
-			  				<text class="txt">酒店列表</text>
-			  			</view>
-			  			<navigator url="/pages/hotelManage/hotelList/hotelList" hover-class="none">
-			  				<view class="btn"><text class="txt">管理</text></view>
-			  			</navigator>
-			  		</view>
-			  		<scroll-view style="background:#fff;height:500px">
-			  			<view style="display: flex;flex-wrap:wrap;flex-direction: row;">
-			  				<view  v-for="item of hotelList" style="padding: 10px;flex:1;min-width:360px;" @click="checkHotel((item._id as string))">
-			  					<view style="display: flex" :class="['zcard', item._id==hotel_id? 'zcard-active':'']"
-			  						@click="checkHotel(item._id as string)">
-			  						<view class="img-container">
-			  							<image
-			  								style="width: 100%; height: 100%" mode="aspectFill"
-			  								:src="(item['firstImages'] != ''&&item['firstImages'] !=null)?item['firstImages']:'/static/images/noimg.png'" />
-			  						</view>
-			  						<view style="padding: 15px 10px" class="zcard-right">
-			  							<view class="item">
-			  								<view class="title"><text class="txt">{{item?.hotelName}}</text></view>
-			  							</view>
-			  							<view class="item">
-			  								<view class="subtitle"><text class="txt">{{
+		<view class="left-container">
+			<view style="flex: 1; min-height: 330px">
+				<view class="black-area">
+					<text>
+
+
+					</text>
+				</view>
+				<view class="title-area">
+					<view>
+						<!-- <image src="/static/icons/list-hotel.png" style="width:50px;height:50px" mode="aspectFit"></image> -->
+						<rice-icon name="bars" size="32px" color="#007AFF"></rice-icon>
+					</view>
+					<view class="title">
+						<text class="txt">酒店列表</text>
+					</view>
+					<navigator url="/pages/hotelManage/hotelList/hotelList" hover-class="none">
+						<view class="btn"><text class="txt">管理</text></view>
+					</navigator>
+				</view>
+				<scroll-view style="background:#fff;height:500px">
+					<view style="display: flex;flex-wrap:wrap;flex-direction: row;">
+						<view v-for="item of hotelList" style="padding: 10px;flex:1;min-width:360px;"
+							@click="checkHotel((item._id as string))">
+							<view style="display: flex" :class="['zcard', item._id==hotel_id? 'zcard-active':'']">
+								<view class="img-container">
+									<image :src="item.firstImages" v-if="item.firstImages!=''"
+										style="height: 100%;width: 100%;" mode="aspectFill">
+									</image>
+									<image src="/static/images/noimg.png" v-if="item.firstImages==''"
+										style="height: 80%;width: 80%;" mode="aspectFit">
+									</image>
+								</view>
+								<view style="padding: 15px 10px" class="zcard-right">
+									<view class="item">
+										<view class="title"><text class="txt">{{item?.hotelName}}</text></view>
+									</view>
+									<view class="item">
+										<view class="subtitle"><text class="txt">{{
 			  	                        item.hotelAddress
 			  	                      }}</text></view>
-			  							</view>
-			  						</view>
-			  						<view class="select">
-			  							<!-- <image :src="item._id==hotel_id?'/static/icons/checked.png':'/static/icons/uncheck.png'"
+									</view>
+								</view>
+								<view class="select">
+									<!-- <image :src="item._id==hotel_id?'/static/icons/checked.png':'/static/icons/uncheck.png'"
 			  								class="form-icon" style="width:35px;height:35px"></image> -->
-											 <rice-icon v-if="item._id==hotel_id"  name="checked-circle-fill" size="25px" color="#007aff"></rice-icon>
-			  						
-			  						</view>
-			  					</view>
-			  				</view>
-			  				<view v-for="item in 5" style="height: 0;min-width:360px;padding:0 10px;flex:1"></view>
-			  		
-			  			</view>
-			  		</scroll-view>
-			  	</view>
-			  </view>
+									<rice-icon v-if="item._id==hotel_id" name="checked-circle-fill" size="25px"
+										color="#007aff"></rice-icon>
+
+								</view>
+							</view>
+						</view>
+						<view v-for="item in 5" style="height: 0;min-width:360px;padding:0 10px;flex:1"></view>
+
+					</view>
+				</scroll-view>
+			</view>
+		</view>
 	</rice-popup>
 
 </template>
 
 <script setup>
-
 	import gatherComponent from "./components/gatherComponent";
 	import operation from "./components/operation";
-	
+
 	import { state, setUser } from '@/store/store.uts';
-	import { comFunction } from "./ComFuc.uts";	
-	import {userBean} from "@/bean/userBean";
+	import { comFunction } from "./ComFuc.uts";
+	import { userBean } from "@/bean/userBean";
 	import { hotelBean } from "@/bean/hotelBean";
 	const showRange = ref(false);
 	const showPopup = ref(false);
@@ -129,7 +134,7 @@
 	const showCheckHotel = () => {
 		showPopup.value = !showPopup.value;
 	}
-	let dataReading=ref(false);
+	let dataReading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -139,143 +144,142 @@
 	const hotelList = computed(() => {
 		return state.hotelList;
 	});
-	const user=computed<userBean>(() => {
+	const user = computed<userBean>(() => {
 		return state.user;
 	});
-	const topImg =():string=>{	
-		if(hotel.value==null){
+	const topImg = () : string => {
+		if (hotel.value == null) {
 			return '/static/images/noimg.png';
 		}
 		const firstImages = hotel.value['firstImages'] as string | null;
-		if(firstImages==''||firstImages==null){
+		if (firstImages == '' || firstImages == null) {
 			return '/static/images/noimg.png';
 		}
 		return firstImages;
 	};
 	const checkHotel = async (h_id : string) => {
 		if (h_id != hotel_id.value) {
-			uni.showLoading({ title: "" });
-			await comFunction.checkHotel(h_id);
 			showPopup.value = false;
+			uni.showLoading({ title: "" });
+			await comFunction.checkHotel(h_id);			
 			uni.hideLoading();
 
 		}
 
 	};
-	const createHotel = ()=>{
+	const closePupop=()=>{
+		
+	}
+	const createHotel = () => {
 		uni.navigateTo({
-			url:"/pages/hotelManage/createHotel/createHotel"
+			url: "/pages/hotelManage/createHotel/createHotel"
 		})
 	}
-	 // onLoad(async ():Promise<void>=>{
-		//  await comFunction.init();
-		//  dataReading.value=true;
-	 // })
-	 // onBeforeMount(async ()=>{
-		//  console.log("index onBeforeMound");
-		//     comFunction.init();
-		//    dataReading.value=true;
-		//    //return Promise.resolve({aa:111});
-	 // })
-	
-	 const init = async ()=>{
-		 //comFunction.loadStorage();
-		 await comFunction.init();
-		 dataReading.value=true;
-	 }
-	 watch(hotel_id,(hotel_idNew:string,hotel_idOld:string):void=>{
-	 	//console.log("hotel_id change index ",hotel_idNew,hotel_idOld)
-	 }); 
-	 const refreshState = ref(false);
-	 const refreshData= async ()=>{
-		   refreshState.value=true;
-			await init();
-			refreshState.value=false;
-			
-	 }
-	    init(); 
-	
-	
+	// onLoad(async ():Promise<void>=>{
+	//  await comFunction.init();
+	//  dataReading.value=true;
+	// })
+	// onBeforeMount(async ()=>{
+	//  console.log("index onBeforeMound");
+	//     comFunction.init();
+	//    dataReading.value=true;
+	//    //return Promise.resolve({aa:111});
+	// })
+
+	const init = async () => {
+		//comFunction.loadStorage();
+		await comFunction.init();
+		dataReading.value = true;
+	}
+	watch(hotel_id, (hotel_idNew : string, hotel_idOld : string) : void => {
+		//console.log("hotel_id change index ",hotel_idNew,hotel_idOld)
+	});
+	const refreshState = ref(false);
+	const refreshData = async () => {
+		refreshState.value = true;
+		await init();
+		refreshState.value = false;
+
+	}
+	init();
 </script>
 
 <style lang="scss">
+	/* 顶部导航栏 */
+	.header {
+		background-color: #007AFF;
+		// padding: 16px 20px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
 
+	.hotel-info {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
 
-/* 顶部导航栏 */
-.header {
-  background-color: #007AFF;
-  // padding: 16px 20px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
+	}
 
-.hotel-info {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+	.hotel-name {
+		max-width: 245px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		font-size: 18px;
+		font-weight: 600;
+		color: #fff;
+	}
 
-}
+	.switch-btn {
+		background: transparent;
+		border: none;
+		color: #fff;
+		font-size: 14px;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
 
-.hotel-name {
-	max-width: 245px;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-  font-size: 18px;
-  font-weight: 600;
-  color: #fff;
-}
+	/* 酒店选择弹窗 */
+	.popup-content {
+		padding: 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
 
-.switch-btn {
-  background: transparent;
-  border: none;
-  color: #fff;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
+	.popup-title {
+		font-size: 16px;
+		font-weight: 600;
+		color: #333;
+	}
 
-/* 酒店选择弹窗 */
-.popup-content {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
+	.hotel-list {
+		height: 300px;
+	}
 
-.popup-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-}
+	.hotel-item {
+		padding: 12px 0;
+		border-bottom: 1px solid #eee;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
 
-.hotel-list {
-  height: 300px;
-}
+	.hotel-item-name {
+		font-size: 15px;
+		color: #333;
+	}
 
-.hotel-item {
-  padding: 12px 0;
-  border-bottom: 1px solid #eee;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.hotel-item-name {
-  font-size: 15px;
-  color: #333;
-}
-
-.close-btn {
-  background-color: #f5f5f5;
-  color: #333;
-  border-radius: 8px;
-  padding: 10px;
-  margin-top: 10px;
-}
+	.close-btn {
+		background-color: #f5f5f5;
+		color: #333;
+		border-radius: 8px;
+		padding: 10px;
+		margin-top: 10px;
+	}
 
 	.left-container {
 		display: flex;
@@ -301,7 +305,7 @@
 			.title {
 				height: 30px;
 				color: #000101;
-				font-weight:700;
+				font-weight: 700;
 
 				.txt {
 					font-size: 18px;
@@ -315,10 +319,10 @@
 			.btn {
 
 				background-color: #007aff;
-				
+
 				padding: 8px 20px;
 				border-radius: 22px;
-				
+
 				.txt {
 					color: #fff;
 					font-size: 14px;
@@ -337,7 +341,8 @@
 			flex-direction: row;
 			align-items: center;
 			justify-content: space-around;
-			border:1px solid #e5e7eb;
+			border: 1px solid #e5e7eb;
+
 			.select {
 				display: flex;
 				flex-direction: row;
@@ -349,14 +354,19 @@
 
 			.img-container {
 				width: 120px;
-				height: 90px;				
+				height: 90px;
+				background-color: #eee;
 				overflow: hidden;
-				
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: center;
+
 			}
 
 			.zcard-right {
 				flex: 1;
-				
+
 				height: 100%;
 				display: flex;
 				min-width: 0;

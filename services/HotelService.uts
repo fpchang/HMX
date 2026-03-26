@@ -168,10 +168,6 @@ class HotelServiceClass {
 			hotelList.push(hotel)
 		})
 		return hotelList;
-
-
-
-
 	}
 	/**
 	 *所属于 当前用户酒店

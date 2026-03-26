@@ -48,9 +48,7 @@ class ComFuc {
 		setHotelId(hotel_id);
 		await this.getRoomTypeList(state.hotel_id);
 		const permissionList = await this.getPermissionList(state.hotel_id);
-		setPermissionList(permissionList);
-
-
+		setPermissionList(permissionList);		
 	}
 	async setDefaultHotel() {
 		const hotelList:hotelBean [] = state.hotelList;

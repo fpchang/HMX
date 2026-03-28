@@ -24,9 +24,9 @@
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
 			<xt-form-item label="收支类型" tips="" required>
 				<view>
-					<rice-radio-group v-model="fmForm.billType" direction="row">
-						<view class="check-container">
-							<rice-radio value="income" label="收入">
+					<rice-radio-group v-model="fmForm.billType" direction="row" :disabled="true">
+						<view class="check-container" v-if="fmForm.billType=='income'">
+							<rice-radio value="income" label="收入" >
 								<view style="display: flex;flex-direction: row;align-items: center;">
 
 									<!-- <rice-icon name="up" color="#00b42a" /> -->
@@ -34,8 +34,8 @@
 								</view>
 							</rice-radio>
 						</view>
-						<view class="check-container">
-							<rice-radio value="expenses" label="收入">
+						<view class="check-container" v-if="fmForm.billType=='expenses'">
+							<rice-radio value="expenses" label="收入" >
 								<view style="display: flex;flex-direction: row;align-items: center;">
 									<!-- <rice-icon name="down" color="#f53f3f" /> -->
 									<text style="color:#f53f3f;font-size: 14px;">支出</text>
@@ -49,7 +49,7 @@
 			</xt-form-item>
 			<xt-form-item label="收入类型" tips="" required>
 				<view>
-					<xt-select :columns="columns" @selectAction="selectType" :showKeySearch="false"></xt-select>
+					<xt-select :columns="columns" @selectAction="selectType" :showKeySearch="false" v-model="fmForm.type"></xt-select>
 				</view>
 			</xt-form-item>
 			<xt-form-item abel="收支时间" tips="">
@@ -111,10 +111,9 @@
 	let submitLoading = ref(false);
 
 	const title = computed(() => {
-		if (pageType.value == 0) {
-			return '添加收支单';
-		}
-		return pageType.value == 1 ? '修改收支单' : '收支单信息';
+		const btstr = fmForm.value.billType=='income'?'收入':'支出';
+		const ptstr = pageType.value==0?'添加':'修改';
+		return ptstr+btstr;
 	});
 	const titleImg = computed<string>(() => {
 		if (pageType.value == 0) {
@@ -155,7 +154,7 @@
 		let list : Array<PickerOption> = [];
 		incomeAndExpensesConfigList.value.forEach(item => {
 			if (item.billType == fmForm.value.billType) {
-				list.push({ text: item.text, value: item.name } as PickerOption);
+				list.push({ text: item.text, value: item._id } as PickerOption);
 			}
 
 		});
@@ -166,7 +165,20 @@
 		fmForm.value.ioeTime = new Date(val).getTime();
 		iotimeStr.value = dayuts(new Date(val)).format("YYYY-MM-DD");
 	}
-
+	const editIE= async ()=>{
+		// try {
+		// 	await FMService.add(fmForm.value);
+		// 	uni.$emit("refrushfmList");
+		// 	uni.navigateBack();
+		// 	submitLoading.value = false;
+		// 	uni.hideLoading();
+		// } catch (error) {
+		// 	console.log("error", error);
+		// 	submitLoading.value = false;
+		// 	uni.hideLoading();
+		// }
+		console.log(fmForm.value);
+	}
 	const submitForm = async () => {
 		if(amount.value!=""){
 			fmForm.value.amount = parseFloat(amount.value);
@@ -174,6 +186,10 @@
 		
 		let flag : boolean = validForm(fmForm.value)
 		if (flag == false) {
+			return;
+		}
+		if(pageType.value==1){
+			editIE();
 			return;
 		}
 		uni.showLoading({
@@ -190,12 +206,32 @@
 			submitLoading.value = false;
 			uni.hideLoading();
 		}
-		console.log(fmForm.value);
 	}
 	onLoad(params => {
 		//console.log("params:",params);
-		const bt = params.getString("billType") ?? 'income';
-		fmForm.value.billType = bt;
+		
+		
+		try {
+			const pt = params.getString("pageType")??"0";
+			const fm = params.getString("fm")??"";
+			if (pt != "") {
+				pageType.value = parseInt(pt);
+			}
+			if (fm != "") {
+				let decoded = decodeURIComponent(fm);
+				if (decoded != null) {
+					fmForm.value = JSON.parse<FMBean>(decoded)!;
+					console.log("bbbbbbb", fmForm.value);
+					iotimeStr.value = dayuts(new Date(fmForm.value.ioeTime)).format("YYYY-MM-DD");
+					amount.value=fmForm.value.amount.toString();
+				}
+			}else{
+				const bt = params.getString("billType") ?? 'income';
+				fmForm.value.billType = bt;
+			}
+		} catch (e) {
+			//console.error(e)
+		}
 	})
 
 	getIncomeAndExpensesConfigList();

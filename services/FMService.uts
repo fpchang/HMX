@@ -129,13 +129,11 @@ class FMServiceClass {
 			billType: item.getString("billType") ?? "",
 			createTime: item.getNumber("createTime") ?? 0,
 			creater: item.getString("creater") ?? "",
-			data_status: item.getNumber("data_status") ?? 0,
+			//data_status: item.getNumber("data_status") ?? 0,
 			hotel_id: item.getString("hotel_id") ?? "",
 			ioeTime: item.getNumber("ioeTime") ?? 0,
 			mark: item.getString("mark") ?? "",
 			type: typeItem.getString("_id") ?? "",
-			type_name: typeItem.getString("name") ?? "",
-			type_text: typeItem.getString("text") ?? "",
 			unit: item.getString("unit") ?? ""
 		})
 					//}

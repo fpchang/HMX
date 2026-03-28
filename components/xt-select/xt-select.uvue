@@ -9,6 +9,7 @@
 		</view>
 		</view>		
 		<view class="select-item" v-if="showKeySearch">
+			
 			<view class="select"> 
 			<rice-search v-model="keystr" input-color="#fff" :clearable="false" :placeholder="placeholder" :custom-style="{'padding':0}" @search="searchEvent" @clickLeftIcon="searchEvent" @input="searchInputChange"/>
 			
@@ -17,7 +18,7 @@
 		</view>
 		<!-- <rice-action-sheet v-model:show="show" :close-on-click-action="true"
 					@select="onSelect"  v-bind="$attrs"/> -->
-		<rice-picker   v-model:show="show"  :columns="columns" @confirm="onColumnsConfirm"></rice-picker>
+		<rice-picker   v-model:show="show"  :columns="columns" @confirm="onColumnsConfirm" v-model="mode_val"></rice-picker>
 					
 		
 	</view>
@@ -53,29 +54,29 @@
 	const attrs = useAttrs();
 	let show=ref(false);
 	let text_val =ref("请选择");
-	if(props.modelValue!=""){
-		const target = props.columns[0].find(item=>{
-			const val = item['value'] as string;
-			return val == props.modelValue; 
+	const mode_val = ref<Array<string>>([props.modelValue]);
+	const setDefault=()=>{
+		if(props.modelValue!=""){
+			if(props.columns[0].length>0){
+				const target = props.columns[0].find(item=>{
+					const val = item['value'] as string;
+					return val == props.modelValue; 
+					
+				}) as PickerOption;
+				if(target!=null){
+					text_val.value = target.text as string;
+				//	mode_val.value=props.columns[0][1];
+				}
+				
+			}
 			
-		}) as PickerOption;
-		text_val.value = target.text as string;
+		}
 	}
+	
 	let keystr=ref("");
 	const showSelect=()=>{
 		show.value=!show.value;
 	}
-	// const columns = ref<PickerOption[][]>([
-	//   [
-	//     { text: '杭州', value: 'Hangzhou' },
-	//     { text: '宁波', value: 'Ningbo' },
-	//     { text: '温州', value: 'Wenzhou', },
-	//     { text: '绍兴', value: 'Shaoxing' },
-	//     { text: '湖州', value: 'Huzhou' },
-	//     { text: '金华', value: 'JinHua' },
-	//     { text: '嘉兴', value: 'JiaXing' },
-	//   ]
-	// ])
 	const searchEvent=(value:string)=>{
 		emit("searchAction",value);
 	}
@@ -87,16 +88,17 @@
 		let val: string = e.selectedValues[0] as string
 		let index: number = e.selectedIndex[0] as number
 		text_val.value = props.columns[0][index]['text'] as string;
-		
+		//mode_val.value=val;
 		emit("update:modelValue", val);
 		emit("selectAction",val);
 	}
-	if( props.columns.length>0){
+	if( props.columns[0].length>0){
 		// console.log("MMMMMMM",props.columns);
-		// console.log("KKKKKKKKK",props,props.columns);
-		// text_val.value = props.columns[0][0]['text'] as string;
+		setDefault();
 	}
-	
+	watch(() => props.columns, val => {
+		setDefault();
+	})
 	
 </script>
 

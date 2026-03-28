@@ -11,13 +11,13 @@ export type FMBean={
 	billType: string,
 	createTime?: number,
 	creater: string,
-	data_status?: number,
+	//data_status?: number,
 	hotel_id: string,
 	ioeTime: number,
 	mark: string,
 	type:string,
-	type_name?:string,
-	type_text?:string,
+	// type_name?:string,
+	// type_text?:string,
 	unit?: string
 }
 

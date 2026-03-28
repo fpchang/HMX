@@ -7,9 +7,10 @@ exports.main = async (event, context) => {
 	} = event;
 	console.log("hm_updateRoom", event);
 	if(!_id){
-		return new Promise((resolve,reject)=>{
-			reject({errMsg:"缺少_id",errCode:"300"});
-		})
+		// return new Promise((resolve,reject)=>{
+		// 	reject({errMsg:"缺少_id",errCode:"300"});
+		// })
+		throw new Error("缺少_id")
 	}
 	const dbJQL = uniCloud.databaseForJQL({
 		event,

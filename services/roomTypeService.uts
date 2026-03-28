@@ -224,6 +224,38 @@ class RoomTypeClass {
 		}
 	}
 	/**
+	 * 修改房间
+	 */
+	async editRoom(room : roomBean) : Promise<boolean> {
+		try {
+			const _id=room._id;
+			const roomObj={
+				
+				hotel_id: room.hotel_id,
+				room_name: room.room_name,
+				room_type_id: room.room_type_id
+			}
+			const res = await DB.callFunction("hm_updateRoom", {_id, roomObj});
+			console.log("edit room", res);
+			const result = res['result'] as UTSJSONObject;
+			const code = result.getNumber("code") ?? 0;
+			const message = result.getString("message") ?? "";
+			if (code != 0) {
+				console.log("code error", code);
+				uni.showToast({
+					title: message,
+					icon: "none"
+				});
+				throw new Error(message);
+			}
+			
+			return true;
+		} catch (error) {
+			throw new Error("修改房间失败");
+	
+		}
+	}
+	/**
 	 * 删除房间
 	 */
 	async deleteRoom(room_id : string) : Promise<boolean> {
@@ -247,53 +279,6 @@ class RoomTypeClass {
 		}
 
 	}
-	//h5 {
-	//     "errCode": 0,
-	//     "success": true,
-	//     "requestId": "6dc1b1b7-85ff-4041-8e20-ad0f07649b03",
-	//     "result": {
-	//         "code": 0,
-	//         "errCode": 0,
-	//         "message": "",
-	//         "errMsg": "",
-	//         "systemInfo": [],
-	//         "updated": 1
-	//     }
-	// }
-	//ios == {
-	//     "errCode": 0,
-	//     "success": true,
-	//     "requestId": "b10c5a03-11b0-4c74-bb62-36f214a41710",
-	//     "result": {
-	//         "errCode": 0,
-	//         "message": "",
-	//         "code": 0,
-	//         "systemInfo": [],
-	//         "updated": 1,
-	//         "errMsg": ""
-	//     }
-	// }
-	// android{
-	// 	"requestId": "",
-	// 	"result":
-	// 	//‍[⁠UTSJSONObject⁠]‍
-	// 	{
-	// 		"code":
-	// 			//‍[number]‍
-	// 			0,
-	// 		"errCode":
-	// 			//‍[number]‍
-	// 			0,
-	// 		"message": "",
-	// 		"errMsg": "",
-	// 		"systemInfo":
-	// 			//‍[Array]‍
-	// 			[],
-	// 		"updated":
-	// 			//‍[number]‍
-	// 			1
-	// 	}
-	// }
 }
 
 //module.exports =new HotelService();

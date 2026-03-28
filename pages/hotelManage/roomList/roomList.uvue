@@ -240,6 +240,9 @@
 			})
 			return;
 		}
+		uni.navigateTo({
+			url: `/pages/hotelManage/editRoom/editRoom?pageType=1&&room=${encodeURIComponent(JSON.stringify(room))}`,
+		});
 	}
 	onLoad(params => {
 		console.log("params",params);

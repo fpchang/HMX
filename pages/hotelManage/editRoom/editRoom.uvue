@@ -147,8 +147,11 @@
 			}
 			if (rm != "") {
 				let decoded = decodeURIComponent(rm);
+				if(decoded!=null){
 					roomForm.value = JSON.parse<roomBean>(decoded)!;
 					console.log("bbbbbbb", roomForm.value);
+				}
+					
 			}
 		} catch (e) {
 			console.error(e)

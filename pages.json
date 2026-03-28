@@ -250,7 +250,8 @@
 		{
 			"path": "pages/hotelManage/editRoom/editRoom",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
 			}
 		}
 	],

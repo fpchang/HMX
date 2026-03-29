@@ -198,20 +198,20 @@
 			editIE();
 			return;
 		}
-		uni.showLoading({
-			title: ""
-		})
+		// uni.showLoading({
+		// 	title: ""
+		// })
 		try {
 			await FMService.add(fmForm.value);
 			uni.$emit("refrushfmList");
 			uni.navigateBack();
 			submitLoading.value = false;
-			uni.hideLoading();
+			//uni.hideLoading();
 			uni.showToast({title:"添加成功",icon:"none"});
 		} catch (error) {
 			console.log("error", error);
 			submitLoading.value = false;
-			uni.hideLoading();
+			//uni.hideLoading();
 			uni.showToast({title:"添加失败",icon:"none"});
 		}
 	}

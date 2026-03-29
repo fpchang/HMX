@@ -140,7 +140,7 @@
 	import fmSearchComponent from "./components/fmSearchComponent/fmSearchComponent";
 	import expensesInfoCardComponent from "./components/expensesInfoCardComponent/expensesInfoCardComponent";
 	import incomeInfoCardComponent from "./components/incomeInfoCardComponent/incomeInfoCardComponent";
-	let submitLoading = ref(false);
+	let submitLoading = ref(true);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -183,13 +183,22 @@
 	})
 	const getFmList = async () => {
 		submitLoading.value = true;
-		uni.showLoading({
-			title: ""
-		})
-		const fmr = await FMService.getIncomeAndExpensesDateBySearch(hotel_id.value, billType.value, keyword.value, dateRange.value, fmResult.value.pageNo, fmResult.value.pageSize);
-		fmResult.value = fmr as FMDataListResult;
-		uni.hideLoading();
-		submitLoading.value = false;
+		// uni.showLoading({
+		// 	title: ""
+		// })
+		try{
+			const fmr = await FMService.getIncomeAndExpensesDateBySearch(hotel_id.value, billType.value, keyword.value, dateRange.value, fmResult.value.pageNo, fmResult.value.pageSize);
+			fmResult.value = fmr as FMDataListResult;
+			//uni.hideLoading();
+			submitLoading.value = false;
+		}catch(e){
+			submitLoading.value = false;
+			uni.showToast({
+				title:"请求数据失败",
+				icon:"none"
+			})
+		}
+	
 	}
 	const dateChange = (range : string[]) => {
 		dateRange.value = range;

@@ -110,11 +110,7 @@
 	let pageType = ref(0);
 	let submitLoading = ref(false);
 
-	const title = computed(() => {
-		const btstr = fmForm.value.billType=='income'?'收入':'支出';
-		const ptstr = pageType.value==0?'添加':'修改';
-		return ptstr+btstr;
-	});
+	
 	const titleImg = computed<string>(() => {
 		if (pageType.value == 0) {
 			return "/static/icons/addpage.png"
@@ -137,11 +133,17 @@
 		type: ""
 		//unit: ""
 	});
+	const title = computed(() => {
+		const btstr = fmForm.value.billType=='income'?'收入':'支出';
+		const ptstr = pageType.value==0?'添加':'修改';
+		return ptstr+btstr;
+	});
 	const showCalendarEvent = () => {
 		showCalendar.value = true;
 	}
 	const selectType = (val : string) => {
-		fmForm.value.type = val;
+		console.log('sss',val)
+		//fmForm.value.type = val;
 
 	}
 	const incomeAndExpensesConfigList = ref<Array<FMTypeConfigBean>>([]);
@@ -154,7 +156,7 @@
 		let list : Array<PickerOption> = [];
 		incomeAndExpensesConfigList.value.forEach(item => {
 			if (item.billType == fmForm.value.billType) {
-				list.push({ text: item.text, value: item._id } as PickerOption);
+				list.push({ text: item.text, value: item.name } as PickerOption);
 			}
 
 		});
@@ -166,17 +168,19 @@
 		iotimeStr.value = dayuts(new Date(val)).format("YYYY-MM-DD");
 	}
 	const editIE= async ()=>{
-		// try {
-		// 	await FMService.add(fmForm.value);
-		// 	uni.$emit("refrushfmList");
-		// 	uni.navigateBack();
-		// 	submitLoading.value = false;
-		// 	uni.hideLoading();
-		// } catch (error) {
-		// 	console.log("error", error);
-		// 	submitLoading.value = false;
-		// 	uni.hideLoading();
-		// }
+		try {
+			await FMService.edit(fmForm.value);
+			uni.$emit("refrushfmList");
+			uni.navigateBack();
+			submitLoading.value = false;
+			uni.hideLoading();
+			uni.showToast({title:"更新成功",icon:"none"});
+		} catch (error) {
+			console.log("error", error);
+			submitLoading.value = false;
+			uni.hideLoading();
+			uni.showToast({title:"更新失败",icon:"none"});
+		}
 		console.log(fmForm.value);
 	}
 	const submitForm = async () => {
@@ -188,6 +192,8 @@
 		if (flag == false) {
 			return;
 		}
+		// console.log("add   ",fmForm.value)
+		// return;
 		if(pageType.value==1){
 			editIE();
 			return;
@@ -201,10 +207,12 @@
 			uni.navigateBack();
 			submitLoading.value = false;
 			uni.hideLoading();
+			uni.showToast({title:"添加成功",icon:"none"});
 		} catch (error) {
 			console.log("error", error);
 			submitLoading.value = false;
 			uni.hideLoading();
+			uni.showToast({title:"添加失败",icon:"none"});
 		}
 	}
 	onLoad(params => {

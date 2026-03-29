@@ -64,6 +64,29 @@ class FMServiceClass {
 		}
 
 	}
+	async edit(item : FMBean) : Promise<boolean> {
+		const _id = item._id;
+		const fm = {
+			amount: parseFloat(item.amount.toString()),
+			billType: item.billType,
+			creater: item.creater,
+			hotel_id: item.hotel_id,
+			ioeTime: item.ioeTime,
+			type: item.type,
+			mark: item.mark
+		}
+		try {
+			await DB.update("hm-incomeAndExpenses", _id, fm);
+			uni.showToast({
+				title: "更新成功",
+				icon: "none"
+			});
+			return true;
+		} catch (error) {
+			throw new Error("更新收支失败");
+		}
+
+	}
 	async deleteFm(fm_id : string) {
 		try {
 			const res = await DB.callFunction("hm_deleteFm", {
@@ -105,37 +128,39 @@ class FMServiceClass {
 		}
 		let FMList : Array<FMBean> = [];
 		let skipnum : number = Math.max((pageNo - 1) * pageSize, 0);
-		const main = db.collection("hm-incomeAndExpenses").where(w).orderBy("ioeTime desc").skip(skipnum).limit(pageSize).getTemp();
-		const config = db.collection("hm-incomeAndExpensesConfig").getTemp();
+		//const main = db.collection("hm-incomeAndExpenses").where(w).orderBy("ioeTime desc").skip(skipnum).limit(pageSize).getTemp();
+		//const config = db.collection("hm-incomeAndExpensesConfig").getTemp();
 		try {
-			const res = await db.collection(main, config).get({ getCount: true });
+			//const res = await db.collection(main).get({ getCount: true });
+			const res = await db.collection("hm-incomeAndExpenses").where(w).orderBy("ioeTime desc").skip(skipnum).limit(pageSize).get({ getCount: true });
+			console.log("res", res);
 			const data = res['data'] as Array<UTSJSONObject>;
 
 			if (data != null) {
 				data.forEach((item : UTSJSONObject) => {
-					const typeArr = item.getArray<UTSJSONObject>("type") ?? [];
+					//const typeArr = item.getArray<UTSJSONObject>("type") ?? [];
 					//let typeObj : FMTypeConfigBean;
 					//if (typeArr.length > 0) {
-					let typeItem = typeArr[0] as UTSJSONObject;
+				//	let typeItem = typeArr[0] as UTSJSONObject;
 					// typeObj = {
 					// 	_id: typeItem.getString("_id") ?? "",
 					// 	billType: typeItem.getString("billType") ?? "",
 					// 	name: typeItem.getString("name") ?? "",
 					// 	text: typeItem.getString("text") ?? "",
 					// }
-		FMList.push({
-			_id: item.getString("_id") ?? "",
-			amount: item.getNumber("amount") ?? 0,
-			billType: item.getString("billType") ?? "",
-			createTime: item.getNumber("createTime") ?? 0,
-			creater: item.getString("creater") ?? "",
-			//data_status: item.getNumber("data_status") ?? 0,
-			hotel_id: item.getString("hotel_id") ?? "",
-			ioeTime: item.getNumber("ioeTime") ?? 0,
-			mark: item.getString("mark") ?? "",
-			type: typeItem.getString("_id") ?? "",
-			unit: item.getString("unit") ?? ""
-		})
+					FMList.push({
+						_id: item.getString("_id") ?? "",
+						amount: item.getNumber("amount") ?? 0,
+						billType: item.getString("billType") ?? "",
+						createTime: item.getNumber("createTime") ?? 0,
+						creater: item.getString("creater") ?? "",
+						//data_status: item.getNumber("data_status") ?? 0,
+						hotel_id: item.getString("hotel_id") ?? "",
+						ioeTime: item.getNumber("ioeTime") ?? 0,
+						mark: item.getString("mark") ?? "",
+						type: item.getString("type") ?? "",
+						unit: item.getString("unit") ?? ""
+					})
 					//}
 
 				})
@@ -149,6 +174,7 @@ class FMServiceClass {
 			}
 			return fMDataListResult;
 		} catch (e) {
+			console.error(e);
 			throw new Error("获取收支列表失败");
 		}
 
@@ -203,7 +229,7 @@ class FMServiceClass {
 	}
 
 	//获取当月收入统计
-	async getIncomeCurrentMonth(hotel_id : string, month:string) : Promise<Array<charPietItem>> {
+	async getIncomeCurrentMonth(hotel_id : string, month : string) : Promise<Array<charPietItem>> {
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
 		const monthFirst = getMonthFirstDay(month);
@@ -243,7 +269,7 @@ class FMServiceClass {
 
 
 	//获取当月支出统计
-	async getExpensesCurrentMonth(hotel_id : string,month:string) : Promise<Array<charPietItem>> {
+	async getExpensesCurrentMonth(hotel_id : string, month : string) : Promise<Array<charPietItem>> {
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
 		const monthFirst = getMonthFirstDay(month);
@@ -281,14 +307,14 @@ class FMServiceClass {
 	/**
 	 * year:年份
 	 */
-	async getIncomeAndExpensesCurrentYear(hotel_id : string, year : string,billType:string) {
+	async getIncomeAndExpensesCurrentYear(hotel_id : string, year : string, billType : string) {
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
 		const yearFirst = new Date(new Date(year).getFullYear(), 0, 1).getTime();
 		const yearLast = new Date(new Date(year).getFullYear(), 12, 1).getTime() - 1;
 		const w = {
 			hotel_id: hotel_id,
-			billType:billType,
+			billType: billType,
 			ioeTime: dbCmd.and([dbCmd.gte(yearFirst), dbCmd.lte(yearLast)])
 		}
 		//房费
@@ -314,7 +340,7 @@ class FMServiceClass {
 		}
 		return resultList;
 	}
-	
+
 
 }
 

@@ -114,13 +114,13 @@ class ComFuc {
 	 * 数据开始加载
 	 */
 	async init() {
-		uni.showLoading({ title: '' });
+		//uni.showLoading({ title: '' });
 		this.getUser();
 		await this.getHotelList();
 		await this.setDefaultHotel();
 		await this.getRoomTypeList(state.hotel_id);
-		console.log("all thing is ok;");
-		uni.hideLoading();
+		//console.log("all thing is ok;");
+		//uni.hideLoading();
 
 	}
 }

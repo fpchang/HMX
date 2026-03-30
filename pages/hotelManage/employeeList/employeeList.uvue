@@ -84,6 +84,9 @@
 				</view>
 			</view>
 		</view>
+		<view v-if="submitLoading" style="margin-top:68px;display: flex;flex-direction: row;justify-content: center;">
+			<rice-loading color="#787878" text="加载中…" />
+		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
@@ -256,12 +259,12 @@
 	}
 	const init= async ()=>{
 		submitLoading.value=true;
-		uni.showLoading({
-			title:""
-		})
+		// uni.showLoading({
+		// 	title:""
+		// })
 		await employeeAction.getEmplolyeeList(hotel_id.value);
 		submitLoading.value=false;
-		uni.hideLoading();
+		//uni.hideLoading();
 	}
 	init();
 </script>

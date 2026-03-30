@@ -22,7 +22,11 @@
 		:show-scrollbar="false">
 		<gatherComponent></gatherComponent>
 		<operation></operation>
+		
 	</scroll-view>
+	<view v-if="submitLoading" style="margin-top:168px;display: flex;flex-direction: row;justify-content: center;">
+		<rice-loading color="#787878" text="加载中…" />
+	</view>
 	<view style="margin-top: 168px;" v-if="dataReading&&hotel_id==''">
 		<l-empty description="没有酒店" />
 		<view style="display: flex;flex-direction: row;align-items: center;justify-content: center;">
@@ -122,6 +126,7 @@
 	import { comFunction } from "./ComFuc.uts";
 	import { userBean } from "@/bean/userBean";
 	import { hotelBean } from "@/bean/hotelBean";
+	const submitLoading = ref(false);
 	const showRange = ref(false);
 	const showPopup = ref(false);
 	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"]);
@@ -188,8 +193,10 @@
 
 	const init = async () => {
 		//comFunction.loadStorage();
+		submitLoading.value=true;
 		await comFunction.init();
 		dataReading.value = true;
+		submitLoading.value=false;
 	}
 	watch(hotel_id, (hotel_idNew : string, hotel_idOld : string) : void => {
 		//console.log("hotel_id change index ",hotel_idNew,hotel_idOld)

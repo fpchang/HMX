@@ -139,6 +139,9 @@
 			</view>
 			<!-- </template> -->
 		</view>
+		<view v-if="submitLoading" style="margin-top:68px;display: flex;flex-direction: row;justify-content: center;">
+			<rice-loading color="#787878" text="加载中…" />
+		</view>
 		<l-empty description="没有数据" v-if="!submitLoading&&orderResult.orderList.length<1" />
 	<!-- #ifdef APP -->
 	</scroll-view>
@@ -208,12 +211,12 @@
 	})
 	const getOrderList = async () => {
 		submitLoading.value = true;
-		uni.showLoading({
-			title: ""
-		})
+		// uni.showLoading({
+		// 	title: ""
+		// })
 		const fmr = await OrderService.getOrderListBySearch(hotel_id.value, dateRange.value, orderStatus.value, keyword.value, orderResult.value.pageNo, orderResult.value.pageSize);
 		orderResult.value = fmr as OrderDataListResult;
-		uni.hideLoading();
+		//uni.hideLoading();
 		submitLoading.value = false;
 	}
 	const dateChange = (range : string[]) => {

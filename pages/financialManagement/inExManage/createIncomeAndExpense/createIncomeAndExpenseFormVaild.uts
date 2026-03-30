@@ -3,7 +3,7 @@ export const  validForm = (fm:FMBean):boolean=>{
 	let msg ="";
 	
 	if(fm.type==""){
-		msg="请选择收入类型";
+		msg="请选择收支类型";
 	}
 	if(fm.amount<1){
 		msg="请输入金额";

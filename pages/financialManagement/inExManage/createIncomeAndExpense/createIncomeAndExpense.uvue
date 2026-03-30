@@ -22,10 +22,10 @@
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
-			<xt-form-item label="收支类型" tips="" required>
+			<xt-form-item label="单据类型" tips="" required>
 				<view>
-					<rice-radio-group v-model="fmForm.billType" direction="row" :disabled="true">
-						<view class="check-container" v-if="fmForm.billType=='income'">
+					<rice-radio-group v-model="fmForm.billType" direction="row" :disabled="pageType==1" @change="billTypeChange">
+						<view class="check-container" v-if="pageType==0 ||fmForm.billType=='income'">
 							<rice-radio value="income" label="收入" >
 								<view style="display: flex;flex-direction: row;align-items: center;">
 
@@ -34,7 +34,7 @@
 								</view>
 							</rice-radio>
 						</view>
-						<view class="check-container" v-if="fmForm.billType=='expenses'">
+						<view class="check-container" v-if="pageType==0 ||fmForm.billType=='expenses'">
 							<rice-radio value="expenses" label="收入" >
 								<view style="display: flex;flex-direction: row;align-items: center;">
 									<!-- <rice-icon name="down" color="#f53f3f" /> -->
@@ -47,7 +47,7 @@
 					</rice-radio-group>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="收入类型" tips="" required>
+			<xt-form-item label="收支类型" tips="" required>
 				<view>
 					<xt-select :columns="columns" @selectAction="selectType" :showKeySearch="false" v-model="fmForm.type"></xt-select>
 				</view>
@@ -163,6 +163,9 @@
 		result.push(list);
 		return result;
 	});
+	const billTypeChange=()=>{
+		fmForm.value.type="";
+	}
 	const checkIoTime = (val : string) => {
 		fmForm.value.ioeTime = new Date(val).getTime();
 		iotimeStr.value = dayuts(new Date(val)).format("YYYY-MM-DD");
@@ -188,7 +191,9 @@
 			fmForm.value.amount = parseFloat(amount.value);
 		}
 		
-		let flag : boolean = validForm(fmForm.value)
+		let flag : boolean = validForm(fmForm.value);
+		// console.log(fmForm.value);
+		// return;
 		if (flag == false) {
 			return;
 		}
@@ -241,7 +246,9 @@
 			//console.error(e)
 		}
 	})
-
+	// watch(()=>fmForm.value.billType,()=>{
+	// 	fmForm.value.type="";
+	// })
 	getIncomeAndExpensesConfigList();
 </script>
 

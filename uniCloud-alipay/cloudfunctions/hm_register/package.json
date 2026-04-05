@@ -1,0 +1,10 @@
+{
+  "name": "hm_register",
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "tokenEvent": "file:../common/tokenEvent"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

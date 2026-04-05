@@ -1,0 +1,53 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": false,
+		"create": false,
+		"update": false,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"username": {
+			"description": "用户名",
+			"bsonType": "string"
+		},
+		"password": {
+			"description": "密码",
+			"bsonType": "password"
+		},
+		"email": {
+			"description": "邮箱",
+			"bsonType":"string"
+		},
+		"phone": {
+			"description": "手机号",
+			"bsonType":"string"
+		},
+		"id_card": {
+			"description": "身份证号码",
+			"bsonType": "string"
+		},
+		"token": {
+			"description": "token",
+			"bsonType": "string"
+		},
+		"smscode": {
+			"description": "短信验证码",
+			"bsonType": "string"
+		},
+		"createTime": {
+			"description": "创建时间",
+			"bsonType": "timestamp"
+		},
+		"data_status": {
+			"description": "数据状态 1正常 10 注销" ,
+			"bsonType": "int",
+			"enum":[1,10]
+		}
+	}
+}

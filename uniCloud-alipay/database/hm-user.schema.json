@@ -31,6 +31,23 @@
 			"description": "昵称",
 			"bsonType": "string"
 		},
+		"account": {
+			"description": "账号",
+			"bsonType": "string"
+		},
+		"password": {
+			"description": "密码",
+			"bsonType": "string"
+		},
+		"email": {
+			"description": "邮箱",
+			"bsonType": "string"
+		},
+		"smscode": {
+			"description": "短信验证码",
+			"bsonType": "string"
+		},
+
 		"phone": {
 			"description": "手机号",
 			"title": "手机号",
@@ -42,10 +59,6 @@
 				"minLength": "{title}不能小于 {minLength} 个字符",
 				"pattern": "{title}格式不正确"
 			}
-		},
-		"userId": {
-			"description": "用户id",
-			"bsonType": "string"
 		},
 		"userName": {
 			"description": "用户名",

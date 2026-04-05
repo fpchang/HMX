@@ -72,8 +72,10 @@ class AccountServiceClass {
 		return user;
 	}
 	async getuserByToken() : Promise<userBean | null> {
+		const res1 = await DB.callFunction("hm_getUser", {type:'token', value: uni.getStorageSync("hm_token") });
+		console.log("用户信息1：：",res1);
 		const res = await DB.getCollection("hm-user", { hm_token: uni.getStorageSync("hm_token") });
-		console.log("用户信息：：",res);
+		//console.log("用户信息：：",res);
 		const list =res['data'] as Array<UTSJSONObject>;
 		let user:userBean | null =null;
 		if(list!=null&&list.length>0){

@@ -12,6 +12,9 @@ exports.main = async (event, context) => {
 	if (loginType == 'app') {
 		return loginByApp(event,context)
 	}
+	if(loginType=='account'){
+		return loginByAccount(event,context)
+	}
 	if (loginType == 'code' || !loginType) {
 		return loginBySmsCode(event,context);
 	}
@@ -89,6 +92,10 @@ async function loginByApp(event,context) {
 		}
 	}
 
+}
+//账号密码登录
+async function loginByAccount(event,context){
+	const {account,password}=event;
 }
 //验证码登录
 async function loginBySmsCode(event,context) {

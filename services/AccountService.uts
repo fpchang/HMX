@@ -22,6 +22,36 @@ class AccountServiceClass {
 		// const token:string = uni.getStorageSync('hm_token').toString();
 		return DB.callFunction("hm_validToken");
 	}
+	/**
+	 * 注册账号验证是否存在
+	 */
+	
+	async validRegisterAccount(account:string):Promise<boolean>{
+		console.log("aacc",account);
+		if(account==""){
+			throw new Error("账号不能为空")
+		}
+		try{
+			const params={account} as UTSJSONObject;
+			const res =await DB.getCollection("hm-user",params);			
+			const data = res['data'] as Array<UTSJSONObject>;
+			const flag = data.length<1;
+			return flag;
+		}catch(e){
+			throw new Error("系统异常");
+		}
+		
+	}
+	async register(user:UTSJSONObject):Promise<boolean>{
+		
+		try {
+			const res = await DB.callFunction("hm_register",{user});
+			console.log("res",res);
+			return true;
+		} catch (error) {
+			throw new Error("注册失败");
+		}
+	}
 	login(userForm : UTSJSONObject) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
 		console.log("login",userForm)
 		return DB.callFunction("hm_login", { userForm });
@@ -72,14 +102,15 @@ class AccountServiceClass {
 		return user;
 	}
 	async getuserByToken() : Promise<userBean | null> {
-		const res1 = await DB.callFunction("hm_getUser", {type:'token', value: uni.getStorageSync("hm_token") });
-		console.log("用户信息1：：",res1);
-		const res = await DB.getCollection("hm-user", { hm_token: uni.getStorageSync("hm_token") });
+		const res = await DB.callFunction("hm_getUser", {type:'token', value: uni.getStorageSync("hm_token") });
+		console.log("用户信息1：：",res);
+		//const res = await DB.getCollection("hm-user", { hm_token: uni.getStorageSync("hm_token") });
 		//console.log("用户信息：：",res);
-		const list =res['data'] as Array<UTSJSONObject>;
+		//const list =res['data'] as Array<UTSJSONObject>;
+		const userObj = res['result'] as UTSJSONObject;
 		let user:userBean | null =null;
-		if(list!=null&&list.length>0){
-			const userObj=list[0];
+		// if(list!=null&&list.length>0){
+		// 	const userObj=list[0];
 			user={
 				_id: userObj.getString("_id")??"",
 				idCard: userObj.getString("idCard")??"",
@@ -100,7 +131,7 @@ class AccountServiceClass {
 				accountStatus: userObj.getNumber("accountStatus")??1
 			}
 			
-		}
+		//}
 		return user;
 	}
 	async updateUser(_id : string, userObj:UTSJSONObject) : Promise<boolean> {

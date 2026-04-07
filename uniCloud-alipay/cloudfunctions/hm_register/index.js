@@ -3,23 +3,28 @@ const crypto = require('crypto');
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	console.log('event : ', event);
-		const {account,password,email}=event;
+		const {user}=event;
+		const {account,password,email}=user;
 		const dbJQL = uniCloud.databaseForJQL({
 			event,
 			context
-		})
-		if(account!=""){
+		});
+		console.log("params::",user,account)
+		if(account==""){
 			return {code:40,msg:"账号不能为空"}
 		}
-		if(password!=""){
-			return {code:40,msg:"密码不能为空"}
+		if(password==""){
+		
+			return {code:40,msg:"密码不能为空"} 
 		}
 		try {
+			
 			const ep = encryptPassword(password);
 			const user= formatUser(account,ep);
 			const result = await dbJQL.collection('hm-user').add(user);
-			console.log("result",result);
+			return true;
 		} catch (error) {
+			console.log(error)
 			throw new Error("注册失败");
 		}
 	//返回数据给客户端
@@ -34,7 +39,7 @@ exports.main = async (event, context) => {
  */
 function encryptPassword(password) {
   // 盐值（自己改一个唯一的，不要泄露）
-  const salt = 'unicloud_2026_secure_salt';
+  const salt = '****';
   
   // 创建 SHA256 哈希
   const hash = crypto.createHmac('sha256', salt)
@@ -47,12 +52,13 @@ function encryptPassword(password) {
 function formatUser(account,password){
 	return {
 		idCard: "",
-		ipStartDateStamp: "",
+		vipStartDateStamp: "",
 		isVip: false,
 		nickName: "",
-		phone: "",
+		//phone: null,
 		account:account,
-		password:password
+		password:password,
+		email:"",
 		userName: "",
 		vipEndDate: "",
 		vipEndDateStamp: "",

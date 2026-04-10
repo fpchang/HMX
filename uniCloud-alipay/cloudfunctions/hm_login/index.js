@@ -46,7 +46,7 @@ async function register(phone) {
 async function loginByApp(event,context) {
 	console.log("app 一键登录")
 	const res = await uniCloud.getPhoneNumber({
-		appid: '__UNI__EB41BD5', // 替换成自己开通一键登录的应用的DCloud appid
+		appid: '__UNI__6CB5534', // 替换成自己开通一键登录的应用的DCloud appid
 		provider: 'univerify',
 		access_token: event.access_token,
 		openid: event.openid

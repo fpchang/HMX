@@ -24,6 +24,7 @@
 			default: false
 		}
 	});
+	const submitLoading =ref(false);
 	const userForm = ref({
 		account: '',
 		password: ''
@@ -43,7 +44,7 @@
 				"account",
 				[
 					{ required: true, message: '请输入用户名' },
-					{ min: 3, max: 10, message: '字数需为 3 至 10 位', trigger: 'blur' }
+					{ min: 3, max: 20, message: '字数需为 3 至 20 位', trigger: 'blur' }
 				]
 			],
 			[
@@ -68,7 +69,43 @@
 			uni.showToast({ title: '请先同意用户协议与隐私政策', icon: 'none' });
 			return;
 		}
-		//111111
+		try {
+			const f = {
+				loginType:'account',
+				account:userForm.value.account,
+				password:userForm.value.password
+			}
+			const res = await AccountService.login(f);
+			
+			
+			const result = res.result as UTSJSONObject;
+			const data = result.getJSON("data")??{}
+			const code = result.getNumber("code",99);
+			const msg = result.msg as string;
+			console.log("code====", code);
+			if (code != 0) {
+				uni.showToast({
+					title: msg,
+					duration: 2000,
+					icon: "error",
+				});
+				submitLoading.value = false;
+				return;
+			}
+			
+			const token = data['token'] as string | null;
+			if (token != null) {
+				uni.setStorageSync("hm_token", token as string);
+			}
+			uni.setStorageSync("account", userForm.value.account);
+			//getUserInfo();
+			uni.reLaunch({
+				url: "/pages/index/index",
+			});
+		} catch (error) {
+			throw new Error("登录失败");
+		}
+		
 	}
 </script>
 

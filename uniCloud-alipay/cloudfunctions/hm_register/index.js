@@ -1,5 +1,5 @@
 'use strict';
-const crypto = require('crypto');
+const {encryptPassword} = require('encryptPassword');
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	console.log('event : ', event);
@@ -32,22 +32,7 @@ exports.main = async (event, context) => {
 };
 
 
-/**
- * 明文密码加密（Node.js / UniCloud 通用）
- * @param {string} password 明文密码
- * @returns {string} 加密后的密码
- */
-function encryptPassword(password) {
-  // 盐值（自己改一个唯一的，不要泄露）
-  const salt = '****';
-  
-  // 创建 SHA256 哈希
-  const hash = crypto.createHmac('sha256', salt)
-    .update(password)
-    .digest('hex'); // 转 16 进制字符串
 
-  return hash;
-}
 
 function formatUser(account,password){
 	return {

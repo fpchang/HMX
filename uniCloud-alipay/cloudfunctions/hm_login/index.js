@@ -2,6 +2,7 @@
 const dateFormat = require('dateFormat');
 const jwt = require('jsonwebtoken');
 const tokenEvent = require('tokenEvent');
+const {encryptPassword} = require('encryptPassword');
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	console.log('event : ', event);
@@ -11,6 +12,9 @@ exports.main = async (event, context) => {
 	console.log("登录参数", event);
 	if (loginType == 'app') {
 		return loginByApp(event,context)
+	}
+	if(loginType=='account'){
+		return loginByAccount(event,context)
 	}
 	if (loginType == 'code' || !loginType) {
 		return loginBySmsCode(event,context);
@@ -89,6 +93,47 @@ async function loginByApp(event,context) {
 		}
 	}
 
+}
+//账号密码登录
+async function loginByAccount(event,context){
+	const {account,password}=event;
+	const dbJQL = uniCloud.databaseForJQL({ // 获取JQL database引用，此处需要传入云函数的event和context，必传
+		event,
+		context
+	});
+	try {
+		const ep = encryptPassword(password);
+		const userRes = await dbJQL.collection('hm-user').where(`account=='${account}'&&password='${ep}'`).get();
+		if (userRes.data.length > 0) {
+			const user = userRes.data[0];
+			//更新token
+			const newToken = tokenEvent.getToken({
+				phone: phone
+			}, secret, (new Date().getTime() + 1000 * 60 * 60 * 24 * 30));
+			const upuserRes = await dbJQL.collection('hm-user').doc(user._id).update({
+				'hm_token': newToken
+			});
+			//user.hm_token = newToken;
+			return {
+				code: 0,
+				msg: "",
+				data: {
+					token: newToken
+				}
+			};
+		}
+		 return {
+				code: 404,
+				msg: "账号密码不正确",
+				data: {
+					token: ""
+				}
+			};
+	} catch (error) {
+		//TODO handle the exception
+		throw new Error("登录失败");
+	}
+	
 }
 //验证码登录
 async function loginBySmsCode(event,context) {
@@ -182,6 +227,9 @@ function getUser(phone, token) {
 		"isVip": true,
 		"nickName": "",
 		"phone": phone,
+		//"account":null,
+		"email":"",
+		"password":"",
 		"userId": phone,
 		"userName": `用户${phone.substr(-4)}`,
 		"vipEndDate": dateFormat(new Date(vipEndDateStamp), "yyyy-MM-dd HH:mm:ss"),

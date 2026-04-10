@@ -1,168 +1,193 @@
 <template>
-	<view class="container">
-		<!-- 分屏左右风格 Split Screen -->
-		<view class="left-panel" v-if="false">
-			<view class="left-content">
-				<text class="brand-text">议宿</text>
-				<text class="slogan-text">轻松管理\n解放束缚</text>
-				<view class="feature-list">
-					<text class="feature-item">✓ 人事管理</text>
-					<text class="feature-item">✓ 房型管理</text>
-					<text class="feature-item">✓ 房间管理</text>
-					<text class="feature-item">✓ 订单管理</text>
-					<text class="feature-item">✓ 财务管理</text>
-					<text class="feature-item">✓ 分享信息</text>
-				</view>
-			</view>
-			<view class="decoration-circle"></view>
-		</view>
-
-		<view class="right-panel">
-			<view class="right-header">
-				<text class="welcome-text">欢迎回来</text>
-				<text class="sub-text">请登录您的账户</text>
+	<view class="page">
+		<view class="wrap">
+			<!-- 标题 -->
+			<view class="head">
+				<text class="title">登录</text>
 			</view>
 
-			<!-- 登录表单 -->
-			<view class="form-box">
-				<!-- <view class="segment-control" >
-					<view :class="['segment-item',loginType == 'app'? 'segment-item-active':'']"
-						@click="switchLoginType('app')">
-						<text class="segment-item-text">一键登录</text>
-					</view>
-					<view :class="['segment-item',loginType == 'code'? 'segment-item-active':'']"
-						@click="switchLoginType('code')">
-						<text class="segment-item-text">验证码</text>
-					</view>
-				</view> -->
+			<!-- 选项卡 -->
+			<view class="tab-wrap">
+				<!-- <text class="tab {{ currentTab === 0 ? 'tab-on' : '' }}" @click="switchTab(0)">
+					账号密码
+				</text>
+				<text class="tab {{ currentTab === 1 ? 'tab-on' : '' }}" @click="switchTab(1)">
+					一键登录
+				</text>
+				<text class="tab {{ currentTab === 2 ? 'tab-on' : '' }}" @click="switchTab(2)">
+					短信验证
+				</text> -->
+				<rice-tabs v-model="currentTab" :list="list" @clickTab="tabClick" :shrink="false" style="flex: 1;"
+					bg-color="transparent" line-width="60px"></rice-tabs>
+			</view>
 
-				<view class="input-list">
-					<view class="split-input" v-if="loginType === 'code'">
-						<text class="input-label">手机号</text>
-						<input type="number" placeholder="请输入手机号" placeholder-style="color: #bbbbbb;"
-							v-model="input_phone" maxlength="11" />
-					</view>
-
-					<view class="split-input" v-if="loginType === 'code'">
-						<text class="input-label">验证码</text>
-						<view class="code-flex">
-							<input type="number" placeholder="请输入验证码" placeholder-style="color: #bbbbbb;" v-model="smsCode"
-								maxlength="6" style="flex:1" />
-							<button class="send-split" @click="sendCode">
-								{{ countdown > 0 ? countdown + 's' : '获取验证码' }}
-							</button>
-						</view>
-					</view>
-
-					<view class="split-input" v-if="loginType === 'password'">
-						<text class="input-label">密码</text>
-						<view class="pwd-flex">
-							<input :type="showPassword ? 'text' : 'password'" placeholder="请输入密码"
-								placeholder-style="color: #bbbbbb;" v-model="password" />
-							<text class="eye-split" @click="showPassword = !showPassword">
-								{{ showPassword ? '隐藏' : '显示' }}
-							</text>
-						</view>
-					</view>
-				</view>
-
-				<!-- <button v-if="loginType != 'app'" class="split-btn" @click="handleLogin"><text class="split-btn-text">登 录</text></button> -->
-				
-
-				<text class="forgot-split" v-if="loginType === 'password'" @click="forgotPwd">忘记密码?</text>
+			<!-- 账号密码登录 -->
+			<view class="form" v-if="currentTab === 0">
+				<accountComponent :isAgree="isAgree"></accountComponent>
 			</view>
 
 			<!-- 一键登录 -->
-			<view class="app-split" v-if="loginType==='app'">
-				<view class="split-line-wrapper">
-					<view class="split-line"></view>
-					<!-- <text class="split-line-text">其他方式</text> -->
-					<view class="split-line"></view>
+			<view class="form" v-if="currentTab === 1">
+				<view class="input-row">
+					<rice-input class="input" placeholder="请输入手机号" type="number" v-model="phone" :maxlength="11" />
 				</view>
-				<view class="con" @click="verify(false)">
-					<!-- <image src="/static/icons/phone.png" style="width: 16px;height: 16px;"></image>
-					<text class="w-text">手机一键登录</text> -->
-					<view style="display: flex;flex-direction: row;align-items: center;justify-content: center;">
-						<text class="tit" >{{phone}}</text>
-						<view style="width:40px;margin-left: 12px;">
-							<rice-button text="换号" shape="round" size="mini" @click="switchLoginType('code')"></rice-button>
-						</view>
+
+				<view class="tip"><text class="txt">*未注册的手机号验证后将自动创建议宿账号</text></view>
+				<button class="btn-login" @click="oneKeyLogin">一键登录</button>
+			</view>
+
+			<!-- 短信验证码登录 -->
+			<view class="form" v-if="currentTab === 2">
+				<loginBySmscodeComponent :isAgree="isAgree"></loginBySmscodeComponent>
+				<!-- <view class="input-row">
+					<rice-input class="input" placeholder="请输入手机号" type="number" v-model="smsPhone" :maxlength="11"
+						border="none" />
+				</view>
+
+				<view class="input-row code-row">
+					<view style="flex:1">
 						
+						<rice-input class="input" placeholder="请输入验证码" type="number" v-model="smsCode" :maxlength="4"
+							border="none" />
+
 					</view>
-					<view><text class="ct">未注册的手机号验证后自动创建议宿账号</text></view>
+					<view>
+						<text class="btn-code" :disabled="codeDisabled" @click="sendSmsCode">
+							{{ codeText }}
+						</text>
+					</view>
+
 				</view>
+
+				<view class="tip"><text class="txt">*未注册的手机号验证后将自动创建议宿账号</text></view>
+				<button class="btn-login" @click="smsLogin">短信登录</button> -->
 			</view>
-		
-			<view> 
-			<rice-button v-if="loginType != 'app'" type="primary" text="登录" class="submit-btn" shape="round"
-				color="#165dff" :disabled="submitDisabled || submitLoading" @click="handleLogin"
-				:loading="submitLoading" />
-			<rice-button v-if="loginType == 'app'" type="primary" text="本机号码一键登录" class="submit-btn" shape="round"
-				color="#165dff" @click="verify(false)"
-				:loading="submitLoading" />
-				<!-- <rice-button @click="uniVerifyLogin" text="测试"></rice-button> -->
-			</view>
-			<view class="up">
-				<view @click="agreeEvent" style="padding-right: 2px;">
-					<!-- <l-icon v-show="isAgree" name="material-symbols:check-circle" size="20"
-						color="#165dff"></l-icon>
-					<l-icon v-show="!isAgree" name="material-symbols-light:circle-outline" size="20"
-						color="#165dff"></l-icon> -->
-					<image v-show="!isAgree" src="/static/icons/circle.png" class="form-icon"></image>
-					<image v-show="isAgree" src="/static/icons/confirm_selcted.png" class="form-icon"></image>
-			
+
+			<!-- 全局共用：用户协议 + 注册入口 -->
+			<view class="bottom-box">
+				<view class="up">
+					<view @click="agreeEvent" style="padding-right: 2px;">
+
+						<image v-show="!isAgree" src="/static/icons/circle.png" class="form-icon"></image>
+						<image v-show="isAgree" src="/static/icons/confirm_selcted.png" class="form-icon"></image>
+
+					</view>
+					<view style="display: flex;flex-direction: row;flex-wrap:wrap">
+						<text class="ct">我已经同意</text>
+						<text class="ct-txt-btn" @click="openUserAgreement">《用户协议》</text>
+						<text class="ct">和</text>
+						<text class="ct-txt-btn" @click="openUserPrivacyPolicy">《隐私政策》</text>
+
+
+						<!-- 	<text class="ct">我已阅读并同意</text> -->
+					</view>
+
 				</view>
-				<view style="display: flex;flex-direction: row;flex-wrap:wrap">
-					<text class="ct">我已经同意</text>
-					<text class="ct-txt-btn" @click="openUserAgreement">《用户协议》</text>
-					<text class="ct">和</text>
-					<text class="ct-txt-btn" @click="openUserPrivacyPolicy">《隐私政策》</text>
-			
-			
-					<!-- 	<text class="ct">我已阅读并同意</text> -->
+
+				<view class="register" @click="goRegister" v-if="currentTab==0">
+					<navigator url="/pages/register/register">
+						<text class="register-text">还没有账号？立即注册</text>
+					</navigator>
+
 				</view>
-			
-			</view>
-			<view class="bottom-control">
-				<view class="control-item" v-if="loginType!='code'" @click="switchLoginType('code')"><image class="imgstyle" src="/static/icons/phone-control.png"></image></view>
-				<view class="control-item" v-if="loginType!='app'" @click="switchLoginType('app')"><image class="imgstyle"  src="/static/icons/china-mobile.png"></image></view>
-				<!-- <view class="control-item"><image class="imgstyle"  src="/static/icons/phone.png"></image></view> -->
 			</view>
 		</view>
 	</view>
 </template>
-<script setup lang="uts">
+
+<script setup>
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
-	import { ref, computed } from "vue";
-	import { AccountService } from "../../services/AccountService";
-	import { state, setUser } from '@/store/store.uts';
-	import { userFormBean } from "@/bean/loginBean.uts";
-	import { userBean } from "@/bean/userBean";
-	const loginType = ref("app");
-	const input_phone = ref("");
-	const smsCode = ref("");
-	const tk = ref("");
-	const password = ref("");
-	const showPassword = ref(false);
-	const countdown = ref(0);
+	import { AccountService } from "@/services/AccountService";
+	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
+	import accountComponent from "./components/accountComponent.uvue";
+	import loginBySmscodeComponent from "./components/loginBySmscodeComponent.uvue"
+	//import { ref, onUnmounted } from 'vue';
 
-	const uniVerifyManager = ref(null as UniVerifyManager | null)
-	const phone = ref('')
-	const slogan = ref('')
-	const privacyName = ref('')
-	const privacyUrl = ref('')
+	// 选项卡
+	const currentTab = ref(0);
 
-	let submitLoading = ref(false);
-	let isAgree = ref(false);
-	const sendSmsDisabled = computed<boolean>(() => {
-		return input_phone.value.length != 11;
-	});
-	const submitDisabled = computed<boolean>(() => {
-		return input_phone.value.length != 11 || smsCode.value.length != 4
-	});
-	const switchLoginType = (type : string) => {
-		loginType.value = type;
+	// 表单数据
+	const account = ref('');
+	const password = ref('');
+	const phone = ref('');
+	const smsPhone = ref('');
+	const smsCode = ref('');
+
+	// 协议
+	const isAgree = ref(false);
+
+
+
+	// 切换选项卡
+	const switchTab = (index : number) => {
+		currentTab.value = index;
+		// clearTimer();
+	};
+	const list = ref<TabsOptions[]>([{
+		name: '账号密码',
+		value: 0
+	}, {
+		name: '一键登录',
+		value: 1
+	}, {
+		name: '短信验证',
+		value: 2
 	}
+	])
+	const tabClick = (e : TabsClickTab) => {
+		currentTab.value = e.index;
+	}
+	// 同意协议
+	const toggleAgree = () => {
+		isAgree.value = !isAgree.value;
+	};
+	
+	// 去注册
+	const goRegister = () => {
+		// uni.showToast({
+		// 	title: '跳转到注册页面',
+		// 	icon: 'none'
+		// });
+		// uni.navigateTo({ url: '/pages/register/register' });
+	};
+
+	// 账号密码登录
+	const accountLogin = () => {
+		if (!isAgree.value) {
+			uni.showToast({ title: '请先同意用户协议与隐私政策', icon: 'none' });
+			return;
+		}
+		if (account.value == "" || password.value == "") {
+			uni.showToast({ title: '请完善账号密码', icon: 'none' });
+			return;
+		}
+		uni.showToast({ title: '登录成功', icon: 'success' });
+	};
+
+	// 一键登录
+	const oneKeyLogin = () => {
+		if (!isAgree.value) {
+			uni.showToast({ title: '请先同意用户协议与隐私政策', icon: 'none' });
+			return;
+		}
+		if (phone.value == "" || phone.value.length !== 11) {
+			uni.showToast({ title: '请输入正确手机号', icon: 'none' });
+			return;
+		}
+
+		uni.showModal({
+			title: '提示',
+			content: '该手机号未注册，将自动为您创建议宿账号',
+			confirmText: '确认登录',
+			success: (res) => {
+				if (res.confirm) {
+					uni.showToast({ title: '登录并注册成功', icon: 'success' });
+				}
+			}
+		});
+	};
+	
+	
 	const agreeEvent = () => {
 		console.log(isAgree.value)
 		isAgree.value = !isAgree.value;
@@ -177,526 +202,179 @@
 			url: "/pages/common/privacyPolicy/privacyPolicy",
 		});
 	};
-	const wechatLogin = () => {
-		uni.showToast({ title: '微信登录', icon: 'none' })
-	}
-
-
-	const sendSmsSuccess = () => {
-		countdown.value = 60;
-		let timer : number | null = null
-		timer = setInterval(() => {
-			countdown.value--
-			if (countdown.value <= 0) {
-				if (timer != null) {
-					clearInterval(timer as number)
-				}
-			}
-		}, 1000)
-	}
-	const sendCode = async () => {
-		if (countdown.value > 0) {
-			uni.showToast({ title: "倒计时结束后再发送", icon: "none" });
-			return;
+	onShow(() => {
+		const accountstorage = uni.getStorageSync("account");
+		if (accountstorage != null) {
+			account.value = accountstorage;
 		}
-		if (input_phone.value == '' || input_phone.value.length != 11) {
-			uni.showToast({ title: '请输入正确的手机号', icon: 'none' })
-			return
-		}
-
-		uni.showLoading({ title: "" });
-		try {
-			const res = await AccountService.sendSmsCode(input_phone.value);
-			const data = res.result as UTSJSONObject;
-			console.log("res", res);
-			const tkstr = data.tk as string;
-			tk.value = tkstr;
-			uni.setStorageSync("tk", tk);
-			uni.hideLoading();
-			sendSmsSuccess();
-		} catch (error) {
-			console.error(error);
-			uni.showToast({
-				title: "发送短信失败"
-			})
-		}
-		//uni.showToast({ title: '验证码已发送', icon: 'none' })
-	}
-	const handleLogin = async () => {
-		if (input_phone.value == '') {
-			uni.showToast({ title: '请输入手机号', icon: 'none' })
-			return
-		}
-		if (loginType.value === 'code' && smsCode.value == '') {
-			uni.showToast({ title: '请输入验证码', icon: 'none' })
-			return
-		}
-		if (loginType.value === 'password' && password.value == '') {
-			uni.showToast({ title: '请输入密码', icon: 'none' })
-			return
-		}
-		//uni.showToast({ title: '登录成功', icon: 'success' })
-
-		console.log("submit")
-		if (!isAgree.value) {
-			uni.showToast({
-				title: "请先阅读并同意协议",
-				icon: "none",
-			});
-			return;
-		}
-		submitLoading.value = true;
-
-		try {
-			const res = await AccountService.login({
-				loginType: 'code',
-				tk: tk.value,
-				smsCode: smsCode.value,
-				phone: input_phone.value
-			});
-			console.log("ressss", res)
-
-
-			const result = res.result as UTSJSONObject;
-			const data = result.getJSON("data")??{}
-			const code = result.getNumber("code",99);
-			const msg = result.msg as string;
-			console.log("code====", code);
-			if (code != 0) {
-				uni.showToast({
-					title: msg,
-					duration: 2000,
-					icon: "error",
-				});
-				submitLoading.value = false;
-				return;
-			}
-
-			const token = data['token'] as string | null;
-			if (token != null) {
-				uni.setStorageSync("hm_token", token as string);
-			}
-			uni.setStorageSync("phone", input_phone.value);
-			//getUserInfo();
-			uni.reLaunch({
-				url: "/pages/index/index",
-			});
-		} catch (error) {
-			console.log("登录失败", error);
-			submitLoading.value = false;
-		}
-	}
-	const forgotPwd = () => {
-		uni.showToast({ title: '忘记密码', icon: 'none' })
-	}
-
-
-	const preLogin = (callback : (() => void)) => {
-		uniVerifyManager.value?.preLogin({
-			success: (res) => {
-				phone.value = res.number;
-				slogan.value = res.slogan;
-				privacyName.value = res.privacyName;
-				privacyUrl.value = res.privacyUrl;
-				console.log("pre login success");
-				callback();
-			},
-			fail: (err) => {
-				console.error("pre login fail => " + JSON.stringify(err));
-				const hasCauseMessage = (err.cause?.cause?.message ?? '').length > 0
-				uni.showModal({
-					title: '预登录失败',
-					content: hasCauseMessage ? JSON.parseObject(err.cause?.cause?.message ?? '')?.getString("errorDesc") : err.errMsg,
-					showCancel: false
-				});
-			}
-		});
-	}
-	const takePhoneNumber = async (accessToken : string, openId : string) => {
-		// 云函数取号
-		try {
-
-			const res = await uniCloud.callFunction({
-				name: 'hm_login',
-				data: {
-					userForm: {
-						phone: "",
-						smsCode: "",
-						loginType: "app"
-					},
-					access_token: accessToken, // 客户端一键登录接口返回的access_token
-					openid: openId // 客户端一键登录接口返回的openid
-				}
-			});
-			console.log("取号结果", res);
-			const result = res.result as UTSJSONObject;
-			const data = result.data as UTSJSONObject;
-			const code = result.code as number;
-			const msg = result.msg as string;
-			console.log("code====", code);
-			submitLoading.value = false;
-			uni.hideLoading();
-			if (code != 0) {
-				uni.showToast({
-					title: msg,
-					duration: 2000,
-					icon: "error",
-				});
-				submitLoading.value = false;
-				uni.hideLoading();
-				return;
-			}
-
-			const token = data['token'] as string | null;
-			if (token != null) {
-				uni.setStorageSync("hm_token", token as string);
-			}
-			uni.setStorageSync("phone", phone.value);
-			uni.reLaunch({
-				url: "/pages/index/index",
-			});
-			// 关闭登录页
-			uniVerifyManager.value?.close();
-		} catch (error) {
-			submitLoading.value = false;
-			uni.hideLoading();
-			uniVerifyManager.value?.close();
-			uni.showModal({
-				title: '登录失败',
-				content: "请用其它方式登录",
-				showCancel: false
-			});
-
-
-		}
-
-	}
-
-	const login = (fullScreen : boolean) => {
-
-		uniVerifyManager.value?.login({
-			uniVerifyStyle: {
-				fullScreen: fullScreen,
-				loginBtnText: "一键登录",
-				logoPath: "/static/images/ys.png"
-			},
-			success: (res) => {
-				console.log("login success => " + JSON.stringify(res));
-				takePhoneNumber(res.accessToken, res.openId);
-			},
-			fail: (err) => {
-				console.error("login fail => " + err);
-				submitLoading.value = false;
-			}
-		});
-	}
-
-	const verify = (fullScreen : boolean) => {
-		if (!isAgree.value) {
-			uni.showToast({
-				title: "请先阅读并同意协议",
-				icon: "none",
-			});
-			return;
-		}
-		if (submitLoading.value == true) {
-			return;
-		}
-		if ('production' === process.env.NODE_ENV && '__UNI__HelloUniAppX' === uni.getAppBaseInfo().appId) {
-			uni.showModal({
-				title: '提示',
-				content: '一键登录为收费功能，当前环境暂不支持',
-				showCancel: false
-			})
-			return
-		}
-		// 校验预登录是否有效
-		submitLoading.value = true;
-		uni.showLoading({ title: "" });
-		const isPreLoginValid = uniVerifyManager.value?.isPreLoginValid() ?? false;
-		if (isPreLoginValid) {
-			// 预登录有效，执行登录
-			login(fullScreen);
-		} else {
-			// 预登录无效，执行预登录
-			preLogin(() => {
-				login(fullScreen);
-			})
-		}
-	}
-
-	onLoad(() => {
-		uniVerifyManager.value = uni.getUniVerifyManager();
-		// 预登录
-		preLogin(() => { });
 	})
 	
-	
-	// 页面/组件中的方法（以 Vue3 + UniApp X 为例）
 </script>
 
-
-<style lang="scss" scoped>
-	.container {
-		flex: 1;
-		flex-direction: row;
+<style scoped lang="scss">
+	.page {
+		background-color: #fff;
+		min-height: 100vh;
+		padding: 0 24px;
 	}
 
-	/* 左侧装饰面板 */
-	.left-panel {
-		width: 28%;
-		background-image: linear-gradient(to bottom left, #0091ff, #3949ab);
-		padding: 30px 20px;
-		position: relative;
+	.wrap {
+		padding-top: 60px;
+	}
+
+	/* 标题 */
+	.head {
+		margin-bottom: 40px;
+	}
+
+	.title {
+		font-size: 34px;
+		font-weight: 600;
+		color: #1d1d1f;
+	}
+
+	/* 选项卡 */
+	.tab-wrap {
+		display: flex;
+		flex-direction: row;
+		border-bottom: 1px solid #e5e5ea;
+		margin-bottom: 32px;
+	}
+
+
+	/* 表单 */
+	.form {
+		width: 100%;
+	}
+
+	.input-row {
+		background-color: #fff;
+		border-radius: 25px;
+		margin-bottom: 12px;
 		overflow: hidden;
 	}
 
-	.left-content {
-		position: relative;
-		z-index: 1;
-	}
-
-	.brand-text {
-		font-size: 24px;
-		color: #ffffff;
-		font-weight: bold;
-		letter-spacing: 4px;
-		margin-bottom: 20px;
-	}
-
-	.slogan-text {
+	.input {
+		height: 50px;
+		padding: 0 16px;
 		font-size: 16px;
-		color: rgba(255, 255, 255, 0.9);
-		line-height: 1.6;
-		margin-bottom: 30px;
+		color: #1d1d1f;
 	}
 
-	.feature-list {
-		margin-top: 20px;
-	}
-
-	.feature-item {
-		font-size: 12px;
-		color: rgba(255, 255, 255, 0.7);
-		margin-bottom: 8px;
-	}
-
-	.decoration-circle {
-		position: absolute;
-		width: 200px;
-		height: 200px;
-		border-radius: 100px;
-		background: rgba(255, 255, 255, 0.05);
-		bottom: -50px;
-		right: -50px;
-	}
-
-	/* 右侧登录面板 */
-	.right-panel {
-		flex: 1;
-		background-color: #ffffff;
-		padding: 40px 25px 25px;
-	}
-
-	.right-header {
-		margin-bottom: 25px;
-	}
-
-	.welcome-text {
-		font-size: 20px;
-		color: #333333;
-		font-weight: bold;
-		margin-bottom: 5px;
-	}
-
-	.sub-text {
-		font-size: 13px;
-		color: #999999;
-	}
-
-	.form-box {
-		margin-bottom: 20px;
-	}
-
-	.segment-control {
-		flex-direction: row;
-		background-color: #f5f5f5;
-		border-radius: 6px;
-		padding: 3px;
-		margin-bottom: 20px;
-	}
-
-	.segment-item {
-		flex: 1;
-		height: 30px;
-		justify-content: center;
-		align-items: center;
-		border-radius: 5px;
-
-		.segment-item-text {
-			font-size: 13px;
-			color: #787878;
-		}
-	}
-
-
-
-	.segment-item-active {
-		background-color: #ffffff;
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-
-		.segment-item-text {
-			color: #1a237e !important;
-			font-weight: bold;
-
-		}
-	}
-
-
-	.input-list {
-		margin-bottom: 15px;
-	}
-
-	.split-input {
-		// height:50px;
-		margin-bottom: 24px;
-	}
-
-	.input-label {
-		font-size: 12px;
-		color: #787878;
-		margin-bottom: 8px;
-	}
-
-	.split-input-field {
-		font-size: 16px;
-		color: #333333;
-		height: 30px;
-		border-bottom: 1px solid #e0e0e0;
-		padding: 0;
-	}
-
-	.code-flex,
-	.pwd-flex {
-		flex: 1;
+	/* 验证码 */
+	.code-row {
+		display: flex;
 		flex-direction: row;
 		align-items: center;
+		padding-right: 12px;
 	}
 
-	.code-flex .split-input-field,
-	.pwd-flex .split-input-field {
+	.code-input {
 		flex: 1;
 	}
 
-	.send-split {
-		width: 80px;
-		height: 30px;
-		background-color: #0091ff;
-		border-radius: 4px;
-		font-size: 11px;
-		color: #ffffff;
-		margin-left: 10px;
-		padding: 0;
-		line-height: 30px;
-	}
-
-	.send-split::after {
+	.btn-code {
+		font-size: 14px;
+		color: #007aff;
+		background: transparent;
 		border: none;
+		padding: 0 8px;
 	}
 
-	.eye-split {
-		font-size: 12px;
-		color: #0091ff;
-		margin-left: 10px;
+	.btn-code[disabled] {
+		color: #8e8e93;
 	}
 
-	.split-btn {
+	/* 自动注册提示 */
+	.tip {
+
+		margin-bottom: 16px;
+
+		.txt {
+			font-size: 12px;
+			color: #8e8e93;
+			line-height: 1.4;
+		}
+	}
+
+	/* 登录按钮 */
+	.btn-login {
 		width: 100%;
-		height: 45px;
-		background-color: #0091ff;
-		border-radius: 6px;
-		margin-top: 10px;
-	}
-
-	.split-btn::after {
+		height: 50px;
+		line-height: 50px;
+		background-color: #007aff;
+		color: #fff;
+		font-size: 17px;
+		font-weight: 500;
+		border-radius: 25px;
 		border: none;
+		margin: 24px 0 12px 0;
 	}
 
-	.split-btn-text {
-		font-size: 16px;
-		color: #ffffff;
-		letter-spacing: 4px;
+	/* 底部：协议 + 注册 */
+	.bottom-box {
+		width: 100%;
 	}
 
-	.forgot-split {
-		font-size: 12px;
-		color: #0091ff;
-		text-align: center;
-		margin-top: 10px;
-	}
-
-	/* 微信登录 */
-	.app-split {
+	.agree {
+		display: flex;
 		align-items: center;
-		.con{
-			.tit{
-				text-align: center;
-				font-size: 24px;
-			}
-			.ct {
-				font-size: 12px;
-				color: gray;
-				padding-top: 8px;
-			
-			
-			}
-		}
+		margin-bottom: 16px;
 	}
 
-	.split-line-wrapper {
-		flex-direction: row;
-		align-items: center;
-		margin-bottom: 15px;
+	.check {
+		width: 18px;
+		height: 18px;
+		border-radius: 4px;
+		border: 1px solid #c7c7cc;
+		margin-right: 8px;
 	}
 
-	.split-line {
-		flex: 1;
-		height: 0.5px;
-		background-color: #e0e0e0;
+	.check-on {
+		background-color: #007aff;
+		border-color: #007aff;
+		position: relative;
 	}
 
-	.split-line-text {
-		padding: 0 10px;
-		font-size: 12px;
-		color: #999999;
+	.check-on::after {
+		content: "";
+		position: absolute;
+		left: 5px;
+		top: 2px;
+		width: 5px;
+		height: 9px;
+		border-right: 2px solid #fff;
+		border-bottom: 2px solid #fff;
+		transform: rotate(45deg);
 	}
 
-	.wechat-icon-box {
-		flex-direction: row;
-		align-items: center;
-		padding: 8px 20px;
-		background-color: #f5f5f5;
-		border-radius: 20px;
-	}
-
-	.w-icon {
-		font-size: 16px;
-		margin-right: 6px;
-	}
-
-	.w-text {
+	.agree-text {
 		font-size: 13px;
-		color: #333333;
+		color: #8e8e93;
 	}
-	.submit-btn{
+
+	.link {
+		color: #007aff;
+	}
+
+	.register {
 		margin-top: 24px;
+
 	}
+
+	.register-text {
+		font-size: 15px;
+		color: #007aff;
+		text-align: center;
+	}
+
 	.up {
 		margin: 12px 0 12px 0;
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;
+
 		.ct {
 			font-size: 13px;
 			color: gray;
@@ -712,23 +390,6 @@
 		.form-icon {
 			width: 20px;
 			height: 20px;
-		}
-	}
-	.bottom-control{
-		flex:1;
-		justify-content: center;
-		align-items: flex-end;
-		display: flex;
-		flex-direction: row;
-		padding-bottom: 30px;
-		.control-item{
-			padding:12px;
-			height: 60px;
-			width: 60px;
-			.imgstyle{
-				width: 100%;
-				height: 100%;
-			}
 		}
 	}
 </style>

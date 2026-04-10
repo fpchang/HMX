@@ -1,0 +1,114 @@
+<template>
+	<view>
+		<rice-form :model="userForm" :rules="accountRule" ref="userFormRef" label-width="100px" class="demo-form">
+			<rice-form-item name="account" label="用户名">
+				<rice-input v-model="userForm['account']" placeholder="请输入用户名" border="none" />
+			</rice-form-item>
+			<rice-form-item name="password" label="密码" required>
+				<rice-input v-model="userForm['password']" placeholder="请输入密码" border="none" type="password" />
+			</rice-form-item>
+		</rice-form>
+		
+		<rice-button type="primary" text="登录" class="btn" shape="round" @click="accountLogin" />
+		
+	</view>
+</template>
+
+<script setup lang="uts">
+	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
+	import { AccountService } from "@/services/AccountService";
+	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
+	const props = defineProps({
+		isAgree: {
+			type: Boolean,
+			default: false
+		}
+	});
+	const submitLoading =ref(false);
+	const userForm = ref({
+		account: '',
+		password: ''
+	});
+	const userFormRef = ref<RiceFormComponentPublicInstance | null>(null);
+	
+		//密码的校验函数
+		const passwordValidator = (value : any | null) => {
+			const val = value as string
+			if (val.length < 6) return '密码的长度不能小于6位'
+			//if (val.startsWith('123456')) return '密码开头不能为连续的123456'
+			//只有返回 true 才表示校验通过
+			return true
+		}
+		const accountRule = new Map<string, FormRules[]>([
+			[
+				"account",
+				[
+					{ required: true, message: '请输入用户名' },
+					{ min: 3, max: 20, message: '字数需为 3 至 20 位', trigger: 'blur' }
+				]
+			],
+			[
+				"password",
+				[
+					//函数校验
+					{ validator: passwordValidator },
+					//正则校验
+					{ pattern: /[a-zA-Z].*\d|\d.*[a-zA-Z]/, message: '密码需要包含字母和数字' },
+				]
+			]
+		])
+	const accountLogin= async ()=>{
+		const result = await userFormRef.value!.validate();
+		console.log("result",result);
+		//校验成功
+		if(result!=true){
+			console.log("校验失败");
+			return;
+		}
+		if(!props.isAgree){
+			uni.showToast({ title: '请先同意用户协议与隐私政策', icon: 'none' });
+			return;
+		}
+		try {
+			const f = {
+				loginType:'account',
+				account:userForm.value.account,
+				password:userForm.value.password
+			}
+			const res = await AccountService.login(f);
+			
+			
+			const result = res.result as UTSJSONObject;
+			const data = result.getJSON("data")??{}
+			const code = result.getNumber("code",99);
+			const msg = result.msg as string;
+			console.log("code====", code);
+			if (code != 0) {
+				uni.showToast({
+					title: msg,
+					duration: 2000,
+					icon: "error",
+				});
+				submitLoading.value = false;
+				return;
+			}
+			
+			const token = data['token'] as string | null;
+			if (token != null) {
+				uni.setStorageSync("hm_token", token as string);
+			}
+			uni.setStorageSync("account", userForm.value.account);
+			//getUserInfo();
+			uni.reLaunch({
+				url: "/pages/index/index",
+			});
+		} catch (error) {
+			throw new Error("登录失败");
+		}
+		
+	}
+</script>
+
+<style lang="scss">
+
+</style>

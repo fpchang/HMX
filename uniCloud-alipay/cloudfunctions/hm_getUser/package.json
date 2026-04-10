@@ -1,0 +1,11 @@
+{
+  "name": "hm_getUser",
+  "dependencies": {
+    "dateFormat": "file:../common/dateFormat",
+    "errorEvent": "file:../common/errorEvent",
+    "tokenEvent": "file:../common/tokenEvent"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

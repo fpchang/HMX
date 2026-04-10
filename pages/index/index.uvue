@@ -3,7 +3,7 @@
 
 		<template #title>
 			<view class="header">
-				<view class="hotel-info" @click="showCheckHotel">
+				<view class="hotel-info" @click="showCheckHotel" v-if="hotelList.length>0">
 					<text class="hotel-name">{{hotel?.hotelName}}</text>
 					<!-- <button class="switch-btn" @click="showCheckHotel">
              <text>切换</text>
@@ -118,7 +118,7 @@
 
 </template>
 
-<script setup>
+<script setup lang="uts">
 	import gatherComponent from "./components/gatherComponent";
 	import operation from "./components/operation";
 

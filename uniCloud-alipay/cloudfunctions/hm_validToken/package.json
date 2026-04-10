@@ -1,8 +1,8 @@
 {
   "name": "hm_validToken",
   "dependencies": {
-    "tokenEvent": "file:../common/tokenEvent",
-    "errorEvent": "file:../common/errorEvent"
+    "errorEvent": "file:../common/errorEvent",
+    "tokenEvent": "file:../common/tokenEvent"
   },
   "extensions": {
     "uni-cloud-jql": {}

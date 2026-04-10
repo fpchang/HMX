@@ -1,6 +1,6 @@
 {
 	"bsonType": "object",
-	"required": ["blong", "hotelName","dataStatus"],
+	"required": ["ownership_id", "hotelName","dataStatus"],
 	"permission": {
 		"read": true,
 		"create": true,
@@ -15,6 +15,10 @@
 	"properties": {
 		"_id": {
 			"description": "ID，系统自动生成"
+		},
+		"ownership_id":{
+			"description": "归属id",
+			"bsonType": "string"
 		},
 		"belong": {
 			"description": "所属账号",

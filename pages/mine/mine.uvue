@@ -7,7 +7,7 @@
 				<view style="display: flex;flex-direction: row;">
 					<view class="user-info-section" style="flex-direction: column;flex: 1;">
 						<image class="avatar" :src="avator" mode="aspectFill"></image>
-						<text class="user-name">{{user.userName}}</text>
+						<text class="user-name">{{formatUserName}}</text>
 						<text class="user-phone">{{emergency_phone_number((user.phone ?? '') as string)}}</text>
 					</view>
 
@@ -112,7 +112,13 @@
 		if ( user.value.userName != '') {
 			return user.value.userName;
 		}
-		return `用户${user.value.phone.slice(-4)}`;
+		if(user.value.phone){
+			return `用户${user.value.phone.slice(-4)}`;
+		}
+		if(user.value.account){
+			return `用户${user.value.account}`;
+		}
+		return "--"
 	})
 	const topImg = () : string => {
 		if (hotel.value == null) {

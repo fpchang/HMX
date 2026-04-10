@@ -2,6 +2,7 @@
 
 export type hotelBean = {
   _id?:string,
+  ownership_id:string,
   belong: string,
   hotelCoordinate: Array<number>,
  // onlinePayment?: boolean,

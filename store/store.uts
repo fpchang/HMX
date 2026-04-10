@@ -76,16 +76,22 @@ export const setEmployeeList = (list : Array<employeeBean>) => {
 };
 export const setHotelId = (hotel_id : string) => {
 	state.hotel_id = hotel_id;
-	if(hotel_id!=""){
+	//if(hotel_id!=""){
 		setHotel();
-	}
+	//}
 	
 };
 
 export const setHotel = () => {
+	console.log("999999999")
 	let hotel = state.hotelList.find(item => item._id == state.hotel_id) as hotelBean;
-		state.hotel = hotel;
-		uni.setStorage({key:"hotel",data:hotel});
+		if(hotel!=null){
+			state.hotel = hotel;
+			uni.setStorage({key:"hotel",data:hotel});
+		}else{
+			state.hotel = null;
+		}
+		
 	
 	
 };
@@ -142,11 +148,14 @@ export const clearCache =  () : void => {
 	 setHotelId("");
 	setHotelList([]);
 	 const phone = uni.getStorageSync("phone");
+	 const account = uni.getStorageSync("account");
 	 uni.clearStorageSync();
 	 if(phone!=null && phone !=""){
 		  uni.setStorageSync("phone", phone);
 	 }
-	
+	if(account!=null && account !=""){
+			  uni.setStorageSync("account", account);
+	}
 	 
 };
 export const loginOut = () : void => {

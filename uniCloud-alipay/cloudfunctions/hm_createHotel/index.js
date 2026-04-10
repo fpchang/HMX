@@ -16,7 +16,17 @@ exports.main = async (event, context) => {
 		if(validstr!=""){
 			return {code:10,message:validstr};
 		}
-		console.log("入库对象：：",foramtHotel(hotelObj))
+		console.log("入库对象1：：",foramtHotel(hotelObj))
+		//过渡老版本
+		if(!hotelObj.ownership_id&&hotelObj.belong){
+			const user = await dbJQL.collection('hm-user').where({phone:hotelObj.belong}).get();
+			console.log("uuu",user);
+			const oid = user.data[0]["_id"];
+			if(oid){
+				hotelObj.ownership_id=oid;
+			}
+		
+		}
 		const result = await  dbJQL.collection('hm-hotel').add(foramtHotel(hotelObj));
 		const employeeForm={
 			    "employee_name": "店主",
@@ -39,6 +49,7 @@ function validHotel(hotel){
 }
 function foramtHotel(hotel){
 	return {
+	  ownership_id:hotel["ownership_id"]??"--",
 	  belong:hotel['belong']??"",
 	  dataStatus:0,
 	  onlinePayment:false,

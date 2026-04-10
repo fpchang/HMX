@@ -3,8 +3,9 @@
   "dependencies": {
     "jsonwebtoken": "^9.0.2",
     "dateFormat": "file:../common/dateFormat",
-    "tokenEvent": "file:../common/tokenEvent",
-    "encryptPassword": "file:../common/encryptPassword"
+    "encryptPassword": "file:../common/encryptPassword",
+    "errorEvent": "file:../common/errorEvent",
+    "tokenEvent": "file:../common/tokenEvent"
   },
   "extensions": {
     "uni-cloud-jql": {},

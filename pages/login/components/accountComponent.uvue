@@ -9,7 +9,7 @@
 			</rice-form-item>
 		</rice-form>
 		
-		<rice-button type="primary" text="登录" class="btn" shape="round" @click="accountLogin" />
+		<rice-button type="primary" text="登录" class="btn" shape="round" @click="accountLogin" :loading="submitLoading"/>
 		
 	</view>
 </template>
@@ -29,6 +29,7 @@
 		account: '',
 		password: ''
 	});
+	
 	const userFormRef = ref<RiceFormComponentPublicInstance | null>(null);
 	
 		//密码的校验函数
@@ -75,6 +76,7 @@
 				account:userForm.value.account,
 				password:userForm.value.password
 			}
+				submitLoading.value = true;
 			const res = await AccountService.login(f);
 			
 			
@@ -107,6 +109,13 @@
 		}
 		
 	}
+	const init=()=>{
+		const acstorage = uni.getStorageSync("account");
+		if(acstorage!=null){
+			userForm.value.account= acstorage as string;
+		}
+	}
+	init();
 </script>
 
 <style lang="scss">

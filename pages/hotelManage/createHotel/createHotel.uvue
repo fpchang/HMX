@@ -175,6 +175,7 @@
 		return state.user;
 	});
 	let hotelForm = ref<hotelBean>({
+		ownership_id:"",
 		belong: "",
 		hotelName: "",
 		hotelAddress: "",
@@ -264,10 +265,9 @@
 		}
 		submitLoading.value = true;
 		hotelForm.value.belong = user.value['phone'] as string;
+		hotelForm.value.ownership_id=user.value["_id"];
 		const address = `${hotelForm.value.hotelAddressArea}${hotelForm.value.hotelAddress}`;
-		console.log("address", address);
 		const location : Array<number> = await Location.getLocation(address);
-		console.log("location", location);
 		hotelForm.value.hotelCoordinate = location;
 		if (pageType.value == 1) {
 			updateHotel();

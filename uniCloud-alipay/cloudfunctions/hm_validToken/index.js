@@ -19,8 +19,9 @@ exports.main = async (event, context) => {
 			//throw errorEvent.getTokenError("token已过有效期");
 			return {code:9990,msg:"token已过有效期"}
 		}
-		const {phone} = verifT.value;
-		const userRes = await dbJQL.collection("hm-user").where({phone:phone+""}).get();
+		const {phone,account} = verifT.value;
+		const sql = `phone=='${phone.toString()}'||account=='${account.toString()}'`
+		const userRes = await dbJQL.collection("hm-user").where(sql).get();
 		
 		//console.log("userRes",userRes)
 		if(userRes.data.length<1){//无此账号

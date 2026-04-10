@@ -147,6 +147,7 @@ class HotelServiceClass {
 		data.forEach(item=>{
 			const hotel:hotelBean={
 				_id:item.getString("_id")??"",
+				ownership_id:item.getString("ownership_id")??"",
 				 belong: item.getString("belong")??"",
 				 hotelCoordinate: item.getArray<number>("hotelCoordinate")??[],
 				 hotelIntroduction: item.getString("hotelIntroduction")??"",
@@ -186,6 +187,7 @@ class HotelServiceClass {
 			const item = data[0] as UTSJSONObject;
 			const hotel:hotelBean={
 				_id:item.getString("_id")??"",
+				ownership_id:item.getString("ownership_id")??"",
 				 belong: item.getString("belong")??"",
 				 hotelCoordinate: item.getArray<number>("hotelCoordinate")??[],
 				 hotelIntroduction: item.getString("hotelIntroduction")??"",

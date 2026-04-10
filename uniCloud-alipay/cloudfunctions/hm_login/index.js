@@ -96,19 +96,28 @@ async function loginByApp(event,context) {
 }
 //账号密码登录
 async function loginByAccount(event,context){
-	const {account,password}=event;
+	console.log("login by account");
+	const {userForm} = event;
+	const {account,password}=userForm;
 	const dbJQL = uniCloud.databaseForJQL({ // 获取JQL database引用，此处需要传入云函数的event和context，必传
 		event,
 		context
 	});
 	try {
 		const ep = encryptPassword(password);
-		const userRes = await dbJQL.collection('hm-user').where(`account=='${account}'&&password='${ep}'`).get();
+		const secret = tokenEvent.getSecret();
+		const w = {
+			account:account,
+			password:password
+		}
+		const userRes = await dbJQL.collection('hm-user').where(`account=='${account}'&&password=='${ep}'`).get();
+		console.log("uuuu",userRes);
 		if (userRes.data.length > 0) {
 			const user = userRes.data[0];
 			//更新token
 			const newToken = tokenEvent.getToken({
-				phone: phone
+				phone: "",
+				account:account,
 			}, secret, (new Date().getTime() + 1000 * 60 * 60 * 24 * 30));
 			const upuserRes = await dbJQL.collection('hm-user').doc(user._id).update({
 				'hm_token': newToken
@@ -130,7 +139,7 @@ async function loginByAccount(event,context){
 				}
 			};
 	} catch (error) {
-		//TODO handle the exception
+		console.log(error)
 		throw new Error("登录失败");
 	}
 	

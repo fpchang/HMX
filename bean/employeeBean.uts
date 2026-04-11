@@ -3,6 +3,8 @@ export type employeeBean={
 		employee_name: string,
 		hotel_id: string,
 		phone: string,
+		account_id:string,
+		account:string,
 		role: string,
 		data_status?: number,
 		mark: string,

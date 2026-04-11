@@ -241,6 +241,8 @@ class HotelServiceClass {
 						_id: item.getString("_id") ?? "",
 						hotel_id: item.getString("hotel_id") ?? "",
 						phone: item.getString("phone") ?? "",
+						account: item.getString("account") ?? "",
+						account_id: item.getString("account_id") ?? "",
 						role: item.getString("role") ?? "",
 						employee_name: item.getString("employee_name") ?? "",
 						working_status: item.getNumber("working_status"),

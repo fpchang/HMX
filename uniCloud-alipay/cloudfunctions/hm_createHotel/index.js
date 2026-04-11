@@ -2,6 +2,7 @@
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	let {
+		$user,
 		hotelObj
 	} = event;
 	console.log("hm-createHotel", event);
@@ -32,10 +33,11 @@ exports.main = async (event, context) => {
 			    "employee_name": "店主",
 			    "hotel_id": result.id,
 			    "phone":hotelObj.belong,
-				"account":hotelObj.account,
+				"account":$user.account,
 				"account_id":hotelObj.ownership_id,
 			    "role": "administrator"
 		}
+		console.log("create hotel employee",employeeForm)
 		await  dbJQL.collection('hm-employee').add(employeeForm);
 		//await transaction.commit();
 		 return {code:0,message:""};

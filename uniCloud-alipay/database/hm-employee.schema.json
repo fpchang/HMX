@@ -17,12 +17,17 @@
 			"foreignKey": "hm-hotel._id"
 		},
 		"account_id":{
-			"description": "账号id",
+			"description": "账号id关联user._id",
+			"title": "账号",
+			"bsonType": "string"
+		},
+		"account":{
+			"description": "账号关联user.account",
 			"title": "账号",
 			"bsonType": "string"
 		},
 		"phone": {
-			"description": "员工手机号",
+			"description": "员工手机号,关联user.phone",
 			"title": "员工手机号",
 			"bsonType": "string",
 			"minLength": 11,

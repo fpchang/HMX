@@ -2,11 +2,12 @@
 const tokenEvent = require('tokenEvent');
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
-	//console.log('event : ', event);
-	const {$token} = event;
+	console.log('event : ', event);
+	const {$token,$user} = event;
 	if(!$token){
 		throw new Error("token不能为空")
 	}
+	const {_id} =$user;
 	const db =uniCloud.database();
 	const dbJQL = uniCloud.databaseForJQL({
 		event,
@@ -14,15 +15,19 @@ exports.main = async (event, context) => {
 	})
 	try{
 		
-		const verifyTokenObj =tokenEvent.verifyToken($token,"****");
-		 
-		 const {phone,account} = verifyTokenObj.value;
-		 if(!phone && !account){
+		const verifyTokenObj =tokenEvent.verifyToken($token,"****");		 
+		 const {phone,account,account_id} = verifyTokenObj.value;
+		 if(!phone && !account&&!account_id){
 			 throw new Error("无有效用户信息");
 		 }
-		 console.log("getHotelList",phone,account);
+		 console.log("verifyTokenObj",verifyTokenObj);
+		 console.log("getHotelList",phone,account,account_id);
 		//const sql =`phone=='${phone.toString()}'||account=='${account.toString()}'`
-		 const sql =phone?`phone=='${phone.toString()}'`:`account=='${account.toString()}'`
+		 let sql =`account_id=='${account_id+""}'`;
+		 if(!account_id){
+			 sql =phone?`phone=='${phone+""}'`:`account=='${account+""}'`;
+		 }
+		 console.log('sql',sql);
 		const emTemp = dbJQL.collection("hm-employee").where(sql).getTemp();
 		const hoTemp = dbJQL.collection("hm-hotel").where("dataStatus!=10").getTemp();
 		const res = await dbJQL.collection(emTemp,hoTemp).get();

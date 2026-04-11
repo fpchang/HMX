@@ -2,26 +2,32 @@
 const dateFormat = require('dateFormat');
 const jwt = require('jsonwebtoken');
 const tokenEvent = require('tokenEvent');
-const {encryptPassword} = require('encryptPassword');
+const {
+	encryptPassword
+} = require('encryptPassword');
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	console.log('event : ', event);
 	const starttime = new Date().getTime();
-	let {userForm} = event;
-	let {loginType} = userForm;
+	let {
+		userForm
+	} = event;
+	let {
+		loginType
+	} = userForm;
 	console.log("登录参数", event);
 	if (loginType == 'app') {
-		return loginByApp(event,context)
+		return loginByApp(event, context)
 	}
-	if(loginType=='account'){
-		return loginByAccount(event,context)
+	if (loginType == 'account') {
+		return loginByAccount(event, context)
 	}
 	if (loginType == 'code' || !loginType) {
-		return loginBySmsCode(event,context);
+		return loginBySmsCode(event, context);
 	}
 
 
-  
+
 
 };
 //注册
@@ -47,7 +53,7 @@ async function register(phone) {
 	};
 }
 //一键登录
-async function loginByApp(event,context) {
+async function loginByApp(event, context) {
 	console.log("app 一键登录")
 	const res = await uniCloud.getPhoneNumber({
 		appid: '__UNI__6CB5534', // 替换成自己开通一键登录的应用的DCloud appid
@@ -69,7 +75,9 @@ async function loginByApp(event,context) {
 			const user = userRes.data[0];
 			//更新token
 			const newToken = tokenEvent.getToken({
-				phone: phone
+				phone: phone,
+				account: user.account,
+				account_id:user._id
 			}, secret, (new Date().getTime() + 1000 * 60 * 60 * 24 * 30));
 			const upuserRes = await dbJQL.collection('hm-user').doc(user._id).update({
 				'hm_token': newToken
@@ -95,10 +103,15 @@ async function loginByApp(event,context) {
 
 }
 //账号密码登录
-async function loginByAccount(event,context){
+async function loginByAccount(event, context) {
 	console.log("login by account");
-	const {userForm} = event;
-	const {account,password}=userForm;
+	const {
+		userForm
+	} = event;
+	const {
+		account,
+		password
+	} = userForm;
 	const dbJQL = uniCloud.databaseForJQL({ // 获取JQL database引用，此处需要传入云函数的event和context，必传
 		event,
 		context
@@ -107,17 +120,18 @@ async function loginByAccount(event,context){
 		const ep = encryptPassword(password);
 		const secret = tokenEvent.getSecret();
 		const w = {
-			account:account,
-			password:password
+			account: account,
+			password: password
 		}
 		const userRes = await dbJQL.collection('hm-user').where(`account=='${account}'&&password=='${ep}'`).get();
-		console.log("uuuu",userRes);
+		console.log("uuuu", userRes);
 		if (userRes.data.length > 0) {
 			const user = userRes.data[0];
 			//更新token
 			const newToken = tokenEvent.getToken({
-				phone: "",
-				account:account,
+				phone: user.phone,
+				account: user.account,
+				account_id:user._id
 			}, secret, (new Date().getTime() + 1000 * 60 * 60 * 24 * 30));
 			const upuserRes = await dbJQL.collection('hm-user').doc(user._id).update({
 				'hm_token': newToken
@@ -131,23 +145,29 @@ async function loginByAccount(event,context){
 				}
 			};
 		}
-		 return {
-				code: 404,
-				msg: "账号密码不正确",
-				data: {
-					token: ""
-				}
-			};
+		return {
+			code: 404,
+			msg: "账号密码不正确",
+			data: {
+				token: ""
+			}
+		};
 	} catch (error) {
 		console.log(error)
 		throw new Error("登录失败");
 	}
-	
+
 }
 //验证码登录
-async function loginBySmsCode(event,context) {
-	let {userForm} = event;
-	let {smsCode,phone,tk} = userForm;
+async function loginBySmsCode(event, context) {
+	let {
+		userForm
+	} = event;
+	let {
+		smsCode,
+		phone,
+		tk
+	} = userForm;
 	const secret = tokenEvent.getSecret();
 	const dbJQL = uniCloud.databaseForJQL({ // 获取JQL database引用，此处需要传入云函数的event和context，必传
 		event,
@@ -173,12 +193,14 @@ async function loginBySmsCode(event,context) {
 
 	try {
 		const userRes = await dbJQL.collection('hm-user').where(`phone=='${phone}'`).get();
-		console.log("MMMMuser",userRes)
+		console.log("MMMMuser", userRes)
 		if (userRes.data.length > 0) {
 			const user = userRes.data[0];
 			//更新token
 			const newToken = tokenEvent.getToken({
-				phone: phone
+				phone: user.phone,
+				account: user.account,
+				account_id:user._id
 			}, secret, (new Date().getTime() + 1000 * 60 * 60 * 24 * 30));
 			const upuserRes = await dbJQL.collection('hm-user').doc(user._id).update({
 				'hm_token': newToken
@@ -237,8 +259,8 @@ function getUser(phone, token) {
 		"nickName": "",
 		"phone": phone,
 		//"account":null,
-		"email":"",
-		"password":"",
+		"email": "",
+		"password": "",
 		"userId": phone,
 		"userName": `用户${phone.substr(-4)}`,
 		"vipEndDate": dateFormat(new Date(vipEndDateStamp), "yyyy-MM-dd HH:mm:ss"),

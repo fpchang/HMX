@@ -31,7 +31,8 @@ exports.main = async (event, context) => {
 		const employeeForm={
 			    "employee_name": "店主",
 			    "hotel_id": result.id,
-			   // "phone":hotelObj.belong,
+			    "phone":hotelObj.belong,
+				"account":hotelObj.account,
 				"account_id":hotelObj.ownership_id,
 			    "role": "administrator"
 		}

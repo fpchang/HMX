@@ -62,7 +62,12 @@
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
 	import { AccountService } from "@/services/AccountService";
 	const submitLoading = ref(false);
-	const userForm = ref({
+	type userType={
+		account: string,
+		password: string,
+		confirmPassword: string
+	}
+	const userForm = ref<userType>({
 		account: '',
 		password: '',
 		confirmPassword: '',

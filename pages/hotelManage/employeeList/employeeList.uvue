@@ -54,17 +54,17 @@
 						</view>
 					</view>
 					<view>
-						<view style="display: flex;flex-direction: row;align-items: center;margin-top:15px">
+						<view style="display: flex;flex-direction: row;align-items: center;margin-top:15px" v-if="employee.account">
 						
 							<view>
-								<image src="/static/icons/tel02.png" style="width:14px;height:14px"></image>
+								<image src="/static/icons/account.png" style="width:14px;height:14px"></image>
 							</view>
-							<view><text @click="makePhone(employee.account)"
-									style="color:#272e3b;font-size: 14px;padding-left: 4px;">{{employee.phone}}</text>
+							<view><text 
+									style="color:#272e3b;font-size: 14px;padding-left: 4px;">{{employee.account}}</text>
 							</view>
 							
 						</view>
-						<view style="display: flex;flex-direction: row;align-items: center;margin-top:15px">
+						<view style="display: flex;flex-direction: row;align-items: center;margin-top:15px" v-if="employee.phone">
 
 							<view>
 								<image src="/static/icons/tel02.png" style="width:14px;height:14px"></image>

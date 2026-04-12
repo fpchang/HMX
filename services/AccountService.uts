@@ -86,6 +86,7 @@ class AccountServiceClass {
 				isVip: userObj.getBoolean("isVip")??false,
 				nickName: userObj.getString("nickName")??"",
 				phone: userObj.getString("phone")??"",
+				account: userObj.getString("account")??"",
 				userId: userObj.getString("userId")??"",
 				userName: userObj.getString("userName")??"",
 				vipEndDate: userObj.getString("vipEndDate")??"",

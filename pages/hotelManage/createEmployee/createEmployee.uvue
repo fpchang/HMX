@@ -21,6 +21,7 @@
 	</rice-navbar>
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
+
 	<!-- #endif -->
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
 			<xt-form-item label="用户名" tips="" required>
@@ -30,7 +31,7 @@
 						v-model="employeeForm.employee_name"></rice-input>
 				</view>
 			</xt-form-item>
-			<view style="padding:20px;border:1px solid #eee;border-radius: 12px;">
+			<view style="padding:20px;border:1px solid #eee;border-radius: 12px  ;">
 				<rice-radio-group v-model="accountType" direction="row" style="margin-bottom: 20px;">
 					<rice-radio value="phone" label="手机号"></rice-radio>
 					<rice-radio value="account" label="普通账号"></rice-radio>
@@ -47,8 +48,7 @@
 					<view>
 						<rice-input style="height: 40px;" placeholderStyle="font-size:14px" clearable
 							clear-trigger="always" classic placeholder="请输入账号名称" borderColor="#dcdfe6"
-							:disabled="pageType==2" v-model="employeeForm.account" :maxlength="11"
-							type="number"></rice-input>
+							:disabled="pageType==2" v-model="employeeForm.account"></rice-input>
 					</view>
 				</xt-form-item>
 			</view>
@@ -99,6 +99,7 @@
 		return pageType.value == 1 ? '修改员工信息' : '员工信息';
 	});
 	const accountType = ref("phone");
+
 	const employeeList = computed<Array<employeeBean>>(() => {
 		return state.employeeList;
 	});
@@ -109,11 +110,18 @@
 		employee_name: "",
 		hotel_id: hotel_id.value,
 		phone: "",
-		account: user.value.account,
-		account_id: user.value._id,
+		account: "",
+		account_id: "",
 		role: "normal",
 		mark: ""
 	});
+	watch(accountType, (val : string) => {
+		if (val == 'phone') {
+			employeeForm.value.account = "";
+		} else {
+			employeeForm.value.phone = "";
+		}
+	})
 	const titleImg = computed<string>(() => {
 		if (pageType.value == 0) {
 			return "/static/icons/addpage.png"
@@ -127,7 +135,6 @@
 		return false
 	});
 	const editEmployee = async () => {
-
 		submitLoading.value = true;
 		try {
 			await HotelService.editEmployee(employeeForm.value);
@@ -150,20 +157,22 @@
 	const addEmployee = async () => {
 		submitLoading.value = true;
 		try {
-			await HotelService.addEmployee(employeeForm.value);
-			submitLoading.value = false;
-			employeeAction.getEmplolyeeList(hotel_id.value);
-			uni.navigateBack();
+
+			const flag : boolean = await HotelService.addEmployee(employeeForm.value);
+			if (flag) {
+				submitLoading.value = false;
+				employeeAction.getEmplolyeeList(hotel_id.value);
+				uni.navigateBack();
+				uni.showToast({
+					title: "添加成功",
+					icon: "none"
+				});
+			}
+
 		} catch (error) {
-			showDialog({
-				title: '添加失败',
-				message: "请稍候再试",
-				showCancelButton: false,
-				confirm: () => {
-					submitLoading.value = false;
-					hideDialog();
-				}
-			})
+			console.log("createemployee error",error);
+		submitLoading.value = false;
+		hideDialog();
 
 		}
 

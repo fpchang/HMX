@@ -8,6 +8,7 @@ class EmployeeAction{
 	async getEmplolyeeList(hotel_id:string){
 		console.log("start");
 		const list:Array<employeeBean> = await HotelService.getEmployeeList(hotel_id);
+		console.log("llll",list);
 		setEmployeeList(list)
 	}
 }

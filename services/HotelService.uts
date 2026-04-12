@@ -5,6 +5,7 @@ import { roomTypeBean, formatRoomTypeList } from "@/bean/roomTypeBean.uts";
 import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
 import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
+import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 type employeeList_Res = {
 	code : number;
 	errCode : number;
@@ -275,8 +276,10 @@ class HotelServiceClass {
 	}
 	async addEmployee(employeeForm : employeeBean) : Promise<boolean> {
 		try {
-			const { employee_name, hotel_id, phone, role, mark } = employeeForm;
-			const res = await DB.callFunction("hm_addEmployee", { employeeObj: { employee_name, hotel_id, phone, role, mark } });
+			const { account_id, employee_name, hotel_id,account, phone, role, mark } = employeeForm;
+			
+			const res = await DB.callFunction("hm_addEmployee", { employeeObj: { account_id,employee_name, hotel_id, phone,account, role, mark } });
+			console.log("eeeee",res);
 			const result = res['result'] as UTSJSONObject;
 			const code = result.getNumber("code") ?? 0;
 			const message = result.getString("message") ?? "";
@@ -286,16 +289,21 @@ class HotelServiceClass {
 					title: message,
 					icon: "none"
 				});
-				throw new Error(message);
+				return false;
 			}
-			uni.showToast({
-				title: "添加成功",
-				icon: "none"
-			});
+
 			return true;
-		} catch (error) {
-			console.log(error)
-			throw new Error("添加员工失败");
+		} catch (err) {
+			//const hasCauseMessage = (err.cause?.cause?.message ?? '').length > 0;
+			//const msg=hasCauseMessage ? JSON.parseObject(err.cause?.cause?.message ?? ''):'系统异常，添加失败';
+			showDialog({
+				title: '添加失败',
+				message: err.message.toString(),
+				showCancelButton: false,
+				confirm: () => {
+					
+				}
+			})
 		}
 
 	}
@@ -326,6 +334,35 @@ class HotelServiceClass {
 			}
 	}
 	
+	
+	// async updateEmployeeData(){
+	// 	console.log("start===")
+	// 	const db = uniCloud.databaseForJQL();
+	// 	const res =await db.collection("hm-employee").get();
+	// 	const list =res['data'];
+	// 	for(const item of list){
+	// 		const phone =item['phone'];
+	// 		const account =item['account']
+	// 		if(phone || account){
+	// 			const sql = phone?`phone=='${phone}'`:`account=='${account}'`;
+	// 			console.log(sql);
+	// 			const user = await db.collection("hm-user").where(sql).get();
+	// 			console.log(user)
+	// 			if(user.data.length>0){
+	// 				const user_id = user.data[0]._id;
+					
+	// 				await db.collection("hm-employee").doc(item._id).update({
+	// 					account:"",
+	// 					account_id:user_id
+	// 				})
+	// 			}else{
+	// 				await db.collection("hm-employee").doc(item._id).remove();
+	// 			}
+				
+	// 		}
+	// 	}
+	// 	console.log("更新完成");
+	// }
 }
 
 //module.exports =new HotelService();

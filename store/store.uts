@@ -161,7 +161,6 @@ export const clearCache =  () : void => {
 export const loginOut = () : void => {
 	console.log("退出登录");
 	clearCache();
-	console.log("344444444")
 	uni.reLaunch({
 		url: "/pages/indexAdvise/indexAdvise",
 	});

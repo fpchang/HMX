@@ -112,10 +112,10 @@
 		if ( user.value.userName != '') {
 			return user.value.userName;
 		}
-		if(user.value.phone){
+		if(user.value.phone!=""){
 			return `用户${user.value.phone.slice(-4)}`;
 		}
-		if(user.value.account){
+		if(user.value.account!=""){
 			return `用户${user.value.account}`;
 		}
 		return "--"

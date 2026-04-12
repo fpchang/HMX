@@ -2,14 +2,18 @@
 	<view>
 		<rice-form :model="userForm" :rules="accountRule" ref="userFormRef" label-width="100px" class="demo-form">
 			<rice-form-item name="phone" label="手机号">
+				<view class="input-row" >
+					<view style="flex:1;display: flex;">
 				<rice-input v-model="userForm['phone']" placeholder="请输入手机号" border="none" :maxlength="11" />
+				</view>
+				</view>
 			</rice-form-item>
 			<rice-form-item name="smsCode" label="验证码" required>
 				<!-- <rice-input v-model="userForm['smsCode']" placeholder="请输入验证码" border="none" :maxlength="4" /> -->
-				<view class="input-row">
-					<view style="flex:1">
+				<view class="input-row" >
+					<view style="flex:1;display: flex;">
 
-						<rice-input class="input" placeholder="请输入验证码" type="number" v-model="userForm['smsCode']"
+						<rice-input  placeholder="请输入验证码" type="number" v-model="userForm['smsCode']"
 							:maxlength="4" border="none" />
 
 					</view>
@@ -42,7 +46,11 @@
 			default: false
 		}
 	});
-	const userForm = ref({
+	type userFormType={
+		phone: string,
+		smsCode: string
+	}
+	const userForm = ref<userFormType>({
 		phone: '',
 		smsCode: ''
 	});
@@ -191,9 +199,14 @@
 
 <style lang="scss">
 	.input-row {
+		
+		width: 100%;
+		height: 100%;
 		display: flex;
+		flex:1;
 		flex-direction: row;
-		background-color: #fff;
+		justify-content: space-between;
+	
 		overflow: hidden;
 	}
 

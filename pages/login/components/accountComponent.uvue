@@ -25,7 +25,11 @@
 		}
 	});
 	const submitLoading =ref(false);
-	const userForm = ref({
+	 type userFormType={
+		account: string,
+		password: string
+	}
+	const userForm = ref<userFormType>({
 		account: '',
 		password: ''
 	});
@@ -95,8 +99,8 @@
 				return;
 			}
 			
-			const token = data['token'] as string | null;
-			if (token != null) {
+			const token = data.getString("token")??""
+			if (token != "") {
 				uni.setStorageSync("hm_token", token as string);
 			}
 			uni.setStorageSync("account", userForm.value.account);

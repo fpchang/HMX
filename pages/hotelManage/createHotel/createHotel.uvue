@@ -265,7 +265,7 @@
 		}
 		submitLoading.value = true;
 		hotelForm.value.belong = user.value['phone'] as string;
-		hotelForm.value.ownership_id=user.value["_id"];
+		hotelForm.value.ownership_id=user.value._id;
 		const address = `${hotelForm.value.hotelAddressArea}${hotelForm.value.hotelAddress}`;
 		const location : Array<number> = await Location.getLocation(address);
 		hotelForm.value.hotelCoordinate = location;

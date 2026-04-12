@@ -8,18 +8,23 @@ export const  validEmployeeForm = (employeeForm:employeeBean,pagetype:number):bo
 		msg="请填写员工名称";
 		
 	}
+	if(employeeForm.account==""&&employeeForm.phone==""){
+		msg="请填写员工账号信息";
+		
+	}
 	if(employeeForm.hotel_id==""){
 		msg="未关联公司";
 	
 	}
 	
-		const telStr =validTel(employeeForm.phone,pagetype,employeeForm)
-		if(telStr!=""){
-			msg=telStr;
-		
+		const telStr =validTel(employeeForm.phone,pagetype,employeeForm);
+		const accountstr = validAccount(employeeForm.account,pagetype,employeeForm);
+		if(accountstr!=""){
+			msg=accountstr;
 		}
-	
-	
+		if(telStr!=""){
+			msg=telStr;		
+		}	
 	if(msg!=""){
 		uni.showToast({
 			title:msg,
@@ -29,16 +34,31 @@ export const  validEmployeeForm = (employeeForm:employeeBean,pagetype:number):bo
 	}
 	return true;
 }
+const validAccount=(account:string,pagetype:number,employeeForm:employeeBean):string=>{
+	
+	const employeeList =state.employeeList;
+	const item = employeeList.find(item=>item.account==account&&item._id !=employeeForm._id);
+	if(item!=null&&account!=""){
+		return "已有相同账号"
+	}
+
+	return "";
+}
 const validTel=(tel:string,pagetype:number,employeeForm:employeeBean):string=>{
+	console.log(tel)
 	const employeeList =state.employeeList;
 	const item = employeeList.find(item=>item.phone==tel&&item._id !=employeeForm._id);
-	if(item!=null){
+	if(item!=null&&tel!=""){
 		return "已有相同手机号"
 	}
-	const reg ="^[1][3,4,5,6,7,8,9][0-9]{9}$";
-	  const regex = new RegExp(reg);
-	if(regex.test(tel)){
-		return ""
+	// const telstr =tel+"";
+	// const reg ="/^1\d{10}$/";
+	//   const regex = new RegExp(reg);
+	// if(regex.test(telstr)){
+	// 	return ""
+	// }
+	if(tel!=""&&tel.length!=11){
+		return "手机号不合法";
 	}
-	return "手机号不合法";
+	return "";
 }

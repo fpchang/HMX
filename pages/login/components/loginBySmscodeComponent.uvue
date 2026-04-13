@@ -25,10 +25,13 @@
 				</view>
 
 			</rice-form-item>
+			<view><text class="ct">未注册的手机号验证后自动创建议宿账号</text></view>
 		</rice-form>
-
-		<rice-button type="primary" text="登录" class="btn" shape="round" @click="accountLogin"
-			:loading="submitLoading" />
+		<view style="margin-top: 24px;">
+			<rice-button type="primary" text="登录" class="btn" shape="round" @click="accountLogin"
+				:loading="submitLoading" />
+		</view>
+		
 	</view>
 </template>
 
@@ -222,5 +225,13 @@
 
 	.btn-code[disabled] {
 		color: #8e8e93;
+	}
+	.ct {
+		font-size: 12px;
+		color: gray;
+		padding-top: 8px;
+		text-align: center;
+		padding-top: 12px;
+	
 	}
 </style>

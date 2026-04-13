@@ -28,39 +28,14 @@
 
 			<!-- 一键登录 -->
 			<view class="form" v-if="currentTab === 1">
-				<view class="input-row">
-					<rice-input class="input" placeholder="请输入手机号" type="number" v-model="phone" :maxlength="11" />
-				</view>
-
-				<view class="tip"><text class="txt">*未注册的手机号验证后将自动创建议宿账号</text></view>
+				
+				<loginByApp :isAgree="isAgree"></loginByApp>
 				<button class="btn-login" @click="oneKeyLogin">一键登录</button>
 			</view>
 
 			<!-- 短信验证码登录 -->
 			<view class="form" v-if="currentTab === 2">
 				<loginBySmscodeComponent :isAgree="isAgree"></loginBySmscodeComponent>
-				<!-- <view class="input-row">
-					<rice-input class="input" placeholder="请输入手机号" type="number" v-model="smsPhone" :maxlength="11"
-						border="none" />
-				</view>
-
-				<view class="input-row code-row">
-					<view style="flex:1">
-						
-						<rice-input class="input" placeholder="请输入验证码" type="number" v-model="smsCode" :maxlength="4"
-							border="none" />
-
-					</view>
-					<view>
-						<text class="btn-code" :disabled="codeDisabled" @click="sendSmsCode">
-							{{ codeText }}
-						</text>
-					</view>
-
-				</view>
-
-				<view class="tip"><text class="txt">*未注册的手机号验证后将自动创建议宿账号</text></view>
-				<button class="btn-login" @click="smsLogin">短信登录</button> -->
 			</view>
 
 			<!-- 全局共用：用户协议 + 注册入口 -->
@@ -101,6 +76,8 @@
 	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
 	import accountComponent from "./components/accountComponent.uvue";
 	import loginBySmscodeComponent from "./components/loginBySmscodeComponent.uvue"
+	import loginByApp from "./components/loginByApp.uvue"
+	
 	//import { ref, onUnmounted } from 'vue';
 
 	// 选项卡
@@ -294,6 +271,8 @@
 			font-size: 12px;
 			color: #8e8e93;
 			line-height: 1.4;
+			text-align: center;
+			padding-top: 12px;
 		}
 	}
 

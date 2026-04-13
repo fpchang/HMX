@@ -30,7 +30,7 @@
 			<view class="form" v-if="currentTab === 1">
 				
 				<loginByApp :isAgree="isAgree"></loginByApp>
-				<button class="btn-login" @click="oneKeyLogin">一键登录</button>
+			<!-- 	<button class="btn-login" @click="oneKeyLogin">一键登录</button> -->
 			</view>
 
 			<!-- 短信验证码登录 -->
@@ -141,28 +141,6 @@
 		uni.showToast({ title: '登录成功', icon: 'success' });
 	};
 
-	// 一键登录
-	const oneKeyLogin = () => {
-		if (!isAgree.value) {
-			uni.showToast({ title: '请先同意用户协议与隐私政策', icon: 'none' });
-			return;
-		}
-		if (phone.value == "" || phone.value.length !== 11) {
-			uni.showToast({ title: '请输入正确手机号', icon: 'none' });
-			return;
-		}
-
-		uni.showModal({
-			title: '提示',
-			content: '该手机号未注册，将自动为您创建议宿账号',
-			confirmText: '确认登录',
-			success: (res) => {
-				if (res.confirm) {
-					uni.showToast({ title: '登录并注册成功', icon: 'success' });
-				}
-			}
-		});
-	};
 	
 	
 	const agreeEvent = () => {

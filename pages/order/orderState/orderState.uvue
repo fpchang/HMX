@@ -19,7 +19,7 @@
 			</view>
 		</template>
 	</rice-navbar>
-	<scroll-view style="flex:1" v-if="hotel_id!=''" :refresher-enabled="true" :refresher-triggered="refreshState" @refresherrefresh="refreshData">
+	<scroll-view style="flex:1" v-if="hotel_id!=''&&roomList.length>0" :refresher-enabled="true" :refresher-triggered="refreshState" @refresherrefresh="refreshData">
 		<view style="display: flex;flex-direction: row;">
 			<view>
 				<view class="table-container">
@@ -89,8 +89,8 @@
 
 
 	</scroll-view>
-	<view style="margin-top: 168px;" v-if="hotel_id==''">
-		<l-empty description="没有数据"  />
+	<view style="margin-top: 168px;" v-if="hotel_id==''|| roomList.length<1">
+		<l-empty :description="hotel_id==''?'没有数据':'没有房间'"  />
 	</view>
 
 

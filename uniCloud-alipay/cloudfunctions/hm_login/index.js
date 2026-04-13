@@ -8,6 +8,7 @@ const {
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	console.log('event : ', event);
+	console.log('context : ', context);
 	const starttime = new Date().getTime();
 	let {
 		userForm
@@ -125,7 +126,9 @@ async function loginByAccount(event, context) {
 		}
 		const userRes = await dbJQL.collection('hm-user').where(`account=='${account}'&&password=='${ep}'`).get();
 		console.log("uuuu", userRes);
-		if (userRes.data.length > 0) {
+		if (userRes.data.length <1) {
+			throw new Error("账号密码不正确")
+		}
 			const user = userRes.data[0];
 			//更新token
 			const newToken = tokenEvent.getToken({
@@ -144,17 +147,10 @@ async function loginByAccount(event, context) {
 					token: newToken
 				}
 			};
-		}
-		return {
-			code: 404,
-			msg: "账号密码不正确",
-			data: {
-				token: ""
-			}
-		};
+		
 	} catch (error) {
 		console.log(error)
-		throw new Error("登录失败");
+		throw new Error("系统异常");
 	}
 
 }
@@ -174,19 +170,20 @@ async function loginBySmsCode(event, context) {
 		context
 	});
 	//小程序或测试账号
-	if (!isTestAccount(phone) && client != 'MP') {
+	if (!isTestAccount(phone)) {
 		//检验短信正确性
 		const verifT = tokenEvent.verifyToken(tk, secret);
 		//console.log("aaa",verifT)
 		if (!verifT || verifT.value.smsCode != smsCode) {
 			//短信验证码校验通过
-			return {
-				code: 4001,
-				msg: "短信验证码不正确",
-				data: {
-					token: ""
-				}
-			};
+			// return {
+			// 	code: 4001,
+			// 	msg: "短信验证码不正确",
+			// 	data: {
+			// 		token: ""
+			// 	}
+			// };
+			throw new Error("验证码不正确");
 		}
 	}
 
@@ -194,7 +191,8 @@ async function loginBySmsCode(event, context) {
 	try {
 		const userRes = await dbJQL.collection('hm-user').where(`phone=='${phone}'`).get();
 		console.log("MMMMuser", userRes)
-		if (userRes.data.length > 0) {
+		if (userRes.data.length >0) {
+			
 			const user = userRes.data[0];
 			//更新token
 			const newToken = tokenEvent.getToken({
@@ -215,13 +213,9 @@ async function loginBySmsCode(event, context) {
 			};
 		}
 		//注册
-		return register(phone, newToken)
+		return register(phone)
 	} catch (e) {
-		console.error(e);
-		return {
-			code: 40002,
-			msg: "登录失败"
-		}
+		throw new Error(e);
 	}
 
 

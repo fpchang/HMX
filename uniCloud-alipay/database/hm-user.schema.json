@@ -60,6 +60,10 @@
 				"pattern": "手机号格式不正确"
 			}
 		},
+		"userId":{
+			"description": "用户id--弃用",
+			"bsonType": "string"
+		},
 		"userName": {
 			"description": "用户名",
 			"bsonType": "string"

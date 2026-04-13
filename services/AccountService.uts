@@ -1,6 +1,7 @@
 import { DB } from '../api/DB';
 import { callFunctionRes } from "@/bean/DBBean";
 import { userBean } from '@/bean/userBean';
+import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 class AccountServiceClass {
 
 	constructor() {
@@ -52,9 +53,28 @@ class AccountServiceClass {
 			throw new Error("注册失败");
 		}
 	}
-	login(userForm : UTSJSONObject) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		console.log("login",userForm)
-		return DB.callFunction("hm_login", { userForm });
+	async login(userForm : UTSJSONObject) : Promise<UTSJSONObject> {
+		try {
+			console.log("login",userForm);
+			const res= await DB.callFunction("hm_login", { userForm });
+			return res;
+		} catch (err) {
+			// showDialog({
+			// 	title: '登录失败',
+			// 	message: err.message.toString(),
+			// 	showCancelButton: false,
+			// 	confirm: () => {
+					
+			// 	}
+			// })
+			uni.showToast({
+				title:err.message as string,
+				icon:"none"
+			})
+			//throw new Error("登录失败");
+			
+		}
+		
 	}
 
 	/**

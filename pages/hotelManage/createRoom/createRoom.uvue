@@ -25,7 +25,7 @@
 
 			<xt-form-item label="房型" tips="" required>
 				<view>
-					<xt-select :columns="columns" @selectAction="selectRoomType" :showKeySearch="false"></xt-select>
+					<xt-select :columns="columns"  :showKeySearch="false" v-model="roomForm.room_type_id"></xt-select>
 				</view>
 			</xt-form-item>
 			<xt-form-item label="房间名称" tips="" required>

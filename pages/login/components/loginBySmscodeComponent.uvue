@@ -170,8 +170,6 @@
 				phone: userForm.value.phone
 			});
 			console.log("ressss", res)
-
-
 			const result = res.result as UTSJSONObject;
 			const data = result.getJSON("data") ?? {}
 			const code = result.getNumber("code", 99);

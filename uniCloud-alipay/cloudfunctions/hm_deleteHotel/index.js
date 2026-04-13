@@ -16,9 +16,9 @@ exports.main = async (event, context) => {
 				//短信验证码校验通过
 				 throw new Error("token无效")		
 			}
-			const {phone} = verifT.value;
+			const {phone,account_id} = verifT.value;
 			const res = await dbJQL.collection("hm-hotel").doc(hotel_id).get();
-			if(res.data[0].belong!=phone){
+			if(res.data[0].ownership_id!=account_id){
 				throw new Error("权限不足")
 			}
 			const dres = await dbJQL.collection("hm-hotel").doc(hotel_id).update({dataStatus:10});

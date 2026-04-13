@@ -53,6 +53,7 @@
 		});
 	const attrs = useAttrs();
 	let show=ref(false);
+	const mode_val = ref<Array<string>>([props.modelValue]);
 	let text_val =computed<string>(()=>{
 		let returnVal ="请选择";
 		if(props.modelValue!=""){
@@ -64,7 +65,7 @@
 				}) as PickerOption;
 				if(target!=null){
 					returnVal= target.text as string;
-				//	mode_val.value=props.columns[0][1];
+					//mode_val.value=props.columns[0][1];
 				}
 				
 			}
@@ -75,7 +76,7 @@
 	// if(props.modelValue!=""){
 	// 	text_val.value=props.modelValue;
 	// }
-	const mode_val = ref<Array<string>>([props.modelValue]);
+	
 	const setDefault=()=>{
 		
 	}
@@ -95,7 +96,7 @@
 		let val: string = e.selectedValues[0] as string
 		let index: number = e.selectedIndex[0] as number
 		text_val.value = props.columns[0][index]['text'] as string;
-		//mode_val.value=val;
+		mode_val.value=[val];
 		emit("update:modelValue", val);
 		emit("selectAction",val);
 	}

@@ -30,7 +30,7 @@
 		}
 	});
 	const uniVerifyManager = ref(null as UniVerifyManager | null)
-	const phone = ref('18516285834')
+	const phone = ref('')
 	const slogan = ref('')
 	const privacyName = ref('')
 	const privacyUrl = ref('')

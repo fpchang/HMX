@@ -91,8 +91,7 @@
 				submitLoading.value = false;
 				uni.hideLoading();
 				return;
-			}
-	
+			}	
 			const token = data['token'] as string | null;
 			if (token != null) {
 				uni.setStorageSync("hm_token", token as string);

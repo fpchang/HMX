@@ -72,30 +72,31 @@ class AccountServiceClass {
 		
 		try {
 			const res = await DB.callFunction("hm_register",{user});
+			console.log("rrrr",res);
 			return true;
 		} catch (error) {
-			throw new Error(error.message as string);
+			throw new Error(error.message.toString());
 		}
 	}
-	async login(userForm : UTSJSONObject) : Promise<UTSJSONObject> {
+	async login(userForm : UTSJSONObject) : Promise<boolean> {
 		try {
 			console.log("login",userForm);
 			const res= await DB.callFunction("hm_login", { userForm });
-			return res;
+			const result = res.result ;
+			const data = result.getJSON("data")??{}
+			//const code = result.getNumber("code",99);		
+			const token = data.getString("token")??""
+			if (token != "") {
+				uni.setStorageSync("hm_token", token as string);
+			}
+			//uni.setStorageSync("account", userForm.value.account);
+			return true;
 		} catch (err) {
-			// showDialog({
-			// 	title: '登录失败',
-			// 	message: err.message.toString(),
-			// 	showCancelButton: false,
-			// 	confirm: () => {
-					
-			// 	}
-			// })
 			uni.showToast({
 				title:err.message as string,
 				icon:"none"
 			})
-			//throw new Error("登录失败");
+			throw new Error(err.message.toString());
 			
 		}
 		

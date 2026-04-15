@@ -149,8 +149,7 @@ async function loginByAccount(event, context) {
 			};
 		
 	} catch (error) {
-		console.log(error)
-		throw new Error("系统异常");
+		throw new Error(error);
 	}
 
 }

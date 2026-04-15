@@ -229,30 +229,8 @@
 
 		try {
 			const res = await AccountService.login({ ...userForm.value });
-			console.log("ressss", res)
-
-
-			const result = res.result as UTSJSONObject;
-			const data = result.data as UTSJSONObject;
-			const code = result.code as number;
-			const msg = result.msg as string;
-			console.log("code====",code);
-			if (code != 0) {
-				uni.showToast({
-					title: msg,
-					duration: 2000,
-					icon: "error",
-				});
-				submitLoading.value = false;
-				return;
-			}
-
-			const token = data['token'] as string | null;
-			if (token != null) {
-				uni.setStorageSync("hm_token", token as string);
-			}
+			
 			uni.setStorageSync("phone", userForm.value.phone);
-			//getUserInfo();
 			uni.reLaunch({
 				url: "/pages/index/index",
 			});

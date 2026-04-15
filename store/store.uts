@@ -83,6 +83,7 @@ export const setHotelId = (hotel_id : string) => {
 };
 
 export const setHotel = () => {
+	console.log("sethotel=====",state.hotelList);
 	let hotel = state.hotelList.find(item => item._id == state.hotel_id);
 		if(hotel!=null){
 			state.hotel = hotel;

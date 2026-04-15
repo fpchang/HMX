@@ -21,9 +21,8 @@ exports.main = async (event, context) => {
 			const ep = encryptPassword(password);
 			const user= formatUser(account,ep,email);
 			const result = await dbJQL.collection('hm-user').add(user);
-			return true;
+			return result
 		} catch (error) {
-			console.log(error)
 			throw new Error(error);
 		}
 	//返回数据给客户端

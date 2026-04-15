@@ -37,7 +37,7 @@
 				</rice-form-item>
 			</rice-form>
 			<view class="flex">
-				<rice-button type="primary" text="完成注册" class="btn" shape="round" @click="handleRegister" />
+				<rice-button type="primary" text="完成注册" class="btn" shape="round" @click="handleRegister"  :loading="submitLoading"/>
 
 			</view>
 		
@@ -48,6 +48,7 @@
 <script setup lang="uts">
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
 	import { AccountService } from "@/services/AccountService";
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 	const submitLoading = ref(false);
 	type userType = {
 		account : string,
@@ -176,8 +177,9 @@
 	}
 	// 注册提交
 	const handleRegister = async () => {
-
-
+		if(submitLoading.value == true){
+			return;
+		}
 		const result = await userFormRef.value!.validate();
 		console.log("result", result);
 		//校验成功
@@ -193,17 +195,25 @@
 		} as UTSJSONObject;
 		try {
 			submitLoading.value = true;
-			const flag = await AccountService.register(userJSON);
-			if (flag == true) {
+			const res = await AccountService.register(userJSON);			
 				uni.setStorageSync("account", userForm.value.account);
 				uni.navigateBack();
 				uni.showToast({
 					title: "注册成功",
 					icon: "none"
 				});
-			}
-		} catch (error) {
-			throw new Error("注册失败");
+			
+		} catch (err) {
+			//throw new Error(error.message as string);
+			submitLoading.value = false;
+			showDialog({
+							title: '登录失败',
+							message: err.message as string,
+							showCancelButton: false,
+							confirm: () => {
+								
+							}
+						})
 		}
 	}
 	//AccountService.upp();

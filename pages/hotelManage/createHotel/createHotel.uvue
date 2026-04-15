@@ -148,13 +148,15 @@
 	import { hotelBean } from "@/bean/hotelBean.uts";
 	import { HotelService } from "@/services/HotelService";
 	import { useCascaderAreaData } from '@/uni_modules/lime-shared/areaData';
-	import { state } from '@/store/store.uts';
+	import { state,setHotelId } from '@/store/store.uts';
 	//import amap from "@/common/amap-wx.130";
 	import { Location } from "@/services/LocationService.uts";
 	import { validForm } from "./hotelFormVaild.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { userBean } from "@/bean/userBean";
 	import { facilityConfig_type } from "@/bean/facilityConfig_type.uts";
+	
+	
 	// const props = defineProps({
 	// 	type: {
 	// 		type: Number,
@@ -242,8 +244,10 @@
 		try {
 			const id = hotelForm.value._id as string;
 			await HotelService.updateHotel(id, hotelForm.value);
+			
 			submitLoading.value = false;
-			comFunction.getHotelList();
+			await comFunction.getHotelList();
+			setHotelId(hotel_id.value);
 			uni.navigateBack({
 				success() {
 					uni.showToast({

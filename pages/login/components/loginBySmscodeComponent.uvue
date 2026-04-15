@@ -120,6 +120,10 @@
 			uni.showToast({ title: '请输入正确手机号', icon: 'none' });
 			return;
 		}
+		if(timer!=0){
+			//console.log(`请在${timer}s 后再试`);
+			return;
+		}
 		uni.showLoading({ title: "" });
 		try {
 			const res = await AccountService.sendSmsCode(userForm.value.phone);
@@ -163,37 +167,20 @@
 		submitLoading.value = true;
 
 		try {
-			const res = await AccountService.login({
+			const flag = await AccountService.login({
 				loginType: 'code',
 				tk: tk.value,
 				smsCode: userForm.value.smsCode,
 				phone: userForm.value.phone
 			});
-			console.log("ressss", res)
-			const result = res.result as UTSJSONObject;
-			const data = result.getJSON("data") ?? {}
-			const code = result.getNumber("code", 99);
-			const msg = result.msg as string;
-			console.log("code====", code);
-			if (code != 0) {
-				uni.showToast({
-					title: msg,
-					duration: 2000,
-					icon: "error",
+			if(flag){
+				uni.setStorageSync("phone", userForm.value.phone);
+				//getUserInfo();
+				uni.reLaunch({
+					url: "/pages/index/index",
 				});
-				submitLoading.value = false;
-				return;
 			}
-
-			const token = data['token'] as string | null;
-			if (token != null) {
-				uni.setStorageSync("hm_token", token as string);
-			}
-			uni.setStorageSync("phone", userForm.value.phone);
-			//getUserInfo();
-			uni.reLaunch({
-				url: "/pages/index/index",
-			});
+			
 		} catch (error) {
 			console.log("登录失败", error);
 			submitLoading.value = false;

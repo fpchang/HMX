@@ -1,6 +1,6 @@
 {
 	"bsonType": "object",
-	"required": ["hotel_id", "createrPhone","orderStatus","checkInStartDateTimeStamp","checkInStartDateTimeStamp"],
+	"required": ["hotel_id", "orderStatus","checkInStartDateTimeStamp","checkInStartDateTimeStamp"],
 	"permission": {
 		"read": true,
 		"create": true,
@@ -69,6 +69,11 @@
 			"description": "创建人手机",
 			"bsonType": "string",
 			"foreignKey": "hm-user.phone"
+		},
+		"createUserId":{
+			"description": "创建人id",
+			"bsonType": "string",
+			"foreignKey": "hm-user._id"
 		},
 		"createrName": {
 			"description": "下单人姓名",

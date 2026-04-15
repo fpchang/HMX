@@ -184,6 +184,7 @@
 		createTime: 0,
 		createrName: "",
 		createrPhone:user.value.phone,
+		createUserId:user.value._id,
 		downPayment: 0,
 		fromClient: false,
 		hotel_id: hotel_id.value,

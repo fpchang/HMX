@@ -72,7 +72,6 @@ class OrderServiceClass {
 
 	}
 	async getOrderListBySearch(hotel_id : string, dateRange : string[], orderStatus : string | number, keyword : string, pageNo : number, pageSize : number) : Promise<OrderDataListResult> {
-		console.log("zjjjjjj",orderStatus);
 		let skipnum : number = Math.max((pageNo - 1) * pageSize, 0);
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
@@ -118,6 +117,7 @@ class OrderServiceClass {
 						createTime: item.getNumber("createTime") ?? 0,
 						createrName: item.getString("createrName") ?? "",
 						createrPhone: item.getString("createrPhone") ?? "",
+						createUserId:item.getString("createUserId") ?? "",
 						downPayment: item.getNumber("downPayment") ?? 0,
 						fromClient: item.getBoolean("fromClient") ?? false,
 						hotel_id: item.getString("hotel_id") ?? "",

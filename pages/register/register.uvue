@@ -6,6 +6,28 @@
 				<rice-form-item name="account" label="用户名">
 					<rice-input v-model="userForm['account']" placeholder="请输入用户名" border="none" />
 				</rice-form-item>
+				<rice-form-item name="email" label="邮箱" required>
+					<rice-input v-model="userForm['email']" placeholder="请输入邮箱" border="none" />
+				</rice-form-item>
+				<rice-form-item name="emailCode" label="邮箱验证码" required v-if="false">
+
+
+
+					<view class="input-row">
+						<view style="flex:1;display: flex;">
+
+							<rice-input v-model="userForm['emailcode']" placeholder="邮箱验证码" border="none" :maxlength="4"
+								type="number" />
+
+
+						</view>
+						<view style="display: flex;flex-direction: row;align-items: center;">
+							<text class="btn-code" @click="sendEmailCode">
+								{{ codeText }}
+							</text>
+						</view>
+					</view>
+				</rice-form-item>
 				<rice-form-item name="password" label="密码" required>
 					<rice-input v-model="userForm['password']" placeholder="请输入密码" border="none" type="password" />
 				</rice-form-item>
@@ -18,42 +40,7 @@
 				<rice-button type="primary" text="完成注册" class="btn" shape="round" @click="handleRegister" />
 
 			</view>
-			<!-- 
-      <view class="input-box">
-        <rice-input
-          v-model="username"
-		  border="none"
-          class="input"
-          placeholder="用户名"
-          placeholder-class="ph"
-        />
-      </view>
-
-      <view class="input-box">
-        <rice-input
-          v-model="password"
-		  border="none"
-          class="input"
-          placeholder="密码"
-          type="password"
-          placeholder-class="ph"
-        />
-      </view>
-
-      <view class="input-box">
-        <rice-input
-          v-model="confirmPwd"
-		  border="none"
-          class="input"
-          placeholder="确认密码"
-          type="password"
-          placeholder-class="ph"
-        />
-      </view> -->
-
-			<!--  <button class="btn-register" @click="handleRegister">
-        完成注册
-      </button> -->
+		
 		</view>
 	</view>
 </template>
@@ -62,22 +49,36 @@
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
 	import { AccountService } from "@/services/AccountService";
 	const submitLoading = ref(false);
-	type userType={
-		account: string,
-		password: string,
-		confirmPassword: string
+	type userType = {
+		account : string,
+		email : string,
+		//emailcode : string,
+		password : string,
+		confirmPassword : string
 	}
 	const userForm = ref<userType>({
 		account: '',
+		email: "",
+		//emailcode: "",
 		password: '',
 		confirmPassword: '',
 	});
 	const userFormRef = ref<RiceFormComponentPublicInstance | null>(null);
-	const validAccount=async (account:any | null)=>{
-		if(account==null){
+	const codeText = ref('获取验证码');
+	const codeDisabled = ref(false);
+	let timer = 0;
+	const validAccount = async (account : any | null) => {
+		if (account == null) {
 			return "账号不能为空";
 		}
-		const flag = await AccountService.validRegisterAccount(account.toString());
+		const flag = await AccountService.validRegisterAccount(account.toString(),);
+		return flag;
+	}
+	const emailvalidAccount = async (email : any | null) => {
+		if (email == null) {
+			return "邮箱不能为空";
+		}
+		const flag = await AccountService.validRegisterByEmail(email.toString());
 		return flag;
 	}
 	//密码的校验函数
@@ -104,9 +105,24 @@
 			[
 				{ required: true, message: '请输入用户名' },
 				{ min: 3, max: 10, message: '字数需为 3 至 10 位', trigger: 'blur' },
-				{ validator:validAccount, trigger: 'blur',message:"已存在相同用户名" }
+				{ validator: validAccount, trigger: 'blur', message: "已存在相同用户名" }
+			]
+		], [
+			"email",
+			[
+				{ required: true, message: '请输入邮箱' },
+				{ min: 3, max: 25, message: '字数需为 3 至 25 位', trigger: 'blur' },
+				{ pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: '邮箱格式不正确' },
+				{ validator: emailvalidAccount, trigger: 'blur', message: "此邮箱已注册" }
 			]
 		],
+		//  [
+		// 	"emailCode",
+		// 	[
+		// 		{ required: true, message: '请输入邮箱验证码' },
+		// 		{ min: 4, max: 4, message: '字数需为 4 位', trigger: 'blur' }
+		// 	]
+		// ],
 		[
 			"password",
 			[
@@ -122,35 +138,68 @@
 				//函数校验
 				{ validator: passwordConfirmValidator },
 				//正则校验
-				{ pattern: /[a-zA-Z].*\d|\d.*[a-zA-Z]/, message: '密码需要包含字母和数字' },
+				{ pattern: /[a-zA-Z].*\d|\d.*[a-zA-Z]/, message: '密码需要包含字母和数字',trigger:'change' },
 			]
 		]
 	])
+	// 清除定时器
+	const clearTimer = () => {
+		if (timer != 0) {
+			clearInterval(timer);
+			timer = 0;
+		}
+		codeText.value = '获取验证码';
+		codeDisabled.value = false;
+	};
+	const startTimeTask = () => {
+		codeDisabled.value = true;
+		let count = 60;
+		codeText.value = `${count}s`;
+	
+		timer = setInterval(() => {
+			count--;
+			if (count <= 0) {
+				clearTimer();
+				return;
+			}
+			codeText.value = `${count}s`;
+		}, 1000);
+	}
+	const sendEmailCode = async () => {
+		const result = await userFormRef.value!.validate();
+		if(result!=true){
+			const errsName = (result as FormValidateErrors[]).map(v => v.name)
+			   console.log('校验失败的name合集', errsName)
+		}
+		
+		await AccountService.sendEmailCode(userForm.value.email)
+	}
 	// 注册提交
 	const handleRegister = async () => {
-		
+
 
 		const result = await userFormRef.value!.validate();
-		console.log("result",result);
+		console.log("result", result);
 		//校验成功
-		if(result!=true){
+		if (result != true) {
 			console.log("校验失败");
 			return;
 		}
 		console.log("success")
-		const userJSON= {
-			account:userForm.value.account,
-			password:userForm.value.password
+		const userJSON = {
+			account: userForm.value.account,
+			email:userForm.value.email,
+			password: userForm.value.password
 		} as UTSJSONObject;
 		try {
-			submitLoading.value=true;
+			submitLoading.value = true;
 			const flag = await AccountService.register(userJSON);
-			if(flag==true){
-				uni.setStorageSync("account",userForm.value.account);
+			if (flag == true) {
+				uni.setStorageSync("account", userForm.value.account);
 				uni.navigateBack();
 				uni.showToast({
-					title:"注册成功",
-					icon:"none"
+					title: "注册成功",
+					icon: "none"
 				});
 			}
 		} catch (error) {
@@ -168,10 +217,10 @@
 	}
 
 	.card {
-		 background: #ffffff;
+		background: #ffffff;
 		padding-top: 60px;
 		border-radius: 20px;
-		 padding: 40px 20px;
+		padding: 40px 20px;
 		// box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
 	}
 
@@ -216,5 +265,30 @@
 		font-size: 17px;
 		font-weight: 500;
 		border: none;
+	}
+	.input-row {
+		
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex:1;
+		flex-direction: row;
+		justify-content: space-between;
+	
+		overflow: hidden;
+	}
+	
+	.btn-code {
+		font-size: 14px;
+		color: #007aff;
+		background: #fff;
+		border: none;
+		outline: none;
+		padding: 0 8px;
+		margin: 0 4px;
+	}
+	
+	.btn-code[disabled] {
+		color: #8e8e93;
 	}
 </style>

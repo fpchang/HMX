@@ -113,13 +113,12 @@
 		}
 		
 	}
-	const init=()=>{
+	onShow(()=>{
 		const acstorage = uni.getStorageSync("account");
 		if(acstorage!=null){
 			userForm.value.account= acstorage as string;
 		}
-	}
-	init();
+	})
 </script>
 
 <style lang="scss">

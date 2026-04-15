@@ -6,8 +6,9 @@
 			<rice-cell title="会员名" :value="user.userName" />
 			<rice-cell title="账号" :value="user.account" />
 			<rice-cell title="手机号" :value="emergency_phone_number((user.phone ?? '') as string)" />
-			<rice-cell v-if="accountIsValid" titlaccounte="账号注销" :arrow="true" @click="closeAccount" />
-			<rice-cell v-if="!accountIsValid" title="账号恢复" :label="closeDateStr" :arrow="true"
+			<rice-cell title="邮箱" :value="user.email" />
+			<rice-cell v-if="accountIsValid==true" title="账号注销" :arrow="true" @click="closeAccount" />
+			<rice-cell v-if="accountIsValid==false" title="账号恢复" :label="closeDateStr" :arrow="true"
 				@click="recoverAccount" />
 		</rice-cell-group>
 	<!-- #ifdef APP -->
@@ -27,7 +28,7 @@
 	const user = computed<userBean>(() => {
 		return state.user;
 	});
-	const accountIsValid = computed(() => {
+	const accountIsValid = computed<boolean>(() => {
 		return user.value.accountStatus != 9 && user.value.accountStatus != 10;
 	})
 	const closeDateStr = computed<string>(() => {

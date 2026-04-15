@@ -23,6 +23,15 @@ class AccountServiceClass {
 		// const token:string = uni.getStorageSync('hm_token').toString();
 		return DB.callFunction("hm_validToken");
 	}
+	async sendEmailCode(email:string){
+		const res = await DB.callFunction("sendemail",{
+			subject:"注册验证码",
+			email:email,
+			html:'<h1>邮箱验证</h1><p>你正在注册议宿账号，当前验证码为5055</p>'
+		});
+		console.log("111",res)
+		
+	}
 	/**
 	 * 注册账号验证是否存在
 	 */
@@ -43,14 +52,29 @@ class AccountServiceClass {
 		}
 		
 	}
+	async validRegisterByEmail(email:string):Promise<boolean>{
+		console.log("aacc",email);
+		if(email==""){
+			throw new Error("邮箱不能为空")
+		}
+		try{
+			const params={email} as UTSJSONObject;
+			const res =await DB.getCollection("hm-user",params);			
+			const data = res['data'] as Array<UTSJSONObject>;
+			const flag = data.length<1;
+			return flag;
+		}catch(e){
+			throw new Error("系统异常");
+		}
+		
+	}
 	async register(user:UTSJSONObject):Promise<boolean>{
 		
 		try {
 			const res = await DB.callFunction("hm_register",{user});
-			console.log("res",res);
 			return true;
 		} catch (error) {
-			throw new Error("注册失败");
+			throw new Error(error.message as string);
 		}
 	}
 	async login(userForm : UTSJSONObject) : Promise<UTSJSONObject> {
@@ -106,6 +130,7 @@ class AccountServiceClass {
 				isVip: userObj.getBoolean("isVip")??false,
 				nickName: userObj.getString("nickName")??"",
 				phone: userObj.getString("phone")??"",
+				email: userObj.getString("email")??"",
 				account: userObj.getString("account")??"",
 				userId: userObj.getString("userId")??"",
 				userName: userObj.getString("userName")??"",
@@ -140,6 +165,7 @@ class AccountServiceClass {
 				isVip: userObj.getBoolean("isVip")??false,
 				nickName: userObj.getString("nickName")??"",
 				phone: userObj.getString("phone")??"",
+				email: userObj.getString("email")??"",
 				userId: userObj.getString("userId")??"",
 				userName: userObj.getString("userName")??"",
 				vipEndDate: userObj.getString("vipEndDate")??"",

@@ -11,22 +11,25 @@ exports.main = async (event, context) => {
 		});
 		console.log("params::",user,account)
 		if(account==""){
-			throw new Error("账号不能为空")
+			//throw new Error("账号不能为空")
+			return {errCode:401,errMsg:"账号不能为空"}
 		}
 		if(password==""){		
-			throw new Error("密码不能为空")
+			//throw new Error("密码不能为空")
+			return {errCode:401,errMsg:"账号不能为空"}
 		}
 		try {
 			
 			const ep = encryptPassword(password);
 			const user= formatUser(account,ep,email);
+			console.log(user)
 			const result = await dbJQL.collection('hm-user').add(user);
 			return result
 		} catch (error) {
+			console.log(error)
 			throw new Error(error);
 		}
-	//返回数据给客户端
-	return event
+	
 };
 
 

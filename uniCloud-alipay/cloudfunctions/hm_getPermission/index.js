@@ -11,7 +11,7 @@ exports.main = async (event, context) => {
 	 		context
 	 	})
 		if(!$token){
-			return {code:"302",msg:"没有token，无法确定权限",data:[]}
+			return {errCode:"302",errMsg:"没有token，无法确定权限",data:[]}
 		}
 	 //获取角色
 	 try{

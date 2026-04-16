@@ -279,18 +279,11 @@ class HotelServiceClass {
 			const { employee_name, hotel_id,account, phone, role, mark } = employeeForm;			
 			const res = await DB.callFunction("hm_addEmployee", { employeeObj: {employee_name, hotel_id, phone,account, role, mark } });
 			console.log("eeeee",res);
+			
 			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				console.log("code error", code);
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				return false;
-			}
-
+			if(result.getNumber("errCode")!=0){
+				throw new Error(result.getString("errMsg")??"系统异常")；
+			}		
 			return true;
 		} catch (err) {
 			//const hasCauseMessage = (err.cause?.cause?.message ?? '').length > 0;

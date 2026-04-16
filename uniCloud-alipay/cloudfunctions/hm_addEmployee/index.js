@@ -16,17 +16,23 @@ exports.main = async (event, context) => {
 	// });
 	const {phone,account} =employeeObj;
 	if(!phone&&!account){
-		throw new Error("无有效账号信息");
+		//throw new Error("无有效账号信息");
+		return {errCode : 201,errMsg : "无有效账号信息"};
 	}
 	const sql = phone?`phone=='${phone+""}'`:`account=='${account+""}'`;
 	const targetRes = await dbJQL.collection('hm-user').where(sql).get();
 	const user = targetRes.data[0];
 	if(!user){
-		throw new Error("账号或手机号无效，请员工先注册")
+		//throw new Error("账号或手机号无效，请员工先注册")
+		return {errCode : 101,errMsg : "账号或手机号无效，请员工先注册"};
 	}
 	const u_id = user._id;
 	employeeObj.account_id=u_id;
-	//console.log('1111',employeeObj)
-	const result = await dbJQL.collection('hm-employee').add(employeeObj);
-	return result;
+	try {
+		const result = await dbJQL.collection('hm-employee').add(employeeObj);
+		return result;
+	} catch (error) {
+		throw new Error(error);
+	}
+	
 };

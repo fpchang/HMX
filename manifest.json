@@ -64,10 +64,10 @@
 				}
 			},
 			"icons": {
-				"hdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/72x72.png",
-				"xhdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/96x96.png",
-				"xxhdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/144x144.png",
-				"xxxhdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/192x192.png"
+				"hdpi": "/Users/sky/工作资料/项目资料/hm/icons/72x72.png",
+				"xhdpi": "/Users/sky/工作资料/项目资料/hm/icons/96x96.png",
+				"xxhdpi": "/Users/sky/工作资料/项目资料/hm/icons/144x144.png",
+				"xxxhdpi": "/Users/sky/工作资料/项目资料/hm/icons/192x192.png"
 			},
 			"splashScreens": {
 				"default": {}
@@ -131,7 +131,7 @@
 				}
 			},
 			"icons": {
-				"appstore": "D:/workspace-uniapp/HM3/unpackage/res/icons/1024x1024.png"
+				"appstore": "/Users/sky/工作资料/项目资料/hm/icons/1024x1024.png"
 			},
 			"splashScreens": {},
 			"privacyDescription": {

@@ -121,13 +121,15 @@ export const loginEvent = async () : Promise<string> => {
 	}
 
 	const res = await AccountService.validToken();
+	const result = res['result'] as UTSJSONObject;
 	console.log("res", res);
-	const code = res.result['code'] as number;
+	const code = result.getNumber("errCode")??0;
+	const errmsg = result.getString("errMsg")??"";
 	if (code != 0) {
-		const msg = res.result['msg'] as string;
-		if (msg != "") {
+		
+		if (errmsg != "") {
 			uni.showToast({
-				title: msg,
+				title: errmsg,
 				duration: 2000,
 				icon: "none",
 			});

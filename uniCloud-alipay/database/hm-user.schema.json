@@ -51,14 +51,14 @@
 		"phone": {
 			"description": "手机号",
 			"title": "手机号",
-			"bsonType": "string",
-			"minLength": 11,
-			"pattern": "^[1][3,4,5,6,7,8,9][0-9]{9}$",
-			"errorMessage": {
-				//"required": "手机号不能为空",
-				"minLength": "手机号不能小于 11 个字符",
-				"pattern": "手机号格式不正确"
-			}
+			"bsonType": "string"
+			// "minLength": 11,
+			// "pattern": "^[1][3,4,5,6,7,8,9][0-9]{9}$",
+			// "errorMessage": {
+			// 	//"required": "手机号不能为空",
+			// 	"minLength": "手机号不能小于 11 个字符",
+			// 	"pattern": "手机号格式不正确"
+			// }
 		},
 		"userId":{
 			"description": "用户id--弃用",

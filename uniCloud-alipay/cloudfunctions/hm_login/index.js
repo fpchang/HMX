@@ -46,8 +46,8 @@ async function register(phone) {
 		}
 	})
 	return {
-		code: 0,
-		msg: "",
+		errCode: 0,
+		errMsg: "",
 		data: {
 			token: newToken
 		}
@@ -127,7 +127,8 @@ async function loginByAccount(event, context) {
 		const userRes = await dbJQL.collection('hm-user').where(`account=='${account}'&&password=='${ep}'`).get();
 		console.log("uuuu", userRes);
 		if (userRes.data.length <1) {
-			throw new Error("账号密码不正确")
+			//throw new Error("账号密码不正确")
+			return {errCode : 1,errMsg : "账号密码不正确"};
 		}
 			const user = userRes.data[0];
 			//更新token
@@ -141,8 +142,8 @@ async function loginByAccount(event, context) {
 			});
 			//user.hm_token = newToken;
 			return {
-				code: 0,
-				msg: "",
+				errCode: 0,
+				errMsg: "",
 				data: {
 					token: newToken
 				}
@@ -182,7 +183,8 @@ async function loginBySmsCode(event, context) {
 			// 		token: ""
 			// 	}
 			// };
-			throw new Error("验证码不正确");
+			//throw new Error("验证码不正确");
+			return {errCode : 202,errMsg : "验证码不正确"};
 		}
 	}
 
@@ -204,8 +206,8 @@ async function loginBySmsCode(event, context) {
 			});
 			user.hm_token = newToken;
 			return {
-				code: 0,
-				msg: "",
+				errCode: 0,
+				errMsg: "",
 				data: {
 					token: newToken
 				}
@@ -228,10 +230,10 @@ function isTestAccount(phone = "", smsCode) {
 			phone: "18516285834",
 			smsCode: "1234"
 		},
-		{
-			phone: "19083441181",
-			smsCode: "1234"
-		},
+		// {
+		// 	phone: "19083441181",
+		// 	smsCode: "1234"
+		// },
 		{
 			phone: "13122905834",
 			smsCode: "1234"

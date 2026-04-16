@@ -11,13 +11,13 @@ exports.main = async (event, context) => {
 		
 		const {$token} = event;
 		if(!$token){
-			return {code:9992,msg:""}
+			return {errMode:9992,errMsg:""}
 		}
 		
 		const verifT = tokenEvent.verifyToken($token,tokenEvent.getSecret());
 		if(!verifT){
 			//throw errorEvent.getTokenError("token已过有效期");
-			return {code:9990,msg:"token已过有效期"}
+			return {errCode:9990,errMsg:"token已过有效期"}
 		}
 		const {phone,account,account_id} = verifT.value;
 		const sql = `_id=='${account_id+""}'||phone=='${phone+""}'||account=='${account+""}'`
@@ -25,12 +25,12 @@ exports.main = async (event, context) => {
 		
 		//console.log("userRes",userRes)
 		if(userRes.data.length<1){//无此账号
-			return {code:9992,msg:""}
+			return {errCode:9992,errMsg:"账号不存在"}
 		}
 		if(userRes.data[0]['hm_token']!=$token){
-			return {code:9991,msg:"账号已在别外登录"}
+			return {errCode:9991,errMsg:"账号已在别外登录"}
 		}else{
-			return {code:0,msg:""};
+			return {errCode:0,errMsg:""};
 		}
 		
 	}catch(e){

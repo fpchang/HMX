@@ -113,8 +113,8 @@
 			[
 				{ required: true, message: '请输入邮箱' },
 				{ min: 3, max: 25, message: '字数需为 3 至 25 位', trigger: 'blur' },
-				{ pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: '邮箱格式不正确' },
-				{ validator: emailvalidAccount, trigger: 'blur', message: "此邮箱已注册" }
+				{ pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: '邮箱格式不正确' }
+			//	{ validator: emailvalidAccount, trigger: 'blur', message: "此邮箱已注册" }
 			]
 		],
 		//  [

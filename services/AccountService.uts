@@ -69,9 +69,14 @@ class AccountServiceClass {
 		
 	}
 	async register(user:UTSJSONObject):Promise<boolean>{
-		
+		console.log("user---",user)
 		try {
 			const res = await DB.callFunction("hm_register",{user});
+			const result = res['result'] as UTSJSONObject;
+			console.log("result",result);
+			if(result.getNumber("errCode")!=0){
+				throw new Error(result.getString("errMsg")??"系统异常")；
+			}
 			console.log("rrrr",res);
 			return true;
 		} catch (error) {
@@ -82,7 +87,11 @@ class AccountServiceClass {
 		try {
 			console.log("login",userForm);
 			const res= await DB.callFunction("hm_login", { userForm });
-			const result = res.result ;
+			console.log("res",res);
+			const result = res.result as UTSJSONObject;
+			if(result.getNumber("errCode")!=0){				
+				throw new Error(result.getString("errMsg")??"系统异常")；
+			}
 			const data = result.getJSON("data")??{}
 			//const code = result.getNumber("code",99);		
 			const token = data.getString("token")??""
@@ -92,6 +101,7 @@ class AccountServiceClass {
 			//uni.setStorageSync("account", userForm.value.account);
 			return true;
 		} catch (err) {
+			console.log("1eeeee",err);
 			uni.showToast({
 				title:err.message as string,
 				icon:"none"

@@ -1,0 +1,119 @@
+import { orderBean } from '@/bean/orderBean';
+	import {OrderService} from '@/services/OrderService';
+export type OrderState = {
+	orderListTodayAfter : Array<orderBean>,//今天及以后的订单
+	orderListByCheckInToday : Array<orderBean>, //今天办理入住的订单
+	orderListByCheckOutToday : Array<orderBean>, //今天退房的订单
+	orderListToday : Array<orderBean>,//今天住宿订单
+	orderListByCheckInTommorow : Array<orderBean>, //明天天办理入住的订单
+	orderListByCheckOutTommorow : Array<orderBean>, //明天退房的订单
+	orderListTommorow : Array<orderBean>,//明天住宿订单
+}
+
+//实例化
+export const orderState = reactive({
+	orderListTodayAfter: [],//今天及以后的订单
+	orderListByCheckInToday: [], //今天办理入住的订单
+	orderListByCheckOutToday: [], //今天退房的订单
+	orderListToday: [],//今天住宿订单
+	orderListByCheckInTommorow: [], //明天天办理入住的订单
+	orderListByCheckOutTommorow: [], //明天退房的订单
+	orderListTommorow: [],//明天住宿订单
+} as OrderState)
+
+export const updateOrderListTodayAfter = (list : Array<orderBean>) => {
+	orderState.orderListTodayAfter = list;
+}
+
+export const updateOrderListByCheckInToday = (list : Array<orderBean>) => {
+	orderState.orderListByCheckInToday = list;
+}
+export const updateOrderListByCheckOutToday = (list : Array<orderBean>) => {
+	orderState.orderListByCheckOutToday = list;
+}
+export const updateOrderListToday = (list : Array<orderBean>) => {
+	orderState.orderListToday = list;
+}
+//明天
+export const updateOrderListByCheckInTommorow = (list : Array<orderBean>) => {
+	orderState.orderListByCheckInTommorow = list;
+}
+export const updateOrderListByCheckOutTommorow = (list : Array<orderBean>) => {
+	orderState.orderListByCheckOutTommorow = list;
+}
+export const updateOrderListTommorow = (list : Array<orderBean>) => {
+	orderState.orderListTommorow = list;
+}
+/**方法*/
+
+
+//获取当天开始的订单
+export const getOrderListTodayAfter = async (hotel_id : string):Promise<Array<orderBean>> => {
+	const list = await OrderService.getOrderListTodayAfter(hotel_id);
+	updateOrderListTodayAfter(list);
+	return list;
+}
+//今天退房订单
+export const getOrderListByCheckOutToday = async (hotel_id : string):Promise<Array<orderBean>> => {
+	const list = await OrderService.getOrderListByCheckOut(hotel_id, new Date().getTime());
+	//console.log("今日退房订单",list);
+	updateOrderListByCheckOutToday(list);
+	return list;
+}
+//明天退房订单
+export const getOrderListByCheckOutTommorow = async (hotel_id : string):Promise<Array<orderBean>> => {
+	const list = await OrderService.getOrderListByCheckOut(hotel_id, new Date().getTime() + 1000 * 60 * 60 * 24);
+	//console.log("明日退房订单",list);
+	updateOrderListByCheckOutTommorow(list);
+	return list;
+}
+//今日办理入住的客户
+export const getOrderListByCheckInToday = async (hotel_id : string):Promise<Array<orderBean>> => {
+	const list = await OrderService.getOrderListByCheckIn(hotel_id, new Date().getTime());
+	//console.log("今日办理入住。。。。。",list);
+	updateOrderListByCheckInToday(list);
+	return list;
+}
+//今日订单
+export const getOrderListToday = async (hotel_id : string):Promise<Array<orderBean>> => {
+	const list = await OrderService.getOrderListByDate(hotel_id,new Date().getTime());
+	//console.log("今日订单",list);
+	updateOrderListToday(list);
+	return list
+}
+
+//明日办理入住的客户
+export const getOrderListByCheckInTommorow = async (hotel_id : string):Promise<Array<orderBean>> => {
+	const list = await OrderService.getOrderListByCheckIn(hotel_id, new Date().getTime() + 1000 * 60 * 60 * 24);
+	//console.log("明日办理入住。。。。。",list);
+	updateOrderListByCheckInTommorow(list);
+	return list;
+}
+//明日订单
+export const getOrderListTommorow = async (hotel_id : string):Promise<Array<orderBean>> => {
+	const list = await OrderService.getOrderListByDate(hotel_id, new Date().getTime() + 1000 * 60 * 60 * 24);
+	//console.log("明日订单",list);
+	updateOrderListTommorow(list);
+	return list
+}
+
+export const getGatherEvent = async (hotel_id : string):Promise<boolean> => {
+	console.log("getGatherEvent");
+	// const s1 = getOrderListByCheckInToday(hotel_id);//今日办理入住的客户
+	// const s2 = getOrderListByCheckOutToday(hotel_id);//今天退房订单
+	// const s3 = getOrderListByCheckOutTommorow(hotel_id);//明天退房订单
+	// const s4 = getOrderListByCheckInTommorow(hotel_id);//明日办理入住的客户
+	// const s5 = getOrderListToday(hotel_id);	//今日订单
+	// const s6 =getOrderListTommorow(hotel_id);//明日订单
+	// const s7 = getOrderListTodayAfter(hotel_id);
+	//await Promise.all([s1,s2,s3,s4,s5,s6,s7]);
+	//console.log("组合查询结束",res);
+	getOrderListByCheckInToday(hotel_id);//今日办理入住的客户
+	getOrderListByCheckOutToday(hotel_id);//今天退房订单
+	getOrderListByCheckOutTommorow(hotel_id);//明天退房订单
+	getOrderListByCheckInTommorow(hotel_id);//明日办理入住的客户
+	getOrderListToday(hotel_id);	//今日订单
+	getOrderListTommorow(hotel_id);//明日订单
+	getOrderListTodayAfter(hotel_id);
+	return true;
+}

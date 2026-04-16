@@ -1,0 +1,8 @@
+{
+  "name": "ext_storage_co",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {},
+    "uni-cloud-ext-storage": {}
+  }
+}

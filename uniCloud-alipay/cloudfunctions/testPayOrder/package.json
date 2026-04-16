@@ -1,0 +1,7 @@
+{
+  "name": "testPayOrder",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

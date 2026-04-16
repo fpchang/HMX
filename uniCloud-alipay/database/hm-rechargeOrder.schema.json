@@ -1,0 +1,37 @@
+{
+	"bsonType": "object",
+	"required": ["phone","orderStatus","rechargeConfig_id"],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"createTime":{
+			"description": "订单创建时间",
+			"bsonType": "timestamp",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		},
+		"phone":{
+			"description": "用户手机号",
+			"bsonType": "string",
+			"foreignKey": "hm-user.phone"
+		},
+		"rechargeConfig_id":{
+			"description": "配置id",
+			"foreignKey": "hm-rechargeConfig._id"
+		},
+		"orderStatus":{
+			"description": "订单状态",
+			"bsonType": "int",
+			"defaultValue":0,
+			"enum":[0,1,2]//0 待支付，1已支付，2超时
+		}
+	}
+}

@@ -1,0 +1,193 @@
+<template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;align-items: center;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn" v-if="pageType!=2">
+				<!-- <text class="txt">保存</text> -->
+				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
+					textColor="#007aff" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+			</view>
+		</template>
+	</rice-navbar>
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1">
+	<!-- #endif -->
+		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
+
+			<xt-form-item label="房型" tips="" required>
+				<view>
+					<xt-select :columns="columns" @selectAction="selectRoomType" :showKeySearch="false" v-model="roomForm.room_type_id"></xt-select>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="房间名称" tips="" required>
+				<view class="room-list-item" style="display: flex;flex-direction: row;align-items: center;"
+					>
+
+					<view style="flex: 1;">
+						<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic
+							placeholder="请输入房间名称" borderColor="#dcdfe6" :disabled="pageType==2"
+							v-model="roomForm.room_name"></rice-input>
+					</view>
+				</view>
+
+			</xt-form-item>			
+		</view>
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+</template>
+
+<script setup>
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { roomBean } from '@/bean/roomBean';
+	import {roomTypeService} from "@/services/roomTypeService.uts";
+	import { state } from "@/store/store";
+	import {comFunction} from "@/pages/index/ComFuc.uts"
+	import {validForm} from "./editRoomVaild.uts";
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import {userBean} from "@/bean/userBean";
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	});
+	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+		return state.roomTypeList;
+	});
+	let pageType = ref(0);
+	let submitLoading = ref(false);
+	const title = computed(() => {
+		if (pageType.value == 0) {
+			return '添加房间';
+		}
+		return pageType.value == 1 ? '修改房间信息' : '房间信息';
+	});
+	const titleImg = computed<string>(() => {
+		if (pageType.value == 0) {
+			return "/static/icons/addpage.png"
+		}
+		return pageType.value == 1 ? "/static/icons/editpage.png" : "/static/icons/detailpage.png"
+	});
+	const roomForm = ref<roomBean>({		
+			_id: "",
+			hotel_id: hotel_id.value,
+			room_name: "",
+			room_type_id: ""
+		
+	});
+	const columns = computed<Array<Array<PickerOption>>>(() => {
+		if (roomTypeList.value == null) {
+			return []
+		}
+		let result:Array<Array<PickerOption>>=[];
+		let list:Array<PickerOption>=[];
+		roomTypeList.value.forEach(item=>{
+			list.push({ text: item.name, value: item._id } as PickerOption);
+		});
+		result.push(list);
+		return result;
+	});
+	const selectRoomType = (val : string) => {
+		if (roomForm.value.room_type_id == val) {
+			return;
+		}
+		roomForm.value.room_type_id=val;
+	}
+	
+	const submitForm = async () => {
+		submitLoading.value=true;
+		let flag:boolean = validForm(roomForm.value)
+		if(flag==false){
+			submitLoading.value=false;
+			return;
+		}
+		try {
+			await roomTypeService.editRoom(roomForm.value);
+			await comFunction.getRoomTypeList(hotel_id.value);
+			uni.navigateBack();
+			submitLoading.value=false;
+			uni.showToast({
+				title: "修改房间成功",
+				icon: "none"
+			});
+		} catch (error) {
+			submitLoading.value=false;
+			uni.showToast({
+				title: "修改房间失败",
+				icon: "none"
+			});
+		}
+		
+	}
+	
+	
+	onLoad(params => {
+		console.log("params",params);
+		try {
+			const pt = params.getString("pageType")??"";
+			const rm = params.getString("room")??"";
+			//console.log("1111111",pt,h);
+			if (pt != "") {
+				pageType.value = parseInt(pt);
+			}
+			if (rm != "") {
+				let decoded = decodeURIComponent(rm);
+				if(decoded!=null){
+					roomForm.value = JSON.parse<roomBean>(decoded)!;
+					console.log("bbbbbbb", roomForm.value);
+				}
+					
+			}
+		} catch (e) {
+			console.error(e)
+		}
+	});
+</script>
+
+<style lang="scss">
+	.room-list-item {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		margin-bottom: 12px;
+
+		.del-style {
+			padding-left: 8px;
+		}
+
+
+	}
+
+	.addNew-btn {
+		flex: 1;
+		background: #fff;
+		padding: 10px 0;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid #ededed;
+		border-radius: 8px;
+
+		.txt {
+			font-size: 14px;
+			color: #007aff;
+
+		}
+	}
+</style>

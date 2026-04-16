@@ -1,0 +1,170 @@
+<template>
+	<view class="l-tag" ref="tagRef" :key="type" :class="classes" :style="[styles]" @click="handleClick" @transitionend="transitionend">
+		<slot name="icon"><l-icon class="l-tag__icon" v-if="icon" :prefix="prefix" :name="icon" :color="iconColor" :size="iconSize"></l-icon></slot>
+		<text class="l-tag__text" :style="[textStyles]" ref="textRef"><slot/></text>
+		<l-icon class="l-tag__icon-close" name="close" :prefix="prefix" v-if="closable && !disabled" :color="iconColor" :size="iconSize" @click="onClickClose"></l-icon>
+	</view>
+</template>
+<script lang="uts" setup>
+	
+	/**
+	 * Tag 标签组件
+	 * @description 用于信息标记和分类，支持多种样式风格和交互模式
+	 * <br>插件类型：LTagComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-tag
+	 * 
+	 * @property {boolean} closable 是否可关闭（默认：false）
+	 * @property {string} content 标签内容（支持HTML）
+	 * @property {boolean} disabled 是否禁用（默认：false）
+	 * @property {string} icon 图标名称（支持uni-icons或自定义图标）
+	 * @property {string} prefix 图标类名前缀（默认："uni"）
+	 * @property {string} maxWidth 最大宽度（支持CSS单位）
+	 * @property {'square' | 'round' | 'mark'} shape 标签形状（默认："square"）
+	 * @value square
+	 * @value round
+	 * @value mark
+	 * @property {'small' | 'medium' | 'large'} size 标签尺寸（默认："medium"）
+	 * @value small
+	 * @value medium
+	 * @value large
+	 * @property {'default' | 'primary' | 'warning' | 'danger' | 'success'} type 标签类型（默认："default"）
+	 * @value default
+	 * @value primary
+	 * @value warning
+	 * @value danger
+	 * @value success
+	 * @property {'solid' | 'light' | 'outline' | 'light-outline'} variant 风格变体（默认："solid"）
+	 * @value solid
+	 * @value light
+	 * @value outline
+	 * @value light-outline
+	 * @property {string} color 自定义背景/边框色（覆盖type颜色）
+	 * @property {string} textColor 自定义文字颜色
+	 * @property {string} fontSize 文字大小（支持CSS单位）
+	 * @property {string} radius 圆角大小（支持CSS单位）
+	 * @property {string} padding 内边距（支持CSS简写）
+	 * @event {Function} close 点击关闭按钮时触发
+	 * @event {Function} click 点击按钮时触发
+	 */
+	
+	
+	import { TagProps } from './type'
+	
+	const emits = defineEmits(['click', 'close'])
+	const props = withDefaults(defineProps<TagProps>(), {
+		closable: false,
+		disabled: false,
+		shape: 'square',
+		type: 'default',
+		variant: 'solid',
+		size: 'medium',
+		prefix: ''
+	})
+	const textRef =ref<UniTextElement|null>(null)
+	const instance = getCurrentInstance()
+	const isSolid = computed(():boolean => props.variant == 'solid')
+	const classes = computed(():Map<string, any>=>{
+		const cls = new Map<string, any>()
+		const name = 'l-tag'
+		
+		cls.set(`${name}--${props.type}`, true)
+		cls.set(`${name}--${props.shape}`, true)
+		cls.set(`${name}--${props.variant}`, true)
+		cls.set(`${name}--${props.size}`, true)
+		
+		return cls
+	})
+	
+	const styles = computed(():Map<string, any>=>{
+		const style = new Map<string, any>()
+		
+		if(props.color != null) {
+			if(isSolid.value) {
+				style.set('background', props.color!)
+			} else if(['outline', 'light-outline'].includes(props.variant)) {
+				style.set('border-color', props.color!)
+			}
+		}
+		if(props.maxWidth != null) {
+			style.set('max-width', props.maxWidth!)
+		}
+		if(props.padding != null) {
+			style.set('padding', props.padding!)
+		}
+		if(props.radius != null) {
+			style.set('border-radius', props.radius!)
+		}
+		
+		return style
+	})
+	
+	const textStyles = computed(():Map<string, any>=>{
+		const style = new Map<string, any>()
+		
+		if(props.icon != null || instance?.proxy?.$slots?.['icon'] != null) {
+			style.set('margin-left', '4px')
+		}
+		if(props.closable && !props.disabled) {
+			style.set('margin-right', '4px')
+		}
+		
+		
+		if(props.color != null) {
+			if(!isSolid.value) {
+				style.set('color', props.color!)
+			}
+		}
+		
+		if(props.textColor != null) {
+			style.set('color', props.textColor!)
+		}
+		return style
+	})
+	
+	const sizes = new Map<string, string>([
+		// #ifdef APP-ANDROID || APP-IOS
+		['mini', '10px'],
+		['small', '12px'],
+		['medium', '14px'],
+		['large', '16px'],
+		['extra-large', '16px'],
+		// #endif
+	])
+	
+	const iconSize = computed(():string | null => {
+		return props.fontSize ?? sizes.get(props.size)
+	})
+	
+	const colors = new Map<string, string>([
+		// #ifdef APP-ANDROID || APP-IOS
+		// ['default', 'rgba(0,0,0,0.88)'],
+		// ['primary', '#3283ff'],
+		// ['danger', '#FF4D4F'],
+		// ['warning', '#ffb400'],
+		// ['success', '#34c471'],
+		// #endif
+	])
+	const iconColor = computed(():string | null=> {
+		// #ifdef APP
+		return props.textColor ?? (isSolid.value ? 'white' : (props.color ?? textRef.value?.style.getPropertyValue('color') as string | null))
+		// #endif
+		// #ifndef APP
+		return props.textColor ?? (isSolid.value ? 'white' : (props.color ?? colors.get(props.type)))
+		// #endif
+	})
+	
+	const handleClick = (_e: UniPointerEvent)=> {
+		emits('click')
+	}
+	const transitionend = ()=> {
+		emits('close')
+	}
+	const tagRef = ref<UniElement|null>(null)
+	const onClickClose = ()=>{
+		if(tagRef.value == null) return
+		tagRef.value!.style.setProperty('opacity', 0)
+	}
+</script>
+<style lang="scss">
+	@import './index-u';
+</style>

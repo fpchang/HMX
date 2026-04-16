@@ -1,0 +1,19 @@
+	import { roomBean } from "@/bean/roomBean.uts";
+export const  validForm = (room:roomBean):boolean=>{
+	let msg ="";	
+		if(room.room_name==""){
+			msg="房间名不能为空";			
+		}
+		if(room.room_type_id==""){
+			msg="请选择房型";
+			
+		}	
+	if(msg!=""){
+		uni.showToast({
+			title:msg,
+			icon:"none"
+		})
+		return false;
+	}
+	return true;
+}

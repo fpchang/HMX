@@ -1,0 +1,180 @@
+<template>
+	<view>
+	
+		<view style="position: relative">
+			<view class="share-area">
+			  <view class="container">
+			    <!-- #ifdef MP -->
+			
+			    <view class="icon-item">
+			      <button class="clearBtn" :plain="true" open-type="share">
+			       <!-- <l-icon name="ri:share-forward-fill" color="#fff" size="24px"></l-icon> -->
+				   <image src="/static/icons/hoteldisplay/share.png" style="width: 20px;height: 20px;"></image>
+			      </button>
+			    </view>
+			    <!-- #endif -->
+			    <!-- #ifndef MP -->
+			
+			    <view class="icon-item" @click="shareWx()" v-if="false">
+			     
+			       <!-- <l-icon   name="ri:share-forward-fill" color="#fff" size="20px"></l-icon> -->
+				     <image src="/static/icons/hoteldisplay/share.png" style="width: 20px;height: 20px;"></image>
+			     
+			    </view>
+			    <!-- #endif -->
+			  </view>
+			</view>
+		  <swiper style="height: 562.5rpx" :current="current" @change="onChange" :autoplay="true" :interval="3000">
+		    <swiper-item class="slide slide1" v-if="firstImages">
+				<image :src="firstImages" style="width: 100%;height: 100%;" mode="aspectFill"></image>
+			</swiper-item>
+			<swiper-item class="slide slide1" v-for="img of imagesList">
+				<image :src="img" style="width: 100%;height: 100%;" mode="aspectFill"></image>
+			</swiper-item>
+			
+			<!-- 
+		    <swiper-item class="slide slide2">
+				<image src="/static/images/hotel1.png" style="width: 100%;height: 100%;" mode="aspectFill"></image>
+			</swiper-item>
+		    <swiper-item class="slide slide3">
+				<image src="/static/images/hotel1.png" style="width: 100%;height: 100%;" mode="aspectFill"></image>
+			</swiper-item> -->
+		  </swiper>
+		  <l-swiper-dot :current="current" type="index" :total="imgLength" activeColor="rgba(42,93,152,1)"  fontSize="0" inactive-color="rgba(255,255,255,0.7)"/>
+		</view>
+	</view>
+</template>
+
+<script setup>
+	import { hotelBean } from '@/bean/hotelBean';
+	const props = defineProps({
+		hotel:{
+			type:hotelBean,
+			default:{}
+		}
+		
+	});
+	
+	const hotelObj = props.hotel;
+	console.log("hotelobj==",hotelObj,props.hotel)
+	const hotel_id:string = hotelObj?._id??"";
+	const firstImages:string =hotelObj?.firstImages??""; 
+	const imagesList:Array<string> = hotelObj?.imagesList??[];
+	const hotelName:string =hotelObj?.hotelName??""; 
+	const hotelAddress:string =hotelObj?.hotelAddress??"";
+	
+	const current = ref(0)
+	const type = ref('dot');
+	const imgLength=computed<number>(()=>{
+		if(firstImages!=""){
+			return imagesList.length+1;
+		}
+		return imagesList.length;
+	})
+	const onChange = (e: UniSwiperChangeEvent) => {
+		current.value = e.detail.current
+	}
+	const shareWx=()=> {
+	  let imgurl ='https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/images/app.png';
+	  if(firstImages!=null &&firstImages!=""){
+		 imgurl =firstImages;
+	  }
+	  // #ifdef APP
+	  //uni.hideToast()
+	  // 		uni.shareWithSystem({
+	  // 				type:'text',
+			// 		href: 'https://uniapp.dcloud.io',
+	  // 				//href: 'https://cdn.hotelsys.fun/HM/icons/facilityConfig/tv.png',
+			// 	//imageUrl:"/static/images/hotel.png",
+	  // 			success() {
+	  // 				console.log('Shared----------------------------success')
+	  // 			},
+	  // 			fail(res) {
+	  // 				console.log('Share failed, ' + "res.errCode =" + res.errCode + '---res.errMsg= ' + res.errMsg)
+	  // 				uni.showToast({
+	  // 					icon: "error",
+	  // 					title: "errorCode=" + res.errCode
+	  // 				})
+	  // 			},
+	  // 			complete(_) {
+	  
+	  // 			}
+	  // 		})
+	  // uni.share({
+	  //         provider: "weixin", //分享服务提供商（即weixin|qq|sinaweibo）
+	  //         type: 5, //小程序
+	  //         scene: "WXSceneSession", //provider 为 weixin 时必选 WXSceneSession分享到聊天界面，WXSceneTimeline分享到朋友圈，WXSceneFavorite分享到微信收藏
+	  //         title: `${hotelName}`, //分享内容的标题
+	  //         summary: `${hotelAddress}`, //分享内容的摘要
+	  //         miniProgram: {
+	  //           id: "gh_5557133bdd5e",
+	  //           type: 0,
+	  //           webUrl: "http://uniapp.dcloud.io",
+	  //           path: `/pages_client/hotelHome/hotelHome?hotel_id=${hotel_id}`,
+	  //         },
+	  //         imageUrl:`${imgurl}`, //图片地址，type 为 0、2、5 时必选
+	  //         success(r) {
+	          
+	  //         },
+	  //         fail(err) {
+	          
+	  //         },
+	  //       });
+	 
+	  
+	  // #endif
+	  // #ifndef APP
+	  uni.showToast({
+	  	title: "分享功能仅在APP端支持",
+		icon: "none"
+	  });
+	  // #endif
+	 
+	}
+</script>
+
+<style lang="scss">
+	.share-area {
+	  position: absolute;
+	  width: 100%;
+	  top: 0;
+	  left: 0;
+	  height: 55px;
+	  padding: 0 20px;
+	  box-sizing: border-box;
+	  background-color: transparent;
+	  z-index: 999;
+	  display: flex;
+	  flex-direction: row;
+	  align-items: center;
+	  justify-content: flex-end;
+	  .container {
+	    display: flex;
+		flex-direction: row;
+	    align-items: center;
+	    justify-content: center;
+	    .icon-item {
+	      cursor: pointer;
+	      background-color: rgba(0, 0, 0, 0.3);
+	      padding: 5px;
+	      width: 30px;
+	      height: 30px;
+	      box-sizing: border-box;
+	      border-radius: 50%;
+	      display: flex;
+	      align-items: center;
+	      justify-content: center;
+	      &:hover {
+	        background-color: rgba(0, 0, 0, 0.5);
+	      }
+	      .clearBtn{
+	        display: flex;
+			flex-direction: row;
+	        align-items: center;
+	        justify-content: center;
+	      }
+	    }
+	  }
+	}
+
+</style>

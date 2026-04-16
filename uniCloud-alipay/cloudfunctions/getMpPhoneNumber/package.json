@@ -1,0 +1,7 @@
+{
+  "name": "getMpPhoneNumber",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

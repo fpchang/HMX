@@ -1,0 +1,7 @@
+{
+    "name": "hm_order_roomList_task",
+    "dependencies": [],
+    "extensions": {
+        "uni-cloud-jql": []
+    }
+}

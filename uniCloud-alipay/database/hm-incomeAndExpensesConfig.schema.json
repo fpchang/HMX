@@ -1,0 +1,1 @@
+{"bsonType":"object","required":[],"permission":{"read":true,"create":false,"update":false,"delete":false},"properties":{"_id":{"description":"ID，系统自动生成"},"billType":{"description":"账单类型,income 收入  expenses 支出","bsonType":"string","enum":["income","expenses"]},"name":{"description":"名称","bsonType":"string"},"text":{"description":"中文名称","bsonType":"string"}}}

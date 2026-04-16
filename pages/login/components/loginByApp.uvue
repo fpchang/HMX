@@ -1,0 +1,251 @@
+<template>
+	<view>
+		<view class="app-split">
+			<view class="split-line-wrapper">
+				<view class="split-line"></view>
+				<!-- <text class="split-line-text">其他方式</text> -->
+				<view class="split-line"></view>
+			</view>
+			<view class="con" @click="verify(false)">
+				<!-- <image src="/static/icons/phone.png" style="width: 16px;height: 16px;"></image>
+				<text class="w-text">手机一键登录</text> -->
+				<view style="display: flex;flex-direction: row;align-items: center;justify-content: center;">
+					<text class="tit" >{{phone}}</text>
+					<!-- <view style="width:40px;margin-left: 12px;">
+						<rice-button text="换号" shape="round" size="mini" @click="switchLoginType('code')"></rice-button>
+					</view> -->
+					
+				</view>
+				<view><text class="ct">未注册的手机号验证后自动创建议宿账号</text></view>
+			</view>
+			<button class="btn-login" @click="verify(false)">一键登录</button>
+		</view>
+	</view>
+</template>
+
+<script setup>
+	const props = defineProps({
+		isAgree: {
+			type: Boolean,
+			default: false
+		}
+	});
+	const uniVerifyManager = ref(null as UniVerifyManager | null)
+	const phone = ref('')
+	const slogan = ref('')
+	const privacyName = ref('')
+	const privacyUrl = ref('')
+	
+	let submitLoading = ref(false);
+	const preLogin = (callback : (() => void)) => {
+		uniVerifyManager.value?.preLogin({
+			success: (res) => {
+				phone.value = res.number;
+				slogan.value = res.slogan;
+				privacyName.value = res.privacyName;
+				privacyUrl.value = res.privacyUrl;
+				console.log("pre login success");
+				callback();
+			},
+			fail: (err) => {
+				console.error("pre login fail => " + JSON.stringify(err));
+				const hasCauseMessage = (err.cause?.cause?.message ?? '').length > 0
+				uni.showModal({
+					title: '预登录失败',
+					content: hasCauseMessage ? JSON.parseObject(err.cause?.cause?.message ?? '')?.getString("errorDesc") : err.errMsg,
+					showCancel: false
+				});
+			}
+		});
+	}
+	const takePhoneNumber = async (accessToken : string, openId : string) => {
+		// 云函数取号
+		try {
+	
+			const res = await uniCloud.callFunction({
+				name: 'hm_login',
+				data: {
+					userForm: {
+						phone: "",
+						smsCode: "",
+						loginType: "app"
+					},
+					access_token: accessToken, // 客户端一键登录接口返回的access_token
+					openid: openId // 客户端一键登录接口返回的openid
+				}
+			});
+			console.log("取号结果", res);
+			const result = res.result as UTSJSONObject;
+			const data = result.data as UTSJSONObject;
+			const code = result.code as number;
+			const msg = result.msg as string;
+			console.log("code====", code);
+			submitLoading.value = false;
+			uni.hideLoading();
+			if (code != 0) {
+				uni.showToast({
+					title: msg,
+					duration: 2000,
+					icon: "error",
+				});
+				submitLoading.value = false;
+				uni.hideLoading();
+				return;
+			}	
+			const token = data['token'] as string | null;
+			if (token != null) {
+				uni.setStorageSync("hm_token", token as string);
+			}
+			uni.setStorageSync("phone", phone.value);
+			uni.reLaunch({
+				url: "/pages/index/index",
+			});
+			// 关闭登录页
+			uniVerifyManager.value?.close();
+		} catch (error) {
+			submitLoading.value = false;
+			uni.hideLoading();
+			uniVerifyManager.value?.close();
+			uni.showModal({
+				title: '登录失败',
+				content: "请用其它方式登录",
+				showCancel: false
+			});
+	
+	
+		}
+	
+	}
+	
+	const login = (fullScreen : boolean) => {
+	
+		uniVerifyManager.value?.login({
+			uniVerifyStyle: {
+				fullScreen: fullScreen,
+				loginBtnText: "一键登录",
+				logoPath: "/static/images/ys.png"
+			},
+			success: (res) => {
+				console.log("login success => " + JSON.stringify(res));
+				takePhoneNumber(res.accessToken, res.openId);
+			},
+			fail: (err) => {
+				console.error("login fail => " + err);
+				submitLoading.value = false;
+			}
+		});
+	}
+	
+	const verify = (fullScreen : boolean) => {
+		if (!props.isAgree) {
+			uni.showToast({
+				title: "请先阅读并同意协议",
+				icon: "none",
+			});
+			return;
+		}
+		if (submitLoading.value == true) {
+			return;
+		}
+		if ('production' === process.env.NODE_ENV && '__UNI__HelloUniAppX' === uni.getAppBaseInfo().appId) {
+			uni.showModal({
+				title: '提示',
+				content: '一键登录为收费功能，当前环境暂不支持',
+				showCancel: false
+			})
+			return
+		}
+		// 校验预登录是否有效
+		submitLoading.value = true;
+		uni.showLoading({ title: "" });
+		const isPreLoginValid = uniVerifyManager.value?.isPreLoginValid() ?? false;
+		if (isPreLoginValid) {
+			// 预登录有效，执行登录
+			login(fullScreen);
+		} else {
+			// 预登录无效，执行预登录
+			preLogin(() => {
+				login(fullScreen);
+			})
+		}
+	}
+	// 一键登录
+	const oneKeyLogin = () => {
+		if (!props.isAgree) {
+			uni.showToast({ title: '请先同意用户协议与隐私政策', icon: 'none' });
+			return;
+		}
+		if (phone.value == "" || phone.value.length !== 11) {
+			uni.showToast({ title: '请输入正确手机号', icon: 'none' });
+			return;
+		}
+	
+		uni.showModal({
+			title: '提示',
+			content: '该手机号未注册，将自动为您创建议宿账号',
+			confirmText: '确认登录',
+			success: (res) => {
+				if (res.confirm) {
+					uni.showToast({ title: '登录并注册成功', icon: 'success' });
+				}
+			}
+		});
+	};
+	
+	onLoad(() => {
+		uniVerifyManager.value = uni.getUniVerifyManager();
+		// 预登录
+		preLogin(() => { });
+	})
+</script>
+
+<style lang="scss">
+/* 微信登录 */
+	.app-split {
+		align-items: center;
+		.con{
+			.tit{
+				text-align: center;
+				font-size: 24px;
+			}
+			.ct {
+				font-size: 12px;
+				color: gray;
+				padding-top: 8px;
+			
+			
+			}
+		}
+	}
+
+	.split-line-wrapper {
+		flex-direction: row;
+		align-items: center;
+		margin-bottom: 15px;
+	}
+
+	.split-line {
+		flex: 1;
+		height: 0.5px;
+		background-color: #e0e0e0;
+	}
+
+	.split-line-text {
+		padding: 0 10px;
+		font-size: 12px;
+		color: #999999;
+	}
+/* 登录按钮 */
+	.btn-login {
+		width: 100%;
+		height: 50px;
+		line-height: 50px;
+		background-color: #007aff;
+		color: #fff;
+		font-size: 17px;
+		font-weight: 500;
+		border-radius: 25px;
+		border: none;
+		margin: 24px 0 12px 0;
+	}
+</style>

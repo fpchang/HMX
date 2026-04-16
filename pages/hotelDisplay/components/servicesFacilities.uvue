@@ -1,0 +1,92 @@
+<template>
+	<view>
+		<listComponent :list="servicesFacilities_data"></listComponent>
+	</view>
+</template>
+
+<script setup>
+	import { state } from "@/store/store";
+	import listComponent from "./listComponent/listComponent.uvue";
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { roomBean } from '@/bean/roomBean';
+	import { hotelBean } from "@/bean/hotelBean";
+	import { sf } from "./listComponent/type.uts";
+	import { roomTypeService } from '@/services/roomTypeService';
+	import { HotelService } from '@/services/HotelService';
+	const props = defineProps({
+		hotel_id: {
+			type: String,
+			default: ""
+		},
+		
+	});
+	const hotel_id = props.hotel_id;
+	const hotel = ref<hotelBean | null>(null);
+	const roomTypeList = ref<Array<roomTypeBean> | null>(null);
+	//const hotel_id = ref<string>("");
+	// const setHotelId=(h:string)=>{
+	// 	console.log("sssssss",h)
+	// 	hotel_id.value=h
+	// }
+	// const setHotel=(h:hotelBean)=>{
+	// 	console.log
+	// 	hotel.value=h
+	// }
+	// const setRoomTypeList=(rm:Array<roomTypeBean>)=>{
+	// 	roomTypeList.value=rm
+	// }
+	const servicesFacilities_data = computed<Array<sf>>(() => {
+		if (roomTypeList.value == null || hotel.value == null) {
+			return []
+		}
+		let arr : string[] = [];
+		roomTypeList.value.map((item : roomTypeBean) => {
+			let facility : string[] = item.facility != null ? item.facility : [];
+			arr = arr.concat(facility);
+		});
+		arr = Array.from(new Set<string>(arr)) as string[];
+		const list : Array<sf> = [
+			{
+				name: "房型设施",
+				icon: "/static/icons/hoteldisplay/roomtype.png",
+				liIcon: "ri:building-4-fill",
+				type: "roomType",
+				support: arr
+			},
+
+			{
+				name: "餐饮设施",
+				icon: "/static/icons/hoteldisplay/canying.png",
+				type: "catering",
+				liIcon: "emojione-monotone:fork-and-knife",
+				support: hotel.value.cateringServices != null ? hotel.value.cateringServices : [],
+			},
+			{
+				name: "休闲设施",
+				icon: "/static/icons/hoteldisplay/solarium.png",
+				type: "recreation",
+				liIcon: "streamline-plump:card-game-diamond-solid",
+				support: hotel.value.recreationFacility != null ? hotel.value.recreationFacility : [],
+			},
+			{
+				name: "运动",
+				icon: "/static/icons/hoteldisplay/sports.png",
+				type: "athleticFacility",
+				liIcon: "material-symbols:sports-volleyball",
+				support: hotel.value.athleticFacility != null ? hotel.value.athleticFacility : [],
+			}
+		];
+		return list;
+	})
+	const initData=async ()=>{
+		roomTypeList.value =await roomTypeService.getRoomTypeList(hotel_id);
+		hotel.value = await HotelService.getHotelInfoById(hotel_id);
+		console.log("hotel====",hotel.value)		
+	}
+	initData();
+	console.log("1111", servicesFacilities_data.value)
+</script>
+
+<style lang="scss" scoped>
+
+</style>

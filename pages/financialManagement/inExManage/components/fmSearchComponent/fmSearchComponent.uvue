@@ -1,0 +1,181 @@
+<template>
+	<view class="fm-search">
+		<view class="select-item">
+			<!-- <view class="select" :style="{'overflow':show?'visible':'hidden'}">
+				<view class="content" @click="showSelect">
+					<text class="txt">{{text_val}}</text>
+					<image src="/static/icons/arrow-down.png" style="width: 16px;height:16px"></image>
+				</view>
+			</view> -->
+			<view style="display: flex;flex-direction: row;align-items: center;">
+			<!-- 	<view style="width: 50px;margin-right: 8px;"><rice-button :type="billType=='all'?'primary':'info'" size="small"
+						text="全部" @click="checkBillType('all')"></rice-button></view> -->
+				<view style="width: 50px;margin-right: 8px"><rice-button :type="billType=='income'?'primary':'info'" size="small"
+						text="收入"  @click="checkBillType('income')"></rice-button></view>
+				<view style="width: 50px;">
+					<rice-button size="small" :type="billType=='expenses'?'primary':'info'" text="支出"  @click="checkBillType('expenses')"></rice-button></view>
+			</view>
+
+		</view>
+		<view class="select-item">
+			<view class="select">
+				<view class="content" @click="showCalendarEvent">
+					<text class="txt">{{dateRange.join(" ~ ") }}</text>
+					<image src="/static/icons/calendar.png" style="width: 20px;height:20px"></image>
+				</view>
+			</view>
+		</view>
+		<view class="select-item">
+			<view class="select" style="padding-right: 8px;">
+				<rice-search v-model="keystr" input-color="#fff" :clearable="false" :placeholder="placeholder"
+					:custom-style="{'padding':0}" @search="searchEvent" @clickLeftIcon="searchEvent"
+					@input="searchInputChange" @clickAction="searchEvent" show-action left-icon=""
+					action-color="#007aff" />
+			</view>
+		</view>
+	<!-- 	<rice-picker v-model:show="showPicker" :columns="columns" @confirm="onColumnsConfirm"></rice-picker> -->
+		<rice-calendar v-model:show="showCalendar" mode="range" :date="dateRange"
+			@confirm="rangeConfirm"></rice-calendar>
+	</view>
+</template>
+
+<script setup>
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import {TIME,MOONTH_START_END_TIMESTAMP,getMonthDateArray} from "@/static/utils/TIME";
+	//selectAction下拉 选择
+	//searchAction input点击搜索
+	//searchInputChange 输入框变化
+	const emit = defineEmits(['selectAction', "searchAction", "searchInputChange","dateChange"]);
+	const props = defineProps({
+		initDateRange: {
+			type: Array<string>,
+			default: []
+		},
+		placeholder: {
+			type: String,
+			default: "请输入关键字"
+		}
+	});
+	const columns = ref<PickerOption[][]>([
+		[
+			{ text: '收入', value: 'income' },
+			{ text: '支出', value: 'expense' }
+		]
+	])
+	const attrs = useAttrs();
+	let showPicker = ref(false);
+	let showCalendar = ref(false);
+	const billType=ref("income");
+	let text_val = ref("请选择");
+	let keystr = ref("");
+	text_val.value = columns.value[0][0]['text'] as string;
+
+	const dateRange = ref<string[]>(props.initDateRange);
+	const checkBillType=(id:string)=>{
+		billType.value=id;
+		emit("selectAction",id);
+	}
+	const showSelect = () => {
+		showPicker.value = !showPicker.value;
+	}
+	const showCalendarEvent = () => {
+		showCalendar.value = !showCalendar.value;
+	}
+
+
+	const searchEvent = () => {
+		emit("searchAction", billType.value,dateRange.value,keystr.value);
+	}
+	const searchInputChange = (value : string) => {
+		emit("searchInputChange", value);
+	}
+	const rangeConfirm = (e : string[]) => {
+		console.log('rangeConfirm', e)
+		// let val: string = e.selectedValues[0] as string
+		// let index: number = e.selectedIndex[0] as number
+		// text_val.value = props.columns[0][index]['text'] as string
+		 emit("dateChange",e);
+		dateRange.value = e;
+	}
+	// const onColumnsConfirm = (e : PickerEvent) => {
+	// 	console.log('PickerEvent', e)
+	// 	let val : string = e.selectedValues[0] as string
+	// 	let index : number = e.selectedIndex[0] as number
+	// 	text_val.value = props.columns[0][index]['text'] as string
+	// 	emit("selectAction", val);
+	// }
+</script>
+
+<style lang="scss" scoped>
+	.fm-search {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		flex-wrap: wrap;
+
+		.select-item {
+			margin-bottom: 12px;
+			min-width: 300px;
+			// padding: 0 15px;
+
+			flex: 1;
+		}
+
+		.select {
+
+			position: relative;
+			border: 1px solid #dcdfe6;
+			box-sizing: border-box;
+			overflow: visible;
+			border-radius: 4px;
+
+			.content {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				height: 36px;
+				padding: 0 8px;
+				overflow: visible;
+
+				.txt {
+					line-height: 36px;
+				}
+			}
+
+			.select-panal {
+				overflow: visible;
+				width: 100%;
+				position: relative;
+				top: 40px;
+				left: 0;
+
+				.select-list {
+					overflow: visible;
+					background-color: #fff;
+				}
+			}
+		}
+
+	}
+
+	.center-panal {
+		padding: 16px;
+		border-radius: 8px;
+		background-color: #f1f1f1;
+
+		.select-list {
+			min-width: 250px;
+
+			.select-list-item {
+				padding: 8px;
+
+				.txt {
+					color: #eee
+				}
+			}
+		}
+	}
+</style>

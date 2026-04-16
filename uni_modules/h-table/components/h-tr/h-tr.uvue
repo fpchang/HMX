@@ -1,0 +1,29 @@
+<template>
+	<view class="h-tr" :class="(head as Boolean)?'h-head':'h-body'" hover-class="h-tr-hover">
+		<slot></slot>
+	</view>
+</template>
+
+<script>
+	export default {
+		props: {
+			// 是否表头
+			head: {
+				type: Boolean,
+				default: false
+			},
+		},
+		data() {
+			return {
+
+			}
+		},
+		methods: {
+
+		}
+	}
+</script>
+
+<style lang="scss">
+	@import "../h-table/h-table.scss";
+</style>

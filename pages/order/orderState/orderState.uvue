@@ -1,0 +1,398 @@
+<template>
+	<rice-navbar title="" border v-if="hotel_id!=''">
+		<template #left>
+			<view style="display: flex;flex-direction: row;">
+				<!-- s -->
+
+				<image src="/static/icons/orderstate.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">房态</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn">
+				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
+
+				<text class="txt" @click="orderManage">订单管理</text>
+
+
+			</view>
+		</template>
+	</rice-navbar>
+	<scroll-view style="flex:1" v-if="hotel_id!=''&&roomList.length>0" :refresher-enabled="true" :refresher-triggered="refreshState" @refresherrefresh="refreshData">
+		<view style="display: flex;flex-direction: row;">
+			<view>
+				<view class="table-container">
+					<view class="table">
+					<view class="row row-first-child">
+						<view class="cell cell-th" style="border-left: 1px solid #e5e7eb;">
+							<view class="cell-content" style="padding:0">
+								<!-- <text class="txt" style="color:#1f2937;font-size: 16px;">房间/日期</text> -->
+								   <view class="slash-wrap">
+								          <text class="left">房间</text>
+								          <text class="slash"></text>
+								          <text class="right">日期</text>
+								        </view>
+							</view>
+						</view>
+					
+					</view>
+						<view class="row" v-for="(item,index) of roomList">
+							<view class="cell " style="border-left: 1px solid #e5e7eb;">
+								<view class="cell-content">
+									<text class="txt" style="color:#1f2937;font-size: 12px;">{{item.room_name}}</text>
+									<text class="txt-sub"
+										style="color:#6b7280;font-size: 12px;">{{getRoomTypeName(item.room_type_id)}}</text>
+								</view>
+							</view>
+
+						</view>
+
+					</view>
+				</view>
+			</view>
+			<view class="table-container">
+				<rice-scroll-x>
+					<view class="table">
+					
+						<view class="row row-first-child" >
+							<view  class="cell cell-th " v-for="(item,index) of orderDateRangeFormat">
+								<view class="cell-content">
+									<!-- <text class="txt" style="color:#1f2937;font-size: 16px;">{{item}}</text>
+									<text class="txt-sub"
+										style="color:#6b7280;font-size: 12px;"></text>
+										 -->
+										 <view>
+										   <view><text class="txt" style="padding-bottom: 4px;">{{item.de}}</text></view>
+										   <view><text class="txt"  style="padding-bottom: 4px;">{{item.dy}}</text></view>
+										   <view><text class="txt" style="color: green">剩余（{{getRemainRoomCountByDate(item.timestamp)}}）</text></view>
+										 </view>
+								</view>
+							</view>
+						
+						</view>
+						<view class="row"
+							v-for="(list,index) of checkInOrderListFormat">
+							<view class="cell" v-for="(it,ind) of list">
+								<view :class="['cell-content', it.name!=''?'cell-content-red':'']">
+									<text class="txt">{{it.name}}</text>
+								</view>
+							</view>
+
+						</view>
+
+					</view>
+				</rice-scroll-x>
+			</view>
+		</view>
+
+
+
+	</scroll-view>
+	<view style="margin-top: 168px;" v-if="hotel_id==''|| roomList.length<1">
+		<l-empty :description="hotel_id==''?'没有数据':'没有房间'"  />
+	</view>
+
+
+
+
+
+
+</template>
+<script setup>
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import { TIME, getMonthDateArray } from "@/static/utils/TIME";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { roomBean } from "@/bean/roomBean";
+	import { OrderService } from "@/services/OrderService";
+	import { orderBean, OrderRoomTypeBean, OrderDataListResult } from '@/bean/orderBean.uts';
+	import { state } from "@/store/store";
+	import { userBean } from "@/bean/userBean";
+	import { orderState, getGatherEvent } from "@/store/modules/orderStore";
+	let submitLoading = ref(false);
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	})
+	const roomTypeList = computed<Array<roomTypeBean>>(() => {
+		return state.roomTypeList;
+	});
+	const roomList = computed<Array<roomBean>>(() => {
+		return state.roomList;
+	});
+	const checkInOrderList = computed<orderBean[]>(() => {
+		return orderState.orderListTodayAfter;
+	});
+	const orderDateRange = computed<number[]>(() => {
+		let rangeDate : Number[] = [];
+		let minTime = Math.min(
+			...checkInOrderList.value.map((item) => item.checkInStartDateTimeStamp),new Date().getTime()
+		);
+		let maxTime = Math.max(
+			...checkInOrderList.value.map((item) => item.checkInEndDateTimeStamp), (new Date().getTime() + 30 * 1000 * 60 * 60 * 24)
+		);
+		for (let i = minTime; i <= maxTime; i = i + 1000 * 60 * 60 * 24) {
+			rangeDate.push(i);
+		}
+		return rangeDate;
+	});
+	type table_th = {
+		de : string,
+		dy : string,
+		timestamp : number,
+		label : string
+	}
+	type table_td = {
+		name : string
+	}
+	const orderDateRangeFormat = computed<table_th[]>(() => {
+		let dyStr = [
+			"星期日",
+			"星期一",
+			"星期二",
+			"星期三",
+			"星期四",
+			"星期五",
+			"星期六"
+		];
+		// let arr=[{name:"roomName",  fixed: true, width: 90 }];
+	let arr : table_th[] = [];
+		orderDateRange.value.map((item) => {
+			arr.push({
+				de: dayuts(item).format("MM-DD"),
+				dy: dyStr[new Date(item).getDay()],
+				timestamp: item,
+				label: dayuts(item).format("MM-dd") + dyStr[new Date(item).getDay()]
+			});
+		});
+		return arr;
+	});
+	const checkInOrderListFormat = computed<table_td[][]>(() => {
+		if (
+			checkInOrderList.value.length < 1 ||
+			roomList.value.length < 1
+		) {
+			return [];
+		}
+		let result : table_td[][] = [];
+		roomList.value.forEach(room => {
+			let rowList : table_td[] = [];
+			orderDateRange.value.forEach(time => {
+				const orderObj = checkInOrderList.value.find(order => {
+					const s =
+						time >=
+						order.checkInStartDateTimeStamp &&
+						time <
+						order.checkInEndDateTimeStamp;
+					const s2 = order.reservedRoomList.includes(room._id);
+					return s && s2;
+				})
+				const userName = orderObj?.userName ?? "";
+
+				rowList.push({
+					name: userName
+				})
+
+			})
+			result.push(rowList);
+		})
+
+		return result;
+	});
+	const getRoomTypeName = (room_type_id : string) : string => {
+		
+			let obj = roomTypeList.value.find(item => item._id == room_type_id) as roomTypeBean;
+			return obj.name??"-";
+	}
+	const getRemainRoomCountByDate=(time:Number)=> {
+	  let count = 0;
+	  for (let item of checkInOrderList.value) {
+	    let s1 =
+	      time >= item.checkInStartDateTimeStamp &&
+	      time < item.checkInEndDateTimeStamp;
+	    if (!s1) {
+	      continue;
+	    }
+	  
+	      count += item.reservedRoomList.length;
+	    
+	  }
+	  return Math.max(roomList.value.length - count, 0);
+	}
+	const orderManage = () => {
+		uni.navigateTo({
+			url: "/pages/order/orderList/orderList"
+		})
+	}
+	type RowItem = {
+		name : string
+		value : string[]
+	}
+	let listleft : RowItem[] = [];
+	let list : RowItem[] = [];
+
+	for (let i = 0; i < 100; i++) {
+		let objleft : RowItem = {
+			name: `row${i}`,
+			value: [`房间${i}`]
+		};
+		let obj : RowItem = {
+			name: `row${i}`,
+			value: ["cell1", "cell2", "cell3", "cell4", "cell5", "cell6", "cell7", "cell8"]
+		}
+		listleft.push(objleft)
+		list.push(obj);
+	}
+	
+	const refreshState = ref(false);
+	const refreshData= async ()=>{
+			   refreshState.value=true;
+				await getGatherEvent(hotel_id.value);
+				refreshState.value=false;
+				
+	}
+</script>
+
+<style lang="scss">
+	.table-container {
+		flex: 1;
+		box-sizing: border-box;
+	}
+
+	.table {
+		display: flex;
+		flex-direction: column;
+
+		.row {
+			display: flex;
+			flex-direction: row;
+
+			.cell {
+				flex: 1;
+
+				border-right: 1px solid #e5e7eb;
+				border-bottom: 1px solid #e5e7eb;
+
+
+				.cell-content {
+					padding: 8px;
+					height: 60px;
+					min-width: 80px;
+					box-sizing: border-box;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: left;
+					background-color: #fff;
+
+					.txt {
+						color: #787878;
+						font-size: 12px;
+						text-align: center;
+					}
+					
+
+					.txt-sub {
+						padding-top: 4px;
+						text-align: center;
+					}
+				}
+
+				.cell-content-red {
+					background-color: rgba(239, 68, 68, 0.1);
+
+					.txt {
+						color: rgba(239, 68, 68, 1);
+					}
+				}
+
+			}
+			.cell-th{
+				
+				.cell-content {
+					height: 70px;
+					background-color: #f9fafb;
+				}
+			}
+
+			// .cell-first-child {
+			// 	border-left: 1px solid #e5e7eb;
+			// }
+
+			// .cell:first-child {
+			// 	border-left: 1px solid #e5e7eb;
+
+			// }
+		}
+
+		.row-first-child {
+			.cell {
+				border-top: 1px solid #e5e7eb;
+			}
+		}
+
+		// .row:first-child {
+		// 	.cell {
+		// 		border-top: 1px solid #e5e7eb;
+		// 	}
+		// }
+	}
+	.slash-wrap {
+	      position: relative;
+	      box-sizing: border-box;
+	      width: 80px;
+	      height: 100px;
+		  /* 斜线 */
+		  .slash {
+		    position: absolute;
+    display: flex;
+		    top: 0;
+		    left: 0;
+		    /* 斜边边长 */
+		    /* Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)) */
+		    /* Math.sqrt(Math.pow(150, 2) + Math.pow(80, 2)) = 170 */
+		    width: 128px;
+		    height: 1px;
+		    background-color:#e5e7eb;
+		    /* 旋转角度计算公式 */ 
+		    /*  Math.atan(height / width) * 180 / Math.PI  */
+		    /*  Math.atan(80 / 150) * 180 / Math.PI  = 28.072486935852954 */
+		    transform: rotate(51deg); 
+		    transform-origin: top left;
+			color: #787878;
+		  }
+		  	
+		  /* 左下角文字 */
+		  .left {
+		    position: absolute;
+		    /* 左下角 left:0; bottom: 0; */
+		    left: 10px;
+		    bottom: 25px;
+			transform: rotate(45deg);
+			color: #787878;
+			font-size: 13px;
+		  }
+		  	
+		  /* 右上角文字 */
+		  .right {
+		    position: absolute;
+		    /* 右上角 right:0; top: 0; */
+		    right: 10px;
+		    top: 25px;
+			transform: rotate(45deg);
+			color: #787878;
+			font-size: 13px;
+		  }
+	    }
+	
+	  
+</style>

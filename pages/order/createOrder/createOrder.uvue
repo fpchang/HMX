@@ -1,0 +1,403 @@
+<template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;align-items: center;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn" v-if="pageType!=2">
+				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
+					textColor="#007aff" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+			</view>
+		</template>
+	</rice-navbar>
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1">
+	<!-- #endif -->
+		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
+			<xt-form-item label="来源" tips="" required>
+				<rice-radio-group v-model="orderForm.orderSource" direction="row" @change="orderSourceChange">
+					<view style="display: flex;flex-direction: column;width: 100%;">
+						<view v-for="item of source"> <rice-radio :value="item.value" :label="item.text"
+								style="margin-left:24px;margin-bottom: 12px;"></rice-radio></view>
+					</view>
+
+				</rice-radio-group>
+
+			</xt-form-item>
+			<xt-form-item label="日期" tips="" required>
+				<view class="select">
+					<view class="content" @click="showCalendarEvent">
+						<text class="txt">{{dateRange.join(" ~ ") }}</text>
+						<image src="/static/icons/calendar.png" style="width: 20px;height:20px"></image>
+					</view>
+				</view>
+
+			</xt-form-item>
+			<xt-form-item label="房型房间" tips="" required>
+				<!-- <view class="room-list-item" style="display: flex;flex-direction: row;align-items: center;"
+					v-for="room_id of orderForm.reservedRoomList">
+
+					<view class="room-label-container" style="flex: 1">
+						{{formatRoomName(room_id)}}
+					</view>
+					<view class="del-style" @click="deleteRoom(index)" v-if="orderForm.reservedRoomList.length>1">
+						<image src="/static/icons/delete.png" style="width:20px;height:20px"></image>
+					</view>
+				</view> -->
+				<view class="select-room-style" v-if="!showAddRoom">
+					<view class="room-content">
+						<text class="txt">{{formatRoomList(orderForm.reservedRoomList)}}</text>
+					</view>
+					<view class="edit-style" @click="editRoom()">
+						<image src="/static/icons/editpage.png" style="width:20px;height:20px"></image>
+					</view>
+				</view>
+				<view @click="addNewRoom" class="addNew-btn" v-if="showAddRoom">
+					<rice-icon name="plus" size="16px" color="#007aff" />
+					<text class="txt">选择房间</text>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="客户名" tips="" required>
+
+				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服微信"
+					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.userName"></rice-input>
+			</xt-form-item>
+			<xt-form-item label="联系电话" tips="">
+				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服电话"
+					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.phone" :maxlength="11"
+					type="number"></rice-input>
+
+			</xt-form-item>
+			<xt-form-item label="定金" tips="">
+
+				<rice-stepper v-model="orderForm.downPayment" input-width="150" button-size="38" font-size="15"
+					:auto-fixed="false" :disabled="pageType==2" />
+			</xt-form-item>
+			<xt-form-item label="总价" tips="" required>
+				<rice-stepper v-model="orderForm.totalAmount" input-width="150" button-size="38" font-size="15"
+					:auto-fixed="false" :disabled="pageType==2" />
+
+			</xt-form-item>
+			<xt-form-item label="备注" tips="">
+				<view>
+
+					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="请输入备注内容"
+						layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
+						v-model="orderForm.mark"></rice-textarea>
+				</view>
+			</xt-form-item>
+		</view>
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+	<rice-calendar v-model:show="showCalendar" mode="range" :min-date="initDateObj.minDate" :date="dateRange"
+		@confirm="rangeConfirm"></rice-calendar>
+	<l-popup v-model="showCheckRoomPanal" position="right" :closeable="true" :safeAreaInsetBottom="true"
+		:safeAreaInsetTop="true" bgColor="#f5f7fa" :preventScrollThrough="true">
+		<view style="width:700rpx;padding:60px 0">
+			<checkRoomComponent></checkRoomComponent>
+		</view>
+	</l-popup>
+</template>
+
+<script setup>
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { roomBean } from '@/bean/roomBean';
+	import {userBean} from "@/bean/userBean";
+	import {orderSourceBean, orderBean } from '@/bean/orderBean';
+	import { OrderService } from "@/services/OrderService.uts";
+	import { state } from "@/store/store";
+	import { comFunction } from "@/pages/index/ComFuc.uts"
+	import { validForm } from "./createOrderVaild.uts";
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { TIME, getMonthDateArray } from "@/static/utils/TIME";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import checkRoomComponent from "./components/checkRoomComponent.uvue";
+	import { orderState, getGatherEvent } from "@/store/modules/orderStore";
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	});
+	const roomTypeList = computed<Array<roomTypeBean>>(() => {
+		return state.roomTypeList;
+	});
+	const roomList = computed<Array<roomBean>>(() => {
+		return state.roomList;
+	});
+	const formatRoomList = (list : Array<string>) : string => {
+		let result : Array<string> = [];
+		list.forEach((room_id : string) => {
+			let room = roomList.value.find((item : roomBean) => item._id == room_id) as roomBean|null;
+			if (room != null) {
+				result.push(room.room_name);
+			}
+		})
+		return result.join(",");
+	}
+	let pageType = ref(0);
+	const showCheckRoomPanal = ref(false);
+	let submitLoading = ref(false);
+	const title = computed(() => {
+		if (pageType.value == 0) {
+			return '添加订单';
+		}
+		return pageType.value == 1 ? '修改订单信息' : '订单信息';
+	});
+	const titleImg = computed<string>(() => {
+		if (pageType.value == 0) {
+			return "/static/icons/addpage.png"
+		}
+		return pageType.value == 1 ? "/static/icons/editpage.png" : "/static/icons/detailpage.png"
+	});
+	const source = ref<Array<orderSourceBean>>([]);
+	const showCalendar = ref(false);
+	const initDateObj = {
+		start_date: dayuts(new Date()).format("YYYY-MM-DD") as string,
+		end_date: dayuts(new Date()).add(1, 'day').format("YYYY-MM-DD") as string,
+		minDate: dayuts(new Date()).format("YYYY-MM-DD") as string
+	}
+	const dateRange = ref<string[]>([
+		initDateObj.start_date as string,
+		initDateObj.end_date as string
+	]);
+// new Date(dayuts(new Date(dateRange[0])).format("YYYY/MM/DD  14:00:00")).getTime()
+	let orderForm = ref<orderBean>({
+		_id: "",
+		checkInEndDate: "",
+		checkInEndDateTimeStamp:  0,
+		checkInStartDate: "",
+		checkInStartDateTimeStamp:  0,
+		createTime: 0,
+		createrName: "",
+		createrPhone:user.value.phone,
+		createUserId:user.value._id,
+		downPayment: 0,
+		fromClient: false,
+		hotel_id: hotel_id.value,
+		orderSouce_Zn: "线下",
+		orderSource: 1,
+		orderStatus: 1,
+		orderType: "normal",
+		payType: "",
+		phone: "",
+		roomTypeArray: [],
+		reservedRoomList: [],
+		totalAmount: 0,
+		userName: "",
+		wxNickName: "",
+		mark: ""
+	});
+
+	const orderSourceChange = (val : number) => {
+		const found = source.value.find(item => item.value == val)
+		if (found != null) {
+			orderForm.value.orderSouce_Zn = found.text
+		}
+	}
+	const showAddRoom = computed<boolean>(() => {
+		return orderForm.value.reservedRoomList.length < 1;
+	})
+	const showCalendarEvent = () => {
+		showCalendar.value = !showCalendar.value;
+	}
+	// const formatDateTime = (str : string) : number => {
+	// 	let startDate = dayuts(new Date(str)).format("YYYY/MM/DD  14:00:00");
+	// 	let endDate = dayuts(new Date(e[1])).format("YYYY/MM/DD  12:00:00");
+	// }
+	const rangeConfirm = (e : string[]) => {
+		console.log('rangeConfirm', e)
+		dateRange.value = e;
+	}
+	const getSource = async () => {
+		try {
+			const list : Array<orderSourceBean> = await OrderService.getSource();
+			source.value = list;
+		} catch (error) {
+			uni.showToast({
+				title: "获取订单来源失败",
+				icon: "none"
+			})
+		}
+
+	}
+	const addNewRoom = () => {
+		uni.$once("setRoomTypeList", (list : Array<string>) => {
+			console.log("setRoomTypeList", list);
+			orderForm.value.reservedRoomList = list;
+		})
+		uni.navigateTo({
+			url: `/pages/order/createOrder/checkOrderRoom/checkOrderRoom?startDate=${dateRange.value[0]}&endDate=${dateRange.value[1]}`
+		})
+	}
+	const editRoom = () => {
+		uni.$once("setRoomTypeList", (list : Array<string>) => {
+			console.log("setRoomTypeList", list);
+			orderForm.value.reservedRoomList = list;
+		})
+		uni.navigateTo({
+			url: `/pages/order/createOrder/checkOrderRoom/checkOrderRoom?startDate=${dateRange.value[0]}&endDate=${dateRange.value[1]}&checkRoomList=${orderForm.value.reservedRoomList.toString()}`
+		})
+	}
+	const submitForm = async () => {
+
+		console.log("form submit", orderForm.value);
+
+
+		let flag : boolean = validForm(orderForm.value)
+		if (flag == false) {
+			return;
+		}
+		submitLoading.value=true;
+		try {
+			await OrderService.addOrder(orderForm.value);
+			uni.$emit("refrushOrderList");
+			getGatherEvent(hotel_id.value);//nm==刷新首页
+			uni.navigateBack();
+			submitLoading.value = false;
+			uni.showToast({
+				title: "添加成功",
+				icon: "none"
+			});
+		} catch (error) {
+			submitLoading.value = false;
+			uni.showToast({
+				title: "添加订单失败",
+				icon: "none"
+			});
+		}
+
+	}
+	const init = async () => {
+		uni.showLoading({title:""})
+		try {
+			
+			await getSource();
+			uni.hideLoading();
+		} catch (error) {
+			uni.hideLoading();
+		}
+
+	}
+	init();
+	watch(dateRange.value, (n: string[], o: string[]) => {
+		orderForm.value.checkInEndDate = dateRange.value[1];
+		orderForm.value.checkInStartDate = dateRange.value[0]
+		orderForm.value.checkInStartDateTimeStamp = new Date(dayuts(new Date(dateRange.value[0])).format("YYYY/MM/DD  14:00:00")).getTime();
+		orderForm.value.checkInEndDateTimeStamp = new Date(dayuts(new Date(dateRange.value[1])).format("YYYY/MM/DD  12:00:00")).getTime();
+	}, {
+		immediate: true//先执行一次
+	})
+</script>
+
+<style lang="scss">
+	.select-room-style {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+
+		.room-content {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			border: 1px solid #dcdfe6;
+			flex: 1;
+			padding: 8px;
+			border-radius: 4px;
+		}
+
+		.txt {
+			margin-right: 8px;
+		}
+	}
+
+	.room-list-item {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		margin-bottom: 12px;
+
+		.room-label-container {
+			display: flex;
+			height: 36px;
+			padding-left: 8px;
+			line-height: 36px;
+			border-radius: 4px;
+			border: 1px solid #dcdfe6;
+		}
+
+		.del-style {
+			padding-left: 8px;
+		}
+
+
+	}
+
+	.select {
+
+		position: relative;
+		border: 1px solid #dcdfe6;
+		box-sizing: border-box;
+		overflow: visible;
+		border-radius: 4px;
+
+		.content {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			height: 36px;
+			padding: 0 8px;
+			overflow: visible;
+
+			.txt {
+				line-height: 36px;
+			}
+		}
+
+		.select-panal {
+			overflow: visible;
+			width: 100%;
+			position: relative;
+			top: 40px;
+			left: 0;
+
+			.select-list {
+				overflow: visible;
+				background-color: #fff;
+			}
+		}
+	}
+
+	.addNew-btn {
+		flex: 1;
+		background: #fff;
+		padding: 10px 0;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid #ededed;
+		border-radius: 8px;
+
+		.txt {
+			font-size: 14px;
+			color: #007aff;
+
+		}
+	}
+</style>

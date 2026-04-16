@@ -1,0 +1,637 @@
+<template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image src="/static/icons/list.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">收入列表</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn">
+				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
+
+				<text class="txt" @click="addFm">{{billType=='income'?'添加收入':'添加支出'}}</text>
+
+
+			</view>
+		</template>
+	</rice-navbar>
+	<scroll-view style="flex:1">
+
+		<!-- <incomeInfoCardComponent v-if="billType=='income'"></incomeInfoCardComponent>
+		<expensesInfoCardComponent v-if="billType=='expenses'"></expensesInfoCardComponent> -->
+		<view class="search-area">
+			<view class="card">
+				<view class="card-item title-area">
+					<text class="txt">收入筛选</text>
+					<l-tag variant="light">共{{fmResult.count}}条</l-tag>
+				</view>
+				<view class="card-item  select-area" style="margin-bottom: 0;">
+					<fmSearchComponent :columns="columns" :initDateRange="dateRange"
+						@searchInputChange="searchInputChange" @selectAction="selectFm" @dateChange="dateChange"
+						@searchAction="getFmList" placeholder="搜索备注信息"></fmSearchComponent>
+				</view>
+				<!-- <view class="card-item search"></view> -->
+			</view>
+
+		</view>
+		<view style="padding:20px;border-radius: 8px;">
+		
+			<rice-collapse :custom-style="{borderRadius:'8px'}">
+				<rice-collapse-item v-for="fm of fmResult.fmList" :name="fm._id"
+					:title="`${ formatTypeName(fm.type)}:￥${fm.amount}`" :value="formatDate(fm.ioeTime)"
+					:title-style="{color:fm.billType=='expenses'?'#b91c1c':'#047857'}" :border="false">
+					<view class="l-card">
+						
+						<!-- 	<view class="amount-area">
+			  		<view><text class="label">{{fm.billType=='expenses'?'本次支出':'本次收入'}}</text></view>
+			  		<view><text  :class="['num',fm.billType=='expenses'?'num-red':'']">￥{{fm.amount}}</text></view>
+			  	</view> -->
+						<view class="content">
+							<!-- 	<view class="card-item title">
+			  			<text class="txt">{{formatDate(fm.ioeTime)}}</text>
+			  		</view> -->
+							<view class="card-item">
+								<view class="fl-c">
+									<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
+									<text class="label">收支时间：</text>
+								</view>
+								<text class="val-style">{{formatDate(fm.ioeTime)}}</text>
+							</view>
+							<view class="card-item">
+								<view class="fl-c">
+									<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
+									<text class="label">交易类型：</text>
+								</view>
+								<text class="val-style">{{formatTypeName(fm.type)}}</text>
+							</view>
+							<view class="card-item" v-if="fm.billType=='income'">
+								<view class="fl-c">
+									<image src="/static/icons/fm/income.png" style="width: 16px;height: 16px;"></image>
+									<text class="label">收入金额：</text>
+								</view>
+								<text class="val-style" style="color:#047857">¥{{fm.amount}}</text>
+							</view>
+							<view class="card-item" v-if="fm.billType=='expenses'">
+								<view class="fl-c">
+									<image src="/static/icons/fm/expenses.png" style="width: 16px;height: 16px;">
+									</image>
+									<text class="label">支出金额：</text>
+								</view>
+								<text class="val-style" style="color:#b91c1c">¥{{fm.amount}}</text>
+							</view>
+
+							<view class="card-item" style="margin-bottom: 0;">
+								<view class="fl-c">
+									<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
+									<text class="label">备注信息：</text>
+								</view>
+								<text class="val-style">
+									{{fm.mark}}
+								</text>
+							</view>
+						</view>
+
+						<view class="control">
+							<view>
+								<xt-control @del="deleteFm(fm)" @edit="editFm(fm)" :show-view="false"></xt-control>
+							</view>
+
+
+						</view>
+					</view>
+				</rice-collapse-item>
+
+			</rice-collapse>
+		</view>
+		<view v-if="submitLoading" style="display: flex;flex-direction: row;justify-content: center;"> 
+			<rice-loading color="#787878" text="加载中…" />
+		</view>
+		<view v-if="!submitLoading&&fmResult.fmList.length<1">
+			<l-empty description="没有数据" />
+		</view>
+	</scroll-view>
+
+
+	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"
+		v-if="!submitLoading&&fmResult!=null&&fmResult.count>fmResult.pageSize">
+		<l-pagination v-model="fmResult.pageNo" :disabled="submitLoading" :total="fmResult?.count"
+			:page-size="fmResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
+	</view>
+</template>
+
+<script setup>
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import { TIME, getMonthDateArray } from "@/static/utils/TIME";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { FMService } from "@/services/FMService";
+	import { roomBean } from '@/bean/roomBean';
+	import { FMBean, FMDataListResult, FMTypeConfigBean } from '@/bean/FMBean';
+	import { state } from "@/store/store";
+	import { fmState } from "@/store/modules/fmStore.uts";
+	import { userBean } from "@/bean/userBean";
+
+	import { comFunction } from "@/pages/index/ComFuc";
+	import fmSearchComponent from "./components/fmSearchComponent/fmSearchComponent";
+	import expensesInfoCardComponent from "./components/expensesInfoCardComponent/expensesInfoCardComponent";
+	import incomeInfoCardComponent from "./components/incomeInfoCardComponent/incomeInfoCardComponent";
+	let submitLoading = ref(true);
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	})
+	const currentPage = ref(1);
+	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+		return state.roomTypeList;
+	});
+	//选择列表
+	let _select_id = ref("income");
+	let _search_key = ref("");
+	const billType = ref("income");
+	const keyword = ref("");//过滤字段
+	const dateRange = ref<string[]>(getMonthDateArray());
+	const columns = computed<Array<Array<PickerOption>>>(() => {
+		let result : Array<Array<PickerOption>> = [[
+			{ text: '收入', value: 'income' },
+			{ text: '支出', value: 'expense' }
+		]];
+		return result;
+	});
+
+	const incomeAndExpensesConfigList = ref<Array<FMTypeConfigBean>>([]);
+	const getIncomeAndExpensesConfigList = async () => {
+		const list = await FMService.getIncomeAndExpensesConfig();
+		incomeAndExpensesConfigList.value = list;
+	}
+	
+	
+	const fmResult = ref<FMDataListResult>({
+		count: 0,//总数量
+		pageNo: 1,//当前页码
+		pageSize: 20,//每页数量
+		fmList: []//列表
+	})
+	const getFmList = async () => {
+		submitLoading.value = true;
+		// uni.showLoading({
+		// 	title: ""
+		// })
+		try{
+			const fmr = await FMService.getIncomeAndExpensesDateBySearch(hotel_id.value, billType.value, keyword.value, dateRange.value, fmResult.value.pageNo, fmResult.value.pageSize);
+			fmResult.value = fmr as FMDataListResult;
+			//uni.hideLoading();
+			submitLoading.value = false;
+		}catch(e){
+			submitLoading.value = false;
+			uni.showToast({
+				title:"请求数据失败",
+				icon:"none"
+			})
+		}
+	
+	}
+	const dateChange = (range : string[]) => {
+		dateRange.value = range;
+		getFmList();
+
+	}
+	const searchInputChange = (k : string) => {
+		keyword.value = k;
+	}
+	const selectFm = (bt : string) => {
+		billType.value = bt;
+		getFmList();
+	}
+	const pageChange = (pn : number) => {
+		console.log(pn, fmResult.value);
+		getFmList();
+	}
+	const formatDate = (timestamp : number) : string => {
+		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
+	}
+	const formatTypeName=(type:string):string=>{
+		const target = incomeAndExpensesConfigList.value.find(item=>item.name==type);
+		if(target!=null){
+			return target.text
+		}
+		return "--"
+	}
+	const addFm = async () => {
+		if (!permissionList.value.includes(
+			"FM_CREATE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+		uni.$once("refrushfmList", () => {
+			console.log("刷新fmlist");
+			getFmList();
+		})
+		uni.navigateTo({
+			url: `/pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense?billType=${billType.value}`
+		});
+
+
+	}
+	const deleteFm = async (fm : FMBean) => {
+		if (submitLoading.value == true) {
+			return;
+		}
+		if (!permissionList.value.includes(
+			"ROOMTYPE_DELETE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+
+				}
+			})
+			return;
+		}
+		console.log("delete")
+		showDialog({
+			title: '确认删除此收支单',
+			message: "删除后将无法恢复，确认删除吗？",
+			beforeClose: async () : Promise<boolean> => {
+
+				//await roomTypeService.deleteFm(room._id);
+				//await comFunction.getRoomTypeList(hotel_id.value);
+				try {
+					await FMService.deleteFm(fm._id);
+					getFmList();
+					hideDialog();
+				} catch (errMsg) {
+					uni.showToast({
+						title: '删除异常，请重试',
+						icon: "none"
+					})
+				}
+
+
+			},
+			confirm: () => {
+			}, cancel: () => {
+				hideDialog();
+			}
+
+		});
+	}
+	const editFm = async (fm : FMBean) => {
+		if (!permissionList.value.includes(
+			"ROOMTYPE_UPDATE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+		uni.$once("refrushfmList", () => {
+			console.log("刷新fmlist");
+			getFmList();
+		})
+		uni.navigateTo({
+			url: `/pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense?pageType=1&fm=${encodeURIComponent(JSON.stringify(fm))}`
+		})
+	}
+	const init = async () => {
+		//let d:MOONTH_START_END_TIMESTAMP=TIME.getTodayStartTimeAndEndTime(new Date());
+		await getIncomeAndExpensesConfigList();
+		getFmList();
+	}
+	onPageShow(() => {
+		//getFmList();
+	})
+	init();
+</script>
+
+<style lang="scss">
+	.search-area {
+		padding: 18px;
+
+		.card {
+			background-color: #fff;
+			border-radius: 8px;
+			padding: 16px;
+
+			.card-item {
+				margin-bottom: 15px;
+
+				&:last-child {
+					margin: 0;
+				}
+			}
+
+			.title-area {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+
+				.txt {
+					padding-right: 8px;
+					font-size: 18px;
+					font-weight: 700;
+				}
+			}
+
+		}
+	}
+
+	.card-list {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+
+		.card-list-item {
+			min-width: 360px;
+			padding: 7.5px 15px;
+			flex: 1;
+
+			.card {
+				background-color: #fff;
+				border-radius: 12px;
+
+				position: relative;
+
+				.icon-area {
+					position: absolute;
+					right: 10px;
+					top: 10px;
+				}
+
+				.top-area {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					height: 60px;
+					border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+					background-color: #ecfdf5;
+					padding: 0 24px;
+
+					.txt {
+						// line-height: 60px;
+						color: #047857;
+						font-size: 18px;
+						font-weight: 700;
+						padding-left: 4px;
+					}
+
+				}
+
+				.top-area-red {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					height: 60px;
+					padding: 0 24px;
+					border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+					background-color: #fef2f2;
+
+					.txt {
+						// line-height: 60px;
+						color: #b91c1c;
+						font-size: 18px;
+						font-weight: 700;
+						padding-left: 4px;
+					}
+
+				}
+
+				.amount-area {
+					padding: 0 24px;
+					margin-top: 24px;
+
+					.label {
+						color: #6b7280;
+						font-size: 14px;
+						margin-bottom: 4px;
+					}
+
+					.num {
+						line-height: 36px;
+						color: #047857;
+						font-size: 30px;
+						font-weight: 700;
+					}
+
+					.num-red {
+						color: #b91c1c;
+					}
+				}
+
+				.content {
+
+					.card-item {
+
+						margin-top: 15px;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						justify-content: space-between;
+
+						&:first-child {
+							margin-top: 0;
+						}
+
+						.fl-c {
+							display: flex;
+							flex-direction: row;
+							align-items: center;
+						}
+
+						.label {
+							color: #787878;
+							font-size: 16px;
+							padding-left: 8px;
+						}
+
+						.val-style {
+							color: #787878;
+							font-size: 16px;
+						}
+
+					}
+				}
+
+
+
+				.control {
+
+					display: flex;
+					flex-direction: row;
+					justify-content: flex-end;
+					// background-color: #f9fafb;
+					align-items: center;
+					padding: 0px 20px 24px 0;
+
+					.txt {
+						font-size: 20px;
+						font-weight: 700;
+						color: #f53f3f;
+						padding-top: 5px;
+					}
+
+					.txt-in {
+						color: #00b42a;
+					}
+				}
+			}
+		}
+	}
+
+	.l-card {
+		background-color: #fff;
+		border-radius: 12px;
+
+		position: relative;
+
+		.icon-area {
+			position: absolute;
+			right: 10px;
+			top: 10px;
+		}
+
+		.top-area {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 60px;
+			border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+			background-color: #ecfdf5;
+			padding: 0 24px;
+
+			.txt {
+				// line-height: 60px;
+				color: #047857;
+				font-size: 18px;
+				font-weight: 700;
+				padding-left: 4px;
+			}
+
+		}
+
+		.top-area-red {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 60px;
+			padding: 0 24px;
+			border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+			background-color: #fef2f2;
+
+			.txt {
+				// line-height: 60px;
+				color: #b91c1c;
+				font-size: 18px;
+				font-weight: 700;
+				padding-left: 4px;
+			}
+
+		}
+
+		.amount-area {
+			margin-top: 24px;
+
+			.label {
+				color: #6b7280;
+				font-size: 14px;
+				margin-bottom: 4px;
+			}
+
+			.num {
+				line-height: 36px;
+				color: #047857;
+				font-size: 30px;
+				font-weight: 700;
+			}
+
+			.num-red {
+				color: #b91c1c;
+			}
+		}
+
+		.content {
+
+			.card-item {
+
+				margin-top: 15px;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: space-between;
+
+				&:first-child {
+					margin-top: 0;
+				}
+
+				.fl-c {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+				}
+
+				.label {
+					color: #787878;
+					font-size: 13px;
+					padding-left: 8px;
+				}
+
+				.val-style {
+					color: #787878;
+					font-size: 13px;
+				}
+
+			}
+		}
+
+
+
+		.control {
+
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-end;
+			// background-color: #f9fafb;
+			align-items: center;
+
+
+			.txt {
+				font-size: 20px;
+				font-weight: 700;
+				color: #f53f3f;
+				padding-top: 5px;
+			}
+
+			.txt-in {
+				color: #00b42a;
+			}
+		}
+	}
+</style>

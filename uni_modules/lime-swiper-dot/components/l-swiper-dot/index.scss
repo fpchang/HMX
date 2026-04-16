@@ -1,0 +1,117 @@
+@import '~@/uni_modules/lime-style/index.scss';
+@import '~@/uni_modules/lime-style/mixins/ellipsis.scss';
+$prefix: l !default;
+$swiper-dot: #{$prefix}-swiper-dot;
+
+// 位置变量
+$swiper-dot-fraction-right: create-var(swiper-dot-fraction-right, $spacer-sm);
+$swiper-dot-fraction-bottom: create-var(swiper-dot-fraction-bottom, $spacer-sm);
+
+// 内边距变量
+$swiper-dot-fraction-padding-x: create-var(swiper-dot-fraction-padding-x, $spacer-xs);
+$swiper-dot-fraction-padding-y: create-var(swiper-dot-fraction-padding-y, $spacer-tn);
+$swiper-dot-title-padding-x: create-var(swiper-dot-title-padding-x, $spacer-xs);
+$swiper-dot-title-padding-y: create-var(swiper-dot-title-padding-y, $spacer-xs);
+
+// 样式变量
+$swiper-dot-radius: create-var(swiper-dot-radius, $border-radius-hg);
+$swiper-dot-text-color: create-var(swiper-dot-text-color, white);
+$swiper-dot-bg-color: create-var(swiper-dot-bg-color, rgba(0,0,0,0.3));
+$swiper-dot-active-bg-color: create-var(swiper-dot-active-bg-color, rgba(0,0,0,0.5));
+
+// 尺寸变量
+$swiper-dot-font-size: create-var(swiper-dot-font-size, $font-size);
+$swiper-dot-line-height: create-var(swiper-dot-line-height, $line-height);
+$swiper-dot-index-size: create-var(swiper-dot-index-size, 20px);
+$swiper-dot-gap: create-var(swiper-dot-gap, 3px);
+$swiper-dot-size: create-var(swiper-dot-size, 6px);
+$swiper-dot-active-size: create-var(swiper-dot-active-size, 12px);
+
+.#{$swiper-dot} {
+	position: absolute;
+	display: flex;
+	pointer-events: none;
+	
+	&__fraction {
+		right: $swiper-dot-fraction-right;
+		bottom: $swiper-dot-fraction-bottom;
+		// padding: $swiper-dot-fraction-padding;
+		@include padding($swiper-dot-fraction-padding-y $swiper-dot-fraction-padding-x);
+		border-radius: $swiper-dot-radius;
+		font-size: $swiper-dot-font-size;
+		color: $swiper-dot-text-color;
+		background-color: $swiper-dot-bg-color;
+	}
+	&__title {
+		/* #ifndef  UNI-APP-X && APP */
+		display: block;
+		/* #endif */ 
+		left: 0;
+		right: 0;
+		bottom: 0;
+		// padding: $swiper-dot-title-padding;
+		@include padding($swiper-dot-title-padding-y $swiper-dot-title-padding-x);
+		font-size: $swiper-dot-font-size;
+		color: $swiper-dot-text-color;
+		background-color: $swiper-dot-bg-color;
+		line-height: $swiper-dot-line-height;
+		overflow: hidden;
+		
+		@include ellipsis;
+	}
+	&__dot,&__dot-bar,&__index {
+		left: 0;
+		right: 0;
+		bottom: $swiper-dot-fraction-bottom;
+		flex-direction: row;
+		justify-content: center;
+		
+		.#{$swiper-dot} {
+			&__item {
+				background-color: $swiper-dot-bg-color;
+				margin-left: $swiper-dot-gap;
+				margin-right: $swiper-dot-gap;
+				border-radius: $swiper-dot-radius;
+				&--active {
+					background-color: $swiper-dot-active-bg-color
+				}
+			}
+		}
+	}
+	
+	&__index {
+		.#{$swiper-dot} {
+			&__item {
+				width: $swiper-dot-index-size;
+				height: $swiper-dot-index-size;
+				
+				text-align: center;
+				color: $swiper-dot-text-color;
+				font-size: $swiper-dot-font-size;
+				line-height: $swiper-dot-index-size;
+				
+			}
+		}
+	}
+	&__dot-bar {
+		.#{$swiper-dot} {
+			&__item {
+				width: $swiper-dot-size;
+				height: $swiper-dot-size;
+				transition: width 300ms;
+				&--active {
+					width: $swiper-dot-active-size;
+				}
+			}
+		}
+	}
+	&__dot {
+		.#{$swiper-dot} {
+			&__item {
+				width: $swiper-dot-size;
+				height: $swiper-dot-size;
+				transition: background 300ms;
+			}
+		}
+	}
+}

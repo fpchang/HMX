@@ -1,0 +1,7 @@
+{
+  "name": "hm_updateRoomType",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

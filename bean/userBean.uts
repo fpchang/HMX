@@ -1,0 +1,44 @@
+export type userBean={
+	_id: string,
+	idCard: string,
+	ipStartDateStamp: string,
+	isVip: boolean,
+	nickName: string,
+	phone: string,
+	email:string,
+	userId: string,
+	account:string,
+	userName: string,
+	vipEndDate: string,
+	vipEndDateStamp: string,
+	closeAccountDateTime:number|null,
+	vipStartDate: string,
+	wxNickName: string,
+	wxOpenId: string,
+	hm_token: string,
+	avatar:string,
+	accountStatus: number
+}
+export const  getInitUser=():userBean=>{
+	return {
+		_id: "",
+		idCard: "",
+		ipStartDateStamp: "",
+		isVip: false,
+		nickName: "",
+		phone: "",
+		email:"",
+		userId: "",
+		account:"",
+		userName: "",
+		vipEndDate: "",
+		vipEndDateStamp: "",
+		closeAccountDateTime:null,
+		vipStartDate: "",
+		wxNickName: "",
+		wxOpenId: "",
+		hm_token: "",
+		avatar:"",
+		accountStatus: 1
+	}
+}

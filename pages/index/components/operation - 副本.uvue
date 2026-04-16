@@ -1,0 +1,117 @@
+<template>
+	<view class="operation">
+		<view class="card">
+			<view class="title"><text class="txt">快速操作</text></view>
+			<view class="list">
+				
+				<view class="list-item" v-for="item in menuList" >
+					<navigator :url="item.url" hover-class="none">
+					<view class="groupIcon">
+						<image :src="item.icon" class="icon-style" mode="aspectFit"></image>
+					</view>
+					<view>
+						<text class="label">{{item.label}}</text>
+					</view>
+					</navigator>
+				</view>
+
+				<view class="list-item" style="height:0"></view>
+				<view class="list-item" style="height:0"></view>
+				<view class="list-item" style="height:0"></view>
+				<view class="list-item" style="height:0"></view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script setup>
+	import { state } from "@/store/store";
+	type menu = {
+		icon : string,
+		label : string,
+		bgColor:string,
+		url : string,
+		show ?: boolean
+	}
+	const permissionList = computed(() => {
+		return state.permissionList;
+	})
+	const menuList : Array<menu> = [{
+		icon: "/static/icons/operation/add-bold.png",
+		label: "添加订单",
+		bgColor:"#165dff1a",
+		url: "/pages/order/createOrder/createOrder",
+		show:permissionList.value.includes("FM_CREATE")
+	},
+	{
+		icon: "/static/icons/operation/addincome.png",
+		label: "添加收支",
+		bgColor:"#722ed11a",
+		url: "/pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense?billType=income",
+		show:permissionList.value.includes("FM_CREATE")
+	},
+	{
+		icon: "/static/icons/homemenu/order1.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
+		label: "订单管理",
+		bgColor:"#faad141a",
+		url: "/pages/order/orderList/orderList"
+	}
+	]
+</script>
+
+<style lang="scss">
+	.card {
+		background-color: #fff;
+		padding: 15px;
+
+		.title {
+			padding: 5px 5px 15px 5px;
+
+			.txt {
+				color: #1f2937;
+				font-weight: 700;
+				color: #1f2937;
+			}
+		}
+
+		.list {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: space-evenly;
+
+			.list-item {
+				width: 85px;
+				height: 100px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+
+				.groupIcon {
+					// width:60px;
+					// height:60px;
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					justify-content: center;
+					border-radius: 30px;
+					/*background-color: #165dff1a;*/
+					
+
+					.icon-style {
+						width: 35px;
+						height: 35px;
+					}
+				}
+
+				.label {
+					font-size: 13px;
+					padding-top: 8px;
+					color: #64748b;
+					text-align: center;
+				}
+			}
+		}
+	}
+</style>

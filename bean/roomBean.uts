@@ -1,0 +1,9 @@
+
+
+export type roomBean = {
+	_id: string,
+	data_status?: number,
+	hotel_id: string,
+	room_name: string,
+	room_type_id: string
+}

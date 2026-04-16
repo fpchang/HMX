@@ -1,0 +1,270 @@
+'use strict';
+const dateFormat = require('dateFormat');
+const jwt = require('jsonwebtoken');
+const tokenEvent = require('tokenEvent');
+const {
+	encryptPassword
+} = require('encryptPassword');
+exports.main = async (event, context) => {
+	//event为客户端上传的参数
+	console.log('event : ', event);
+	console.log('context : ', context);
+	const starttime = new Date().getTime();
+	let {
+		userForm
+	} = event;
+	let {
+		loginType
+	} = userForm;
+	console.log("登录参数", event);
+	if (loginType == 'app') {
+		return loginByApp(event, context)
+	}
+	if (loginType == 'account') {
+		return loginByAccount(event, context)
+	}
+	if (loginType == 'code' || !loginType) {
+		return loginBySmsCode(event, context);
+	}
+
+
+
+
+};
+//注册
+async function register(phone) {
+	console.log("注册");
+	const secret = tokenEvent.getSecret();
+	const newToken = tokenEvent.getToken({
+		phone: phone
+	}, secret, (new Date().getTime() + 1000 * 60 * 60 * 24 * 30));
+	//添加新用记到数据表hm-user
+	const res = await uniCloud.callFunction({
+		name: 'hm-addUser',
+		data: {
+			userInfo: getUser(phone, newToken)
+		}
+	})
+	return {
+		errCode: 0,
+		errMsg: "",
+		data: {
+			token: newToken
+		}
+	};
+}
+//一键登录
+async function loginByApp(event, context) {
+	console.log("app 一键登录")
+	const res = await uniCloud.getPhoneNumber({
+		appid: '__UNI__6CB5534', // 替换成自己开通一键登录的应用的DCloud appid
+		provider: 'univerify',
+		access_token: event.access_token,
+		openid: event.openid
+	})
+
+	console.log("换到的手机号", res); // res里包含手机号
+	const phone = res.phoneNumber;
+	const secret = tokenEvent.getSecret();
+	const dbJQL = uniCloud.databaseForJQL({ // 获取JQL database引用，此处需要传入云函数的event和context，必传
+		event,
+		context
+	});
+	try {
+		const userRes = await dbJQL.collection('hm-user').where(`phone=='${phone}'`).get();
+		if (userRes.data.length > 0) {
+			const user = userRes.data[0];
+			//更新token
+			const newToken = tokenEvent.getToken({
+				phone: phone,
+				account: user.account,
+				account_id:user._id
+			}, secret, (new Date().getTime() + 1000 * 60 * 60 * 24 * 30));
+			const upuserRes = await dbJQL.collection('hm-user').doc(user._id).update({
+				'hm_token': newToken
+			});
+			user.hm_token = newToken;
+			return {
+				code: 0,
+				msg: "",
+				data: {
+					token: newToken
+				}
+			};
+		}
+		//注册
+		return register(phone)
+	} catch (e) {
+		console.error(e);
+		return {
+			code: 40002,
+			msg: "登录失败"
+		}
+	}
+
+}
+//账号密码登录
+async function loginByAccount(event, context) {
+	console.log("login by account");
+	const {
+		userForm
+	} = event;
+	const {
+		account,
+		password
+	} = userForm;
+	const dbJQL = uniCloud.databaseForJQL({ // 获取JQL database引用，此处需要传入云函数的event和context，必传
+		event,
+		context
+	});
+	try {
+		const ep = encryptPassword(password);
+		const secret = tokenEvent.getSecret();
+		const w = {
+			account: account,
+			password: password
+		}
+		const userRes = await dbJQL.collection('hm-user').where(`account=='${account}'&&password=='${ep}'`).get();
+		console.log("uuuu", userRes);
+		if (userRes.data.length <1) {
+			//throw new Error("账号密码不正确")
+			return {errCode : 1,errMsg : "账号密码不正确"};
+		}
+			const user = userRes.data[0];
+			//更新token
+			const newToken = tokenEvent.getToken({
+				phone: user.phone,
+				account: user.account,
+				account_id:user._id
+			}, secret, (new Date().getTime() + 1000 * 60 * 60 * 24 * 30));
+			const upuserRes = await dbJQL.collection('hm-user').doc(user._id).update({
+				'hm_token': newToken
+			});
+			//user.hm_token = newToken;
+			return {
+				errCode: 0,
+				errMsg: "",
+				data: {
+					token: newToken
+				}
+			};
+		
+	} catch (error) {
+		throw new Error(error);
+	}
+
+}
+//验证码登录
+async function loginBySmsCode(event, context) {
+	let {
+		userForm
+	} = event;
+	let {
+		smsCode,
+		phone,
+		tk
+	} = userForm;
+	const secret = tokenEvent.getSecret();
+	const dbJQL = uniCloud.databaseForJQL({ // 获取JQL database引用，此处需要传入云函数的event和context，必传
+		event,
+		context
+	});
+	//小程序或测试账号
+	if (!isTestAccount(phone)) {
+		//检验短信正确性
+		const verifT = tokenEvent.verifyToken(tk, secret);
+		//console.log("aaa",verifT)
+		if (!verifT || verifT.value.smsCode != smsCode) {
+			//短信验证码校验通过
+			// return {
+			// 	code: 4001,
+			// 	msg: "短信验证码不正确",
+			// 	data: {
+			// 		token: ""
+			// 	}
+			// };
+			//throw new Error("验证码不正确");
+			return {errCode : 202,errMsg : "验证码不正确"};
+		}
+	}
+
+
+	try {
+		const userRes = await dbJQL.collection('hm-user').where(`phone=='${phone}'`).get();
+		console.log("MMMMuser", userRes)
+		if (userRes.data.length >0) {
+			
+			const user = userRes.data[0];
+			//更新token
+			const newToken = tokenEvent.getToken({
+				phone: user.phone,
+				account: user.account,
+				account_id:user._id
+			}, secret, (new Date().getTime() + 1000 * 60 * 60 * 24 * 30));
+			const upuserRes = await dbJQL.collection('hm-user').doc(user._id).update({
+				'hm_token': newToken
+			});
+			user.hm_token = newToken;
+			return {
+				errCode: 0,
+				errMsg: "",
+				data: {
+					token: newToken
+				}
+			};
+		}
+		//注册
+		return register(phone)
+	} catch (e) {
+		throw new Error(e);
+	}
+
+
+}
+async function validToken(token) {
+	return false
+}
+
+function isTestAccount(phone = "", smsCode) {
+	const testAccountList = [{
+			phone: "18516285834",
+			smsCode: "1234"
+		},
+		// {
+		// 	phone: "19083441181",
+		// 	smsCode: "1234"
+		// },
+		{
+			phone: "13122905834",
+			smsCode: "1234"
+		}
+	]
+
+	let t = testAccountList.find(item => item.phone == phone);
+	return t ? true : false;
+}
+
+function getUser(phone, token) {
+	let vipStartDateStamp = new Date().getTime();
+	let vipEndDateStamp = new Date().getTime() + 30 * 1000 * 60 * 60 * 24;
+	return {
+		"idCard": "",
+		"vipStartDateStamp": vipStartDateStamp,
+		"isVip": true,
+		"nickName": "",
+		"phone": phone,
+		//"account":null,
+		"email": "",
+		"password": "",
+		"userId": phone,
+		"userName": `用户${phone.substr(-4)}`,
+		"vipEndDate": dateFormat(new Date(vipEndDateStamp), "yyyy-MM-dd HH:mm:ss"),
+		"vipEndDateStamp": vipEndDateStamp,
+		"vipStartDate": dateFormat(new Date(vipStartDateStamp), "yyyy-MM-dd HH:mm:ss"),
+		"wxNickName": "",
+		"wxOpenId": "",
+		"hm_token": token,
+		"avatar": "",
+		"blongEmployment": []
+	}
+}

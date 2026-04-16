@@ -1,0 +1,187 @@
+@import '@/uni_modules/lime-style/index.scss';
+@import '~@/uni_modules/lime-style/mixins/hairline.scss';
+// $prefix: l !default;
+$card: #{$prefix}-card;
+
+/* #ifdef  uniVersion >= 4.75 */ 
+$use-css-var: true;
+/* #endif */
+
+// $card-header-height: create-var(card-header-height, auto);
+$card-header-line-height: create-var(card-line-height, $line-height-md);
+$card-header-padding-y: create-var(card-header-padding-y, $spacer);
+$card-header-padding-x: create-var(card-header-padding-x, $spacer);
+$card-body-padding-y: create-var(card-body-padding-y, $spacer);
+$card-body-padding-x: create-var(card-body-padding-x, $spacer);
+
+$card-bg-color: create-var(card-bg-color, $bg-color-container);
+$card-hover-color: create-var(card-hover-color, $gray-1);
+$card-border-color: create-var(card-border-color, $border-color-2);
+
+// $card-title-color: create-var(card-title-color, $text-color-1);
+$card-title-color: create-var(card-title-color, $text-color-1);
+$card-title-font-size: create-var(card-title-font-size, $font-size-md);
+$card-note-color: create-var(card-note-color, $text-color-3);
+$card-note-font-size: create-var(card-note-font-size, $font-size);
+
+$card-extra-color: create-var(card-extra-color, $text-color-3);
+$card-extra-font-size: create-var(card-extra-font-size, $font-size);
+$card-extra-icon-size: create-var(card-extra-icon-size, $font-size-md);
+
+$card-left-icon-color: create-var(card-left-icon-color, $primary-color);
+$card-left-icon-size: create-var(card-left-icon-size, $font-size-heading-3);
+
+$card-image-width: create-var(card-image-width, 48px);
+$card-image-height: create-var(card-image-height, 48px);
+$card-right-icon-color: create-var(card-right-icon-color, $text-color-3);
+$card-right-icon-size: create-var(card-right-icon-size, 22px);
+
+$card-inset-margin-x: create-var(card-inset-margin-x, $spacer);
+$card-inset-margin-y: create-var(card-inset-margin-y, 0);
+$card-border-radius: create-var(card-border-radius, $border-radius-lg);
+
+.#{$card} {
+	// background: $bg-color-container;
+	background-color: $card-bg-color;
+	// background-color: var(--l-bg-color-page);
+	&--inset { 
+		@include margin($card-inset-margin-y $card-inset-margin-x);
+		@include border-radius($card-border-radius);
+		overflow: hidden;
+	}
+	  
+	&__cover { 
+		width: 100%
+	}
+	  
+	&__header {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		position: relative;
+		@include padding($card-header-padding-y 0);
+		@include margin(0 $card-header-padding-x);
+		 
+		
+		/* #ifndef UNI-APP-X && APP */
+		&::after {
+		    @include hairline-bottom($card-border-color, 0, 0);
+		}
+		&--borderless::after {
+		    display: none;
+		}
+		/* #endif */
+		/* #ifdef UNI-APP-X && APP */
+		 @include border-bottom(0.5px solid $card-border-color);
+		&--borderless {
+		    border-bottom: none;
+		}
+		/* #endif */
+	}
+	&__avatar {
+		/* #ifndef UNI-APP-X && APP */
+	    &:not(:empty) {
+			margin-right: $spacer-xs;
+	    }
+		/* #endif */
+		/* #ifdef UNI-APP-X && APP */
+		margin-right: $spacer-xs;
+		/* #endif */
+	    &-icon {
+			/* #ifndef UNI-APP-X */
+			display: inline-flex;
+			/* #endif */
+			color: $card-left-icon-color;
+			font-size: $card-left-icon-size;
+	    }
+	
+	    &-img {
+			height: $card-image-height;
+			width: $card-image-width;
+			/* #ifndef UNI-APP-X && APP */
+			display: block;
+			/* #endif */
+	    }
+	} 
+	 
+	&__title {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	    &-text {
+			color: $card-title-color;
+			// color: var(--l-card-title-color);
+			font-size: $card-title-font-size;
+			// line-height: $card-header-line-height;
+		}
+	    &-sub { 
+			color: $card-note-color;
+			font-size: $card-note-font-size;
+			margin-top: $spacer-xs;
+		}
+	}
+	&__extra {
+		&-icon {
+			margin-left: $spacer-tn;
+			color: $card-extra-color;
+			font-size: $card-extra-icon-size;
+		}
+		&-text {
+			color: $card-extra-color;
+			font-size: $card-extra-font-size;
+		}
+	}
+	&__body {
+		@include padding($card-header-padding-y 0);
+		@include margin(0 $card-header-padding-x);
+		// padding: $card-body-padding-y $card-body-padding-x;
+	}   
+	&__action-icon { /* 操作图标通用样式 */ }
+	  
+	&__footer {
+		display: flex;
+		flex-direction: row;
+		
+		@include padding($card-header-padding-y 0);
+		@include margin(0 $card-header-padding-x);
+		
+		/* #ifndef UNI-APP-X && APP */
+		&::after {
+		    @include hairline-top($card-border-color, 0, 0);
+		}
+		&--borderless::after {
+		    display: none;
+		}
+		/* #endif */
+		/* #ifdef UNI-APP-X && APP */
+		border-top-width: 0.5px;
+		border-top-style: solid;
+		border-top-color: $card-border-color;
+		&--borderless {
+		    border-top: none;
+		}
+		/* #endif */
+		
+		&--left {
+			 justify-content: flex-start;
+		}
+		&--right {
+			 justify-content: flex-end;
+		}
+		&--space-between {
+		    // justify-content: space-between;
+		}
+	}
+	
+	&__action {
+		&--gap {
+			margin-left: $spacer-sm;
+		}
+		&--space-between {
+		    flex: 1
+		}
+	}
+	.pt-0 {
+		padding-top: 0;
+	}
+}

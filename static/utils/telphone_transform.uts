@@ -1,0 +1,5 @@
+export const 	 emergency_phone_number=(tel:string)=> {
+			let reg=/(\d{3})\d{4}(\d{4})/;
+			let result = tel.replace(reg, "$1****$2")
+			return result;
+		}

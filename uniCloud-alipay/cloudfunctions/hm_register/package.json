@@ -1,0 +1,11 @@
+{
+  "name": "hm_register",
+  "dependencies": {
+   
+    "tokenEvent": "file:../common/tokenEvent",
+    "encryptPassword": "file:../common/encryptPassword"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

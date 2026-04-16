@@ -1,0 +1,204 @@
+<template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+				<image src="/static/icons/mine/hotel.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 18px;font-weight: 700;color:#2a5d98;">{{hotel?.hotelName}}</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn">
+				<rice-tabs v-model="activeIndex" :list="list" @clickTab="tabClick" line-color="#2a5d98"
+					title-inactive-color="#4b5563" title-active-color="#2a5d98"></rice-tabs>
+
+			</view>
+		</template>
+	</rice-navbar>
+	<swiper :current="activeIndex" style="height: auto;flex: 1;background-color:#f8f9fa;" @change="swiperChange"
+		:circular="true">
+		<swiper-item>
+
+			<scroll-view style="flex:1">
+				<view>
+					<imageSwiperComponent :hotel="hotel" v-if="hotel!=null"></imageSwiperComponent>
+				</view>
+				<view class="information">
+					<view class="title"><text class="txt">{{hotel?.hotelName}}</text></view>
+					<view class="subtitle">
+						<image src="/static/icons/hoteldisplay/location.png" style="width: 16px;height: 16px;"></image>
+						<text class="txt">{{hotel?.hotelAddress}}</text>
+					</view>
+				</view>
+				<view class="cotent-list-container">
+					<view class="title">
+						<text class="txt">酒店特色</text>
+					</view>
+					<view class="content">
+						<!-- <listComponent></listComponent> -->
+						<view class="tag-list" style="display: flex;flex-direction: row;" v-if="hotel!=null"> 
+							<view class="tag-list-item" v-for="item of hotel.feature"><rice-tag type="warning" :text="item"  size="large"/></view>
+							
+						</view>
+						
+					</view>
+				</view>
+
+				<view class="cotent-list-container">
+					<view class="title">
+						<text class="txt">酒店设施</text>
+					</view>
+					<view class="content">
+						<services-facilities ref="servicesFacilitiesRes" :hotel_id="hotel_id"></services-facilities>
+					</view>
+				</view>
+
+			</scroll-view>
+
+		</swiper-item>
+		<swiper-item>
+			<!-- #ifdef APP -->
+			<scroll-view style="flex:1">
+			<!-- #endif -->
+				<roomTypeComponent :hotel_id="hotel_id"></roomTypeComponent>
+			<!-- #ifdef APP -->
+			</scroll-view>
+			<!-- #endif -->
+		</swiper-item>
+	</swiper>
+
+</template>
+
+<script setup>
+	import { ref } from 'vue';
+	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
+	import imageSwiperComponent from "./components/imageSwiperComponent.uvue";
+	// import share from "./components/share.uvue";
+	import roomTypeComponent from "./components/roomTypeComponent/roomTypeComponent.uvue"
+	import listComponent from "./components/listComponent/listComponent.uvue";
+	import  servicesFacilities from "./components/servicesFacilities.uvue"
+	import { roomTypeService } from '@/services/roomTypeService';
+	import { hotelBean } from '@/bean/hotelBean';
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { HotelService } from '@/services/HotelService';
+	
+	// 在 uni-app-x 中不支持 InstanceType<typeof Component>，直接声明为 any
+	const servicesFacilitiesRes = ref<ComponentPublicInstance | null>(null);
+	const hotel_id = ref("");
+	const hotel =ref<hotelBean | null>(null);
+	const roomTypeList=ref<Array<roomTypeBean >| null>(null);
+	const activeIndex = ref(0);
+	const list = ref<TabsOptions[]>([{
+		name: '首页',
+		value: 'recommedn'
+	}, {
+		name: '房型',
+	}
+
+	])
+	const tabClick = (e : TabsClickTab) => {
+		console.log('TabsClickTab', e)
+
+	}
+	const swiperChange = (event : UniSwiperChangeEvent) => {
+		activeIndex.value = event.detail.current;
+		console.log(event)
+	}
+	
+	const initData=async ()=>{
+		//roomTypeList.value =await roomTypeService.getRoomTypeList(hotel_id.value);
+		hotel.value = await HotelService.getHotelInfoById(hotel_id.value);
+			
+	}
+	onReady(()=>{
+		// const instance = getCurrentInstance();
+		// if(instance!=null){
+		// 	servicesFacilitiesRes.value=instance.refs['servicesFacilitiesRes'] as ComponentPublicInstance;
+		// 	console.log("ssss33333",servicesFacilitiesRes.value)
+		// 	servicesFacilitiesRes.value.$callMethod("setHotelId",hotel_id.value)
+		// }
+		
+		// if (servicesFacilitiesRes.value != null) {
+		// 	servicesFacilitiesRes.value.setHotelId(hotel_id.value);
+		// 	if (hotel.value != null) {
+		// 		// 使用安全调用，避免 setHotel 方法不存在导致运行时异常
+		// 		(servicesFacilitiesRes.value as any)?.setHotel?.(hotel.value);
+		// 	}
+		// 	if (roomTypeList.value != null) {
+		// 		servicesFacilitiesRes.value.setRoomTypeList(roomTypeList.value);
+		// 	}
+		// }
+	})
+	onLoad(params => {
+		console.log("params:", params);
+		const h_id : string = params.getString("hotel_id")??"";
+		if (h_id != null) {
+			hotel_id.value =h_id;
+			initData()
+		}
+	})
+</script>
+
+<style lang="scss">
+	.hotel-display {
+		background-color: #f8f9fa;
+	}
+
+	.information {
+		padding: 18px;
+
+		.title {
+			.txt {
+				color: #111827;
+				font-size: 24px;
+				color: rgb(17, 24, 39);
+				font-weight: 700;
+			}
+		}
+
+		.subtitle {
+
+			margin-top: 8px;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+
+			.txt {
+				color: #4b5563;
+				font-size: 16px;
+				margin-left: 4px;
+			}
+		}
+	}
+
+	.cotent-list-container {
+		// margin-bottom: 32px;
+		padding: 24px;
+
+		.title {
+			border-left: 4px solid #2a5d98;
+			padding-left: 12px;
+
+			.txt {
+				color: #111827;
+				font-size: 18px;
+				color: rgb(17, 24, 39);
+				font-weight: 700;
+			}
+		}
+
+		.content {
+			margin-top: 16px;
+		}
+	}
+.tag-list{
+	display: flex;
+	flex-direction: row;
+	.tag-list-item{
+		padding:4px 8px;
+	}
+}
+</style>

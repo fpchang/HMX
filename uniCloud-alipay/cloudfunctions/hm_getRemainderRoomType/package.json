@@ -1,0 +1,9 @@
+{
+  "name": "hm_getRemainderRoomType",
+  "dependencies": {
+	   "dateFormat": "file:../common/dateFormat"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

@@ -1,0 +1,32 @@
+{
+    "_id": "6905b95a16634a0a15408c31",
+    "checkInEndDate": "2025/11/03 12:00:00",
+    "checkInEndDateTimeStamp": 1762142400000,
+    "checkInStartDate": "2025/11/02 14:00:00",
+    "checkInStartDateTimeStamp": 1762063200000,
+    "createTime": 1761982837424,
+    "createrName": "skyminds",
+    "createrPhone": "18516285834",
+    "downPayment": 0,
+    "fromClient": false,
+    "hotel_id": "66f4d677e4ec9dbeca1f8ff9",
+    "orderSouce_Zn": "线下",
+    "orderSource": 0,
+    "orderStatus": 5,
+    "orderType": "normal",
+    "payType": "offline",
+    "phone": "",
+    "roomTypeArray": [
+        {
+            "count": 1,
+            "name": "豪华大床房",
+            "roomList": [
+                "68c1282be2b826dcc66a7a06"
+            ],
+            "roomType_id": "66f5061d14d9e2960c104e8b"
+        }
+    ],
+    "totalAmount": 333,
+    "userName": "夺寺",
+    "wxNickName": ""
+}

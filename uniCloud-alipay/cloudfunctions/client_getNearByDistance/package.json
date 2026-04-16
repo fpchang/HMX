@@ -1,0 +1,7 @@
+{
+  "name": "client_getNearByDistance",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

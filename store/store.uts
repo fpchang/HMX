@@ -1,0 +1,169 @@
+import { AccountService } from "@/services/AccountService";
+import { PermissionService } from "@/services/PermissionService";
+import { employeeBean } from "../bean/employeeBean";
+//import {hotelBean} from "@/bean/hotelBean";
+import { roomTypeBean } from "../bean/roomTypeBean";
+import { roomBean } from "@/bean/roomBean";
+import { userBean ,getInitUser} from "@/bean/userBean";
+import { hotelBean } from "../bean/hotelBean";
+export type State = {
+	//存放状态
+	isLogin : boolean,
+	config : UTSJSONObject, //配置信息 | null
+	viewWidth : number, //可视宽度
+	user : userBean,
+	hotelList : Array<hotelBean>,
+	employeeList : Array<employeeBean>,
+	hotel_id : string,
+	hotel : hotelBean | null,
+	roomTypeList : Array<roomTypeBean>,
+	roomList:Array<roomBean>,
+	permissionList : Array<string>,//s权限列表
+	location : Array<number>
+}
+// 实例化为state
+export const state = reactive({
+	isLogin: false,
+	config: {} as UTSJSONObject,
+	viewWidth: 0,
+	user: getInitUser() as userBean,
+	hotelList: [],
+	employeeList: [] as Array<employeeBean>,
+	hotel_id: "",
+	hotel: null,
+	roomTypeList: [] as Array<roomTypeBean>,
+	roomList:[],
+	permissionList: [] as Array<string>,
+	location: [] as Array<number>
+} as State);
+// 定义修改属性值的方法
+
+
+export const setIsLogin = (bool : boolean) => {
+	state.isLogin = bool;
+};
+//当前位置坐标
+export const setLocation = (loc : Array<number>) => {
+	state.location = loc;
+};
+export const setConfig = (obj : UTSJSONObject) => {
+	uni.setStorageSync("config", obj);
+	state.config = obj;
+};
+
+
+export const setUser = (user : userBean) => {
+	state.user = user;
+};
+export const setHotelList = (list : Array<hotelBean>) => {
+	state.hotelList = list;
+	uni.setStorageSync("hotelList",list);
+	const t =  uni.getStorageSync("hotelList") as  Array<hotelBean>;
+};
+export const setRoomTypeList = (list : Array<roomTypeBean>) => {
+	state.roomTypeList = list;
+	uni.setStorage({key:"roomTypeList",data:list});
+	//设置roomlist
+	let rlist:Array<roomBean>=[];
+	list.forEach(item=>{
+		rlist.push(...item.roomList)
+	})
+	state.roomList=rlist;
+};
+export const setEmployeeList = (list : Array<employeeBean>) => {
+	state.employeeList = list;
+	uni.setStorage({key:"employeeList",data:list});
+};
+export const setHotelId = (hotel_id : string) => {
+	state.hotel_id = hotel_id;
+	//if(hotel_id!=""){
+		setHotel();
+	//}
+	
+};
+
+export const setHotel = () => {
+	console.log("sethotel=====",state.hotelList);
+	let hotel = state.hotelList.find(item => item._id == state.hotel_id);
+		if(hotel!=null){
+			state.hotel = hotel;
+			uni.setStorage({key:"hotel",data:hotel});
+		}else{
+			state.hotel = null;
+		}
+		
+	
+	
+};
+export const setPermissionList = (list : Array<string>) => {
+	state.permissionList = list;
+	uni.setStorage({key:"permissionList",data:list});
+};
+
+
+
+
+
+
+/**
+ * 
+ * @param {*} context 
+ * @param {*} loginSuccess 未登录进入登录页面，登录成功后触发
+ * @param {*} noLoginEvent 未登录时直接触发
+ * @returns 
+ */
+export const loginEvent = async () : Promise<string> => {
+	const token = uni.getStorageSync("hm_token") as string | null;
+	if (token == null || token == "") {
+		//未登录
+		clearCache();
+		return Promise.reject("未登录");
+	}
+
+	const res = await AccountService.validToken();
+	const result = res['result'] as UTSJSONObject;
+	console.log("res", res);
+	const code = result.getNumber("errCode")??0;
+	const errmsg = result.getString("errMsg")??"";
+	if (code != 0) {
+		
+		if (errmsg != "") {
+			uni.showToast({
+				title: errmsg,
+				duration: 2000,
+				icon: "none",
+			});
+		}
+		clearCache();
+		return Promise.reject("token验证失败");
+	}
+	return Promise.resolve('token验证通过')
+};
+export const clearCache =  () : void => {
+	// uni.removeStorageSync("hm_token");
+	// uni.removeStorageSync("user");
+	// uni.removeStorageSync("permissionList");
+	// uni.removeStorageSync("hotel");
+	// uni.removeStorageSync("config");
+	// uni.removeStorageSync("employeeList");
+	 
+	 setHotelId("");
+	setHotelList([]);
+	 const phone = uni.getStorageSync("phone");
+	 const account = uni.getStorageSync("account");
+	 uni.clearStorageSync();
+	 if(phone!=null && phone !=""){
+		  uni.setStorageSync("phone", phone);
+	 }
+	if(account!=null && account !=""){
+			  uni.setStorageSync("account", account);
+	}
+	 
+};
+export const loginOut = () : void => {
+	console.log("退出登录");
+	clearCache();
+	uni.reLaunch({
+		url: "/pages/indexAdvise/indexAdvise",
+	});
+};

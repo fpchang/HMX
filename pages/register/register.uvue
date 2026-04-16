@@ -1,0 +1,304 @@
+<template>
+	<view class="page">
+		<view class="card">
+			<view class="title"><text class="txt">注册账号</text></view>
+			<rice-form :model="userForm" :rules="registerRule" ref="userFormRef" label-width="100px" class="demo-form">
+				<rice-form-item name="account" label="用户名">
+					<rice-input v-model="userForm['account']" placeholder="请输入用户名" border="none" />
+				</rice-form-item>
+				<rice-form-item name="email" label="邮箱" required>
+					<rice-input v-model="userForm['email']" placeholder="请输入邮箱" border="none" />
+				</rice-form-item>
+				<rice-form-item name="emailCode" label="邮箱验证码" required v-if="false">
+
+
+
+					<view class="input-row">
+						<view style="flex:1;display: flex;">
+
+							<rice-input v-model="userForm['emailcode']" placeholder="邮箱验证码" border="none" :maxlength="4"
+								type="number" />
+
+
+						</view>
+						<view style="display: flex;flex-direction: row;align-items: center;">
+							<text class="btn-code" @click="sendEmailCode">
+								{{ codeText }}
+							</text>
+						</view>
+					</view>
+				</rice-form-item>
+				<rice-form-item name="password" label="密码" required>
+					<rice-input v-model="userForm['password']" placeholder="请输入密码" border="none" type="password" />
+				</rice-form-item>
+				<rice-form-item name="confirmPassword" label="确认密码" required>
+					<rice-input v-model="userForm['confirmPassword']" placeholder="请再次输入密码" border="none"
+						type="password" />
+				</rice-form-item>
+			</rice-form>
+			<view class="flex">
+				<rice-button type="primary" text="完成注册" class="btn" shape="round" @click="handleRegister"  :loading="submitLoading"/>
+
+			</view>
+		
+		</view>
+	</view>
+</template>
+
+<script setup lang="uts">
+	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
+	import { AccountService } from "@/services/AccountService";
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	const submitLoading = ref(false);
+	type userType = {
+		account : string,
+		email : string,
+		//emailcode : string,
+		password : string,
+		confirmPassword : string
+	}
+	const userForm = ref<userType>({
+		account: '',
+		email: "",
+		//emailcode: "",
+		password: '',
+		confirmPassword: '',
+	});
+	const userFormRef = ref<RiceFormComponentPublicInstance | null>(null);
+	const codeText = ref('获取验证码');
+	const codeDisabled = ref(false);
+	let timer = 0;
+	const validAccount = async (account : any | null) => {
+		if (account == null) {
+			return "账号不能为空";
+		}
+		const flag = await AccountService.validRegisterAccount(account.toString(),);
+		return flag;
+	}
+	const emailvalidAccount = async (email : any | null) => {
+		if (email == null) {
+			return "邮箱不能为空";
+		}
+		const flag = await AccountService.validRegisterByEmail(email.toString());
+		return flag;
+	}
+	//密码的校验函数
+	const passwordValidator = (value : any | null) => {
+		const val = value as string
+		if (val.length < 6) return '密码的长度不能小于6位'
+		//if (val.startsWith('123456')) return '密码开头不能为连续的123456'
+		//只有返回 true 才表示校验通过
+		return true
+	}
+	const passwordConfirmValidator = (value : any | null) => {
+		const val = value as string
+		if (val.length < 6) return '密码的长度不能小于6位'
+		// if (val.startsWith('123456')) return '密码开头不能为连续的123456';
+		if (val != userForm.value.password) {
+			return "两次输入的密码不一致"
+		}
+		//只有返回 true 才表示校验通过
+		return true
+	}
+	const registerRule = new Map<string, FormRules[]>([
+		[
+			"account",
+			[
+				{ required: true, message: '请输入用户名' },
+				{ min: 3, max: 10, message: '字数需为 3 至 10 位', trigger: 'blur' },
+				{ validator: validAccount, trigger: 'blur', message: "已存在相同用户名" }
+			]
+		], [
+			"email",
+			[
+				{ required: true, message: '请输入邮箱' },
+				{ min: 3, max: 25, message: '字数需为 3 至 25 位', trigger: 'blur' },
+				{ pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: '邮箱格式不正确' }
+			//	{ validator: emailvalidAccount, trigger: 'blur', message: "此邮箱已注册" }
+			]
+		],
+		//  [
+		// 	"emailCode",
+		// 	[
+		// 		{ required: true, message: '请输入邮箱验证码' },
+		// 		{ min: 4, max: 4, message: '字数需为 4 位', trigger: 'blur' }
+		// 	]
+		// ],
+		[
+			"password",
+			[
+				//函数校验
+				{ validator: passwordValidator },
+				//正则校验
+				{ pattern: /[a-zA-Z].*\d|\d.*[a-zA-Z]/, message: '密码需要包含字母和数字' },
+			]
+		],
+		[
+			"confirmPassword",
+			[
+				//函数校验
+				{ validator: passwordConfirmValidator },
+				//正则校验
+				{ pattern: /[a-zA-Z].*\d|\d.*[a-zA-Z]/, message: '密码需要包含字母和数字',trigger:'change' },
+			]
+		]
+	])
+	// 清除定时器
+	const clearTimer = () => {
+		if (timer != 0) {
+			clearInterval(timer);
+			timer = 0;
+		}
+		codeText.value = '获取验证码';
+		codeDisabled.value = false;
+	};
+	const startTimeTask = () => {
+		codeDisabled.value = true;
+		let count = 60;
+		codeText.value = `${count}s`;
+	
+		timer = setInterval(() => {
+			count--;
+			if (count <= 0) {
+				clearTimer();
+				return;
+			}
+			codeText.value = `${count}s`;
+		}, 1000);
+	}
+	const sendEmailCode = async () => {
+		const result = await userFormRef.value!.validate();
+		if(result!=true){
+			const errsName = (result as FormValidateErrors[]).map(v => v.name)
+			   console.log('校验失败的name合集', errsName)
+		}
+		
+		await AccountService.sendEmailCode(userForm.value.email)
+	}
+	// 注册提交
+	const handleRegister = async () => {
+		if(submitLoading.value == true){
+			return;
+		}
+		const result = await userFormRef.value!.validate();
+		console.log("result", result);
+		//校验成功
+		if (result != true) {
+			console.log("校验失败");
+			return;
+		}
+		console.log("success")
+		const userJSON = {
+			account: userForm.value.account,
+			email:userForm.value.email,
+			password: userForm.value.password
+		} as UTSJSONObject;
+		try {
+			submitLoading.value = true;
+			const res = await AccountService.register(userJSON);			
+				uni.setStorageSync("account", userForm.value.account);
+				uni.navigateBack();
+				uni.showToast({
+					title: "注册成功",
+					icon: "none"
+				});
+			
+		} catch (err) {
+			//throw new Error(error.message as string);
+			submitLoading.value = false;
+			showDialog({
+							title: '登录失败',
+							message: err.message as string,
+							showCancelButton: false,
+							confirm: () => {
+								
+							}
+						})
+		}
+	}
+	//AccountService.upp();
+</script>
+<style scoped lang="scss">
+	.page {
+		flex: 1;
+		// background: linear-gradient(180deg, #f2f5f9 0%, #e6ebf5 100%);
+		padding: 0 16px;
+		box-sizing: border-box;
+	}
+
+	.card {
+		background: #ffffff;
+		padding-top: 60px;
+		border-radius: 20px;
+		padding: 40px 20px;
+		// box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+	}
+
+	.title {
+
+		text-align: center;
+		margin-bottom: 40px;
+
+		.txt {
+			font-size: 32px;
+			font-weight: 600;
+			color: #1d1d1f;
+		}
+	}
+
+	.input-box {
+		margin-bottom: 20px;
+		border-bottom: 0.5px solid #e5e7eb;
+		background-color: #fff;
+		border-radius: 25px;
+	}
+
+	.input {
+		height: 50px;
+		padding: 0 16px;
+		font-size: 16px;
+		color: #1d1d1f;
+	}
+
+	.ph {
+		color: #8e8e93;
+	}
+
+	.btn-register {
+		margin-top: 35px;
+		width: 100%;
+		height: 50px;
+		line-height: 50px;
+		background: #007aff;
+		color: #fff;
+		border-radius: 25px;
+		font-size: 17px;
+		font-weight: 500;
+		border: none;
+	}
+	.input-row {
+		
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex:1;
+		flex-direction: row;
+		justify-content: space-between;
+	
+		overflow: hidden;
+	}
+	
+	.btn-code {
+		font-size: 14px;
+		color: #007aff;
+		background: #fff;
+		border: none;
+		outline: none;
+		padding: 0 8px;
+		margin: 0 4px;
+	}
+	
+	.btn-code[disabled] {
+		color: #8e8e93;
+	}
+</style>

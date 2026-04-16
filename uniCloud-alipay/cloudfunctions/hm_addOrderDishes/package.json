@@ -1,0 +1,7 @@
+{
+  "name": "hm_addOrderDishes",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

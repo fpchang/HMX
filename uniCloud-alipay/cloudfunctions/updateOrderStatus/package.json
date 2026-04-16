@@ -1,0 +1,7 @@
+{
+  "name": "updateOrderStatus",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

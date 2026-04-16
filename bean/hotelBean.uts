@@ -1,0 +1,26 @@
+
+
+export type hotelBean = {
+  _id?:string,
+  ownership_id:string,
+  belong: string,
+  hotelCoordinate: Array<number>,
+ // onlinePayment?: boolean,
+  hotelIntroduction:string,
+  //contactPhone: string,
+  //dataStatus?: number,
+  hotelName: string,
+  firstImages: string ,
+   imagesList: Array<string> ,
+  athleticFacility: Array<string>,
+  cateringServices: Array<string>,
+  recreationFacility: Array<string>,
+  feature: Array<string>,
+  serviceTel: string ,
+  wechat: string ,
+  hotelAddress: string,
+  hotelAddressArea: string ,
+  hotelAddressCode?: string,
+  baseFacility: Array<string>,
+  curRole?:string
+}

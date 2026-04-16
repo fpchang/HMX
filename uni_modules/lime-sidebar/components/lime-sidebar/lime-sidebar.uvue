@@ -1,0 +1,204 @@
+<template>
+	<view class="demo-block">
+		<text class="demo-block__title-text ultra">侧边栏</text>
+		<text class="demo-block__desc-text">垂直展示的导航栏，用于在不同的内容区域之间进行切换。</text>	
+		<view class="demo-block__body">
+			<view class="demo-block">
+				<text class="demo-block__title-text">基础用法</text>
+				<view class="demo-block__body preview" style="height: 500rpx;">
+					<l-sidebar v-model="active">
+					  <l-sidebar-item title="标签名称"/>
+					  <l-sidebar-item title="标签名称"/>
+					  <l-sidebar-item title="标签名称"/>
+					</l-sidebar>
+				</view>	
+			</view>	
+			<view class="demo-block">
+				<text class="demo-block__title-text">线条</text>
+				<view class="demo-block__body preview" style="height: 500rpx;">
+					<l-sidebar v-model="active" line>
+					  <l-sidebar-item title="标签名称"/>
+					  <l-sidebar-item title="标签名称"/>
+					  <l-sidebar-item title="标签名称"/>
+					</l-sidebar>
+				</view>	
+			</view>	
+			<view class="demo-block">
+				<text class="demo-block__title-text">圆角</text>
+				<view class="demo-block__body preview" style="height: 500rpx;">
+					<l-sidebar v-model="active" round>
+					  <l-sidebar-item title="标签名称"/>
+					  <l-sidebar-item title="标签名称"/>
+					  <l-sidebar-item title="标签名称"/>
+					</l-sidebar>
+				</view>	
+			</view>	
+				<view class="demo-block">
+				<text class="demo-block__title-text">徽标提示</text>
+				<view class="demo-block__body preview">
+					<l-sidebar v-model="active" >
+					  <l-sidebar-item title="标签名称" :dot="true"/>
+					  <l-sidebar-item title="标签名称" badge="5"/>
+					  <l-sidebar-item title="标签名称"/>
+					</l-sidebar>
+				</view>	
+			</view>	
+			
+			<view class="demo-block">
+				<text class="demo-block__title-text">禁用状态</text>
+				<view class="demo-block__body preview">
+					<l-sidebar v-model="active" >
+					  <l-sidebar-item title="标签名称"/>
+					  <l-sidebar-item title="标签名称" :disabled="true"/>
+					  <l-sidebar-item title="标签名称"/>
+					</l-sidebar>
+				</view>	
+			</view>
+			
+			<view class="demo-block">
+				<text class="demo-block__title-text">监听切换事件</text>
+				<view class="demo-block__body preview">
+					<l-sidebar v-model="active" @change="onChange">
+					  <l-sidebar-item title="标签名称"/>
+					  <l-sidebar-item title="标签名称"/>
+					  <l-sidebar-item title="标签名称"/>
+					</l-sidebar>
+				</view>	
+			</view>
+			<view class="demo-block" style="margin-bottom: 100px;">
+				<text class="demo-block__title-text">配合锚点组件</text>
+				<view class="demo-block__body preview" style="height: 500px;">
+					<l-sidebar v-model="current" @change="onChange2">
+					  <l-sidebar-item v-for="section in list" :title="section.title" :key="section.title" :value="section.title"/>
+					</l-sidebar>
+					<view class="right" style="flex: 1; padding: 0 10px;">
+						<l-anchor v-model="current">
+							<l-anchor-section v-for="section in list" :name="section.title" :key="section.title">
+								<template #header>
+									<text class="section-title">{{section.title}}</text>
+								</template>
+								<view  class="section-card" v-for="item in section.children" :key="item">
+									<text class="section-card-text">{{item}}</text>
+								</view>
+							</l-anchor-section>
+						</l-anchor>
+					</view>
+				</view>	
+			</view>
+		</view>	
+	</view>
+</template>
+
+<script setup>
+	const active = ref<string|number>(0);
+	const current = ref<string|number>(0);
+	
+	const onChange = (value: number|string) => {
+		uni.showToast({
+			title: `标签${value}`
+		})
+	}
+	const onChange2 = (value: number|string) => {
+		console.log('value', value)
+	}
+	
+	type NavList = {
+		title: string,
+		children: any[]
+	}
+	
+	const generateNavItems = (count : number) => {
+		const items:NavList[] = [];
+		for (let i = 0; i < count; i++) {
+			items.push({
+				title: `标签${i + 1}`,
+				children: [0,1,2]
+			} as NavList);
+		}
+		return items;
+	};
+	
+	const list = ref<NavList[]>(generateNavItems(20));
+	
+	
+	
+</script>
+
+<style lang="scss">
+	$card-bg-color: var(--doc-card-bg-color, white);
+	$page-bg-color: var(--doc-page-bg-color, #f5f5f5);
+	$title-color: var(--doc-title-color, #000000E6);
+	$summary-color: var(--doc-summary-color, #00000099);
+	
+	.preview {
+		background-color: $card-bg-color;
+		transition-property: background-color;
+		// transition-duration: 300ms;
+		flex-direction: row;
+		.section-title {
+			padding: 10px;
+			color: $summary-color;
+			background-color: $card-bg-color;
+		}
+		.section-card {
+			background-color: $page-bg-color;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 104px;
+			margin-bottom: 10px;
+			
+			&-text {
+				color: $summary-color;
+			}
+		}
+	}
+	.demo-block {
+		margin: 32px 10px 0;
+		// overflow: visible;
+		&.card{
+			background-color: $card-bg-color;
+			transition-property: background-color;
+			// transition-duration: 300ms;
+			// padding: 30rpx 0;
+			margin-bottom: 20rpx !important;
+		}
+		&__title {
+			margin: 0;
+			margin-top: 8px;
+			&-text {
+				color: $summary-color;
+				font-weight: 400;
+				font-size: 14px;
+				line-height: 16px;
+				
+				&.large {
+					color: $title-color;
+					font-size: 18px;
+					font-weight: 700;
+					line-height: 26px;
+				}
+				&.ultra {
+					color: $title-color;
+					font-size: 24px;
+					font-weight: 700;
+					line-height: 32px;
+				}
+			}
+		}
+		&__desc-text {
+			color: $summary-color;
+			margin: 8px 16px 0 0;
+			font-size: 14px;
+			line-height: 22px;
+		}
+		&__body {
+			margin: 16px 0;
+			overflow: visible;
+			.demo-block {
+				// margin-top: 0px;
+				margin: 0;
+			}
+		}
+	}
+</style>

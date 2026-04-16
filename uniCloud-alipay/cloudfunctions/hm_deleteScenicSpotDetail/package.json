@@ -1,0 +1,7 @@
+{
+  "name": "hm_deleteScenicSpotDetail",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

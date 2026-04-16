@@ -1,0 +1,7 @@
+{
+  "name": "hm_hotelObj",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

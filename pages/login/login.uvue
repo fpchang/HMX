@@ -1,0 +1,352 @@
+<template>
+	<view class="page">
+		<view class="wrap">
+			<!-- 标题 -->
+			<view class="head">
+				<text class="title">登录</text>
+			</view>
+
+			<!-- 选项卡 -->
+			<view class="tab-wrap">
+				<!-- <text class="tab {{ currentTab === 0 ? 'tab-on' : '' }}" @click="switchTab(0)">
+					账号密码
+				</text>
+				<text class="tab {{ currentTab === 1 ? 'tab-on' : '' }}" @click="switchTab(1)">
+					一键登录
+				</text>
+				<text class="tab {{ currentTab === 2 ? 'tab-on' : '' }}" @click="switchTab(2)">
+					短信验证
+				</text> -->
+				<rice-tabs v-model="currentTab" :list="list" @clickTab="tabClick" :shrink="false" style="flex: 1;"
+					bg-color="transparent" line-width="60px"></rice-tabs>
+			</view>
+
+			<!-- 账号密码登录 -->
+			<view class="form" v-if="currentTab === 0">
+				<accountComponent :isAgree="isAgree"></accountComponent>
+			</view>
+
+			<!-- 一键登录 -->
+			<view class="form" v-if="currentTab === 1">
+				
+				<loginByApp :isAgree="isAgree"></loginByApp>
+			<!-- 	<button class="btn-login" @click="oneKeyLogin">一键登录</button> -->
+			</view>
+
+			<!-- 短信验证码登录 -->
+			<view class="form" v-if="currentTab === 2">
+				<loginBySmscodeComponent :isAgree="isAgree"></loginBySmscodeComponent>
+			</view>
+
+			<!-- 全局共用：用户协议 + 注册入口 -->
+			<view class="bottom-box">
+				<view class="up">
+					<view @click="agreeEvent" style="padding-right: 2px;">
+
+						<image v-show="!isAgree" src="/static/icons/circle.png" class="form-icon"></image>
+						<image v-show="isAgree" src="/static/icons/confirm_selcted.png" class="form-icon"></image>
+
+					</view>
+					<view style="display: flex;flex-direction: row;flex-wrap:wrap">
+						<text class="ct">我已经同意</text>
+						<text class="ct-txt-btn" @click="openUserAgreement">《用户协议》</text>
+						<text class="ct">和</text>
+						<text class="ct-txt-btn" @click="openUserPrivacyPolicy">《隐私政策》</text>
+
+
+						<!-- 	<text class="ct">我已阅读并同意</text> -->
+					</view>
+
+				</view>
+
+				<view class="register" @click="goRegister" v-if="currentTab==0">
+					<navigator url="/pages/register/register">
+						<text class="register-text">还没有账号？立即注册</text>
+					</navigator>
+
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script setup>
+	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
+	import { AccountService } from "@/services/AccountService";
+	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
+	import accountComponent from "./components/accountComponent.uvue";
+	import loginBySmscodeComponent from "./components/loginBySmscodeComponent.uvue"
+	import loginByApp from "./components/loginByApp.uvue"
+	
+	//import { ref, onUnmounted } from 'vue';
+
+	// 选项卡
+	const currentTab = ref(0);
+
+	// 表单数据
+	const account = ref('');
+	const password = ref('');
+	const phone = ref('');
+	const smsPhone = ref('');
+	const smsCode = ref('');
+
+	// 协议
+	const isAgree = ref(false);
+
+
+
+	// 切换选项卡
+	const switchTab = (index : number) => {
+		currentTab.value = index;
+		// clearTimer();
+	};
+	const list = ref<TabsOptions[]>([{
+		name: '账号密码',
+		value: 0
+	}, {
+		name: '一键登录',
+		value: 1
+	}, {
+		name: '短信验证',
+		value: 2
+	}
+	])
+	const tabClick = (e : TabsClickTab) => {
+		currentTab.value = e.index;
+	}
+	// 同意协议
+	const toggleAgree = () => {
+		isAgree.value = !isAgree.value;
+	};
+	
+	// 去注册
+	const goRegister = () => {
+		// uni.showToast({
+		// 	title: '跳转到注册页面',
+		// 	icon: 'none'
+		// });
+		// uni.navigateTo({ url: '/pages/register/register' });
+	};
+
+	// 账号密码登录
+	const accountLogin = () => {
+		if (!isAgree.value) {
+			uni.showToast({ title: '请先同意用户协议与隐私政策', icon: 'none' });
+			return;
+		}
+		if (account.value == "" || password.value == "") {
+			uni.showToast({ title: '请完善账号密码', icon: 'none' });
+			return;
+		}
+		uni.showToast({ title: '登录成功', icon: 'success' });
+	};
+
+	
+	
+	const agreeEvent = () => {
+		console.log(isAgree.value)
+		isAgree.value = !isAgree.value;
+	};
+	const openUserAgreement = () => {
+		uni.navigateTo({
+			url: "/pages/common/userAgreement/userAgreement",
+		});
+	};
+	const openUserPrivacyPolicy = () => {
+		uni.navigateTo({
+			url: "/pages/common/privacyPolicy/privacyPolicy",
+		});
+	};
+	onShow(() => {
+		const accountstorage = uni.getStorageSync("account");
+		if (accountstorage != null) {
+			account.value = accountstorage as string;
+		}
+	})
+	
+</script>
+
+<style scoped lang="scss">
+	.page {
+		background-color: #fff;
+		flex:1;
+		padding: 0 24px;
+	}
+
+	.wrap {
+		padding-top: 60px;
+	}
+
+	/* 标题 */
+	.head {
+		margin-bottom: 40px;
+	}
+
+	.title {
+		font-size: 34px;
+		font-weight: 600;
+		color: #1d1d1f;
+	}
+
+	/* 选项卡 */
+	.tab-wrap {
+		display: flex;
+		flex-direction: row;
+		border-bottom: 1px solid #e5e5ea;
+		margin-bottom: 32px;
+	}
+
+
+	/* 表单 */
+	.form {
+		width: 100%;
+	}
+
+	.input-row {
+		background-color: #fff;
+		border-radius: 25px;
+		margin-bottom: 12px;
+		overflow: hidden;
+	}
+
+	.input {
+		height: 50px;
+		padding: 0 16px;
+		font-size: 16px;
+		color: #1d1d1f;
+	}
+
+	/* 验证码 */
+	.code-row {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		padding-right: 12px;
+	}
+
+	.code-input {
+		flex: 1;
+	}
+
+	.btn-code {
+		font-size: 14px;
+		color: #007aff;
+		background: transparent;
+		border: none;
+		padding: 0 8px;
+	}
+
+	.btn-code[disabled] {
+		color: #8e8e93;
+	}
+
+	/* 自动注册提示 */
+	.tip {
+
+		margin-bottom: 16px;
+
+		.txt {
+			font-size: 12px;
+			color: #8e8e93;
+			line-height: 1.4;
+			text-align: center;
+			padding-top: 12px;
+		}
+	}
+
+	/* 登录按钮 */
+	.btn-login {
+		width: 100%;
+		height: 50px;
+		line-height: 50px;
+		background-color: #007aff;
+		color: #fff;
+		font-size: 17px;
+		font-weight: 500;
+		border-radius: 25px;
+		border: none;
+		margin: 24px 0 12px 0;
+	}
+
+	/* 底部：协议 + 注册 */
+	.bottom-box {
+		width: 100%;
+	}
+
+	.agree {
+		display: flex;
+		align-items: center;
+		margin-bottom: 16px;
+	}
+
+	.check {
+		width: 18px;
+		height: 18px;
+		border-radius: 4px;
+		border: 1px solid #c7c7cc;
+		margin-right: 8px;
+	}
+
+	.check-on {
+		background-color: #007aff;
+		border-color: #007aff;
+		position: relative;
+	}
+
+	.check-on::after {
+		content: "";
+		position: absolute;
+		left: 5px;
+		top: 2px;
+		width: 5px;
+		height: 9px;
+		border-right: 2px solid #fff;
+		border-bottom: 2px solid #fff;
+		transform: rotate(45deg);
+	}
+
+	.agree-text {
+		font-size: 13px;
+		color: #8e8e93;
+	}
+
+	.link {
+		color: #007aff;
+	}
+
+	.register {
+		margin-top: 24px;
+
+	}
+
+	.register-text {
+		font-size: 15px;
+		color: #007aff;
+		text-align: center;
+	}
+
+	.up {
+		margin: 12px 0 12px 0;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+
+		.ct {
+			font-size: 13px;
+			color: gray;
+
+
+		}
+
+		.ct-txt-btn {
+			color: #165dff;
+			font-size: 12px;
+		}
+
+		.form-icon {
+			width: 20px;
+			height: 20px;
+		}
+	}
+</style>

@@ -1,0 +1,9 @@
+{
+  "name": "hm_closeAccount",
+  "dependencies": {
+    "tokenEvent": "file:../common/tokenEvent"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

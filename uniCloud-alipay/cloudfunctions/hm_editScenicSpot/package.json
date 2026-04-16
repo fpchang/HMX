@@ -1,0 +1,7 @@
+{
+  "name": "hm_editScenicSpot",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

@@ -1,0 +1,20 @@
+{
+    "name": "hm_hotel_approve",
+    "dependencies": [],
+    "extensions": {
+        "uni-cloud-jql": []
+    },
+    "cloudfunction-config": {
+        // "memorySize": 512,
+        // "timeout": 60,
+        // "triggers": [
+        //     {
+        //         "name": "orderTrigger",
+        //         "type": "timer",
+        //         "config": "0 0 * * * * *"
+        //     }
+        // ],
+        // "path": "",
+        // "runtime": "Nodejs18"
+    }
+}

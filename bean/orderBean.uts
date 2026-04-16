@@ -1,0 +1,94 @@
+import { roomBean } from "./roomBean"
+
+export type orderSourceBean={
+	name: string,
+	text:string,
+	value: number
+}
+export type OrderRoomTypeBean = {
+	count: number,
+	name: string,
+	roomList: string[],
+	roomType_id: string
+}
+export type orderBean={
+		_id: string,
+		checkInEndDate: string,
+		checkInEndDateTimeStamp: number,
+		checkInStartDate: string,
+		checkInStartDateTimeStamp: number,
+		createTime: number,
+		createrName: string,
+		createUserId:string,
+		createrPhone: string,
+		downPayment: number,
+		fromClient: boolean,
+		hotel_id: string,
+		orderSouce_Zn: string,
+		orderSource: number,
+		orderStatus: number,
+		orderType: string,
+		payType: string,
+		phone: string,
+		roomTypeArray: Array<OrderRoomTypeBean>,
+		reservedRoomList:Array<string>,
+		totalAmount: number,
+		userName: string,
+		wxNickName: string,
+		mark:string
+}
+export type OrderDataListResult={
+	count: number,
+	pageNo: number,//当前页码
+	pageSize: number,//每页数量
+	orderList: Array<orderBean>//列表
+}
+export type remainRoomTypeBean={
+	_id:string,
+	name:string,
+	remainRoomList:Array<roomBean>
+}
+/**
+ * 格式化 item->orderBean
+ */
+export const formatOrder=(orderItem:UTSJSONObject):orderBean=>{
+	let roomTypeList : Array<OrderRoomTypeBean> = [];
+	let rList = orderItem.getArray("roomTypeArray") as Array<UTSJSONObject> ?? []
+	rList.forEach((rt : UTSJSONObject) => {
+		let formatRt : OrderRoomTypeBean = {
+			count: rt.getNumber("count") ?? 0,
+			name: rt.getString("name") ?? "",
+			roomList: rt.getArray("roomList") as Array<string> ?? [],
+			roomType_id: rt.getString("roomType_id") ?? ""
+		}
+		roomTypeList.push(formatRt)
+	})
+		let order : orderBean = {
+			_id: orderItem.getString("_id") ?? "",
+			checkInEndDate: orderItem.getString("checkInEndDate") ?? "",
+			checkInEndDateTimeStamp: orderItem.getNumber("checkInEndDateTimeStamp") ?? 0,
+			checkInStartDate: orderItem.getString("checkInStartDate") ?? "",
+			checkInStartDateTimeStamp: orderItem.getNumber("checkInStartDateTimeStamp") ?? 0,
+			createTime: orderItem.getNumber("createTime") ?? 0,
+			createrName: orderItem.getString("createrName") ?? "",
+			createUserId:orderItem.getString("createUserId")??"",
+			createrPhone: orderItem.getString("createrPhone") ?? "",
+			downPayment: orderItem.getNumber("downPayment") ?? 0,
+			fromClient: orderItem.getBoolean("fromClient") ?? false,
+			hotel_id: orderItem.getString("hotel_id") ?? "",
+			orderSouce_Zn: orderItem.getString("orderSouce_Zn") ?? "",
+			orderSource: orderItem.getNumber("orderSource") ?? 0,
+			orderStatus: orderItem.getNumber("orderStatus") ?? 0,
+			orderType: orderItem.getString("orderType") ?? "",
+			payType: orderItem.getString("payType") ?? "",
+			phone: orderItem.getString("phone") ?? "",
+			roomTypeArray: roomTypeList,
+			reservedRoomList: orderItem.getArray<string>("reservedRoomList") ?? [],
+			totalAmount: orderItem.getNumber("totalAmount") ?? 0,
+			userName: orderItem.getString("userName") ?? "",
+			wxNickName: orderItem.getString("wxNickName") ?? "",
+			mark: orderItem.getString("mark") ?? ""
+		}
+	return order;
+}
+

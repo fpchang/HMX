@@ -1,0 +1,375 @@
+<template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;align-items: center;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image src="/static/icons/list.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">房型列表</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn">
+				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
+
+				<text class="txt" @click="addRoomType">添加房型</text>
+
+
+			</view>
+		</template>
+	</rice-navbar>
+	<scroll-view style="flex:1" @scroll="scrollPage" v-if="roomTypeList.length>0">
+		<view class="card-list">
+
+			<view class="card-list-item" v-for="(roomType,index) of roomTypeList">
+				<view class="card">
+					<view class="img-area">
+						<image :src="topImg(roomType.firstImages)" style="height: 100%;width: 100%;" mode="aspectFill">
+						</image>
+					</view>
+					<view class="card-title-group">
+						<view class="card-title-area">
+							<view class="card-title">
+								<text class="txt">{{roomType.name}}</text>
+								<text class="price">¥{{roomType.priceBase}}</text>
+							</view>
+							<view class="card-subtitle" style="justify-content: flex-start;margin-bottom: 16px;">
+								<view>
+									<rice-tag :text="`${roomType.area}㎡`" text-color="#4e5969" color="#f2f3f5"
+										:round="true" />
+
+								</view>
+								<view style="margin-left: 8px;" v-for="it of roomType.bedList">
+									<rice-tag :text="`${it['count']}张${it['name']}床`" text-color="#4e5969"
+										color="#f2f3f5" text-size="12px" :round="true" />
+
+								</view>
+
+
+
+							</view>
+
+
+
+							<view class="card-subtitle">
+								<navigator :url="`/pages/hotelManage/roomList/roomList?roomType_id=${roomType._id}`">
+									<view style="display: flex;flex-direction: row;align-items: center;">
+										<text style=" font-weight:400;color: #1d2129;font-size: 14px;">房间数：</text>
+										<text class="txt-num"
+											style="color: #00b42f;font-size: 14px;padding:0 4px;">{{roomType.roomList.length}}</text>
+										<text style="color: #4e5969;font-size: 14px;"> 间</text>
+										<rice-icon name="arrow-right"/>
+									</view>
+								</navigator>
+								
+								<view style="display: flex;flex-direction:row; align-items: center;">
+
+									<xt-control @del="deleteRoomType(roomType)" @view="viewDetail(roomType)"
+										@edit="editRoomType(roomType)"></xt-control>
+								</view>
+							</view>
+
+
+							<!-- <view v-if="false" class="control-icons" style="display: flex;flex-direction: row;">
+								<view class="control-icons-item" @click="viewDetail(roomType)">
+									
+									<image src="/static/icons/operation/view.png" style="width: 18px;height: 18px;">
+									</image>
+								</view>
+								<view class="control-icons-item" @click="editRoomType(roomType)">
+								
+									<image src="/static/icons/operation/edit.png" style="width: 18px;height: 18px;">
+									</image>
+								</view>
+								<view class="control-icons-item" @click="deleteRoomType(roomType)">
+									
+									<image src="/static/icons/operation/delete.png" style="width: 18px;height: 18px;">
+									</image>
+								</view>
+
+
+
+							</view> -->
+
+
+
+
+						</view>
+
+					</view>
+
+					<view class="control">
+					</view>
+				</view>
+			</view>
+
+		</view>
+
+	</scroll-view>
+	<view style="margin-top:80px" v-if="roomTypeList.length<1">
+		<l-empty description="没有数据"  />
+	</view>
+
+</template>
+
+<script setup>
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { state } from "@/store/store";
+	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
+	import { comFunction } from "@/pages/index/ComFuc.uts";
+	import { roomTypeService } from "@/services/roomTypeService";
+	import { roomTypeBean } from "@/bean/roomTypeBean.uts";
+	import { hotelBean } from "@/bean/hotelBean";
+	let submitLoading = ref(false);
+
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const hotelList = computed<Array<hotelBean>>(() => {
+		return state.hotelList;
+	});
+	const permissionList = computed<Array<string>>(() => {
+		return state.permissionList;
+	});
+	const roomTypeList = computed<Array<roomTypeBean>>(() => {
+		return state.roomTypeList;
+	});
+	//console.log("roomTypeList", roomTypeList);
+	const topImg = (imgUrl : string) : string => {
+		if (imgUrl == '') {
+			return '/static/images/noimg.png';
+		}
+		return imgUrl;
+	};
+	const belong = (phone : string) : string => {
+		return emergency_phone_number(phone)
+	}
+	const roleFormat = (val : string) : string => {
+		const p : Map<string, string> = new Map([
+			["administrator", "超级管理员"],
+			["manager", "管理员"],
+			["normal", "员工"]
+		]);
+		return p.get(val) ?? val;
+	}
+	let showControl_id = ref("");
+	const getRoomTypeId = (roomType : UTSJSONObject) : string => {
+		const idObj = roomType["_id"] as UTSJSONObject;
+		return idObj["_value"] as string;
+	}
+	const showControl = (roomType : UTSJSONObject) => {
+		showControl_id.value = getRoomTypeId(roomType);
+	}
+	const isShowMenu = (roomType : UTSJSONObject) => {
+		return getRoomTypeId(roomType) == showControl_id.value;
+	}
+	const editRoomType = (roomType : roomTypeBean) => {
+		if (!permissionList.value.includes(
+			"ROOMTYPE_UPDATE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+		uni.navigateTo({
+			url: `/pages/hotelManage/createRoomType/createRoomType?pageType=1&roomType_id=${roomType._id}`,
+		});
+	}
+	const addRoomType = () => {
+		console.log("create", permissionList.value)
+		if (!permissionList.value.includes(
+			"ROOMTYPE_CREATE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+		uni.navigateTo({
+			url: "/pages/hotelManage/createRoomType/createRoomType"
+		});
+	}
+	const deleteRoomType = async (roomType : roomTypeBean) => {
+		if (!permissionList.value.includes(
+			"ROOMTYPE_DELETE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+
+		showDialog({
+			title: '确认删除此房型',
+			message: "删除后将无法恢复，确认删除吗？",
+			beforeClose: async () : Promise<boolean> => {
+				try {
+					// const o = targetObj['_id'] as UTSJSONObject;
+					// const id = o["_value"] as string;
+					await roomTypeService.deleteRoomType(roomType._id);
+					await comFunction.getRoomTypeList(hotel_id.value);
+					hideDialog();
+					uni.showToast({
+						title: "删除成功",
+						icon: "none"
+					});
+					return true;
+				} catch (e) {
+					uni.showToast({
+						title: "删除房型失败",
+						icon: "none"
+					});
+					return false;
+				}
+			},
+			confirm: () => {
+			}, cancel: () => {
+				hideDialog();
+			}
+
+		});
+	}
+	const viewDetail = (roomType : roomTypeBean) => {
+		// this.type = 2;
+		//this.targetObj = JSON.parse(JSON.stringify(targetObj));
+		uni.navigateTo({
+			url: `/pages/hotelManage/createRoomType/createRoomType?pageType=2&roomType_id=${roomType._id}`,
+		});
+	}
+	let scrollTop_val = ref(0);
+	const scrollPage = (event : UniScrollEvent) => {
+		//event.detail = {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY}
+		let { scrollTop } = event.detail;
+		scrollTop_val.value = scrollTop
+	}
+</script>
+
+<style lang="scss">
+	.navbar-btn {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		padding: 12px 15px;
+		border-radius: 8px;
+
+		.txt {
+			color: #007aff;
+			font-size: 15px;
+			padding-left: 4px;
+		}
+	}
+
+	.card-list {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+
+		.card-list-item {
+			min-width: 360px;
+			padding: 15px;
+			flex: 1;
+
+			.card {
+
+
+				background-color: #fff;
+				border-radius: 12px;
+
+				.img-area {
+					height: 350rpx;
+					max-height: 200px;
+					background-color: #eee;
+				}
+
+				.card-title-group {
+					display: flex;
+					flex-direction: row;
+
+					justify-content: space-between;
+					padding: 15px;
+
+					.card-title-area {
+						flex: 1;
+
+						.card-title {
+							display: flex;
+							flex-direction: row;
+							justify-content: space-between;
+							align-items: center;
+							margin-bottom: 12px;
+
+							.price {
+								color: #165dff;
+								font-size: 20px;
+								font-weight: 700;
+							}
+
+							.txt {
+								color: #1d2129;
+								font-weight: 700;
+								font-size: 18px;
+							}
+						}
+
+						.card-subtitle {
+							margin-top: 8px;
+							display: flex;
+							flex-direction: row;
+							align-items: center;
+							justify-content: space-between;
+
+							.txt {
+								color: rgb(144, 147, 153);
+								font-size: 14px;
+								padding-left: 4px;
+							}
+						}
+					}
+
+					.state {
+
+
+						.txt {
+							background-color: rgba(255, 152, 0, 0.1);
+							color: rgb(255, 152, 0);
+							font-size: 14px;
+							padding: 8px;
+							border-radius: 4px;
+						}
+					}
+				}
+
+				.control-icons {
+					display: flex;
+					flex-direction: row;
+
+					.control-icons-item {
+						padding: 6px 8px;
+					}
+				}
+
+			}
+		}
+
+	}
+</style>

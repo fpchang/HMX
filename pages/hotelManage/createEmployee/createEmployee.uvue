@@ -1,0 +1,234 @@
+<template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;align-items: center;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn" v-if="pageType!=2">
+				<!-- <text class="txt">保存</text> -->
+				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
+					textColor="#007aff" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+			</view>
+		</template>
+	</rice-navbar>
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1">
+
+	<!-- #endif -->
+		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
+			<xt-form-item label="用户名" tips="" required>
+				<view>
+					<rice-input style="height: 40px;" clearable clear-trigger="always" placeholderStyle="font-size:14px"
+						classic placeholder="请输入员工名" borderColor="#dcdfe6" :disabled="pageType==2||isAdministrator"
+						v-model="employeeForm.employee_name"></rice-input>
+				</view>
+			</xt-form-item>
+			<view style="padding:20px;border:1px solid #eee;border-radius: 12px  ;">
+				<rice-radio-group v-model="accountType" direction="row" style="margin-bottom: 20px;">
+					<rice-radio value="phone" label="手机号"></rice-radio>
+					<rice-radio value="account" label="普通账号"></rice-radio>
+				</rice-radio-group>
+				<xt-form-item label="手机号" tips="*确认输入的手机号已经注册，否则无法添加" required v-if="accountType=='phone'">
+					<view>
+						<rice-input style="height: 40px;" placeholderStyle="font-size:14px" clearable
+							clear-trigger="always" classic placeholder="请输入手机号" borderColor="#dcdfe6"
+							:disabled="pageType==2" v-model="employeeForm.phone" :maxlength="11"
+							type="number"></rice-input>
+					</view>
+				</xt-form-item>
+				<xt-form-item label="登录账号" tips="*确认输入的账号已经注册，否则无法添加" required v-if="accountType=='account'">
+					<view>
+						<rice-input style="height: 40px;" placeholderStyle="font-size:14px" clearable
+							clear-trigger="always" classic placeholder="请输入账号名称" borderColor="#dcdfe6"
+							:disabled="pageType==2" v-model="employeeForm.account"></rice-input>
+					</view>
+				</xt-form-item>
+			</view>
+
+			<xt-form-item label="角色" tips="" required>
+				<view>
+					<rice-radio-group v-model="employeeForm.role" direction="row">
+
+						<view style="margin:4px"> <rice-radio value="manager" label="管理员"></rice-radio></view>
+						<view style="margin:4px"><rice-radio value="normal" label="普通员工"></rice-radio></view>
+
+					</rice-radio-group>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="备注" tips="" required>
+				<view>
+
+					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="备注内容"
+						layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
+						v-model="employeeForm.mark"></rice-textarea>
+				</view>
+			</xt-form-item>
+		</view>
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+</template>
+
+<script setup>
+	import { state } from '@/store/store.uts';
+	import { employeeBean } from '@/bean/employeeBean';
+	import { validEmployeeForm } from "./createEmployeeFormVaild.uts";
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { HotelService } from '@/services/HotelService.uts';
+	import { employeeAction } from "../employeeList/employeeAction.uts";
+
+	let pageType = ref(0);
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed(() => {
+		return state.user;
+	});
+	const title = computed(() => {
+		if (pageType.value == 0) {
+			return '添加员工';
+		}
+		return pageType.value == 1 ? '修改员工信息' : '员工信息';
+	});
+	const accountType = ref("phone");
+
+	const employeeList = computed<Array<employeeBean>>(() => {
+		return state.employeeList;
+	});
+	let submitLoading = ref(false);
+	let _id = ref("");//编辑页面id
+	let employeeForm = ref<employeeBean>({
+		_id: "",
+		employee_name: "",
+		hotel_id: hotel_id.value,
+		phone: "",
+		account: "",
+		account_id: "",
+		role: "normal",
+		mark: ""
+	});
+	watch(accountType, (val : string) => {
+		if (val == 'phone') {
+			employeeForm.value.account = "";
+		} else {
+			employeeForm.value.phone = "";
+		}
+	})
+	const titleImg = computed<string>(() => {
+		if (pageType.value == 0) {
+			return "/static/icons/addpage.png"
+		}
+		return pageType.value == 1 ? "/static/icons/editpage.png" : "/static/icons/detailpage.png"
+	})
+	const isAdministrator = computed<boolean>(() => {
+		if (employeeForm.value.role == "administrator" && pageType.value == 1) {
+			return true
+		}
+		return false
+	});
+	const editEmployee = async () => {
+		submitLoading.value = true;
+		try {
+			await HotelService.editEmployee(employeeForm.value);
+			submitLoading.value = false;
+			employeeAction.getEmplolyeeList(hotel_id.value);
+			uni.navigateBack();
+		} catch (error) {
+			showDialog({
+				title: '更新失败',
+				message:error.message.toString(),
+				showCancelButton: false,
+				confirm: () => {
+					submitLoading.value = false;
+					hideDialog();
+				}
+			})
+
+		}
+	}
+	const addEmployee = async () => {
+		submitLoading.value = true;
+		try {
+
+			const flag : boolean = await HotelService.addEmployee(employeeForm.value);
+			if (flag) {
+				submitLoading.value = false;
+				employeeAction.getEmplolyeeList(hotel_id.value);
+				uni.navigateBack();
+				uni.showToast({
+					title: "添加成功",
+					icon: "success"
+				});
+			}
+
+		} catch (error) {
+			console.log("createemployee error",error);
+			submitLoading.value = false;
+			hideDialog();
+
+		}
+
+	}
+	const submitForm = () => {
+
+		if (!validEmployeeForm(employeeForm.value, pageType.value)) {
+			return;
+		}
+		employeeAction.getEmplolyeeList(hotel_id.value);
+		if (pageType.value == 1) {
+			editEmployee();
+			return;
+		}
+		addEmployee();
+	}
+	onLoad(params => {
+		try {
+			//console.log("params::",params);
+			const pt = params.getString("pageType") ?? "0";
+			const id = params.getString("id") ?? "";
+			pageType.value = parseInt(pt);
+			_id.value = id;
+			const found = employeeList.value.find(item => item._id == id);
+			if (found != null) {
+				employeeForm.value = {
+					_id: found._id,
+					employee_name: found.employee_name,
+					hotel_id: found.hotel_id,
+					account: found.account,
+					account_id: found.account_id,
+					phone: found.phone,
+					role: found.role,
+					mark: found.mark
+				};
+			}
+			// else {
+			// 	employeeForm.value = {
+			// 		_id:"",
+			// 		employee_name: "",
+			// 		hotel_id: hotel_id.value,
+			// 		phone: "",
+			// 		role: "normal",
+			// 		mark: ""
+			// 	};
+			// }
+			//console.log("employeeForm",employeeForm);
+		} catch (error) {
+			throw new Error("参数转换失败");
+		}
+
+
+
+	})
+</script>
+
+<style>
+
+</style>

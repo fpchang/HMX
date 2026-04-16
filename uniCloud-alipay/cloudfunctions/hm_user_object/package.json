@@ -1,0 +1,11 @@
+{
+  "name": "hm_user_object",
+  "dependencies": {
+    "tokenEvent": "file:../common/tokenEvent"
+  },
+  "extensions": {
+    "uni-cloud-jql": {},
+    "uni-cloud-sms": {},
+    "uni-cloud-ext-storage": {}
+  }
+}

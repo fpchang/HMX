@@ -1,0 +1,211 @@
+<template>
+	<view class="demo-block">
+		<text class="demo-block__title-text ultra">Popover 弹出气泡</text>
+		<text class="demo-block__desc-text">用于文字提示的气泡框。</text>	
+		<view class="demo-block__body">
+			<!-- <view style="height: 600px;"></view> -->
+			<view class="demo-block card">
+				<text class="demo-block__title-text">顶部</text>
+				<view class="demo-block__body row">
+					<l-popover theme="dark" style="flex:1; margin-right:10px" placement="top-left" content="内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容">
+						<button type="primary" @click="onClick">顶部左</button>
+					</l-popover>
+					<l-popover theme="dark" style="flex:1; margin-right:10px"  content="内容">
+						<button type="primary" @click="onClick">顶部中</button>
+						<template #content>
+							<view>
+								<text style="color: aliceblue;">内容内容内内容</text>
+							</view>
+						</template>
+					</l-popover>
+					<l-popover theme="darkcyan" style="flex:1;" content="内容内容内容" placement="top-right">
+						<button type="primary" @click="onClick">顶部右</button>
+					</l-popover>
+				</view>	
+			</view>	
+			
+					<!-- <l-popover placement="bottom">
+						<text class="iconfont">测试</text>
+						<template #content>
+							<view class="more-box">
+								<text class="box-text line" @click="popupShow('编辑学习笔记')">编辑</text>
+								<text class="box-text" @click="delNote('1')">删除</text>
+							</view>
+						</template>
+					</l-popover> -->
+			
+			<view class="demo-block card">
+				<text class="demo-block__title-text">底部</text>
+				<view class="demo-block__body row">
+					<l-popover theme="dark" style="flex:1; margin-right:10px" placement="bottom-left" content="内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容">
+						<button type="primary" style="width: 100%;" @click="onClick">底部左</button>
+					</l-popover>
+					<l-popover style="flex:1; margin-right:10px" placement="bottom"  content="内容">
+						<button type="primary" @click="onClick">底部中</button>
+						<template #content>
+							<view style="width: 100px;">
+								<text @click="handleClick" class="popover-cell">选项1</text>
+								<text @click="handleClick" class="popover-cell">选项1</text>
+								<text @click="handleClick" class="popover-cell">选项1</text>
+								<text @click="handleClick" class="popover-cell">选项1</text>
+								<text @click="handleClick" class="popover-cell">选项1</text>
+								<text @click="handleClick" class="popover-cell popover-cell-none">选项1</text>
+							</view>
+						</template>
+					</l-popover>
+					<l-popover style="flex:1;" content="内容内容内容内容内容内容内容内容内容内容内容内容内容" placement="bottom-right">
+						<button type="primary" @click="onClick">底部右</button>
+					</l-popover>
+				</view>	
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">右侧</text>
+				<view class="demo-block__body">
+					<l-popover theme="dark" placement="right-top" content="内容">
+						<button type="primary" style="width: 223px; height: 80px; line-height: 80px;" @click="onClick">底部左</button>
+					</l-popover>
+					<view style="height: 20px;"></view>
+					<l-popover theme="dark" placement="right" content="内容">
+						<button type="primary" style="width: 223px;height: 80px; line-height: 80px;" @click="onClick">底部中</button>
+					</l-popover>
+					<view style="height: 20px;"></view>
+					<l-popover theme="dark" content="内容" placement="right-bottom">
+						<button type="primary" style="width: 223px;height: 80px; line-height: 80px;" @click="onClick">底部右</button>
+					</l-popover>
+				</view>	
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">左侧</text>
+				<view class="demo-block__body" style="align-items: flex-end;">
+					<l-popover theme="dark" placement="left-top" content="内容">
+						<button type="primary" style="width: 223px; height: 80px; line-height: 80px;" @click="onClick">底部左</button>
+					</l-popover>
+					<view style="height: 20px;"></view>
+					<l-popover theme="dark" placement="left" content="内容">
+						<button type="primary" style="width: 223px;height: 80px; line-height: 80px;" @click="onClick">底部中</button>
+					</l-popover>
+					<view style="height: 20px;"></view>
+					<l-popover theme="dark" content="内容" placement="left-bottom">
+						<button type="primary" style="width: 223px;height: 80px; line-height: 80px;" @click="onClick">底部右</button>
+					</l-popover>
+				</view>	
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">测试</text>
+				<view class="demo-block__body" style="align-items: flex-end;">
+					<l-popover theme="dark" placement="right-top" content="内容">
+						<button type="primary" style="width: 223px; height: 80px; line-height: 80px;" @click="onClick">底部左</button>
+					</l-popover>
+					<view style="height: 20px;"></view>
+					<l-popover :closeOnClickOutside="false" style="align-self: flex-start;" theme="dark" content="内容内容" placement="left-bottom">
+						<button type="primary" style="width: 223px;height: 80px; line-height: 80px;" @click="onClick">底部右</button>
+					</l-popover>
+				</view>	
+			</view>
+			<view class="demo-block card">
+				<text class="demo-block__title-text">测试</text>
+				<view class="demo-block__body row">
+					<view style="height: 20px;"></view>
+					<text>1221</text>
+					<l-popover theme="dark" content="内容内容" placement="right">
+						<text style="background-color: red;" @click="click">点我</text>
+					</l-popover>
+					<text>1221</text>
+				</view>	
+			</view>
+		</view>	
+		<button @click="closeAll">关闭所有</button>
+		<view style="height: 500px;"></view>
+	</view>
+</template>
+
+<script lang="uts" setup>
+	import { closeOutside } from '@/uni_modules/lime-popover'
+	const closeAll = () => {
+		closeOutside()
+	}
+	const onClick = ()=>{
+		console.log('onClick:0')
+	}
+	const handleClick = () => {
+		console.log('handleClick:0')
+	}
+	const click = () => {
+		console.log('点击了我')
+	}
+	const popupShow = (v: string) => {
+		
+	}
+	 const delNote= (v: string) => {
+		
+	}
+</script>
+
+<style lang="scss">
+	$card-bg-color: var(--doc-card-bg-color, white);
+	// $page-bg-color: var(--doc-page-bg-color, #f5f5f5);
+	$title-color: var(--doc-title-color, #000000E6);
+	$summary-color: var(--doc-summary-color, #00000099);
+	
+	.row {
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	.popover-cell {
+		height: 50px;
+		line-height: 50px;
+		border-bottom: 1px solid #eee;
+		&-none {
+			border-bottom-width: 0;
+		}
+	}
+	.demo-block {
+		margin: 32px 14px 0;
+		overflow: visible;
+		&.card{
+			background-color: $card-bg-color;
+			transition-property: background-color;
+			// transition-duration: 300ms;
+			padding: 30rpx;
+			margin-bottom: 20rpx !important;
+			overflow: visible;
+		}
+		&__title {
+			margin: 0;
+			margin-top: 8px;
+			&-text {
+				color: $summary-color;
+				font-weight: 400;
+				font-size: 14px;
+				line-height: 16px;
+				
+				&.large {
+					color: $title-color;
+					font-size: 18px;
+					font-weight: 700;
+					line-height: 26px;
+				}
+				&.ultra {
+					color: $title-color;
+					font-size: 24px;
+					font-weight: 700;
+					line-height: 32px;
+				}
+			}
+		}
+		&__desc-text {
+			color: $summary-color;
+			margin: 8px 16px 0 0;
+			font-size: 14px;
+			line-height: 22px;
+		}
+		&__body {
+			margin: 16px 0 0;
+			overflow: visible;
+			.demo-block {
+				// margin-top: 0px;
+				margin: 0;
+			}
+		}
+	}
+</style>

@@ -1,0 +1,7 @@
+{
+  "name": "hm_addRoomType",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

@@ -1,0 +1,21 @@
+import{DB} from '../api/DB';
+class MineServiceClass{
+	constructor(){
+      
+    }
+    //添加意见反馈
+   async add(feedbackObj:UTSJSONObject):Promise<boolean>{
+     //  return  DB.callFunction("hm_addFeedback",{feedbackObj});
+	 try {
+		 //await DB.callFunction("hm_addFeedback",{feedbackObj});
+	 	await DB.add("hm-feedback",feedbackObj);
+		return true;
+	 } catch (error) {
+	 	throw new Error("添加失败");
+	 }
+		
+    }
+   
+}
+//module.exports =new MineService();
+export var MineService=new MineServiceClass();

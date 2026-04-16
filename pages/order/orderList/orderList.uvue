@@ -1,0 +1,540 @@
+<template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image src="/static/icons/list.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">订单列表</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn">
+				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
+
+				<text class="txt" @click="addOrder">添加订单</text>
+
+
+			</view>
+		</template>
+	</rice-navbar>
+	
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1">
+	<!-- #endif -->
+		<view class="search-area">
+			<view class="card">
+				<view class="card-item title-area">
+					<text class="txt">订单筛选</text>
+					<l-tag variant="light">共{{orderResult.count}}条</l-tag>
+				</view>
+				<view class="card-item  select-area">
+					<orderSearchComponent :columns="columns" :initDateRange="dateRange"
+						@searchInputChange="searchInputChange" @selectAction="selectStatus" @dateChange="dateChange"
+						@searchAction="getOrderList" placeholder="搜索收入名称"></orderSearchComponent>
+				</view>
+				<view class="card-item search"></view>
+			</view>
+
+		</view>
+		<view class="card-list">
+			<!-- <template v-for="roomType of filterRoomTypeList"> -->
+			<view class="card-list-item" v-for="order of orderResult.orderList">
+				<view class="card">
+					<view style="display: flex;flex-direction: row;justify-content: flex-end;">
+						<view> 
+						<rice-tag v-if="order.orderStatus==1" type="primary" text="待入住" />
+						<rice-tag v-if="order.orderStatus==5" type="success" text="已完成" />
+						<rice-tag v-if="order.orderStatus==10" type="error" text="已撤销" />
+						</view>
+					
+					</view>
+					
+					<view class="content">
+						<!-- 	<view class="card-item title">
+							<text class="txt">{{formatDate(order.ioeTime)}}</text>
+						</view> -->
+						<view class="card-item">
+							<view class="fl-c">
+								<image src="/static/icons/hotelcustomer.png" style="width: 13px;height: 13px;"></image>
+								<text class="label">住客：</text>
+							</view>
+							<text class="val-style">{{order.userName}}</text>
+						</view>
+						<view class="card-item">
+							<view class="fl-c">
+								<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">入住时间：</text>
+							</view>
+							<text class="val-style">{{formatDate(order.checkInStartDateTimeStamp)}}</text>
+						</view>
+						<view class="card-item">
+							<view class="fl-c">
+								<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">退房时间：</text>
+							</view>
+							<text class="val-style">{{formatDate(order.checkInEndDateTimeStamp)}}</text>
+						</view>
+						<!-- <view class="card-item">
+							<view class="fl-c">
+								<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">房型：</text>
+							</view>
+							<view class="val-style" style="display: flex;flex-direction: row;align-items: center;">
+								<view v-for="it of order.roomTypeArray" >
+									<text style="padding-left: 8px">{{it.name}}</text>
+									</view>
+							</view>
+						</view> -->
+						<view class="card-item">
+							<view class="fl-c">
+								<image src="/static/icons/roomReserve.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">房间：</text>
+								
+							</view>
+							<view class="val-style" style="display: flex;flex-direction: row;align-items: center;flex: 1;flex-wrap: wrap;justify-content: flex-end;">
+								<!-- <view v-for="it of order.roomTypeArray" style="display: flex;flex-direction: row;align-items: center;">
+									<text style="padding-left: 8px" v-for="i of it.roomList">{{formatRoomName(i)}}</text>
+								</view> -->
+							
+								<text v-for="item of formatRoomList(order.reservedRoomList)" style="padding:0 4px">{{item}}</text> 
+							</view>
+						</view>
+						<view class="card-item" style="margin-bottom: 0;">
+							<view class="fl-c">
+								<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
+								<text class="label">备注信息：</text>
+							</view>
+							<text class="val-style">
+								{{order.mark}}
+							</text>
+						</view> 
+						<view class="card-item" style="margin-bottom: 0;">
+						<!-- <view class="amount-area">
+							<view><text class="label">房价</text></view>
+							<view><text class="num">￥{{order.totalAmount}}</text></view>
+						</view> -->
+						<view class="fl-c">
+							<image src="/static/icons/fm/income.png" style="width: 16px;height: 16px;"></image>
+							<text class="label">房价：</text>
+						</view>
+						<text class="val-style" style="color:#047857;font-weight: 700;">
+							￥{{order.totalAmount}}
+						</text>
+						</view> 
+					</view>
+
+					<view class="control">
+			
+						<view>
+							<xt-control @del="deleteOrder(order)" @edit="editOrder(order)" :show-view="false" :show-edit="false" :show-delete="order.orderStatus!=10"></xt-control>
+						</view>
+
+
+					</view>
+				</view>
+			</view>
+			<!-- </template> -->
+		</view>
+		<view v-if="submitLoading" style="margin-top:68px;display: flex;flex-direction: row;justify-content: center;">
+			<rice-loading color="#787878" text="加载中…" />
+		</view>
+		<l-empty description="没有数据" v-if="!submitLoading&&orderResult.orderList.length<1" />
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"  v-if="!submitLoading&&orderResult!=null&&orderResult.count>orderResult.pageSize">
+		<l-pagination v-model="orderResult.pageNo" :disabled="submitLoading" :total="orderResult?.count"
+			:page-size="orderResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
+	</view>
+</template>
+
+<script setup>
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import { TIME, getMonthDateArray } from "@/static/utils/TIME";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { OrderService } from "@/services/OrderService";
+	import { orderBean,OrderRoomTypeBean, OrderDataListResult } from '@/bean/orderBean.uts';
+	import { state } from "@/store/store";
+	import { fmState } from "@/store/modules/fmStore.uts";
+	import { comFunction } from "@/pages/index/ComFuc";
+	import orderSearchComponent from "./components/orderSearchComponent/orderSearchComponent";
+	import { roomBean } from "@/bean/roomBean";
+	import {userBean} from "@/bean/userBean";
+	import {getGatherEvent } from "@/store/modules/orderStore";
+	let submitLoading = ref(false);
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	})
+	const currentPage = ref(1);
+	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+		return state.roomTypeList;
+	});
+	const roomList = computed<Array<roomBean>>(() => {
+		return state.roomList;
+	});
+	//选择列表
+	let _select_id = ref("income");
+	let _search_key = ref("");
+	const orderStatus = ref<string | number>("all");
+	const keyword = ref("");//过滤字段
+	const dateRange = ref<string[]>(getMonthDateArray());
+	const columns = computed<Array<Array<PickerOption>>>(() => {
+		let result : Array<Array<PickerOption>> = [[
+				{ text: "全部", value: "all" },
+			      { text: "待入住", value: 1 },
+			      { text: "已完成", value: 5 },
+			      { text: "已撤销", value: 10 },
+		]];
+		return result;
+	});
+
+
+	const orderResult = ref<OrderDataListResult>({
+		count: 0,//总数量
+		pageNo: 1,//当前页码
+		pageSize: 20,//每页数量
+		orderList: []//列表
+	})
+	const getOrderList = async () => {
+		submitLoading.value = true;
+		// uni.showLoading({
+		// 	title: ""
+		// })
+		const fmr = await OrderService.getOrderListBySearch(hotel_id.value, dateRange.value, orderStatus.value, keyword.value, orderResult.value.pageNo, orderResult.value.pageSize);
+		orderResult.value = fmr as OrderDataListResult;
+		//uni.hideLoading();
+		submitLoading.value = false;
+	}
+	const dateChange = (range : string[]) => {
+		dateRange.value = range;
+		getOrderList();
+
+	}
+	const searchInputChange = (k : string) => {
+		keyword.value = k;
+	}
+	const selectStatus = (bt : string | number) => {
+		orderStatus.value = bt;
+		getOrderList();
+	}
+	const pageChange = (pn : number) => {
+		getOrderList();
+	}
+	const formatDate = (timestamp : number) => {
+		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
+	}
+	const formatRoomName = (room_id : string):string => {
+			let val="--";
+		if (roomTypeList.value == null) {
+			return val;
+		}
+		roomTypeList.value.forEach(roomtype=>{
+			let list = roomtype.roomList as Array<roomBean>;
+			list.forEach(room=>{
+				if(room._id ==room_id){
+					val=room.room_name;
+					return;
+				}
+				
+			})
+		})	
+		return val;
+	}
+	// const parseRoomList = (roomTypeArray:Array<OrderRoomTypeBean>):Array<string>=>{
+	// 	let list:Array<string>=[];
+	// 	roomTypeArray.forEach(item=>{
+	// 		item.roomList.forEach(roomid=>{
+	// 			list.push(formatRoomName(roomid))
+	// 		})	
+	// 	});
+	// 	return list;
+	// }
+	const formatRoomList = (list : Array<string>) : Array<string> => {
+		let result : Array<string> = [];
+		list.forEach(room_id => {
+			let room = roomList.value.find(item => item._id == room_id);
+			if(room==null){
+				result.push("-");
+				
+			}else{
+				result.push(room.room_name);
+			}
+			
+		})
+	
+		return result;
+	}
+	const addOrder = async () => {
+		if (!permissionList.value.includes(
+			"FM_CREATE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+		uni.$once("refrushOrderList", ()=>{
+			console.log("刷新orderlist");
+			getOrderList();
+		})
+		uni.navigateTo({
+			url: `/pages/order/createOrder/createOrder`
+		});
+	}
+	const deleteOrder = async (order : orderBean) => {
+		if (submitLoading.value == true) {
+			return;
+		}
+		if (!permissionList.value.includes(
+			"ORDER_DELETE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+
+				}
+			})
+			return;
+		}
+		console.log("delete")
+		showDialog({
+			title: '确认删除此订单',
+			message: "删除后将无法恢复，确认删除吗？",
+			beforeClose: async () : Promise<boolean> => {
+			console.log(1111);
+				// await roomTypeService.deleteOrder(room._id);
+				// await comFunction.getRoomTypeList(hotel_id.value);
+				// await FMService.deleteOrder(fm._id);
+				await OrderService.deleteOrder(order._id);
+				
+				await getOrderList();
+				getGatherEvent(hotel_id.value);
+				hideDialog();
+
+			},
+			confirm: () => {
+			}, cancel: () => {
+				hideDialog();
+			}
+
+		});
+	}
+	const editOrder = async (order:orderBean) => {
+		if (!permissionList.value.includes(
+			"ROOMTYPE_UPDATE"
+		)) {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+	}
+	const init = () => {
+		//let d:MOONTH_START_END_TIMESTAMP=TIME.getTodayStartTimeAndEndTime(new Date());
+		getOrderList();
+	}
+	onPageShow(() => {
+	//	getOrderList();
+	})
+	defineExpose({
+		//getOrderList
+	});
+	init();
+</script>
+
+<style lang="scss">
+	.search-area {
+		padding: 18px;
+
+		.card {
+			background-color: #fff;
+			border-radius: 8px;
+			padding: 16px;
+
+			.card-item {
+				margin-bottom: 15px;
+
+				&:last-child {
+					margin: 0;
+				}
+			}
+
+			.title-area {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+
+				.txt {
+					padding-right: 8px;
+					font-size: 18px;
+					font-weight: 700;
+				}
+			}
+
+		}
+	}
+
+	.card-list {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+
+		.card-list-item {
+			min-width: 360px;
+			padding: 7.5px 15px;
+			flex: 1;
+
+			.card {
+				background-color: #fff;
+				border-radius: 12px;
+
+				position: relative;
+
+				.icon-area {
+					position: absolute;
+					right: 10px;
+					top: 10px;
+				}
+
+				.top-area {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					height: 60px;
+					border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+					background-color: #ecfdf5;
+					padding: 0 24px;
+
+					.txt {
+						line-height: 60px;
+						color: #047857;
+						font-size: 18px;
+						font-weight: 700;
+					}
+
+				}
+
+				.top-area-red {
+					border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+					background-color: #fef2f2;
+
+					.txt {
+						line-height: 60px;
+						color: #b91c1c;
+						font-size: 18px;
+						font-weight: 700;
+					}
+
+				}
+
+				.amount-area {
+					padding: 0 24px;
+					margin-top: 24px;
+
+					.label {
+						color: #6b7280;
+						font-size: 14px;
+						margin-bottom: 4px;
+					}
+
+					.num {
+						line-height: 36px;
+						color: #047857;
+						font-size: 20px;
+						font-weight: 600;
+					}
+
+					.num-red {
+						color: #b91c1c;
+					}
+				}
+
+				.content {
+					padding: 24px;
+
+					.card-item {
+
+						margin-top: 15px;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						justify-content: space-between;
+
+						&:first-child {
+							margin-top: 0;
+						}
+
+						.fl-c {
+							display: flex;
+							flex-direction: row;
+							align-items: center;
+						}
+
+						.label {
+							color: #1f2937;
+							font-size: 13px;
+							padding-left: 8px;
+						}
+
+						.val-style {
+							color: #1f2937;
+							font-size: 13px;
+						}
+
+					}
+				}
+
+
+
+				.control {
+					// height: 44px;
+					padding:0 12px 12px 0;
+					display: flex;
+					flex-direction: row;
+					justify-content: flex-end;
+			
+					align-items: center;
+
+					.txt {
+						font-size: 20px;
+						font-weight: 700;
+						color: #f53f3f;
+						padding-top: 5px;
+					}
+
+					.txt-in {
+						color: #00b42a;
+					}
+				}
+			}
+		}
+	}
+	
+</style>

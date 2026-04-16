@@ -1,0 +1,7 @@
+{
+  "name": "hm_addEmployee",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

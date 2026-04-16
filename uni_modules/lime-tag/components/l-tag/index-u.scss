@@ -1,0 +1,243 @@
+@import '@/uni_modules/lime-style/index.scss';
+$use-css-var: true;
+$tag: #{$prefix}-tag;
+
+// Extracted variables with names
+$tag-solid-text-color: create-var(tag-solid-text-color, white);
+$tag-text-color: create-var(tag-text-color, $gray-11);
+$tag-square-border-radius: create-var(tag-border-radius, $border-radius-sm);
+$tag-round-border-radius: create-var(tag-border-radius, $border-radius-hg);
+$tag-mark-border-radius: create-var(tag-mark-border-radius, $tag-round-border-radius);
+$tag-close-icon-color: create-var(tag-close-icon-color, $text-color-3);
+
+// Type colors variables
+$tag-default-color: create-var(tag-default-color, $gray-11);
+$tag-default-light-color: create-var(tag-default-light-color, $gray-1);
+$tag-default-border-color: create-var(tag-default-border-color, $gray-5);
+$tag-primary-color: create-var(tag-primary-color, $primary-color);
+$tag-primary-light-color: create-var(tag-primary-light-color, $primary-color-1);
+$tag-success-color: create-var(tag-success-color, $success-color);
+$tag-success-light-color: create-var(tag-success-light-color, $success-color-1);
+$tag-warning-color: create-var(tag-warning-color, $warning-color);
+$tag-warning-light-color: create-var(tag-warning-light-color, $warning-color-1);
+$tag-danger-color: create-var(tag-danger-color, $error-color);
+$tag-danger-light-color: create-var(tag-danger-light-color, $error-color-1);
+
+// Size variables - Split padding into x and y
+$tag-mini-padding-x: create-var(tag-mini-padding-x, 4px);
+$tag-mini-padding-y: create-var(tag-mini-padding-y, 0);
+$tag-mini-font-size: create-var(tag-mini-font-size, 9px);
+$tag-mini-icon-size: create-var(tag-mini-icon-size, 10px);
+$tag-mini-height: create-var(tag-mini-height, 15px);
+
+$tag-small-padding-x: create-var(tag-small-padding-x, 6px);
+$tag-small-padding-y: create-var(tag-small-padding-y, 0);
+$tag-small-font-size: create-var(tag-small-font-size, $font-size-xs);
+$tag-small-icon-size: create-var(tag-small-icon-size, 12px);
+$tag-small-height: create-var(tag-small-height, 20px);
+
+$tag-medium-padding-x: create-var(tag-medium-padding-x, 8px);
+$tag-medium-padding-y: create-var(tag-medium-padding-y, 0);
+$tag-medium-font-size: create-var(tag-medium-font-size, $font-size-sm);
+$tag-medium-icon-size: create-var(tag-medium-icon-size, 14px);
+$tag-medium-height: create-var(tag-medium-height, 24px);
+
+$tag-large-padding-x: create-var(tag-large-padding-x, 8px);
+$tag-large-padding-y: create-var(tag-large-padding-y, 0);
+$tag-large-font-size: create-var(tag-large-font-size, $font-size);
+$tag-large-icon-size: create-var(tag-large-icon-size, 16px);
+$tag-large-height: create-var(tag-large-height, 28px);
+
+$tag-extra-large-padding-x: create-var(tag-extra-large-padding-x, 15px);
+$tag-extra-large-padding-y: create-var(tag-extra-large-padding-y, 0);
+$tag-extra-large-font-size: create-var(tag-extra-large-font-size, $font-size);
+$tag-extra-large-icon-size: create-var(tag-extra-large-icon-size, 16px);
+$tag-extra-large-height: create-var(tag-extra-large-height, 40px);
+
+$type-colors: (
+  'default': (
+    'color': $tag-default-color,
+    'light-color': $tag-default-light-color,
+  ),
+  'primary': (
+    'color': $tag-primary-color,
+    'light-color': $tag-primary-light-color,
+  ),
+  'success': (
+    'color': $tag-success-color,
+    'light-color': $tag-success-light-color
+  ),
+  'warning': (
+    'color': $tag-warning-color,
+    'light-color': $tag-warning-light-color
+  ),
+  'danger': (
+    'color': $tag-danger-color,
+    'light-color': $tag-danger-light-color
+  )
+);
+
+$size-styles: (
+	'mini': (
+		'padding-x': $tag-mini-padding-x,
+		'padding-y': $tag-mini-padding-y,
+		'font-size': $tag-mini-font-size,
+		'icon-size': $tag-mini-icon-size,
+		'height': $tag-mini-height
+  ),
+  'small': (
+	  'padding-x': $tag-small-padding-x,
+	  'padding-y': $tag-small-padding-y,
+	  'font-size': $tag-small-font-size,
+	  'icon-size': $tag-small-icon-size,
+	  'height': $tag-small-height
+  ),
+  'medium': (
+	  'padding-x': $tag-medium-padding-x,
+	  'padding-y': $tag-medium-padding-y,
+	  'font-size': $tag-medium-font-size,
+	  'icon-size': $tag-medium-icon-size,
+	  'height': $tag-medium-height
+  ),
+  'large': (
+	  'padding-x': $tag-large-padding-x,
+	  'padding-y': $tag-large-padding-y,
+	  'font-size': $tag-large-font-size,
+	  'icon-size': $tag-large-icon-size,
+	  'height': $tag-large-height
+  ),
+  'extra-large': (
+	  'padding-x': $tag-extra-large-padding-x,
+	  'padding-y': $tag-extra-large-padding-y,
+	  'font-size': $tag-extra-large-font-size,
+	  'icon-size': $tag-extra-large-icon-size,
+	  'height': $tag-extra-large-height
+  )
+);
+
+
+@mixin tag-variant($variant) {
+	$types: default, primary, success, warning, danger;
+	@each $type in $types {
+		$type-list: map-get($type-colors, $type);
+		
+		$type-color: map-get($type-list, color);
+		$type-light-color: map-get($type-list, light-color);
+		// $text-color: create-var(tag-text-color, if($variant == solid, $tag-solid-text-color, $type-color));
+		// $text-color: if($variant == solid and $type == default, $tag-default-solid-text-color, 
+		// 		            if($variant == solid, $tag-solid-text-color, $type-color));
+		$text-color: if($variant != solid and $type == default, $tag-text-color,
+				            if($variant == solid, $tag-solid-text-color, $type-color));
+		&.#{$tag}--#{$type} {
+			@if $variant == light-outline or $variant == outline {
+				border-width: 0.6px;
+				border-style: solid;
+				border-color: if($type == default, $tag-default-border-color, $type-color);
+			}
+			@if $variant == light-outline or $variant == light {
+				background-color: $type-light-color;
+			} @else if $variant == outline {
+				background-color: rgba(255, 255, 255, 0);
+			} @else {
+				background-color: $type-color;
+			}
+			/* #ifndef UNI-APP-X && APP*/
+			color: $text-color;
+			// @if $variant == solid {
+			// 	color: $tag-solid-text-color
+			// } @else {
+			// 	color: $type-color
+			// }
+			/* #endif */
+			/* #ifdef UNI-APP-X && APP */
+			.#{$tag} {
+				&__text,&__icon,&__icon-close {
+					color: $text-color //!important;
+					// @if $variant == solid {
+					// 	color: $tag-solid-text-color
+					// } @else {
+					// 	color: $type-color
+					// }
+				}
+			}
+			/* #endif */
+		}
+		
+	}
+}
+
+
+@mixin tag-size($size) {
+	.#{$tag}--#{$size} {
+		$size-list: map-get($size-styles, $size);
+		
+		height: map-get($size-list, 'height');
+		// padding: map-get($size-list, 'padding');
+		// padding: map-get($size-list, 'padding-y') map-get($size-list, 'padding-x');
+		@include padding(map-get($size-list, 'padding-y') map-get($size-list, 'padding-x'));
+		.#{$tag}__text {
+			font-size: map-get($size-list, font-size);
+		}
+		.#{$prefix}-icon,
+		.#{$prefix}-icon-close {
+			font-size: map-get($size-list, icon-size);
+		}
+	}
+}
+
+$sizes: mini, small, medium, large, extra-large;
+@each $size in $sizes {
+	@include tag-size($size);
+}
+
+
+.#{$tag} {
+	/* #ifndef UNI-APP-X */
+	display: inline-flex;
+	/* #endif */
+	flex-direction: row;
+	align-items: center;
+	align-self: flex-start;
+	box-sizing: border-box;
+	transition-duration: 300ms;
+	transition-property: opacity;
+	
+	&--square {
+		// border-radius: $tag-square-border-radius;
+		@include border-radius($tag-square-border-radius);
+	}
+	&--round  {
+		// border-radius: $tag-round-border-radius;
+		@include border-radius($tag-round-border-radius);
+	}
+	&--mark {
+		// border-radius: 0 $tag-mark-border-radius $tag-mark-border-radius 0;
+		@include border-radius(0 $tag-mark-border-radius $tag-mark-border-radius 0);
+	}
+	&__text {
+		/* #ifndef UNI-APP-X && APP */
+		word-wrap: normal;
+		/* #endif */
+		flex: 1;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	/* #ifndef UNI-APP-X && APP */
+	&__icon,&__icon-close {
+		display: inline-flex;
+	}
+	.l-icon:not(:empty) + &__text:not(:empty),
+	&__icon:not(:empty) + &__text:not(:empty),
+	&__text:not(:empty) + &__icon-close:not(:empty) {
+	    margin-left: 4px;
+	}
+	/* #endif */
+	
+	$variants: solid, light, outline, light-outline;
+	@each $variant in $variants {
+		&--#{$variant}{
+			@include tag-variant($variant);
+		}	
+	}
+}

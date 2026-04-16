@@ -1,0 +1,410 @@
+<template>
+  <view class="container">
+    <!-- 顶部导航栏：酒店名称 + 切换按钮 -->
+   <!-- <view class="header">
+      <view class="hotel-info">
+        <text class="hotel-name">{{ currentHotel.name }}</text>
+        <button class="switch-btn" @click="showHotelSelector = true">
+          <text>切换</text>
+          <uni-icons type="arrowdown" size="16" color="#fff"></uni-icons>
+        </button>
+      </view>
+    </view> -->
+
+    <!-- 酒店选择弹窗 -->
+ <!--   <uni-popup v-model:show="showHotelSelector" type="bottom" :height="60%">
+      <view class="popup-content">
+        <text class="popup-title">选择酒店</text>
+        <scroll-view class="hotel-list" scroll-y>
+          <view 
+            class="hotel-item" 
+            v-for="(hotel, index) in hotelList" 
+            :key="index"
+            @click="switchHotel(hotel)"
+          >
+            <text class="hotel-item-name">{{ hotel.name }}</text>
+            <uni-icons 
+              type="checkmark" 
+              size="20" 
+              color="#007AFF" 
+              v-if="hotel.id === currentHotel.id"
+            ></uni-icons>
+          </view>
+        </scroll-view>
+        <button class="close-btn" @click="showHotelSelector = false">取消</button>
+      </view>
+    </uni-popup> -->
+
+    <!-- 住房统计模块：今日/明日切换 -->
+    <view class="stats-section">
+      <view class="stats-tab">
+        <button 
+          class="tab-btn" 
+          :class="{ active: activeIndex == 0 }"
+          @click="tabClick(0)"
+		  style="margin-right: 10px;"
+        >
+          今日
+        </button>
+        <button 
+          class="tab-btn" 
+          :class="{ active: activeIndex == 1 }"
+          @click="tabClick(1)"
+        >
+          明日
+        </button>
+      </view>
+
+      <!-- 统计数据卡片 -->
+	  <view class="stats-card" v-if="activeIndex==0">
+	    <view class="stats-item">
+	      <text class="stats-label">今日入住</text>
+	      <text class="stats-value">{{numOrderToday}}</text>
+	    </view>
+	    <view class="stats-item">
+	      <text class="stats-label">今日退房</text>
+	     <text class="stats-value">{{numAccessOutToday}}</text>
+	
+	    </view>
+	    <view class="stats-item">
+	      <text class="stats-label">当前在住</text>
+	      <!-- <text class="stats-value">44</text> -->
+		 <l-circle :percent="numCustomerOrderToday_percent" size="100px"
+		  	strokeColor="green" trailColor="#eee" strokeWidth="12" trailWidth="12">
+		  	<text class="stats-value">{{numCustomerOrderToday}}</text>
+		  </l-circle>
+		<!-- <rice-progress-circle :percentage="numCustomerOrderToday_percent" color="green" inactive-color="#eee" text-size="18px">
+			   <text class="slot-text" style="text-align: center;font-size: 24px;font-weight: 600;color: #333;">{{numCustomerOrderToday}}</text>
+		  </rice-progress-circle> -->
+		
+	    </view>
+	    <view class="stats-item">
+	      <text class="stats-label">空房数量</text>
+	      <!-- <text class="stats-value">55</text> -->
+		  <l-circle :percent="(100 - numCustomerOrderToday_percent)" trailColor="#eee"
+		  	size="100px" strokeColor="orange" strokeWidth="12" trailWidth="12">
+		  	<text class="stats-value">{{ roomCount - numCustomerOrderToday}}</text>
+		  </l-circle>
+		<!-- <rice-progress-circle :percentage=" 40" text-color="green" text-size="18px">
+		  			   <text class="slot-text" style="text-align: center;font-size: 24px;font-weight: 600;color: #333;">{{roomCount - numCustomerOrderToday}}</text>
+		  </rice-progress-circle> -->
+	    </view>
+	  </view>
+      <view class="stats-card" v-if="activeIndex==1">
+        <view class="stats-item">
+          <text class="stats-label">明日入住</text>
+          <text class="stats-value">{{numOrderTommorow}}</text>
+        </view>
+        <view class="stats-item">
+          <text class="stats-label">明日退房</text>
+          <text class="stats-value">{{numAccessOutTommorow}}</text>
+        </view>
+        <view class="stats-item">
+          <text class="stats-label">当前在住</text>
+         <!-- <text class="stats-value">44</text> -->
+		 <l-circle :percent="numCustomerOrderTommorw_percent" size="100px"
+		 	strokeColor="green" strokeWidth="12" trailWidth="12">
+		 	<text class="stats-value">{{numCustomerOrderTommorw}}</text>
+		 </l-circle>
+        </view>
+        <view class="stats-item">
+          <text class="stats-label">空房数量</text>
+         <!-- <text class="stats-value">55</text> -->
+		 <l-circle :percent="(100 - numCustomerOrderTommorw_percent)" size="100px"
+		 	strokeColor="orange" strokeWidth="12" trailWidth="12">
+		 	<text class="stats-value">{{roomCount - numCustomerOrderTommorw}}</text>
+		 </l-circle>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script setup lang="ts">
+	import { ref, watch } from 'vue';
+	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import { TIME } from "@/static/utils/TIME";
+	import { state } from "@/store/store";
+	import { orderState, getGatherEvent } from "@/store/modules/orderStore";
+	import { roomTypeBean } from '@/bean/roomTypeBean.uts';
+	import { orderBean } from '@/bean/orderBean';
+	const activeIndex = ref(0);
+	const itemStyle = {
+		fontSize: "20px"
+	}
+	const activeStyle = {
+		color: "#ff0000"
+	}
+	const list = ref<TabsOptions[]>([{
+		name: '今天',
+		value: 'today'
+	},
+	{
+		name: '明天',
+		value: 'tommorow'
+	}]);
+	let swiperx = ref('0');
+	//const echartRef = ref<EChartComponentPublicInstance | null>(null);
+	const option = {
+		xAxis: {
+			type: 'category',
+			data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+		},
+		yAxis: { type: 'value' },
+		series: [{
+			data: [12, 20, 15, 8, 7, 11, 13],
+			type: 'bar',
+		}],
+		grid: [{ left: 50, right: 15, top: 40, bottom: 30 }],
+		tooltip: { show: true },
+	};
+	const currentData = () : string => {
+		return dayuts(new Date()).format("YYYY 年 MM 月 DD 日");
+	}
+	// 组件挂载后初始化echarts实例 (也可在请求数据后初始化)
+	function initEchart() {
+	
+	}
+	function tabClick(index:number) {
+		activeIndex.value = index;
+	}
+	const onClick = (index : number) => {
+		// 在切换前执行一些逻辑，如数据校验
+		activeIndex.value = index;
+	}
+	let clientx = ref(0);
+	const swiperMove = (event : UniTouchEvent) : void => {
+		//console.log("tochmove",event);
+		// if(clientx.value==0){
+		// 	clientx.value=event.changedTouches[0].clientX
+		// }
+		// console.log();
+		// let x = event.changedTouches[0].clientX - clientx.value;
+		// if(x>0 &&activeIndex.value==0){
+		// 	swiperx.value= '0';
+		// }
+		// if(x<0 &&activeIndex.value==list.value.length){
+		// 	swiperx.value= `${100/list.value.length}%`;
+		// }
+		// swiperx.value= `${x}px`;
+	}
+	//订单列表中计算有多少房间
+	const getRoomCountFromOrderList = (orderList : Array<orderBean>) : number => {
+		let numCount = 0;
+		orderList.map(item => {
+			let num = item.reservedRoomList.length;
+			numCount += num;
+	
+		});
+		return numCount;
+	}
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const roomTypeList = computed<Array<roomTypeBean>>(() => {
+		return state.roomTypeList;
+	});
+	const roomCount = computed(() => {
+		let count = 0;
+		roomTypeList.value.map(item => {
+			//const hmRoom = (item['_id'] as UTSJSONObject).get('hm-room') as Array<UTSJSONObject>|null;
+			//count += hmRoom != null ? hmRoom.length : 0;
+			count += item.roomList?.length ?? 0;
+		})
+		return count;
+	})
+	//今日办理入住的订单
+	// const orderListByCheckInToday = computed(() => {
+	// 	return orderState.orderListByCheckInToday;
+	// });
+	const numOrderToday = computed(() : number => {
+		let orderList = orderState.orderListByCheckInToday;
+		let num = getRoomCountFromOrderList(orderList);
+		return num;
+	});
+	//今日退房订单
+	// const orderListByCheckOutToday = computed(() => {
+	// 	return orderState.orderListByCheckOutToday;
+	// });
+	const numAccessOutToday = computed(() : number => {
+		let orderList = orderState.orderListByCheckOutToday;
+		let num = getRoomCountFromOrderList(orderList);
+		return num;
+	});
+	//明日办理入住的订单
+	// const orderListByCheckInTommorow = computed(() => {
+	// 	return orderState.orderListByCheckInTommorow;
+	// });
+	const numOrderTommorow = computed(() : number => {
+		let orderList = orderState.orderListByCheckInTommorow;
+		let num = getRoomCountFromOrderList(orderList);
+		return num;
+	});
+	//明日退房订单
+	// const orderListByCheckOutTommorow = computed(() => {
+	// 	return orderState.orderListByCheckOutTommorow;
+	// });
+	const numAccessOutTommorow = computed(() : number => {
+		let orderList = orderState.orderListByCheckOutTommorow;
+		let num = getRoomCountFromOrderList(orderList);
+		return num;
+	});
+	//今日住客数量
+	// const orderListToday = computed(() => {
+	// 	return orderState.orderListToday;
+	// });
+	const numCustomerOrderToday = computed(() : number => {
+		let orderList = orderState.orderListToday;
+		let num = getRoomCountFromOrderList(orderList);
+		return num;
+	});
+	const numCustomerOrderToday_percent = computed(() : number => {
+		if (roomCount.value == 0) {
+			return 40;
+		}
+		const val = (numCustomerOrderToday.value * 100 / roomCount.value) as number;
+		return parseFloat(val.toFixed(2)) ;
+	});
+	//明日住客订单
+	// const orderListTommorow = computed(() => {
+	// 	return orderState.orderListTommorow;
+	// });
+	const numCustomerOrderTommorw = computed(() : number => {
+		let orderList = orderState.orderListTommorow;
+		let num = getRoomCountFromOrderList(orderList);
+		return num
+	});
+	const numCustomerOrderTommorw_percent = computed(() : number => {
+		if (roomCount.value == 0) {
+			return 0.01;
+		}
+		const val = (numCustomerOrderTommorw.value * 100 / roomCount.value) as number;
+		return Math.max(parseFloat(val.toFixed(2)),0.01) ;
+	});
+	watch(activeIndex, (indexNew : number, indexOld : number) : void => {
+		if (indexNew == 1) {
+			swiperx.value = '-50%';
+			return;
+		}
+		swiperx.value = '0'
+	});
+	
+	const init = async () => {
+		getGatherEvent(hotel_id.value);
+		//console.log("getGatherEvent",res);
+	}
+	watch(hotel_id, (hotel_idNew : string, hotel_idOld : string) : void => {
+		//console.log("hotel_id change", hotel_idNew, hotel_idOld);
+		init();
+	});
+	onBeforeMount(() => {
+		//console.log("gather component onBeforeMound");
+	
+	})
+	onMounted(() => {
+		initEchart();
+	});
+	init();
+</script>
+
+<style scoped>
+/* 全局容器 */
+.container {
+  width: 100%;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 顶部导航栏 */
+.header {
+  background-color: #007AFF;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hotel-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.hotel-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+
+
+
+/* 统计模块 */
+.stats-section {
+  padding: 20px;
+}
+
+.stats-tab {
+  display: flex;
+  margin-bottom: 16px;
+  flex-direction: row;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #333;
+  border: none;
+  font-size: 15px;
+}
+
+.tab-btn.active {
+  background-color: #007AFF;
+  color: #fff;
+}
+
+.stats-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding:0 20px 20px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+
+}
+
+.stats-item {
+	margin-top: 20px;
+	flex: 1;
+	min-width: 140px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stats-label {
+  font-size: 14px;
+  color: #666;
+  padding:8px;
+}
+
+.stats-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+			.val-text {
+				font-size: 32px;
+				font-weight: 700;
+			}
+.slot-text{
+	text-align: center;font-size: 24px;font-weight: 600;color: #333;
+}
+</style>

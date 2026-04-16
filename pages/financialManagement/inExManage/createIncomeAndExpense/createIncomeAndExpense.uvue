@@ -1,0 +1,300 @@
+<template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;align-items: center;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn" v-if="pageType!=2">
+				<!-- <text class="txt">保存</text> -->
+				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
+					textColor="#007aff" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+			</view>
+		</template>
+	</rice-navbar>
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1">
+	<!-- #endif -->
+		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
+			<xt-form-item label="单据类型" tips="" required>
+				<view>
+					<rice-radio-group v-model="fmForm.billType" direction="row" :disabled="pageType==1" @change="billTypeChange">
+						<view class="check-container" v-if="pageType==0 ||fmForm.billType=='income'">
+							<rice-radio value="income" label="收入" >
+								<view style="display: flex;flex-direction: row;align-items: center;">
+
+									<!-- <rice-icon name="up" color="#00b42a" /> -->
+									<text style="color:#00b42a;font-size: 14px;">收入</text>
+								</view>
+							</rice-radio>
+						</view>
+						<view class="check-container" v-if="pageType==0 ||fmForm.billType=='expenses'">
+							<rice-radio value="expenses" label="收入" >
+								<view style="display: flex;flex-direction: row;align-items: center;">
+									<!-- <rice-icon name="down" color="#f53f3f" /> -->
+									<text style="color:#f53f3f;font-size: 14px;">支出</text>
+								</view>
+							</rice-radio>
+						</view>
+
+
+					</rice-radio-group>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="收支类型" tips="" required>
+				<view>
+					<xt-select :columns="columns" @selectAction="selectType" :showKeySearch="false" v-model="fmForm.type"></xt-select>
+				</view>
+			</xt-form-item>
+			<xt-form-item abel="收支时间" tips="">
+				<view class="select">
+					<view class="content" @click="showCalendarEvent">
+						<text class="txt">{{iotimeStr}}</text>
+						<image src="/static/icons/calendar.png" style="width: 16px;height:16px"></image>
+					</view>
+				</view>
+				<rice-calendar v-model:show="showCalendar" @confirm="checkIoTime" :date="iotimeStr"
+					:lunar="true"></rice-calendar>
+			</xt-form-item>
+
+			<xt-form-item label="金额" tips="" required>
+				<view class="room-list-item" style="flex: 1;">
+
+					<rice-input style="height: 40px;" type="digit" placeholderStyle="font-size:14px" classic
+						placeholder="请输入金额" borderColor="#dcdfe6" :disabled="pageType==2" v-model="amount"></rice-input>
+
+					<!-- <rice-stepper v-model="fmForm.amount" input-width="150px" button-size="38" font-size="15" :auto-fixed ="false" :disabled="pageType==2" />
+			 -->
+				</view>
+			</xt-form-item>
+			<xt-form-item label="备注" tips="">
+				<view>
+
+					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="备注内容"
+						layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
+						v-model="fmForm.mark"></rice-textarea>
+				</view>
+			</xt-form-item>
+		</view>
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+</template>
+
+<script setup>
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { state } from "@/store/store";
+	import { comFunction } from "@/pages/index/ComFuc";
+	import { FMBean, FMTypeConfigBean } from "@/bean/FMBean";
+	import { userBean } from "@/bean/userBean";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import { FMService } from "@/services/FMService";
+	import { validForm } from "./createIncomeAndExpenseFormVaild";
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	});
+	let pageType = ref(0);
+	let submitLoading = ref(false);
+
+	
+	const titleImg = computed<string>(() => {
+		if (pageType.value == 0) {
+			return "/static/icons/addpage.png"
+		}
+		return pageType.value == 1 ? "/static/icons/editpage.png" : "/static/icons/detailpage.png"
+	});
+	const iotimeStr = ref(dayuts(new Date()).format("YYYY-MM-DD"));
+	const showCalendar = ref(false);
+	const amount = ref("");
+	const fmForm = ref<FMBean>({
+		_id: "",
+		amount: 0,
+		billType: "income",
+		//createTime: number,
+		creater: user.value.phone,
+		//data_status?: number,
+		hotel_id: hotel_id.value,
+		ioeTime: new Date().getTime(),
+		mark: "",
+		type: ""
+		//unit: ""
+	});
+	const title = computed(() => {
+		const btstr = fmForm.value.billType=='income'?'收入':'支出';
+		const ptstr = pageType.value==0?'添加':'修改';
+		return ptstr+btstr;
+	});
+	const showCalendarEvent = () => {
+		showCalendar.value = true;
+	}
+	const selectType = (val : string) => {
+		console.log('sss',val)
+		//fmForm.value.type = val;
+
+	}
+	const incomeAndExpensesConfigList = ref<Array<FMTypeConfigBean>>([]);
+	const getIncomeAndExpensesConfigList = async () => {
+		const list = await FMService.getIncomeAndExpensesConfig();
+		incomeAndExpensesConfigList.value = list;
+	}
+	const columns = computed<Array<Array<PickerOption>>>(() => {
+		let result : Array<Array<PickerOption>> = [];
+		let list : Array<PickerOption> = [];
+		incomeAndExpensesConfigList.value.forEach(item => {
+			if (item.billType == fmForm.value.billType) {
+				list.push({ text: item.text, value: item.name } as PickerOption);
+			}
+
+		});
+		result.push(list);
+		return result;
+	});
+	const billTypeChange=()=>{
+		fmForm.value.type="";
+	}
+	const checkIoTime = (val : string) => {
+		fmForm.value.ioeTime = new Date(val).getTime();
+		iotimeStr.value = dayuts(new Date(val)).format("YYYY-MM-DD");
+	}
+	const editIE= async ()=>{
+		try {
+			await FMService.edit(fmForm.value);
+			uni.$emit("refrushfmList");
+			uni.navigateBack();
+			submitLoading.value = false;
+			uni.hideLoading();
+			uni.showToast({title:"更新成功",icon:"none"});
+		} catch (error) {
+			console.log("error", error);
+			submitLoading.value = false;
+			uni.hideLoading();
+			uni.showToast({title:"更新失败",icon:"none"});
+		}
+		console.log(fmForm.value);
+	}
+	const submitForm = async () => {
+		if(amount.value!=""){
+			fmForm.value.amount = parseFloat(amount.value);
+		}
+		
+		let flag : boolean = validForm(fmForm.value);
+		// console.log(fmForm.value);
+		// return;
+		if (flag == false) {
+			return;
+		}
+		// console.log("add   ",fmForm.value)
+		// return;
+		if(pageType.value==1){
+			editIE();
+			return;
+		}
+		// uni.showLoading({
+		// 	title: ""
+		// })
+		try {
+			await FMService.add(fmForm.value);
+			uni.$emit("refrushfmList");
+			uni.navigateBack();
+			submitLoading.value = false;
+			//uni.hideLoading();
+			uni.showToast({title:"添加成功",icon:"none"});
+		} catch (error) {
+			console.log("error", error);
+			submitLoading.value = false;
+			//uni.hideLoading();
+			uni.showToast({title:"添加失败",icon:"none"});
+		}
+	}
+	onLoad(params => {
+		//console.log("params:",params);
+		
+		
+		try {
+			const pt = params.getString("pageType")??"0";
+			const fm = params.getString("fm")??"";
+			if (pt != "") {
+				pageType.value = parseInt(pt);
+			}
+			if (fm != "") {
+				let decoded = decodeURIComponent(fm);
+				if (decoded != null) {
+					fmForm.value = JSON.parse<FMBean>(decoded)!;
+					console.log("bbbbbbb", fmForm.value);
+					iotimeStr.value = dayuts(new Date(fmForm.value.ioeTime)).format("YYYY-MM-DD");
+					amount.value=fmForm.value.amount.toString();
+				}
+			}else{
+				const bt = params.getString("billType") ?? 'income';
+				fmForm.value.billType = bt;
+			}
+		} catch (e) {
+			//console.error(e)
+		}
+	})
+	// watch(()=>fmForm.value.billType,()=>{
+	// 	fmForm.value.type="";
+	// })
+	getIncomeAndExpensesConfigList();
+</script>
+
+<style lang="scss">
+	.check-container {
+		flex: 1;
+		// border: 1px solid #dcdfe6;
+		padding: 8px;
+		margin-right: 20px;
+		border-radius: 4px;
+	}
+
+	.select {
+
+		position: relative;
+		border: 1px solid #dcdfe6;
+		box-sizing: border-box;
+		overflow: visible;
+		padding-right: 8px;
+		border-radius: 4px;
+
+		.content {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			height: 36px;
+			padding: 0 8px;
+			overflow: visible;
+
+			.txt {
+				line-height: 36px;
+			}
+		}
+
+		.select-panal {
+			overflow: visible;
+			width: 100%;
+			position: relative;
+			top: 40px;
+			left: 0;
+
+			.select-list {
+				overflow: visible;
+				background-color: #fff;
+			}
+		}
+	}
+</style>

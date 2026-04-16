@@ -1,0 +1,9 @@
+{
+  "name": "hm_fm_task",
+  "dependencies": {
+    "dateFormat": "file:../common/dateFormat"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

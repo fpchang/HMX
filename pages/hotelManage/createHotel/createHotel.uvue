@@ -1,0 +1,408 @@
+<template>
+	<rice-navbar title="" border>
+		<template #left>
+
+			<view style="display: flex;flex-direction: row;align-items: center;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn" v-if="pageType!=2">
+				<!-- <text class="txt">保存</text> -->
+				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
+					textColor="#007aff" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+			</view>
+		</template>
+	</rice-navbar>
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1">
+	<!-- #endif -->
+		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
+			<xt-form-item label="酒店名称" tips="" required>
+				<view>
+					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入酒店名称"
+						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.hotelName"></rice-input>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="酒店地址" tips="" required>
+				<view>
+					<view @click="selectAddress()" class="address-group">
+						<view>
+							<text style="color:rgba(0,0,0,0.6);font-size: 14px;"
+								v-if="hotelForm.hotelAddressArea==''">选择地址</text>
+							<text style="font-size: 14px;"
+								v-if="hotelForm.hotelAddressArea!=''">{{hotelForm.hotelAddressArea}}</text>
+						</view>
+
+						<rice-icon name="arrow-right" color="#dcdfe6" />
+					</view>
+					<view style="height: 100px;">
+						<rice-textarea style="height: 40px;flex: 1;" placeholderStyle="font-size:14px" classic
+							placeholder="请输入具体地址" layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
+							v-model="hotelForm.hotelAddress"></rice-textarea>
+					</view>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="特点" tips="如：免费停车，宠物免费，户外泳池，草地烧烤等" :showTips="pageType!=2">
+				<view v-if="pageType==0 ||pageType==1">
+					<xt-input-tab v-model="hotelForm.feature" btnText="添加特点" list=""></xt-input-tab>
+				</view>
+				<view v-if="pageType!=0 &&pageType!=1" class="feature-show-area">
+					<view v-for="txtstr of hotelForm.feature" class="feature-item" style="margin-right: 4px;"><rice-tag
+							size="small" type="primary" :text="txtstr" color="#f2f3f5" text-color="#4e5969" /></view>
+
+				</view>
+			</xt-form-item>
+			<xt-form-item label="餐饮" tips="">
+				<rice-checkbox-group @change="cateringCheckboxChange" direction="row"
+					v-model="hotelForm.cateringServices">
+					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+						v-for="item in facilityConfig_catering">
+						<rice-checkbox :disabled="pageType==2" :value="item ['_id']" :label="item.name" />
+					</view>
+				</rice-checkbox-group>
+			</xt-form-item>
+			<xt-form-item label="基础设施" tips="">
+				<rice-checkbox-group @change="baseCheckboxChange" direction="row" v-model="hotelForm.baseFacility">
+
+					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+						v-for="item in facilityConfig_base">
+						<rice-checkbox :disabled="pageType==2" :value="item ['_id']" :label="item.name" />
+
+					</view>
+
+				</rice-checkbox-group>
+			</xt-form-item>
+			<xt-form-item label="休闲设施" tips="">
+				<rice-checkbox-group @change="recreationCheckboxChange" direction="row"
+					v-model="hotelForm.recreationFacility">
+					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+						v-for="item in facilityConfig_recreation">
+						<rice-checkbox :disabled="pageType==2" :value="item ['_id']" :label="item.name" />
+					</view>
+				</rice-checkbox-group>
+			</xt-form-item>
+			<xt-form-item label="运动设施" tips="">
+
+				<rice-checkbox-group @change="athleticFacilityCheckboxChange" direction="row"
+					v-model="hotelForm.athleticFacility">
+					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+						v-for="item in facilityConfig_athleticFacility">
+						<rice-checkbox :disabled="pageType==2" :value="item ['_id']" :label="item.name" />
+					</view>
+				</rice-checkbox-group>
+			</xt-form-item>
+			<xt-form-item label="客服电话" tips="" required>
+				<view>
+					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服电话"
+						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.serviceTel" :maxlength="11"
+						type="number"></rice-input>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="客服微信" tips="" required>
+				<view>
+					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服微信"
+						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.wechat"></rice-input>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="备注" tips="">
+				<view>
+
+					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="备注内容"
+						layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
+						v-model="hotelForm.hotelIntroduction"></rice-textarea>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="封面图片" tips="" required>
+				<view>
+					<xt-file-upload :max-count="1" :filePath="`HM/client/${hotel_id}/hotel`"
+						:default_files_list="getFirstImagesList()" @uploadSuccess="uploadFirstImageSuccess"
+						accept="image" :readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
+				</view>
+			</xt-form-item>
+			<xt-form-item label="酒店图片" tips="" required>
+				<view>
+					<xt-file-upload :max-count="3" :default_files_list="hotelForm.imagesList"
+						@uploadSuccess="uploadImageListSuccess" ::filePath="`HM/client/${hotel_id}/hotel`"
+						accept="image" :readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
+				</view>
+			</xt-form-item>
+
+		</view>
+
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+	<l-cascader v-model:visible="showSelectAreaPopup" v-model="hotelForm.hotelAddressArea" uniCloud
+		:subTitles="subTitles" title="请选择所在地区" @change="transformAddress" />
+
+</template>
+
+<script setup>
+	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
+	import { hotelBean } from "@/bean/hotelBean.uts";
+	import { HotelService } from "@/services/HotelService";
+	import { useCascaderAreaData } from '@/uni_modules/lime-shared/areaData';
+	import { state,setHotelId } from '@/store/store.uts';
+	//import amap from "@/common/amap-wx.130";
+	import { Location } from "@/services/LocationService.uts";
+	import { validForm } from "./hotelFormVaild.uts";
+	import { comFunction } from "@/pages/index/ComFuc.uts";
+	import { userBean } from "@/bean/userBean";
+	import { facilityConfig_type } from "@/bean/facilityConfig_type.uts";
+	
+	
+	// const props = defineProps({
+	// 	type: {
+	// 		type: Number,
+	// 		default: 0,
+	// 	}
+	// });
+
+	type form = {
+		username : string,
+		phone : string,
+		password : string
+	}
+	const pageType = ref(0);
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	let hotelForm = ref<hotelBean>({
+		ownership_id:"",
+		belong: "",
+		hotelName: "",
+		hotelAddress: "",
+		hotelAddressCode: "",
+		hotelAddressArea: "",
+		hotelCoordinate: [],
+		hotelIntroduction: "",
+		firstImages: "",
+		imagesList: [],
+		cateringServices: [],
+		baseFacility: [],
+		recreationFacility: [],
+		athleticFacility: [],
+		serviceTel: "",
+		wechat: "",
+		feature: []
+	});
+
+	const title = computed(() => {
+		if (pageType.value == 0) {
+			return '创建酒店';
+		}
+		return pageType.value == 1 ? '修改酒店信息' : '酒店信息';
+	});
+	const titleImg = computed<string>(() => {
+		if (pageType.value == 0) {
+			return "/static/icons/addpage.png"
+		}
+		return pageType.value == 1 ? "/static/icons/editpage.png" : "/static/icons/detailpage.png"
+	});
+	let submitLoading = ref(false);
+	const getFirstImagesList = () : Array<string> => {
+		if (hotelForm.value.firstImages != "") {
+			return [hotelForm.value.firstImages];
+		}
+		return []
+	}
+
+	const addHotel = async () => {
+		try {
+			const res = await HotelService.createHotel(hotelForm.value);
+			console.log("res:::::::", res);
+			submitLoading.value = false;
+
+			comFunction.init();
+			uni.navigateBack();
+			uni.showToast({
+				title: "添加酒店成功",
+				icon: "none"
+			});
+
+
+		} catch (e) {
+			submitLoading.value = false;
+			//console.error("保存失败", e)
+			uni.showToast({
+				title: "添加酒店失败",
+				icon: "none"
+			});
+		}
+
+	}
+	const updateHotel = async () => {
+		try {
+			const id = hotelForm.value._id as string;
+			await HotelService.updateHotel(id, hotelForm.value);
+			
+			submitLoading.value = false;
+			await comFunction.getHotelList();
+			setHotelId(hotel_id.value);
+			uni.navigateBack({
+				success() {
+					uni.showToast({
+						title: "更新成功",
+						icon: "none",
+						position: 'top'
+					});
+				}
+			});
+		} catch (e) {
+			submitLoading.value = false;
+		}
+	}
+
+	const submitForm = async () => {
+		const flag : boolean = validForm(hotelForm.value);
+		if (flag == false) {
+			return;
+		}
+		submitLoading.value = true;
+		hotelForm.value.belong = user.value['phone'] as string;
+		hotelForm.value.ownership_id=user.value._id;
+		const address = `${hotelForm.value.hotelAddressArea}${hotelForm.value.hotelAddress}`;
+		const location : Array<number> = await Location.getLocation(address);
+		hotelForm.value.hotelCoordinate = location;
+		if (pageType.value == 1) {
+			updateHotel();
+			return;
+		}
+		addHotel();
+	}
+	const inputStyle = ref({
+		height: '24px',
+		padding: '0px',
+		backgroundColor: 'transparent',
+	});
+	const showSelectAreaPopup = ref(false);
+	let optionsAreaData = ref<Array<UTSJSONObject> | null>(null);
+	const subTitles = ['请选择省份', '请选择城市', '请选择区/县'];
+	//const cascaderValue7 = ref('');
+	const fieldValue7 = ref<string | null>(null);
+	const transformAddress = (value : string, options : UTSJSONObject[]) => {
+		hotelForm.value.hotelAddressArea = options.map((item : UTSJSONObject) : any | null => (item['name'])).join('/');
+	};
+	const selectAddress = async () => {
+		if (pageType.value == 2) {
+			return;
+		}
+		showSelectAreaPopup.value = true;
+		// if (optionsAreaData.value == null) {
+		// 	uni.showLoading({
+		// 		title: ""
+		// 	});
+		// 	optionsAreaData.value = useCascaderAreaData();
+		// 	uni.hideLoading();
+		// }
+
+	}
+	const facilityConfig_base = ref<Array<facilityConfig_type> | null>(null);
+	const facilityConfig_catering = ref<Array<facilityConfig_type> | null>(null);
+	const facilityConfig_recreation = ref<Array<facilityConfig_type> | null>(null);
+	const facilityConfig_athleticFacility = ref<Array<facilityConfig_type> | null>(null);
+	const cateringCheckboxChange = (e : string[]) => {
+		hotelForm.value.cateringServices = e;
+	}
+	const baseCheckboxChange = (e : string[]) => {
+		hotelForm.value.baseFacility = e;
+	}
+	const recreationCheckboxChange = (e : string[]) => {
+		hotelForm.value.recreationFacility = e;
+	}
+	const athleticFacilityCheckboxChange = (e : string[]) => {
+		hotelForm.value.athleticFacility = e;
+	}
+	const uploadFirstImageSuccess = (list : string[]) => {
+		console.log("得到的list：", list);
+		if(list.length>0){
+			hotelForm.value.firstImages = list[0];
+			return;
+		}
+		hotelForm.value.firstImages="";
+	}
+	const uploadImageListSuccess = (list : string[]) => {
+		
+		if(list.length>0){
+			hotelForm.value.imagesList = list;
+			return;
+		}
+		hotelForm.value.imagesList = [];
+	}
+
+	onLoad(params => {
+		//console.log("params",params);
+		try {
+			const pt = params.get("pageType");
+			const h = params.get("hotel_item");
+			//console.log("1111111",pt,h);
+			if (pt != null) {
+				pageType.value = parseInt(pt);
+			}
+			if (h != null) {
+				let decoded = decodeURIComponent(h as string);
+				if (decoded != null) {
+					hotelForm.value = JSON.parse<hotelBean>(decoded)!;
+					console.log("bbbbbbb", hotelForm.value);
+				}
+			}
+		} catch (e) {
+			console.error(e)
+		}
+	});
+	const init = async () => {
+		HotelService.getConfig_facilityConfig('base').then(list => {
+			facilityConfig_base.value = list;
+		});
+		HotelService.getConfig_facilityConfig('catering').then(list => {
+			facilityConfig_catering.value = list;
+		});
+		HotelService.getConfig_facilityConfig('recreation').then(list => {
+			facilityConfig_recreation.value = list;
+		});
+		HotelService.getConfig_facilityConfig('athleticFacility').then(list => {
+			facilityConfig_athleticFacility.value = list;
+		});
+
+	}
+
+	init();
+</script>
+
+<style lang="scss">
+	.address-group {
+		border-radius: 6px;
+		border: 1px solid #dcdfe6;
+		padding: 8px;
+		margin-bottom: 8px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		height: 40px;
+		box-sizing: border-box;
+	}
+
+	.feature-show-area {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+
+		.feature-item {
+			margin-left: 4px;
+		}
+
+		.feature-item:first-child {
+			margin-left: 0;
+		}
+	}
+</style>

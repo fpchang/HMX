@@ -1,0 +1,435 @@
+import { orderSourceBean, orderBean,formatOrder, OrderRoomTypeBean, OrderDataListResult, remainRoomTypeBean } from '@/bean/orderBean';
+type remainRoomBean = {
+	_id : string
+	room_name : string
+}
+import { DB } from '@/api/DB';
+import { dayuts } from '@/uni_modules/lime-dayuts';
+import { TIME, MOONTH_START_END_TIMESTAMP } from "@/static/utils/TIME";
+import { roomTypeBean } from '../bean/roomTypeBean';
+import { roomBean } from '../bean/roomBean';
+class OrderServiceClass {
+	constructor() {
+
+	}
+	async getSource() : Promise<Array<orderSourceBean>> {
+		let list : Array<orderSourceBean> = [];
+		try {
+			const res = await DB.getCollection("hm-orderSouce", {});
+			let resultList = res['data'] as Array<UTSJSONObject>;
+			resultList.forEach(item => {
+				let os : orderSourceBean = {
+					name: item.getString("name") ?? "",
+					text: item.getString("text") ?? "",
+					value: item.getNumber("value") ?? 0
+				}
+				list.push(os);
+			})
+			return list;
+		} catch (error) {
+			throw new Error("获取订单来源失败");
+		}
+
+	}
+	/**
+	 * 创建订单
+	 */
+	async addOrder(orderObj : orderBean) : Promise<boolean> {
+		const obj = {
+			hotel_id: orderObj.hotel_id,
+			userName: orderObj.userName,
+			checkInStartDateTimeStamp: orderObj.checkInStartDateTimeStamp,
+			checkInEndDateTimeStamp: orderObj.checkInEndDateTimeStamp,
+			checkInStartDate: orderObj.checkInStartDate,
+			checkInEndDate: orderObj.checkInEndDate,
+			phone: orderObj.phone,
+			createrPhone: orderObj.createrPhone,
+			createrName: orderObj.userName,
+			orderSource: orderObj.orderSource,
+			orderSouce_Zn: orderObj.orderSouce_Zn,
+			downPayment: orderObj.downPayment,
+			totalAmount: orderObj.totalAmount,
+			reservedRoomList: orderObj.reservedRoomList
+		}
+		try {
+			const res = await DB.callFunction("hm_addOrder", { orderObj: obj });
+			//console.log("create order", res);
+			const result = res['result'] as UTSJSONObject;
+			const code = result.getNumber("code", 0) ?? 0;
+			const message = result.getString("message", "") ?? "";
+			if (code != 0) {
+				//console.log("code error", code);
+				uni.showToast({
+					title: message,
+					icon: "none"
+				});
+				throw new Error(message);
+			}
+			return true
+		} catch (error) {
+			throw new Error("创建失败");
+		}
+
+	}
+	async getOrderListBySearch(hotel_id : string, dateRange : string[], orderStatus : string | number, keyword : string, pageNo : number, pageSize : number) : Promise<OrderDataListResult> {
+		let skipnum : number = Math.max((pageNo - 1) * pageSize, 0);
+		const db = uniCloud.databaseForJQL();
+		const dbCmd = db.command;
+		let st : number = TIME.getCurrentMonthFirst(new Date());
+		let et : number = TIME.getCurrentMonthLast(new Date());
+		if (dateRange != null && dateRange.length == 2) {
+			st = TIME.startTime(new Date(dateRange[0]));
+			et = TIME.endTime(new Date(dateRange[1]));
+		}
+		//console.log("wwww", st, et);
+		const w = {
+			hotel_id: hotel_id,
+			//checkInEndDateTimeStamp: dbCmd.and([dbCmd.gte(st), dbCmd.lte(et)]),
+			checkInStartDateTimeStamp: dbCmd.and([dbCmd.gte(st), dbCmd.lte(et)]),
+			orderStatus: orderStatus == 'all' ? dbCmd.neq(999) : orderStatus,
+			$or: [{ userName: new RegExp(`${keyword}`) }, { wxNickName: new RegExp(`${keyword}`) }, { phone: new RegExp(`${keyword}`) }]
+		}
+		//console.log("过滤条件", w);
+		try {
+			const res = await db.collection("hm-order").where(w).orderBy("createTime desc").skip(skipnum).limit(pageSize).get({ getCount: true });
+			//console.log("order request", res)
+			const data = res['data'] as Array<UTSJSONObject>;
+			let orderList : Array<orderBean> = []
+			if (data != null) {
+				data.forEach((item : UTSJSONObject) => {
+					let roomTypeList : Array<OrderRoomTypeBean> = [];
+					let rList = item.getArray("roomTypeArray") as Array<UTSJSONObject> ?? []
+					rList.forEach((rt : UTSJSONObject) => {
+						let formatRt : OrderRoomTypeBean = {
+							count: rt.getNumber("count") ?? 0,
+							name: rt.getString("name") ?? "",
+							roomList: rt.getArray("roomList") as Array<string> ?? [],
+							roomType_id: rt.getString("roomType_id") ?? ""
+						}
+						roomTypeList.push(formatRt)
+					})
+					let order : orderBean = {
+						_id: item.getString("_id") ?? "",
+						checkInEndDate: item.getString("checkInEndDate") ?? "",
+						checkInEndDateTimeStamp: item.getNumber("checkInEndDateTimeStamp") ?? 0,
+						checkInStartDate: item.getString("checkInStartDate") ?? "",
+						checkInStartDateTimeStamp: item.getNumber("checkInStartDateTimeStamp") ?? 0,
+						createTime: item.getNumber("createTime") ?? 0,
+						createrName: item.getString("createrName") ?? "",
+						createrPhone: item.getString("createrPhone") ?? "",
+						createUserId:item.getString("createUserId") ?? "",
+						downPayment: item.getNumber("downPayment") ?? 0,
+						fromClient: item.getBoolean("fromClient") ?? false,
+						hotel_id: item.getString("hotel_id") ?? "",
+						orderSouce_Zn: item.getString("orderSouce_Zn") ?? "",
+						orderSource: item.getNumber("orderSource") ?? 0,
+						orderStatus: item.getNumber("orderStatus") ?? 0,
+						orderType: item.getString("orderType") ?? "",
+						payType: item.getString("payType") ?? "",
+						phone: item.getString("phone") ?? "",
+						roomTypeArray: roomTypeList,
+						reservedRoomList: item.getArray<string>("reservedRoomList") ?? [],
+						totalAmount: item.getNumber("totalAmount") ?? 0,
+						userName: item.getString("userName") ?? "",
+						wxNickName: item.getString("wxNickName") ?? "",
+						mark: item.getString("mark") ?? ""
+					}
+					orderList.push(order);
+				})
+			}
+			let OrderDataListResult : OrderDataListResult = {
+				count: res['count'] as number,
+				pageNo: pageNo ?? 1,
+				pageSize: pageSize ?? 20,
+				orderList: orderList
+			}
+			//console.log("条件订单列表：", OrderDataListResult);
+			return OrderDataListResult;
+		} catch (error) {
+			throw new Error("获取订单列表失败")
+		}
+
+
+
+	}
+
+	async getRemainderRoomList(hotel_id : string, startTime : number, endTime : number) : Promise<Array<roomBean>> {
+		let params = {
+			hotel_id: hotel_id,
+			startTime: startTime,
+			endTime: endTime
+		}
+		//console.log("params", params);
+		let list : roomBean[] = [];
+
+		try {
+			const db = uniCloud.databaseForJQL();
+			let jql = `hotel_id=='${hotel_id}'&&orderType=='normal'&&(orderStatus==0||orderStatus==1)&&(` +
+				`${endTime}<=checkInEndDateTimeStamp&&${endTime}>checkInStartDateTimeStamp||` +
+				`${startTime}>=checkInStartDateTimeStamp&&${endTime}<=checkInEndDateTimeStamp||` +
+				`${startTime}>=checkInStartDateTimeStamp&&${startTime}<checkInEndDateTimeStamp||` +
+				`${startTime}<=checkInStartDateTimeStamp&&${endTime}>=checkInEndDateTimeStamp)`;
+			//console.log("jql", jql);
+			const orderListRes = await db.collection('hm-order').where(jql).get();
+			//console.log("orderlist", orderListRes);
+			const roomListRes = await db.collection('hm-room').where(`hotel_id=='${hotel_id}'`).get();
+			const orderList = orderListRes.data;
+			let hasUseRoomList = new Set<string>([]);
+			let remainRoomList : Array<roomBean> = [];
+			let roomList : Array<roomBean> = [];
+			roomListRes.data.forEach(item => {
+				let room : roomBean = {
+					_id: item.getString("_id") ?? "",
+					data_status: item.getNumber("data_status") ?? 1,
+					hotel_id: item.getString("hotel_id") ?? "",
+					room_name: item.getString("room_name") ?? "",
+					room_type_id: item.getString("room_type_id") ?? ""
+				}
+				roomList.push(room)
+			})
+			orderList.forEach(item => {
+				let list = item.getArray<string>("reservedRoomList") ?? [];
+				list.forEach(room => {
+					hasUseRoomList.add(room);
+				})
+
+			});
+			remainRoomList = roomList.filter(item => !hasUseRoomList.has(item._id));
+			//console.log("remainlist", remainRoomList);
+			return remainRoomList;
+			// const res = await DB.callFunction("hm_getRemainderRoomList", params);
+			// //console.log("hm_getRemainderRoomList", res);
+			// let result = res['result'] as Array<UTSJSONObject>;						
+			// if (result == null) {
+			// 	return list;
+			// }
+			// result.forEach(item => {
+			// 	let room : roomBean = {
+			// 		_id: item.getString("_id"),
+			// 		data_status: item.getNumber("data_status") ?? 1,
+			// 		hotel_id: item.getString("hotel_id") ?? "",
+			// 		room_name: item.getString("room_name") ?? "",
+			// 		room_type_id: item.getString("room_type_id") ?? ""
+			// 	}
+			// 	list.push(room)
+			// })
+			return list;
+		} catch (error) {
+
+			throw new Error("获取剩余房间失败");
+		}
+	}
+	// async getRemainderRoomType(hotel_id : string, startTime : number, endTime : number) : Promise<Array<remainRoomTypeBean>> {
+	// 	let params = {
+	// 		hotel_id: hotel_id,
+	// 		startTime: startTime,
+	// 		endTime: endTime
+	// 	}
+	// 	//console.log("params", params);
+	// 	let list : remainRoomTypeBean[] = [];
+
+	// 	try {
+	// 		const res = await DB.callFunction("hm_getRemainderRoomType", params);
+	// 		//console.log("getRemainderRoomType", res);
+	// 		let result = res['result'] as Array<UTSJSONObject>;
+	// 		if (result == null) {
+	// 			return list;
+	// 		}
+	// 		result.forEach(item => {
+	// 			let rmlist = item.getArray<UTSJSONObject>("remainRoomList") ?? []; //item["remainRoomList"] as Array<UTSJSONObject>;
+	// 			let rmlistF : Array<remainRoomBean> = [];
+	// 			rmlist.forEach(room => {
+	// 				let rm : remainRoomBean = {
+	// 					_id: room.getString("_id") ?? "",
+	// 					room_name: room.getString("room_name") ?? "",
+	// 				}
+	// 				rmlistF.push(rm)
+	// 			})
+
+	// 			let rmt : remainRoomTypeBean = {
+	// 				_id: item.getString("_id") ?? "",
+	// 				name: item.getString("name") ?? "",
+	// 				remainRoomList: rmlistF
+	// 			}
+	// 			list.push(rmt);
+	// 		})
+	// 		uni.hideLoading();
+	// 		return list;
+	// 	} catch (error) {
+	// 		throw new Error("获取剩余房间失败");
+	// 	}
+
+	// }
+	/**
+	 *  办理入住订单
+	 * st 日期
+	 */
+	async getOrderListByCheckIn(hotel_id : string, st : number | string) : Promise<orderBean[]> {
+		const datestr = dayuts(st as number).format("YYYY/MM/DD  14:00:00");
+		let startTime = dayuts(datestr).valueOf();
+		let jql = `hotel_id=='${hotel_id}'&&orderStatus==1&&checkInStartDateTimeStamp==${startTime}`;
+		
+		try {
+			const res= await DB.getCollection("hm-order", jql);
+			const data = res['data'] as Array<UTSJSONObject>;
+			let orderList : Array<orderBean> = []
+			if (data != null) {
+				data.forEach((item : UTSJSONObject) => {
+					const order = formatOrder(item)
+					orderList.push(order);
+				})
+			}
+			//console.log("条件订单列表：", orderList);
+			return orderList;
+		} catch (error) {
+			throw new Error("通过日期请求订单失败")
+		}
+	}
+	/**
+ *  退房订单
+ * ed 日期
+ */
+   async getOrderListByCheckOut(hotel_id : string, ed : string | number) : Promise<orderBean[]> {
+	const datestr = dayuts(ed).format("YYYY/MM/DD  12:00:00");
+	let endTime = dayuts(datestr).valueOf();
+		let jql = `hotel_id=='${hotel_id}'&&orderStatus==1&&checkInEndDateTimeStamp==${endTime}`;
+		
+
+		try {
+			const res= await DB.getCollection("hm-order", jql);
+			const data = res['data'] as Array<UTSJSONObject>;
+			let orderList : Array<orderBean> = []
+			if (data != null) {
+				data.forEach((item : UTSJSONObject) => {
+					const order = formatOrder(item)
+					orderList.push(order);
+				})
+			}
+			//console.log("条件订单列表：", orderList);
+			return orderList;
+		} catch (error) {
+			throw new Error("通过退房请求订单失败")
+		}
+	}
+	/**
+	 *  今天住客订单
+	 */
+	async getOrderListToday(hotel_id : string) : Promise<orderBean[]> {
+		let startTime = new Date(dayuts(new Date()).format("YYYY/MM/DD  14:00:00")).getTime();
+		const s0 = `hotel_id=='${hotel_id}'&&orderStatus==1`
+		const s1 = `${startTime}>=checkInStartDateTimeStamp&&${startTime}<checkInEndDateTimeStamp`;
+
+		let jql = `${s0}&&${s1}`;
+		
+try {
+			const res = await DB.getCollection("hm-order", jql);
+			const data = res['data'] as Array<UTSJSONObject>;
+			let orderList : Array<orderBean> = []
+			if (data != null) {
+				data.forEach((item : UTSJSONObject) => {
+					const order = formatOrder(item)
+					orderList.push(order);
+				})
+			}
+			//console.log("条件订单列表：", orderList);
+			return orderList;
+		} catch (error) {
+			throw new Error("通过日期请求订单失败")
+		}
+		
+	}
+	/**
+   *  特定日期住客订单
+   */
+	async getOrderListByDate(hotel_id : string, date : string | number) : Promise<orderBean[]> {
+		let startTime = dayuts(date).startOf('day').add(14,'hour').valueOf();
+		const s0 = `hotel_id=='${hotel_id}'&&orderStatus==1`
+		const s1 = `${startTime}>=checkInStartDateTimeStamp&&${startTime}<checkInEndDateTimeStamp`;
+
+		let jql = `${s0}&&${s1}`;
+		
+
+		try {
+			const res = await DB.getCollection("hm-order", jql);
+			const data = res['data'] as Array<UTSJSONObject>;
+			let orderList : Array<orderBean> = []
+			if (data != null) {
+				data.forEach((item : UTSJSONObject) => {
+					const order = formatOrder(item)
+					orderList.push(order);
+				})
+			}
+			////console.log("条件订单列表：", orderList);
+			return orderList;
+		} catch (error) {
+			throw new Error("通过日期请求订单失败")
+		}
+	}
+	/**
+	 *  根据日期范围查找订单
+	 */
+
+   getOrderListByCondition(hotel_id : string, st : string | number, et : string | number) : Promise<UniCloudDBGetResult> {
+	////console.log(arguments);
+	let startTime = dayuts(st).startOf('day').add(14,'hour').valueOf();
+	let endTime   = dayuts(et).startOf('day').add(12,'hour').valueOf();
+		const s1 = `checkInStartDateTimeStamp<${startTime}&&checkInEndDateTimeStamp>${startTime}`;
+		const s2 = `checkInStartDateTimeStamp>=${startTime}&&checkInEndDateTimeStamp<=${endTime}`;
+		const s3 = `checkInStartDateTimeStamp<${endTime}&&checkInStartDateTimeStamp>=${startTime}&&checkInEndDateTimeStamp>=${endTime}`
+		const s4 = `checkInStartDateTimeStamp<=${startTime}&&checkInEndDateTimeStamp>=${endTime}`;
+
+		let jql =
+			`hotel_id=='${hotel_id}'&&orderStatus==1&&(${s1}||${s2}||${s3}||${s4})`;
+		return DB.getCollectionOrderBy("hm-order", jql, "checkInStartDateTimeStamp asc");
+	}
+	/** 
+   * 获取当前酒店今天以后的订单信息
+  */
+	async getOrderListTodayAfter(hotel_id : string) : Promise<orderBean[]> {
+		let startTime = new Date(dayuts(new Date()).format("YYYY/MM/DD  14:00:00")).getTime();
+		let endTime = new Date(dayuts(new Date()).format("YYYY/MM/DD  12:00:00")).getTime();
+		let jql =
+			`hotel_id=='${hotel_id}'&&orderStatus==1&&(checkInStartDateTimeStamp>=${startTime} ||` +
+			`(${endTime}<checkInEndDateTimeStamp && ${endTime}>checkInStartDateTimeStamp))`;
+		try {
+
+
+			const res = await DB.getCollectionOrderBy("hm-order", jql, "checkInStartDateTimeStamp asc");
+			////console.log("今天以后的订单：：",res)
+			const data = res['data'] as Array<UTSJSONObject>;
+			let orderList : Array<orderBean> = []
+			if (data != null) {
+				data.forEach((item : UTSJSONObject) => {
+					const order = formatOrder(item)
+					orderList.push(order);
+				})
+			}
+			////console.log("条件订单列表：", orderList);
+			return orderList;
+		} catch (error) {
+			throw new Error("请求房态失败")
+		}
+	}
+	/**
+	 * 
+	 * @returns 删除订单
+	 */
+	async deleteOrder(_id : string) : Promise<boolean> {
+		try {
+			const res = await DB.callFunction('hm-deleteOrder', { _id });
+			console.log("删除订单",res)
+			return true;
+		} catch (error) {
+			throw new Error("删除订单失败")
+		}
+		
+		
+	}
+	//更改订单状态
+	updateOrder(_id : string, obj : UTSJSONObject) : Promise<UniCloudDBUpdateResult> {
+		////console.log("更新",_id,obj)
+		return DB.update("hm-order", _id, obj);
+	}
+}
+//module.exports =new OrderService();
+export var OrderService = new OrderServiceClass();

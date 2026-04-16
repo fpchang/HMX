@@ -1,0 +1,22 @@
+	import { orderBean } from "@/bean/orderBean.uts";
+export const  validForm = (order:orderBean):boolean=>{
+	let msg ="";
+	if(order.reservedRoomList.length<1){
+		msg ="请选择房间";
+	}
+	if(order.userName==""){
+		msg="请输入客户名";
+	}
+	if(order.totalAmount<1){
+		msg="请输入总价";
+	}
+	if(msg!=""){
+		uni.showToast({
+			title:msg,
+			icon:"none"
+		})
+		return false;
+	}
+	
+	return true;
+}

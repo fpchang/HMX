@@ -1,0 +1,285 @@
+<template>
+
+	<!-- 导航栏 -->
+	<!-- <view class="navbar">
+      <text class="navbar-title">财务中心</text>
+    </view> -->
+
+	<!-- 内容区 -->
+	<scroll-view class="content" style="flex:1" v-if="hotel_id!=''"  :refresher-enabled="true" :refresher-triggered="refreshState" @refresherrefresh="refreshData">
+		<!-- 核心指标卡片 -->
+		<view class="card" @click="goToDetail('kpi')">
+			<text class="card-title">核心财务指标</text>
+
+			<view class="kpi-grid">
+				<view class="kpi-item">
+					<view class="container">
+						<text class="kpi-label">本月收入</text>
+						<view><text class="kpi-value income">¥{{incomeAmount}}</text></view>
+					</view>
+				</view>
+				<view class="kpi-item">
+					<view class="container">
+						<text class="kpi-label">本月支出</text>
+						<view><text class="kpi-value expense">¥{{expensesAmount}}</text></view>
+					</view>
+				</view>
+				<view class="kpi-item">
+					<view class="container">
+						<text class="kpi-label">本年收入</text>
+						<view><text class="kpi-value income">¥{{incomeYearAmount}}</text></view>
+					</view>
+				</view>
+				<view class="kpi-item">
+					<view class="container">
+						<text class="kpi-label">本年支出</text>
+						<view><text class="kpi-value expense">¥{{expensesYearAmount}}</text></view>
+					</view>
+				</view>
+			</view>
+		</view>
+
+		<!-- 本月财务详情 -->
+		<view class="card" @click="goToDetail('month')">
+			<text class="card-title">本月收入财务详情</text>
+			<view class="item" v-for="income of incomeMonthList">
+				<view class="container">
+					<text class="label">{{income.name}}</text>
+					<text class="value income">¥{{income.value}}</text>
+				</view>
+			</view>
+		</view>
+
+		<view class="card" @click="goToDetail('month')">
+			<text class="card-title">本月支出详情</text>
+			<view class="item" v-for="expenses of expensesMonthList">
+				<view class="container">
+					<text class="label">{{expenses.name}}</text>
+					<text class="value expense">¥{{expenses.value}}</text>
+				</view>
+			</view>
+		</view>
+
+		<!-- 本年财务概览 -->
+		<view class="card" @click="goToDetail('year')">
+			<text class="card-title">本年财务概览</text>
+
+			<view class="item">
+				<text class="label">总收入</text>
+				<text class="value income">¥{{incomeYearAmount}}</text>
+			</view>
+			<view class="item">
+				<text class="label">总支出</text>
+				<text class="value expense">¥{{expensesYearAmount}}</text>
+			</view>
+			<view class="item">
+				<text class="label">本年利润</text>
+				<text class="value profit">¥{{incomeYearAmount-expensesYearAmount}}</text>
+			</view>
+		</view>
+	</scroll-view>
+	<view style="margin-top: 80px;"  v-if="hotel_id==''" >
+		<l-empty description="没有数据"/>
+	</view>
+
+</template>
+
+<script setup>
+	import { FMService } from "@/services/FMService";
+	import { state } from '@/store/store.uts';
+	import { charPietItem } from "@/bean/chartBean.uts";
+	import { userBean } from "@/bean/userBean";
+	import { DateTimePickerExtend } from "@/uni_modules/rice-ui";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const hotel = computed(() => {
+		return state.hotel;
+	});
+	const hotelList = computed(() => {
+		return state.hotelList;
+	});
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const month = ref<string>(dayuts(new Date()).format("YYYY-MM"));
+	const year = ref<string>(new Date().getFullYear().toString());
+
+	const incomeMonthList = ref<Array<charPietItem>>([]);
+	const expensesMonthList = ref<Array<charPietItem>>([]);
+	const incomeYearList = ref<Array<Array<string | number>>>([]);
+	const expensesYearList = ref<Array<Array<string | number>>>([]);
+	//月收入金额
+	const incomeAmount = computed<number>(() => {
+		return incomeMonthList.value.reduce((acc, item) => acc + item.value, 0);
+	})
+	//月支出金额
+	const expensesAmount = computed<number>(() => {
+		return expensesMonthList.value.reduce((acc, item) => acc + item.value, 0);
+	})
+	//年收入金额
+	const incomeYearAmount = computed<number>(() => {
+		let amount = 0;
+		incomeYearList.value.forEach(item => {
+			const num = item[1] as number;
+			amount += num;
+		})
+		return amount;
+	})
+	//年支出金额
+	const expensesYearAmount = computed<number>(() => {
+		let amount = 0;
+		expensesYearList.value.forEach(item => {
+			const num = item[1] as number;
+			amount += num;
+		})
+		return amount;
+	})
+	const init = async () => {
+		//当月支出
+		let expensesMonthRes = FMService.getExpensesCurrentMonth(hotel_id.value, month.value);
+		//当月收入
+		let incomeMonthRes = FMService.getIncomeCurrentMonth(hotel_id.value, month.value);
+		//当年支出
+		const empensesYearRes = FMService.getIncomeAndExpensesCurrentYear(hotel_id.value, year.value, 'expenses');
+		//当年收入
+		const incomeYearRes = FMService.getIncomeAndExpensesCurrentYear(hotel_id.value, year.value, 'income');
+		// 显式指定 Promise.all 的泛型为 any，避免类型推断失败
+		//const [a,b,c,d] = await Promise.all([expensesMonthRes, incomeMonthRes,empensesYearRes,incomeYearRes]);
+		//console.log("11111",a,b,c,d)expensesMonthRes
+		expensesMonthRes.then(list => {
+			console.log("list1---", list);
+			expensesMonthList.value = list as Array<charPietItem>;
+		})
+		incomeMonthRes.then(list => {
+			console.log("list2---", list);
+			incomeMonthList.value = list as Array<charPietItem>;
+		})
+		empensesYearRes.then(list => {
+			console.log("list---", list);
+			expensesYearList.value = list as Array<Array<string | number>>;
+		})
+		incomeYearRes.then(list => {
+			console.log("list4---", list);
+			incomeYearList.value = list as Array<Array<string | number>>;
+		})
+
+	}
+	onLoad(params => {
+		init();
+	})
+	function goToDetail(type : string) {
+
+	}
+	const refreshState = ref(false);
+	const refreshData= async ()=>{
+			   refreshState.value=true;
+				await init();
+				refreshState.value=false;
+				
+	}
+</script>
+
+<style scoped lang="scss">
+	.page {
+		background: #f9f9f9;
+		flex: 1;
+	}
+
+	.navbar {
+		height: 44px;
+		background: #fff;
+		border-bottom: 1px solid #e0e0e0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.navbar-title {
+		font-size: 18px;
+		font-weight: 500;
+	}
+
+	.content {
+		padding: 16px;
+	}
+
+	.card {
+		background: #fff;
+		border-radius: 8px;
+		padding: 15px;
+		margin-bottom: 16px;
+	}
+
+	.card-title {
+		font-size: 16px;
+		font-weight: 500;
+		margin-bottom: 16px;
+	}
+
+	.kpi-grid {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	.kpi-item {
+		flex: 1;
+		min-width: 150px;
+		box-sizing: border-box;
+		padding: 6px;
+
+		.container {
+
+			background: #f9f9f9;
+			padding: 12px 6px;
+			border-radius: 8px;
+			text-align: center;
+		}
+	}
+
+	.kpi-label {
+		font-size: 14px;
+		color: #757575;
+	}
+
+	.kpi-value {
+		font-size: 18px;
+		font-weight: 600;
+		margin-top: 4px;
+	}
+
+	.item {
+		display: flex;
+		justify-content: space-between;
+		padding: 8px 0;
+		border-bottom: 1px solid #f0f0f0;
+	}
+
+	.item:last-child {
+		border-bottom: none;
+	}
+
+	.label {
+		font-size: 15px;
+	}
+
+	.value {
+		font-size: 15px;
+		font-weight: 600;
+		padding: 4px 0;
+	}
+
+	.income {
+		color: #34a853;
+	}
+
+	.expense {
+		color: #ea4335;
+	}
+
+	.profit {
+		color: #fbbc05;
+	}
+</style>

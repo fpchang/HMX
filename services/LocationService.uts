@@ -1,0 +1,57 @@
+import{DB} from '@/api/DB';
+class LocationService{
+	constructor(){
+        
+    }
+
+    
+    /**
+     *"I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+     *
+     * @param {*} hotelObj
+     * @return {*} 
+     * @memberof HotelService
+     */
+    // getHotelByDistance(){
+    //   return   DB.callFunction("hm_createHotel",{hotelObj});
+    // }
+	/**
+	 * https://apis.map.qq.com/ws/geocoder/v1/?address=%E4%B8%8A%E6%B5%B7%E6%B1%89%E5%BA%AD&key=I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU
+*/
+   getLocation(address:string):Promise<Array<number>>{
+	  const key ="I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU";
+	  let url =`https://apis.map.qq.com/ws/geocoder/v1?address=${address}&key=${key}`;
+	  //#ifdef H5
+		//url = `/txmapKey/ws/geocoder/v1?address=上海市浦东新区&key=${key}`;
+		return Promise.resolve([119.872549, 30.55434]);
+	  //#endif
+	  console.log("url:",url);
+	  return new Promise((resolve,reject)=>{
+		  uni.request({
+		    	url:url.toString(),
+				 method: "GET",
+				header: { "content-type": "application/json" },
+				success:(res)=>{
+					console.log("请求的坐标结果",res);
+					const data = res.data as UTSJSONObject;
+					const result = data['result'] as UTSJSONObject;
+					const location = result['location'] as UTSJSONObject;
+					const loc : Array<number> = [
+						location['lng'] as number,
+						location['lat'] as number
+						
+					];
+					resolve(loc);
+				},
+				fail:err=>{
+					console.log(err);
+					reject("请求失败");
+					
+				}
+		    })
+	  })
+	
+  }
+}
+//module.exports =new HotelService();
+export var Location=new LocationService();

@@ -1,0 +1,7 @@
+{
+  "name": "hm_editMenuDetail",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

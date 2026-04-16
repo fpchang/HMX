@@ -1,0 +1,50 @@
+
+import {callFunctionRes} from "@/bean/DBBean";
+class DBConnect{
+  constructor(){
+  }
+  async callFunction(name:string,data:UTSJSONObject={}):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
+  
+	let groupData = UTSJSONObject.assign(data,{
+        $user:uni.getStorageSync('user'),
+        $token:uni.getStorageSync('hm_token')
+      });
+
+	return  uniCloud.callFunction({
+	  	name:name,
+	  	data:groupData
+	  })
+  }
+   getCollection(dbName:string,w:(string | UTSJSONObject)):Promise<UniCloudDBGetResult>{
+	   let wh = w;
+	   if(w==""){
+		   wh ={}
+	   }
+    return  uniCloud.databaseForJQL().collection(dbName).where(wh).limit(50000).get();
+  
+  }
+   getCollectionOrderBy(dbName:string,w:(string | UTSJSONObject),orderBy="_id desc"):Promise<UniCloudDBGetResult>{
+    return uniCloud.databaseForJQL().collection(dbName).where(w).orderBy(orderBy).get();
+  }
+   insertData(dbName:string,r:UTSJSONObject={}):Promise<UniCloudDBAddResult>{
+    return uniCloud.databaseForJQL().collection(dbName).add(r);
+
+  }
+   add(dbName:string,r:UTSJSONObject={}):Promise<UniCloudDBAddResult>{
+      return uniCloud.databaseForJQL().collection(dbName).add(r)  
+  }
+   update(dbName:string,_id:string="",data:UTSJSONObject={}):Promise<UniCloudDBUpdateResult>{
+    return uniCloud.databaseForJQL().collection(dbName).doc(_id).update(data);
+  }
+   remove(dbName:string,_id:string):Promise<UniCloudDBRemoveResult>{
+    return uniCloud.databaseForJQL().collection(dbName).doc(_id).remove();
+  }
+   clearnTable(dbName:string){
+// 		const dbCmd = uniCloud.databaseForJQL().command
+//  uniCloud.databaseForJQL().collection(dbName).where({
+//   _id: dbCmd.exists(true);
+// }).remove()
+  }
+}
+//module.exports = new DB();
+export var DB = new DBConnect();

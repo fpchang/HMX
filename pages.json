@@ -1,17 +1,320 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://doc.dcloud.net.cn/uni-app-x/collocation/pagesjson.html
 		{
+			"path": "pages/indexAdvise/indexAdvise",
+			"style": {
+				"navigationBarTitleText": "",
+				"disableScroll": true,
+				"enablePullDownRefresh": false,
+				"navigationBarBackgroundColor": "#ffffff",
+				"navigationStyle": "custom",
+				"transparentTitle": "auto"
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app x"
+				"navigationBarTitleText": "",
+				"disableScroll": true,
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		},
+
+		{
+			"path": "pages/common/privacyPolicy/privacyPolicy",
+			"style": {
+				"navigationBarTitleText": "隐私政策"
+			}
+		},
+		{
+			"path": "pages/common/userAgreement/userAgreement",
+			"style": {
+				"navigationBarTitleText": "用户协议"
+			}
+		}, 
+		{
+			"path": "pages/home/home",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		}, {
+			"path": "uni_modules/rice-ui/pages/action-sheet/action-sheet"
+		}, {
+			"path": "uni_modules/rice-ui/pages/dialog/dialog"
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationBarTextStyle": "black",
+				"transparentTitle": "always"
+			}
+		},
+		{
+			"path" : "pages/order/orderState/orderState",
+			"style" : 
+			{
+				"navigationBarTitleText" : "房态",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/financialManagement/financiaHome/financiaHome",
+			"style" : 
+			{
+				"navigationBarTitleText" : "财务中心",
+				"navigationBarBackgroundColor":"#007aff", //"linear-gradient(135deg, #2563eb, #3b82f6)",
+				"navigationBarTextStyle": "white"
+				
+			}
+			
+		},
+		{
+			"path" : "pages/homeMenu/homeMenu",
+			"style" : 
+			{
+				"navigationBarTitleText" : "功能"
+			}
+		},
+		{
+			"path" : "pages/mine/mine",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/order/createOrder/createOrder",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/order/orderList/orderList",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/financialManagement/inExManage/inExManage",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/financialManagement/expense/expense",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/financialManagement/fmchart/fmchart",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/hotelManage/hotelList/hotelList",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/set/set",
+			"style": {
+				"navigationBarTitleText": "设置"
+			}
+		},
+		{
+			"path": "pages/set/aboutYisu/aboutYisu",
+			"style": {
+				"navigationBarTitleText": "关于议宿"
+			}
+		},
+		{
+			"path": "pages/set/accountSafe/accountSafe",
+			"style": {
+				"navigationBarTitleText": "账号信息"
+			}
+		},
+		{
+			"path": "pages/mine/feedback/feedback",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/hotelManage/createHotel/createHotel",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/mine/editUser/editUser",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/hotelManage/roomTypeList/roomTypeList",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/hotelManage/createRoomType/createRoomType",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/hotelManage/roomList/roomList",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/hotelManage/createRoom/createRoom",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/hotelManage/employeeList/employeeList",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/lottery/lottery",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/hotelManage/createEmployee/createEmployee",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/order/createOrder/checkOrderRoom/checkOrderRoom",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/hotelDisplay/hotelDisplay",
+			"style": {
+				"navigationBarTitleText": "", 
+				"navigationStyle": "custom",
+				"backgroundColorContent": "#f8f9fa"
+			}
+		},
+		{
+			"path": "pages/login/login9",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/login/loginapp/loginapp",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/hotelManage/editRoom/editRoom",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/register/register",
+			"style": {
+				"navigationBarTitleText": ""
 			}
 		}
 	],
 	"globalStyle": {
+		"navigationBarTitleText": "",
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app x",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		//*"navigationBarBackgroundColor": "#0765ae",*/
+		"backgroundColor": "#f5f5f7",
+		"backgroundColorContent":"#f5f5f7",
+		"rpxCalcMaxDeviceWidth": 3000,
+		"rpxCalcBaseDeviceWidth": 1024,
+		"rpxCalcIncludeWidth": 750,
+		 "resizable": true
 	},
+	"tabBar": {
+			"color": "#787878",
+			"selectedColor": "#007aff",
+			"borderStyle": "white",
+			"backgroundColor": "#ffffff",
+			"redDotColor":"#ff0000",
+			"backgroundColor":"#ffffff",
+			//"spacing":"5px",
+			//"fontSize":"12px",
+			"iconWidth":"20px",
+			//"height":"80px",
+			"list": [{
+					"pagePath": "pages/index/index",
+					"iconPath": "/static/icons/tabbar/home-black.png",
+					"selectedIconPath": "/static/icons/tabbar/home-blue.png",
+					"text": "首页"
+				},
+				{
+					"pagePath": "pages/order/orderState/orderState",
+					"iconPath": "/static/icons/tabbar/ft-black.png",
+					"selectedIconPath": "/static/icons/tabbar/ft-blue.png",
+					"text": "房态"
+				},
+				{
+					"pagePath": "pages/financialManagement/financiaHome/financiaHome",
+					"iconPath": "/static/icons/tabbar/fm-black.png",
+					"selectedIconPath": "/static/icons/tabbar/fm-blue.png",
+					"text": "财务"
+				},
+				
+				{
+					"pagePath": "pages/homeMenu/homeMenu",
+					"iconPath": "/static/icons/tabbar/fun-black.png",
+					"selectedIconPath": "/static/icons/tabbar/fun-blue.png",
+					"text": "功能"
+				},
+				{
+					"pagePath": "pages/mine/mine",
+					"iconPath": "/static/icons/tabbar/mine-black.png",
+					"selectedIconPath": "/static/icons/tabbar/mine-blue.png",
+					"text": "我的"
+				}
+			]
+		},
 	"uniIdRouter": {}
 }

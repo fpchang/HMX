@@ -1,0 +1,149 @@
+<template>
+	<view class="xt-input-tab">
+		<view class="input-area">
+			<view v-if="showInput" style="flex: 1;;height: 100%;;padding-left: 8px;">
+				<input class="in-input-style" v-model="name_label" placeholder="请输入标签名称" />
+			</view>
+			<view style="margin-left: 8px;"><button class="btn" :disabled="name_label==''"
+					@click="addtab">{{btnText}}</button></view>
+
+		</view>
+		<view class="tab-area">
+			<view class="tab" v-for="(str,index) of tablist">
+				<text class="txt">{{str}}</text>
+				<view @click="deleteTab(index)">
+					<image src="./delete.png" style="width:16px;height: 16px;"></image>
+				</view>
+
+			</view>
+
+		</view>
+	</view>
+</template>
+
+
+
+<script setup>
+	const props = defineProps({
+		showInput: {
+			type: Boolean,
+			default: true
+		},
+		modelValue: {
+			type: Array<string>,
+			default:[]
+
+		},
+		
+		btnText: {
+			type: String,
+			default: "添加标签"
+		}
+	})
+	const emit = defineEmits(['update:modelValue'])
+
+
+	// /const showInput:boolean=props.showInput;
+	let name_label = ref<string>("");
+	let tablist = ref<Array<string>>([]);
+	if(props.modelValue!=null){
+		tablist.value = props.modelValue;
+	}
+	const onUPdate = () => {
+		// 更新
+		emit("update:modelValue", tablist.value);
+	}
+	const addtab = () => {
+		if (name_label.value != "") {
+			tablist.value.push(name_label.value);
+			name_label.value = "";
+			onUPdate();
+		}
+
+	}
+
+	const deleteTab = (index : number) => {
+		tablist.value.splice(index, 1);
+		onUPdate();
+	}
+</script>
+
+
+<style lang="scss" scoped>
+	.xt-input-tab {
+		background-color: #fff;
+		width: auto;
+		height: auto;
+		border-radius: 12px;
+		border-width: 0px;
+		border-color: transparent;
+		margin: 0px 14px 14px;
+		padding: 14px;
+		border-style: solid;
+		border: 1px solid rgb(245, 245, 245);
+
+		.input-area {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+			background-color: rgb(245, 245, 245);
+			height: 40px;
+
+			.in-input-style {
+				height: 100%;
+				line-height: 40px;
+			}
+
+			.btn {
+
+				height: 40px;
+				line-height: 40px;
+				border: 0.5px solid rgb(0, 128, 240);
+				background-color: rgb(0, 136, 255);
+				// border-radius: 12px;
+				opacity: 1;
+				min-width: 100px;
+				max-width: 190px;
+				display: flex;
+		
+				align-items: center;
+				justify-content: center;
+				font-weight: normal;
+				color: rgb(255, 255, 255);
+				font-size: 16px;
+
+			}
+		}
+
+		.tab-area {
+			display: flex;
+			flex-direction: row;
+			margin-top: 16px;
+
+			.tab {
+
+				border-radius: 100px;
+				padding: 6px 8px;
+				background-color: #f2f3f5;
+
+				margin-left: 12px;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+
+				.txt {
+					line-height: 16px;
+					color: #4e5969;
+					font-size: 12px;
+					padding-right: 6px;
+				}
+			}
+
+			.tab:first-child {
+				margin-left: 0;
+			}
+		}
+
+	}
+</style>

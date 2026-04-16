@@ -1,0 +1,103 @@
+import { roomBean } from "./roomBean";
+export  type bedBean = {
+	count: number,
+	name: string
+}
+export type roomTypeBean = {
+	_id: string,
+	hotel_id:string,
+	name : string,
+	area : number,
+	isWindow : boolean,
+	guestNumber : number,
+	firstImages : string,
+	imagesList : Array<string>,
+	bedList : Array<bedBean>,
+	roomList : Array<roomBean>,
+	facility : Array<string>,
+	priceBase : number,
+	independentBathroom : boolean
+
+}
+export let formatRoomTypeBean=(parsed:UTSJSONObject):roomTypeBean=>{
+	
+	const _idObj = parsed.getJSON("_id")??{};	
+	let imagesList : Array<string> = [];
+	let bedList : Array<bedBean> = []
+	const rawBedArr = parsed.getArray("bedList")
+	if (rawBedArr != null) {
+		for (let i = 0; i < rawBedArr.length; i++) {
+			const item = rawBedArr[i] as UTSJSONObject
+			const bed: bedBean = {
+				count: item.getNumber("count") ?? 0,
+				name: item.getString("name") ?? ""
+			}
+			bedList.push(bed)
+		}
+	}
+	const rawImgArr = parsed.getArray("imagesList")
+	if (rawImgArr != null) {
+		for (let i = 0; i < rawImgArr.length; i++) {
+			const img = rawImgArr[i] as string
+			imagesList.push(img)
+		}
+	}
+	let facility : Array<string> = []
+	const rawFacArr = parsed.getArray("facility")
+	if (rawFacArr != null) {
+		for (let i = 0; i < rawFacArr.length; i++) {
+			const fac = rawFacArr[i] as string
+			facility.push(fac)
+		}
+	}
+	let roomList : Array<roomBean> = []
+	const rawRoomArr = _idObj.getArray("hm-room")
+	if (rawRoomArr != null) {
+		for (let i = 0; i < rawRoomArr.length; i++) {
+			const rItem = rawRoomArr[i] as UTSJSONObject
+			const rm: roomBean = {
+				_id: rItem.getString("_id") ?? "",
+				data_status: rItem.getNumber("data_status"),
+				hotel_id:  rItem.getString("_id") ?? "",
+				room_name:  rItem.getString("room_name") ?? "",
+				room_type_id:  rItem.getString("room_type_id") ?? ""
+			}
+			roomList.push(rm)
+		}
+	}
+	const result:roomTypeBean= {
+		_id:_idObj.getString("_value")??"",
+		hotel_id:parsed.getString("hotel_id")??"",
+		name:parsed.getString("name")??"",
+		area:parsed.getNumber("area")??0,
+		isWindow:parsed.getBoolean("isWindow")??false,
+		guestNumber: parsed.getNumber("guestNumber")??0,
+		firstImages:parsed.getString("firstImages")??"",
+		imagesList:imagesList,
+		bedList:bedList,
+		facility:facility,
+		priceBase:parsed.getNumber("priceBase")??0,
+		roomList:roomList,
+		independentBathroom:parsed.getBoolean("independentBathroom")??false
+	}
+	return result;
+}
+export let formatRoomTypeList =(list:Array<UTSJSONObject>):Array<roomTypeBean>=>{
+	if (list == null) {
+		return []
+	}
+	let returnList:Array<roomTypeBean> =[];
+		list.forEach(item => {
+			if (item == null) {
+				return;
+			}
+			
+			const temp = formatRoomTypeBean(item);
+		
+				returnList.push(temp);
+			
+	
+		});
+	return returnList;
+	
+}

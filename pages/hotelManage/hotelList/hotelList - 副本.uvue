@@ -1,0 +1,315 @@
+<template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image src="/static/icons/hotel-manage.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">酒店列表</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-btn">
+				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
+				
+					<text class="txt" @click="addHotel">添加酒店</text>
+				
+
+			</view>
+		</template>
+	</rice-navbar>
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1">
+	<!-- #endif -->
+		<view class="card-list">
+			<view class="card-list-item" v-for="hotel of hotelList">
+				<view class="card">
+					<view class="card-item card-left">
+						<view class="img-area">
+							<image :src="topImg((hotel['firstImages'] as string | null) ?? null)"
+								style="height: 100%;width: 100%;" mode="aspectFill">
+							</image>
+						</view>
+						
+					</view>
+					<view class="card-item card-right">
+						<view class=" card-title-group">
+							<view class="card-title-area">
+								<view class="card-title"><text class="txt">{{hotel.hotelName}}</text></view>
+								<view class="card-subtitle">
+									<image src="/static/icons/position_black.png"
+										style="width:18px;height:18px;margin-right: 4px;"></image>
+									<text
+										class="txt">{{(hotel.hotelAddress as string | null) != null ? hotel.hotelAddress : '--'}}</text>
+								</view>
+								<view class="card-subtitle" style="margin-top: 15px;">
+									<image src="/static/icons/administrator.png"
+										style="width:18px;height:18px;margin-right: 4px;"></image>
+									<text class="txt">店主:{{belong((hotel.belong??'') as string)}}</text>
+								</view>
+								<view class="card-subtitle">
+									<image src="/static/icons/role.png" style="width:18px;height:18px;margin-right: 4px;">
+									</image>
+									<text class="txt">角色:{{roleFormat(hotel.curRole as string)}}</text>
+								</view>
+								
+							</view>
+							<view class="state">
+								<text class="txt">正常运营</text>
+							</view>
+						</view>
+						<view class="control">
+							<xt-control :showEdit="hotel.curRole == 'administrator'" :showDelete="hotel.curRole == 'administrator'" @del="deleteHotel(hotel)" @view="viewDetail(hotel)" @edit="editHotel(hotel)"></xt-control>				
+						</view>
+					</view>
+				
+
+					
+				</view>
+			</view>
+
+		</view>
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+
+</template>
+
+<script setup>
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui"
+	import { state } from "@/store/store";
+	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
+	import { comFunction } from "@/pages/index/ComFuc.uts";
+	import { HotelService } from "@/services/HotelService.uts";
+	let submitLoading = ref(false);
+	const hotelList = computed(() => {
+		return state.hotelList;
+	});
+	const topImg = (imgUrl : string | null) : string => {
+		if (imgUrl == null || imgUrl == '') {
+			return '/static/images/hotel.png';
+		}
+		return imgUrl;
+	};
+	const belong = (phone : string) : string => {
+		return emergency_phone_number(phone)
+	}
+	const roleFormat = (val : string) : string => {
+		const p : Map<string, string> = new Map([
+			["administrator", "超级管理员"],
+			["manager", "管理员"],
+			["normal", "员工"]
+		]);
+		return p.get(val) ?? val;
+	}
+	const editHotel = (hotel_item : UTSJSONObject) => {
+		if (hotel_item.curRole != "administrator") {
+			//alert.alertNoPermisson();
+			return;
+		}
+		uni.navigateTo({
+			url: `/pages/hotelManage/createHotel/createHotel?pageType=1&&hotel_item=${encodeURIComponent(JSON.stringify(hotel_item))}`,
+		});
+	}
+	const addHotel = () => {
+		console.log("addhotel");
+		uni.navigateTo({
+			url: "/pages/hotelManage/createHotel/createHotel"
+		});
+	}
+	const deleteHotel = async (targetObj : UTSJSONObject) => {
+		if (targetObj.curRole != "administrator") {
+			showDialog({
+				title: '没有足够的权限',
+				message: "请联系负责人",
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+
+		showDialog({
+			title: '确认删除此酒店',
+			message: "删除后将无法恢复，确认删除吗？",
+			beforeClose: async () : Promise<boolean> => {
+				try {
+					await HotelService.deleteHotel(targetObj._id as string);
+					await comFunction.getHotelList();
+					hideDialog();
+					uni.showToast({
+						title: "删除成功",
+						icon: "none"
+					});
+					return true;
+				} catch (e) {
+					uni.showToast({
+						title: "系统异常",
+						icon: "none"
+					});
+					return false;
+				}
+			},
+			confirm: () => {
+			}, cancel: () => {
+				hideDialog();
+			}
+
+		});
+	}
+	const viewDetail = (hotel_item : UTSJSONObject) => {
+		// this.type = 2;
+		//this.targetObj = JSON.parse(JSON.stringify(targetObj));
+		uni.navigateTo({
+			url: `/pages/hotelManage/createHotel/createHotel?pageType=2&&hotel_item=${encodeURIComponent(JSON.stringify(hotel_item))}`,
+		});
+	}
+
+</script>
+
+<style lang="scss">
+	.navbar-btn {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		padding: 12px 15px;
+		border-radius: 8px;
+
+		.txt {
+			color: #007aff;
+			font-size: 15px;
+			padding-left: 4px;
+		}
+	}
+
+	.card-list {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+
+		.card-list-item {
+			// min-width: 360px;
+			padding: 15px;
+			flex: 1;
+
+			.card {
+
+				display: flex;
+				flex-direction: row;
+				background-color: #fff;
+				justify-content: space-between;
+				flex-wrap: wrap;
+				border-radius: 12px;
+				.card-item{
+					
+					
+				}
+				.card-left{
+					min-width: 180rpx;
+					flex:1;
+					display: flex;
+					flex-direction: row;
+					flex-wrap: wrap;
+					.img-area {
+						width: 100%;
+						height: 350rpx;
+						max-height: 200px;
+						background-color: #eee;
+						flex:1;
+					}
+					
+					
+				}
+				.card-right{
+					min-width:520rpx;
+					flex:1;
+					display: flex;
+					flex-direction: row;
+					flex-wrap: wrap;
+					.card-title-group {
+						min-width: 300px;
+						display: flex;
+						flex-direction: row;
+						flex:1;
+						justify-content: space-between;
+						padding: 15px;
+					
+						.card-title-area {
+							.card-title {
+								.txt {
+									color: rgb(30, 30, 30);
+									font-weight: 700;
+									font-size: 20px;
+								}
+							}
+					
+							.card-subtitle {
+								margin-top: 8px;
+								display: flex;
+								flex-direction: row;
+								align-items: center;
+					
+								.txt {
+									color: rgb(144, 147, 153);
+									font-size: 14px;
+									padding-left: 4px;
+								}
+							}
+						}
+					
+						.state {
+					
+					
+							.txt {
+								background-color: rgba(255, 152, 0, 0.1);
+								color: rgb(255, 152, 0);
+								font-size: 14px;
+								padding: 8px;
+								border-radius: 4px;
+							}
+						}
+					}
+					.control {
+						display: flex;
+						flex-direction: row;
+						min-width: 160px;
+						padding:15px;
+						flex:1;
+						.control-item {
+							display: flex;
+							flex-direction: row;
+							border-radius: 8px;
+					
+							.control-btn {
+								flex: 1;
+								display: flex;
+								flex-direction: row;
+								align-items: center;
+								justify-content: center;
+					
+								.control-btn-group {
+									display: flex;
+									flex-direction: row;
+									align-items: center;
+									padding: 10px;
+								}
+							}
+					
+					
+						}
+					
+					
+					}
+				}
+
+
+			}
+		}
+
+	}
+</style>

@@ -1,0 +1,64 @@
+import { state } from "../../../store/store";
+import { employeeBean} from "@/bean/employeeBean.uts";
+export const  validEmployeeForm = (employeeForm:employeeBean,pagetype:number):boolean=>{
+	let msg ="";
+
+	
+	if(employeeForm.employee_name==""){
+		msg="请填写员工名称";
+		
+	}
+	if(employeeForm.account==""&&employeeForm.phone==""){
+		msg="请填写员工账号信息";
+		
+	}
+	if(employeeForm.hotel_id==""){
+		msg="未关联公司";
+	
+	}
+	
+		const telStr =validTel(employeeForm.phone,pagetype,employeeForm);
+		const accountstr = validAccount(employeeForm.account,pagetype,employeeForm);
+		if(accountstr!=""){
+			msg=accountstr;
+		}
+		if(telStr!=""){
+			msg=telStr;		
+		}	
+	if(msg!=""){
+		uni.showToast({
+			title:msg,
+			icon:"none"
+		})
+		return false;
+	}
+	return true;
+}
+const validAccount=(account:string,pagetype:number,employeeForm:employeeBean):string=>{
+	
+	const employeeList =state.employeeList;
+	const item = employeeList.find(item=>item.account==account&&item._id !=employeeForm._id);
+	if(item!=null&&account!=""){
+		return "已有相同账号"
+	}
+
+	return "";
+}
+const validTel=(tel:string,pagetype:number,employeeForm:employeeBean):string=>{
+	console.log(tel)
+	const employeeList =state.employeeList;
+	const item = employeeList.find(item=>item.phone==tel&&item._id !=employeeForm._id);
+	if(item!=null&&tel!=""){
+		return "已有相同手机号"
+	}
+	// const telstr =tel+"";
+	// const reg ="/^1\d{10}$/";
+	//   const regex = new RegExp(reg);
+	// if(regex.test(telstr)){
+	// 	return ""
+	// }
+	if(tel!=""&&tel.length!=11){
+		return "手机号不合法";
+	}
+	return "";
+}

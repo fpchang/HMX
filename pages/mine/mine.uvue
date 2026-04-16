@@ -1,0 +1,344 @@
+<template>
+	<view style="padding:20px">
+		<view class=" split-item">
+			<navigator url="./editUser/editUser">
+			<view class="personal-container">
+				<!-- 1. 用户信息区域 -->
+				<view style="display: flex;flex-direction: row;">
+					<view class="user-info-section" style="flex-direction: column;flex: 1;">
+						<image class="avatar" :src="avator" mode="aspectFill"></image>
+						<text class="user-name">{{formatUserName}}</text>
+						<text class="user-phone">{{emergency_phone_number((user.phone ?? '') as string)}}</text>
+					</view>
+
+					<view style="display: flex;flex-direction: row;align-items: center;">
+						<rice-icon size="16px" name="arrow-right" />
+					</view>
+				</view>
+
+			</view>
+			</navigator>
+		</view>
+		<view class=" split-item">
+
+
+			<!-- <l-card v-if="hotel_id" :title="hotel?.hotelName" :note="hotel?.hotelAddress" :cover="hotel?.firstImages" coverMode="aspectFill" extra="查看全部"
+				more lStyle="margin:0" @more="viewAll()">
+			
+			</l-card>
+			<view  v-if="hotel_id==''"  style="height:300px">
+				<l-empty description="没有数据"/>
+			</view> -->
+			<view class="title">
+				<text class="txt">当前酒店</text>
+				<navigator url="/pages/hotelManage/hotelList/hotelList">
+					<text class="btn-txt">查看全部</text>
+				</navigator>
+
+			</view>
+			
+			<view class="card">
+				<block v-if="hotel_id!=''">
+					<view class="img-area">
+						<!-- <image :src="topImg()" style="height: 100%;width: 100%;" mode="aspectFill"></image> -->
+						<image :src="hotel?.firstImages" v-if=" hotel!=null&&hotel?.firstImages!=''"
+							style="height: 100%;width: 100%;" mode="aspectFill">
+						</image>
+						<image src="/static/images/noimg.png" v-if="hotel?.firstImages==''"
+							style="height: 80%;width: 80%;" mode="aspectFit">
+						</image>
+					</view>
+					<view class="card-title-group">
+						<view class="card-title-area">
+							<view class="card-title"><text class="txt">{{hotel?.hotelName}}</text></view>
+							<view class="card-subtitle">
+								<image src="/static/icons/position_black.png"
+									style="width:14px;height:14px;margin-right: 4px;"></image>
+								<text class="txt">{{hotel?.hotelAddress}}</text>
+							</view>
+						</view>
+						<view class="state">
+							<text class="txt">正常运营</text>
+						</view>
+					</view>
+				</block>
+				<view v-if="hotel_id==''">
+					<l-empty description="没有数据" />
+				</view>
+			</view>
+		</view>
+
+		<!-- 2. 当前酒店区域 -->
+		<view class="split-item">
+			<!-- 	<rice-cell-group border>
+				<rice-cell icon="set-fill" title="设置" url="/pages/set/set" :arrow="true" />
+				<rice-cell icon="chat-fill" title="意见反馈" url="/pages/mine/feedback/feedback" :arrow="true" />
+			</rice-cell-group> -->
+			<!-- <view class="title">
+				<text class="txt">当前酒店</text>			
+			</view> -->
+			<operation></operation>
+		</view>
+
+	</view>
+
+</template>
+
+<script setup lang="uts">
+	import { state } from "@/store/store";
+	import operation from "./components/operation.uvue";
+	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
+	import { userBean } from "@/bean/userBean";
+	import { hotelBean } from "@/bean/hotelBean.uts";
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const hotel = computed<hotelBean | null>(() => {
+			return state.hotel;	
+	});
+	const hotelList = computed(() => {
+		return state.hotelList;
+	});
+	const avator = computed<string>(() => {
+		if (user.value.avatar != "" && user.value.avatar != null) {
+			return user.value.avatar;
+		}
+		return "/static/icons/mine/avator.png";
+	})
+	const formatUserName = computed<string>(() => {
+		if ( user.value.userName != '') {
+			return user.value.userName;
+		}
+		if(user.value.phone!=""){
+			return `用户${user.value.phone.slice(-4)}`;
+		}
+		if(user.value.account!=""){
+			return `用户${user.value.account}`;
+		}
+		return "--"
+	})
+	const topImg = () : string => {
+		if (hotel.value == null) {
+			return '/static/images/hotel.png';
+		}
+		const firstImages = hotel.value['firstImages'] as string | null;
+		if (firstImages == '' || firstImages == null) {
+			return '/static/images/noimg.png';
+		}
+		return firstImages;
+	};
+	const viewAll = () => {
+		uni.navigateTo({
+			url: "/pages/hotelManage/hotelList/hotelList"
+		})
+	}
+	const titleStyle = {
+		fontSize: '24px',
+		fontWeight: '700'
+	}
+	const valueStyle = {
+		color: "#007aff"
+	}
+</script>
+
+<style lang="scss" scoped>
+	.split-item {
+		margin-bottom: 20px;
+
+		.title {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			padding: 18px 0;
+
+			.txt {
+				color: #333;
+				font-weight: 600;
+				font-size: 16px;
+			}
+
+			.btn-txt {
+				font-size: 14px;
+				color: rgb(30, 136, 229);
+			}
+		}
+
+		.card {
+			background-color: #fff;
+			border-radius: 12px;
+			margin-bottom: 32px;
+
+			.img-area {
+				height: 350rpx;
+				max-height: 300px;
+				background-color: #eee;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.card-title-group {
+				display: flex;
+				flex-direction: row;
+
+				justify-content: space-between;
+				padding: 15px;
+
+				.card-title-area {
+					.card-title {
+						.txt {
+							color: rgb(30, 30, 30);
+							font-weight: 700;
+							font-size: 16px;
+						}
+					}
+
+					.card-subtitle {
+						margin-top: 8px;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+
+						.txt {
+							color: rgb(144, 147, 153);
+							font-size: 14px;
+						}
+					}
+				}
+
+				.state {
+
+
+					.txt {
+						background-color: rgba(255, 152, 0, 0.1);
+						color: rgb(255, 152, 0);
+						font-size: 14px;
+						padding: 8px;
+						border-radius: 4px;
+					}
+				}
+			}
+
+		}
+
+	}
+
+	/* 整体容器 */
+	.personal-container {
+		background-color: #fff;
+		padding: 20px 15px;
+		box-sizing: border-box;
+		margin-top: 40px;
+		border-radius: 12px;
+
+
+	}
+
+	/* 用户信息区域 */
+	.user-info-section {
+		align-items: center;
+		
+	}
+
+	.avatar {
+		width: 80px;
+		height: 80px;
+		border-radius: 40px;
+		margin-bottom: 10px;
+	}
+
+	.user-name {
+		font-size: 16px;
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+
+	.user-phone {
+		font-size: 14px;
+		color: #999;
+	}
+
+	/* 酒店区域 */
+	.hotel-section {
+		background-color: #fff;
+		padding: 15px;
+		border-radius: 8px;
+		margin-bottom: 20px;
+	}
+
+	.hotel-header {
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 10px;
+	}
+
+	.hotel-title {
+		font-size: 16px;
+		font-weight: bold;
+	}
+
+	.all-entrance {
+		font-size: 14px;
+		color: #007aff;
+	}
+
+	.current-hotel {
+		align-items: center;
+	}
+
+	.hotel-img {
+		width: 60px;
+		height: 60px;
+		border-radius: 4px;
+		margin-right: 10px;
+	}
+
+	.hotel-info {
+		flex: 1;
+	}
+
+	.hotel-name {
+		font-size: 15px;
+		margin-bottom: 5px;
+	}
+
+	.hotel-address {
+		font-size: 12px;
+		color: #999;
+	}
+
+	/* 功能入口区域 */
+	.function-section {
+		background-color: #fff;
+		border-radius: 8px;
+	}
+
+	.function-item {
+		justify-content: space-between;
+		align-items: center;
+		padding: 15px;
+	}
+
+	.function-item:last-child {
+		border-bottom: none;
+	}
+
+	.item-icon {
+		font-size: 20px;
+		margin-right: 10px;
+	}
+
+	.item-text {
+		flex: 1;
+		font-size: 16px;
+	}
+
+	.item-arrow {
+		font-size: 14px;
+		color: #999;
+	}
+</style>

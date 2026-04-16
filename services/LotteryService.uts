@@ -1,0 +1,20 @@
+import{DB} from '../api/DB';
+class LotteryClass{
+	
+	constructor(){
+       
+    }
+
+async addKl8(list:Array<UTSJSONObject>): Promise<boolean> {
+	try {
+		await uniCloud.databaseForJQL().collection("lottery-kl8").add(list);
+		return true;
+	} catch (error) {
+		//TODO handle the exception
+		throw new Error("添加失败");
+	}
+
+}
+
+}
+export var Lottery=new LotteryClass();

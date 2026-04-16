@@ -1,0 +1,169 @@
+<template>
+	<view class="xt-select">
+		<view class="select-item"> 
+		<view class="select" :style="{'overflow':show?'visible':'hidden'}">
+			<view class="content" @click="showSelect">
+				<text class="txt">{{text_val}}</text>
+				<image src="/static/icons/arrow-down.png" style="width: 16px;height:16px"></image>
+			</view>
+		</view>
+		</view>		
+		<view class="select-item" v-if="showKeySearch">
+			
+			<view class="select"> 
+			<rice-search v-model="keystr" input-color="#fff" :clearable="false" :placeholder="placeholder" :custom-style="{'padding':0}" @search="searchEvent" @clickLeftIcon="searchEvent" @input="searchInputChange"/>
+			
+			</view>
+			
+		</view>
+		<!-- <rice-action-sheet v-model:show="show" :close-on-click-action="true"
+					@select="onSelect"  v-bind="$attrs"/> -->
+		<rice-picker   v-model:show="show"  :columns="columns" @confirm="onColumnsConfirm" v-model="mode_val"></rice-picker>
+					
+		
+	</view>
+</template>
+
+<script setup>
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	//selectAction下拉 选择
+	//searchAction input点击搜索
+	//searchInputChange 输入框变化
+	const emit =defineEmits(['update:modelValue','selectAction',"searchAction","searchInputChange"]);
+	const props = defineProps({
+		modelValue: {
+			type: String,
+			default:""
+		
+		},
+		columns:{
+			type:Array<Array<PickerOption>>,
+			default:[]
+		},
+		showKeySearch:{
+			type:Boolean,
+			default:true
+		},
+		
+		placeholder:{
+			type:String,
+			default:"请输入关键字"
+		}
+		});
+	const attrs = useAttrs();
+	let show=ref(false);
+	const mode_val = ref<Array<string>>([props.modelValue]);
+	let text_val =computed<string>(()=>{
+		let returnVal ="请选择";
+		if(props.modelValue!=""){
+			if(props.columns[0].length>0){
+				const target = props.columns[0].find(item=>{
+					const val = item['value'] as string;
+					return val == props.modelValue; 
+					
+				}) as PickerOption;
+				if(target!=null){
+					returnVal= target.text as string;
+					//mode_val.value=props.columns[0][1];
+				}
+				
+			}
+			
+		}
+		return returnVal;
+	})
+	// if(props.modelValue!=""){
+	// 	text_val.value=props.modelValue;
+	// }
+	
+	const setDefault=()=>{
+		
+	}
+	
+	let keystr=ref("");
+	const showSelect=()=>{
+		show.value=!show.value;
+	}
+	const searchEvent=(value:string)=>{
+		emit("searchAction",value);
+	}
+	const searchInputChange=(value:string)=>{
+		emit("searchInputChange",value);
+	}
+	const onColumnsConfirm = (e:PickerEvent) => {
+		console.log('PickerEvent', e)
+		let val: string = e.selectedValues[0] as string
+		let index: number = e.selectedIndex[0] as number
+		text_val.value = props.columns[0][index]['text'] as string;
+		mode_val.value=[val];
+		emit("update:modelValue", val);
+		emit("selectAction",val);
+	}
+	// watch(() => props.columns, val => {
+	// 	setDefault();
+	// })
+	
+</script>
+
+<style lang="scss" scoped>
+	.xt-select{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		flex-wrap: wrap;
+		.select-item{
+			margin-bottom: 12px;
+			min-width: 300px;
+			
+			
+			flex:1;
+		}
+		.select{
+			
+			position: relative;
+			border:1px solid #dcdfe6;
+			box-sizing: border-box;
+			overflow: visible;
+			border-radius: 4px;
+			.content{
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				height: 36px;
+				padding:0 8px;
+				overflow: visible;
+				.txt{
+					line-height: 36px;
+				}
+			}
+			.select-panal{
+				overflow: visible;
+				width: 100%;
+				position: relative;
+				top:40px;
+				left: 0;
+				.select-list{
+					overflow: visible;
+					background-color: #fff;
+				}
+			}
+		}
+		
+	}
+	.center-panal{
+		padding:16px;
+		border-radius: 8px;
+		background-color: #f1f1f1;
+		.select-list{
+			min-width: 250px;
+			.select-list-item{
+				padding:8px;
+				.txt{
+					color:#eee
+				}
+			}
+		}
+	}
+</style>

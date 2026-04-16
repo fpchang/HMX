@@ -1,0 +1,1 @@
+{"bsonType":"object","required":["permission_name"],"permission":{"read":true,"create":true,"update":true,"delete":true},"properties":{"_id":{"description":"ID，系统自动生成"},"type":{"description":"权限类型","bsonType":"string","enum":["control","menu"]},"permission_name":{"description":"权限名称","bsonType":"string"},"permission_name_Zn":{"description":"权限中文名称","bsonType":"string"}}}

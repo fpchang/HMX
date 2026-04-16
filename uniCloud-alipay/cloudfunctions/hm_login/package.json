@@ -1,0 +1,15 @@
+{
+  "name": "hm_login",
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2",
+    "dateFormat": "file:../common/dateFormat",
+    "encryptPassword": "file:../common/encryptPassword",
+    "errorEvent": "file:../common/errorEvent",
+    "tokenEvent": "file:../common/tokenEvent"
+  },
+  "extensions": {
+    "uni-cloud-jql": {},
+    "uni-cloud-sms": {},
+    "uni-cloud-verify": {}
+  }
+}

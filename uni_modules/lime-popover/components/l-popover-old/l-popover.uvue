@@ -1,0 +1,513 @@
+<template>
+	<!-- #ifndef APP -->
+	<view class="l-popover__wrapper" @click.stop="handleClick" ref="referenceRef" :style="{zIndex}">
+		<slot />
+		<!-- #endif -->
+		<!-- #ifdef APP -->
+		<view class="l-popover__wrapper" ref="referenceRef">
+			<slot />
+			<!-- #endif -->
+			<!-- #ifdef APP || WEB -->
+			<view  
+				v-if="display"
+				class="l-popover"
+				:class="['l-popover--' + innerPlacement, 'l-popover--' + theme, classes]"
+				:style="[popoverStyle, styles]" ref="popoverRef">
+				<!-- #endif -->
+				<!-- #ifndef APP || WEB  -->
+				<view  
+				v-show="display"
+				class="l-popover"
+				:class="['l-popover--' + innerPlacement, 'l-popover--' + theme, classes]"
+				:style="[popoverStyle, styles]" ref="popoverRef" @transitionend="finished">
+				<!-- #endif -->
+				
+				<view class="l-popover__arrow" v-if="showArrow" :style="[arrowStyles]"
+					:class="['l-popover__arrow--' + innerPlacement]">
+				</view>
+				<view class="l-popover__content" :style="[contentStyles]"
+					:class="['l-popover__content--' + innerPlacement]">
+					<slot name="content">
+						<text class="l-popover__text" :style="[textStyles]">{{content}}</text>
+					</slot>
+				</view>
+			</view>
+			<!-- #ifndef APP || WEB -->
+			<view class="l-popover__mark" v-if="currentVisible && closeOnClickOutside" @touchstart="handleMark"></view>
+			<!-- #endif -->
+		</view>
+</template>
+<script lang="uts" setup>
+	/**
+	 * Popover 气泡弹出层组件
+	 * @description 用于显示上下文相关的信息或操作菜单，支持多种定位方式和主题样式
+	 * <br>插件类型：LPopoverComponentPublicInstance 
+	 * @tutorial https://ext.dcloud.net.cn/plugin?name=lime-popover
+	 * 
+	 * @property {boolean} closeOnClickOutside 点击外部关闭（默认：true）
+	 * @property {string} content 显示内容
+	 * @property {string} placement 弹出位置（默认：'top'）
+	 * @value top          顶部居中
+	 * @value top-left     顶部左侧
+	 * @value top-right    顶部右侧
+	 * @value bottom       底部居中
+	 * @value bottom-left  底部左侧
+	 * @value bottom-right 底部右侧
+	 * @value left         左侧居中
+	 * @value left-top     左侧上方
+	 * @value left-bottom  左侧下方
+	 * @value right        右侧居中
+	 * @value right-top    右侧上方
+	 * @value right-bottom 右侧下方
+	 * @property {boolean} showArrow 显示定位箭头（默认：true）
+	 * @property {'dark' | 'light'} theme 主题样式
+	 * @property {'dark' | 'light'} theme 主题样式（默认：'dark'）
+	 * @value light   
+	 * @value dark 
+	 * @property {boolean} visible 控制显示/隐藏（支持v-model）
+	 * @property {string} color 自定义主色（覆盖主题色）
+	 */
+
+	import { PopoverProps, PlacementAndWidth } from './type';
+	import { useTransition, UseTransitionOptions, TransitionEmitStatus } from '@/uni_modules/lime-transition';
+	import { getRect } from '@/uni_modules/lime-shared/getRect'
+	import { pushToQueue, removeFromQueue, closeOther } from '@/uni_modules/lime-popover';
+	import { transformMap, appTransformMap, transformOriginMap } from './transform'
+	// #ifdef APP || WEB
+	import { findPageElement, previousSibling } from './utils';
+	// #endif
+	import { calculateWidthAndAdjustPlacement } from './utils';
+
+	const props = withDefaults(defineProps<PopoverProps>(), {
+		closeOnClickOutside: true,
+		placement: 'top',
+		showArrow: true,
+		disabled: false,
+		theme: 'light',
+		visible: null
+	})
+	const instance = getCurrentInstance()!
+	pushToQueue(instance.proxy!);
+	const innerPlacement = ref(props.placement)
+	const referenceRef = ref<UniElement | null>(null);
+	const popoverRef = ref<UniElement | null>(null);
+	const targetRef = ref<UniElement | null>(null);
+	const zIndex = ref(2);
+	const popoverStyle = reactive({
+		// #ifndef APP || WEB
+		position: 'fixed',
+		width: 'auto',
+		// #endif
+	})
+	
+	const popoverState = ref('')
+	const modelValue = defineModel({ type: Boolean, default: false })
+	const currentVisible = computed({
+		set(v : boolean) {
+			modelValue.value = v;
+		},
+		get() : boolean {
+			return props.visible ?? modelValue.value
+		}
+	} as WritableComputedOptions<boolean>)
+
+	const styles = computed(() : Map<string, any> => {
+		const style = new Map<string, any>()
+		// #ifndef APP
+		if (!['light', 'dark'].includes(props.theme)) {
+			style.set('--l-popover-bg-color', props.theme)
+			style.set('--l-popover-color', props.color ?? 'white')
+		}
+		// #endif
+		return style
+	})
+	const contentStyles = computed(() : Map<string, any> => {
+		const style = new Map<string, any>()
+		// #ifdef APP
+		if (!['light', 'dark'].includes(props.theme)) {
+			style.set('background', props.theme)
+		}
+		// #endif
+		return style
+	})
+	const textStyles = computed(() : Map<string, any> => {
+		const style = new Map<string, any>()
+		// #ifdef APP
+		if (!['light', 'dark'].includes(props.theme)) {
+			style.set('color', props.color ?? 'white')
+		}
+		// #endif
+		return style
+	})
+	const arrowStyles = computed(() : Map<string, any> => {
+		const style = new Map<string, any>()
+		// #ifdef APP
+		if (!['light', 'dark'].includes(props.theme)) {
+			// style.set('border-color', props.theme)
+			if (innerPlacement.value.startsWith('top')) {
+				style.set('border-top-color', props.theme)
+			}
+			else if (innerPlacement.value.startsWith('bottom')) {
+				style.set('border-bottom-color', props.theme)
+			}
+			else if (innerPlacement.value.startsWith('left')) {
+				style.set('border-left-color', props.theme)
+			}
+			else if (innerPlacement.value.startsWith('right')) {
+				style.set('border-right-color', props.theme)
+			}
+		}
+		// #endif
+		return style
+	})
+
+
+	const updatePosition = async (updateWidth : boolean) : Promise<void> => {
+		const { windowWidth } = uni.getWindowInfo()
+		// #ifdef APP || WEB
+		const target = (targetRef.value ?? referenceRef.value) as UniElement | null
+		if (target == null || popoverRef.value == null) return
+		const popoverRect = await popoverRef.value!.getBoundingClientRectAsync() as DOMRect | null;
+		const referenceRect = await target.getBoundingClientRectAsync() as DOMRect | null
+
+		const referenceTop = referenceRect?.top ?? 0;
+		const referenceLeft = referenceRect?.left ?? 0;
+		const referenceRight = referenceRect?.right ?? 0;
+		const referenceBottom = referenceRect?.bottom ?? 0;
+		const referenceHeight = referenceRect?.height ?? 0;
+		const referenceWidth = referenceRect?.width ?? 0;
+
+		const popoverTop = popoverRect?.top ?? 0;
+		const popoverLeft = popoverRect?.left ?? 0;
+		const popoverRight = popoverRect?.right ?? 0;
+		const popoverBottom = popoverRect?.bottom ?? 0;
+		const popoverHeight = popoverRect?.height ?? 0;
+		const popoverWidth = popoverRect?.width ?? 0;
+
+		const availableLeft = referenceLeft - 8; // 左侧可用宽度（减去边距）
+		const availableRight = windowWidth - 8 - referenceRight; // 右侧可用宽度（减去边距）
+		const { placement, finalWidth } = calculateWidthAndAdjustPlacement(props.placement, availableLeft, availableRight, popoverRect?.width ?? 0)
+		if (innerPlacement.value != placement) {
+			innerPlacement.value = placement
+		}
+		// #ifdef APP
+		if (placement == 'top') {
+			popoverRef.value!.style.setProperty('top', `${referenceTop - popoverHeight}px`)
+			popoverRef.value!.style.setProperty('left', `${referenceLeft - finalWidth / 2 + referenceWidth / 2}px`)
+		}
+		else if (placement == 'top-left') {
+			popoverRef.value!.style.setProperty('top', `${referenceTop - popoverHeight}px`)
+			popoverRef.value!.style.setProperty('left', `${referenceLeft}px`)
+		}
+		else if (placement == 'top-right') {
+			popoverRef.value!.style.setProperty('top', `${referenceTop - popoverHeight}px`)
+			popoverRef.value!.style.setProperty('right', `${windowWidth - referenceRight}px`)
+		}
+		else if (placement == 'bottom') {
+			popoverRef.value!.style.setProperty('top', `${referenceBottom}px`)
+			popoverRef.value!.style.setProperty('left', `${referenceLeft - finalWidth / 2 + referenceWidth / 2}px`)
+		}
+		else if (placement == 'bottom-left') {
+			popoverRef.value!.style.setProperty('top', `${referenceBottom}px`)
+			popoverRef.value!.style.setProperty('left', `${referenceLeft}px`)
+		}
+		else if (placement == 'bottom-right') {
+			popoverRef.value!.style.setProperty('top', `${referenceBottom}px`)
+			popoverRef.value!.style.setProperty('right', `${windowWidth - referenceRight}px`)
+		}
+		else if (placement == 'right') {
+			popoverRef.value!.style.setProperty('left', `${referenceRight}px`)
+			popoverRef.value!.style.setProperty('top', `${referenceTop + referenceHeight / 2}px`)
+
+			popoverRef.value!.style.setProperty('transform', `translateY(-50%)`)
+		}
+		else if (placement == 'right-top') {
+			popoverRef.value!.style.setProperty('top', `${referenceTop}px`)
+			popoverRef.value!.style.setProperty('left', `${referenceRight}px`)
+		}
+		else if (placement == 'right-bottom') {
+			popoverRef.value!.style.setProperty('left', `${referenceRight}px`)
+			popoverRef.value!.style.setProperty('top', `${referenceTop + referenceHeight}px`)
+
+			popoverRef.value!.style.setProperty('transform', `translateY(-100%)`)
+		}
+		else if (placement == 'left') {
+			popoverRef.value!.style.setProperty('top', `${referenceTop + referenceHeight / 2}px`)
+			popoverRef.value!.style.setProperty('right', `${windowWidth - referenceLeft}px`)
+			popoverRef.value!.style.setProperty('transform', `translateY(-50%)`)
+		}
+		else if (placement == 'left-top') {
+			popoverRef.value!.style.setProperty('top', `${referenceTop}px`)
+			popoverRef.value!.style.setProperty('right', `${windowWidth - referenceLeft}px`)
+		}
+		else if (placement == 'left-bottom') {
+			popoverRef.value!.style.setProperty('top', `${referenceTop + referenceHeight}px`)
+			popoverRef.value!.style.setProperty('right', `${windowWidth - referenceLeft}px`)
+			popoverRef.value!.style.setProperty('transform', `translateY(-100%)`)
+		}
+		// #endif
+		// #ifndef APP
+		popoverRef.value!.style.setProperty('position', 'absolute')
+		// #endif
+		if (!updateWidth) return
+		popoverRef.value!.style.setProperty('width', finalWidth + 'px')
+		// #endif
+		// #ifndef APP || WEB
+		// popoverStyle.transform = ''
+		
+		const referenceRect = await getRect('.l-popover__wrapper', instance.proxy!)
+		const popoverRect = await getRect('.l-popover', instance.proxy!)
+		popoverStyle.position = 'absolute';
+		const availableLeft = referenceRect.left - 8; // 左侧可用宽度（减去边距）
+		const availableRight = windowWidth - 8 - referenceRect.right; // 右侧可用宽度（减去边距）
+		const { placement, finalWidth } = calculateWidthAndAdjustPlacement(props.placement, availableLeft, availableRight, popoverRect.width)
+		
+		if (innerPlacement.value != placement) {
+			innerPlacement.value = placement
+		}
+		popoverStyle.width = `${finalWidth}px`;
+		// #endif
+	}
+	
+	// #ifdef APP-ANDROID || APP-IOS || WEB
+	const display = ref(false)
+	const classes = ref('')
+	// #endif
+	
+	// #ifndef APP-ANDROID || APP-IOS || WEB
+	const {inited, display, classes, finished, toggle} = useTransition({
+		defaultName: 'popover-animation',
+		emits: (name:TransitionEmitStatus) => { 
+			popoverState.value = name
+			if(name == 'after-leave') {
+				// #ifdef WEB
+				if(referenceRef.value == null || popoverRef.value == null) return
+				popoverRef.value!.style.setProperty('width', 'auto')
+				popoverRef.value!.style.setProperty('position', 'fixed')
+				// #endif
+				// #ifndef APP || WEB
+				popoverStyle.width = 'auto';
+				popoverStyle.position = 'fixed';
+				// #endif
+				zIndex.value = 2
+				innerPlacement.value = props.placement
+				// currentVisible.value = false
+			}
+		},
+		onNextTick: (name:TransitionEmitStatus):Promise<void> => {
+			return new Promise((resolve)=>{
+				if(name == 'enter') {
+					nextTick(()=>{
+						setTimeout(()=>{
+							updatePosition(true)
+							resolve()
+						}, 50)
+					})
+				} else {
+					resolve()
+				}
+			})
+		},
+		visible: (): boolean => currentVisible.value,
+		duration: 300,
+	} as UseTransitionOptions)
+	// #endif
+	
+	const close = () => {
+		currentVisible.value = false;
+		setTimeout(()=> {
+			zIndex.value = 2
+		},100)
+	}
+	let markTime = Date.now()
+	const handleMark = (e : UniTouchEvent) => {
+		markTime = Date.now()
+		// e.preventDefault()
+		close()
+	}
+
+	let clickTimer = -1
+	const outsideClick = (e : UniPointerEvent) => {
+		if (!props.closeOnClickOutside || !currentVisible.value) return
+		// #ifdef APP || WEB
+
+		// 检查点击目标是否在内部
+		// const target = findPageElement(e.target, 'l-popover__wrapper')
+		// if (target == referenceRef.value) return
+		// #endif
+		clearTimeout(clickTimer)
+		clickTimer = setTimeout(()=>{
+			close()
+		},100)
+	}
+
+	
+	const handleClick = (e : UniPointerEvent) => {
+		// 微信小程序点击遮罩 会有可能触发底层的点击事件
+		if( Date.now() - markTime < 200 || props.disabled) return
+		e.stopPropagation()
+		closeOther(instance.proxy!)
+		// #ifdef APP || WEB
+		
+		// #endif
+		currentVisible.value = !currentVisible.value
+		if (!currentVisible.value) return
+		zIndex.value = 3
+	}
+
+	// #ifdef APP
+	onPageScroll((_e : OnPageScrollOptions) => {
+		if (!currentVisible.value) return
+		updatePosition(false)
+	})
+	// #endif
+	defineExpose({
+		close
+	})
+
+
+	// #ifdef APP
+	let pageElementCallbackWrapper : UniCallbackWrapper | null = null
+	let targetCallbackWrapper : UniCallbackWrapper | null = null
+	// #endif
+	
+	// #ifdef APP-ANDROID || APP-IOS || WEB
+	let uniAnimation : UniAnimation | null = null
+	const enterKeyframes = [{ opacity: 0 }, { opacity: 1 }];
+	const leaveKeyframes = [{ opacity: 1 }, { opacity: 0 }];
+	let enterTimer = -1
+	const createAnimation = (isEnter : boolean) => {
+		uniAnimation?.cancel()
+
+		// #ifndef APP
+		let transform = transformMap.get(innerPlacement.value) ?? ''
+		if (transform != '') transform += ' '
+		// #endif
+		// #ifdef APP
+		let transform = ''
+		// #endif
+		let transformOrigin = transformOriginMap.get(innerPlacement.value)
+
+		if (!appTransformMap.has(innerPlacement.value)) {
+			if (isEnter) {
+				// @ts-ignore
+				enterKeyframes[0].set('transformOrigin', transformOrigin)
+				// @ts-ignore
+				enterKeyframes[1].set('transformOrigin', transformOrigin)
+				// @ts-ignore
+				enterKeyframes[0].set('transform', `${transform}scale(0.4)`)
+				// @ts-ignore
+				enterKeyframes[1].set('transform', `${transform}scale(1)`)
+			} else {
+				// @ts-ignore
+				leaveKeyframes[0].set('transformOrigin', transformOrigin)
+				// @ts-ignore
+				leaveKeyframes[1].set('transformOrigin', transformOrigin)
+				// @ts-ignore
+				leaveKeyframes[0].set('transform', `${transform}scale(1)`)
+				// @ts-ignore
+				leaveKeyframes[1].set('transform', `${transform}scale(0.4)`)
+			}
+		}
+
+		const keyframes = isEnter ? enterKeyframes : leaveKeyframes
+
+		uniAnimation = popoverRef.value?.animate(keyframes, {
+			duration: 150,
+			easing: 'ease',
+			fill: 'forwards'
+		})
+		
+		uniAnimation!.onfinish = (e : UniAnimationPlaybackEvent) => {
+			if (!isEnter) {
+				display.value = false
+			} else {
+				// popoverRef.value?.style.setProperty('opacity', 1)
+			}
+		}
+	}
+	watch(currentVisible, (v : boolean) => {
+		uniAnimation?.cancel()
+		clearTimeout(enterTimer)
+
+		if (v) {
+			display.value = true
+			nextTick(() => {
+				uniAnimation?.cancel()
+				// popoverRef.value?.style.setProperty('opacity', 0)
+				setTimeout(()=> {
+					popoverRef.value?.getBoundingClientRectAsync()?.then(res => {
+						nextTick(()=> {
+							updatePosition(v).then(() => {
+								createAnimation(v)
+							})
+						})
+					})
+				},50)
+				
+			})
+		} else {
+			createAnimation(v)
+		}
+	})
+	// #endif
+
+
+	onMounted(() => {
+		nextTick(() => {
+			// #ifdef WEB
+			window.addEventListener('click', outsideClick)
+			// #endif
+			// #ifdef APP
+			pageElementCallbackWrapper = instance.proxy?.$el?.uniPage.vm.$el.addEventListener('click', outsideClick)
+			// #endif
+
+			// #ifdef APP
+			// targetRef.value = previousSibling(popoverRef.value)
+			if (referenceRef.value == null) return
+
+			// for (let el in referenceRef.value!.children) {
+			// 	if (!['#text', '#comment'].includes(el.nodeName)) {
+			// 		targetRef.value = el
+			// 		break;
+			// 	}
+			// }
+			for(let i = 0; i<referenceRef.value!.children.length; i++){
+				const el  = referenceRef.value!.children[i]
+				if (!['#text', '#comment'].includes(el.nodeName)) {
+					targetRef.value = el
+					break;
+				}
+			}
+			if (targetRef.value == null) return
+			targetCallbackWrapper = targetRef.value!.addEventListener('click', handleClick)
+			// #endif
+		})
+
+	})
+
+	onBeforeUnmount(() => {
+		// 清理定时器和事件
+		clearTimeout(clickTimer!)
+		close()
+		// 移除全局点击监听
+		// #ifdef WEB
+		window.removeEventListener('click', outsideClick!)
+		// #endif
+		// #ifdef APP
+		if (pageElementCallbackWrapper == null) return
+		instance.proxy.$el?.uniPage.vm.$el.removeEventListener('click', pageElementCallbackWrapper!)
+		pageElementCallbackWrapper = null
+		// #endif
+
+		// #ifdef APP
+		if (targetRef.value != null || targetCallbackWrapper != null) {
+			targetRef.value!.removeEventListener('touchstart', targetCallbackWrapper!)
+		}
+		// #endif
+		removeFromQueue(instance.proxy!)
+	})
+</script>
+<style lang="scss">
+	@import './index';
+</style>

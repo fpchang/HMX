@@ -1,0 +1,28 @@
+{
+	"bsonType": "object",
+	"required": ["text","value"],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"name": {
+			"description": "名称",
+			"bsonType": "string"
+		},
+		"text": {
+			"description": "文本",
+			"bsonType": "string"
+		},
+		"value": {
+			"description": "值",
+			"bsonType": "int"
+		}
+		
+	}
+}

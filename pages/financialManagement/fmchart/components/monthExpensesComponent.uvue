@@ -1,0 +1,190 @@
+<template>
+	<view>
+		<view class="chart-container" id="incomePieChart">
+			<view class="title-area">
+				<text class="chart-subtitle">当月支出</text>
+				<view>
+			
+					<view class="select" @click="showDatePicker=!showDatePicker">
+						<text class="txt">{{month}}月</text>
+						<image src="/static/images/arrow.png" style="width: 16px;height: 16px;"></image>
+					</view>
+				</view>
+			</view>
+			<l-echart ref="chartRef" @finished="initChart"></l-echart>
+		</view>
+	</view>
+	<rice-datetime-picker v-model:show="showDatePicker" type="month" @confirm="onConfirm"/>
+</template>
+
+<script setup>
+	import { FMService } from "@/services/FMService";
+	import { state } from '@/store/store.uts';
+	import { charPietItem } from "@/bean/chartBean.uts";
+	import { userBean } from "@/bean/userBean";
+	import {DateTimePickerExtend } from "@/uni_modules/rice-ui";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const hotel = computed(() => {
+		return state.hotel;
+	});
+	const hotelList = computed(() => {
+		return state.hotelList;
+	});
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const showDatePicker=ref(false);
+	const month=ref<string>(dayuts(new Date()).format("YYYY-MM"));
+	//#ifdef H5
+	import * as echarts from 'echarts';
+	//#endif
+
+	const chartRef = ref<LEchartComponentPublicInstance | null>(null);
+
+	const getIncomeMonth = async () : Promise<Array<charPietItem>> => {
+		const list = await FMService.getIncomeCurrentMonth(hotel_id.value,month.value);
+		console.log("当月统计", list);
+		return list;
+	}
+	// 初始化图表
+	const initChart = async () => {
+		if (chartRef.value == null) {
+			return;
+		}
+
+		try {
+			// 仅在 H5 平台下使用 echarts，小程序端 l-echart 内部已集成
+			//#ifdef H5
+			const chart = await chartRef.value.init(echarts)
+			//#endif
+			//#ifndef H5
+			const chart = await chartRef.value.init(null)
+			//#endif
+			chart.showLoading();
+			let dataList = await FMService.getExpensesCurrentMonth(hotel_id.value,month.value);
+			const labelStyle = {
+			   color: '#303133',
+			   fontSize: 14,
+			   fontWeight: 'bold',
+			   align: 'center'
+			 };
+			   const total = dataList.reduce((sum, item) => sum + item.value, 0);
+			const chartOption = {
+			
+				tooltip: {
+					trigger: 'item'
+				},
+				legend: {
+					top: '5%',
+					left: 'center'
+				},
+				color:[
+					 '#FF7043', // 主色：橙红（生活消费）
+					    '#FDC040', // 暖黄（交通出行）
+					    '#E84393', // 玫红（娱乐休闲）
+					    '#E53E3E', // 砖红（人情往来）
+					    '#F7971E'  // 橘黄（其他支出）
+				],
+				series: [
+					{
+						name: '当月支出',
+						type: 'pie',
+						radius: ['40%', '70%'],
+						avoidLabelOverlap: false,
+						itemStyle: {
+							borderRadius: 10,
+							borderColor: '#fff',
+							borderWidth: 2
+						},
+						label: {
+							show: true,
+							position: 'center',
+							formatter: [
+							  `{title|总支出}`,
+							  `{value|${total}元}`
+							].join('\n'),
+							rich: {
+							  title: {
+							    ...labelStyle,
+							    fontSize: 16,
+								 padding: [0, 0, 8, 0], 
+							    marginBottom: 4
+							  },
+							  value: {
+							    ...labelStyle,
+							    fontSize: 20,
+							    color: '#FF7043'
+							  }
+							}
+						},
+						emphasis: {
+							label: {
+								show: true,
+								fontSize: 40,
+								fontWeight: 'bold'
+							}
+						},
+						labelLine: {
+							show: false
+						},
+						data: dataList
+					}
+				]
+			
+			
+			
+			}
+			chart.setOption(chartOption);
+				chart.hideLoading();
+		} catch (error) {
+			console.error('图表初始化失败:', error)
+		}
+	} 
+	const onConfirm=(value:string, extend:DateTimePickerExtend)=>{
+		console.log('value',value,'extend', extend)
+		month.value=value;
+		initChart();
+	}
+</script>
+
+<style lang="scss">
+	.chart-container {
+		width: 100%;
+		height: 400px;
+	}
+	
+	.title-area {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	
+	.chart-subtitle {
+		display: block;
+		font-size: 16px;
+		color: #606266;
+		margin-bottom: 12px;
+		font-weight: 500;
+	}
+	
+	.select {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		padding: 4px 12px;
+		border-radius: 6px;
+		border: 1px solid #e5e7eb;
+		background-color: #fff;
+	
+		.txt {
+			font-size: 14px;
+			color: #303133;
+			margin-right: 4px;
+		}
+	}
+</style>

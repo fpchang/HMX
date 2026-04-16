@@ -29,14 +29,14 @@
 		"phone": {
 			"description": "员工手机号,关联user.phone",
 			"title": "员工手机号",
-			"bsonType": "string",
-			"minLength": 11,
-			"pattern": "^[1][3,4,5,6,7,8,9][0-9]{9}$",
-			"errorMessage": {
-				"required": "手机号不能为空",
-				"minLength": "手机号不能小于 {minLength} 个字符",
-				"pattern": "手机号格式不正确"
-			}
+			"bsonType": "string"
+			// "minLength": 11,
+			// "pattern": "^[1][3,4,5,6,7,8,9][0-9]{9}$",
+			// "errorMessage": {
+			// 	"required": "手机号不能为空",
+			// 	"minLength": "手机号不能小于 {minLength} 个字符",
+			// 	"pattern": "手机号格式不正确"
+			// }
 		},
 		"role": {
 			"description": "角色",

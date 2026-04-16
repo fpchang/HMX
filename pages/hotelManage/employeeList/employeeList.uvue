@@ -85,6 +85,7 @@
 							<rice-icon color="#165dff" name="edit" size="14px" />
 							<text style="color:#165dff;font-size: 16px;">编辑</text>
 						</view>
+						
 						<view class="control-icons-item" v-if="showControl_delete(employee)"
 							@click="deleteEmployee(employee)">
 							<rice-icon color="#ff4d4f" name="delete" size="14px" />

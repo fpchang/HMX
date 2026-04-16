@@ -144,7 +144,7 @@
 		} catch (error) {
 			showDialog({
 				title: '更新失败',
-				message: "请稍候再试",
+				message:error.message.toString(),
 				showCancelButton: false,
 				confirm: () => {
 					submitLoading.value = false;
@@ -165,14 +165,14 @@
 				uni.navigateBack();
 				uni.showToast({
 					title: "添加成功",
-					icon: "none"
+					icon: "success"
 				});
 			}
 
 		} catch (error) {
 			console.log("createemployee error",error);
-		submitLoading.value = false;
-		hideDialog();
+			submitLoading.value = false;
+			hideDialog();
 
 		}
 

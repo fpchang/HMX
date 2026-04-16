@@ -91,6 +91,7 @@
 			
 			
 		} catch (error) {
+			submitLoading.value = false;
 			throw new Error(error.message.toString());
 		}
 		

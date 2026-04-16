@@ -14,19 +14,15 @@ exports.main = async (event, context) => {
 	// const result = await db.collection('hm-hotel').doc(_id).update({
 	// 	employee: dCmd.push([employeeObj])
 	// });
-	const {phone,account,account_id} =employeeObj;
-	if(!phone&&!account&&!account_id){
+	const {phone,account} =employeeObj;
+	if(!phone&&!account){
 		throw new Error("无有效账号信息");
 	}
 	const sql = phone?`phone=='${phone+""}'`:`account=='${account+""}'`;
 	const targetRes = await dbJQL.collection('hm-user').where(sql).get();
 	const user = targetRes.data[0];
 	if(!user){
-		throw new Error("没有匹配的账号")
-		return {
-			code:404,
-			message:"添加的员工没有注册账号"
-		}
+		throw new Error("账号或手机号无效，请员工先注册")
 	}
 	const u_id = user._id;
 	employeeObj.account_id=u_id;

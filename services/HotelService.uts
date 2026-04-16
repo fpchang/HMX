@@ -276,9 +276,8 @@ class HotelServiceClass {
 	}
 	async addEmployee(employeeForm : employeeBean) : Promise<boolean> {
 		try {
-			const { account_id, employee_name, hotel_id,account, phone, role, mark } = employeeForm;
-			
-			const res = await DB.callFunction("hm_addEmployee", { employeeObj: { account_id,employee_name, hotel_id, phone,account, role, mark } });
+			const { employee_name, hotel_id,account, phone, role, mark } = employeeForm;			
+			const res = await DB.callFunction("hm_addEmployee", { employeeObj: {employee_name, hotel_id, phone,account, role, mark } });
 			console.log("eeeee",res);
 			const result = res['result'] as UTSJSONObject;
 			const code = result.getNumber("code") ?? 0;
@@ -296,12 +295,13 @@ class HotelServiceClass {
 		} catch (err) {
 			//const hasCauseMessage = (err.cause?.cause?.message ?? '').length > 0;
 			//const msg=hasCauseMessage ? JSON.parseObject(err.cause?.cause?.message ?? ''):'系统异常，添加失败';
+			
 			showDialog({
 				title: '添加失败',
 				message: err.message.toString(),
 				showCancelButton: false,
 				confirm: () => {
-					
+					throw new Error(err.message.toString());
 				}
 			})
 		}
@@ -310,8 +310,8 @@ class HotelServiceClass {
 	async editEmployee(employeeForm : employeeBean): Promise<boolean> {
 		
 			try {
-				const {_id, employee_name, hotel_id, phone, role, mark } = employeeForm;
-				const res = await DB.callFunction("hm_editEmployee", {_id:_id ,employeeObj: { employee_name, hotel_id, phone, role, mark } });
+				const {_id, employee_name, hotel_id,account, phone, role, mark } = employeeForm;
+				const res = await DB.callFunction("hm_editEmployee", {_id:_id ,employeeObj: { employee_name, hotel_id,account, phone, role, mark } });
 				const result = res['result'] as UTSJSONObject;
 				const code = result.getNumber("code") ?? 0;
 				const message = result.getString("message") ?? "";
@@ -330,7 +330,7 @@ class HotelServiceClass {
 				return true;
 			} catch (error) {
 				console.log(error)
-				throw new Error("修改员工失败");
+				throw new Error(error.message.toString());
 			}
 	}
 	

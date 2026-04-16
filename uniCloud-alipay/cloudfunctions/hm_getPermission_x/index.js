@@ -11,13 +11,14 @@ exports.main = async (event, context) => {
 	 		context
 	 	})
 		if(!$token){
-			return {code:"302",msg:"没有token，无法确定权限",data:[]}
+			throw new Error("没有token，无法确定权限")
+			//return {code:"302",msg:"没有token，无法确定权限",data:[]}
 		}
 	 //获取角色
 	 try{
 		const verifyTokenObj =tokenEvent.verifyToken($token,"****");
-		const {phone} = verifyTokenObj.value;
-	 	const roleObj = await dbJQL.collection("hm-employee").where({hotel_id,phone}).get();
+		const {account_id} = verifyTokenObj.value;
+	 	const roleObj = await dbJQL.collection("hm-employee").where({hotel_id,account_id}).get();
 		let role_name = "normal";
 		if(roleObj.data.length>0){	
 			role_name = roleObj.data[0]['role'];			

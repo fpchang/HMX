@@ -195,9 +195,7 @@
 						order.checkInStartDateTimeStamp &&
 						time <
 						order.checkInEndDateTimeStamp;
-						console.log("s",s,time,order)
 					const s2 = order.reservedRoomList.includes(room._id);
-					console.log("s2",s2,order.reservedRoomList,room._id)
 					return s && s2;
 				})
 				if(orderObj!=null){
@@ -318,7 +316,7 @@
 					}
 				}
 
-				.cell-content-red {
+				.cell-content-red { 
 					background-color: rgba(239, 68, 68, 0.1);
 
 					.txt {

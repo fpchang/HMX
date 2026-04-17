@@ -174,8 +174,9 @@
 			isReading.value = true;
 		}
 	});
-	onLoad(() => {
+	onLoad(async () => {
 		initData();
+
 	})
 	onMounted(() => {
 		// uni.setNavigationBarColor({
@@ -183,6 +184,7 @@
 		// 	frontColor: "rgba(255,255,255,0.3)"
 		// })
 	});
+	
 </script>
 
 <style scoped lang="scss">

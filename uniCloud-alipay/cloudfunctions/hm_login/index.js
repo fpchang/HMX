@@ -85,8 +85,8 @@ async function loginByApp(event, context) {
 			});
 			user.hm_token = newToken;
 			return {
-				code: 0,
-				msg: "",
+				errCode: 0,
+				errMsg: "",
 				data: {
 					token: newToken
 				}
@@ -96,10 +96,7 @@ async function loginByApp(event, context) {
 		return register(phone)
 	} catch (e) {
 		console.error(e);
-		return {
-			code: 40002,
-			msg: "登录失败"
-		}
+		
 	}
 
 }

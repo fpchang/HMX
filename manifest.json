@@ -1,7 +1,7 @@
 {
 	"name": "议宿",
 	"appid": "__UNI__6CB5534",
-	"description": "",
+	"description": "酒店与民宿管理",
 	"versionName": "3.0.0",
 	"versionCode": "300",
 	"uni-app-x": {},
@@ -46,15 +46,19 @@
 				"uni-location": {
 					"tencent": {
 						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+<<<<<<< HEAD
 					},
 					"system": {}
+=======
+					}
+>>>>>>> 5238d25014cda95a5337ddcdcbc8eb189cc0ef4a
 				}
 			},
 			"icons": {
-				"hdpi": "/Users/sky/工作资料/项目资料/hm/icons/72x72.png",
-				"xhdpi": "/Users/sky/工作资料/项目资料/hm/icons/96x96.png",
-				"xxhdpi": "/Users/sky/工作资料/项目资料/hm/icons/144x144.png",
-				"xxxhdpi": "/Users/sky/工作资料/项目资料/hm/icons/192x192.png"
+				"hdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/72x72.png",
+				"xhdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/96x96.png",
+				"xxhdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/144x144.png",
+				"xxxhdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/192x192.png"
 			},
 			"splashScreens": {
 				"default": {}
@@ -75,8 +79,20 @@
 					"tencent": {}
 				}
 			},
+<<<<<<< HEAD
 			"icons": {},
 			"splashScreens": {}
+=======
+			"icons": {
+				"appstore": "D:/workspace-uniapp/HM3/unpackage/res/icons/1024x1024.png"
+			},
+			"splashScreens": {},
+			"privacyDescription": {
+				"NSPhotoLibraryUsageDescription": "该应用在创建店铺数据上传图片时需要访问您的照片库权限，才可以将本地图片或视频上传",
+				"NSPhotoLibraryAddUsageDescription": "该应用需要存储照片到本地照片库",
+				"NSLocalNetworkUsageDescription": "该应用依赖网络获取数据，以便功能正常使用"
+			}
+>>>>>>> 5238d25014cda95a5337ddcdcbc8eb189cc0ef4a
 		}
 	},
 	"web": {

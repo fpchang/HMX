@@ -235,12 +235,7 @@
 				"backgroundColorContent": "#f8f9fa"
 			}
 		},
-		{
-			"path": "pages/login/login9",
-			"style": {
-				"navigationBarTitleText": ""
-			}
-		},
+	
 		{
 			"path": "pages/login/loginapp/loginapp",
 			"style": {

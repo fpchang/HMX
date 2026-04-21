@@ -1,0 +1,10 @@
+{
+  "name": "hm_Account_co",
+  "dependencies": {
+    "encryptPassword": "file:../common/encryptPassword",
+    "tokenEvent": "file:../common/tokenEvent"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

@@ -6,19 +6,29 @@
 				<!-- <text class="split-line-text">其他方式</text> -->
 				<view class="split-line"></view>
 			</view>
-			<view class="con" @click="verify(false)">
+			<view class="con" v-if="phone!=''">
 				<!-- <image src="/static/icons/phone.png" style="width: 16px;height: 16px;"></image>
 				<text class="w-text">手机一键登录</text> -->
 				<view style="display: flex;flex-direction: row;align-items: center;justify-content: center;">
-					<text class="tit" >{{phone}}</text>
+					<text class="tit">{{phone}}</text>
 					<!-- <view style="width:40px;margin-left: 12px;">
 						<rice-button text="换号" shape="round" size="mini" @click="switchLoginType('code')"></rice-button>
 					</view> -->
-					
+
 				</view>
 				<view><text class="ct">未注册的手机号验证后自动创建议宿账号</text></view>
 			</view>
-			<button class="btn-login" @click="verify(false)">一键登录</button>
+			<view class="con" v-if="phone==''">
+				<view style="display: flex;flex-direction: row;justify-content: center;">
+					<rice-loading color="#787878" text="手机号获取中…" />
+				</view>
+			</view>
+			<view class="btn-content">
+				<rice-button type="primary" text="一键登录" class="btn" shape="round" @click="verify(false)"
+					:loading="submitLoading" />
+			
+			</view>
+
 		</view>
 	</view>
 </template>
@@ -35,7 +45,7 @@
 	const slogan = ref('')
 	const privacyName = ref('')
 	const privacyUrl = ref('')
-	
+
 	let submitLoading = ref(false);
 	const preLogin = (callback : (() => void)) => {
 		uniVerifyManager.value?.preLogin({
@@ -61,7 +71,7 @@
 	const takePhoneNumber = async (accessToken : string, openId : string) => {
 		// 云函数取号
 		try {
-	
+
 			const res = await uniCloud.callFunction({
 				name: 'hm_login',
 				data: {
@@ -74,12 +84,11 @@
 					openid: openId // 客户端一键登录接口返回的openid
 				}
 			});
-			console.log("取号结果", res);
+			//console.log("取号结果", res);
 			const result = res.result as UTSJSONObject;
 			const data = result.data as UTSJSONObject;
 			const code = result.code as number;
 			const msg = result.msg as string;
-			console.log("code====", code);
 			submitLoading.value = false;
 			uni.hideLoading();
 			if (code != 0) {
@@ -91,7 +100,7 @@
 				submitLoading.value = false;
 				uni.hideLoading();
 				return;
-			}	
+			}
 			const token = data['token'] as string | null;
 			if (token != null) {
 				uni.setStorageSync("hm_token", token as string);
@@ -111,14 +120,14 @@
 				content: "请用其它方式登录",
 				showCancel: false
 			});
-	
-	
+
+
 		}
-	
+
 	}
-	
+
 	const login = (fullScreen : boolean) => {
-	
+
 		uniVerifyManager.value?.login({
 			uniVerifyStyle: {
 				fullScreen: fullScreen,
@@ -135,8 +144,15 @@
 			}
 		});
 	}
-	
+
 	const verify = (fullScreen : boolean) => {
+		if(uniVerifyManager.value==null){
+			uni.showToast({
+				title: "当前环境暂不支持一键登录",
+				icon: "none",
+			});
+			return;
+		}
 		if (!props.isAgree) {
 			uni.showToast({
 				title: "请先阅读并同意协议",
@@ -157,7 +173,7 @@
 		}
 		// 校验预登录是否有效
 		submitLoading.value = true;
-		uni.showLoading({ title: "" });
+		//uni.showLoading({ title: "" });
 		const isPreLoginValid = uniVerifyManager.value?.isPreLoginValid() ?? false;
 		if (isPreLoginValid) {
 			// 预登录有效，执行登录
@@ -179,7 +195,7 @@
 			uni.showToast({ title: '请输入正确手机号', icon: 'none' });
 			return;
 		}
-	
+
 		uni.showModal({
 			title: '提示',
 			content: '该手机号未注册，将自动为您创建议宿账号',
@@ -191,7 +207,7 @@
 			}
 		});
 	};
-	
+
 	onLoad(() => {
 		uniVerifyManager.value = uni.getUniVerifyManager();
 		// 预登录
@@ -200,20 +216,22 @@
 </script>
 
 <style lang="scss">
-/* 微信登录 */
+	/* 微信登录 */
 	.app-split {
 		align-items: center;
-		.con{
-			.tit{
+
+		.con {
+			.tit {
 				text-align: center;
 				font-size: 24px;
 			}
+
 			.ct {
 				font-size: 12px;
 				color: gray;
 				padding-top: 8px;
-			
-			
+
+
 			}
 		}
 	}
@@ -235,7 +253,12 @@
 		font-size: 12px;
 		color: #999999;
 	}
-/* 登录按钮 */
+
+	/* 登录按钮 */
+	.btn-content{
+		width: 100%;
+		margin: 24px 0 12px 0;
+	}
 	.btn-login {
 		width: 100%;
 		height: 50px;
@@ -246,6 +269,6 @@
 		font-weight: 500;
 		border-radius: 25px;
 		border: none;
-		margin: 24px 0 12px 0;
+		
 	}
 </style>

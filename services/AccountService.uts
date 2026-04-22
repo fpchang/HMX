@@ -25,9 +25,9 @@ class AccountServiceClass {
 	}
 	async sendEmailCode(email:string){
 		const res = await DB.callFunction("sendemail",{
-			subject:"注册验证码",
+			subject:"验证邮箱",
 			email:email,
-			html:'<h1>邮箱验证</h1><p>你正在注册议宿账号，当前验证码为5055</p>'
+			html:'<h1>邮箱验证</h1><p>你正在注册议宿账号，当前验证码为 <text style="font-weight:bold;padding:0 8px;font-size:16px">4056<text></p>'
 		});
 		console.log("111",res)
 		
@@ -45,7 +45,7 @@ class AccountServiceClass {
 			const params={account} as UTSJSONObject;
 			const res =await DB.getCollection("hm-user",params);			
 			const data = res['data'] as Array<UTSJSONObject>;
-			const flag = data.length<1;
+			const flag = data.length>0;
 			return flag;
 		}catch(e){
 			throw new Error("系统异常");
@@ -61,7 +61,7 @@ class AccountServiceClass {
 			const params={email} as UTSJSONObject;
 			const res =await DB.getCollection("hm-user",params);			
 			const data = res['data'] as Array<UTSJSONObject>;
-			const flag = data.length<1;
+			const flag = data.length>0;
 			return flag;
 		}catch(e){
 			throw new Error("系统异常");

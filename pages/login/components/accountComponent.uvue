@@ -8,7 +8,12 @@
 				<rice-input v-model="userForm['password']" placeholder="请输入密码" border="none" type="password" />
 			</rice-form-item>
 		</rice-form>
-		
+		<view class="btn-text-content"> 
+		<navigator url="/pages/set/resetPassword/resetPassword">
+			<text class="txt">忘记密码</text>
+		</navigator>
+			
+		</view>
 		<rice-button type="primary" text="登录" class="btn" shape="round" @click="accountLogin" :loading="submitLoading"/>
 		
 	</view>
@@ -105,5 +110,14 @@
 </script>
 
 <style lang="scss">
-
+.btn-text-content{
+	padding:8px;
+	margin-bottom: 14px;
+	.txt{
+		text-align: right;
+		font-size: 12px;
+		color: #3283ff;
+	}
+	
+}
 </style>

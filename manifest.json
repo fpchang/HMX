@@ -51,6 +51,12 @@
 					},
 					"system": {}
 				}
+			},
+			"icons": {
+				"hdpi": "D:/workspace-uniapp/HMX/static/icons/appicons/72x72.png",
+				"xhdpi": "D:/workspace-uniapp/HMX/static/icons/appicons/96x96.png",
+				"xxhdpi": "D:/workspace-uniapp/HMX/static/icons/appicons/144x144.png",
+				"xxxhdpi": "D:/workspace-uniapp/HMX/static/icons/appicons/192x192.png"
 			}
 		},
 		"icons": {
@@ -77,6 +83,11 @@
 					"tencent": {
 						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
 					}
+				},
+				"uni-map": {
+					"tencent": {
+						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+					}
 				}
 			},
 			"splashScreens": {},
@@ -86,7 +97,7 @@
 				"NSLocalNetworkUsageDescription": "该应用依赖网络获取数据，以便功能正常使用"
 			},
 			"icons": {
-				"appstore": "/Users/sky/工作资料/项目资料/hm/icons/1024x1024.png"
+				"appstore": "D:/workspace-uniapp/HMX/static/icons/appicons/1024x1024.png"
 			}
 		}
 	},

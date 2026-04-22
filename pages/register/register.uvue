@@ -3,13 +3,13 @@
 		<view class="card">
 			<view class="title"><text class="txt">注册账号</text></view>
 			<rice-form :model="userForm" :rules="registerRule" ref="userFormRef" label-width="100px" class="demo-form">
-				<rice-form-item name="account" label="用户名">
+				<rice-form-item name="account">
 					<rice-input v-model="userForm['account']" placeholder="请输入用户名" border="none" />
 				</rice-form-item>
-				<rice-form-item name="email" label="邮箱" required>
+				<rice-form-item name="email"  required>
 					<rice-input v-model="userForm['email']" placeholder="请输入邮箱" border="none" />
 				</rice-form-item>
-				<rice-form-item name="emailCode" label="邮箱验证码" required v-if="false">
+				<rice-form-item name="emailCode"  required v-if="false">
 
 
 
@@ -28,15 +28,15 @@
 						</view>
 					</view>
 				</rice-form-item>
-				<rice-form-item name="password" label="密码" required>
+				<rice-form-item name="password"  required>
 					<rice-input v-model="userForm['password']" placeholder="请输入密码" border="none" type="password" />
 				</rice-form-item>
-				<rice-form-item name="confirmPassword" label="确认密码" required>
+				<rice-form-item name="confirmPassword"  required>
 					<rice-input v-model="userForm['confirmPassword']" placeholder="请再次输入密码" border="none"
 						type="password" />
 				</rice-form-item>
 			</rice-form>
-			<view class="flex">
+			<view style="margin-top: 24px;">
 				<rice-button type="primary" text="完成注册" class="btn" shape="round" @click="handleRegister"  :loading="submitLoading"/>
 
 			</view>

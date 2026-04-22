@@ -53,10 +53,10 @@
 				}
 			},
 			"icons": {
-				"hdpi": "D:/workspace-uniapp/HMX/static/icons/appicons/72x72.png",
-				"xhdpi": "D:/workspace-uniapp/HMX/static/icons/appicons/96x96.png",
-				"xxhdpi": "D:/workspace-uniapp/HMX/static/icons/appicons/144x144.png",
-				"xxxhdpi": "D:/workspace-uniapp/HMX/static/icons/appicons/192x192.png"
+				"hdpi": "static/icons/appicons/72x72.png",
+				"xhdpi": "static/icons/appicons/96x96.png",
+				"xxhdpi": "static/icons/appicons/144x144.png",
+				"xxxhdpi": "static/icons/appicons/192x192.png"
 			}
 		},
 		"icons": {
@@ -97,7 +97,7 @@
 				"NSLocalNetworkUsageDescription": "该应用依赖网络获取数据，以便功能正常使用"
 			},
 			"icons": {
-				"appstore": "D:/workspace-uniapp/HMX/static/icons/appicons/1024x1024.png"
+				"appstore": "static/icons/appicons/1024x1024.png"
 			}
 		}
 	},

@@ -1,10 +1,10 @@
 <template>
 	<view>
 		<rice-form :model="userForm" :rules="accountRule" ref="userFormRef" label-width="100px" class="demo-form">
-			<rice-form-item name="account" label="用户名">
+			<rice-form-item name="account">
 				<rice-input v-model="userForm['account']" placeholder="请输入用户名" border="none" />
 			</rice-form-item>
-			<rice-form-item name="password" label="密码" required>
+			<rice-form-item name="password"  required>
 				<rice-input v-model="userForm['password']" placeholder="请输入密码" border="none" type="password" />
 			</rice-form-item>
 		</rice-form>
@@ -14,8 +14,9 @@
 		</navigator>
 			
 		</view>
+		<view style="margin-top: 24px;">
 		<rice-button type="primary" text="登录" class="btn" shape="round" @click="accountLogin" :loading="submitLoading"/>
-		
+		</view>
 	</view>
 </template>
 

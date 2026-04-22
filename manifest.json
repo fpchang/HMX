@@ -1,101 +1,112 @@
 {
-    "name" : "议宿",
-    "appid" : "__UNI__6CB5534",
-    "description" : "酒店与民宿管理",
-    "versionName" : "3.0.0",
-    "versionCode" : "300",
-    "uni-app-x" : {
-        "vapor" : true
-    },
-    /* 快应用特有相关 */
-    "quickapp" : {},
-    /* 小程序特有相关 */
-    "mp-weixin" : {
-        "appid" : "",
-        "setting" : {
-            "urlCheck" : false
-        },
-        "usingComponents" : true
-    },
-    "mp-alipay" : {
-        "usingComponents" : true
-    },
-    "mp-baidu" : {
-        "usingComponents" : true
-    },
-    "mp-toutiao" : {
-        "usingComponents" : true
-    },
-    "uniStatistics" : {
-        "enable" : false
-    },
-    "vueVersion" : "3",
-    "app" : {
-        "distribute" : {
-            "icons" : {
-                "android" : {
-                    "hdpi" : "",
-                    "xhdpi" : "",
-                    "xxhdpi" : "",
-                    "xxxhdpi" : ""
-                }
-            }
-        }
-    },
-    "app-android" : {
-        "distribute" : {
-            "modules" : {
-                "uni-location" : {
-                    "tencent" : {
-                        "key" : "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
-                    },
-                    "system" : {}
-                }
-            }
-        },
-        "icons" : {
-            "hdpi" : "D:/workspace-uniapp/HM3/unpackage/res/icons/72x72.png",
-            "xhdpi" : "D:/workspace-uniapp/HM3/unpackage/res/icons/96x96.png",
-            "xxhdpi" : "D:/workspace-uniapp/HM3/unpackage/res/icons/144x144.png",
-            "xxxhdpi" : "D:/workspace-uniapp/HM3/unpackage/res/icons/192x192.png"
-        },
-        "splashScreens" : {
-            "default" : {}
-        },
-        "abiFilters" : [ "x86_64", "x86", "arm64-v8a", "armeabi-v7a" ]
-    },
-    "app-ios" : {
-        "distribute" : {
-            "modules" : {
-                "uni-location" : {
-                    "system" : {},
-                    "tencent" : {
-                        "key" : "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
-                    }
-                }
-            },
-            "splashScreens" : {},
-            "privacyDescription" : {
-                "NSPhotoLibraryUsageDescription" : "该应用在创建店铺数据上传图片时需要访问您的照片库权限，才可以将本地图片或视频上传",
-                "NSPhotoLibraryAddUsageDescription" : "该应用需要存储照片到本地照片库",
-                "NSLocalNetworkUsageDescription" : "该应用依赖网络获取数据，以便功能正常使用"
-            },
-            "icons" : {
-                "appstore" : "/Users/sky/工作资料/项目资料/hm/icons/1024x1024.png"
-            }
-        }
-    },
-    "web" : {
-        "router" : {
-            "mode" : ""
-        }
-    },
-    "app-harmony" : {
-        "distribute" : {
-            "deviceArchs" : [ "arm64-v8a", "x86_64" ],
-            "deviceTypes" : [ "phone", "tablet" ],
-            "bundleName" : "ys.hotelsys.fun",
-            "signingConfigs" : {}
-        }
-    }
+	"name": "议宿",
+	"appid": "__UNI__6CB5534",
+	"description": "酒店与民宿管理",
+	"versionName": "3.0.0",
+	"versionCode": "300",
+	"uni-app-x": {
+		"vapor": true
+	},
+	/* 快应用特有相关 */
+	"quickapp": {},
+	/* 小程序特有相关 */
+	"mp-weixin": {
+		"appid": "",
+		"setting": {
+			"urlCheck": false
+		},
+		"usingComponents": true
+	},
+	"mp-alipay": {
+		"usingComponents": true
+	},
+	"mp-baidu": {
+		"usingComponents": true
+	},
+	"mp-toutiao": {
+		"usingComponents": true
+	},
+	"uniStatistics": {
+		"enable": false
+	},
+	"vueVersion": "3",
+	"app": {
+		"distribute": {
+			"icons": {
+				"android": {
+					"hdpi": "",
+					"xhdpi": "",
+					"xxhdpi": "",
+					"xxxhdpi": ""
+				}
+			}
+		}
+	},
+	"app-android": {
+		"distribute": {
+			"modules": {
+				"uni-location": {
+					"tencent": {
+						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+					},
+					"system": {}
+				}
+			}
+		},
+		"icons": {
+			"hdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/72x72.png",
+			"xhdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/96x96.png",
+			"xxhdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/144x144.png",
+			"xxxhdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/192x192.png"
+		},
+		"splashScreens": {
+			"default": {}
+		},
+		"abiFilters": [
+			"x86_64",
+			"x86",
+			"arm64-v8a",
+			"armeabi-v7a"
+		]
+	},
+	"app-ios": {
+		"distribute": {
+			"modules": {
+				"uni-location": {
+					"system": {},
+					"tencent": {
+						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+					}
+				}
+			},
+			"splashScreens": {},
+			"privacyDescription": {
+				"NSPhotoLibraryUsageDescription": "该应用在创建店铺数据上传图片时需要访问您的照片库权限，才可以将本地图片或视频上传",
+				"NSPhotoLibraryAddUsageDescription": "该应用需要存储照片到本地照片库",
+				"NSLocalNetworkUsageDescription": "该应用依赖网络获取数据，以便功能正常使用"
+			},
+			"icons": {
+				"appstore": "/Users/sky/工作资料/项目资料/hm/icons/1024x1024.png"
+			}
+		}
+	},
+	"web": {
+		"router": {
+			"mode": ""
+		}
+	},
+	"app-harmony": {
+		"distribute": {
+			"deviceArchs": [
+				"arm64-v8a",
+				"x86_64"
+			],
+			"deviceTypes": [
+				"phone",
+				"tablet"
+			],
+			"bundleName": "ys.hotelsys.fun",
+			"signingConfigs": {}
+		}
+	}
 }

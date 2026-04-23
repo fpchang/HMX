@@ -1,14 +1,14 @@
 <template>
 	<view>
 		<rice-form :model="userForm" :rules="rule" ref="userFormRef" label-width="100px" class="demo-form">
-			<rice-form-item name="phone">
+			<rice-form-item name="phone" label-position="top">
 				<view class="input-row" >
 					<view style="flex:1;display: flex;">
 				<rice-input v-model="userForm.phone" placeholder="请输入手机号" border="none" :maxlength="11" />
 				</view>
 				</view>
 			</rice-form-item>
-			<rice-form-item name="smsCode"  required>
+			<rice-form-item name="smsCode"  required  label-position="top">
 				<!-- <rice-input v-model="userForm['smsCode']" placeholder="请输入验证码" border="none" :maxlength="4" /> -->
 				<view class="input-row" >
 					<view style="flex:1;display: flex;">

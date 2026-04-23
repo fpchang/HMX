@@ -1,5 +1,5 @@
 {
-  "name": "sendemail",
+  "name": "send_email_co",
   "dependencies": {
     "nodemailer": "^8.0.5",
     "tokenEvent": "file:../common/tokenEvent"

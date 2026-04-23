@@ -75,16 +75,6 @@
 
 <script setup lang="uts">
 	import { loginEvent, loginOut } from "@/store/store.uts";
-
-	//import { ref, onMounted, computed } from "vue";
-	//import { AccountService } from "@/services/AccountService";
-	// const props = defineProps({
-	//   message: {
-	//     type: String,
-	//     required: true
-	//   }
-	// });
-
 	let isReading = ref(false);
 	let refresher_triggered = ref(false);
 	let submitLoading = ref(false);
@@ -174,7 +164,7 @@
 			isReading.value = true;
 		}
 	});
-	onLoad(async () => {
+	onLoad(() => {
 		initData();
 
 	})
@@ -184,7 +174,7 @@
 		// 	frontColor: "rgba(255,255,255,0.3)"
 		// })
 	});
-	
+
 </script>
 
 <style scoped lang="scss">

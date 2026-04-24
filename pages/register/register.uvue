@@ -12,7 +12,7 @@
 				<rice-form-item name="emailCode" required label-position="top">
 					<view class="input-row">
 						<view style="flex:1;display: flex;">
-							<rice-input v-model="userForm['emailcode']" placeholder="邮箱验证码" border="none" :maxlength="4"
+							<rice-input v-model="userForm['emailCode']" placeholder="邮箱验证码" border="none" :maxlength="4"
 								type="number" />
 						</view>
 						<view style="display: flex;flex-direction: row;align-items: center;">

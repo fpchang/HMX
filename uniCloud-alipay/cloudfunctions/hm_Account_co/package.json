@@ -1,5 +1,5 @@
 {
-  "name": "hm_Account_co",
+  "name": "hm_account_co",
   "dependencies": {
     "encryptPassword": "file:../common/encryptPassword",
     "tokenEvent": "file:../common/tokenEvent"

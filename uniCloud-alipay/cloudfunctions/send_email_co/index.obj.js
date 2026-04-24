@@ -36,7 +36,6 @@ module.exports = {
 	   if (!email) {
 	   	throw new Error("无有效的邮箱信息");
 	   }
-	   const emailCode =randomSms();
 	   let transporter = nodemailer.createTransport({
 	   	host: 'smtp.qq.com',
 	   	    port: 465,
@@ -55,7 +54,7 @@ module.exports = {
 	   	//text: `验证码为${smsCode}`  
 	   })
 	   if (info.messageId) {
-	   	const newToken = tokenEvent.getToken({email:email,emailCode:emailCode},tokenEvent.getSecret(),'5m');
+	   	const newToken = tokenEvent.getToken({email:email,emailCode:temp.emailCode},tokenEvent.getSecret(),'5m');
 	   	// return {code: 0, msg: '发送成功'}  
 	   	return {errCode:0,errMsg:"",data:{emailCodeTk:newToken}}
 	   } else {
@@ -75,6 +74,7 @@ function getEmailTemp(key){
 	const temp={
 		register:{
 			subject:"验证邮箱",
+			emailCode:emailCode,
 			html:`<h1>邮箱验证</h1><p>你正在通过邮箱注册议宿账号，验证码为</p><p><text style="font-weight:bold;padding:0 14px;font-size:24px;color:#007aff">${emailCode}<text></p>`
 		},
 		

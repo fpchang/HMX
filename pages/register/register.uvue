@@ -46,7 +46,7 @@
 	type userType = {
 		account : string,
 		email : string,
-		emailcode : string,
+		emailCode : string,
 		password : string,
 		confirmPassword : string,
 		emailCodeTk:string
@@ -54,7 +54,7 @@
 	const userForm = ref<userType>({
 		account: '',
 		email: "",
-		emailcode: "",
+		emailCode: "",
 		password: '',
 		confirmPassword: '',
 		emailCodeTk:""
@@ -68,7 +68,7 @@
 		if (account == null) {
 			return "账号不能为空";
 		}
-		const flag = await AccountService.validRegisterAccount(account.toString(),);
+		const flag = await AccountService.validRegisterAccount(account.toString());
 		return !flag;
 	}
 	const emailvalidAccount = async (email : any | null) => {
@@ -101,7 +101,7 @@
 			"account",
 			[
 				{ required: true, message: '请输入用户名' },
-				{ min: 3, max: 10, message: '字数需为 3 至 10 位', trigger: 'blur' },
+				{ min: 3, max: 15, message: '字数需为 3 至 15 位', trigger: 'blur' },
 				{ validator: validAccount, trigger: 'blur', message: "已存在相同用户名" }
 			]
 		], [
@@ -213,27 +213,35 @@
 		const userJSON = {
 			account: userForm.value.account,
 			email: userForm.value.email,
-			password: userForm.value.password
+			password: userForm.value.password,
+			emailCode: userForm.value.emailCode,
+			confirmPassword: userForm.value.confirmPassword,
+			emailCodeTk:userForm.value.emailCodeTk
 		} as UTSJSONObject;
 		try {
 			submitLoading.value = true;
-			const res = await AccountService.register(userJSON);
-			uni.setStorageSync("account", userForm.value.account);
-			uni.navigateBack();
-			uni.showToast({
-				title: "注册成功",
-				icon: "none"
-			});
+			const flag = await AccountService.register(userJSON);
+			if(flag){
+				uni.setStorageSync("account", userForm.value.account);
+				console.log("99999999999999",flag)
+				uni.navigateBack();
+				uni.showToast({
+					title: "注册成功",
+					icon: "none"
+				});
+			}
+			submitLoading.value = false;
 
 		} catch (err) {
 			//throw new Error(error.message as string);
+			console.log("eeeeeeeeeeeeeeeeeeeeeee");
 			submitLoading.value = false;
 			showDialog({
 				title: '注册失败',
 				message: err.message as string,
 				showCancelButton: false,
 				confirm: () => {
-
+					submitLoading.value = false;
 				}
 			})
 		}

@@ -3,6 +3,7 @@ import { callFunctionRes } from "@/bean/DBBean";
 import { userBean } from '@/bean/userBean';
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 const send_email_co = uniCloud.importObject('send_email_co');
+const account_co = uniCloud.importObject('hm_account_co');
 class AccountServiceClass {
 
 	constructor() {
@@ -26,19 +27,8 @@ class AccountServiceClass {
 	}
 	async sendEmailCode(email : string):Promise<string> {
 		try {
-			// const res = await DB.callFunction("sendemail", {
-			// 	subject: "验证邮箱",
-			// 	email: email,
-			// 	html: '<h1>邮箱验证</h1><p>你正在注册议宿账号，验证码为</p>'
-			// });
 			const res = await send_email_co.sendEmailCode(email,"register");
 			console.log("send email code", res);
-			const errCode = res['errCode'] as number;
-			if(errCode!=0){
-				throw new Error(res["errMessage"]);
-				
-			}
-			
 			const data = res['data'] as UTSJSONObject;
 			const emailCodeTk = data.getString("emailCodeTk")??"";
 			return emailCodeTk;
@@ -87,17 +77,24 @@ class AccountServiceClass {
 	}
 	async register(user : UTSJSONObject) : Promise<boolean> {
 		console.log("user---", user)
+		// try {
+		// 	const res = await DB.callFunction("hm_register", { user });
+		// 	const result = res['result'] as UTSJSONObject;
+		// 	console.log("result", result);
+		// 	if (result.getNumber("errCode") != 0) {
+		// 		throw new Error(result.getString("errMsg") ?? "系统异常")；
+		// 	}
+		// 	console.log("rrrr", res);
+		// 	return true;
+		// } catch (error) {
+		// 	throw new Error(error.message.toString());
+		// }
 		try {
-			const res = await DB.callFunction("hm_register", { user });
-			const result = res['result'] as UTSJSONObject;
-			console.log("result", result);
-			if (result.getNumber("errCode") != 0) {
-				throw new Error(result.getString("errMsg") ?? "系统异常")；
-			}
-			console.log("rrrr", res);
-			return true;
+			 await account_co.register(user);
+			return true
 		} catch (error) {
-			throw new Error(error.message.toString());
+			console.log("aaaaaaaaa",error);
+			return false;
 		}
 	}
 	async login(userForm : UTSJSONObject) : Promise<boolean> {

@@ -1,5 +1,7 @@
 // 云对象教程: https://uniapp.dcloud.net.cn/uniCloud/cloud-obj
 // jsdoc语法提示教程：https://ask.dcloud.net.cn/docs/#//ask.dcloud.net.cn/article/129
+const tokenEvent = require('tokenEvent');
+const {RegisterClass} = require('./register/RegisterClass.js');
 module.exports = {
 	_before: function () { // 通用预处理器
 		const methodName = this.getMethodName()
@@ -27,14 +29,27 @@ module.exports = {
 	}
 	*/
    async register(userForm={}){
+	   console.log("userForm",userForm);
 	   const {
 		   account,
 		   email,
-		   emailcode,
+		   emailCode,
 		   password,
 		   confirmPassword,
 		   emailCodeTk
-	   }
+	   }=userForm;
+	   const secret = tokenEvent.getSecret();
+	   	const verifT = tokenEvent.verifyToken(emailCodeTk, secret);
+		console.log('verift',verifT);
+		if (!verifT || verifT.value.emailCode != emailCode) {
+			return {errCode : 202,errMsg : "邮箱验证码不正确"};
+		}
+		if(verifT.value.email!=email){
+			return {errCode : 202,errMsg : "邮箱与验证码不匹配"};
+		}
+	   const registerClass = new RegisterClass(account, password, email);
+	   const res = await registerClass.register();
+	   return res;
    },
    /**
 	* @param {Object} accountObject
@@ -43,7 +58,7 @@ module.exports = {
 	   const {
 		   account,
 		   email,
-		   emailcode,
+		   emailCode,
 		   password,
 		   confirmPassword,
 	   }=accountObject;

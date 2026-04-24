@@ -26,6 +26,16 @@ module.exports = {
 		}
 	}
 	*/
+   async register(userForm={}){
+	   const {
+		   account,
+		   email,
+		   emailcode,
+		   password,
+		   confirmPassword,
+		   emailCodeTk
+	   }
+   },
    /**
 	* @param {Object} accountObject
 	*/

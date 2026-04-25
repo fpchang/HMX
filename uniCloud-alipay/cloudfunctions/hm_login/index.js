@@ -251,7 +251,7 @@ function getUser(phone, token) {
 		"nickName": "",
 		"phone": phone,
 		//"account":null,
-		"email": "",
+		//"email": "",
 		"password": "",
 		"userId": phone,
 		"userName": `用户${phone.substr(-4)}`,

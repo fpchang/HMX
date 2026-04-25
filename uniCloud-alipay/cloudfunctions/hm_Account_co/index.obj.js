@@ -11,23 +11,27 @@ module.exports = {
 	 * @param {string} param1 参数1描述
 	 * @returns {object} 返回值描述
 	 */
-	/* 
-	method1(param1) {
-		// 参数校验，如无参数则不需要
-		if (!param1) {
-			return {
-				errCode: 'PARAM_IS_NULL',
-				errMsg: '参数不能为空'
-			}
-		}
-		// 业务逻辑
+	async validEmailAndCode(email : string,emailCode:string,emailCodeTk:string){
 		
-		// 返回结果
-		return {
-			param1 //请根据实际需要返回值
-		}
-	}
-	*/
+			const secret = tokenEvent.getSecret();
+			const verifT = tokenEvent.verifyToken(emailCodeTk, secret);
+				console.log('verift',verifT);
+				if (!verifT || verifT.value.emailCode != emailCode) {
+					return {errCode : 202,errMsg : "邮箱验证码不正确"};
+				}
+				if(verifT.value.email!=email){
+					return {errCode : 202,errMsg : "邮箱与验证码不匹配"};
+				}
+				const db = uniCloud.databaseForJQL();
+				const res = await db.getCollection("hm-user", {email:email});
+				console.log("EEEERRRR",res);
+				const data = res['data'] as Array<UTSJSONObject>;
+				if( data.length >0){
+					return {errCode : 502,errMsg : "邮箱已经存在"};
+				}
+			return {errCode : 0,errMsg : "0"};
+	},
+	
    async register(userForm={}){
 	   console.log("userForm",userForm);
 	   const {
@@ -38,15 +42,7 @@ module.exports = {
 		   confirmPassword,
 		   emailCodeTk
 	   }=userForm;
-	   const secret = tokenEvent.getSecret();
-	   	const verifT = tokenEvent.verifyToken(emailCodeTk, secret);
-		console.log('verift',verifT);
-		if (!verifT || verifT.value.emailCode != emailCode) {
-			return {errCode : 202,errMsg : "邮箱验证码不正确"};
-		}
-		if(verifT.value.email!=email){
-			return {errCode : 202,errMsg : "邮箱与验证码不匹配"};
-		}
+	   
 	   const registerClass = new RegisterClass(account, password, email);
 	   const res = await registerClass.register();
 	   return res;

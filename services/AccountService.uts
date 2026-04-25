@@ -61,19 +61,35 @@ class AccountServiceClass {
 	}
 	async validRegisterByEmail(email : string) : Promise<boolean> {
 		console.log("aacc", email);
+		let flag = false;
 		if (email == "") {
-			throw new Error("邮箱不能为空")
+			throw new Error("邮箱不能为空");
 		}
 		try {
 			const params = { email } as UTSJSONObject;
 			const res = await DB.getCollection("hm-user", params);
 			const data = res['data'] as Array<UTSJSONObject>;
-			const flag = data.length > 0;
+			if( data.length <1){
+				flag=true;
+			}
 			return flag;
 		} catch (e) {
 			throw new Error("系统异常");
+			
 		}
-
+		
+	}
+	//验证邮箱与验证码
+	async validEmailAndCode(email : string,emailCode:string,emailCodeTk:string):Promise<boolean>{
+		console.log("111",arguments);
+		try {
+			await account_co.validEmailAndCode(email,emailCode,emailCodeTk);
+			return true;
+		} catch (error) {
+			//return false;
+			console.log("eeee",error)
+			throw new Error(error.message as string);
+		}
 	}
 	async register(user : UTSJSONObject) : Promise<boolean> {
 		console.log("user---", user)

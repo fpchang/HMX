@@ -25,6 +25,7 @@
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
 	import { AccountService } from "@/services/AccountService";
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	const emit =defineEmits(["setAccountEvent"]);
 	const submitLoading = ref(false);
 	type userType = {
 		account : string,
@@ -95,7 +96,20 @@
 		]
 	])
 
-	const accountEvent=()=>{}
+	const accountEvent= async ()=>{
+		if(submitLoading.value==true){
+			return;
+		}
+		const result = await userFormRef.value!.validate();
+		console.log("result", result);
+		//校验成功
+		if (result != true) {
+			console.log("校验失败");
+			return;
+		}
+		submitLoading.value=true;
+		emit("setAccountEvent",userForm.value.account,userForm.value.password);
+	}
 
 </script>
 <style scoped lang="scss">

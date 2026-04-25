@@ -11,7 +11,7 @@ module.exports = {
 	 * @param {string} param1 参数1描述
 	 * @returns {object} 返回值描述
 	 */
-	async validEmailAndCode(email : string,emailCode:string,emailCodeTk:string){
+	async validEmailAndCode(email,emailCode,emailCodeTk){
 		
 			const secret = tokenEvent.getSecret();
 			const verifT = tokenEvent.verifyToken(emailCodeTk, secret);
@@ -25,7 +25,7 @@ module.exports = {
 				const db = uniCloud.databaseForJQL();
 				const res = await db.getCollection("hm-user", {email:email});
 				console.log("EEEERRRR",res);
-				const data = res['data'] as Array<UTSJSONObject>;
+				const data = res['data'];
 				if( data.length >0){
 					return {errCode : 502,errMsg : "邮箱已经存在"};
 				}
@@ -37,10 +37,7 @@ module.exports = {
 	   const {
 		   account,
 		   email,
-		   emailCode,
-		   password,
-		   confirmPassword,
-		   emailCodeTk
+		   password
 	   }=userForm;
 	   
 	   const registerClass = new RegisterClass(account, password, email);

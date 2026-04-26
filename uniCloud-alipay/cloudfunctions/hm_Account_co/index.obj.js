@@ -2,6 +2,7 @@
 // jsdoc语法提示教程：https://ask.dcloud.net.cn/docs/#//ask.dcloud.net.cn/article/129
 const tokenEvent = require('tokenEvent');
 const {RegisterClass} = require('./register/RegisterClass.js');
+const {PasswordClass} = require('./password/PasswordClass.js');
 module.exports = {
 	_before: function () { // 通用预处理器
 		const methodName = this.getMethodName()
@@ -31,7 +32,21 @@ module.exports = {
 				}
 			return {errCode : 0,errMsg : "0"};
 	},
-	
+	async updatePassword(token,password){
+		console.log("oooo",token,password)
+		const secret = tokenEvent.getSecret();
+		const verifT = tokenEvent.verifyToken(token, secret);
+		console.log("verifT::",verifT)
+		if (!verifT || !verifT.value.account_id) {
+			return {errMsg:"验证用户身份失败",errCode:200};
+		}
+		const pc = new PasswordClass(verifT.value.account_id,password);
+		const res = await pc.resetPassword();
+		return res;
+	},
+	/**
+	 * 注册
+	 */
    async register(userForm={}){
 	   console.log("userForm",userForm);
 	   const {

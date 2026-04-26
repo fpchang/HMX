@@ -131,10 +131,10 @@
 			startTimeTask();
 		} catch (error) {
 			uni.hideLoading();
-			uni.showToast({
-				title: error.message as string,
-				icon: "none"
-			})
+			// uni.showToast({
+			// 	title: error.message as string,
+			// 	icon: "none"
+			// })
 		}
 	}
 

@@ -266,6 +266,12 @@
 			"style": {
 				"navigationBarTitleText": ""
 			}
+		},
+		{
+			"path": "pages/set/updatePassword/updatePassword",
+			"style": {
+				"navigationBarTitleText": ""
+			}
 		}
 		
 	],

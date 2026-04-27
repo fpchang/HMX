@@ -51,7 +51,7 @@
 			return;
 		}
 		uni.navigateTo({
-			url:"/pages/set/resetPassword/resetPassword"
+			url:"/pages/set/updatePassword/updatePassword"
 		})
 	}
 	const closeAccount = () => {

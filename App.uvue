@@ -5,12 +5,15 @@
 	export default {
 		onLaunch: function () {
 			console.log('App Launch')
+			//#ifdef APP-ANDROID
 			const showMoreMessage = uni.getStorageSync("showMoreMessage");
 			if(showMoreMessage!="0"){
 				uni.openDialogPage({
 					url:"/pages/common/androidPrivacy/androidPrivacy",animationType:'none'
 				});
-			}					
+			}
+			//#endif
+								
 		},
 		onShow: function () {
 			console.log('App Show')

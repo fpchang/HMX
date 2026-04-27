@@ -2,7 +2,7 @@
 	<view>
 		<rice-form :model="userForm" :rules="accountRule" ref="userFormRef" label-width="100px" class="demo-form">
 			<rice-form-item name="account" label-position="top">
-				<rice-input v-model="userForm['account']" placeholder="请输入用户名" border="none" />
+				<rice-input v-model="userForm['account']" placeholder="请输入账号名/邮箱/手机号" border="none" />
 			</rice-form-item>
 			<rice-form-item name="password" label-position="top" required>
 				<rice-input v-model="userForm['password']" placeholder="请输入密码" border="none" type="password" />

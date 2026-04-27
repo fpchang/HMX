@@ -7,7 +7,6 @@ const {
 const {
 	PasswordClass
 } = require('./password/PasswordClass.js');
-const { validEmailAndCode } = require('../../../../../../../Users/sky/workspace/HMX/uniCloud-alipay/cloudfunctions/hm_account_co/index.obj.js');
 module.exports = {
 	_before: function() { // 通用预处理器
 		const methodName = this.getMethodName()
@@ -18,7 +17,7 @@ module.exports = {
 	 * @returns {object} 返回值描述
 	 */
 	async validEmailAndCode(email, emailCode, emailCodeTk) {
-
+	console.log("参数",email, emailCode, emailCodeTk)
 		const secret = tokenEvent.getSecret();
 		const verifT = tokenEvent.verifyToken(emailCodeTk, secret);
 		console.log('verift', verifT);
@@ -36,7 +35,7 @@ module.exports = {
 		}
 		return {
 			errCode: 0,
-			errMsg: "0"
+			errMsg: ""
 		};
 	},
 	// async validEmailAndCodeRegister(email,emailCode,emailCodeTk){

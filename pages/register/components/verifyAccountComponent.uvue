@@ -73,6 +73,7 @@
 			[
 				{ required: true, message: '请输入用户名' },
 				{ min: 3, max: 15, message: '字数需为 3 至 15 位', trigger: 'blur' },
+				{ pattern: /^(?=.*[a-zA-Z])[a-zA-Z0-9]{4,20}$/, message: '账号只能由字母数字组成' },
 				{ validator: validAccount, trigger: 'blur', message: "已存在相同用户名" }
 			]
 		], 

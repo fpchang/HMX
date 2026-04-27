@@ -32,17 +32,29 @@ module.exports = {
 				}
 			return {errCode : 0,errMsg : "0"};
 	},
-	async updatePassword(token,password){
-		console.log("oooo",token,password)
+	async updatePassword(token,password,originPassword){
+		console.log("oooo",originPassword,password);
+		if(!originPassword){
+			return {errMsg:"原密码不能为空",errCode:101};
+		}
+		if(!password){
+			return {errMsg:"密码不能为空",errCode:102};
+		}
 		const secret = tokenEvent.getSecret();
 		const verifT = tokenEvent.verifyToken(token, secret);
 		console.log("verifT::",verifT)
 		if (!verifT || !verifT.value.account_id) {
 			return {errMsg:"验证用户身份失败",errCode:200};
 		}
-		const pc = new PasswordClass(verifT.value.account_id,password);
-		const res = await pc.resetPassword();
+	
+		const pc = new PasswordClass(verifT.value.account_id);
+		const flag = await pc.validPasswordIsCorrent(originPassword);
+		if(!flag){
+			 return {errMsg:"原密码不正确",errCode:103};
+		}
+		const res = await pc.resetPassword(password);
 		return res;
+		
 	},
 	/**
 	 * 注册

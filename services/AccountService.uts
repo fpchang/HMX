@@ -2,8 +2,14 @@ import { DB } from '../api/DB';
 import { callFunctionRes } from "@/bean/DBBean";
 import { userBean } from '@/bean/userBean';
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
-const send_email_co = uniCloud.importObject('send_email_co');
-const account_co = uniCloud.importObject('hm_account_co');
+const se_co= uniCloud.importObject("send_email_co");
+const account_co = uniCloud.importObject("hm_account_co");
+
+// type CallObjectResult = {
+//   errCode : number,
+//   errMsg : string,
+//   detail : string
+// }
 class AccountServiceClass {
 
 	constructor() {
@@ -27,7 +33,7 @@ class AccountServiceClass {
 	}
 	async sendEmailCode(email : string):Promise<string> {
 		try {
-			const res = await send_email_co.sendEmailCode(email,"register");
+			const res = await se_co.sendEmailCode(email,"register");
 			console.log("send email code", res);
 			const data = res['data'] as UTSJSONObject;
 			const emailCodeTk = data.getString("emailCodeTk")??"";
@@ -81,7 +87,6 @@ class AccountServiceClass {
 	}
 	//验证邮箱与验证码
 	async validEmailAndCode(email : string,emailCode:string,emailCodeTk:string):Promise<boolean>{
-		console.log("111",arguments);
 		try {
 			await account_co.validEmailAndCode(email,emailCode,emailCodeTk);
 			return true;
@@ -94,7 +99,7 @@ class AccountServiceClass {
 	async register(user : UTSJSONObject) : Promise<boolean> {
 		console.log("user---", user)
 		try {
-			 await account_co.register(user);
+			await account_co.register(user);
 			return true
 		} catch (error) {
 			console.log("aaaaaaaaa",error);
@@ -129,10 +134,10 @@ class AccountServiceClass {
 		}
 
 	}
-	async updatePassword(password:string):Promise<boolean>{
+	async updatePassword(password:string,originPassword:string):Promise<boolean>{
 		try {
 			const token = uni.getStorageSync("hm_token");
-			await account_co.updatePassword(token,password);
+			await account_co.updatePassword(token,password,originPassword);
 			return true;
 		} catch (error) {
 			console.log("1eeeeeeee",error);

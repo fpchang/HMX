@@ -154,7 +154,7 @@
 			submitLoading.value = true;
 			const flag = await AccountService.validEmailAndCode(emailForm.value.email, emailForm.value.emailCode, emailForm.value.emailCodeTk);
 			if (flag) {
-				emit("setEmailEvent", emailForm.value.email);
+				emit("setEmailEvent", emailForm.value.email,emailForm.value.emailCodeTk);
 			}
 		} catch (err) {
 			submitLoading.value = false;

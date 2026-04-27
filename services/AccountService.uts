@@ -106,6 +106,22 @@ class AccountServiceClass {
 			return false;
 		}
 	}
+	//login v2 co
+	async Login(userForm:UTSJSONObject): Promise<boolean>{
+		try {
+			const res = await account_co.login(userForm);
+			console.log("8888",res);
+			const data = res.getJSON("data") ?? {}
+			//const code = result.getNumber("code",99);		
+			const token = data.getString("token") ?? ""
+			if (token != "") {
+				uni.setStorageSync("hm_token", token as string);
+			}
+			return true;
+		} catch (error) {
+			throw new Error(error.message as string);
+		}
+	}
 	async login(userForm : UTSJSONObject) : Promise<boolean> {
 		try {
 			const res = await DB.callFunction("hm_login", { userForm });

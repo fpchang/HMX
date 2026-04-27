@@ -7,9 +7,26 @@ const {
 const {
 	PasswordClass
 } = require('./password/PasswordClass.js');
+const {
+	LoginAction
+} = require('./login/LoginAction.js');
 module.exports = {
 	_before: function() { // 通用预处理器
 		const methodName = this.getMethodName()
+	},
+	async login(userForm) {
+		let {
+			loginType
+		} = userForm;
+		const loginAction = new LoginAction();
+		if (loginType === 'app') {
+			return loginAction.loginByApp(userForm);
+		}
+		if (loginType === 'account') {
+			return loginAction.loginByAccountAndPassword(userForm)
+		}
+		return loginAction.loginBySmsCode(userForm);
+
 	},
 	/**
 	 * method1方法描述
@@ -17,7 +34,7 @@ module.exports = {
 	 * @returns {object} 返回值描述
 	 */
 	async validEmailAndCode(email, emailCode, emailCodeTk) {
-	console.log("参数",email, emailCode, emailCodeTk)
+		console.log("参数", email, emailCode, emailCodeTk)
 		const secret = tokenEvent.getSecret();
 		const verifT = tokenEvent.verifyToken(emailCodeTk, secret);
 		console.log('verift', verifT);
@@ -97,7 +114,7 @@ module.exports = {
 	/**
 	 * @param {Object} accountObject
 	 */
-	async resetPasswordByEmailCode(email,emailCode, emailCodeTk, password) {
+	async resetPasswordByEmailCode(email, emailCode, emailCodeTk, password) {
 		try {
 			const secret = tokenEvent.getSecret();
 			const verifT = tokenEvent.verifyToken(emailCodeTk, secret);
@@ -116,9 +133,12 @@ module.exports = {
 			}
 			const passwordClass = new PasswordClass();
 			const res = await passwordClass.resetPasswordByEmail(email, password);
-			console.log("resetpassword res ",res);
-			if(res.updated<1){
-				return {errCode:404,errMsg:"未找到相关账号"}
+			console.log("resetpassword res ", res);
+			if (res.updated < 1) {
+				return {
+					errCode: 404,
+					errMsg: "未找到相关账号"
+				}
 			}
 			return res;
 		} catch (error) {

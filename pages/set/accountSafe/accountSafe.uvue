@@ -3,10 +3,11 @@
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<rice-cell-group border>
-			<rice-cell title="会员名" :value="user.userName" />
+			<rice-cell title="用户名" :value="user.userName" />
 			<rice-cell title="账号" :value="user.account" />
 			<rice-cell title="手机号" :value="emergency_phone_number((user.phone ?? '') as string)" />
 			<rice-cell title="邮箱" :value="user.email" />
+			<rice-cell title="修改密码" arrow @click="updatePassword" />
 			<rice-cell v-if="accountIsValid==true" title="账号注销" :arrow="true" @click="closeAccount" />
 			<rice-cell v-if="accountIsValid==false" title="账号恢复" :label="closeDateStr" :arrow="true"
 				@click="recoverAccount" />
@@ -41,6 +42,18 @@
 		}
 		return "";
 	})
+	const updatePassword=async ()=>{
+		if(user.value.account===""){
+			uni.showToast({
+				title:"无账号信息，请先设置账号",
+				icon:"none"
+			});
+			return;
+		}
+		uni.navigateTo({
+			url:"/pages/set/updatePassword/updatePassword"
+		})
+	}
 	const closeAccount = () => {
 		showDialog({
 			title: '确认注销',
@@ -52,10 +65,11 @@
 					const list = res['data'] as UTSJSONObject[];
 					if (list != null && list.length > 0) {
 						uni.showToast({ title: "当前用户名下有关联酒店", icon: "none" });
-						return;
+						return true;
 					}
 					await AccountService.closeAccount();
 					loginOut();
+					return true;
 
 				} catch (e) {
 					throw new Error("注销账号失败");

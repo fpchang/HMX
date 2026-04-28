@@ -83,7 +83,7 @@ export const setHotelId = (hotel_id : string) => {
 };
 
 export const setHotel = () => {
-	console.log("sethotel=====",state.hotelList);
+	//console.log("sethotel=====",state.hotelList);
 	let hotel = state.hotelList.find(item => item._id == state.hotel_id);
 		if(hotel!=null){
 			state.hotel = hotel;
@@ -151,12 +151,16 @@ export const clearCache =  () : void => {
 	setHotelList([]);
 	 const phone = uni.getStorageSync("phone");
 	 const account = uni.getStorageSync("account");
+	 const showMoreMessage=uni.getStorageSync("showMoreMessage")
 	 uni.clearStorageSync();
 	 if(phone!=null && phone !=""){
 		  uni.setStorageSync("phone", phone);
 	 }
 	if(account!=null && account !=""){
 			  uni.setStorageSync("account", account);
+	}
+	if(showMoreMessage!=null && showMoreMessage !=""){
+		uni.setStorageSync("showMoreMessage", showMoreMessage);
 	}
 	 
 };

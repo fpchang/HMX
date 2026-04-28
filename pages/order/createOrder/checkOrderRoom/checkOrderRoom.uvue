@@ -1,5 +1,5 @@
 <template>
-	<view class="checkRoom">
+	<view class="checkRoom" v-if="remainRoomTypeList.length>0&&!submitLoading">
 		<view class="tab-container">
 			<rice-tabs v-model="activeIndex" :list="menuList" @clickTab="tabClick" line-width="70%" s></rice-tabs>
 		</view>
@@ -52,6 +52,12 @@
 				</view>
 			</view>
 		</view>
+	</view>
+	<view v-if="submitLoading" style="margin-top:68px;display: flex;flex-direction: row;justify-content: center;">
+		<rice-loading color="#787878" text="加载中…" />
+	</view>
+	<view v-if="remainRoomList.length<1&&!submitLoading" style="margin-top: 68px;"> 
+	<l-empty description="当前日期房间已经订完，请确认房间数据"  />
 	</view>
 </template>
 
@@ -176,6 +182,7 @@
 
 	// }
 	const getRemainRoomList = async () => {
+		submitLoading.value=true;
 		uni.showLoading({title:""});
 		let startTime = new Date(dayuts(dateRange.value[0]).format("YYYY-MM-DD 14:00:00")).getTime();
 		let endTime = new Date(dayuts(dateRange.value[1]).format("YYYY-MM-DD 12:00:00")).getTime();
@@ -183,9 +190,10 @@
 			const list : Array<roomBean> = await OrderService.getRemainderRoomList(hotel_id.value, startTime, endTime);
 			//console.log("剩余房间", list)
 			remainRoomList.value = list;
+			submitLoading.value=false;
 			uni.hideLoading();
 		} catch (e) {
-			console.log(e);
+			submitLoading.value=false;
 			uni.hideLoading();
 			uni.showToast({
 				title: "获取剩余房间失败",

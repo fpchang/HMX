@@ -1,0 +1,51 @@
+'use strict';
+const {
+	encryptPassword
+} = require('encryptPassword');
+ class PasswordClass {
+	constructor(_id) {
+		this._id =_id;
+		//this.password = password;
+	}
+	async resetPassword(password){
+		if(!password){
+			return {errCode:10,errMsg:"密码不能为空"}
+		}
+		const ep = encryptPassword(password);
+		const db = uniCloud.databaseForJQL();
+		const res = await db.collection("hm-user").doc(this._id).update({password:ep});
+		return res;
+	}
+	/**
+	 * @param {Object} password
+	 * 通过邮箱重置密码
+	 */
+	async resetPasswordByEmail(email,password){
+		if(!password){
+			return {errCode:101,errMsg:"密码不能为空"}
+		}
+		if(!email){
+			return {errCode:102,errMsg:"邮箱不能为空"}
+		}
+		const ep = encryptPassword(password);
+		const db = uniCloud.databaseForJQL();
+		const res = await db.collection("hm-user").where({email:email}).update({password:ep});
+		return res;
+	}
+	async validPasswordIsCorrent(password){
+		const db = uniCloud.databaseForJQL();
+		const user = await db.collection("hm-user").doc(this._id).get();
+		const ep = encryptPassword(password);
+		const psd = user.data[0].password;
+		if(psd===""||psd===null ||psd ===undefined){
+			return true;
+		}
+		return psd ===ep;
+		
+		
+	}
+}
+
+ 
+
+module.exports = { PasswordClass};

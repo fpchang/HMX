@@ -18,6 +18,10 @@ exports.main = async (event, context) => {
 			//throw new Error("密码不能为空")
 			return {errCode:401,errMsg:"账号不能为空"}
 		}
+		const validuser = await dbJQL.collection('hm-user').where({email:email}).get();
+		if(validuser.data.length>0){
+			return {errCode:101,errMsg:"该邮箱已经注册"};
+		}
 		try {
 			
 			const ep = encryptPassword(password);

@@ -96,10 +96,7 @@ async function loginByApp(event, context) {
 		return register(phone)
 	} catch (e) {
 		console.error(e);
-		return {
-			code: 40002,
-			msg: "登录失败"
-		}
+		
 	}
 
 }
@@ -254,7 +251,7 @@ function getUser(phone, token) {
 		"nickName": "",
 		"phone": phone,
 		//"account":null,
-		"email": "",
+		//"email": "",
 		"password": "",
 		"userId": phone,
 		"userName": `用户${phone.substr(-4)}`,

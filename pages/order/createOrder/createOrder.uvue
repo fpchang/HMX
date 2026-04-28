@@ -253,10 +253,9 @@
 		})
 	}
 	const submitForm = async () => {
-
-		console.log("form submit", orderForm.value);
-
-
+		if(submitLoading.value==true){
+			return;
+		}
 		let flag : boolean = validForm(orderForm.value)
 		if (flag == false) {
 			return;
@@ -293,12 +292,13 @@
 
 	}
 	init();
-	watch(dateRange.value, (n: string[], o: string[]) => {
-		orderForm.value.checkInEndDate = dateRange.value[1];
-		orderForm.value.checkInStartDate = dateRange.value[0]
-		orderForm.value.checkInStartDateTimeStamp = new Date(dayuts(new Date(dateRange.value[0])).format("YYYY/MM/DD  14:00:00")).getTime();
-		orderForm.value.checkInEndDateTimeStamp = new Date(dayuts(new Date(dateRange.value[1])).format("YYYY/MM/DD  12:00:00")).getTime();
+	watch(dateRange, (n: string[], o: string[]) => {
+		orderForm.value.checkInEndDate = n[1];
+		orderForm.value.checkInStartDate = n[0]
+		orderForm.value.checkInStartDateTimeStamp = new Date(dayuts(new Date(n[0])).format("YYYY/MM/DD  14:00:00")).getTime();
+		orderForm.value.checkInEndDateTimeStamp = new Date(dayuts(new Date(n[1])).format("YYYY/MM/DD  12:00:00")).getTime();
 	}, {
+		deep:true,
 		immediate: true//先执行一次
 	})
 </script>

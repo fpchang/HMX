@@ -148,6 +148,7 @@
 		});
 	}
 	const deleteHotel = async (targetObj : hotelBean) => {
+		console.log("targetObj",targetObj);
 		if (targetObj.curRole != "administrator") {
 			showDialog({
 				title: '没有足够的权限',

@@ -187,6 +187,9 @@
 		console.log(fmForm.value);
 	}
 	const submitForm = async () => {
+		if(submitLoading.value==true){
+			return;
+		}
 		if(amount.value!=""){
 			fmForm.value.amount = parseFloat(amount.value);
 		}

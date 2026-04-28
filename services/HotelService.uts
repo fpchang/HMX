@@ -328,30 +328,24 @@ class HotelServiceClass {
 	}
 	
 	
-	// async updateEmployeeData(){
+	// async updatehotelData(){
 	// 	console.log("start===")
 	// 	const db = uniCloud.databaseForJQL();
-	// 	const res =await db.collection("hm-employee").get();
+	// 	const res =await db.collection("hm-hotel").get();
 	// 	const list =res['data'];
+	// 	console.log("list",list)
 	// 	for(const item of list){
-	// 		const phone =item['phone'];
-	// 		const account =item['account']
-	// 		if(phone || account){
-	// 			const sql = phone?`phone=='${phone}'`:`account=='${account}'`;
-	// 			console.log(sql);
-	// 			const user = await db.collection("hm-user").where(sql).get();
-	// 			console.log(user)
-	// 			if(user.data.length>0){
+	// 		const hotel_id = item["_id"];
+	// 		const belong = item['belong'];
+	// 		const ownership_id =item['ownership_id'];
+	// 		if(ownership_id==="" || ownership_id===null || ownership_id===undefined){
+	// 			if(belong){
+	// 				const user = await db.collection("hm-user").where({phone:belong}).get();
 	// 				const user_id = user.data[0]._id;
-					
-	// 				await db.collection("hm-employee").doc(item._id).update({
-	// 					account:"",
-	// 					account_id:user_id
-	// 				})
-	// 			}else{
-	// 				await db.collection("hm-employee").doc(item._id).remove();
+	// 				if(user_id){
+	// 					await db.collection("hm-hotel").doc(hotel_id).update({ownership_id:user_id})
+	// 				}
 	// 			}
-				
 	// 		}
 	// 	}
 	// 	console.log("更新完成");

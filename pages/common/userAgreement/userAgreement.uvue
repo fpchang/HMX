@@ -1,5 +1,5 @@
 <template>
-	<scroll-view style="flex:1">
+	<scroll-view style="flex:1;background-color: #fff;">
 	<view class="container">
 		<view class="title"><text class="title-txt">议宿用户服务协议</text></view>
 		<view><text class="txt-normal">版本更新日期：2024年11月15日</text></view>

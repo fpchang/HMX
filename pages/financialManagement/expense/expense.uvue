@@ -2,7 +2,6 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		expense
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->

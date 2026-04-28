@@ -1,0 +1,10 @@
+{
+  "name": "send_email_co",
+  "dependencies": {
+    "nodemailer": "^8.0.5",
+    "tokenEvent": "file:../common/tokenEvent"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

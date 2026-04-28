@@ -34,9 +34,12 @@ const {
 	}
 	async validPasswordIsCorrent(password){
 		const db = uniCloud.databaseForJQL();
-		const user = await db.collection("hm-user").doc(this._id).get();		
+		const user = await db.collection("hm-user").doc(this._id).get();
 		const ep = encryptPassword(password);
 		const psd = user.data[0].password;
+		if(psd===""||psd===null ||psd ===undefined){
+			return true;
+		}
 		return psd ===ep;
 		
 		

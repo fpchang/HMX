@@ -85,8 +85,8 @@ async function loginByApp(event, context) {
 			});
 			user.hm_token = newToken;
 			return {
-				errCode: 0,
-				errMsg: "",
+				code: 0,
+				msg: "",
 				data: {
 					token: newToken
 				}

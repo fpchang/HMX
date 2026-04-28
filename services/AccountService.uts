@@ -110,9 +110,7 @@ class AccountServiceClass {
 	async Login(userForm:UTSJSONObject): Promise<boolean>{
 		try {
 			const res = await account_co.login(userForm);
-			console.log("8888",res);
-			const data = res.getJSON("data") ?? {}
-			//const code = result.getNumber("code",99);		
+			const data = res['data'] as UTSJSONObject;	
 			const token = data.getString("token") ?? ""
 			if (token != "") {
 				uni.setStorageSync("hm_token", token as string);

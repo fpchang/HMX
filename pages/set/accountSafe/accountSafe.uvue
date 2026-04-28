@@ -3,7 +3,7 @@
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<rice-cell-group border>
-			<rice-cell title="会员名" :value="user.userName" />
+			<rice-cell title="用户名" :value="user.userName" />
 			<rice-cell title="账号" :value="user.account" />
 			<rice-cell title="手机号" :value="emergency_phone_number((user.phone ?? '') as string)" />
 			<rice-cell title="邮箱" :value="user.email" />

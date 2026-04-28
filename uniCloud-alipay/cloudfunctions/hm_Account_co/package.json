@@ -1,10 +1,12 @@
 {
   "name": "hm_account_co",
   "dependencies": {
+    "dateFormat": "file:../common/dateFormat",
     "encryptPassword": "file:../common/encryptPassword",
     "tokenEvent": "file:../common/tokenEvent"
   },
   "extensions": {
-    "uni-cloud-jql": {}
+    "uni-cloud-jql": {},
+    "uni-cloud-verify": {}
   }
 }

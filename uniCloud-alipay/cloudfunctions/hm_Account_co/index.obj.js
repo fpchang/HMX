@@ -77,15 +77,10 @@ module.exports = {
 	// },
 	async updatePassword(token, password, originPassword) {
 		console.log("oooo", originPassword, password);
-		if (!originPassword) {
-			return {
-				errMsg: "原密码不能为空",
-				errCode: 101
-			};
-		}
+		
 		if (!password) {
 			return {
-				errMsg: "密码不能为空",
+				errMsg: "新密码不能为空",
 				errCode: 102
 			};
 		}

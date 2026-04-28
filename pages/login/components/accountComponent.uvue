@@ -54,7 +54,7 @@
 			[
 				"account",
 				[
-					{ required: true, message: '请输入用户名' },
+					{ required: true, message: '请输入账户名' },
 					{ min: 3, max: 20, message: '字数需为 3 至 20 位', trigger: 'blur' }
 				]
 			],
@@ -80,6 +80,7 @@
 			uni.showToast({ title: '请先同意用户协议与隐私政策', icon: 'none' });
 			return;
 		}
+		
 		try {
 			const f = {
 				loginType:'account',
@@ -87,7 +88,6 @@
 				password:userForm.value.password
 			}
 				submitLoading.value = true;
-				//const flag = await AccountService.login(f);
 				const flag = await AccountService.Login(f);
 				
 				if(flag){

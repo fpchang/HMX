@@ -59,7 +59,7 @@
 
 <style lang="scss">
 	.message-content {
-		max-height: 500px;
+		max-height: 350px;
 
 		.row {
 			display: flex;

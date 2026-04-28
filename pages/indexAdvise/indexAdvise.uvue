@@ -74,6 +74,7 @@
 </template>
 
 <script setup lang="uts">
+	import {HotelService} from "../../services/HotelService.uts";
 	import { loginEvent, loginOut } from "@/store/store.uts";
 	let isReading = ref(false);
 	let refresher_triggered = ref(false);

@@ -26,7 +26,7 @@
 			<view class="btn-content">
 				<rice-button type="primary" text="一键登录" class="btn" shape="round" @click="verify(false)"
 					:loading="submitLoading" />
-			
+
 			</view>
 
 		</view>
@@ -34,6 +34,7 @@
 </template>
 
 <script setup>
+	import { AccountService } from "@/services/AccountService";
 	const props = defineProps({
 		isAgree: {
 			type: Boolean,
@@ -68,7 +69,27 @@
 			}
 		});
 	}
-	const takePhoneNumber = async (accessToken : string, openId : string) => {
+	const takePhoneNumber = async (accessToken : string, openid : string) => {
+		const userForm = {
+
+			loginType: "app",
+			accessToken: accessToken,
+			openid: openid
+		}
+		try {
+			submitLoading.value = true;
+			const flag = await AccountService.Login(userForm);
+			if (flag) {
+				uni.reLaunch({
+					url: "/pages/index/index",
+				});
+			}
+		} catch (error) {
+
+		}
+
+	}
+	const takePhoneNumber2 = async (accessToken : string, openId : string) => {
 		// 云函数取号
 		try {
 
@@ -84,11 +105,11 @@
 					openid: openId // 客户端一键登录接口返回的openid
 				}
 			});
-			//console.log("取号结果", res);
+			console.log("取号结果", res);
 			const result = res.result as UTSJSONObject;
 			const data = result.data as UTSJSONObject;
-			const code = result.code as number;
-			const msg = result.msg as string;
+			const code = result.errCode as number;
+			const msg = result.errMsg as string;
 			submitLoading.value = false;
 			uni.hideLoading();
 			if (code != 0) {
@@ -112,6 +133,7 @@
 			// 关闭登录页
 			uniVerifyManager.value?.close();
 		} catch (error) {
+			console.log("eeee", error);
 			submitLoading.value = false;
 			uni.hideLoading();
 			uniVerifyManager.value?.close();
@@ -146,7 +168,7 @@
 	}
 
 	const verify = (fullScreen : boolean) => {
-		if(uniVerifyManager.value==null){
+		if (uniVerifyManager.value == null) {
 			uni.showToast({
 				title: "当前环境暂不支持一键登录",
 				icon: "none",
@@ -255,10 +277,11 @@
 	}
 
 	/* 登录按钮 */
-	.btn-content{
+	.btn-content {
 		width: 100%;
 		margin: 24px 0 12px 0;
 	}
+
 	.btn-login {
 		width: 100%;
 		height: 50px;
@@ -269,6 +292,6 @@
 		font-weight: 500;
 		border-radius: 25px;
 		border: none;
-		
+
 	}
 </style>

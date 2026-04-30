@@ -15,7 +15,7 @@
         <button class="book-btn" @click="goToBook">立即预订</button>
       </view> -->
 		</view>
-
+		
 		<!-- 2. APP介绍区域 -->
 		<view class="intro-section">
 			<view style="height: 60px;background-color: #fff;"></view>
@@ -76,6 +76,8 @@
 <script setup lang="uts">
 	import {HotelService} from "../../services/HotelService.uts";
 	import { loginEvent, loginOut } from "@/store/store.uts";
+	import i18n from './i18n';
+	const title2 = i18n.global.t('title', null, null);	
 	let isReading = ref(false);
 	let refresher_triggered = ref(false);
 	let submitLoading = ref(false);

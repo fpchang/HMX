@@ -46,7 +46,7 @@
 		//密码的校验函数
 		const passwordValidator = (value : any | null) => {
 			const val = value as string
-			if (val.length < 6) return '密码的长度不能小于6位'
+			if (val.length < 6) return i18n.global.t('login.valid_password_num')
 			//if (val.startsWith('123456')) return '密码开头不能为连续的123456'
 			//只有返回 true 才表示校验通过
 			return true
@@ -55,17 +55,18 @@
 			[
 				"account",
 				[
-					{ required: true, message: '请输入账户名' },
-					{ min: 3, max: 20, message: '字数需为 3 至 20 位', trigger: 'blur' }
+					{ required: true, message: i18n.global.t('login.valid_account') },
+					{ min: 3, max: 25, message:i18n.global.t('login.valid_account_num'), trigger: 'blur' }
 				]
 			],
 			[
 				"password",
 				[
+					{ required: true, message: i18n.global.t('form.valid_required') },
 					//函数校验
 					{ validator: passwordValidator },
 					//正则校验
-					{ pattern: /[a-zA-Z].*\d|\d.*[a-zA-Z]/, message: '密码需要包含字母和数字' },
+					{ pattern: /[a-zA-Z].*\d|\d.*[a-zA-Z]/, message:i18n.global.t('login.valid_password_comb')},
 				]
 			]
 		])
@@ -78,7 +79,7 @@
 			return;
 		}
 		if(!props.isAgree){
-			uni.showToast({ title: '请先同意用户协议与隐私政策', icon: 'none' });
+			uni.showToast({ title:i18n.global.t('login.valid_agree'), icon: 'none' });
 			return;
 		}
 		

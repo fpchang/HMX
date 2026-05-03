@@ -131,14 +131,14 @@
 	// 账号密码登录
 	const accountLogin = () => {
 		if (!isAgree.value) {
-			uni.showToast({ title: '请先同意用户协议与隐私政策', icon: 'none' });
+			uni.showToast({ title:i18n.global.t('login.valid_agree'), icon: 'none' });
 			return;
 		}
 		if (account.value == "" || password.value == "") {
-			uni.showToast({ title: '请完善账号密码', icon: 'none' });
+			uni.showToast({ title: i18n.global.t('login.valid_password'), icon: 'none' });
 			return;
 		}
-		uni.showToast({ title: '登录成功', icon: 'success' });
+		uni.showToast({ title: i18n.global.t('login.login_success'), icon: 'success' });
 	};
 
 	

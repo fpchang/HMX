@@ -1,8 +1,21 @@
 export default {
-	
+	form:{
+		valid_required:"必填项",
+		valid_required_email:"邮箱不能为空",
+		valid_required_phone:"手机号不能为空",
+		valid_required_code:"验证码不能为空",
+		valid_email:"邮箱格式不正确",
+		valid_phone:"邮箱格式不正确",
+		valid_code:"验证码格式不正确",
+		pach_email:"请输入邮箱",
+		pach_phone:"请输入手机号",
+		pach_code:"请输入验证码",
+		
+	},
 	indexAdvise:{
 		title:"议宿 Yisu",
 		subtitle:"专业酒店民宿智能管理工具",
+	
 		aboutUs:{
 			title:"关于我们",
 			content:"议宿是一款基于酒店民宿日常事务管理开发的工具类软件，提供基础的房型房间管理，收入与支出的财务管理，财务统计图表。订单与房态管理，并自动生成店铺个性化信息展示，并且能分享给其它用户，方便快速预览。酒店管理员随身管理类必备工具。",
@@ -46,9 +59,37 @@ export default {
 		btn_app_txt:"一键登录"，
 		btn_getSms:"获取验证码",
 		getphone_loading:"手机号获取中…",
-		tips:"未注册的手机号验证后自动创建议宿账号"
-		
-		
+		valid_required:"必填项",
+		valid_agree:"请先同意用户协议与隐私政策",
+		valid_password:"请完善账号密码",
+		valid_password_num:"密码的长度不能小于6位",
+		valid_password_comb:"密码需要包含字母和数字",
+		valid_account:"请输入账户名",
+		valid_account_num:"字数需为 3 至 25 位",
+		valid_phone_num:"手机号长度为11位",
+		valid_sms_num:"验证码为4位",
+		valid_sms:"验证码为数字",
+		send_sms_fail:"发送短信失败",
+		login_success:"登录成功",
+		pre_login_fail:"预登录失败",
+		login_fail:"预登录失败",
+		login_fail_content:"请用其它方式登录",
+		valid_login_app_agree:"请先阅读并同意协议",
+		login_regitser_success:"登录并注册成功",
+		no_support_login_app:"当前环境暂不支持一键登录",
+		tips_login_regitser:"该手机号未注册，将自动为您创建议宿账号",
+		modal_title:"提示",
+		tips:"未注册的手机号验证后自动创建议宿账号"				
+	},
+	register:{
+		title:"注册",
+		register_account:"注册账号",
+		pach_email:"请输入邮箱",
+		pach_email_code:"请输入邮箱验证码",
+		valid_email_hanused:"此邮箱已注册",
+		valid_email_num:"邮箱验证码为 4 位",
+		email_tips:"* 如收不到邮箱验证码，请检查垃圾邮箱箱中是否存在",
+		btn_txt:"下一步",			
 	}
 	
 };

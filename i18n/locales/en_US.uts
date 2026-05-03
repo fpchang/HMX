@@ -1,5 +1,8 @@
 export default {
-	title:"议宿",
+	title:"Yi Su",
+	form:{
+		valid_required:"required",
+	},
 	indexAdvise:{
 		title:"Yisu System",
 		subtitle:"Professional Hotel & Homestay Intelligent Management Tool",
@@ -24,5 +27,46 @@ export default {
 		},
 		loginBtnTxt:"Login & Experience the App"
 		
+	},
+	login: {
+	  "title": "Sign In",
+	  "tab_acount": "Account & Password",
+	  "tab_login_app": "Phone Quick Login",
+	  "tab_login_sms": "SMS Verification",
+	  "agreenTxt_one": "I agree to",
+	  "agreenTxt_two": "and",
+	  "userAgreement": "《User Agreement》",
+	  "privacyPolicy": "《Privacy Policy》",
+	  "regitser_txt": "Don't have an account? Register now",
+	  "pach_account": "Please enter username / email / phone number",
+	  "pach_password": "Please enter your password",
+	  "pach_phone": "Please enter your phone number",
+	  "pach_sms": "Please enter verification code",
+	  "btn_txt_password": "Forgot Password",
+	  "btn_txt": "Sign In",
+	  "btn_app_txt": "Phone Quick Login",
+	  "btn_getSms": "Get Verification Code",
+	  "getphone_loading": "Retrieving phone number…",
+	  valid_required:"required",
+	  "valid_agree": "Please agree to the User Agreement and Privacy Policy first",
+	  "valid_password": "Please fill in your account and password",
+	  "valid_password_num": "Password must be at least 6 characters",
+	  "valid_password_comb": "Password must contain letters and numbers",
+	  "valid_account": "Please enter your account name",
+	  "valid_account_num": "Must be 3 to 25 characters",
+	  "valid_phone_num": "Phone number must be 11 digits",
+	  "valid_sms_num": "Verification code must be 4 digits",
+	  "valid_sms": "Verification code must be numeric",
+	  "send_sms_fail": "Failed to send SMS",
+	  "login_success": "Login successful",
+	  "pre_login_fail": "Pre-login failed",
+	  "login_fail": "Login failed",
+	  "login_fail_content": "Please try another login method",
+	  "valid_login_app_agree": "Please read and agree to the agreement first",
+	  "login_regitser_success": "Login and registration successful",
+	  "no_support_login_app": "One-click login is not supported in current environment",
+	  "tips_login_regitser": "This phone number is not registered and will automatically create a Yisu account for you",
+	  "modal_title": "Prompt",
+	  "tips": "Unregistered phone numbers will automatically create a Yisu account after verification"
 	}
 };

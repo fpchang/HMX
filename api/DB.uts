@@ -3,6 +3,7 @@ import {callFunctionRes} from "@/bean/DBBean";
 class DBConnect{
   constructor(){
   }
+
   async callFunction(name:string,data:UTSJSONObject={}):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
   
 	let groupData = UTSJSONObject.assign(data,{

@@ -1,8 +1,11 @@
 import App from './App.uvue';
 import { createSSRApp } from 'vue';
 import i18n from './i18n';
+//uni.setLocale('en');
 // main.uts
 //import i18n from './i18n';
+
+// 给所有云对象请求自动添加语言
 export function createApp() {
 	
 	const app = createSSRApp(App);
@@ -11,3 +14,5 @@ export function createApp() {
 		app
 	}
 }
+
+

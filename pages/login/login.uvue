@@ -3,7 +3,7 @@
 		<view class="wrap">
 			<!-- 标题 -->
 			<view class="head">
-				<text class="title">登录</text>
+				<text class="title">{{i18n.global.t('login.title')}}</text>
 			</view>
 
 			<!-- 选项卡 -->
@@ -48,10 +48,10 @@
 
 					</view>
 					<view style="display: flex;flex-direction: row;flex-wrap:wrap">
-						<text class="ct">我已经同意</text>
-						<text class="ct-txt-btn" @click="openUserAgreement">《用户协议》</text>
-						<text class="ct">和</text>
-						<text class="ct-txt-btn" @click="openUserPrivacyPolicy">《隐私政策》</text>
+						<text class="ct">{{i18n.global.t('login.agreenTxt_one')}}</text>
+						<text class="ct-txt-btn" @click="openUserAgreement">{{i18n.global.t('login.userAgreement')}}</text>
+						<text class="ct">{{i18n.global.t('login.agreenTxt_two')}}</text>
+						<text class="ct-txt-btn" @click="openUserPrivacyPolicy">{{i18n.global.t('login.privacyPolicy')}}</text>
 
 
 						<!-- 	<text class="ct">我已阅读并同意</text> -->
@@ -61,7 +61,7 @@
 
 				<view class="register" @click="goRegister" v-if="currentTab==0">
 					<navigator url="/pages/register/register">
-						<text class="register-text">还没有账号？立即注册</text>
+						<text class="register-text">{{i18n.global.t('login.regitser_txt')}}</text>
 					</navigator>
 
 				</view>
@@ -77,7 +77,7 @@
 	import accountComponent from "./components/accountComponent.uvue";
 	import loginBySmscodeComponent from "./components/loginBySmscodeComponent.uvue"
 	import loginByApp from "./components/loginByApp.uvue"
-	
+	import i18n from '@/i18n/index.uts';
 	//import { ref, onUnmounted } from 'vue';
 
 	// 选项卡
@@ -101,13 +101,13 @@
 		// clearTimer();
 	};
 	const list = ref<TabsOptions[]>([{
-		name: '账号密码',
+		name: i18n.global.t('login.tab_acount'),
 		value: 0
 	}, {
-		name: '一键登录',
+		name: i18n.global.t('login.tab_login_app'),
 		value: 1
 	}, {
-		name: '短信验证',
+		name: i18n.global.t('login.tab_login_sms'),
 		value: 2
 	}
 	])

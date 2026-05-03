@@ -16,15 +16,15 @@
 					</view> -->
 
 				</view>
-				<view><text class="ct">未注册的手机号验证后自动创建议宿账号</text></view>
+				<view><text class="ct">{{i18n.global.t('login.tips')}}</text></view>
 			</view>
 			<view class="con" v-if="phone==''">
 				<view style="display: flex;flex-direction: row;justify-content: center;">
-					<rice-loading color="#787878" text="手机号获取中…" />
+					<rice-loading color="#787878" :text="i18n.global.t('login.getphone_loading')" />
 				</view>
 			</view>
 			<view class="btn-content">
-				<rice-button type="primary" text="一键登录" class="btn" shape="round" @click="verify(false)"
+				<rice-button type="primary" :text="i18n.global.t('login.btn_app_txt')" class="btn" shape="round" @click="verify(false)"
 					:loading="submitLoading" />
 
 			</view>
@@ -35,6 +35,7 @@
 
 <script setup>
 	import { AccountService } from "@/services/AccountService";
+	import i18n from '@/i18n/index.uts';
 	const props = defineProps({
 		isAgree: {
 			type: Boolean,

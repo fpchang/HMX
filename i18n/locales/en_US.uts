@@ -1,0 +1,28 @@
+export default {
+	title:"议宿",
+	indexAdvise:{
+		title:"Yisu System",
+		subtitle:"Professional Hotel & Homestay Intelligent Management Tool",
+		aboutUs: {
+		  title: "About Us",
+		  content: "Yisu is a practical management app designed for daily operations of hotels and homestays. It provides comprehensive functions including room type and room management, income and expenditure financial management, as well as financial statistical charts. The app supports order processing and room status management, automatically generates personalized store profile pages, and allows one-click sharing for quick preview by others. It is an essential portable management tool for hotel and homestay administrators."
+		},
+		coreFunction:{
+			    title: "Core Functions",
+			    orderManage: "Order Management",
+			    orderManage_content: "Manage orders and quickly check check-in and check-out records",
+			    stateManage: "Room Status Management",
+			    stateManage_content: "View occupancy data at a glance",
+			    hotelRoomType: "Room Type Management",
+			    hotelRoomType_content: "Manage hotel room types and facility information",
+			    financialManagement: "Financial Management",
+			    financialManagement_content: "Hotel income and expenditure management with statistics, view business performance intuitively",
+			    employeeAccount: "Employee Account",
+			    employeeAccount_content: "Support sub-accounts and employee data management",
+			    hotelDisplay: "Hotel Showcase",
+			    hotelDisplay_content: "Personalized display and sharing"
+		},
+		loginBtnTxt:"Login & Experience the App"
+		
+	}
+};

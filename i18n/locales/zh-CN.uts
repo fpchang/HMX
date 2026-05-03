@@ -1,0 +1,54 @@
+export default {
+	
+	indexAdvise:{
+		title:"议宿 Yisu",
+		subtitle:"专业酒店民宿智能管理工具",
+		aboutUs:{
+			title:"关于我们",
+			content:"议宿是一款基于酒店民宿日常事务管理开发的工具类软件，提供基础的房型房间管理，收入与支出的财务管理，财务统计图表。订单与房态管理，并自动生成店铺个性化信息展示，并且能分享给其它用户，方便快速预览。酒店管理员随身管理类必备工具。",
+			
+		},
+		coreFunction:{
+			title:"核心功能",
+			orderManage:"订单管理",
+			orderManage_content:"订单管理，快速查看入住与退房",
+			stateManage:"房态管理",
+			stateManage_content:"一图看清入住数据",
+			hotelRoomType:"房型管理",
+			hotelRoomType_content:"酒店房型设施数据管理",
+			financialManagement:"财务管理",
+			financialManagement_content:"酒店收支管理与统计，一图看清营业状况",
+			employeeAccount:"员工账号",
+			employeeAccount_content:"提供员工子账号与员工数据管理",
+			hotelDisplay:"酒店展示",
+			hotelDisplay_content:"个性化展示与分享"
+		},
+		loginBtnTxt:"登录体验APP"
+
+		
+	},
+	login:{
+		title:"登录",
+		tab_acount:"账号密码",
+		tab_login_app:"一键登录",
+		tab_login_sms:"短信验证",
+		agreenTxt_one:"我已经同意",
+		agreenTxt_two:"和",
+		userAgreement:"《用户协议》",
+		privacyPolicy:"《隐私政策》",
+		regitser_txt:"还没有账号？立即注册",
+		pach_account:"请输入账号名/邮箱/手机号",
+		pach_password:"请输入密码",
+		pach_phone:"请输入手机号",
+		pach_sms:"请输入验证码",
+		btn_txt_password:"忘记密码",
+		btn_txt:"登录",
+		btn_app_txt:"一键登录"，
+		btn_getSms:"获取验证码",
+		getphone_loading:"手机号获取中…",
+		tips:"未注册的手机号验证后自动创建议宿账号"
+		
+		
+	}
+	
+};

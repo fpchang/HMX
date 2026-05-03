@@ -1,4 +1,4 @@
 node_modules/
 unpackage/
 .hbuilderx/
-manifest.json
+./manifest.json

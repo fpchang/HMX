@@ -39,6 +39,9 @@
 					"xxhdpi": "",
 					"xxxhdpi": ""
 				}
+			},
+			"modules": {
+				"uni-ad": {}
 			}
 		}
 	},
@@ -50,6 +53,11 @@
 						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
 					},
 					"system": {}
+				},
+				"uni-map": {
+					"tencent": {
+						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+					}
 				}
 			},
 			"icons": {

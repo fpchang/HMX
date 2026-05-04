@@ -6,7 +6,7 @@
 
 				<image src="/static/icons/orderstate.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">房态</text>
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{ i18n.global.t('order.title') }} </text>
 			</view>
 		</template>
 		<template #right>
@@ -29,9 +29,9 @@
 							<view class="cell-content" style="padding:0">
 								<!-- <text class="txt" style="color:#1f2937;font-size: 16px;">房间/日期</text> -->
 								   <view class="slash-wrap">
-								          <text class="left">房间</text>
+								          <text class="left">{{ i18n.global.t('order.room') }}  </text>
 								          <text class="slash"></text>
-								          <text class="right">日期</text>
+								          <text class="right">{{ i18n.global.t('order.date') }} </text>
 								        </view>
 							</view>
 						</view>
@@ -65,7 +65,7 @@
 										 <view>
 										   <view><text class="txt" style="padding-bottom: 4px;">{{item.de}}</text></view>
 										   <view><text class="txt"  style="padding-bottom: 4px;">{{item.dy}}</text></view>
-										   <view><text class="txt" style="color: green">剩余（{{getRemainRoomCountByDate(item.timestamp)}}）</text></view>
+										   <view><text class="txt" style="color: green">{{ i18n.global.t('order.remain') }} （{{getRemainRoomCountByDate(item.timestamp)}}）</text></view>
 										 </view>
 								</view>
 							</view>
@@ -91,7 +91,7 @@
 
 	</scroll-view>
 	<view style="margin-top: 168px;" v-if="hotel_id==''|| roomList.length<1">
-		<l-empty :description="hotel_id==''?'没有数据':'没有房间'"  />
+		<l-empty :description="hotel_id==''?i18n.global.t('order.noData')   :i18n.global.t('order.noRoom')"  />
 	</view>
 
 
@@ -113,6 +113,7 @@
 	import { state } from "@/store/store";
 	import { userBean } from "@/bean/userBean";
 	import { orderState, getGatherEvent } from "@/store/modules/orderStore";
+	import i18n from '@/i18n/index.uts';
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -158,13 +159,13 @@
 	}
 	const orderDateRangeFormat = computed<table_th[]>(() => {
 		let dyStr = [
-			"星期日",
-			"星期一",
-			"星期二",
-			"星期三",
-			"星期四",
-			"星期五",
-			"星期六"
+			 i18n.global.t('order.weekSun'),
+			  i18n.global.t('order.weekMon'),
+			  i18n.global.t('order.weekTue'),
+			  i18n.global.t('order.weekWed'),
+			  i18n.global.t('order.weekThu'),
+			  i18n.global.t('order.weekFri'),
+			  i18n.global.t('order.weekSat')
 		];
 		// let arr=[{name:"roomName",  fixed: true, width: 90 }];
 	let arr : table_th[] = [];
@@ -252,7 +253,7 @@
 	for (let i = 0; i < 100; i++) {
 		let objleft : RowItem = {
 			name: `row${i}`,
-			value: [`房间${i}`]
+			value: [`${i18n.global.t('order.room')}${i}`]
 		};
 		let obj : RowItem = {
 			name: `row${i}`,

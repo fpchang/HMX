@@ -49,16 +49,14 @@
 			emailCode: userForm.value.emailCode,
 			emailCodeTk: userForm.value.emailCodeTk
 		} as UTSJSONObject;
-		console.log("11111111",userJSON);
 		try {
 			submitLoading.value = true;
 			const flag = await AccountService.register(userJSON);
 			if (flag) {
 				uni.setStorageSync("account", userForm.value.account);
-				console.log("99999999999999", flag)
 				uni.navigateBack();
 				uni.showToast({
-					title: "注册成功",
+					title: i18n.global.t("register.register_success"),
 					icon: "none"
 				});
 			}
@@ -66,7 +64,6 @@
 
 		} catch (err) {
 			//throw new Error(error.message as string);
-			console.log("eeeeeeeeeeeeeeeeeeeeeee");
 			submitLoading.value = false;
 			// showDialog({
 			// 	title: '注册失败',
@@ -82,13 +79,11 @@
 const setEmailEvent = (email : string,emailCodeTk:string) => {
 		userForm.value.email = email;
 		userForm.value.emailCodeTk = emailCodeTk;
-		console.log("setemailevent",userForm.value);
 		process.value=1;
 	}
 	const setAccountEvent =(account:string,password:string)=>{
 		userForm.value.account = account;
 		userForm.value.password = password;
-		console.log("setemailevent",userForm.value);
 		handleRegister();
 		
 	}

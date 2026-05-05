@@ -1,7 +1,27 @@
 export default {
 	title: "Yi Su",
+	common: {
+	    loading: "Loading...",
+	    noData: "No data",
+	    system_error: "System error",
+	    totalCount: "Total {{0}} items",
+	    modal_title: "Tip",
+	
+	    btn_txt_next: "Next",
+	    btn_txt_save: "Save",
+	    btn_txt_submit: "Submit",
+	    btn_txt_delete: "Delete",
+	    btn_txt_cancel: "Cancel",
+	    btn_txt_add: "Add",
+	    btn_txt_modify: "Modify",
+	    btn_txt_update: "Update"
+	},
 	form: {
 		valid_required: "required",
+	},
+	permission: {
+		noPermission: "Insufficient permissions",
+				contactAdmin: "Please contact administrator",
 	},
 	indexAdvise: {
 		title: "Yisu System",
@@ -100,6 +120,29 @@ export default {
 		weekWed: "Wed",
 		weekThu: "Thu",
 		weekFri: "Fri",
-		weekSat: "Sat"
+		weekSat: "Sat",
+		orderList: "Order List",
+		addOrder: "Add Order",
+
+		orderFilter: "Order Filter",
+		totalCount: "{{0}} items total",
+		searchPlaceholder: "Search name",
+		loading: "Loading…",
+		statusAll: "All",
+		statusCheckInPending: "Pending Check-in",
+		statusCompleted: "Completed",
+		statusCancelled: "Cancelled",
+		guest: "Guest: ",
+		checkInTime: "Check-in: ",
+		checkOutTime: "Check-out: ",
+		remark: "Remark: ",
+		roomPrice: "Price: ",
+		noPermission: "Insufficient permissions",
+		contactAdmin: "Please contact administrator",
+		confirmDeleteOrder: "Confirm delete order",
+		deleteOrderTip: "Cannot be restored after deletion, confirm?",
+		next: "Next",
+		completeRegister: "Complete Registration",
+		registerSuccess: "Registration Successful"
 	}
 };

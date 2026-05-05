@@ -8,14 +8,14 @@
 
 				<image src="/static/icons/list.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">订单列表</text>
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{ i18n.global.t('order.orderList') }}</text>
 			</view>
 		</template>
 		<template #right>
 			<view class="navbar-btn">
 				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
 
-				<text class="txt" @click="addOrder">添加订单</text>
+				<text class="txt" @click="addOrder">{{ i18n.global.t('order.addOrder') }}</text>
 
 
 			</view>
@@ -28,13 +28,13 @@
 		<view class="search-area">
 			<view class="card">
 				<view class="card-item title-area">
-					<text class="txt">订单筛选</text>
+					<text class="txt">{{ i18n.global.t('order.orderFilter') }}</text>
 					<l-tag variant="light">共{{orderResult.count}}条</l-tag>
 				</view>
 				<view class="card-item  select-area">
 					<orderSearchComponent :columns="columns" :initDateRange="dateRange"
 						@searchInputChange="searchInputChange" @selectAction="selectStatus" @dateChange="dateChange"
-						@searchAction="getOrderList" placeholder="搜索收入名称"></orderSearchComponent>
+						@searchAction="getOrderList" :placeholder="i18n.global.t('order.searchPlaceholder')"></orderSearchComponent>
 				</view>
 				<view class="card-item search"></view>
 			</view>
@@ -46,9 +46,9 @@
 				<view class="card">
 					<view style="display: flex;flex-direction: row;justify-content: flex-end;">
 						<view> 
-						<rice-tag v-if="order.orderStatus==1" type="primary" text="待入住" />
-						<rice-tag v-if="order.orderStatus==5" type="success" text="已完成" />
-						<rice-tag v-if="order.orderStatus==10" type="error" text="已撤销" />
+						<rice-tag v-if="order.orderStatus==1" type="primary" :text="i18n.global.t('order.statusCheckInPending')" />
+						<rice-tag v-if="order.orderStatus==5" type="success" :text="i18n.global.t('order.statusCompleted')" />
+						<rice-tag v-if="order.orderStatus==10" type="error" :text="i18n.global.t('order.statusCancelled')" />
 						</view>
 					
 					</view>
@@ -60,21 +60,21 @@
 						<view class="card-item">
 							<view class="fl-c">
 								<image src="/static/icons/hotelcustomer.png" style="width: 13px;height: 13px;"></image>
-								<text class="label">住客：</text>
+								<text class="label">{{ i18n.global.t('order.guest') }}：</text>
 							</view>
 							<text class="val-style">{{order.userName}}</text>
 						</view>
 						<view class="card-item">
 							<view class="fl-c">
 								<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
-								<text class="label">入住时间：</text>
+								<text class="label">{{ i18n.global.t('order.checkInTime') }}：</text>
 							</view>
 							<text class="val-style">{{formatDate(order.checkInStartDateTimeStamp)}}</text>
 						</view>
 						<view class="card-item">
 							<view class="fl-c">
 								<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
-								<text class="label">退房时间：</text>
+								<text class="label">{{ i18n.global.t('order.checkOutTime') }}：</text>
 							</view>
 							<text class="val-style">{{formatDate(order.checkInEndDateTimeStamp)}}</text>
 						</view>
@@ -106,7 +106,7 @@
 						<view class="card-item" style="margin-bottom: 0;">
 							<view class="fl-c">
 								<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
-								<text class="label">备注信息：</text>
+								<text class="label">{{ i18n.global.t('order.remark') }}：</text>
 							</view>
 							<text class="val-style">
 								{{order.mark}}
@@ -119,7 +119,7 @@
 						</view> -->
 						<view class="fl-c">
 							<image src="/static/icons/fm/income.png" style="width: 16px;height: 16px;"></image>
-							<text class="label">房价：</text>
+							<text class="label">{{ i18n.global.t('order.roomPrice') }}：</text>
 						</view>
 						<text class="val-style" style="color:#047857;font-weight: 700;">
 							￥{{order.totalAmount}}
@@ -140,9 +140,9 @@
 			<!-- </template> -->
 		</view>
 		<view v-if="submitLoading" style="margin-top:68px;display: flex;flex-direction: row;justify-content: center;">
-			<rice-loading color="#787878" text="加载中…" />
+			<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
 		</view>
-		<l-empty description="没有数据" v-if="!submitLoading&&orderResult.orderList.length<1" />
+		<l-empty :description="i18n.global.t('common.noData')" v-if="!submitLoading&&orderResult.orderList.length<1" />
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
@@ -168,6 +168,7 @@
 	import { roomBean } from "@/bean/roomBean";
 	import {userBean} from "@/bean/userBean";
 	import {getGatherEvent } from "@/store/modules/orderStore";
+	import i18n from '@/i18n/index.uts';
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -194,10 +195,10 @@
 	const dateRange = ref<string[]>(getMonthDateArray());
 	const columns = computed<Array<Array<PickerOption>>>(() => {
 		let result : Array<Array<PickerOption>> = [[
-				{ text: "全部", value: "all" },
-			      { text: "待入住", value: 1 },
-			      { text: "已完成", value: 5 },
-			      { text: "已撤销", value: 10 },
+				{ text: i18n.global.t('order.statusAll'), value: "all" },
+			      { text: i18n.global.t('order.statusCheckInPending'), value: 1 },
+			      { text: i18n.global.t('order.statusCompleted'), value: 5 },
+			      { text: i18n.global.t('order.statusCancelled'), value: 10 },
 		]];
 		return result;
 	});
@@ -283,8 +284,8 @@
 			"FM_CREATE"
 		)) {
 			showDialog({
-				title: '没有足够的权限',
-				message: "请联系负责人",
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
 				showCancelButton: false,
 				confirm: () => {
 					hideDialog();
@@ -293,7 +294,6 @@
 			return;
 		}
 		uni.$once("refrushOrderList", ()=>{
-			console.log("刷新orderlist");
 			getOrderList();
 		})
 		uni.navigateTo({
@@ -307,31 +307,28 @@
 		if (!permissionList.value.includes(
 			"ORDER_DELETE"
 		)) {
-			showDialog({
-				title: '没有足够的权限',
-				message: "请联系负责人",
-				showCancelButton: false,
-				confirm: () => {
-					hideDialog();
-
-				}
-			})
+		showDialog({
+						title: i18n.global.t('permission.noPermission'),
+						message: i18n.global.t('permission.contactAdmin'),
+						showCancelButton: false,
+						confirm: () => {
+							hideDialog();
+						}
+					})
 			return;
 		}
-		console.log("delete")
 		showDialog({
-			title: '确认删除此订单',
-			message: "删除后将无法恢复，确认删除吗？",
+			title: i18n.global.t('order.confirmDeleteOrder'),
+			message: i18n.global.t('order.deleteOrderTip')？,
 			beforeClose: async () : Promise<boolean> => {
-			console.log(1111);
 				// await roomTypeService.deleteOrder(room._id);
 				// await comFunction.getRoomTypeList(hotel_id.value);
 				// await FMService.deleteOrder(fm._id);
-				await OrderService.deleteOrder(order._id);
-				
+				await OrderService.deleteOrder(order._id);				
 				await getOrderList();
 				getGatherEvent(hotel_id.value);
 				hideDialog();
+				return true;
 
 			},
 			confirm: () => {
@@ -345,14 +342,14 @@
 		if (!permissionList.value.includes(
 			"ROOMTYPE_UPDATE"
 		)) {
-			showDialog({
-				title: '没有足够的权限',
-				message: "请联系负责人",
-				showCancelButton: false,
-				confirm: () => {
-					hideDialog();
-				}
-			})
+		showDialog({
+								title: i18n.global.t('permission.noPermission'),
+								message: i18n.global.t('permission.contactAdmin'),
+								showCancelButton: false,
+								confirm: () => {
+									hideDialog();
+								}
+							})
 			return;
 		}
 	}

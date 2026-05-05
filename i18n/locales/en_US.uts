@@ -2,6 +2,7 @@ export default {
 	title: "Yi Su",
 	common: {
 	    loading: "Loading...",
+		saving:"正在保存",
 	    noData: "No data",
 	    system_error: "System error",
 	    totalCount: "Total {0} items",
@@ -19,7 +20,18 @@ export default {
 	    btn_txt_update: "Update"
 	},
 	form: {
-		valid_required: "required",
+	    valid_required: "This field is required",
+	    valid_required_email: "Email cannot be empty",
+	    valid_required_phone: "Phone number cannot be empty",
+	    valid_required_code: "Verification code cannot be empty",
+	    valid_email: "Incorrect email format",
+	    valid_phone: "Incorrect phone number format",
+	    valid_code: "Incorrect verification code format",
+	    pach_email: "Please enter your email",
+	    pach_phone: "Please enter your phone number",
+	    pach_code: "Please enter the verification code",
+	    remark: "Remark",
+	    pach_remark: "Please enter remark content",
 	},
 	permission: {
 		noPermission: "Insufficient permissions",
@@ -145,6 +157,31 @@ export default {
 		deleteOrderTip: "Cannot be restored after deletion, confirm?",
 		next: "Next",
 		completeRegister: "Complete Registration",
-		registerSuccess: "Registration Successful"
+		registerSuccess: "Registration Successful",
+		create_order: {
+		  edit_order_info: 'Edit Order Information',
+		  order_info: 'Order Information',
+		  select_room: 'Select Room',
+		
+		  // 表单标签
+		  source: 'Source',
+		  date: 'Date',
+		  room_type_room: 'Room Type & Room',
+		  customer_name: 'Customer Name',
+		  contact_phone: 'Contact Phone',
+		  deposit: 'Deposit',
+		  total_price: 'Total Price',
+		  remark: 'Remark',
+		
+		  // 表单占位符
+		  please_enter_wechat: 'Please enter customer WeChat',
+		  please_enter_phone: 'Please enter customer phone',
+		  please_enter_remark: 'Please enter remark content',
+		
+		  // 提示语/Toast
+		  get_order_source_fail: 'Failed to get order source',
+		  add_success: 'Added successfully',
+		  add_order_fail: 'Failed to add order'
+		}
 	}
 };

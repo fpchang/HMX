@@ -1,6 +1,7 @@
 export default {
 	common: {
 		loading: "加载中…",
+		saving:"正在保存",
 		noData: "没有数据",
 		system_error:"系统异常",
 		totalCount: "共{0}条",
@@ -16,6 +17,12 @@ export default {
 		btn_txt_add:"新增",
 		btn_txt_modify:"修改",
 		btn_txt_update:"更新",
+		add_success:"添加成功",
+		add_fail:"添加失败",
+		update_success:"更新成功",
+		update_fail:"更新失败",
+		delete_success:"删除成功",
+		delete_fail:"删除失败",
 	},
 	form: {
 		valid_required: "必填项",
@@ -28,6 +35,9 @@ export default {
 		pach_email: "请输入邮箱",
 		pach_phone: "请输入手机号",
 		pach_code: "请输入验证码",
+		remark: "备注",
+		pach_remark: "请输入备注内容",
+		
 
 	},
 	permission: {
@@ -167,6 +177,30 @@ export default {
 		next: "下一步",
 		completeRegister: "完成注册",
 		registerSuccess: "注册成功"
+		
+		create_order:{
+			    edit_order_info: '修改订单信息',
+			    order_info: '订单信息',
+			    select_room: '选择房间',
+			
+			    // 表单标签
+			    source: '来源',
+			    date: '日期',
+			    room_type_room: '房型房间',
+			    customer_name: '客户名',
+			    contact_phone: '联系电话',
+			    deposit: '定金',
+			    total_price: '总价',
+			    remark: '备注',			
+			    // 表单占位符
+			    please_enter_wechat: '请输入客服微信',
+			    please_enter_phone: '请输入客服电话',
+			    please_enter_remark: '请输入备注内容',			
+			    // 提示语/Toast
+			    get_order_source_fail: '获取订单来源失败',
+			    add_success: '添加成功',
+			    add_order_fail: '添加订单失败',						
+		}
 	}
 
 };

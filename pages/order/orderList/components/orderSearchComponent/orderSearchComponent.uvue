@@ -7,14 +7,13 @@
 					<image src="/static/icons/arrow-down.png" style="width: 16px;height:16px"></image>
 				</view>
 			</view> -->
-			<view style="display: flex;flex-direction: row;align-items: center;">
-				<view style="width: 60px;margin-right: 8px" v-for="item of checkType"><rice-button
-						:type="orderType==item.value?'primary':'info'" size="small" :text="item.text"
-						@click="checkTypeEvent(item.value)"></rice-button></view>
-				<!-- 	<view style="width: 50px;">
-					<rice-button size="small" :type="billType=='expenses'?'primary':'info'" text="支出"
-						@click="checkTypeEvent('expenses')"></rice-button>
-				</view> -->
+			<view>
+				<l-space :wrap="true" :fill="true"> 
+					<view style="min-width: 60px;" v-for="item of checkType"><rice-button
+							:type="orderType==item.value?'primary':'info'" size="small" :text="item.text"
+							@click="checkTypeEvent(item.value)"></rice-button></view>
+				</l-space>
+				
 			</view>
 
 		</view>
@@ -31,7 +30,7 @@
 				<rice-search v-model="keystr" input-color="#fff" :clearable="false" :placeholder="placeholder"
 					:custom-style="{'padding':0}" @search="searchEvent" @clickLeftIcon="searchEvent"
 					@input="searchInputChange" @clickAction="searchEvent" show-action left-icon=""
-					action-color="#007aff" />
+					action-color="#007aff"  :action-text="i18n.global.t('common.btn_txt_search')"/>
 			</view>
 		</view>
 		<!-- 	<rice-picker v-model:show="showPicker" :columns="columns" @confirm="onColumnsConfirm"></rice-picker> -->
@@ -45,6 +44,7 @@
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import { TIME, MOONTH_START_END_TIMESTAMP, getMonthDateArray } from "@/static/utils/TIME";
+	import i18n from '@/i18n/index.uts';
 	//selectAction下拉 选择
 	//searchAction input点击搜索
 	//searchInputChange 输入框变化
@@ -56,7 +56,7 @@
 		},
 		placeholder: {
 			type: String,
-			default: "请输入关键字"
+			default: i18n.global.t("common.search_txt")
 		}
 	});
 	type TYPE_ORDER = {
@@ -64,16 +64,16 @@
 		value : string | number
 	}
 	const checkType : Array<TYPE_ORDER> = [
-		{ text: "全部", value: 'all' },
-		{ text: "待入住", value: 1 },
-		{ text: "已完成", value: 5 },
-		{ text: "已撤销", value: 10 }
+		{ text: i18n.global.t('order.statusAll'), value: "all" },
+		  { text: i18n.global.t('order.statusCheckInPending'), value: 1 },
+		  { text: i18n.global.t('order.statusCompleted'), value: 5 },
+		  { text: i18n.global.t('order.statusCancelled'), value: 10 },
 	]
 	const attrs = useAttrs();
 	let showPicker = ref(false);
 	let showCalendar = ref(false);
 	const billType = ref("income");
-	let text_val = ref("请选择");
+	let text_val = ref(i18n.global.t("common.select_txt"));
 	let keystr = ref("");
 	//text_val.value = columns.value[0][0]['text'] as string;
 	const orderType = ref<string | number>('all');

@@ -3,9 +3,11 @@ export default {
 		loading: "加载中…",
 		noData: "没有数据",
 		system_error:"系统异常",
-		totalCount: "共{{0}}条",
+		totalCount: "共{0}条",
 		modal_title:"提示",
-		
+		select_txt:"请选择",
+		search_txt:"请输入关键字",
+		btn_txt_search:"搜索",
 		btn_txt_next: "下一步",
 		btn_txt_save:"保存",
 		btn_txt_submit:"提交",

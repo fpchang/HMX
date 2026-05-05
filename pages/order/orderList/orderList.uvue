@@ -29,7 +29,7 @@
 			<view class="card">
 				<view class="card-item title-area">
 					<text class="txt">{{ i18n.global.t('order.orderFilter') }}</text>
-					<l-tag variant="light">共{{orderResult.count}}条</l-tag>
+					<l-tag variant="light">{{ i18n.global.t('common.totalCount',[orderResult.count]) }}</l-tag>
 				</view>
 				<view class="card-item  select-area">
 					<orderSearchComponent :columns="columns" :initDateRange="dateRange"
@@ -92,7 +92,7 @@
 						<view class="card-item">
 							<view class="fl-c">
 								<image src="/static/icons/roomReserve.png" style="width: 16px;height: 16px;"></image>
-								<text class="label">房间：</text>
+								<text class="label">{{i18n.global.t("order.room")}}：</text>
 								
 							</view>
 							<view class="val-style" style="display: flex;flex-direction: row;align-items: center;flex: 1;flex-wrap: wrap;justify-content: flex-end;">
@@ -319,7 +319,7 @@
 		}
 		showDialog({
 			title: i18n.global.t('order.confirmDeleteOrder'),
-			message: i18n.global.t('order.deleteOrderTip')？,
+			message: i18n.global.t('order.deleteOrderTip')+"?",
 			beforeClose: async () : Promise<boolean> => {
 				// await roomTypeService.deleteOrder(room._id);
 				// await comFunction.getRoomTypeList(hotel_id.value);

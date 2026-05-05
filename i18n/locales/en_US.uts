@@ -4,9 +4,11 @@ export default {
 	    loading: "Loading...",
 	    noData: "No data",
 	    system_error: "System error",
-	    totalCount: "Total {{0}} items",
+	    totalCount: "Total {0} items",
 	    modal_title: "Tip",
-	
+		select_txt:"Please select",
+		btn_txt_search:"Search",
+		search_txt:"Enter keywords",
 	    btn_txt_next: "Next",
 	    btn_txt_save: "Save",
 	    btn_txt_submit: "Submit",

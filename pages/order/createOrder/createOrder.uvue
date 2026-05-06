@@ -88,13 +88,13 @@
 	</scroll-view>
 	<!-- #endif -->
 	<rice-calendar v-model:show="showCalendar" mode="range" :min-date="initDateObj.minDate" :date="dateRange"
-		@confirm="rangeConfirm"></rice-calendar>
-	<l-popup v-model="showCheckRoomPanal" position="right" :closeable="true" :safeAreaInsetBottom="true"
+		@confirm="rangeConfirm" :title="i18n.global.t('form.canendar_title')" :show-subtitle="true"></rice-calendar>
+<!-- 	<l-popup v-model="showCheckRoomPanal" position="right" :closeable="true" :safeAreaInsetBottom="true"
 		:safeAreaInsetTop="true" bgColor="#f5f7fa" :preventScrollThrough="true">
 		<view style="width:700rpx;padding:60px 0">
 			<checkRoomComponent></checkRoomComponent>
 		</view>
-	</l-popup>
+	</l-popup> -->
 </template>
 
 <script setup>

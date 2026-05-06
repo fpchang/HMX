@@ -142,7 +142,7 @@
 		<view v-if="submitLoading" style="margin-top:68px;display: flex;flex-direction: row;justify-content: center;">
 			<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
 		</view>
-		<l-empty :description="i18n.global.t('common.noData')" v-if="!submitLoading&&orderResult.orderList.length<1" />
+		<l-empty :description="i18n.global.t('common.noData',[])" v-if="!submitLoading&&orderResult.orderList.length<1" />
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->

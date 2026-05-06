@@ -6,7 +6,7 @@
 					<image :src="item.title_icon" class="icon-stye"></image>
 					<text class="txt" :style="{'color':item.title_color}">{{item.title}}</text>
 				</view>
-				<view class="list">
+				<!-- 	<view class="list">
 
 					<view class="list-item" v-for="it in item.menu_item_list" :key="it.label">
 						<navigator :url="it.url" hover-class="none">
@@ -24,28 +24,47 @@
 
 					<view v-for="item in 8" style="height:0;padding:0 15px"></view>
 
+				</view> -->
+				<view class="list">
+					<l-space :wrap="true" :size="14">
+						<view class="list-item" v-for="it in item.menu_item_list" :key="it.label">
+							<navigator :url="it.url" hover-class="none">
+								<view class="item-content">
+									<view class="groupIcon">
+										<image :src="it.icon" class="icon-style" mode="aspectFit"></image>
+									</view>
+									<view>
+										<text class="label">{{it.label}}</text>
+									</view>
+								</view>
+
+							</navigator>
+						</view>
+						<view class="list-item" style="width: 0;height:0;padding:0" v-for="item of 2"></view>
+					</l-space>
 				</view>
 			</view>
 		</view>
 	</scroll-view>
-	<view style="margin-top: 80px;" v-if="hotel_id==''" >
-		<l-empty description="没有数据" />
+	<view style="margin-top: 80px;" v-if="hotel_id==''">
+		<l-empty :description="i18n.global.t('common.noData',[''])" />
 	</view>
 </template>
 
 <script setup>
 	import { state } from "@/store/store";
-		import { roomTypeBean } from '@/bean/roomTypeBean';
-		import { roomBean } from '@/bean/roomBean';
-		import { hotelBean } from "@/bean/hotelBean";
-	type menu= {
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { roomBean } from '@/bean/roomBean';
+	import { hotelBean } from "@/bean/hotelBean";
+	import i18n from '@/i18n/index.uts';
+	type menu = {
 		icon : string,
 		label : string,
 		bgColor : string,
 		url : string
 	}
 
-	type MenuItem ={
+	type MenuItem = {
 		title : string,
 		title_icon : string,
 		title_color : string,
@@ -60,44 +79,44 @@
 	const hotelList = computed(() => {
 		return state.hotelList;
 	});
-	const menuList : Array<MenuItem>=[
+	const menuList : Array<MenuItem> = [
 		{
-			title: "酒店设置",
+			title: i18n.global.t("function.title_set"),
 			title_icon: "/static/icons/homemenu/hotel-anage.png",
 			title_color: "rgb(30,30,30)",
 			menu_item_list: [{
 				icon: "/static/icons/homemenu/room-type1.png",
-				label: "房型管理",
+				label: i18n.global.t("function.btn_txt_room_type"),
 				bgColor: "rgba(22, 93, 255, 0.1)",
 				url: "/pages/hotelManage/roomTypeList/roomTypeList"
 			},
 			{
 				icon: "/static/icons/homemenu/room1.png",
-				label: "房间管理",
+				label: i18n.global.t("function.btn_txt_room"),
 				bgColor: "rgba(22, 93, 255, 0.1)",
 				url: "/pages/hotelManage/roomList/roomList"
 			},
 			{
 				icon: "/static/icons/homemenu/employee1.png",
-				label: "员工管理",
+				label: i18n.global.t("function.btn_txt_room_employee"),
 				bgColor: "rgba(22, 93, 255, 0.1)",
 				url: "/pages/hotelManage/employeeList/employeeList"
 			},
 			{
 				icon: "/static/icons/homemenu/hotel2.png",
-				label: "酒店展示",
+				label: i18n.global.t("function.btn_txt_room_hotel_show"),
 				bgColor: "rgba(22, 93, 255, 0.1)",
 				url: `/pages/hotelDisplay/hotelDisplay?hotel_id=${hotel.value?._id}`
 			}],
 
 		},
 		{
-			title: "财务",
+			title: i18n.global.t("function.title_fm"),
 			title_icon: "/static/icons/homemenu/financia-green.png",
 			title_color: "rgb(30,30,30)",
 			menu_item_list: [{
 				icon: "/static/icons/homemenu/income.png",
-				label: "收支管理",
+				label: i18n.global.t("function.btn_txt_income_expense"),
 				bgColor: "rgba(72,187,120,0.1)",
 				url: "/pages/financialManagement/inExManage/inExManage"
 			},
@@ -109,7 +128,7 @@
 			// },
 			{
 				icon: "/static/icons/homemenu/financial-statistics1.png",
-				label: "财务统计",
+				label: i18n.global.t("function.btn_txt_fm_chart"),
 				bgColor: "rgba(72,187,120,0.1)",
 				url: "/pages/financialManagement/fmchart/fmchart"
 			}
@@ -117,18 +136,18 @@
 
 		},
 		{
-			title: "订单",
+			title: i18n.global.t("function.title_order"),
 			title_icon: "/static/icons/homemenu/order-manage.png",
 			title_color: "rgb(30,30,30)",
 			menu_item_list: [{
 				icon: "/static/icons/homemenu/order1.png",
-				label: "订单管理",
+				label: i18n.global.t("function.btn_txt_order"),
 				bgColor: "rgba(237,137,54,0.1)",
 				url: "/pages/order/orderList/orderList"
 			},
 			{
 				icon: "/static/icons/homemenu/order-add1.png",
-				label: "添加订单",
+				label: i18n.global.t("function.btn_txt_create_order"),
 				bgColor: "rgba(237,137,54,0.1)",
 				url: "/pages/order/createOrder/createOrder"
 			}
@@ -136,12 +155,17 @@
 
 		}
 	]
+	onLoad(()=>{
+		uni.setNavigationBarTitle({
+			title:i18n.global.t("function.title_navbar")
+		})
+	})
 </script>
 
 <style lang="scss">
 	.card {
 		margin: 15px;
-		padding:15px 10px;
+		padding: 14px;
 		background-color: #fff;
 		border-radius: 12px;
 
@@ -168,31 +192,30 @@
 		}
 
 		.list {
-			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-			justify-content: space-between;
 
 			.list-item {
 
-				min-width: 80px;
-				max-width: 80px;
+
+
 				flex: 1;
 				display: flex;
 				flex-direction: column;
 				align-items: center;
-				justify-content: center;
-				padding: 15px 0;
+				padding: 14px 0;
+				min-width: 100px;
+				// box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+				border-radius: 14px;
 
 				.item-content {
 					// background-color: #fff;
 					// padding: 18px;
 					border-radius: 12px;
 
-					/*&:hover{
-						transform: scale(1.1);
-					}
-					*/
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+
 					.groupIcon {
 						width: 60px;
 						height: 60px;
@@ -212,11 +235,11 @@
 
 					.label {
 						font-size: 14px;
-						padding-top: 8px;
+						// padding-top: 8px;
 						color: #64748b;
 						overflow: hidden;
-						text-overflow: ellipsis;
-						white-space: nowrap;
+						text-align: center;
+
 					}
 				}
 

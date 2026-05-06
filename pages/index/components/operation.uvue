@@ -2,35 +2,43 @@
 	<view class="operation">
 		<!-- 快速操作入口 -->
 		<view class="quick-actions">
-			<text class="action-title">快速操作</text>
-			<view class="action-grid">
-				<view v-for="item of menuList">
-					<navigator :url="item.url" hover-class="none">
-						<view class="action-item">
-
-							<rice-icon :name="item.icon" size="32" color="#007AFF"></rice-icon>
-							<text class="action-text">{{item.label}}</text>
-
-						</view>
-					</navigator>
-				</view>
-
-			<!-- 	<view class="action-item">
-					<uni-icons type="plus" size="32" color="#007AFF"></uni-icons>
-					<text class="action-text">添加收支</text>
-				</view>
-				<view class="action-item" style="margin-right: 0;">
-					<uni-icons type="list" size="32" color="#007AFF"></uni-icons>
-					<rice-icon name="bars" size="32" color="#007AFF"></rice-icon>
-					<text class="action-text">订单管理</text>
-				</view> -->
+			<text class="action-title">{{i18n.global.t("common.btn_txt_quick_Operation")}}</text>
+		<!-- 	<view class="action-grid">
+				<l-space  :wrap="true" :size="18">
+					<view v-for="item of menuList" style="flex:1;min-width:120px">
+						<navigator :url="item.url" hover-class="none">
+							<view class="action-item">
+					
+								<rice-icon :name="item.icon" size="32" color="#007AFF"></rice-icon>
+								<text class="action-text">{{item.label}}</text>
+					
+							</view>
+						</navigator>
+					</view>
+				</l-space>				
+			</view> -->
+			<view style="background-color: #fff;border-radius: 14px;padding:14px">
+				<l-space  :wrap="true" :size="14" :fill="true">
+					<view v-for="item of menuList" style="min-width: 100px;flex:1">
+						<navigator :url="item.url" hover-class="none">
+							<view  style="display: flex;flex-direction:column;justify-content: center;align-items: center;">
+					
+								<rice-icon :name="item.icon" size="32" color="#007AFF"></rice-icon>
+								<text class="action-text">{{item.label}}</text>
+					
+							</view>
+						</navigator>
+					</view>
+				</l-space>
 			</view>
+			
 		</view>
 	</view>
 
 </template>
 
 <script setup>
+	import i18n from '@/i18n/index.uts';
 	import { state } from "@/store/store";
 	type menu = {
 		icon : string,
@@ -44,21 +52,21 @@
 	})
 	const menuList : Array<menu> = [{
 		icon: "plus",
-		label: "创建订单",
+		label: i18n.global.t('common.btn_txt_create',[i18n.global.t('order.title_order')]),
 		bgColor: "#165dff1a",
 		url: "/pages/order/createOrder/createOrder",
 		show: permissionList.value.includes("FM_CREATE")
 	},
 	{
 		icon: "add",
-		label: "添加收支",
+		label:i18n.global.t("common.btn_txt_create",[i18n.global.t("fm.title_income_expense")]),
 		bgColor: "#722ed11a",
 		url: "/pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense?billType=income",
 		show: permissionList.value.includes("FM_CREATE")
 	},
 	{
 		icon: "bars",//rgb(250 173 20 / var(--tw-text-opacity, 1))
-		label: "订单管理",
+		label:i18n.global.t("order.orderManage") ,
 		bgColor: "#faad141a",
 		url: "/pages/order/orderList/orderList"
 	}
@@ -83,9 +91,12 @@
 	.action-grid {
 		background-color: #fff;
 		border-radius: 12px;
-		padding: 20px;
+		padding:14px;
 		display: flex;
 		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: center;
 
 	}
 
@@ -93,12 +104,14 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		margin-right: 20px;
+		flex:1;
+
 	}
 
 	.action-text {
 		font-size: 14px;
 		color: #333;
 		padding: 8px;
+		text-align: center;
 	}
 </style>

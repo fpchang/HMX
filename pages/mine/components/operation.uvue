@@ -4,13 +4,11 @@
 			<l-grid-item  v-for="item of menuList" :text="item.label" :image="item.icon" :url="item.url" openType="navigateTo" />
 			
 		</l-grid>
-		<!-- <rice-grid :column-num="4" :border="false">
-		  <rice-grid-item v-for="item of menuList" :key="item.label" :icon="item.icon" text="内容" />
-		</rice-grid> -->
 	</view>
 </template>
 
 <script setup>
+	import i18n from '@/i18n/index.uts';
 	type menu = {
 		icon : string,
 		label : string,
@@ -19,22 +17,16 @@
 	}
 	const menuList : Array<menu> = [{
 		icon: "/static/icons/mine/set.png",
-		label: "系统设置",
+		label: i18n.global.t("setcontent.btn_txt_sys_set"),
 		bgColor:"#165dff1a",
 		url: "/pages/set/set"
 	},
 	{
 		icon: "/static/icons/mine/fedback.png",
-		label: "意见反馈",
+		label: i18n.global.t("setcontent.btn_txt_feedback"),
 		bgColor:"#722ed11a",
 		url: "/pages/mine/feedback/feedback"
-	},
-	// {
-	// 	icon: "/static/icons/mine/kf.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
-	// 	label: "客服中心",
-	// 	bgColor:"#faad141a",
-	// 	url: "/pages/order/createOrder/createOrder"
-	// }
+	}
 	]
 </script>
 

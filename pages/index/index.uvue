@@ -198,7 +198,19 @@
 		refreshState.value = false;
 
 	}
-	init();
+	
+	// 动态设置 tabbar 文字
+	 const setTabBarI18n=()=> {
+	   uni.setTabBarItem({ index: 0, text: i18n.global.t('tab.home') });
+	  uni.setTabBarItem({ index: 1, text: i18n.global.t('tab.roomStatus') });
+	  uni.setTabBarItem({ index: 2, text: i18n.global.t('tab.finance') });
+	  uni.setTabBarItem({ index: 3, text: i18n.global.t('tab.function') });
+	  uni.setTabBarItem({ index: 4, text: i18n.global.t('tab.mine') });
+	}
+	onLoad(() => {
+		init();
+	  setTabBarI18n()
+	})	
 </script>
 
 <style lang="scss">

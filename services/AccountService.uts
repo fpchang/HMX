@@ -10,17 +10,17 @@ const account_co = uniCloud.importObject("hm_account_co");
 //   errMsg : string,
 //   detail : string
 // }
-uniCloud.addInterceptor("callFunction",{
-  invoke(args) {
-	  console.log("addd===========");
-    // 获取当前语言：zh / en
-    const lang = 'en' // 你可以从 this.$i18n.locale 获取
+// uniCloud.addInterceptor("callFunction",{
+//   invoke(args) {
+// 	  console.log("addd===========");
+//     // 获取当前语言：zh / en
+//     const lang = 'en' // 你可以从 this.$i18n.locale 获取
     
-    // 自动注入到云对象 context
-    args.custom = args.custom || {}
-    args.custom.lang = lang;
-  }
-});
+//     // 自动注入到云对象 context
+//     args.custom = args.custom || {}
+//     args.custom.lang = lang;
+//   }
+// });
 class AccountServiceClass {
 
 	constructor() {

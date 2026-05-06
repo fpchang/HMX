@@ -45,6 +45,13 @@ export default {
 		
 
 	},
+	tab:{
+			home: "首页",
+			roomStatus: "房态",
+			finance: "财务",
+			function: "功能",
+			mine: "我的"
+		},
 	permission: {
 		noPermission: "没有足够的权限",
 		contactAdmin: "请联系负责人",
@@ -138,8 +145,17 @@ export default {
 	hotel:{
 		title:"酒店",
 		hotel_list:"酒店列表",
-		btn_txt_manage:"管理"
+		btn_txt_manage:"管理",
+		current_hotel:"当前酒店",
+		btn_txt_view_all:"查看全部",
+		normal_operation: "正常营运"
 		
+		
+		
+	},
+	setcontent:{
+		btn_txt_sys_set:"系统设置",
+		btn_txt_feedback:"意见反馈"
 	},
 	gather:{		
 		    today: '今日',

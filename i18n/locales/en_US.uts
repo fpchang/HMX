@@ -1,52 +1,59 @@
 export default {
 	title: "Yi Su",
 	common: {
-	    loading: "Loading...",
-		saving:"Saving",
-	    noData: "No {0} data",
-	    system_error: "System error",
-	    totalCount: "Total {0} items",
-	    modal_title: "Tip",
-		select_txt:"Please select",
-		btn_txt_search:"Search",
-		search_txt:"Enter keywords",
-	    btn_txt_next: "Next",
-		btn_txt_create:"Create {0}",
-	    btn_txt_save: "Save {0}",
-	    btn_txt_submit: "Submit",
-	    btn_txt_delete: "Delete",
-	    btn_txt_cancel: "Cancel",
-	    btn_txt_add: "Add",
-	    btn_txt_modify: "Modify",
-	    btn_txt_update: "Update",
-		btn_txt_quick_Operation:"Quick Operation",
+		loading: "Loading...",
+		saving: "Saving",
+		noData: "No {0} data",
+		system_error: "System error",
+		totalCount: "Total {0} items",
+		modal_title: "Tip",
+		select_txt: "Please select",
+		btn_txt_search: "Search",
+		search_txt: "Enter keywords",
+		btn_txt_next: "Next",
+		btn_txt_create: "Create {0}",
+		btn_txt_save: "Save {0}",
+		btn_txt_submit: "Submit",
+		btn_txt_delete: "Delete",
+		btn_txt_cancel: "Cancel",
+		btn_txt_add: "Add",
+		btn_txt_modify: "Modify",
+		btn_txt_update: "Update",
+		btn_txt_quick_Operation: "Quick Operation",
 		add_success: "Add successful",
 		add_fail: "Add failed",
 		update_success: "Update successful",
 		update_fail: "Update failed",
 		delete_success: "Delete successful",
 		delete_fail: "Delete failed",
-		getData_success:"Get{0}data sucess",
-		getData_fail:"Get{0}data fail"
+		getData_success: "Get{0}data sucess",
+		getData_fail: "Get{0}data fail"
 	},
 	form: {
-	    valid_required: "This field is required",
-	    valid_required_email: "Email cannot be empty",
-	    valid_required_phone: "Phone number cannot be empty",
-	    valid_required_code: "Verification code cannot be empty",
-	    valid_email: "Incorrect email format",
-	    valid_phone: "Incorrect phone number format",
-	    valid_code: "Incorrect verification code format",
-	    pach_email: "Please enter your email",
-	    pach_phone: "Please enter your phone number",
-	    pach_code: "Please enter the verification code",
-	    remark: "Remark",
-	    pach_remark: "Please enter remark content",
-		canendar_title:"Select Date",
+		valid_required: "This field is required",
+		valid_required_email: "Email cannot be empty",
+		valid_required_phone: "Phone number cannot be empty",
+		valid_required_code: "Verification code cannot be empty",
+		valid_email: "Incorrect email format",
+		valid_phone: "Incorrect phone number format",
+		valid_code: "Incorrect verification code format",
+		pach_email: "Please enter your email",
+		pach_phone: "Please enter your phone number",
+		pach_code: "Please enter the verification code",
+		remark: "Remark",
+		pach_remark: "Please enter remark content",
+		canendar_title: "Select Date",
 	},
+		tab: {
+				home: "Home",
+				roomStatus: "Room Status",
+				finance: "Finance",
+				function: "Functions",
+				mine: "Mine"
+			},
 	permission: {
 		noPermission: "Insufficient permissions",
-				contactAdmin: "Please contact administrator",
+		contactAdmin: "Please contact administrator",
 	},
 	indexAdvise: {
 		title: "Yisu System",
@@ -131,27 +138,34 @@ export default {
 		btn_txt_complete: "Complete Registration",
 		register_success: "Registration Successful"
 	},
-	hotel:{
-		title:"Hotel",
-		hotel_list:"Hotel List",
-		btn_txt_manage:"Admin"
-		
+	hotel: {
+		title: "Hotel",
+		hotel_list: "Hotel List",
+		btn_txt_manage: "Admin",
+		current_hotel: "Current Hotel",
+		btn_txt_view_all: "View All",
+		normal_operation: "Normal Operation"
+
 	},
-	gather:{
-		  today: 'Today',
-		    tomorrow: 'Tomorrow',
-		    todayText: 'Today',
-		    tomorrowText: 'Tomorrow',
-		    checkInToday: 'Check-In Today',
-		    checkOutToday: 'Check-Out Today',
-		    currentGuests: 'Current Guests',
-		    emptyRooms: 'Empty Rooms',
-		    checkInTomorrow: 'Check-In Tomorrow',
-		    checkOutTomorrow: 'Check-Out Tomorrow'
-		  
+	setcontent: {
+		btn_txt_sys_set: "System Settings",
+		btn_txt_feedback: "Feedback"
+	}
+	gather: {
+		today: 'Today',
+		tomorrow: 'Tomorrow',
+		todayText: 'Today',
+		tomorrowText: 'Tomorrow',
+		checkInToday: 'Check-In Today',
+		checkOutToday: 'Check-Out Today',
+		currentGuests: 'Current Guests',
+		emptyRooms: 'Empty Rooms',
+		checkInTomorrow: 'Check-In Tomorrow',
+		checkOutTomorrow: 'Check-Out Tomorrow'
+
 	},
 	order: {
-		title_order:"Order",
+		title_order: "Order",
 		title: "Room Status",
 		orderManage: "Order Management",
 		room: "Room",
@@ -168,7 +182,7 @@ export default {
 		weekSat: "Sat",
 		orderList: "Order List",
 		addOrder: "Add Order",
-		remain_room:"Remaining Rooms",
+		remain_room: "Remaining Rooms",
 		orderFilter: "Order Filter",
 		totalCount: "{{0}} items total",
 		searchPlaceholder: "Search name",
@@ -189,52 +203,52 @@ export default {
 		next: "Next",
 		completeRegister: "Complete Registration",
 		registerSuccess: "Registration Successful",
-		all_roomType:"All Room Types ",
+		all_roomType: "All Room Types ",
 		create_order: {
-		  edit_order_info: 'Edit Order Information',
-		  order_info: 'Order Information',
-		  select_room: 'Select Room',
-		
-		  // 表单标签
-		  source: 'Source',
-		  date: 'Date',
-		  room_type_room: 'Room Type & Room',
-		  customer_name: 'Customer Name',
-		  contact_phone: 'Contact Phone',
-		  deposit: 'Deposit',
-		  total_price: 'Total Price',
-		  remark: 'Remark',
-		
-		  // 表单占位符
-		  please_enter_wechat: 'Please enter customer WeChat',
-		  please_enter_phone: 'Please enter customer phone',
-		  please_enter_remark: 'Please enter remark content',
-		
-		  // 提示语/Toast
-		  get_order_source_fail: 'Failed to get order source',
-		  add_success: 'Added successfully',
-		  add_order_fail: 'Failed to add order',
-		  select_room_num: 'Total {0} rooms available',
-		  has_select_room_num: '{0} rooms selected',
-		  btn_txt: "Confirm Selection",
-		  no_room_select_tips: "No rooms available for the selected date. Please check room availability."
+			edit_order_info: 'Edit Order Information',
+			order_info: 'Order Information',
+			select_room: 'Select Room',
+
+			// 表单标签
+			source: 'Source',
+			date: 'Date',
+			room_type_room: 'Room Type & Room',
+			customer_name: 'Customer Name',
+			contact_phone: 'Contact Phone',
+			deposit: 'Deposit',
+			total_price: 'Total Price',
+			remark: 'Remark',
+
+			// 表单占位符
+			please_enter_wechat: 'Please enter customer WeChat',
+			please_enter_phone: 'Please enter customer phone',
+			please_enter_remark: 'Please enter remark content',
+
+			// 提示语/Toast
+			get_order_source_fail: 'Failed to get order source',
+			add_success: 'Added successfully',
+			add_order_fail: 'Failed to add order',
+			select_room_num: 'Total {0} rooms available',
+			has_select_room_num: '{0} rooms selected',
+			btn_txt: "Confirm Selection",
+			no_room_select_tips: "No rooms available for the selected date. Please check room availability."
 		}
 	},
-	fm:{
-		title_income_expense:"Income & Expense "
+	fm: {
+		title_income_expense: "Income & Expense "
 	},
 	function: {
-		title_navbar:"Function",
-	  title_set: "Hotel Settings",
-	  title_fm: "Finance",
-	  title_order: "Orders",
-	  btn_txt_room_type: "Room Type Management",
-	  btn_txt_room: "Room Management",
-	  btn_txt_room_employee: "Staff Management",
-	  btn_txt_room_hotel_show: "Hotel Display",
-	  btn_txt_income_expense: "Income & Expense Management",
-	  btn_txt_order: "Order Management",
-	  btn_txt_create_order: "Create Order",
-	  btn_txt_fm_chart: "Financial Statistics"
+		title_navbar: "Function",
+		title_set: "Hotel Settings",
+		title_fm: "Finance",
+		title_order: "Orders",
+		btn_txt_room_type: "Room Type Management",
+		btn_txt_room: "Room Management",
+		btn_txt_room_employee: "Staff Management",
+		btn_txt_room_hotel_show: "Hotel Display",
+		btn_txt_income_expense: "Income & Expense Management",
+		btn_txt_order: "Order Management",
+		btn_txt_create_order: "Create Order",
+		btn_txt_fm_chart: "Financial Statistics"
 	}
 };

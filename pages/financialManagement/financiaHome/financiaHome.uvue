@@ -146,22 +146,16 @@
 		//当年收入
 		const incomeYearRes = FMService.getIncomeAndExpensesCurrentYear(hotel_id.value, year.value, 'income');
 		// 显式指定 Promise.all 的泛型为 any，避免类型推断失败
-		//const [a,b,c,d] = await Promise.all([expensesMonthRes, incomeMonthRes,empensesYearRes,incomeYearRes]);
-		//console.log("11111",a,b,c,d)expensesMonthRes
 		expensesMonthRes.then(list => {
-			console.log("list1---", list);
 			expensesMonthList.value = list as Array<charPietItem>;
 		})
 		incomeMonthRes.then(list => {
-			console.log("list2---", list);
 			incomeMonthList.value = list as Array<charPietItem>;
 		})
 		empensesYearRes.then(list => {
-			console.log("list---", list);
 			expensesYearList.value = list as Array<Array<string | number>>;
 		})
 		incomeYearRes.then(list => {
-			console.log("list4---", list);
 			incomeYearList.value = list as Array<Array<string | number>>;
 		})
 

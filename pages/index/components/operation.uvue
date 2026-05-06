@@ -29,6 +29,7 @@
 							</view>
 						</navigator>
 					</view>
+					<view v-for="i of 2" style="min-width: 100px;height:0;flex:1"></view>
 				</l-space>
 			</view>
 			

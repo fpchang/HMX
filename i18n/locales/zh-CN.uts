@@ -246,8 +246,21 @@ export default {
 				no_room_select_tips:"当前日期房间已经订完，请确认房间数据"
 		}
 	},
-	fm:{
-		title_income_expense:"收支"
+	finance:{
+		title_income_expense:"收支",
+		core_financial_indicators: '核心财务指标',
+		  monthly_income_details: '本月收入财务详情',
+		  monthly_expense_details: '本月支出详情',
+		  annual_financial_overview: '本年财务概览',
+		
+		  // 指标标签
+		  monthly_income: '本月收入',
+		  monthly_expense: '本月支出',
+		  annual_income: '本年收入',
+		  annual_expense: '本年支出',
+		  total_income: '总收入',
+		  total_expense: '总支出',
+		  annual_profit: '本年利润',
 	},
 	//功能页面
 	function:{

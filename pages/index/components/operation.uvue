@@ -60,7 +60,7 @@
 	},
 	{
 		icon: "add",
-		label:i18n.global.t("common.btn_txt_create",[i18n.global.t("fm.title_income_expense")]),
+		label:i18n.global.t("common.btn_txt_create",[i18n.global.t("finance.title_income_expense")]),
 		bgColor: "#722ed11a",
 		url: "/pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense?billType=income",
 		show: permissionList.value.includes("FM_CREATE")

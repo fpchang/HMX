@@ -37,11 +37,11 @@ export default {
 		valid_email: "Incorrect email format",
 		valid_phone: "Incorrect phone number format",
 		valid_code: "Incorrect verification code format",
-		pach_email: "Please enter your email",
-		pach_phone: "Please enter your phone number",
-		pach_code: "Please enter the verification code",
+		pach_email: "Enter your email",
+		pach_phone: "Enter your phone number",
+		pach_code: "Enter the verification code",
 		remark: "Remark",
-		pach_remark: "Please enter remark content",
+		pach_remark: "Enter remark content",
 		canendar_title: "Select Date",
 	},
 	tab: {
@@ -90,10 +90,10 @@ export default {
 		"userAgreement": "《User Agreement》",
 		"privacyPolicy": "《Privacy Policy》",
 		"regitser_txt": "Don't have an account? Register now",
-		"pach_account": "Please enter username / email / phone number",
-		"pach_password": "Please enter your password",
-		"pach_phone": "Please enter your phone number",
-		"pach_sms": "Please enter verification code",
+		"pach_account": "Enter username / email / phone number",
+		"pach_password": "Enter your password",
+		"pach_phone": "Enter your phone number",
+		"pach_sms": "Enter verification code",
 		"btn_txt_password": "Forgot Password",
 		"btn_txt": "Sign In",
 		"btn_app_txt": "Phone Quick Login",
@@ -104,7 +104,7 @@ export default {
 		"valid_password": "Please fill in your account and password",
 		"valid_password_num": "Password must be at least 6 characters",
 		"valid_password_comb": "Password must contain letters and numbers",
-		"valid_account": "Please enter your account name",
+		"valid_account": "Enter your account name",
 		"valid_account_num": "Must be 3 to 25 characters",
 		"valid_phone_num": "Phone number must be 11 digits",
 		"valid_sms_num": "Verification code must be 4 digits",
@@ -124,11 +124,11 @@ export default {
 	register: {
 		title: "Register",
 		register_account: "Register Account",
-		pach_email: "Please enter your email",
-		pach_email_code: "Please enter email verification code",
+		pach_email: "Enter your email",
+		pach_email_code: "Enter email verification code",
 		valid_email_hanused: "This email is already registered",
 		valid_email_num: "Email verification code is 4 digits",
-		valid_password_again: "Please enter your password again",
+		valid_password_again: "Enter your password again",
 		valid_account_require: "Account cannot be empty",
 		valid_account_correct: "Account can only consist of letters and numbers",
 		valid_account_hasused: "The username already exists",
@@ -220,9 +220,9 @@ export default {
 			remark: 'Remark',
 
 			// 表单占位符
-			please_enter_wechat: 'Please enter customer WeChat',
-			please_enter_phone: 'Please enter customer phone',
-			please_enter_remark: 'Please enter remark content',
+			please_enter_wechat: 'Enter customer WeChat',
+			please_enter_phone: 'Enter customer phone',
+			please_enter_remark: 'Enter remark content',
 
 			// 提示语/Toast
 			get_order_source_fail: 'Failed to get order source',
@@ -234,8 +234,20 @@ export default {
 			no_room_select_tips: "No rooms available for the selected date. Please check room availability."
 		}
 	},
-	fm: {
-		title_income_expense: "Income & Expense "
+	finance: {
+		title_income_expense: "Income & Expense ",
+		 core_financial_indicators: 'Core Financial Indicators',
+		  monthly_income_details: 'Monthly Income Details',
+		  monthly_expense_details: 'Monthly Expense Details',
+		  annual_financial_overview: 'Annual Financial Overview',
+		
+		  monthly_income: 'Monthly Income',
+		  monthly_expense: 'Monthly Expense',
+		  annual_income: 'Annual Income',
+		  annual_expense: 'Annual Expense',
+		  total_income: 'Total Income',
+		  total_expense: 'Total Expense',
+		  annual_profit: 'Annual Profit',
 	},
 	function: {
 		title_navbar: "Function",

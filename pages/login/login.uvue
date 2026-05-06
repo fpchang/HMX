@@ -18,7 +18,7 @@
 					短信验证
 				</text> -->
 				<rice-tabs v-model="currentTab" :list="list" @clickTab="tabClick" :shrink="false" style="flex: 1;"
-					bg-color="transparent" line-width="60px"></rice-tabs>
+					bg-color="transparent" line-width="80%"></rice-tabs>
 			</view>
 
 			<!-- 账号密码登录 -->

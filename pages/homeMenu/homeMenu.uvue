@@ -104,7 +104,7 @@
 			},
 			{
 				icon: "/static/icons/homemenu/hotel2.png",
-				label: i18n.global.t("function.btn_txt_room_hotel_show"),
+				label: i18n.global.t("function.btn_txt_room_preview"),
 				bgColor: "rgba(22, 93, 255, 0.1)",
 				url: `/pages/hotelDisplay/hotelDisplay?hotel_id=${hotel.value?._id}`
 			}],
@@ -202,7 +202,7 @@
 				flex-direction: column;
 				align-items: center;
 				padding: 14px 0;
-				min-width: 100px;
+				min-width: 80px;
 				// box-shadow: 0 2px 12px rgba(0,0,0,0.05);
 				border-radius: 14px;
 

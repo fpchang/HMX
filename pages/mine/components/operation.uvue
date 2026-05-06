@@ -1,9 +1,17 @@
 <template>
 	<view class="operation">
-		<l-grid :inset="true">
-			<l-grid-item  v-for="item of menuList" :text="item.label" :image="item.icon" :url="item.url" openType="navigateTo" />
-			
-		</l-grid>
+		<!-- <l-grid :inset="true" bgColor="#ffffff" :column="3">
+			<l-grid-item  v-for="item of menuList" :text="item.label" :image="item.icon" :url="item.url" openType="navigateTo" />			
+		</l-grid> -->
+		<l-space :wrap="true" :size="24">
+			<navigator v-for="item of menuList" :url="item.url">
+			<view  class="menu-item">				
+					<image :src="item.icon" class="img"></image>
+					<text class="txt">{{item.label}}</text>
+				
+			</view>
+			</navigator>
+		</l-space>
 	</view>
 </template>
 
@@ -33,7 +41,8 @@
 <style lang="scss">
 	.operation{
 		background-color: #fff;
-		border-radius: 8px;
+		border-radius: 14px;
+		padding:24px;
 	}
 	.card {
 		// background-color: #fff;
@@ -55,7 +64,7 @@
 			
 
 			.list-item {
-				width: 85px;
+				width: 95px;
 				height:100px;
 				display: flex;
 				flex-direction: column;
@@ -80,6 +89,21 @@
 					color: #64748b;
 				}
 			}
+		}
+	}
+	.menu-item{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		.img{
+			width: 45px;
+			height: 45px;
+			margin-bottom: 8px;
+		}
+		.txt{
+			font-size: 13px;
+			color: #64748b;
 		}
 	}
 </style>

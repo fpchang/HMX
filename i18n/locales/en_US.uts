@@ -44,13 +44,13 @@ export default {
 		pach_remark: "Please enter remark content",
 		canendar_title: "Select Date",
 	},
-		tab: {
-				home: "Home",
-				roomStatus: "Room Status",
-				finance: "Finance",
-				function: "Functions",
-				mine: "Mine"
-			},
+	tab: {
+		home: "Home",
+		roomStatus: "Room Status",
+		finance: "Finance",
+		function: "Functions",
+		mine: "Mine"
+	},
 	permission: {
 		noPermission: "Insufficient permissions",
 		contactAdmin: "Please contact administrator",
@@ -148,7 +148,7 @@ export default {
 
 	},
 	setcontent: {
-		btn_txt_sys_set: "System Settings",
+		btn_txt_sys_set: "Settings",
 		btn_txt_feedback: "Feedback"
 	}
 	gather: {
@@ -242,12 +242,12 @@ export default {
 		title_set: "Hotel Settings",
 		title_fm: "Finance",
 		title_order: "Orders",
-		btn_txt_room_type: "Room Type Management",
-		btn_txt_room: "Room Management",
-		btn_txt_room_employee: "Staff Management",
-		btn_txt_room_hotel_show: "Hotel Display",
-		btn_txt_income_expense: "Income & Expense Management",
-		btn_txt_order: "Order Management",
+		btn_txt_room_type: "Room Type",
+		btn_txt_room: "Room",
+		btn_txt_room_employee: "Staff",
+		btn_txt_room_preview: "Preview",
+		btn_txt_income_expense: "Income & Expense",
+		btn_txt_order: "Order",
 		btn_txt_create_order: "Create Order",
 		btn_txt_fm_chart: "Financial Statistics"
 	}

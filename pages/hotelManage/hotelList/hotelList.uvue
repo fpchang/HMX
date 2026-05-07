@@ -101,7 +101,7 @@
 	<!-- #ifdef APP -->
 	</scroll-view>	
 	<!-- #endif -->
-<l-empty description="没有数据" v-if="!submitLoading&&hotelList.length<1" />
+<l-empty :description="i18n.global.t('common.noData',[''])" v-if="!submitLoading&&hotelList.length<1" />
 </template>
 
 <script setup>
@@ -111,6 +111,7 @@
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { HotelService } from "@/services/HotelService.uts";
 	import {hotelBean} from "@/bean/hotelBean.uts"
+	import i18n from '@/i18n/index.uts';
 	let submitLoading = ref(false);
 	const hotelList = computed<Array<hotelBean>>(() => {
 		return state.hotelList;

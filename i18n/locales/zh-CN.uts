@@ -247,6 +247,7 @@ export default {
 		}
 	},
 	finance:{
+		navbar_title:"财务中心",
 		title_income_expense:"收支",
 		core_financial_indicators: '核心财务指标',
 		  monthly_income_details: '本月收入财务详情',

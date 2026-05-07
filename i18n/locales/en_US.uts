@@ -235,6 +235,7 @@ export default {
 		}
 	},
 	finance: {
+		navbar_title: "Financial Center",
 		title_income_expense: "Income & Expense ",
 		 core_financial_indicators: 'Core Financial Indicators',
 		  monthly_income_details: 'Monthly Income Details',

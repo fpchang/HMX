@@ -8,14 +8,14 @@
 
 				<image src="/static/icons/list.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">酒店列表</text>
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{i18n.global.t("hotel.hotel_list")}}</text>
 			</view>
 		</template>
 		<template #right>
 			<view class="navbar-btn">
-				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
+				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 				
-					<text class="txt" @click="addHotel">添加酒店</text>
+					<text class="txt" @click="addHotel">{{i18n.global.t("common.btn_txt_create",[i18n.global.t("hotel.title")])}}</text>
 				
 
 			</view>
@@ -47,52 +47,22 @@
 							<view class="card-subtitle" style="margin-top: 15px;">
 								<image src="/static/icons/administrator.png"
 									style="width:18px;height:18px;margin-right: 4px;"></image>
-								<text class="txt">店主:{{belong(hotel.belong??"")}}</text>
+								<text class="txt">{{i18n.global.t("hotel.storekeeper")}}：{{belong(hotel.belong??"")}}</text>
 							</view>
 							<view class="card-subtitle">
 								<image src="/static/icons/role.png" style="width:18px;height:18px;margin-right: 4px;">
 								</image>
-								<text class="txt">角色:{{roleFormat(hotel.curRole ?? '')}}</text>
+								<text class="txt">{{i18n.global.t("hotel.role")}}：{{roleFormat(hotel.curRole ?? '')}}</text>
 							</view>
 							
 						</view>
 						<view class="state">
-							<text class="txt">正常运营</text>
+							<text class="txt">{{i18n.global.t('hotel.normal_operation')}}</text>
 						</view>
 					</view>
 
 					<view class="control">
 						<xt-control :showEdit="hotel.curRole == 'administrator'" :showDelete="hotel.curRole == 'administrator'" @del="deleteHotel(hotel)" @view="viewDetail(hotel)" @edit="editHotel(hotel)"></xt-control>
-				
-						<!-- <view class="control-item"
-							style="background-color: rgb(245,247,250);flex: 1;margin-right: 8px;">
-							<view class="control-btn" @click="viewDetail(hotel)">
-								<view class="control-btn-group" >
-									<image src="/static/icons/view.png" style="width:25px;height:25px"></image>
-									<text style="color:rgb(29,33,41);padding-left: 4px">查看</text>
-								</view>
-
-							</view>
-						</view>
-						<view class="control-item"
-						 v-if="hotel.curRole == 'administrator'"
-							style="background-color: rgba(22,93,255,0.1);height: 100%;flex: 1;margin-right: 8px;">
-							<view class="control-btn" @click="editHotel(hotel)">
-								<view class="control-btn-group" >
-									<image src="/static/icons/edit.png" style="width:25px;height:25px"></image>
-									<text style="color: rgba(22,93,255,1);padding-left: 4px;">编辑</text>
-								</view>
-							</view>
-						</view>
-						<view class="control-item"
-						 v-if="hotel.curRole == 'administrator'"
-							style="background-color: rgba(239,68,68,0.1);height: 100%;width: 45px;">
-							<view class="control-btn" @click="deleteHotel(hotel)">
-								<view class="control-btn-group">
-									<image src="/static/icons/delete.png" style="width:16px;height:16px"></image>
-								</view>
-							</view>
-						</view> -->
 					</view>
 				</view>
 			</view>

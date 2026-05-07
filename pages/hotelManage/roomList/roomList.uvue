@@ -13,7 +13,7 @@
 		</template>
 		<template #right>
 			<view class="navbar-btn">
-				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
+				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
 				<text class="txt" @click="addRoom">添加房间</text>
 

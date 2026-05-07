@@ -144,7 +144,9 @@ export default {
 		btn_txt_manage: "Admin",
 		current_hotel: "Current Hotel",
 		btn_txt_view_all: "View All",
-		normal_operation: "Normal Operation"
+		normal_operation: "Normal Operation",
+		storekeeper:"Storekeeper",
+		role:"Role"
 
 	},
 	setcontent: {

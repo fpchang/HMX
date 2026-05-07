@@ -148,7 +148,11 @@ export default {
 		btn_txt_manage:"管理",
 		current_hotel:"当前酒店",
 		btn_txt_view_all:"查看全部",
-		normal_operation: "正常营运"
+		normal_operation: "正常营运",
+		storekeeper:"店主",
+		role:"角色"
+		
+		
 		
 		
 		

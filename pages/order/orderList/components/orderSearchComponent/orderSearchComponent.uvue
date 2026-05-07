@@ -1,12 +1,6 @@
 <template>
 	<view class="fm-search">
-		<view class="select-item">
-			<!-- <view class="select" :style="{'overflow':show?'visible':'hidden'}">
-				<view class="content" @click="showSelect">
-					<text class="txt">{{text_val}}</text>
-					<image src="/static/icons/arrow-down.png" style="width: 16px;height:16px"></image>
-				</view>
-			</view> -->
+		<view class="select-item" style="min-width:360px">
 			<view>
 				<l-space :wrap="true" :fill="true"> 
 					<view style="min-width: 60px;" v-for="item of checkType"><rice-button

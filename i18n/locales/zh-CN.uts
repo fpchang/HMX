@@ -14,6 +14,7 @@ export default {
 		btn_txt_save:"保存",
 		btn_txt_submit:"提交",
 		btn_txt_delete:"删除",
+		btn_confirm:"确认",
 		btn_txt_cancel:"取消",
 		btn_txt_add:"新增{0}",
 		btn_txt_modify:"修改",
@@ -26,7 +27,9 @@ export default {
 		delete_success:"删除成功",
 		delete_fail:"删除失败",
 		getData_success:"获取{0}数据成功",
-		getData_fail:"获取{0}数据失败"
+		getData_fail:"获取{0}数据失败",
+		confirmDelete: "确认删除",
+		deleteOrderTip: "删除后将无法恢复，确认删除吗？",
 	},
 	form: {
 		valid_required: "必填项",
@@ -144,13 +147,23 @@ export default {
 	},
 	hotel:{
 		title:"酒店",
+		title_room_type:"房型",
+		all_roomType:"全部房型",
+		title_room:"房间",
+		room_filter:"房间筛选",
 		hotel_list:"酒店列表",
+		room_type_list:"房型列表",
+		room_list:"房间列表",
 		btn_txt_manage:"管理",
 		current_hotel:"当前酒店",
 		btn_txt_view_all:"查看全部",
 		normal_operation: "正常营运",
 		storekeeper:"店主",
-		role:"角色"
+		role:"角色",
+		unit_room:"间",
+		room_count:"房间数",
+		pach_search_room_name:"搜索房间名称",
+		tips_create_room_type:"请先创建房型"
 		
 		
 		

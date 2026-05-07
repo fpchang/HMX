@@ -6,25 +6,6 @@
 					<image :src="item.title_icon" class="icon-stye"></image>
 					<text class="txt" :style="{'color':item.title_color}">{{item.title}}</text>
 				</view>
-				<!-- 	<view class="list">
-
-					<view class="list-item" v-for="it in item.menu_item_list" :key="it.label">
-						<navigator :url="it.url" hover-class="none">
-							<view class="item-content">
-								<view class="groupIcon">
-									<image :src="it.icon" class="icon-style" mode="aspectFit"></image>
-								</view>
-								<view>
-									<text class="label">{{it.label}}</text>
-								</view>
-							</view>
-
-						</navigator>
-					</view>
-
-					<view v-for="item in 8" style="height:0;padding:0 15px"></view>
-
-				</view> -->
 				<view class="list">
 					<l-space :wrap="true" :size="14">
 						<view class="list-item" v-for="it in item.menu_item_list" :key="it.label">
@@ -40,7 +21,7 @@
 
 							</navigator>
 						</view>
-						<view class="list-item" style="width: 0;height:0;padding:0" v-for="item of 2"></view>
+						<view class="list-item" style="width: 0;height:0;padding:0" v-for="item of 5"></view>
 					</l-space>
 				</view>
 			</view>

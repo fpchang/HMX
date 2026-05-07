@@ -15,6 +15,7 @@ export default {
 		btn_txt_save: "Save {0}",
 		btn_txt_submit: "Submit",
 		btn_txt_delete: "Delete",
+		btn_confirm:"Confirm",
 		btn_txt_cancel: "Cancel",
 		btn_txt_add: "Add",
 		btn_txt_modify: "Modify",
@@ -27,7 +28,9 @@ export default {
 		delete_success: "Delete successful",
 		delete_fail: "Delete failed",
 		getData_success: "Get{0}data sucess",
-		getData_fail: "Get{0}data fail"
+		getData_fail: "Get{0}data fail",
+		confirmDelete: "Confirm Delete",
+		deleteOrderTip: "Cannot be restored after deletion, confirm?",
 	},
 	form: {
 		valid_required: "This field is required",
@@ -140,13 +143,25 @@ export default {
 	},
 	hotel: {
 		title: "Hotel",
+		title_room_type:"Room Type",
+		all_roomType:"All Room Types",
+		title_room:"Room",
+		room_filter:"Room Filter",
 		hotel_list: "Hotel List",
+		room_type_list:"Room Type List",
+		room_list:"Room List",
 		btn_txt_manage: "Admin",
 		current_hotel: "Current Hotel",
 		btn_txt_view_all: "View All",
 		normal_operation: "Normal Operation",
 		storekeeper:"Storekeeper",
-		role:"Role"
+		role:"Role",
+		unit_room:"",
+		room_count:"Total rooms",
+		pach_search_room_name:"Search Room Name",
+		tips_create_room_type:"Please create room types first."
+		
+		
 
 	},
 	setcontent: {

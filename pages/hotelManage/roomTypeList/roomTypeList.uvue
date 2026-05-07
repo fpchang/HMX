@@ -8,14 +8,14 @@
 
 				<image src="/static/icons/list.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">房型列表</text>
+				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{i18n.global.t("hotel.room_type_list")}}</text>
 			</view>
 		</template>
 		<template #right>
 			<view class="navbar-btn">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
-				<text class="txt" @click="addRoomType">添加房型</text>
+				<text class="txt" @click="addRoomType">{{i18n.global.t("common.btn_txt_create",[i18n.global.t("hotel.title_room_type")])}}</text>
 
 
 			</view>
@@ -43,7 +43,7 @@
 
 								</view>
 								<view style="margin-left: 8px;" v-for="it of roomType.bedList">
-									<rice-tag :text="`${it['count']}张${it['name']}床`" text-color="#4e5969"
+									<rice-tag :text="`${it['name']}*${it['count']}`" text-color="#4e5969"
 										color="#f2f3f5" text-size="12px" :round="true" />
 
 								</view>
@@ -57,10 +57,10 @@
 							<view class="card-subtitle">
 								<navigator :url="`/pages/hotelManage/roomList/roomList?roomType_id=${roomType._id}`">
 									<view style="display: flex;flex-direction: row;align-items: center;">
-										<text style=" font-weight:400;color: #1d2129;font-size: 14px;">房间数：</text>
+										<text style=" font-weight:400;color: #1d2129;font-size: 14px;">{{i18n.global.t("hotel.room_count")}}：</text>
 										<text class="txt-num"
 											style="color: #00b42f;font-size: 14px;padding:0 4px;">{{roomType.roomList.length}}</text>
-										<text style="color: #4e5969;font-size: 14px;"> 间</text>
+										<text style="color: #4e5969;font-size: 14px;"> {{i18n.global.t("hotel.unit_room")}}</text>
 										<rice-icon name="arrow-right"/>
 									</view>
 								</navigator>
@@ -110,7 +110,7 @@
 
 	</scroll-view>
 	<view style="margin-top:80px" v-if="roomTypeList.length<1">
-		<l-empty description="没有数据"  />
+		<l-empty :description="i18n.global.t('common.noData',[''])"  />
 	</view>
 
 </template>
@@ -123,6 +123,7 @@
 	import { roomTypeService } from "@/services/roomTypeService";
 	import { roomTypeBean } from "@/bean/roomTypeBean.uts";
 	import { hotelBean } from "@/bean/hotelBean";
+	import i18n from '@/i18n/index.uts';
 	let submitLoading = ref(false);
 
 	const hotel_id = computed(() => {

@@ -159,6 +159,9 @@
 	}
 	onLoad(params => {
 		init();
+		uni.setNavigationBarTitle({
+			title:i18n.global.t("finance.navbar_title")
+		})
 	})
 	function goToDetail(type : string) {
 

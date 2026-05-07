@@ -152,9 +152,13 @@
 			isReading.value = true;
 		}
 	});
-	onLoad(() => {
+	onLoad(async () => {
 		initData();
-
+		const action = uniCloud.importObject("hm_action_co");
+		console.log(action);
+		//const htlist = await action.hotel_getList();
+		const orlist = await action.order_getList();
+		console.log("11111",orlist)
 	})
 	onMounted(() => {
 	});

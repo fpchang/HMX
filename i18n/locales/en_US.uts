@@ -57,6 +57,9 @@ export default {
 	permission: {
 		noPermission: "Insufficient permissions",
 		contactAdmin: "Please contact administrator",
+		administrator:"Super Admin",
+		manager:"Admin",
+		normal:"Staff"
 	},
 	indexAdvise: {
 		title: "Yisu System",
@@ -159,7 +162,9 @@ export default {
 		unit_room:"",
 		room_count:"Total rooms",
 		pach_search_room_name:"Search Room Name",
-		tips_create_room_type:"Please create room types first."
+		tips_create_room_type:"Please create room types first.",
+		title_employee:"Employee",
+		list_employee:"Employee List"
 		
 		
 

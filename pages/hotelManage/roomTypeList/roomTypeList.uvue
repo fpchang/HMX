@@ -172,13 +172,13 @@
 			"ROOMTYPE_UPDATE"
 		)) {
 			showDialog({
-				title: '没有足够的权限',
-				message: "请联系负责人",
-				showCancelButton: false,
-				confirm: () => {
-					hideDialog();
-				}
-			})
+							title: i18n.global.t('permission.noPermission'),
+							message: i18n.global.t('permission.contactAdmin'),
+							showCancelButton: false,
+							confirm: () => {
+								hideDialog();
+							}
+						})
 			return;
 		}
 		uni.navigateTo({
@@ -191,13 +191,13 @@
 			"ROOMTYPE_CREATE"
 		)) {
 			showDialog({
-				title: '没有足够的权限',
-				message: "请联系负责人",
-				showCancelButton: false,
-				confirm: () => {
-					hideDialog();
-				}
-			})
+										title: i18n.global.t('permission.noPermission'),
+										message: i18n.global.t('permission.contactAdmin'),
+										showCancelButton: false,
+										confirm: () => {
+											hideDialog();
+										}
+									})
 			return;
 		}
 		uni.navigateTo({
@@ -209,19 +209,21 @@
 			"ROOMTYPE_DELETE"
 		)) {
 			showDialog({
-				title: '没有足够的权限',
-				message: "请联系负责人",
-				showCancelButton: false,
-				confirm: () => {
-					hideDialog();
-				}
-			})
+										title: i18n.global.t('permission.noPermission'),
+										message: i18n.global.t('permission.contactAdmin'),
+										showCancelButton: false,
+										confirm: () => {
+											hideDialog();
+										}
+									})
 			return;
 		}
 
 		showDialog({
-			title: '确认删除此房型',
-			message: "删除后将无法恢复，确认删除吗？",
+			title: i18n.global.t("common.confirmDelete"),
+			message: i18n.global.t("common.deleteOrderTip"),
+			cancelButtonText:i18n.global.t("common.btn_txt_cancel"),
+			confirmButtonText:i18n.global.t("common.btn_confirm"),
 			beforeClose: async () : Promise<boolean> => {
 				try {
 					// const o = targetObj['_id'] as UTSJSONObject;

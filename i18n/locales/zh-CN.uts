@@ -58,6 +58,9 @@ export default {
 	permission: {
 		noPermission: "没有足够的权限",
 		contactAdmin: "请联系负责人",
+		administrator:"超级管理员",
+		manager:"管理员",
+		normal:"员工"
 	},
 	indexAdvise: {
 		title: "议宿 Yisu",
@@ -163,13 +166,11 @@ export default {
 		unit_room:"间",
 		room_count:"房间数",
 		pach_search_room_name:"搜索房间名称",
-		tips_create_room_type:"请先创建房型"
-		
-		
-		
-		
-		
+		tips_create_room_type:"请先创建房型"	,
+		title_employee:"员工",
+		list_employee:"员工列表"
 	},
+	
 	setcontent:{
 		btn_txt_sys_set:"设置",
 		btn_txt_feedback:"意见反馈"

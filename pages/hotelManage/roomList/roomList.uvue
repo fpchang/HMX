@@ -1,7 +1,7 @@
 <template>
 	<rice-navbar title="" border>
 		<template #left>
-			<view style="display: flex;flex-direction: row;">
+			<view style="display: flex;flex-direction: row;align-items: center;">
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
@@ -102,7 +102,7 @@
 			return []
 		}
 		let result : Array<Array<PickerOption>> = [];
-		let list : Array<PickerOption> = [{ text:i18n.global.t("hotel.all_roomType"), value: "all" }];
+		let list : Array<PickerOption> = [{ text: i18n.global.t("hotel.all_roomType"), value: "all" }];
 		// let result : Array<Array<PickerOption>> = [];
 		// let list = roomTypeList.value.map(item => {
 		// 	return { text: item.name, value: item._id } as PickerOption
@@ -194,21 +194,21 @@
 			"ROOMTYPE_DELETE"
 		)) {
 			showDialog({
-							title: i18n.global.t('permission.noPermission'),
-							message: i18n.global.t('permission.contactAdmin'),
-							showCancelButton: false,
-							confirm: () => {
-								hideDialog();
-							}
-						})
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
 			return;
 		}
 		showDialog({
 			title: i18n.global.t("common.confirmDelete"),
 			message: i18n.global.t("common.deleteOrderTip"),
-			cancelButtonText:i18n.global.t("common.btn_txt_cancel"),
-			confirmButtonText:i18n.global.t("common.btn_confirm"),
-			
+			cancelButtonText: i18n.global.t("common.btn_txt_cancel"),
+			confirmButtonText: i18n.global.t("common.btn_confirm"),
+
 			beforeClose: async () : Promise<boolean> => {
 				try {
 					await roomTypeService.deleteRoom(room._id);
@@ -239,13 +239,13 @@
 			"ROOMTYPE_UPDATE"
 		)) {
 			showDialog({
-										title: i18n.global.t('permission.noPermission'),
-										message: i18n.global.t('permission.contactAdmin'),
-										showCancelButton: false,
-										confirm: () => {
-											hideDialog();
-										}
-									})
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
 			return;
 		}
 		uni.navigateTo({

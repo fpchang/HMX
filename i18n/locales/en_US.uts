@@ -258,7 +258,12 @@ export default {
 	},
 	finance: {
 		navbar_title: "Financial Center",
+		icome:"icome",
+		expense:"expense",
 		title_income_expense: "Income & Expense ",
+		income_expense_list:"Income & Expense List",
+		income_expense_filter:"Income & Expense Filter",
+		 
 		 core_financial_indicators: 'Core Financial Indicators',
 		  monthly_income_details: 'Monthly Income Details',
 		  monthly_expense_details: 'Monthly Expense Details',

@@ -1,21 +1,21 @@
 <template>
 	<rice-navbar title="" border>
 		<template #left>
-			<view style="display: flex;flex-direction: row;">
+			<view style="display: flex;flex-direction: row;align-items: center;">
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
 
 				<image src="/static/icons/list.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">收入列表</text>
+				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{i18n.global.t("finance.income_expense_list")}}</text>
 			</view>
 		</template>
 		<template #right>
 			<view class="navbar-btn">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
-				<text class="txt" @click="addFm">{{billType=='income'?'添加收入':'添加支出'}}</text>
+				<text class="txt" @click="addFm">{{billType=='income'?i18n.global.t("common.btn_txt_create",[i18n.global.t("finance.icome")]):i18n.global.t("common.btn_txt_create",[i18n.global.t("finance.expense")])}}</text>
 
 
 			</view>
@@ -28,26 +28,26 @@
 		<view class="search-area">
 			<view class="card">
 				<view class="card-item title-area">
-					<text class="txt">收入筛选</text>
-					<l-tag variant="light">共{{fmResult.count}}条</l-tag>
+					<text class="txt">{{i18n.global.t("finance.income_expense_filter")}}</text>
+					<l-tag variant="light">{{ i18n.global.t('common.totalCount',[fmResult.count]) }}</l-tag>
 				</view>
 				<view class="card-item  select-area" style="margin-bottom: 0;">
 					<fmSearchComponent :columns="columns" :initDateRange="dateRange"
 						@searchInputChange="searchInputChange" @selectAction="selectFm" @dateChange="dateChange"
-						@searchAction="getFmList" placeholder="搜索备注信息"></fmSearchComponent>
+						@searchAction="getFmList" placeholder="输入备注信息"></fmSearchComponent>
 				</view>
 				<!-- <view class="card-item search"></view> -->
 			</view>
 
 		</view>
 		<view style="padding:20px;border-radius: 8px;">
-		
+
 			<rice-collapse :custom-style="{borderRadius:'8px'}">
 				<rice-collapse-item v-for="fm of fmResult.fmList" :name="fm._id"
 					:title="`${ formatTypeName(fm.type)}:￥${fm.amount}`" :value="formatDate(fm.ioeTime)"
 					:title-style="{color:fm.billType=='expenses'?'#b91c1c':'#047857'}" :border="false">
 					<view class="l-card">
-						
+
 						<!-- 	<view class="amount-area">
 			  		<view><text class="label">{{fm.billType=='expenses'?'本次支出':'本次收入'}}</text></view>
 			  		<view><text  :class="['num',fm.billType=='expenses'?'num-red':'']">￥{{fm.amount}}</text></view>
@@ -109,11 +109,11 @@
 
 			</rice-collapse>
 		</view>
-		<view v-if="submitLoading" style="display: flex;flex-direction: row;justify-content: center;"> 
-			<rice-loading color="#787878" text="加载中…" />
+		<view v-if="submitLoading" style="display: flex;flex-direction: row;justify-content: center;">
+			<rice-loading color="#787878" :text="i18n.global.t('common.noData',[''])" />
 		</view>
 		<view v-if="!submitLoading&&fmResult.fmList.length<1">
-			<l-empty description="没有数据" />
+			<l-empty :description="i18n.global.t('common.noData',[''])" />
 		</view>
 	</scroll-view>
 
@@ -138,11 +138,12 @@
 	import { state } from "@/store/store";
 	import { fmState } from "@/store/modules/fmStore.uts";
 	import { userBean } from "@/bean/userBean";
-
+	import i18n from '@/i18n/index.uts';
 	import { comFunction } from "@/pages/index/ComFuc";
 	import fmSearchComponent from "./components/fmSearchComponent/fmSearchComponent";
 	import expensesInfoCardComponent from "./components/expensesInfoCardComponent/expensesInfoCardComponent";
 	import incomeInfoCardComponent from "./components/incomeInfoCardComponent/incomeInfoCardComponent";
+
 	let submitLoading = ref(true);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -165,8 +166,8 @@
 	const dateRange = ref<string[]>(getMonthDateArray());
 	const columns = computed<Array<Array<PickerOption>>>(() => {
 		let result : Array<Array<PickerOption>> = [[
-			{ text: '收入', value: 'income' },
-			{ text: '支出', value: 'expense' }
+			{ text:i18n.global.t('finance.icome'), value: 'income' },
+			{ text: i18n.global.t('finance.expense'), value: 'expense' }
 		]];
 		return result;
 	});
@@ -176,8 +177,8 @@
 		const list = await FMService.getIncomeAndExpensesConfig();
 		incomeAndExpensesConfigList.value = list;
 	}
-	
-	
+
+
 	const fmResult = ref<FMDataListResult>({
 		count: 0,//总数量
 		pageNo: 1,//当前页码
@@ -189,19 +190,19 @@
 		// uni.showLoading({
 		// 	title: ""
 		// })
-		try{
+		try {
 			const fmr = await FMService.getIncomeAndExpensesDateBySearch(hotel_id.value, billType.value, keyword.value, dateRange.value, fmResult.value.pageNo, fmResult.value.pageSize);
 			fmResult.value = fmr as FMDataListResult;
 			//uni.hideLoading();
 			submitLoading.value = false;
-		}catch(e){
+		} catch (e) {
 			submitLoading.value = false;
 			uni.showToast({
-				title:"请求数据失败",
-				icon:"none"
+				title: i18n.global.t("common.getData_fail", ['']),
+				icon: "none"
 			})
 		}
-	
+
 	}
 	const dateChange = (range : string[]) => {
 		dateRange.value = range;
@@ -222,9 +223,9 @@
 	const formatDate = (timestamp : number) : string => {
 		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
 	}
-	const formatTypeName=(type:string):string=>{
-		const target = incomeAndExpensesConfigList.value.find(item=>item.name==type);
-		if(target!=null){
+	const formatTypeName = (type : string) : string => {
+		const target = incomeAndExpensesConfigList.value.find(item => item.name == type);
+		if (target != null) {
 			return target.text
 		}
 		return "--"
@@ -234,8 +235,8 @@
 			"FM_CREATE"
 		)) {
 			showDialog({
-				title: '没有足够的权限',
-				message: "请联系负责人",
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
 				showCancelButton: false,
 				confirm: () => {
 					hideDialog();
@@ -261,20 +262,21 @@
 			"ROOMTYPE_DELETE"
 		)) {
 			showDialog({
-				title: '没有足够的权限',
-				message: "请联系负责人",
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
 				showCancelButton: false,
 				confirm: () => {
 					hideDialog();
-
 				}
 			})
 			return;
 		}
 		console.log("delete")
 		showDialog({
-			title: '确认删除此收支单',
-			message: "删除后将无法恢复，确认删除吗？",
+			title: i18n.global.t("common.confirmDelete"),
+			message: i18n.global.t("common.deleteOrderTip"),
+			cancelButtonText: i18n.global.t("common.btn_txt_cancel"),
+			confirmButtonText: i18n.global.t("common.btn_confirm"),
 			beforeClose: async () : Promise<boolean> => {
 
 				//await roomTypeService.deleteFm(room._id);
@@ -283,11 +285,13 @@
 					await FMService.deleteFm(fm._id);
 					getFmList();
 					hideDialog();
+					return true;
 				} catch (errMsg) {
 					uni.showToast({
-						title: '删除异常，请重试',
+						title: i18n.global.t("common.delete_fail"),
 						icon: "none"
 					})
+					return false;
 				}
 
 
@@ -304,8 +308,8 @@
 			"ROOMTYPE_UPDATE"
 		)) {
 			showDialog({
-				title: '没有足够的权限',
-				message: "请联系负责人",
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
 				showCancelButton: false,
 				confirm: () => {
 					hideDialog();
@@ -314,7 +318,6 @@
 			return;
 		}
 		uni.$once("refrushfmList", () => {
-			console.log("刷新fmlist");
 			getFmList();
 		})
 		uni.navigateTo({

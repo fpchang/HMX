@@ -1,12 +1,12 @@
 <template>
 	<rice-navbar title="" border v-if="hotel_id!=''">
 		<template #left>
-			<view style="display: flex;flex-direction: row;">
+			<view style="display: flex;flex-direction: row;align-items: center;">
 				<!-- s -->
 
 				<image src="/static/icons/orderstate.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{ i18n.global.t('order.title') }} </text>
+				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{ i18n.global.t('order.title') }} </text>
 			</view>
 		</template>
 		<template #right>
@@ -20,7 +20,7 @@
 		</template>
 	</rice-navbar>
 	<scroll-view style="flex:1" v-if="hotel_id!=''&&roomList.length>0" :refresher-enabled="true" :refresher-triggered="refreshState" @refresherrefresh="refreshData">
-		<view style="display: flex;flex-direction: row;">
+		<view style="display: flex;flex-direction: row;align-items: center;">
 			<view>
 				<view class="table-container">
 					<view class="table">

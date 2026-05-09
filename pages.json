@@ -289,14 +289,14 @@
 	"tabBar": {
 			"color": "#787878",
 			"selectedColor": "#007aff",
-			"borderStyle": "white",
+			"borderStyle": "#EEEEEE ",
 			"backgroundColor": "#ffffff",
 			"redDotColor":"#ff0000",
 			"backgroundColor":"#ffffff",
 			//"spacing":"5px",
-			//"fontSize":"12px",
-			"iconWidth":"20px",
-			//"height":"80px",
+			"fontSize":"10px",
+			"iconWidth":"24px",
+			"height":"60px",
 			"list": [{
 					"pagePath": "pages/index/index",
 					"iconPath": "/static/icons/tabbar/home-black.png",

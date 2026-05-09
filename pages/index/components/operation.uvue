@@ -17,7 +17,7 @@
 					</view>
 				</l-space>				
 			</view> -->
-			<view style="background-color: #fff;border-radius: 14px;padding:14px">
+		<!-- 	<view style="background-color: #fff;border-radius: 14px;padding:14px">
 				<l-space  :wrap="true" :size="14" :fill="true">
 					<view v-for="item of menuList" style="min-width: 100px;flex:1">
 						<navigator :url="item.url" hover-class="none">
@@ -31,8 +31,20 @@
 					</view>
 					<view v-for="i of 2" style="min-width: 100px;height:0;flex:1"></view>
 				</l-space>
+			</view> -->
+			<view style="background-color: #fff;border-radius: 14px;padding:14px">
+			<rice-cell-group >
+				
+			  <rice-cell center size="medium"  :icon="it.icon" :title="it.label"   v-for="it in menuList"  arrow :url="it.url" :border="false">
+				   <template #leftIcon>
+					   <view style="padding-right: 8px;"> 
+					     <rice-icon :name="it.icon" size="20" color="#007AFF"></rice-icon>
+					   </view>
+				    
+				    </template>
+			  </rice-cell>
+			</rice-cell-group>
 			</view>
-			
 		</view>
 	</view>
 
@@ -79,6 +91,7 @@
 	.quick-actions {
 		padding: 0 20px 20px;
 		flex: 1;
+		border-radius: 14px;
 	}
 
 	.action-title {

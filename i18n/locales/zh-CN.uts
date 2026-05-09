@@ -290,14 +290,14 @@ export default {
 	function:{
 		title_navbar:"功能",
 		title_set:"酒店设置",
-		title_fm:"财务",
+		title_fm:"财务管理",
 		title_order:"订单",
-		btn_txt_room_type:"房型",
-		btn_txt_room:"房间",
-		btn_txt_room_employee:"员工",
+		btn_txt_room_type:"房型管理",
+		btn_txt_room:"房间管理",
+		btn_txt_room_employee:"员工管理",
 		btn_txt_room_preview:"预览",
-		btn_txt_income_expense:"收支",
-		btn_txt_order:"订单",
+		btn_txt_income_expense:"收支管理",
+		btn_txt_order:"订单管理",
 		btn_txt_create_order:"添加订单",
 		btn_txt_fm_chart:"财务统计"
 		

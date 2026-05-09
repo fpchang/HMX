@@ -258,7 +258,7 @@ export default {
 	},
 	finance: {
 		navbar_title: "Financial Center",
-		icome:"icome",
+		income:"income",
 		expense:"expense",
 		title_income_expense: "Income & Expense ",
 		income_expense_list:"Income & Expense List",
@@ -276,6 +276,11 @@ export default {
 		  total_income: 'Total Income',
 		  total_expense: 'Total Expense',
 		  annual_profit: 'Annual Profit',
+		voucher_Type:"Voucher Type",
+		transaction_category:"Transaction Category",
+		 transaction_date:"Transaction Date",
+		 amount:"Amount",
+		 patch_enter_amount:"Enter Amount"
 	},
 	function: {
 		title_navbar: "Function",

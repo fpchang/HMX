@@ -266,7 +266,7 @@ export default {
 	},
 	finance:{
 		navbar_title:"财务中心",
-		icome:"收入",
+		income:"收入",
 		expense:"支出",
 		title_income_expense:"收支",
 		income_expense_list:"收支列表",
@@ -284,6 +284,11 @@ export default {
 		  total_income: '总收入',
 		  total_expense: '总支出',
 		  annual_profit: '本年利润',
+		  voucher_Type:"单据类型",
+		  transaction_category:"收支分类",
+		  transaction_date:"收支日期",
+		  amount:"金额",
+		  patch_enter_amount:"请输入金额"
 		  
 	},
 	//功能页面

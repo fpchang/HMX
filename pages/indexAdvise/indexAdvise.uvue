@@ -141,6 +141,11 @@
 		}, 1000);
 	};
 	const initData = (async () => {
+		const action = uniCloud.importObject("hm_action_co");
+		console.log(action);
+		//const htlist = await action.hotel_getList();
+		// const orlist = await action.order_getList();
+		// console.log("11111",orlist)
 		try {
 			console.log("验证token");
 			const res = await loginEvent();;
@@ -152,13 +157,9 @@
 			isReading.value = true;
 		}
 	});
-	onLoad(async () => {
+	onLoad( () => {
 		initData();
-		const action = uniCloud.importObject("hm_action_co");
-		console.log(action);
-		//const htlist = await action.hotel_getList();
-		const orlist = await action.order_getList();
-		console.log("11111",orlist)
+	
 	})
 	onMounted(() => {
 	});

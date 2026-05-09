@@ -20,7 +20,7 @@
 		</template>
 	</rice-navbar>
 	<scroll-view style="flex:1" v-if="hotel_id!=''&&roomList.length>0" :refresher-enabled="true" :refresher-triggered="refreshState" @refresherrefresh="refreshData">
-		<view style="display: flex;flex-direction: row;align-items: center;">
+		<view style="display: flex;flex-direction: row;">
 			<view>
 				<view class="table-container">
 					<view class="table">

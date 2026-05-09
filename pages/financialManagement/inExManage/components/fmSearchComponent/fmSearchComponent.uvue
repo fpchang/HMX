@@ -11,7 +11,7 @@
 			<!-- 	<view style="width: 50px;margin-right: 8px;"><rice-button :type="billType=='all'?'primary':'info'" size="small"
 						text="全部" @click="checkBillType('all')"></rice-button></view> -->
 				<view style="width: 60px;margin-right: 8px"><rice-button :type="billType=='income'?'primary':'info'" size="small"
-						:text="i18n.global.t('finance.icome')"  @click="checkBillType('income')"></rice-button></view>
+						:text="i18n.global.t('finance.income')"  @click="checkBillType('income')"></rice-button></view>
 				<view style="width: 60px;">
 					<rice-button size="small" :type="billType=='expenses'?'primary':'info'" :text="i18n.global.t('finance.expense')"  @click="checkBillType('expenses')"></rice-button></view>
 			</view>
@@ -61,7 +61,7 @@
 	});
 	const columns = ref<PickerOption[][]>([
 		[
-			{ text:i18n.global.t('finance.icome'), value: 'income' },
+			{ text:i18n.global.t('finance.income'), value: 'income' },
 						{ text: i18n.global.t('finance.expense'), value: 'expense' }
 		]
 	])

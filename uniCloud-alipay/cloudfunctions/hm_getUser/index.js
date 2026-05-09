@@ -1,7 +1,6 @@
 'use strict';
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
-	console.log('111111event : ', event)
 	const {type,value}=event;
 	if(!type){
 		throw new Error("type 不能为空")

@@ -27,7 +27,7 @@
 								
 				<rice-cell-group >
 
-					<rice-cell center size="large"  :title="it.label" v-for="it in item.menu_item_list"
+					<rice-cell center size="medium"  :title="it.label" v-for="it in item.menu_item_list"
 						arrow :url="it.url" :border="false" >
 						<template #leftIcon>
 							<view style="padding-right: 8px;">
@@ -97,7 +97,7 @@
 				url: "/pages/hotelManage/employeeList/employeeList"
 			},
 			{
-				icon: "/static/icons/homemenu/linestyle/preview.png",
+				icon: "/static/icons/homemenu/linestyle/preview-line.png",
 				label: i18n.global.t("function.btn_txt_room_preview"),
 				bgColor: "rgba(22, 93, 255, 0.1)",
 				url: `/pages/hotelDisplay/hotelDisplay?hotel_id=${hotel.value?._id}`

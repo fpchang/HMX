@@ -22,7 +22,7 @@
 					<text class="section-title">{{i18n.global.t('indexAdvise.coreFunction.title')}}</text>
 					<view class="line"></view>
 				</view>
-				<view class="content-card">
+				<view>
 
 					<view>
 						<!-- <rice-grid :column-num="2" :border="false" :clickable="false">
@@ -37,10 +37,11 @@
 							</rice-grid-item>
 						</rice-grid> -->
 						<l-space  :wrap="true" :size="18">
-							<view class="feature-item" v-for="item  of funcList" style="min-width: 300px;">
-								<image class="feature-icon" :src="item.img" mode="widthFix"></image>
-								<text class="feature-name">{{item.title}}</text>
+					
+							<view v-for="item  of funcList" style="width:300px;min-width: 300px;flex:1;background-color: #fff;border-radius: 14px;"> 
+							<l-card :title="item.title"  :image="item.img" coverMode="widthFix" :lStyle="{margin:0}">
 								<text class="feature-desc">{{item.info}}</text>
+							</l-card>
 							</view>
 						</l-space>
 					</view>
@@ -246,7 +247,7 @@
 	.content-card {
 		background: #ffffff;
 		border-radius: 12px;
-		padding: 18px;
+		 padding: 18px;
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 	}
 
@@ -298,7 +299,7 @@
 	}
 
 	.feature-desc {
-		font-size: 12px;
+		// font-size: 12px;
 		/* 24rpx → 12px */
 		color: #999;
 		line-height: 1.5;

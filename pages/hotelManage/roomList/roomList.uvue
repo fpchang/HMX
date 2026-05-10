@@ -355,8 +355,8 @@
 			padding:0 15px;
 			.slot-text{
 				color:#fff;
-				font-size: 13px;
-				padding-left: 8px;
+				font-size: 14px;
+				padding-left: 4px;
 			}
 			
 		}

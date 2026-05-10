@@ -48,21 +48,25 @@
 			<view style="border-radius: 14px;background-color: #fff;"> 
 			  <rice-swipe-actions>
 			    <rice-swipe-actions-item ref="slotRef" :auto-close="true" v-for="room of filterRoomList">
-			      <rice-cell icon="/static/icons/roomReserve.png" :title="room.room_name" size="large" arrow arrow-direction="left"  center :clickable="false" >
+			      <rice-cell :title="room.room_name" :label="getRoomTypeName(room.room_type_id)" size="large" arrow arrow-direction="left"  center :clickable="false" >
+					   <template #leftIcon>
+					     <image src="/static/icons/roomReserve.png" style="width: 50px;height:50px;" class="left-cion"></image>
+					   </template>
 					  <template #rightIcon>
 						  <rice-icon name="double-left" />
 					  </template>
 				  </rice-cell>
 			      <template #right>
 			        <view class="swiper-menu-style" >
+						<view class="menu-item edit" @click="editRoom(room)">
+						  <rice-icon name="plus" color="#fff" />
+						  <text class="slot-text">编辑</text>
+						</view>
 			          <view class="menu-item del" @click="deleteRoom(room)">
 			            <rice-icon name="delete" color="#fff" />
 			            <text class="slot-text">删除</text>
 			          </view>
-			          <view class="menu-item edit" @click="editRoom(room)">
-			            <rice-icon name="plus" color="#fff" />
-			            <text class="slot-text">编辑</text>
-			          </view>
+			         
 			      
 			        </view>
 			       

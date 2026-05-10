@@ -59,7 +59,7 @@
 			      <template #right>
 			        <view class="swiper-menu-style" >
 						<view class="menu-item edit" @click="editRoom(room)">
-						  <rice-icon name="plus" color="#fff" />
+						  <rice-icon name="edit" color="#fff" />
 						  <text class="slot-text">编辑</text>
 						</view>
 			          <view class="menu-item del" @click="deleteRoom(room)">

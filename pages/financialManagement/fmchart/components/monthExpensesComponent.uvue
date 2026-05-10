@@ -91,7 +91,7 @@
 				],
 				series: [
 					{
-						name: '当月支出',
+						name: i18n.global.t("finance.monthly_expense"),
 						type: 'pie',
 						radius: ['40%', '70%'],
 						avoidLabelOverlap: false,
@@ -104,8 +104,8 @@
 							show: true,
 							position: 'center',
 							formatter: [
-							  `{title|总支出}`,
-							  `{value|${total}元}`
+							  `{title|${i18n.global.t("finance.total_expense")}}`,
+							  `{value|${total}}`
 							].join('\n'),
 							rich: {
 							  title: {

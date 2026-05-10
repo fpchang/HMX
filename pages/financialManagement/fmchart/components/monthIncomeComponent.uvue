@@ -91,7 +91,7 @@
 				  ],
 				series: [
 					{
-						name: '当月收入',
+						name: i18n.global.t("finance.monthly_income"),
 						type: 'pie',
 						radius: ['40%', '70%'],
 						avoidLabelOverlap: false,
@@ -108,8 +108,8 @@
 						          show: true,
 						          position: 'center',
 						          formatter: [
-						            `{title|总收入}`,
-						            `{value|${total}元}`
+						            `{title|${i18n.global.t("finance.total_income")}}`,
+						            `{value|${total}}`
 						          ].join('\n'),
 						          rich: {
 						            title: {

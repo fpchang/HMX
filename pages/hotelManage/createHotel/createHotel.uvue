@@ -50,7 +50,7 @@
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('hotel.form.hotel_feature')" :tips="i18n.global.t('hotel.form.tips_feature')" :showTips="pageType!=2">
 				<view v-if="pageType==0 ||pageType==1">
-					<xt-input-tab v-model="hotelForm.feature" btnText="添加特点" list=""></xt-input-tab>
+					<xt-input-tab v-model="hotelForm.feature" :btnText="i18n.global.t('hotel.btn_txt_add_feature')" list=""></xt-input-tab>
 				</view>
 				<view v-if="pageType!=0 &&pageType!=1" class="feature-show-area">
 					<view v-for="txtstr of hotelForm.feature" class="feature-item" style="margin-right: 4px;"><rice-tag
@@ -139,7 +139,7 @@
 	</scroll-view>
 	<!-- #endif -->
 	<l-cascader v-model:visible="showSelectAreaPopup" v-model="hotelForm.hotelAddressArea" uniCloud
-		:subTitles="subTitles" title="请选择所在地区" @change="transformAddress" />
+		:subTitles="subTitles" :title="i18n.global.t('hotel.form.date_title')" @change="transformAddress" />
 
 </template>
 
@@ -198,9 +198,11 @@
 
 	const title = computed(() => {
 		if (pageType.value == 0) {
-			return '创建酒店';
+			return i18n.global.t("common.btn_txt_create",[i18n.global.t('hotel.title')]);
 		}
-		return pageType.value == 1 ? '修改酒店信息' : '酒店信息';
+		const modify_title= i18n.global.t("common.btn_txt_modify",[i18n.global.t('hotel.title')]);
+		const detail_title= i18n.global.t("common.btn_txt_eetails",[i18n.global.t('hotel.title')]);
+		return pageType.value == 1 ? modify_title:detail_title;
 	});
 	const titleImg = computed<string>(() => {
 		if (pageType.value == 0) {
@@ -225,7 +227,7 @@
 			comFunction.init();
 			uni.navigateBack();
 			uni.showToast({
-				title: "添加酒店成功",
+				title: i18n.global.t('common.add_success'),
 				icon: "none"
 			});
 
@@ -234,7 +236,7 @@
 			submitLoading.value = false;
 			//console.error("保存失败", e)
 			uni.showToast({
-				title: "添加酒店失败",
+				title: i18n.global.t('common.add_fail'),
 				icon: "none"
 			});
 		}
@@ -251,7 +253,7 @@
 			uni.navigateBack({
 				success() {
 					uni.showToast({
-						title: "更新成功",
+						title: i18n.global.t('common.update_success'),
 						icon: "none",
 						position: 'top'
 					});
@@ -286,7 +288,7 @@
 	});
 	const showSelectAreaPopup = ref(false);
 	let optionsAreaData = ref<Array<UTSJSONObject> | null>(null);
-	const subTitles = ['请选择省份', '请选择城市', '请选择区/县'];
+	const subTitles = [i18n.global.t("form.tab_title_select_province"), i18n.global.t("form.tab_title_select_city"), i18n.global.t("form.tab_title_select_district")];
 	//const cascaderValue7 = ref('');
 	const fieldValue7 = ref<string | null>(null);
 	const transformAddress = (value : string, options : UTSJSONObject[]) => {

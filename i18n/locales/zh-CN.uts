@@ -17,8 +17,9 @@ export default {
 		btn_confirm:"确认",
 		btn_txt_cancel:"取消",
 		btn_txt_add:"新增{0}",
-		btn_txt_modify:"修改",
+		btn_txt_modify:"修改{0}",
 		btn_txt_update:"更新",
+		btn_txt_eetails:"{0}详情",
 		btn_txt_quick_Operation:"快速操作",
 		add_success:"添加成功",
 		add_fail:"添加失败",
@@ -50,8 +51,10 @@ export default {
 		pach_code: "请输入验证码",
 		remark: "备注",
 		pach_remark: "请输入备注内容",
-		canendar_title:"请选择日期"
-		
+		canendar_title:"请选择日期",
+		tab_title_select_province:"请选择省份",
+		tab_title_select_city:"请选择城市",
+		tab_title_select_district:"请选择区/县"
 
 	},
 	tab:{
@@ -156,10 +159,7 @@ export default {
 	},
 	hotel:{
 		title:"酒店",
-		title_room_type:"房型",
-
-		
-		
+		title_room_type:"房型",				
 		all_roomType:"全部房型",
 		title_room:"房间",
 		room_filter:"房间筛选",
@@ -169,12 +169,14 @@ export default {
 		btn_txt_manage:"管理",
 		current_hotel:"当前酒店",
 		btn_txt_view_all:"查看全部",
+		btn_txt_add_feature:"添加亮点",
 		normal_operation: "正常营运",
 		storekeeper:"店主",
 		role:"角色",
 		unit_room:"间",
 		room_count:"房间数",
 		pach_search_room_name:"搜索房间名称",
+		pach_add_feature:"请输入特色标签",
 		tips_create_room_type:"请先创建房型"	,
 		title_employee:"员工",
 		list_employee:"员工列表",
@@ -195,6 +197,7 @@ export default {
 			path_hotel_address:"请输入酒店地址",
 			path_customer_service_hotline:"请输入客服电话",
 			path_customer_ervice_weChat:"请输入客服微信",
+			date_title:"请选择所在地区",
 			tips_feature:"如：免费停车，宠物免费，户外泳池，草地烧烤等"
 		}
 	},

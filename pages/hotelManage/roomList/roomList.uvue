@@ -44,7 +44,37 @@
 			</view>
 
 		</view>
-		<view class="card-list">
+		<view style="padding:14px;border-radius: 14px;">
+			<view style="border-radius: 14px;background-color: #fff;"> 
+			  <rice-swipe-actions>
+			    <rice-swipe-actions-item ref="slotRef" :auto-close="true" v-for="room of filterRoomList">
+			      <rice-cell icon="/static/icons/roomReserve.png" :title="room.room_name" size="large" arrow arrow-direction="left"  center :clickable="false" >
+					  <template #rightIcon>
+						  <rice-icon name="double-left" />
+					  </template>
+				  </rice-cell>
+			      <template #right>
+			        <view class="swiper-menu-style" >
+			          <view class="menu-item del" @click="deleteRoom(room)">
+			            <rice-icon name="delete" color="#fff" />
+			            <text class="slot-text">删除</text>
+			          </view>
+			          <view class="menu-item edit" @click="editRoom(room)">
+			            <rice-icon name="plus" color="#fff" />
+			            <text class="slot-text">编辑</text>
+			          </view>
+			      
+			        </view>
+			       
+			      </template>
+			    </rice-swipe-actions-item>
+			  </rice-swipe-actions>
+			</view>
+			
+		
+			
+		</view>
+		<view class="card-list" v-if="false">
 			<!-- <template v-for="roomType of filterRoomTypeList"> -->
 			<view class="card-list-item" v-for="room of filterRoomList">
 				<view class="card">
@@ -80,6 +110,7 @@
 	import { roomTypeService } from "@/services/roomTypeService";
 	import { comFunction } from "@/pages/index/ComFuc";
 	import { userBean } from "@/bean/userBean";
+	import { SwipeActionsMenu, SwipeActionsItemClick, SwipeActionsItemOpen, SwipeActionsItemClose } from '@/uni_modules/rice-ui'
 	import i18n from '@/i18n/index.uts';
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
@@ -161,6 +192,10 @@
 		}
 		return "-"
 	}
+	const slotRef = ref<RiceSwipeActionsItemComponentPublicInstance | null>(null)
+				const closeSwiper = () => {
+				  slotRef.value?.close!()
+				}
 	const addRoom = async () => {
 		if (!permissionList.value.includes(
 			"ROOMTYPE_CREATE"
@@ -218,6 +253,7 @@
 						title: i18n.global.t("common.delete_success"),
 						icon: "none"
 					});
+					closeSwiper();
 					return true;
 				} catch (e) {
 					uni.showToast({
@@ -248,10 +284,17 @@
 			})
 			return;
 		}
+		closeSwiper();
 		uni.navigateTo({
 			url: `/pages/hotelManage/editRoom/editRoom?pageType=1&&room=${encodeURIComponent(JSON.stringify(room))}`,
 		});
 	}
+	
+
+	
+	
+
+
 	onLoad(params => {
 
 		try {
@@ -296,7 +339,31 @@
 
 		}
 	}
-
+	.swiper-menu-style{
+		display: flex;
+		flex-direction: row;
+		height: 100%;
+		.menu-item{
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			padding:0 15px;
+			.slot-text{
+				color:#fff;
+				font-size: 13px;
+				padding-left: 8px;
+			}
+			
+		}
+		.del{
+			background-color: #FF0000;
+		}
+		.edit{
+			background-color: #009EFA;
+		}
+		 
+	}
 	.card-list {
 		display: flex;
 		flex-direction: row;

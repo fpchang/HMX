@@ -136,7 +136,7 @@
 	});
 	const title = computed(() => {
 		const btstr = fmForm.value.billType=='income'?i18n.global.t('finance.income'):i18n.global.t('finance.expense');
-		const ptstr = pageType.value==0?i18n.global.t('common.btn_txt_create',['']):i18n.global.t('common.btn_txt_modify');
+		const ptstr = pageType.value==0?i18n.global.t('common.btn_txt_create',['']):i18n.global.t('common.btn_txt_modify',['']);
 		return ptstr+btstr;
 	});
 	const showCalendarEvent = () => {

@@ -2,7 +2,7 @@
 	<view class="xt-input-tab">
 		<view class="input-area">
 			<view v-if="showInput" style="flex: 1;;height: 100%;;padding-left: 8px;">
-				<input class="in-input-style" v-model="name_label" placeholder="请输入标签名称" />
+				<input class="in-input-style" v-model="name_label" :placeholder="i18n.global.t('hotel.pach_add_feature')" />
 			</view>
 			<view style="margin-left: 8px;"><button class="btn" :disabled="name_label==''"
 					@click="addtab">{{btnText}}</button></view>
@@ -24,6 +24,7 @@
 
 
 <script setup>
+	import i18n from '@/i18n/index.uts';
 	const props = defineProps({
 		showInput: {
 			type: Boolean,
@@ -88,11 +89,13 @@
 			align-items: center;
 			justify-content: space-between;
 			background-color: rgb(245, 245, 245);
+			border-radius: 8px;
 			height: 40px;
 
 			.in-input-style {
 				height: 100%;
 				line-height: 40px;
+				font-size: 12px;
 			}
 
 			.btn {
@@ -111,7 +114,7 @@
 				justify-content: center;
 				font-weight: normal;
 				color: rgb(255, 255, 255);
-				font-size: 16px;
+				font-size: 12px;
 
 			}
 		}
@@ -125,7 +128,7 @@
 
 				border-radius: 100px;
 				padding: 6px 8px;
-				background-color: #f2f3f5;
+				background-color: #999;
 
 				margin-left: 12px;
 				display: flex;

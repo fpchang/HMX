@@ -15,7 +15,7 @@ export default {
 		btn_txt_save: "Save {0}",
 		btn_txt_submit: "Submit",
 		btn_txt_delete: "Delete",
-		btn_confirm:"Confirm",
+		btn_confirm: "Confirm",
 		btn_txt_cancel: "Cancel",
 		btn_txt_add: "Add",
 		btn_txt_modify: "Modify",
@@ -31,6 +31,12 @@ export default {
 		getData_fail: "Get{0}data fail",
 		confirmDelete: "Confirm Delete",
 		deleteOrderTip: "Cannot be restored after deletion, confirm?",
+		units: {
+		  year: "Year",
+		  month: "Month",
+		  day: "Day",
+		  cny: "CNY"
+		}
 	},
 	form: {
 		valid_required: "This field is required",
@@ -57,9 +63,9 @@ export default {
 	permission: {
 		noPermission: "Insufficient permissions",
 		contactAdmin: "Please contact administrator",
-		administrator:"Super Admin",
-		manager:"Admin",
-		normal:"Staff"
+		administrator: "Super Admin",
+		manager: "Admin",
+		normal: "Staff"
 	},
 	indexAdvise: {
 		title: "Yisu System",
@@ -146,27 +152,46 @@ export default {
 	},
 	hotel: {
 		title: "Hotel",
-		title_room_type:"Room Type",
-		all_roomType:"All Room Types",
-		title_room:"Room",
-		room_filter:"Room Filter",
+		title_room_type: "Room Type",
+		all_roomType: "All Room Types",
+		title_room: "Room",
+		room_filter: "Room Filter",
 		hotel_list: "Hotel List",
-		room_type_list:"Room Type List",
-		room_list:"Room List",
+		room_type_list: "Room Type List",
+		room_list: "Room List",
 		btn_txt_manage: "Admin",
 		current_hotel: "Current Hotel",
 		btn_txt_view_all: "View All",
 		normal_operation: "Normal Operation",
-		storekeeper:"Storekeeper",
-		role:"Role",
-		unit_room:"",
-		room_count:"Total rooms",
-		pach_search_room_name:"Search Room Name",
-		tips_create_room_type:"Please create room types first.",
-		title_employee:"Employee",
-		list_employee:"Employee List"
-		
-		
+		storekeeper: "Storekeeper",
+		role: "Role",
+		unit_room: "",
+		room_count: "Total rooms",
+		pach_search_room_name: "Search Room Name",
+		tips_create_room_type: "Please create room types first.",
+		title_employee: "Employee",
+		list_employee: "Employee List",
+		form: {
+		  hotel_name: "Hotel Name",
+		  hotel_address: "Hotel Address",
+		  slelect_address:"Select Address",
+		  hotel_feature: "Hotel Features",
+		  catering_facilities: "Catering Facilities",
+		  basic_facilities: "Basic Facilities", // 这里你写错了，我帮你修正为“基础设施”
+		  recreation_facilities: "Recreation Facilities",
+		  athleticFacility_facilities: "Sports Facilities",
+		  customer_service_hotline: "Customer Service Hotline",
+		  customer_service_weChat: "Customer Service WeChat", // 修正拼写错误
+		  cover_image: "Cover Image",
+		  hotel_images: "Hotel Images",
+		  path_hotel_name:"Enter Hotel Name",
+		  path_hotel_address:"Enter Hotel Address",
+		  path_customer_service_hotline:"Enter Customer Service Hotline",
+		  path_customer_ervice_weChat:"Enter Customer Service WeChat or Whats App",
+		  tips_feature: "e.g. Free parking, pet friendly, outdoor swimming pool, lawn barbecue, etc."
+		}
+
+
 
 	},
 	setcontent: {
@@ -258,29 +283,34 @@ export default {
 	},
 	finance: {
 		navbar_title: "Financial Center",
-		income:"income",
-		expense:"expense",
+		income: "income",
+		expense: "expense",
+		title_financial_chart: "Financial Statistical Analysis",
+		title_Yearly_Trend:"Yearly Income & Expense Trend",
 		title_income_expense: "Income & Expense ",
-		income_expense_list:"Income & Expense List",
-		income_expense_filter:"Income & Expense Filter",
-		 
-		 core_financial_indicators: 'Core Financial Indicators',
-		  monthly_income_details: 'Monthly Income Details',
-		  monthly_expense_details: 'Monthly Expense Details',
-		  annual_financial_overview: 'Annual Financial Overview',
+		income_expense_list: "Income & Expense List",
+		income_expense_filter: "Income & Expense Filter",
+
+		core_financial_indicators: 'Core Financial Indicators',
+		monthly_income_details: 'Monthly Income Details',
+		monthly_expense_details: 'Monthly Expense Details',
+		annual_financial_overview: 'Annual Financial Overview',
 		
-		  monthly_income: 'Monthly Income',
-		  monthly_expense: 'Monthly Expense',
-		  annual_income: 'Annual Income',
-		  annual_expense: 'Annual Expense',
-		  total_income: 'Total Income',
-		  total_expense: 'Total Expense',
-		  annual_profit: 'Annual Profit',
-		voucher_Type:"Voucher Type",
-		transaction_category:"Transaction Category",
-		 transaction_date:"Transaction Date",
-		 amount:"Amount",
-		 patch_enter_amount:"Enter Amount"
+		monthly_income_expense_percent: 'Income & Expense Proportion This Month',
+		monthly_income_percent: 'Income Proportion This Month',
+		monthly_expense_percent: 'Expense Proportion This Month',
+		monthly_income: 'Monthly Income',
+		monthly_expense: 'Monthly Expense',
+		annual_income: 'Annual Income',
+		annual_expense: 'Annual Expense',
+		total_income: 'Total Income',
+		total_expense: 'Total Expense',
+		annual_profit: 'Annual Profit',
+		voucher_Type: "Voucher Type",
+		transaction_category: "Transaction Category",
+		transaction_date: "Transaction Date",
+		amount: "Amount",
+		patch_enter_amount: "Enter Amount"
 	},
 	function: {
 		title_navbar: "Function",

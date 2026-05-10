@@ -30,6 +30,12 @@ export default {
 		getData_fail:"获取{0}数据失败",
 		confirmDelete: "确认删除",
 		deleteOrderTip: "删除后将无法恢复，确认删除吗？",
+		units:{
+			year:"年",
+			month:"月",
+			day:"日",
+			cny:"元"
+		}
 	},
 	form: {
 		valid_required: "必填项",
@@ -151,6 +157,9 @@ export default {
 	hotel:{
 		title:"酒店",
 		title_room_type:"房型",
+
+		
+		
 		all_roomType:"全部房型",
 		title_room:"房间",
 		room_filter:"房间筛选",
@@ -168,7 +177,26 @@ export default {
 		pach_search_room_name:"搜索房间名称",
 		tips_create_room_type:"请先创建房型"	,
 		title_employee:"员工",
-		list_employee:"员工列表"
+		list_employee:"员工列表",
+		form:{
+			hotel_name:"酒店名称",
+			hotel_address:"酒店地址",
+			slelect_address:"选择地址",
+			hotel_feature:"酒店特色",
+			catering_facilities:"餐饮设施",
+			basic_facilities:"餐饮设施",
+			recreation_facilities:"休闲设施",
+			athleticFacility_facilities:"运动设施",
+			customer_service_hotline:"客服电话",
+			customer_ervice_weChat:"客服微信",
+			cover_image:"封面图片",
+			hotel_images:"酒店图片",
+			path_hotel_name:"请输入酒店名称",
+			path_hotel_address:"请输入酒店地址",
+			path_customer_service_hotline:"请输入客服电话",
+			path_customer_ervice_weChat:"请输入客服微信",
+			tips_feature:"如：免费停车，宠物免费，户外泳池，草地烧烤等"
+		}
 	},
 	
 	setcontent:{
@@ -268,6 +296,8 @@ export default {
 		navbar_title:"财务中心",
 		income:"收入",
 		expense:"支出",
+		title_financial_chart:"财务统计分析",
+		title_Yearly_Trend:"当年收支趋势",
 		title_income_expense:"收支",
 		income_expense_list:"收支列表",
 		income_expense_filter:"收支筛选",
@@ -277,6 +307,9 @@ export default {
 		  annual_financial_overview: '本年财务概览',
 		
 		  // 指标标签
+		 monthly_income_expense_percent: '本月收支占比',
+		  monthly_income_percent: '本月收入占比',
+		  monthly_expense_percent: '本月支出占比',
 		  monthly_income: '本月收入',
 		  monthly_expense: '本月支出',
 		  annual_income: '本年收入',

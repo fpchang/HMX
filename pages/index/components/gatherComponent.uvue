@@ -297,7 +297,7 @@
 
 .stats-label {
   font-size: 14px;
-  color: #666;
+  color: #323233;
   padding:8px;
 }
 

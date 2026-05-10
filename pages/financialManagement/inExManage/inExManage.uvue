@@ -32,9 +32,9 @@
 					<l-tag variant="light">{{ i18n.global.t('common.totalCount',[fmResult.count]) }}</l-tag>
 				</view>
 				<view class="card-item  select-area" style="margin-bottom: 0;">
-					<fmSearchComponent :columns="columns" :initDateRange="dateRange"
+					<fmSearchComponent  :columns="columns" :initDateRange="dateRange"
 						@searchInputChange="searchInputChange" @selectAction="selectFm" @dateChange="dateChange"
-						@searchAction="getFmList" placeholder="输入备注信息"></fmSearchComponent>
+						@searchAction="getFmList" :placeholder="i18n.global.t('form.pach_remark')"></fmSearchComponent>
 				</view>
 				<!-- <view class="card-item search"></view> -->
 			</view>
@@ -59,21 +59,21 @@
 							<view class="card-item">
 								<view class="fl-c">
 									<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
-									<text class="label">收支时间：</text>
+									<text class="label">{{i18n.global.t("finance.transaction_date")}}：</text>
 								</view>
 								<text class="val-style">{{formatDate(fm.ioeTime)}}</text>
 							</view>
 							<view class="card-item">
 								<view class="fl-c">
 									<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
-									<text class="label">交易类型：</text>
+									<text class="label">{{i18n.global.t("finance.voucher_Type")}}：</text>
 								</view>
 								<text class="val-style">{{formatTypeName(fm.type)}}</text>
 							</view>
 							<view class="card-item" v-if="fm.billType=='income'">
 								<view class="fl-c">
 									<image src="/static/icons/fm/income.png" style="width: 16px;height: 16px;"></image>
-									<text class="label">收入金额：</text>
+									<text class="label">{{i18n.global.t("finance.income")}}{{i18n.global.t("finance.amount")}}：</text>
 								</view>
 								<text class="val-style" style="color:#047857">¥{{fm.amount}}</text>
 							</view>
@@ -81,7 +81,7 @@
 								<view class="fl-c">
 									<image src="/static/icons/fm/expenses.png" style="width: 16px;height: 16px;">
 									</image>
-									<text class="label">支出金额：</text>
+									<text class="label">{{i18n.global.t("finance.expense")}}{{i18n.global.t("finance.amount")}}：</text>
 								</view>
 								<text class="val-style" style="color:#b91c1c">¥{{fm.amount}}</text>
 							</view>
@@ -89,7 +89,7 @@
 							<view class="card-item" style="margin-bottom: 0;">
 								<view class="fl-c">
 									<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
-									<text class="label">备注信息：</text>
+									<text class="label">{{i18n.global.t("form.remark")}}：</text>
 								</view>
 								<text class="val-style">
 									{{fm.mark}}

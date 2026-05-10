@@ -14,8 +14,8 @@
 		<template #right>
 			<view class="navbar-btn" v-if="pageType!=2">
 				<!-- <text class="txt">保存</text> -->
-				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
-					textColor="#007aff" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+				<rice-button @click="submitForm" type="default" size="mini" :text="i18n.global.t('common.btn_txt_save')" color="rgba(0,0,0,0)"
+					textColor="#007aff" textSize="14px" :loadingText="i18n.global.t('common.saving')" :loading="submitLoading"></rice-button>
 			</view>
 		</template>
 	</rice-navbar>
@@ -23,18 +23,18 @@
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
-			<xt-form-item label="酒店名称" tips="" required>
+			<xt-form-item :label="i18n.global.t('hotel.form.hotel_name')" tips="" required>
 				<view>
-					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入酒店名称"
+					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('hotel.form.path_hotel_name')"
 						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.hotelName"></rice-input>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="酒店地址" tips="" required>
+			<xt-form-item :label="i18n.global.t('hotel.form.hotel_address')" tips="" required>
 				<view>
 					<view @click="selectAddress()" class="address-group">
 						<view>
 							<text style="color:rgba(0,0,0,0.6);font-size: 14px;"
-								v-if="hotelForm.hotelAddressArea==''">选择地址</text>
+								v-if="hotelForm.hotelAddressArea==''">{{i18n.global.t("hotel.form.slelect_address")}}</text>
 							<text style="font-size: 14px;"
 								v-if="hotelForm.hotelAddressArea!=''">{{hotelForm.hotelAddressArea}}</text>
 						</view>
@@ -43,12 +43,12 @@
 					</view>
 					<view style="height: 100px;">
 						<rice-textarea style="height: 40px;flex: 1;" placeholderStyle="font-size:14px" classic
-							placeholder="请输入具体地址" layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
+							:placeholder="i18n.global.t('hotel.form.path_hotel_address')" layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
 							v-model="hotelForm.hotelAddress"></rice-textarea>
 					</view>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="特点" tips="如：免费停车，宠物免费，户外泳池，草地烧烤等" :showTips="pageType!=2">
+			<xt-form-item :label="i18n.global.t('hotel.form.hotel_feature')" :tips="i18n.global.t('hotel.form.tips_feature')" :showTips="pageType!=2">
 				<view v-if="pageType==0 ||pageType==1">
 					<xt-input-tab v-model="hotelForm.feature" btnText="添加特点" list=""></xt-input-tab>
 				</view>
@@ -58,7 +58,7 @@
 
 				</view>
 			</xt-form-item>
-			<xt-form-item label="餐饮" tips="">
+			<xt-form-item :label="i18n.global.t('hotel.form.catering_facilities')" tips="">
 				<rice-checkbox-group @change="cateringCheckboxChange" direction="row"
 					v-model="hotelForm.cateringServices">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
@@ -67,7 +67,7 @@
 					</view>
 				</rice-checkbox-group>
 			</xt-form-item>
-			<xt-form-item label="基础设施" tips="">
+			<xt-form-item :label="i18n.global.t('hotel.form.basic_facilities')" tips="">
 				<rice-checkbox-group @change="baseCheckboxChange" direction="row" v-model="hotelForm.baseFacility">
 
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
@@ -78,7 +78,7 @@
 
 				</rice-checkbox-group>
 			</xt-form-item>
-			<xt-form-item label="休闲设施" tips="">
+			<xt-form-item :label="i18n.global.t('hotel.form.recreation_facilities')" tips="">
 				<rice-checkbox-group @change="recreationCheckboxChange" direction="row"
 					v-model="hotelForm.recreationFacility">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
@@ -87,7 +87,7 @@
 					</view>
 				</rice-checkbox-group>
 			</xt-form-item>
-			<xt-form-item label="运动设施" tips="">
+			<xt-form-item :label="i18n.global.t('hotel.form.athleticFacility_facilities')" tips="">
 
 				<rice-checkbox-group @change="athleticFacilityCheckboxChange" direction="row"
 					v-model="hotelForm.athleticFacility">
@@ -97,35 +97,35 @@
 					</view>
 				</rice-checkbox-group>
 			</xt-form-item>
-			<xt-form-item label="客服电话" tips="" required>
+			<xt-form-item :label="i18n.global.t('hotel.form.customer_service_hotline')" tips="" required>
 				<view>
-					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服电话"
+					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('hotel.form.path_customer_service_hotline')"
 						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.serviceTel" :maxlength="11"
 						type="number"></rice-input>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="客服微信" tips="" required>
+			<xt-form-item :label="i18n.global.t('hotel.form.customer_service_weChat')" tips="" required>
 				<view>
-					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服微信"
+					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('hotel.form.path_customer_ervice_weChat')"
 						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.wechat"></rice-input>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="备注" tips="">
+			<xt-form-item :label="i18n.global.t('form.remark')" tips="">
 				<view>
 
-					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="备注内容"
+					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('form.pach_remark')"
 						layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
 						v-model="hotelForm.hotelIntroduction"></rice-textarea>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="封面图片" tips="" required>
+			<xt-form-item :label="i18n.global.t('hotel.form.cover_image')" tips="" required>
 				<view>
 					<xt-file-upload :max-count="1" :filePath="`HM/client/${hotel_id}/hotel`"
 						:default_files_list="getFirstImagesList()" @uploadSuccess="uploadFirstImageSuccess"
 						accept="image" :readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="酒店图片" tips="" required>
+			<xt-form-item :label="i18n.global.t('hotel.form.hotel_images')" tips="" required>
 				<view>
 					<xt-file-upload :max-count="3" :default_files_list="hotelForm.imagesList"
 						@uploadSuccess="uploadImageListSuccess" ::filePath="`HM/client/${hotel_id}/hotel`"
@@ -155,7 +155,7 @@
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { userBean } from "@/bean/userBean";
 	import { facilityConfig_type } from "@/bean/facilityConfig_type.uts";
-	
+	import i18n from '@/i18n/index.uts';
 	
 	// const props = defineProps({
 	// 	type: {

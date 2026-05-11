@@ -20,7 +20,7 @@ export default {
 		btn_txt_add: "Add",
 		btn_txt_modify: "Modify {0}",
 		btn_txt_update: "Update",
-		btn_txt_details:"{0} Details",
+		btn_txt_details: "{0} Details",
 		btn_txt_quick_Operation: "Quick Operation",
 		add_success: "Add successful",
 		add_fail: "Add failed",
@@ -33,10 +33,10 @@ export default {
 		confirmDelete: "Confirm Delete",
 		deleteOrderTip: "Cannot be restored after deletion, confirm?",
 		units: {
-		  year: "Year",
-		  month: "Month",
-		  day: "Day",
-		  cny: "CNY"
+			year: "Year",
+			month: "Month",
+			day: "Day",
+			cny: "CNY"
 		}
 	},
 	form: {
@@ -53,9 +53,9 @@ export default {
 		remark: "Remark",
 		pach_remark: "Enter remark content",
 		canendar_title: "Select Date",
-		tab_title_select_province:"Select Province",
-		tab_title_select_city:"Select City",
-		tab_title_select_district:"Select District/County"
+		tab_title_select_province: "Select Province",
+		tab_title_select_city: "Select City",
+		tab_title_select_district: "Select District/County"
 	},
 	tab: {
 		home: "Home",
@@ -166,36 +166,49 @@ export default {
 		btn_txt_manage: "Admin",
 		current_hotel: "Current Hotel",
 		btn_txt_view_all: "View All",
-		btn_txt_add_feature:"Add Highlights ",
+		btn_txt_add_feature: "Add Highlights ",
 		normal_operation: "Normal Operation",
 		storekeeper: "Storekeeper",
 		role: "Role",
 		unit_room: "",
 		room_count: "Total rooms",
 		pach_search_room_name: "Search Room Name",
-		pach_add_feature:"Enter Highlights",
+		pach_add_feature: "Enter Highlights",
 		tips_create_room_type: "Please create room types first.",
 		title_employee: "Employee",
 		list_employee: "Employee List",
 		form: {
-		  hotel_name: "Hotel Name",
-		  hotel_address: "Hotel Address",
-		  slelect_address:"Select Address",
-		  hotel_feature: "Hotel Features",
-		  catering_facilities: "Catering Facilities",
-		  basic_facilities: "Basic Facilities", // 这里你写错了，我帮你修正为“基础设施”
-		  recreation_facilities: "Recreation Facilities",
-		  athleticFacility_facilities: "Sports Facilities",
-		  customer_service_hotline: "Customer Service Hotline",
-		  customer_service_weChat: "Customer Service WeChat", // 修正拼写错误
-		  cover_image: "Cover Image",
-		  hotel_images: "Hotel Images",
-		  path_hotel_name:"Enter Hotel Name",
-		  path_hotel_address:"Enter Hotel Address",
-		  path_customer_service_hotline:"Enter Customer Service Hotline",
-		  path_customer_ervice_weChat:"Enter Customer Service WeChat or Whats App",
-		  date_title:"Select Region",
-		  tips_feature: "e.g. Free parking, pet friendly, outdoor swimming pool, lawn barbecue, etc."
+			hotel_name: "Hotel Name",
+			hotel_address: "Hotel Address",
+			slelect_address: "Select Address",
+			hotel_feature: "Hotel Features",
+			catering_facilities: "Catering Facilities",
+			basic_facilities: "Basic Facilities", // 这里你写错了，我帮你修正为“基础设施”
+			recreation_facilities: "Recreation Facilities",
+			athleticFacility_facilities: "Sports Facilities",
+			customer_service_hotline: "Customer Service Hotline",
+			customer_service_weChat: "Customer Service WeChat", // 修正拼写错误
+			cover_image: "Cover Image",
+			hotel_images: "Hotel Images",
+			path_hotel_name: "Enter Hotel Name",
+			path_hotel_address: "Enter Hotel Address",
+			path_customer_service_hotline: "Enter Customer Service Hotline",
+			path_customer_ervice_weChat: "Enter Customer Service WeChat or Whats App",
+			date_title: "Select Region",
+			tips_feature: "e.g. Free parking, pet friendly, outdoor swimming pool, lawn barbecue, etc.",
+
+			room_name: "Room Name",
+			patch_room_name: "Enter Room Name",
+			btn_add_more: "Add More",
+
+			room_type_name: "Room Type Name",
+			area: "Area",
+			max_guests: "Max Guests",
+			bed_configuration: "Bed Configuration",
+			room_price: "Room Price",
+			facilities_amenities: "Room Amenities",
+			room_type_images: "Room Type Images",
+			path_room_type_name:"Enter Room Type Name",
 		}
 
 
@@ -293,7 +306,7 @@ export default {
 		income: "income",
 		expense: "expense",
 		title_financial_chart: "Financial Statistical Analysis",
-		title_Yearly_Trend:"Yearly Income & Expense Trend",
+		title_Yearly_Trend: "Yearly Income & Expense Trend",
 		title_income_expense: "Income & Expense ",
 		income_expense_list: "Income & Expense List",
 		income_expense_filter: "Income & Expense Filter",
@@ -302,7 +315,7 @@ export default {
 		monthly_income_details: 'Monthly Income Details',
 		monthly_expense_details: 'Monthly Expense Details',
 		annual_financial_overview: 'Annual Financial Overview',
-		
+
 		monthly_income_expense_percent: 'Income & Expense Proportion This Month',
 		monthly_income_percent: 'Income Proportion This Month',
 		monthly_expense_percent: 'Expense Proportion This Month',

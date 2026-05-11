@@ -11,7 +11,7 @@ export default {
 		btn_txt_search:"搜索",
 		btn_txt_next: "下一步",
 		btn_txt_create:"创建{0}",
-		btn_txt_save:"保存",
+		btn_txt_save:"保存{0}",
 		btn_txt_submit:"提交",
 		btn_txt_delete:"删除",
 		btn_confirm:"确认",
@@ -198,7 +198,20 @@ export default {
 			path_customer_service_hotline:"请输入客服电话",
 			path_customer_ervice_weChat:"请输入客服微信",
 			date_title:"请选择所在地区",
-			tips_feature:"如：免费停车，宠物免费，户外泳池，草地烧烤等"
+			tips_feature:"如：免费停车，宠物免费，户外泳池，草地烧烤等",
+			
+			room_name:"房间名称",
+			patch_room_name:"请输入房间名称",
+			btn_add_more:"继续添加",
+			
+			room_type_name:"房型名称",
+			area:"面积",
+			max_guests:"可住人数",
+			bed_configuration:"床位配置",
+			room_price:"房价",
+			facilities_amenities:"屋内设施",
+			room_type_images:"房型图片",
+			path_room_type_name:"请输入房型名称",
 		}
 	},
 	

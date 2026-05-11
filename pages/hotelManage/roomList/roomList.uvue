@@ -46,8 +46,8 @@
 		</view>
 		<view style="padding:14px;border-radius: 14px;">
 			<view style="border-radius: 14px;background-color: #fff;"> 
-			  <rice-swipe-actions>
-			    <rice-swipe-actions-item ref="slotRef" :auto-close="true" v-for="room of filterRoomList">
+			  <rice-swipe-actions :accordion="true" ref="swipeControlRef">
+			    <rice-swipe-actions-item  :auto-close="true" v-for="room of filterRoomList">
 			      <rice-cell :title="room.room_name" :label="getRoomTypeName(room.room_type_id)" size="large" arrow arrow-direction="left"  center :clickable="false" >
 					   <template #leftIcon>
 					     <image src="/static/icons/roomReserve.png" style="width: 50px;height:50px;" class="left-cion"></image>
@@ -196,9 +196,9 @@
 		}
 		return "-"
 	}
-	const slotRef = ref<RiceSwipeActionsItemComponentPublicInstance | null>(null)
+	const swipeControlRef  = ref<RiceSwipeActionsComponentPublicInstance  | null>(null)
 				const closeSwiper = () => {
-				  slotRef.value?.close!()
+				  swipeControlRef.value!.closeAll!();
 				}
 	const addRoom = async () => {
 		if (!permissionList.value.includes(
@@ -353,6 +353,7 @@
 			align-items: center;
 			justify-content: center;
 			padding:0 15px;
+			// border-radius: 8px;
 			.slot-text{
 				color:#fff;
 				font-size: 14px;
@@ -361,10 +362,10 @@
 			
 		}
 		.del{
-			background-color: #FF0000;
+			background-color: #F56C6C ;
 		}
 		.edit{
-			background-color: #009EFA;
+			background-color: #409EFF ;
 		}
 		 
 	}

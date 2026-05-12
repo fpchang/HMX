@@ -1,243 +1,234 @@
 import { DB } from '../api/DB';
+import { useCloudObject } from '@/utils/cloudObject';
 
-const action_co = uniCloud.importObject("hm_action_co");
+const action_co = useCloudObject("hm_action_co") as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
 
 class ActionServiceClass {
 	constructor() {}
 
-	// ==================== 用户相关 ====================
 	async user_login(userForm: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.user_login(userForm);
+		return await action_co['user_login'](userForm);
 	}
 
 	async user_register(userForm: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.user_register(userForm);
+		return await action_co['user_register'](userForm);
 	}
 
 	async user_sendSms(phone: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.user_sendSms({ phone });
+		return await action_co['user_sendSms']({ phone });
 	}
 
 	async user_validToken(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.user_validToken({});
+		return await action_co['user_validToken']({});
 	}
 
 	async user_getUser(type: string, value: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.user_getUser({ type, value });
+		return await action_co['user_getUser']({ type, value });
 	}
 
 	async user_closeAccount(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.user_closeAccount({});
+		return await action_co['user_closeAccount']({});
 	}
 
 	async user_checkLogin(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.user_checkLogin({});
+		return await action_co['user_checkLogin']({});
 	}
 
 	async user_loginMp(code: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.user_loginMp({ code });
+		return await action_co['user_loginMp']({ code });
 	}
 
 	async user_validEmailAndCode(email: string, emailCode: string, emailCodeTk: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.user_validEmailAndCode(email, emailCode, emailCodeTk);
+		return await action_co['user_validEmailAndCode'](email, emailCode, emailCodeTk);
 	}
 
 	async user_updatePassword(password: string, originPassword: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
 		const token = uni.getStorageSync("hm_token");
-		return await action_co.user_updatePassword(token, password, originPassword);
+		return await action_co['user_updatePassword'](token, password, originPassword);
 	}
 
 	async user_resetPasswordByEmailCode(email: string, emailCode: string, emailCodeTk: string, password: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.user_resetPasswordByEmailCode(email, emailCode, emailCodeTk, password);
+		return await action_co['user_resetPasswordByEmailCode'](email, emailCode, emailCodeTk, password);
 	}
 
-	// ==================== 酒店相关 ====================
 	async hotel_createHotel(hotelObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.hotel_createHotel({ hotelObj });
+		return await action_co['hotel_createHotel']({ hotelObj });
 	}
 
 	async hotel_updateHotel(hotel_id: string, hotelObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.hotel_updateHotel({ hotel_id, hotelObj });
+		return await action_co['hotel_updateHotel']({ hotel_id, hotelObj });
 	}
 
 	async hotel_deleteHotel(hotel_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.hotel_deleteHotel({ hotel_id });
+		return await action_co['hotel_deleteHotel']({ hotel_id });
 	}
 
 	async hotel_getHotelList(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.hotel_getHotelList({});
+		return await action_co['hotel_getHotelList']({});
 	}
 
 	async hotel_getHotelList_x(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.hotel_getHotelList_x({});
+		return await action_co['hotel_getHotelList_x']({});
 	}
 
 	async hotel_hotelApprove(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.hotel_hotelApprove({});
+		return await action_co['hotel_hotelApprove']({});
 	}
 
 	async hotel_getHotelListByMobile(mobile: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.hotel_getHotelListByMobile({ mobile });
+		return await action_co['hotel_getHotelListByMobile']({ mobile });
 	}
 
-	// ==================== 房间相关 ====================
 	async room_addRoom(roomList: UTSJSONObject[]): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.room_addRoom({ roomList });
+		return await action_co['room_addRoom']({ roomList });
 	}
 
 	async room_updateRoom(_id: string, roomObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.room_updateRoom({ _id, roomObj });
+		return await action_co['room_updateRoom']({ _id, roomObj });
 	}
 
 	async room_deleteRoom(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.room_deleteRoom({ _id });
+		return await action_co['room_deleteRoom']({ _id });
 	}
 
 	async room_deleteRoom_x(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.room_deleteRoom_x({ _id });
+		return await action_co['room_deleteRoom_x']({ _id });
 	}
 
 	async room_getRemainderRoomList(hotel_id: string, startTime: number, endTime: number): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.room_getRemainderRoomList({ hotel_id, startTime, endTime });
+		return await action_co['room_getRemainderRoomList']({ hotel_id, startTime, endTime });
 	}
 
-	// ==================== 房型相关 ====================
 	async roomType_addRoomType(roomTypeObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.roomType_addRoomType({ roomTypeObj });
+		return await action_co['roomType_addRoomType']({ roomTypeObj });
 	}
 
 	async roomType_updateRoomType(_id: string, roomTypeObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.roomType_updateRoomType({ _id, roomTypeObj });
+		return await action_co['roomType_updateRoomType']({ _id, roomTypeObj });
 	}
 
 	async roomType_deleteRoomType(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.roomType_deleteRoomType({ _id });
+		return await action_co['roomType_deleteRoomType']({ _id });
 	}
 
 	async roomType_deleteRoomType_x(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.roomType_deleteRoomType_x({ _id });
+		return await action_co['roomType_deleteRoomType_x']({ _id });
 	}
 
 	async roomType_getRoomType(hotel_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.roomType_getRoomType({ hotel_id });
+		return await action_co['roomType_getRoomType']({ hotel_id });
 	}
 
 	async roomType_getRemainderRoomType(hotel_id: string, startTime: number, endTime: number): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.roomType_getRemainderRoomType({ hotel_id, startTime, endTime });
+		return await action_co['roomType_getRemainderRoomType']({ hotel_id, startTime, endTime });
 	}
 
-	// ==================== 订单相关 ====================
 	async order_addOrder(orderObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.order_addOrder({ orderObj });
+		return await action_co['order_addOrder']({ orderObj });
 	}
 
 	async order_deleteOrder(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.order_deleteOrder({ _id });
+		return await action_co['order_deleteOrder']({ _id });
 	}
 
 	async order_addOrderDishes(orderDishesObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.order_addOrderDishes({ orderDishesObj });
+		return await action_co['order_addOrderDishes']({ orderDishesObj });
 	}
 
 	async order_deleteOrderDishes(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.order_deleteOrderDishes({ _id });
+		return await action_co['order_deleteOrderDishes']({ _id });
 	}
 
-	// ==================== 员工相关 ====================
 	async employee_addEmployee(employeeObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.employee_addEmployee({ employeeObj });
+		return await action_co['employee_addEmployee']({ employeeObj });
 	}
 
 	async employee_editEmployee(_id: string, employeeObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.employee_editEmployee({ _id, employeeObj });
+		return await action_co['employee_editEmployee']({ _id, employeeObj });
 	}
 
 	async employee_deleteEmployee(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.employee_deleteEmployee({ _id });
+		return await action_co['employee_deleteEmployee']({ _id });
 	}
 
-	// ==================== 菜单相关 ====================
 	async menu_addMenuDetail(menuDetailObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.menu_addMenuDetail({ menuDetailObj });
+		return await action_co['menu_addMenuDetail']({ menuDetailObj });
 	}
 
 	async menu_addMenuType(menuTypeObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.menu_addMenuType({ menuTypeObj });
+		return await action_co['menu_addMenuType']({ menuTypeObj });
 	}
 
 	async menu_deleteMenuDetail(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.menu_deleteMenuDetail({ _id });
+		return await action_co['menu_deleteMenuDetail']({ _id });
 	}
 
 	async menu_deleteMenuType(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.menu_deleteMenuType({ _id });
+		return await action_co['menu_deleteMenuType']({ _id });
 	}
 
 	async menu_editMenuDetail(_id: string, menuDetail: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.menu_editMenuDetail({ _id, menuDetail });
+		return await action_co['menu_editMenuDetail']({ _id, menuDetail });
 	}
 
 	async menu_editMenuType(_id: string, menuTypeObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.menu_editMenuType({ _id, menuTypeObj });
+		return await action_co['menu_editMenuType']({ _id, menuTypeObj });
 	}
 
 	async menu_addFeedback(feedbackObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.menu_addFeedback({ feedbackObj });
+		return await action_co['menu_addFeedback']({ feedbackObj });
 	}
 
-	// ==================== 景点相关 ====================
 	async scenicSpot_addScenicSpot(scenicSpotObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.scenicSpot_addScenicSpot({ scenicSpotObj });
+		return await action_co['scenicSpot_addScenicSpot']({ scenicSpotObj });
 	}
 
 	async scenicSpot_addScenicSpotDetail(scenicSpotDetailObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.scenicSpot_addScenicSpotDetail({ scenicSpotDetailObj });
+		return await action_co['scenicSpot_addScenicSpotDetail']({ scenicSpotDetailObj });
 	}
 
 	async scenicSpot_deleteScenicSpot(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.scenicSpot_deleteScenicSpot({ _id });
+		return await action_co['scenicSpot_deleteScenicSpot']({ _id });
 	}
 
 	async scenicSpot_deleteScenicSpotDetail(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.scenicSpot_deleteScenicSpotDetail({ _id });
+		return await action_co['scenicSpot_deleteScenicSpotDetail']({ _id });
 	}
 
 	async scenicSpot_editScenicSpot(_id: string, scenicSpotObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.scenicSpot_editScenicSpot({ _id, scenicSpotObj });
+		return await action_co['scenicSpot_editScenicSpot']({ _id, scenicSpotObj });
 	}
 
 	async scenicSpot_editScenicSpotDetail(_id: string, scenicSpotPriceDetail: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.scenicSpot_editScenicSpotDetail({ _id, scenicSpotPriceDetail });
+		return await action_co['scenicSpot_editScenicSpotDetail']({ _id, scenicSpotPriceDetail });
 	}
 
-	// ==================== 财务相关 ====================
 	async fm_deleteFm(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.fm_deleteFm({ _id });
+		return await action_co['fm_deleteFm']({ _id });
 	}
 
 	async fm_createPayOrder(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.fm_createPayOrder({});
+		return await action_co['fm_createPayOrder']({});
 	}
 
 	async fm_createRechargeOrder(rechargeConfig_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.fm_createRechargeOrder({ rechargeConfig_id });
+		return await action_co['fm_createRechargeOrder']({ rechargeConfig_id });
 	}
 
 	async fm_getRechargeConfig(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.fm_getRechargeConfig({});
+		return await action_co['fm_getRechargeConfig']({});
 	}
 
-	// ==================== 配置相关 ====================
 	async config_getConfig(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.config_getConfig({});
+		return await action_co['config_getConfig']({});
 	}
 
 	async permission_getPermission(hotel_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.permission_getPermission({ hotel_id });
+		return await action_co['permission_getPermission']({ hotel_id });
 	}
 
 	async permission_getPermission_x(hotel_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co.permission_getPermission_x({ hotel_id });
+		return await action_co['permission_getPermission_x']({ hotel_id });
 	}
 }
 

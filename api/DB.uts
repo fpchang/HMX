@@ -1,81 +1,4 @@
-
 import {callFunctionRes} from "@/bean/DBBean";
-
-// 云对象映射表：云函数名 -> [云对象方法名, 模块名]
-const cloudFunctionMap: Map<string, [string, string]> = new Map([
-    // 用户相关
-    ["hm_login", ["user_login", "user"]],
-    ["hm_register", ["user_register", "user"]],
-    ["hm-sendSms", ["user_sendSms", "user"]],
-    ["hm_validToken", ["user_validToken", "user"]],
-    ["hm_getUser", ["user_getUser", "user"]],
-    ["hm_closeAccount", ["user_closeAccount", "user"]],
-    ["hm_checkLogin", ["user_checkLogin", "user"]],
-    ["hm_loginMp", ["user_loginMp", "user"]],
-    ["hm-addUser", ["user_addUser", "user"]],
-    
-    // 酒店相关
-    ["hm_createHotel", ["hotel_createHotel", "hotel"]],
-    ["hm_updateHotel", ["hotel_updateHotel", "hotel"]],
-    ["hm_deleteHotel", ["hotel_deleteHotel", "hotel"]],
-    ["hm_getHotelList", ["hotel_getHotelList", "hotel"]],
-    ["hm_getHotelList_x", ["hotel_getHotelList_x", "hotel"]],
-    ["hm_hotel_approve", ["hotel_hotelApprove", "hotel"]],
-    
-    // 房间相关
-    ["hm_addRoom", ["room_addRoom", "room"]],
-    ["hm_updateRoom", ["room_updateRoom", "room"]],
-    ["hm_deleteRoom", ["room_deleteRoom", "room"]],
-    ["hm_deleteRoom_x", ["room_deleteRoom_x", "room"]],
-    ["hm_getRemainderRoomList", ["room_getRemainderRoomList", "room"]],
-    
-    // 房型相关
-    ["hm_addRoomType", ["roomType_addRoomType", "roomType"]],
-    ["hm_updateRoomType", ["roomType_updateRoomType", "roomType"]],
-    ["hm_deleteRoomType", ["roomType_deleteRoomType", "roomType"]],
-    ["hm_deleteRoomType_x", ["roomType_deleteRoomType_x", "roomType"]],
-    ["hm_getRoomType", ["roomType_getRoomType", "roomType"]],
-    ["hm_getRemainderRoomType", ["roomType_getRemainderRoomType", "roomType"]],
-    
-    // 订单相关
-    ["hm_addOrder", ["order_addOrder", "order"]],
-    ["hm-deleteOrder", ["order_deleteOrder", "order"]],
-    ["hm_addOrderDishes", ["order_addOrderDishes", "order"]],
-    ["hm_deleteOrderDishes", ["order_deleteOrderDishes", "order"]],
-    
-    // 员工相关
-    ["hm_addEmployee", ["employee_addEmployee", "employee"]],
-    ["hm_editEmployee", ["employee_editEmployee", "employee"]],
-    ["hm_deleteEmployee", ["employee_deleteEmployee", "employee"]],
-    
-    // 菜单相关
-    ["hm_addMenuDetail", ["menu_addMenuDetail", "menu"]],
-    ["hm_addMenuType", ["menu_addMenuType", "menu"]],
-    ["hm_deleteMenuDetail", ["menu_deleteMenuDetail", "menu"]],
-    ["hm_deleteMenuType", ["menu_deleteMenuType", "menu"]],
-    ["hm_editMenuDetail", ["menu_editMenuDetail", "menu"]],
-    ["hm_editMenuType", ["menu_editMenuType", "menu"]],
-    ["hm_addFeedback", ["menu_addFeedback", "menu"]],
-    
-    // 景点相关
-    ["hm_addScenicSpot", ["scenicSpot_addScenicSpot", "scenicSpot"]],
-    ["hm_addScenicSpotDetail", ["scenicSpot_addScenicSpotDetail", "scenicSpot"]],
-    ["hm_deleteScenicSpot", ["scenicSpot_deleteScenicSpot", "scenicSpot"]],
-    ["hm_deleteScenicSpotDetail", ["scenicSpot_deleteScenicSpotDetail", "scenicSpot"]],
-    ["hm_editScenicSpot", ["scenicSpot_editScenicSpot", "scenicSpot"]],
-    ["hm_editScenicSportDetail", ["scenicSpot_editScenicSpotDetail", "scenicSpot"]],
-    
-    // 财务相关
-    ["hm_deleteFm", ["fm_deleteFm", "fm"]],
-    ["hm_createPayOrder", ["fm_createPayOrder", "fm"]],
-    ["hm_createRechargeOrder", ["fm_createRechargeOrder", "fm"]],
-    ["hm_getRechargeConfig", ["fm_getRechargeConfig", "fm"]],
-    
-    // 配置相关
-    ["hm_getConfig", ["config_getConfig", "config"]],
-    ["hm_getPermission", ["permission_getPermission", "config"]],
-    ["hm_getPermission_x", ["permission_getPermission_x", "config"]],
-]);
 
 class DBConnect{
   constructor(){
@@ -88,32 +11,10 @@ class DBConnect{
         $token:uni.getStorageSync('hm_token')
       });
 
-    // 检查是否需要转发到 hm_action_co 云对象
-    const mapping = cloudFunctionMap.get(name);
-    if (mapping != null) {
-        const [methodName, moduleName] = mapping;
-        return await this.callActionCo(methodName, groupData);
-    }
-
 	return  uniCloud.callFunction({
 	  	name:name,
 	  	data:groupData
 	  })
-  }
-
-  // 调用 hm_action_co 云对象
-  async callActionCo(methodName: string, data: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-      const action_co = uniCloud.importObject("hm_action_co");
-      try {
-          const result = await (action_co as UTSJSONObject)[methodName](data);
-          return {
-              result: result as UTSJSONObject,
-              errMsg: "",
-              requestId: ""
-          } as UniCloudCallFunctionResult<UTSJSONObject>;
-      } catch (error) {
-          throw error;
-      }
   }
 
    getCollection(dbName:string,w:(string | UTSJSONObject)):Promise<UniCloudDBGetResult>{

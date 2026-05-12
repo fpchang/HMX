@@ -58,6 +58,7 @@
 	import {validForm} from "./editRoomVaild.uts";
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import {userBean} from "@/bean/userBean";
+	import i18n from '@/i18n/index.uts';
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});

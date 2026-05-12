@@ -1,9 +1,11 @@
 {
   "name": "hm_action_co",
   "dependencies": {
+    "crypto": "^1.0.1",
     "dateFormat": "file:../common/dateFormat",
     "encryptPassword": "file:../common/encryptPassword",
     "errorEvent": "file:../common/errorEvent",
+    "jsonwebtoken": "^9.0.3",
     "tokenEvent": "file:../common/tokenEvent"
   },
   "extensions": {

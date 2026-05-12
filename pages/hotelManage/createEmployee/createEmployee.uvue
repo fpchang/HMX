@@ -85,7 +85,7 @@
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 	import { HotelService } from '@/services/HotelService.uts';
 	import { employeeAction } from "../employeeList/employeeAction.uts";
-
+import i18n from '@/i18n/index.uts';
 	let pageType = ref(0);
 	const hotel_id = computed(() => {
 		return state.hotel_id;

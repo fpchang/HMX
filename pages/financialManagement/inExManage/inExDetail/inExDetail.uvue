@@ -2,7 +2,7 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		<view class="detail_panal">
+		<!-- <view class="detail_panal">
 				<view class="content">
 					<view class="card-item">
 						<view class="fl-c">
@@ -48,7 +48,7 @@
 				</view>
 		
 				
-			</view>
+			</view> -->
 		
 	<!-- #ifdef APP -->
 	</scroll-view>
@@ -96,14 +96,14 @@
 			try {
 				const fm_t = params.getString("fm");
 		
-				if (fm_t != null) {
-					console.log("2222")
-					let decoded = decodeURIComponent(fm_t);
-					if (decoded != null) {
-						fm.value = JSON.parse<FMBean>(decoded)!;
-						console.log("bbbbbbb", fm.value);
-					}
-				}
+				// if (fm_t != null) {
+				// 	console.log("2222")
+				// 	let decoded = decodeURIComponent(fm_t);
+				// 	if (decoded != null) {
+				// 		fm.value = JSON.parse<FMBean>(decoded)!;
+				// 		console.log("bbbbbbb", fm.value);
+				// 	}
+				// }
 			} catch (e) {
 				console.error(e)
 			}

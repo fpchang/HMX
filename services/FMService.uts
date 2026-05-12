@@ -4,11 +4,13 @@ import { dayuts } from '@/uni_modules/lime-dayuts';
 import { TIME, MOONTH_START_END_TIMESTAMP, getMonthFirstDay, getMonthLastDay } from "@/static/utils/TIME";
 import { fmState } from "@/store/modules/fmStore.uts";
 import { charPietItem } from "@/bean/chartBean.uts";
+import { useCloudObject } from '@/utils/cloudObject';
+
+const action_co = useCloudObject("hm_action_co") as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
+
 class FMServiceClass {
-	constructor() {
-		// this.DB=DB;
-		//  this.validTokenRequest=null;
-	}
+	constructor() {}
+
 	async getIncomeAndExpensesConfig() : Promise<Array<FMTypeConfigBean>> {
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
@@ -30,10 +32,10 @@ class FMServiceClass {
 			})
 			return list;
 		} catch (error) {
-			//TODO handle the exception
 			throw new Error("获取收支配置失败");
 		}
 	}
+
 	async add(item : FMBean) : Promise<boolean> {
 		const fm = {
 			amount: parseFloat(item.amount.toString()),
@@ -62,8 +64,8 @@ class FMServiceClass {
 		} catch (error) {
 			throw new Error("添加收支失败");
 		}
-
 	}
+
 	async edit(item : FMBean) : Promise<boolean> {
 		const _id = item._id;
 		const fm = {
@@ -85,13 +87,11 @@ class FMServiceClass {
 		} catch (error) {
 			throw new Error("更新收支失败");
 		}
-
 	}
+
 	async deleteFm(fm_id : string) {
 		try {
-			const res = await DB.callFunction("hm_deleteFm", {
-				_id: fm_id,
-			});
+			const res = await action_co['fm_deleteFm']({ _id: fm_id });
 			const result = res['result'] as UTSJSONObject;
 			const code = result.getNumber('code') ?? 0;
 			const message = result.getString("message") ?? "";
@@ -104,13 +104,9 @@ class FMServiceClass {
 			}
 		} catch (error) {
 			throw new Error("删除失败");
-
 		}
-
 	}
 
-
-	//获取收入与支出分类
 	async getIncomeAndExpensesDateBySearch(hotel_id : string, billType : string, keyword : string, dateRange : string[], pageNo : number, pageSize : number) : Promise<FMDataListResult> {
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
@@ -128,48 +124,31 @@ class FMServiceClass {
 		}
 		let FMList : Array<FMBean> = [];
 		let skipnum : number = Math.max((pageNo - 1) * pageSize, 0);
-		//const main = db.collection("hm-incomeAndExpenses").where(w).orderBy("ioeTime desc").skip(skipnum).limit(pageSize).getTemp();
-		//const config = db.collection("hm-incomeAndExpensesConfig").getTemp();
 		try {
-			//const res = await db.collection(main).get({ getCount: true });
 			const res = await db.collection("hm-incomeAndExpenses").where(w).orderBy("ioeTime desc").skip(skipnum).limit(pageSize).get({ getCount: true });
 			console.log("res", res);
 			const data = res['data'] as Array<UTSJSONObject>;
 
 			if (data != null) {
 				data.forEach((item : UTSJSONObject) => {
-					//const typeArr = item.getArray<UTSJSONObject>("type") ?? [];
-					//let typeObj : FMTypeConfigBean;
-					//if (typeArr.length > 0) {
-				//	let typeItem = typeArr[0] as UTSJSONObject;
-					// typeObj = {
-					// 	_id: typeItem.getString("_id") ?? "",
-					// 	billType: typeItem.getString("billType") ?? "",
-					// 	name: typeItem.getString("name") ?? "",
-					// 	text: typeItem.getString("text") ?? "",
-					// }
 					FMList.push({
 						_id: item.getString("_id") ?? "",
 						amount: item.getNumber("amount") ?? 0,
 						billType: item.getString("billType") ?? "",
 						createTime: item.getNumber("createTime") ?? 0,
 						creater: item.getString("creater") ?? "",
-						//data_status: item.getNumber("data_status") ?? 0,
 						hotel_id: item.getString("hotel_id") ?? "",
 						ioeTime: item.getNumber("ioeTime") ?? 0,
 						mark: item.getString("mark") ?? "",
 						type: item.getString("type") ?? "",
 						unit: item.getString("unit") ?? ""
 					})
-					//}
-
 				})
-
 			}
 			let fMDataListResult : FMDataListResult = {
-				count: res['count'] as number,//总数量
-				pageNo: pageNo ?? 1,//当前页码
-				pageSize: pageSize ?? 20,//每页数量
+				count: res['count'] as number,
+				pageNo: pageNo ?? 1,
+				pageSize: pageSize ?? 20,
 				fmList: FMList
 			}
 			return fMDataListResult;
@@ -177,29 +156,24 @@ class FMServiceClass {
 			console.error(e);
 			throw new Error("获取收支列表失败");
 		}
-
-
 	}
 
-	//房费统计按店铺分类
 	getRoomOrder(hotel_id : string, st : number, et : number) {
 		const db = uniCloud.databaseForJQL()
 		const s1 = `hotel_id=='${hotel_id}'&&orderStatus==5`;
 		const s2 = `checkInStartDateTimeStamp>=${st}&&checkInStartDateTimeStamp<${et}`;
 		let w = `${s1}&&${s2}`;
-
 		return db.collection("hm-order").where(w).groupBy('hotel_id').groupField('sum(totalAmount) as amount').get()
 	}
-	//房费统计月分组统计
+
 	getRoomOrderOrderByMonth(hotel_id : string, st : number, et : number) {
 		const db = uniCloud.databaseForJQL();
 		const s1 = `hotel_id=='${hotel_id}'&&orderStatus==5`;
 		const s2 = `checkInStartDateTimeStamp>=${st}&&checkInStartDateTimeStamp<${et}`;
 		let w = `${s1}&&${s2}`;
-
 		return db.collection("hm-order").where(w).groupBy('dateToString(timestampToDate(checkInStartDateTimeStamp),"%Y-%m") as month').groupField('sum(totalAmount) as amount').get()
 	}
-	//获取收入与支出分类
+
 	async getIncomeAndExpenses(hotel_id : string, billType : string = 'income', st : number, et : number) {
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
@@ -211,11 +185,9 @@ class FMServiceClass {
 		try {
 			const res = await db.collection("hm-incomeAndExpenses").where(w).groupBy(' type as name').groupField('sum(amount) as value').get();
 			return res;
-		} catch (e) { }
-
-
+		} catch (e) {}
 	}
-	//按月统计
+
 	getIncomeAndExpensesByMonth(hotel_id : string, billType : string = 'income', st : number, et : number) {
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
@@ -228,7 +200,6 @@ class FMServiceClass {
 		return res
 	}
 
-	//获取当月收入统计
 	async getIncomeCurrentMonth(hotel_id : string, month : string) : Promise<Array<charPietItem>> {
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
@@ -239,9 +210,7 @@ class FMServiceClass {
 			billType: 'income',
 			ioeTime: dbCmd.and([dbCmd.gte(monthFirst), dbCmd.lte(monthLast)])
 		}
-		//房费
 		const order = this.getRoomOrder(hotel_id, monthFirst, monthLast);
-		const mt = db.collection("hm-incomeAndExpenses").where(w).get();
 		const other = db.collection("hm-incomeAndExpenses", "hm-incomeAndExpensesConfig").where(w).groupBy('type').groupField('sum(amount) as value').get()
 		let arr : Array<charPietItem> = [];
 		const [orderRes, otherRes] = await Promise.all([order, other]);
@@ -263,12 +232,9 @@ class FMServiceClass {
 			const its : charPietItem = { name: "房费", value: val }
 			arr.push(its)
 		}
-
 		return arr;
 	}
 
-
-	//获取当月支出统计
 	async getExpensesCurrentMonth(hotel_id : string, month : string) : Promise<Array<charPietItem>> {
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
@@ -280,15 +246,8 @@ class FMServiceClass {
 			ioeTime: dbCmd.and([dbCmd.gte(monthFirst), dbCmd.lte(monthLast)])
 		}
 
-		// const mt = db.collection("hm-incomeAndExpenses").where(w).getTemp()
-		// const res =await db.collection(mt,"hm-incomeAndExpensesConfig").groupBy('type').groupField('sum(amount) as value').get();
 		const res = await db.collection("hm-incomeAndExpenses", "hm-incomeAndExpensesConfig").where(w).groupBy('type').groupField('sum(amount) as value').get()
 		const expensesList = res["data"] as Array<UTSJSONObject> ?? [];
-		//   let arr =[];
-		// res.result.data.map(item=>{
-		//   arr.push({name:item.type[0].text,value:item.value})
-		// })
-		// return arr;
 		let arr : Array<charPietItem> = [];
 		expensesList.forEach(item => {
 			const typeArray = item.getArray<UTSJSONObject>("type") ?? [];
@@ -300,13 +259,9 @@ class FMServiceClass {
 			const value = item.getNumber("value") ?? 0;
 			arr.push({ name: name, value: value })
 		})
-
 		return arr;
 	}
-	//获取当年收支统计
-	/**
-	 * year:年份
-	 */
+
 	async getIncomeAndExpensesCurrentYear(hotel_id : string, year : string, billType : string) {
 		const db = uniCloud.databaseForJQL();
 		const dbCmd = db.command;
@@ -317,7 +272,6 @@ class FMServiceClass {
 			billType: billType,
 			ioeTime: dbCmd.and([dbCmd.gte(yearFirst), dbCmd.lte(yearLast)])
 		}
-		//房费
 		const order = this.getRoomOrderOrderByMonth(hotel_id, yearFirst, yearLast);
 		const other = db.collection("hm-incomeAndExpenses", "hm-incomeAndExpensesConfig").where(w).groupBy('dateToString(timestampToDate(ioeTime),"%Y-%m") as month').groupField('sum(amount) as amount').get();
 		const [orderRes, otherRes] = await Promise.all([order, other]);
@@ -340,10 +294,6 @@ class FMServiceClass {
 		}
 		return resultList;
 	}
-
-
 }
 
-
-//module.exports =new AccountService();
 export var FMService = new FMServiceClass();

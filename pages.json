@@ -272,6 +272,12 @@
 			"style": {
 				"navigationBarTitleText": ""
 			}
+		},
+		{
+			"path": "pages/financialManagement/inExManage/inExDetail/inExDetail",
+			"style": {
+				"navigationBarTitleText": ""
+			}
 		}
 		
 	],

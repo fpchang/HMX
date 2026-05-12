@@ -27,7 +27,7 @@
 	<view v-if="!dataReading" style="margin-top:168px;display: flex;flex-direction: row;justify-content: center;">
 		<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
 	</view>
-	<view style="margin-top: 168px;" v-if="dataReading&&hotel_id==''">
+	<view style="margin-top: 68px;" v-if="dataReading&&hotel_id==''">
 		<l-empty :description="i18n.global.t('common.noData',[i18n.global.t('hotel.title')])" />
 		<view style="display: flex;flex-direction: row;align-items: center;justify-content: center;">
 			<rice-button type="primary" icon="plus" :text="i18n.global.t('common.btn_txt_create',[i18n.global.t('hotel.title')])" @click="createHotel"></rice-button>

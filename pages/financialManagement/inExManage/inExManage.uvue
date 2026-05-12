@@ -8,23 +8,22 @@
 
 				<image src="/static/icons/list.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{i18n.global.t("finance.income_expense_list")}}</text>
+				<text
+					style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{i18n.global.t("finance.income_expense_list")}}</text>
 			</view>
 		</template>
 		<template #right>
 			<view class="navbar-btn">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
-				<text class="txt" @click="addFm">{{billType=='income'?i18n.global.t("common.btn_txt_create",[i18n.global.t("finance.income")]):i18n.global.t("common.btn_txt_create",[i18n.global.t("finance.expense")])}}</text>
+				<text class="txt"
+					@click="addFm">{{billType=='income'?i18n.global.t("common.btn_txt_create",[i18n.global.t("finance.income")]):i18n.global.t("common.btn_txt_create",[i18n.global.t("finance.expense")])}}</text>
 
 
 			</view>
 		</template>
 	</rice-navbar>
 	<scroll-view style="flex:1">
-
-		<!-- <incomeInfoCardComponent v-if="billType=='income'"></incomeInfoCardComponent>
-		<expensesInfoCardComponent v-if="billType=='expenses'"></expensesInfoCardComponent> -->
 		<view class="search-area">
 			<view class="card">
 				<view class="card-item title-area">
@@ -32,7 +31,7 @@
 					<l-tag variant="light">{{ i18n.global.t('common.totalCount',[fmResult.count]) }}</l-tag>
 				</view>
 				<view class="card-item  select-area" style="margin-bottom: 0;">
-					<fmSearchComponent  :columns="columns" :initDateRange="dateRange"
+					<fmSearchComponent :columns="columns" :initDateRange="dateRange"
 						@searchInputChange="searchInputChange" @selectAction="selectFm" @dateChange="dateChange"
 						@searchAction="getFmList" :placeholder="i18n.global.t('form.pach_remark')"></fmSearchComponent>
 				</view>
@@ -40,22 +39,65 @@
 			</view>
 
 		</view>
-		<view style="padding:20px;border-radius: 8px;">
+
+		<view style="padding:14px;border-radius: 14px;">
+			<view style="border-radius: 14px;background-color: #fff;">
+				<rice-swipe-actions :accordion="true" ref="swipeControlRef">
+					<rice-swipe-actions-item :auto-close="true" v-for="fm of fmResult.fmList">
+						<rice-cell :title="`${formatTypeName(fm.type)}`" :label="formatDate(fm.ioeTime)"
+							:value="`${fm.billType=='income'?'+':'-'}${fm.amount}`" size="large" arrow
+							arrow-direction="left" center :clickable="false">
+							<template #leftIcon>
+								<image v-if="fm.billType=='income'" src="/static/icons/fm/income-orange.png"
+									style="margin-right:8px;width: 40px;height:40px;" class="left-cion"></image>
+								<image v-if="fm.billType=='expenses'" src="/static/icons/fm/expense-orange.png"
+									style="margin-right:8px;width: 40px;height:40px;" class="left-cion"></image>
+							</template>
+							<template #rightIcon>
+								<rice-icon name="double-left" color="#909399" style="margin-left: 15px;" />
+							</template>
+
+
+						</rice-cell>
+						<view>
+
+						</view>
+						<template #right>
+							<view class="swiper-menu-style">
+								<view class="menu-item detail" @click="viewFm(fm)">
+									<rice-icon name="eyes" color="#fff" />
+									<text class="slot-text">详情</text>
+								</view>
+								<view class="menu-item edit" @click="editFm(fm)">
+									<rice-icon name="edit" color="#fff" />
+									<text class="slot-text">编辑</text>
+								</view>
+								<view class="menu-item del" @click="deleteFm(fm)">
+									<rice-icon name="delete" color="#fff" />
+									<text class="slot-text">删除</text>
+								</view>
+
+
+							</view>
+
+						</template>
+					</rice-swipe-actions-item>
+				</rice-swipe-actions>
+			</view>
+		</view>
+
+		<view style="padding:20px;border-radius: 8px;" v-if="false">
 
 			<rice-collapse :custom-style="{borderRadius:'8px'}">
 				<rice-collapse-item v-for="fm of fmResult.fmList" :name="fm._id"
 					:title="`${ formatTypeName(fm.type)}:￥${fm.amount}`" :value="formatDate(fm.ioeTime)"
 					:title-style="{color:fm.billType=='expenses'?'#b91c1c':'#047857'}" :border="false">
-					<view class="l-card">
-
-						<!-- 	<view class="amount-area">
-			  		<view><text class="label">{{fm.billType=='expenses'?'本次支出':'本次收入'}}</text></view>
-			  		<view><text  :class="['num',fm.billType=='expenses'?'num-red':'']">￥{{fm.amount}}</text></view>
-			  	</view> -->
+					<template #leftIcon>
+						<image src="/static/icons/fm/in.png" style="width: 16px;height: 16px;margin-right: 8px;">
+						</image>
+					</template>
+					<view class="detail_panal">
 						<view class="content">
-							<!-- 	<view class="card-item title">
-			  			<text class="txt">{{formatDate(fm.ioeTime)}}</text>
-			  		</view> -->
 							<view class="card-item">
 								<view class="fl-c">
 									<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
@@ -73,7 +115,8 @@
 							<view class="card-item" v-if="fm.billType=='income'">
 								<view class="fl-c">
 									<image src="/static/icons/fm/income.png" style="width: 16px;height: 16px;"></image>
-									<text class="label">{{i18n.global.t("finance.income")}}{{i18n.global.t("finance.amount")}}：</text>
+									<text
+										class="label">{{i18n.global.t("finance.income")}}{{i18n.global.t("finance.amount")}}：</text>
 								</view>
 								<text class="val-style" style="color:#047857">¥{{fm.amount}}</text>
 							</view>
@@ -81,7 +124,8 @@
 								<view class="fl-c">
 									<image src="/static/icons/fm/expenses.png" style="width: 16px;height: 16px;">
 									</image>
-									<text class="label">{{i18n.global.t("finance.expense")}}{{i18n.global.t("finance.amount")}}：</text>
+									<text
+										class="label">{{i18n.global.t("finance.expense")}}{{i18n.global.t("finance.amount")}}：</text>
 								</view>
 								<text class="val-style" style="color:#b91c1c">¥{{fm.amount}}</text>
 							</view>
@@ -123,6 +167,11 @@
 		<l-pagination v-model="fmResult.pageNo" :disabled="submitLoading" :total="fmResult?.count"
 			:page-size="fmResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
 	</view>
+
+	<rice-dialog v-model:show="showDeatilDialog"  title="收支详情" :show-cancel-button="false" confirm-button-text="关闭">
+		<slot>
+			</slot>
+	</rice-dialog>
 </template>
 
 <script setup>
@@ -143,6 +192,7 @@
 	import fmSearchComponent from "./components/fmSearchComponent/fmSearchComponent";
 	import expensesInfoCardComponent from "./components/expensesInfoCardComponent/expensesInfoCardComponent";
 	import incomeInfoCardComponent from "./components/incomeInfoCardComponent/incomeInfoCardComponent";
+	import { SwipeActionsMenu, SwipeActionsItemClick, SwipeActionsItemOpen, SwipeActionsItemClose } from '@/uni_modules/rice-ui'
 
 	let submitLoading = ref(true);
 	const hotel_id = computed(() => {
@@ -158,6 +208,16 @@
 	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
 		return state.roomTypeList;
 	});
+	
+	const showDeatilDialog=ref(false);
+	const active_fm=ref<FMBean | null>(null);
+	const viewFm=(fm:FMBean)=>{
+		//active_fm.value=fm;
+		//showDeatilDialog.value=true;
+		uni.navigateTo({
+					url: `/pages/financialManagement/inExManage/inExDetail/inExDetail?fm=${encodeURIComponent(JSON.stringify(fm))}`,
+				});
+	}
 	//选择列表
 	let _select_id = ref("income");
 	let _search_key = ref("");
@@ -166,7 +226,7 @@
 	const dateRange = ref<string[]>(getMonthDateArray());
 	const columns = computed<Array<Array<PickerOption>>>(() => {
 		let result : Array<Array<PickerOption>> = [[
-			{ text:i18n.global.t('finance.income'), value: 'income' },
+			{ text: i18n.global.t('finance.income'), value: 'income' },
 			{ text: i18n.global.t('finance.expense'), value: 'expense' }
 		]];
 		return result;
@@ -229,6 +289,10 @@
 			return target.text
 		}
 		return "--"
+	}
+	const swipeControlRef = ref<RiceSwipeActionsComponentPublicInstance | null>(null)
+	const closeSwiper = () => {
+		swipeControlRef.value!.closeAll!();
 	}
 	const addFm = async () => {
 		if (!permissionList.value.includes(
@@ -509,77 +573,12 @@
 		}
 	}
 
-	.l-card {
+	.detail_panal {
+		width: 100%;
+		flex:1;
 		background-color: #fff;
 		border-radius: 12px;
-
-		position: relative;
-
-		.icon-area {
-			position: absolute;
-			right: 10px;
-			top: 10px;
-		}
-
-		.top-area {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			height: 60px;
-			border-bottom: 1px solid rgba(16, 185, 129, 0.2);
-			background-color: #ecfdf5;
-			padding: 0 24px;
-
-			.txt {
-				// line-height: 60px;
-				color: #047857;
-				font-size: 18px;
-				font-weight: 700;
-				padding-left: 4px;
-			}
-
-		}
-
-		.top-area-red {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			height: 60px;
-			padding: 0 24px;
-			border-bottom: 1px solid rgba(239, 68, 68, 0.2);
-			background-color: #fef2f2;
-
-			.txt {
-				// line-height: 60px;
-				color: #b91c1c;
-				font-size: 18px;
-				font-weight: 700;
-				padding-left: 4px;
-			}
-
-		}
-
-		.amount-area {
-			margin-top: 24px;
-
-			.label {
-				color: #6b7280;
-				font-size: 14px;
-				margin-bottom: 4px;
-			}
-
-			.num {
-				line-height: 36px;
-				color: #047857;
-				font-size: 30px;
-				font-weight: 700;
-			}
-
-			.num-red {
-				color: #b91c1c;
-			}
-		}
-
+		
 		.content {
 
 			.card-item {

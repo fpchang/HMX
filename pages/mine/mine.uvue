@@ -1,4 +1,8 @@
 <template>
+	<scroll-view  
+		 style="flex:1;background:#f5f5f5;display: flex;flex-direction: column"
+		:show-scrollbar="false">
+		
 	<view style="padding:20px">
 		<view class=" split-item">
 			<navigator url="./editUser/editUser">
@@ -74,7 +78,7 @@
 		</view>
 
 	</view>
-
+</scroll-view>
 </template>
 
 <script setup lang="uts">

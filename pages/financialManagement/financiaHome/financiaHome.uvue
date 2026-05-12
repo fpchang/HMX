@@ -74,9 +74,9 @@
 			</view>
 		</view>
 	</scroll-view>
-	<!-- <view style="margin-top: 80px;" v-if="hotel_id==''">
-		<l-empty :description="i18n.global.t('common.noData')" />
-	</view> -->
+	<view style="margin-top: 80px;">
+		<l-empty :description="i18n.global.t('common.noData',[''])" />
+	</view>
 
 </template>
 

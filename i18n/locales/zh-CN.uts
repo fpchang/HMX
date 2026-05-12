@@ -346,6 +346,7 @@ export default {
 		title_set:"酒店设置",
 		title_fm:"财务管理",
 		title_order:"订单",
+		title_feedback:"意见反馈",
 		btn_txt_room_type:"房型管理",
 		btn_txt_room:"房间管理",
 		btn_txt_room_employee:"员工管理",

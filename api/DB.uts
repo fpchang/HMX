@@ -42,11 +42,6 @@ class DBConnect{
     return uniCloud.databaseForJQL().collection(dbName).doc(_id).remove();
   }
    clearnTable(dbName:string){
-// 		const dbCmd = uniCloud.databaseForJQL().command
-//  uniCloud.databaseForJQL().collection(dbName).where({
-//   _id: dbCmd.exists(true);
-// }).remove()
   }
 }
-//module.exports = new DB();
 export var DB = new DBConnect();

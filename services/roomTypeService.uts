@@ -5,9 +5,7 @@ import { roomTypeBean, formatRoomTypeList } from "@/bean/roomTypeBean.uts";
 import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
 import { roomBean } from '../bean/roomBean';
-import { useCloudObject } from '@/utils/cloudObject';
-
-const action_co = useCloudObject("hm_action_co") as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
+import { ActionService } from './ActionService';
 
 class RoomTypeClass {
 	constructor() {}
@@ -32,18 +30,11 @@ class RoomTypeClass {
 		return DB.getCollection("hm-room", { hotel_id: hotel_id });
 	}
 
-	async getRoomListByHotelIdGroupByRoomType(hotel_id : string) : Promise<UniCloudDBGetResult> {
-		const db = uniCloud.databaseForJQL();
-		const roomType = db.collection("hm-roomType").where({ hotel_id }).field("hotel_id,_id,name").getTemp();
-		const res = await db.collection(roomType, "hm-room").where({ hotel_id }).get();
-		return res;
-	}
-
 	async deleteRoomType(roomType_id : string) : Promise<void> {
 		console.log("删除房型：：", roomType_id);
 
 		try {
-			const res = await action_co['roomType_deleteRoomType_x']({ _id: roomType_id });
+			const res = await ActionService.roomType_deleteRoomType_x(roomType_id);
 			console.log("res delete", res);
 			const result = res['result'] as UTSJSONObject;
 			const code = result.getNumber('code') ?? 0;
@@ -90,7 +81,7 @@ class RoomTypeClass {
 				priceBase,
 				independentBathroom
 			}
-			const res = await action_co['roomType_addRoomType']({ roomTypeObj });
+			const res = await ActionService.roomType_addRoomType(roomTypeObj);
 			console.log("res::", res);
 			const result = res['result'] as UTSJSONObject;
 			const code = result.getNumber("code");
@@ -138,7 +129,7 @@ class RoomTypeClass {
 				priceBase,
 				independentBathroom
 			}
-			const res = await action_co['roomType_updateRoomType']({ _id, roomTypeObj });
+			const res = await ActionService.roomType_updateRoomType(_id, roomTypeObj);
 			const result = res['result'] as UTSJSONObject;
 			const code = result.getNumber("code") ?? 0;
 			const message = result.getString("message") ?? "";
@@ -165,7 +156,7 @@ class RoomTypeClass {
 					"room_type_id": item.room_type_id
 				})
 			});
-			const res = await action_co['room_addRoom']({ roomList: list });
+			const res = await ActionService.room_addRoom(list);
 			console.log("add room", res);
 			const result = res['result'] as UTSJSONObject;
 			const code = result.getNumber("code") ?? 0;
@@ -192,7 +183,7 @@ class RoomTypeClass {
 				room_name: room.room_name,
 				room_type_id: room.room_type_id
 			}
-			const res = await action_co['room_updateRoom']({ _id, roomObj });
+			const res = await ActionService.room_updateRoom(_id, roomObj);
 			console.log("edit room", res);
 			const result = res['result'] as UTSJSONObject;
 			const code = result.getNumber("code") ?? 0;
@@ -214,7 +205,7 @@ class RoomTypeClass {
 	async deleteRoom(room_id : string) : Promise<boolean> {
 		console.log("1111", room_id);
 		try {
-			const res = await action_co['room_deleteRoom_x']({ _id: room_id });
+			const res = await ActionService.room_deleteRoom_x(room_id);
 			console.log("delete", res);
 			const result = res['result'] as UTSJSONObject;
 			const code = result.getNumber("code") ?? 0;

@@ -6,9 +6,7 @@ import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
 import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
-import { useCloudObject } from '@/utils/cloudObject';
-
-const action_co = useCloudObject("hm_action_co") as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
+import { ActionService } from './ActionService';
 
 class HotelServiceClass {
 	constructor() {}
@@ -44,7 +42,7 @@ class HotelServiceClass {
 
 	async createHotel(hotelObj : hotelBean) : Promise<boolean> {
 		try {
-			const res = await action_co['hotel_createHotel']({ hotelObj });
+			const res = await ActionService.hotel_createHotel(hotelObj);
 			const result = res["result"] as UTSJSONObject;
 			const code = result.getNumber("code") ?? 0;
 			const message = result.getString("message") ?? "";
@@ -57,7 +55,7 @@ class HotelServiceClass {
 				throw new Error(message);
 			}
 			return true;
-		} catch (error) {
+		} catch (e) {
 			throw new Error("创建失败");
 		}
 	}
@@ -65,7 +63,7 @@ class HotelServiceClass {
 	async updateHotel(hotel_id : string, hotelObj : hotelBean) : Promise<boolean> {
 		console.log("UPDATE+++++===", hotelObj);
 		try {
-			const res = await action_co['hotel_updateHotel']({ hotel_id, hotelObj });
+			const res = await ActionService.hotel_updateHotel(hotel_id, hotelObj);
 			console.log("update hotel", res);
 			const result = res['result'] as UTSJSONObject;
 			const code = result.getNumber("code") ?? 0;
@@ -83,14 +81,14 @@ class HotelServiceClass {
 				icon: "none"
 			});
 			return true;
-		} catch (error) {
+		} catch (e) {
 			throw new Error("更新失败");
 		}
 	}
 
 	async deleteHotel(hotel_id : string) : Promise<boolean> {
 		try {
-			const res = await action_co['hotel_deleteHotel']({ hotel_id });
+			const res = await ActionService.hotel_deleteHotel(hotel_id);
 			const result = res['result'] as UTSJSONObject;
 			const code = result.getNumber("code") ?? 0;
 			const message = result.getString("message") ?? "";
@@ -109,9 +107,9 @@ class HotelServiceClass {
 	}
 
 	async getHotelList() : Promise<Array<hotelBean>> {
-		const token = uni.getStorageSync("hm_token");
-		const res = await action_co['hotel_getHotelList'](token);
-		const data = res['data'] as Array<UTSJSONObject>;
+		const res = await ActionService.hotel_getHotelList_x();
+		const result = res.result as UTSJSONObject;
+		const data = result.get('data') as Array<UTSJSONObject>;
 		let hotelList:Array<hotelBean> = [];
 		data.forEach(item => {
 			const hotel:hotelBean = {
@@ -211,7 +209,7 @@ class HotelServiceClass {
 
 	async deleteEmployee(_id : string) : Promise<boolean> {
 		try {
-			await action_co['employee_deleteEmployee']({ _id });
+			await ActionService.employee_deleteEmployee(_id);
 			console.log("res", res);
 			return true;
 		} catch (error) {
@@ -222,7 +220,7 @@ class HotelServiceClass {
 	async addEmployee(employeeForm : employeeBean) : Promise<boolean> {
 		try {
 			const { employee_name, hotel_id, account, phone, role, mark } = employeeForm;			
-			const res = await action_co['employee_addEmployee']({ employeeObj: { employee_name, hotel_id, phone, account, role, mark } });
+			const res = await ActionService.employee_addEmployee({ employee_name, hotel_id, phone, account, role, mark });
 			console.log("eeeee", res);
 			
 			const result = res['result'] as UTSJSONObject;
@@ -245,12 +243,11 @@ class HotelServiceClass {
 	async editEmployee(employeeForm : employeeBean): Promise<boolean> {
 		try {
 			const { _id, employee_name, hotel_id, account, phone, role, mark } = employeeForm;
-			const res = await action_co['employee_editEmployee']({ _id, employeeObj: { employee_name, hotel_id, account, phone, role, mark } });
+			const res = await ActionService.employee_editEmployee(_id, { employee_name, hotel_id, account, phone, role, mark });
 			const result = res['result'] as UTSJSONObject;
 			const code = result.getNumber("code") ?? 0;
 			const message = result.getString("message") ?? "";
 			if (code != 0) {
-				console.log("code error", code);
 				uni.showToast({
 					title: message,
 					icon: "none"

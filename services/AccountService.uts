@@ -2,27 +2,26 @@ import { DB } from '../api/DB';
 import { callFunctionRes } from "@/bean/DBBean";
 import { userBean } from '@/bean/userBean';
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
-import { useCloudObject } from '@/utils/cloudObject';
+import { ActionService } from './ActionService';
 
-const se_co = useCloudObject("send_email_co");
-const account_co = useCloudObject("hm_account_co");
-const action_co = useCloudObject("hm_action_co") as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
+const se_co = uniCloud.importObject("send_email_co");
+const account_co = uniCloud.importObject("hm_account_co");
 
 class AccountServiceClass {
 	constructor() {}
 
 	sendSmsCode(phone : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return action_co['user_sendSms']({ phone });
+		return ActionService.user_sendSms(phone);
 	}
 	getConfig() : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return action_co['config_getConfig']({});
+		return ActionService.config_getConfig();
 	}
 	validToken() : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return action_co['user_validToken']({});
+		return ActionService.user_validToken();
 	}
 	async sendEmailCode(email : string, type:string): Promise<string> {
 		try {
-			const res = await se_co['sendEmailCode'](email, type);
+			const res = await se_co.sendEmailCode(email, type);
 			console.log("send email code", res);
 			const data = res['data'] as UTSJSONObject;
 			const emailCodeTk = data.getString("emailCodeTk") ?? "";
@@ -66,7 +65,7 @@ class AccountServiceClass {
 	}
 	async validEmailAndCode(email : string, emailCode:string, emailCodeTk:string): Promise<boolean> {
 		try {
-			await account_co['validEmailAndCode'](email, emailCode, emailCodeTk);
+			await account_co.validEmailAndCode(email, emailCode, emailCodeTk);
 			return true;
 		} catch (error) {
 			console.log("eeee", error)
@@ -76,7 +75,7 @@ class AccountServiceClass {
 	async register(user : UTSJSONObject) : Promise<boolean> {
 		console.log("user---", user)
 		try {
-			await account_co['register'](user);
+			await account_co.register(user);
 			return true
 		} catch (error) {
 			console.log("aaaaaaaaa", error);
@@ -85,7 +84,7 @@ class AccountServiceClass {
 	}
 	async Login(userForm:UTSJSONObject): Promise<boolean> {
 		try {
-			const res = await account_co['login'](userForm);
+			const res = await account_co.login(userForm);
 			const data = res['data'] as UTSJSONObject;	
 			const token = data.getString("token") ?? ""
 			if (token != "") {
@@ -99,7 +98,7 @@ class AccountServiceClass {
 	}
 	async login(userForm : UTSJSONObject) : Promise<boolean> {
 		try {
-			const res = await action_co['user_login'](userForm);
+			const res = await ActionService.user_login(userForm);
 			const result = res['result'] as UTSJSONObject;
 			if (result.getNumber("errCode") != 0) {
 				throw new Error(result.getString("errMsg") ?? "系统异常");
@@ -121,7 +120,7 @@ class AccountServiceClass {
 	async updatePassword(password:string, originPassword:string): Promise<boolean> {
 		try {
 			const token = uni.getStorageSync("hm_token");
-			await account_co['updatePassword'](token, password, originPassword);
+			await account_co.updatePassword(token, password, originPassword);
 			return true;
 		} catch (error) {
 			console.log("1eeeeeeee", error);
@@ -130,7 +129,7 @@ class AccountServiceClass {
 	}
 	async resetPasswordByEmail(email:string, emailCode:string, emailCodeTk:string, password:string): Promise<boolean> {
 		try {
-			await account_co['resetPasswordByEmailCode'](email, emailCode, emailCodeTk, password);
+			await account_co.resetPasswordByEmailCode(email, emailCode, emailCodeTk, password);
 			return true;
 		} catch (error) {
 			throw new Error(error.message as string)
@@ -138,7 +137,7 @@ class AccountServiceClass {
 	}
 	async closeAccount() : Promise<boolean> {
 		try {
-			await action_co['user_closeAccount']({});
+			await ActionService.user_closeAccount();
 			console.log("11111注销账号")
 			return true;
 		} catch (error) {
@@ -179,7 +178,7 @@ class AccountServiceClass {
 		return user;
 	}
 	async getuserByToken() : Promise<userBean | null> {
-		const res = await action_co['user_getUser']({ type: 'token', value: uni.getStorageSync("hm_token") });
+		const res = await ActionService.user_getUser('token', uni.getStorageSync("hm_token"));
 		console.log("user:::",res);
 		const data = res["data"] as UTSJSONObject[];
 		const userObj = data[0];
@@ -222,13 +221,13 @@ class AccountServiceClass {
 		return DB.getCollection("hm-rechargeConfig", { status: true });
 	}
 	createRechargeOrder(rechargeConfig_id : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return action_co['fm_createRechargeOrder']({ rechargeConfig_id });
+		return ActionService.fm_createRechargeOrder(rechargeConfig_id);
 	}
 	getMpPhoneNumber(code : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
 		return DB.callFunction("getMpPhoneNumber", { code } as UTSJSONObject);
 	}
 	loginMp(code : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return action_co['user_loginMp']({ code });
+		return ActionService.user_loginMp(code);
 	}
 }
 export var AccountService = new AccountServiceClass();

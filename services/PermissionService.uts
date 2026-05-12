@@ -1,8 +1,6 @@
 import { DB } from '../api/DB';
 import { callFunctionRes } from "@/bean/DBBean";
-import { useCloudObject } from '@/utils/cloudObject';
-
-const action_co = useCloudObject("hm_action_co") as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
+import { ActionService } from './ActionService';
 
 class PermissionServiceClass {
     constructor() {}
@@ -12,11 +10,11 @@ class PermissionServiceClass {
     getUserRoleList(phone: string) {}
 
     getPermissionList(hotel_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-        return action_co['permission_getPermission_x']({ hotel_id });
+        return ActionService.permission_getPermission_x(hotel_id);
     }
 
     getRolePermissionList(hotel_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {  
-        return action_co['permission_getPermission']({ hotel_id });          
+        return ActionService.permission_getPermission(hotel_id);          
     }
 
     getUserPermissionList(phone: string) {}

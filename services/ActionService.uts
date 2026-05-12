@@ -1,234 +1,352 @@
 import { DB } from '../api/DB';
-import { useCloudObject } from '@/utils/cloudObject';
 
-const action_co = useCloudObject("hm_action_co") as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
+const action_co = uniCloud.importObject("hm_action_co");
 
 class ActionServiceClass {
 	constructor() {}
 
 	async user_login(userForm: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['user_login'](userForm);
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		const params: UTSJSONObject = {};
+		params['$token'] = token;
+		params['$user'] = user;
+		if (userForm['phone']) params['phone'] = userForm['phone'];
+		if (userForm['password']) params['password'] = userForm['password'];
+		if (userForm['account']) params['account'] = userForm['account'];
+		return await action_co.user_login(params);
 	}
 
 	async user_register(userForm: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['user_register'](userForm);
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		const params: UTSJSONObject = {};
+		params['$token'] = token;
+		params['$user'] = user;
+		if (userForm['phone']) params['phone'] = userForm['phone'];
+		if (userForm['password']) params['password'] = userForm['password'];
+		if (userForm['account']) params['account'] = userForm['account'];
+		if (userForm['email']) params['email'] = userForm['email'];
+		return await action_co.user_register(params);
 	}
 
 	async user_sendSms(phone: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['user_sendSms']({ phone });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.user_sendSms({ phone, $token: token, $user: user });
 	}
 
 	async user_validToken(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['user_validToken']({});
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.user_validToken({ $token: token, $user: user });
 	}
 
 	async user_getUser(type: string, value: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['user_getUser']({ type, value });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.user_getUser({ type, value, $token: token, $user: user });
 	}
 
 	async user_closeAccount(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['user_closeAccount']({});
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.user_closeAccount({ $token: token, $user: user });
 	}
 
 	async user_checkLogin(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['user_checkLogin']({});
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.user_checkLogin({ $token: token, $user: user });
 	}
 
 	async user_loginMp(code: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['user_loginMp']({ code });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.user_loginMp({ code, $token: token, $user: user });
 	}
 
 	async user_validEmailAndCode(email: string, emailCode: string, emailCodeTk: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['user_validEmailAndCode'](email, emailCode, emailCodeTk);
+		return await action_co.user_validEmailAndCode(email, emailCode, emailCodeTk);
 	}
 
 	async user_updatePassword(password: string, originPassword: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		const token = uni.getStorageSync("hm_token");
-		return await action_co['user_updatePassword'](token, password, originPassword);
+		const token = uni.getStorageSync("hm_token") || "";
+		return await action_co.user_updatePassword(token, password, originPassword);
 	}
 
 	async user_resetPasswordByEmailCode(email: string, emailCode: string, emailCodeTk: string, password: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['user_resetPasswordByEmailCode'](email, emailCode, emailCodeTk, password);
+		return await action_co.user_resetPasswordByEmailCode(email, emailCode, emailCodeTk, password);
 	}
 
 	async hotel_createHotel(hotelObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['hotel_createHotel']({ hotelObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.hotel_createHotel({ hotelObj, $token: token, $user: user });
 	}
 
 	async hotel_updateHotel(hotel_id: string, hotelObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['hotel_updateHotel']({ hotel_id, hotelObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.hotel_updateHotel({ hotel_id, hotelObj, $token: token, $user: user });
 	}
 
 	async hotel_deleteHotel(hotel_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['hotel_deleteHotel']({ hotel_id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.hotel_deleteHotel({ hotel_id, $token: token, $user: user });
 	}
 
 	async hotel_getHotelList(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['hotel_getHotelList']({});
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.hotel_getHotelList({ $token: token, $user: user });
 	}
 
 	async hotel_getHotelList_x(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['hotel_getHotelList_x']({});
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.hotel_getHotelList_x({ $token: token, $user: user });
 	}
 
 	async hotel_hotelApprove(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['hotel_hotelApprove']({});
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.hotel_hotelApprove({ $token: token, $user: user });
 	}
 
 	async hotel_getHotelListByMobile(mobile: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['hotel_getHotelListByMobile']({ mobile });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.hotel_getHotelListByMobile({ mobile, $token: token, $user: user });
 	}
 
 	async room_addRoom(roomList: UTSJSONObject[]): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['room_addRoom']({ roomList });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.room_addRoom({ roomList, $token: token, $user: user });
 	}
 
 	async room_updateRoom(_id: string, roomObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['room_updateRoom']({ _id, roomObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.room_updateRoom({ _id, roomObj, $token: token, $user: user });
 	}
 
 	async room_deleteRoom(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['room_deleteRoom']({ _id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.room_deleteRoom({ _id, $token: token, $user: user });
 	}
 
 	async room_deleteRoom_x(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['room_deleteRoom_x']({ _id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.room_deleteRoom_x({ _id, $token: token, $user: user });
 	}
 
 	async room_getRemainderRoomList(hotel_id: string, startTime: number, endTime: number): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['room_getRemainderRoomList']({ hotel_id, startTime, endTime });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.room_getRemainderRoomList({ hotel_id, startTime, endTime, $token: token, $user: user });
 	}
 
 	async roomType_addRoomType(roomTypeObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['roomType_addRoomType']({ roomTypeObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.roomType_addRoomType({ roomTypeObj, $token: token, $user: user });
 	}
 
 	async roomType_updateRoomType(_id: string, roomTypeObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['roomType_updateRoomType']({ _id, roomTypeObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.roomType_updateRoomType({ _id, roomTypeObj, $token: token, $user: user });
 	}
 
 	async roomType_deleteRoomType(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['roomType_deleteRoomType']({ _id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.roomType_deleteRoomType({ _id, $token: token, $user: user });
 	}
 
 	async roomType_deleteRoomType_x(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['roomType_deleteRoomType_x']({ _id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.roomType_deleteRoomType_x({ _id, $token: token, $user: user });
 	}
 
 	async roomType_getRoomType(hotel_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['roomType_getRoomType']({ hotel_id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.roomType_getRoomType({ hotel_id, $token: token, $user: user });
 	}
 
 	async roomType_getRemainderRoomType(hotel_id: string, startTime: number, endTime: number): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['roomType_getRemainderRoomType']({ hotel_id, startTime, endTime });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.roomType_getRemainderRoomType({ hotel_id, startTime, endTime, $token: token, $user: user });
 	}
 
 	async order_addOrder(orderObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['order_addOrder']({ orderObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.order_addOrder({ orderObj, $token: token, $user: user });
 	}
 
 	async order_deleteOrder(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['order_deleteOrder']({ _id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.order_deleteOrder({ _id, $token: token, $user: user });
 	}
 
 	async order_addOrderDishes(orderDishesObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['order_addOrderDishes']({ orderDishesObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.order_addOrderDishes({ orderDishesObj, $token: token, $user: user });
 	}
 
 	async order_deleteOrderDishes(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['order_deleteOrderDishes']({ _id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.order_deleteOrderDishes({ _id, $token: token, $user: user });
 	}
 
 	async employee_addEmployee(employeeObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['employee_addEmployee']({ employeeObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.employee_addEmployee({ employeeObj, $token: token, $user: user });
 	}
 
 	async employee_editEmployee(_id: string, employeeObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['employee_editEmployee']({ _id, employeeObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.employee_editEmployee({ _id, employeeObj, $token: token, $user: user });
 	}
 
 	async employee_deleteEmployee(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['employee_deleteEmployee']({ _id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.employee_deleteEmployee({ _id, $token: token, $user: user });
 	}
 
 	async menu_addMenuDetail(menuDetailObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['menu_addMenuDetail']({ menuDetailObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.menu_addMenuDetail({ menuDetailObj, $token: token, $user: user });
 	}
 
 	async menu_addMenuType(menuTypeObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['menu_addMenuType']({ menuTypeObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.menu_addMenuType({ menuTypeObj, $token: token, $user: user });
 	}
 
 	async menu_deleteMenuDetail(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['menu_deleteMenuDetail']({ _id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.menu_deleteMenuDetail({ _id, $token: token, $user: user });
 	}
 
 	async menu_deleteMenuType(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['menu_deleteMenuType']({ _id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.menu_deleteMenuType({ _id, $token: token, $user: user });
 	}
 
 	async menu_editMenuDetail(_id: string, menuDetail: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['menu_editMenuDetail']({ _id, menuDetail });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.menu_editMenuDetail({ _id, menuDetail, $token: token, $user: user });
 	}
 
 	async menu_editMenuType(_id: string, menuTypeObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['menu_editMenuType']({ _id, menuTypeObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.menu_editMenuType({ _id, menuTypeObj, $token: token, $user: user });
 	}
 
 	async menu_addFeedback(feedbackObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['menu_addFeedback']({ feedbackObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.menu_addFeedback({ feedbackObj, $token: token, $user: user });
 	}
 
 	async scenicSpot_addScenicSpot(scenicSpotObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['scenicSpot_addScenicSpot']({ scenicSpotObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.scenicSpot_addScenicSpot({ scenicSpotObj, $token: token, $user: user });
 	}
 
 	async scenicSpot_addScenicSpotDetail(scenicSpotDetailObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['scenicSpot_addScenicSpotDetail']({ scenicSpotDetailObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.scenicSpot_addScenicSpotDetail({ scenicSpotDetailObj, $token: token, $user: user });
 	}
 
 	async scenicSpot_deleteScenicSpot(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['scenicSpot_deleteScenicSpot']({ _id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.scenicSpot_deleteScenicSpot({ _id, $token: token, $user: user });
 	}
 
 	async scenicSpot_deleteScenicSpotDetail(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['scenicSpot_deleteScenicSpotDetail']({ _id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.scenicSpot_deleteScenicSpotDetail({ _id, $token: token, $user: user });
 	}
 
 	async scenicSpot_editScenicSpot(_id: string, scenicSpotObj: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['scenicSpot_editScenicSpot']({ _id, scenicSpotObj });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.scenicSpot_editScenicSpot({ _id, scenicSpotObj, $token: token, $user: user });
 	}
 
 	async scenicSpot_editScenicSpotDetail(_id: string, scenicSpotPriceDetail: UTSJSONObject): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['scenicSpot_editScenicSpotDetail']({ _id, scenicSpotPriceDetail });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.scenicSpot_editScenicSpotDetail({ _id, scenicSpotPriceDetail, $token: token, $user: user });
 	}
 
 	async fm_deleteFm(_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['fm_deleteFm']({ _id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.fm_deleteFm({ _id, $token: token, $user: user });
 	}
 
 	async fm_createPayOrder(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['fm_createPayOrder']({});
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.fm_createPayOrder({ $token: token, $user: user });
 	}
 
 	async fm_createRechargeOrder(rechargeConfig_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['fm_createRechargeOrder']({ rechargeConfig_id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.fm_createRechargeOrder({ rechargeConfig_id, $token: token, $user: user });
 	}
 
 	async fm_getRechargeConfig(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['fm_getRechargeConfig']({});
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.fm_getRechargeConfig({ $token: token, $user: user });
 	}
 
 	async config_getConfig(): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['config_getConfig']({});
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.config_getConfig({ $token: token, $user: user });
 	}
 
 	async permission_getPermission(hotel_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['permission_getPermission']({ hotel_id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.permission_getPermission({ hotel_id, $token: token, $user: user });
 	}
 
 	async permission_getPermission_x(hotel_id: string): Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return await action_co['permission_getPermission_x']({ hotel_id });
+		const token = uni.getStorageSync("hm_token") || "";
+		const user = uni.getStorageSync("user") || {};
+		return await action_co.permission_getPermission_x({ hotel_id, $token: token, $user: user });
 	}
 }
 

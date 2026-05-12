@@ -208,7 +208,12 @@ export default {
 			room_price: "Room Price",
 			facilities_amenities: "Room Amenities",
 			room_type_images: "Room Type Images",
-			path_room_type_name:"Enter Room Type Name",
+			path_room_type_name: "Enter Room Type Name",
+
+			"valid_customer_service_weChat": "Customer service WeChat Is Required",
+			"valid_customer_serviceTel": "Customer service phone number  Is Required",
+			"valid_customer_hotelAddress": "Hotel address  Is Required",
+			"valid_customer_hotelName": "Hotel name  Is Required"
 		}
 
 

@@ -212,6 +212,12 @@ export default {
 			facilities_amenities:"屋内设施",
 			room_type_images:"房型图片",
 			path_room_type_name:"请输入房型名称",
+			
+			valid_customer_service_weChat:"请填写客服微信",
+			valid_customer_serviceTel:"请填写客服电话",
+			valid_customer_hotelAddress:"请选择填写地址",
+			valid_customer_hotelName:"请填写酒店名称",
+			
 		}
 	},
 	

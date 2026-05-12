@@ -1,7 +1,7 @@
 <template>
 	<rice-navbar title="" border>
 		<template #left>
-			<view style="display: flex;flex-direction: row;">
+			<view style="display: flex;flex-direction: row;align-items: center;">
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>

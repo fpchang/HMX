@@ -67,6 +67,7 @@
 	import { useI18n } from '@/uni_modules/lime-i18n';
 	// import * as test from '@/uni_modules/lime-i18n/message-compiler/test'
 	// import * as test from '@/uni_modules/lime-i18n/common/test'
+	import i18n from '@/uni_modules/lime-i18n/test'
 
 
 	import { getCurrentInstance } from 'vue'
@@ -80,7 +81,9 @@
 		// context!.proxy!.$locale.value = 'zh-CN' ? 'zh-CN' : 'en-US'
 		// locale.value = locale.value != 'zh-CN' ? 'zh-CN' : 'en-US'
 		// console.log(`$i18n.t`, context?.proxy?.$i18n.t('headMenus.userName', {}))
-		console.log(`$i18n.t`, context!.proxy!.$t('headMenus.userName'))
+		// console.log(`$i18n.t`, context!.proxy!.$t('headMenus.userName'))
+		console.log(`$i18n.t`, i18n!.$t('headMenus.userName'))
+		console.log(`$i18n.t`, context.proxy?.$i18n.global.t('headMenus.userName'))
 	}
 </script>
 

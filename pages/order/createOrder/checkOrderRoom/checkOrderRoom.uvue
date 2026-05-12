@@ -9,7 +9,7 @@
 					<view class="rt-title">
 						<image src="/static/icons/hotel-room.png" style="width: 16px;height: 16px;margin-right: 8px;">
 						</image>
-						<text class="txt">{{roomType.name}}(共{{roomType.remainRoomList.length}}间可订)</text>
+						<text class="txt">{{roomType.name}}({{i18n.global.t("order.create_order.select_room_num",[roomType.remainRoomList.length])}})</text>
 					</view>
 					<view class="card-list">
 						<view class="card-list-item" v-for="room of roomType.remainRoomList">
@@ -44,20 +44,20 @@
 		<view class="bottom-area">
 			<view class="content">
 				<view>
-					<text>已选择 {{checkVal.length}} 间房</text>
+					<text class="txt">{{i18n.global.t("order.create_order.has_select_room_num",[checkVal.length])}}</text>
 				</view>
-				<view style="width:100px">
-					<rice-button type="primary" text="确认选择" :disabled="checkVal.length<1"
+				<view style="min-width:100px">
+					<rice-button type="primary" :text="i18n.global.t('order.create_order.btn_txt')" :disabled="checkVal.length<1"
 						@click="setRoomSelect"></rice-button>
 				</view>
 			</view>
 		</view>
 	</view>
 	<view v-if="submitLoading" style="margin-top:68px;display: flex;flex-direction: row;justify-content: center;">
-		<rice-loading color="#787878" text="加载中…" />
+		<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
 	</view>
 	<view v-if="remainRoomList.length<1&&!submitLoading" style="margin-top: 68px;"> 
-	<l-empty description="当前日期房间已经订完，请确认房间数据"  />
+	<l-empty :description="i18n.global.t('order.create_order.no_room_select_tips')"  />
 	</view>
 </template>
 
@@ -72,6 +72,7 @@
 	import { state } from "@/store/store";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import {userBean} from '@/bean/userBean';
+		import i18n from '@/i18n/index.uts';
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -112,7 +113,7 @@
 		let list : TabsOptions[] = [];
 		if (checkVal.value.length > 0) {
 			list.push({
-				name: '全部房型',
+				name: i18n.global.t("order.all_roomType"),
 				value: 'all',
 				badge: {
 					value: checkVal.value.length,
@@ -196,7 +197,7 @@
 			submitLoading.value=false;
 			uni.hideLoading();
 			uni.showToast({
-				title: "获取剩余房间失败",
+				title: i18n.global.t("common.getData_fail",[i18n.global.t("order.orderFilter")]),
 				icon: "none"
 			})
 		}
@@ -227,6 +228,11 @@
 		
 		getRemainRoomList();
 	})
+	// uni.showToast({
+	// 	title: i18n.global.t("common.getData_fail",['剩余房间']),
+	// 	icon: "none"
+	// })
+
 </script>
 
 <style lang="scss">
@@ -319,6 +325,9 @@
 			flex-direction: row;
 			justify-content: space-between;
 			align-items: center;
+			.txt{
+				color:#969799
+			}
 		}
 	}
 </style>

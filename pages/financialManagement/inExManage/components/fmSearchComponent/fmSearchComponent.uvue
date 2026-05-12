@@ -10,10 +10,10 @@
 			<view style="display: flex;flex-direction: row;align-items: center;">
 			<!-- 	<view style="width: 50px;margin-right: 8px;"><rice-button :type="billType=='all'?'primary':'info'" size="small"
 						text="全部" @click="checkBillType('all')"></rice-button></view> -->
-				<view style="width: 50px;margin-right: 8px"><rice-button :type="billType=='income'?'primary':'info'" size="small"
-						text="收入"  @click="checkBillType('income')"></rice-button></view>
-				<view style="width: 50px;">
-					<rice-button size="small" :type="billType=='expenses'?'primary':'info'" text="支出"  @click="checkBillType('expenses')"></rice-button></view>
+				<view style="width: 60px;margin-right: 8px"><rice-button :type="billType=='income'?'primary':'info'" size="small"
+						:text="i18n.global.t('finance.income')"  @click="checkBillType('income')"></rice-button></view>
+				<view style="width: 60px;">
+					<rice-button size="small" :type="billType=='expenses'?'primary':'info'" :text="i18n.global.t('finance.expense')"  @click="checkBillType('expenses')"></rice-button></view>
 			</view>
 
 		</view>
@@ -30,7 +30,7 @@
 				<rice-search v-model="keystr" input-color="#fff" :clearable="false" :placeholder="placeholder"
 					:custom-style="{'padding':0}" @search="searchEvent" @clickLeftIcon="searchEvent"
 					@input="searchInputChange" @clickAction="searchEvent" show-action left-icon=""
-					action-color="#007aff" />
+					action-color="#007aff" :action-text="i18n.global.t('common.btn_txt_search')" />
 			</view>
 		</view>
 	<!-- 	<rice-picker v-model:show="showPicker" :columns="columns" @confirm="onColumnsConfirm"></rice-picker> -->
@@ -44,6 +44,7 @@
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import {TIME,MOONTH_START_END_TIMESTAMP,getMonthDateArray} from "@/static/utils/TIME";
+		import i18n from '@/i18n/index.uts';
 	//selectAction下拉 选择
 	//searchAction input点击搜索
 	//searchInputChange 输入框变化
@@ -60,8 +61,8 @@
 	});
 	const columns = ref<PickerOption[][]>([
 		[
-			{ text: '收入', value: 'income' },
-			{ text: '支出', value: 'expense' }
+			{ text:i18n.global.t('finance.income'), value: 'income' },
+						{ text: i18n.global.t('finance.expense'), value: 'expense' }
 		]
 	])
 	const attrs = useAttrs();

@@ -1,7 +1,7 @@
 <template>
 	<view class="page">
 		<view class="card">
-			<view class="title"><text class="txt">注册账号</text></view>
+			<view class="title"><text class="txt">{{i18n.global.t('register.register_account')}}</text></view>
 			<verifyEmailComponent @setEmailEvent="setEmailEvent" v-if="process==0"></verifyEmailComponent>
 			<verifyAccountComponent @setAccountEvent="setAccountEvent" v-if="process==1"></verifyAccountComponent>
 		</view>
@@ -14,6 +14,7 @@
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 	import verifyAccountComponent from "./components/verifyAccountComponent.uvue";
 	import verifyEmailComponent from "./components/verifyEmailComponent.uvue";
+	import i18n from '@/i18n/index.uts';
 	const submitLoading = ref(false);
 	const process=ref(0);
 	type userType = {
@@ -48,16 +49,14 @@
 			emailCode: userForm.value.emailCode,
 			emailCodeTk: userForm.value.emailCodeTk
 		} as UTSJSONObject;
-		console.log("11111111",userJSON);
 		try {
 			submitLoading.value = true;
 			const flag = await AccountService.register(userJSON);
 			if (flag) {
 				uni.setStorageSync("account", userForm.value.account);
-				console.log("99999999999999", flag)
 				uni.navigateBack();
 				uni.showToast({
-					title: "注册成功",
+					title: i18n.global.t("register.register_success"),
 					icon: "none"
 				});
 			}
@@ -65,7 +64,6 @@
 
 		} catch (err) {
 			//throw new Error(error.message as string);
-			console.log("eeeeeeeeeeeeeeeeeeeeeee");
 			submitLoading.value = false;
 			// showDialog({
 			// 	title: '注册失败',
@@ -81,13 +79,11 @@
 const setEmailEvent = (email : string,emailCodeTk:string) => {
 		userForm.value.email = email;
 		userForm.value.emailCodeTk = emailCodeTk;
-		console.log("setemailevent",userForm.value);
 		process.value=1;
 	}
 	const setAccountEvent =(account:string,password:string)=>{
 		userForm.value.account = account;
 		userForm.value.password = password;
-		console.log("setemailevent",userForm.value);
 		handleRegister();
 		
 	}

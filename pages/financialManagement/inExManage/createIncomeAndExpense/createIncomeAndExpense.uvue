@@ -7,14 +7,14 @@
 				</navigator>
 
 				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
 			</view>
 		</template>
 		<template #right>
 			<view class="navbar-btn" v-if="pageType!=2">
 				<!-- <text class="txt">保存</text> -->
-				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
-					textColor="#007aff" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+				<rice-button @click="submitForm" type="default" size="mini" :text="i18n.global.t('common.btn_txt_save',[''])" color="rgba(0,0,0,0)"
+					textColor="#007aff" textSize="14px" :loadingText="i18n.global.t('common.saving')" :loading="submitLoading"></rice-button>
 			</view>
 		</template>
 	</rice-navbar>
@@ -22,23 +22,23 @@
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
-			<xt-form-item label="单据类型" tips="" required>
+			<xt-form-item :label="i18n.global.t('finance.voucher_Type')" tips="" required>
 				<view>
 					<rice-radio-group v-model="fmForm.billType" direction="row" :disabled="pageType==1" @change="billTypeChange">
 						<view class="check-container" v-if="pageType==0 ||fmForm.billType=='income'">
-							<rice-radio value="income" label="收入" >
+							<rice-radio value="income" :label="i18n.global.t('finance.income')" >
 								<view style="display: flex;flex-direction: row;align-items: center;">
 
 									<!-- <rice-icon name="up" color="#00b42a" /> -->
-									<text style="color:#00b42a;font-size: 14px;">收入</text>
+									<text style="color:#00b42a;font-size: 14px;">{{i18n.global.t("finance.income")}}</text>
 								</view>
 							</rice-radio>
 						</view>
 						<view class="check-container" v-if="pageType==0 ||fmForm.billType=='expenses'">
-							<rice-radio value="expenses" label="收入" >
+							<rice-radio value="expenses" :label="i18n.global.t('finance.expenses')" >
 								<view style="display: flex;flex-direction: row;align-items: center;">
 									<!-- <rice-icon name="down" color="#f53f3f" /> -->
-									<text style="color:#f53f3f;font-size: 14px;">支出</text>
+									<text style="color:#f53f3f;font-size: 14px;">{{i18n.global.t("finance.expense")}}</text>
 								</view>
 							</rice-radio>
 						</view>
@@ -47,12 +47,12 @@
 					</rice-radio-group>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="收支类型" tips="" required>
+			<xt-form-item :label="i18n.global.t('finance.transaction_category')" tips="" required>
 				<view>
 					<xt-select :columns="columns" @selectAction="selectType" :showKeySearch="false" v-model="fmForm.type"></xt-select>
 				</view>
 			</xt-form-item>
-			<xt-form-item abel="收支时间" tips="">
+			<xt-form-item :label="i18n.global.t('finance.transaction_date')" tips="">
 				<view class="select">
 					<view class="content" @click="showCalendarEvent">
 						<text class="txt">{{iotimeStr}}</text>
@@ -63,20 +63,20 @@
 					:lunar="true"></rice-calendar>
 			</xt-form-item>
 
-			<xt-form-item label="金额" tips="" required>
+			<xt-form-item :label="i18n.global.t('finance.amount')" tips="" required>
 				<view class="room-list-item" style="flex: 1;">
 
 					<rice-input style="height: 40px;" type="digit" placeholderStyle="font-size:14px" classic
-						placeholder="请输入金额" borderColor="#dcdfe6" :disabled="pageType==2" v-model="amount"></rice-input>
+						:placeholder="i18n.global.t('finance.patch_enter_amount')" borderColor="#dcdfe6" :disabled="pageType==2" v-model="amount"></rice-input>
 
 					<!-- <rice-stepper v-model="fmForm.amount" input-width="150px" button-size="38" font-size="15" :auto-fixed ="false" :disabled="pageType==2" />
 			 -->
 				</view>
 			</xt-form-item>
-			<xt-form-item label="备注" tips="">
+			<xt-form-item :label="i18n.global.t('form.remark')" tips="">
 				<view>
 
-					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="备注内容"
+					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('form.pach_remark')"
 						layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
 						v-model="fmForm.mark"></rice-textarea>
 				</view>
@@ -98,6 +98,7 @@
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import { FMService } from "@/services/FMService";
 	import { validForm } from "./createIncomeAndExpenseFormVaild";
+	import i18n from '@/i18n/index.uts';
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -134,8 +135,8 @@
 		//unit: ""
 	});
 	const title = computed(() => {
-		const btstr = fmForm.value.billType=='income'?'收入':'支出';
-		const ptstr = pageType.value==0?'添加':'修改';
+		const btstr = fmForm.value.billType=='income'?i18n.global.t('finance.income'):i18n.global.t('finance.expense');
+		const ptstr = pageType.value==0?i18n.global.t('common.btn_txt_create',['']):i18n.global.t('common.btn_txt_modify',['']);
 		return ptstr+btstr;
 	});
 	const showCalendarEvent = () => {
@@ -177,12 +178,12 @@
 			uni.navigateBack();
 			submitLoading.value = false;
 			uni.hideLoading();
-			uni.showToast({title:"更新成功",icon:"none"});
+			uni.showToast({title:i18n.global.t('common.update_success'),icon:"none"});
 		} catch (error) {
 			console.log("error", error);
 			submitLoading.value = false;
 			uni.hideLoading();
-			uni.showToast({title:"更新失败",icon:"none"});
+			uni.showToast({title:i18n.global.t('common.update_fail'),icon:"none"});
 		}
 		console.log(fmForm.value);
 	}
@@ -215,12 +216,12 @@
 			uni.navigateBack();
 			submitLoading.value = false;
 			//uni.hideLoading();
-			uni.showToast({title:"添加成功",icon:"none"});
+			uni.showToast({title:i18n.global.t('common.add_success'),icon:"none"});
 		} catch (error) {
 			console.log("error", error);
 			submitLoading.value = false;
 			//uni.hideLoading();
-			uni.showToast({title:"添加失败",icon:"none"});
+			uni.showToast({title:i18n.global.t('common.add_fail'),icon:"none"});
 		}
 	}
 	onLoad(params => {
@@ -237,7 +238,6 @@
 				let decoded = decodeURIComponent(fm);
 				if (decoded != null) {
 					fmForm.value = JSON.parse<FMBean>(decoded)!;
-					console.log("bbbbbbb", fmForm.value);
 					iotimeStr.value = dayuts(new Date(fmForm.value.ioeTime)).format("YYYY-MM-DD");
 					amount.value=fmForm.value.amount.toString();
 				}

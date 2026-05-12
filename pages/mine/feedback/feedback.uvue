@@ -8,14 +8,15 @@
 
 				<image src="/static/icons/addpage.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">意见反馈</text>
+				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">意见反馈</text>
 			</view>
 		</template>
 		<template #right>
 			<view class="navbar-btn">
 				<!-- <text class="txt">保存</text> -->
-				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
-					textColor="#007aff" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+				<rice-button @click="submitForm" type="default" size="mini" :text="i18n.global.t('common.btn_txt_save',[''])" color="rgba(0,0,0,0)"
+					textColor="#007aff" textSize="14px" :loadingText="i18n.global.t('common.saving')" :loading="submitLoading">
+				</rice-button>
 			</view>
 		</template>
 	</rice-navbar>
@@ -46,6 +47,7 @@
 	import { state, loginOut } from "@/store/store.uts";
 	import { userBean } from "@/bean/userBean";
 	import { MineService } from "@/services/MineService.uts";
+	import i18n from '@/i18n/index.uts';
 	const submitLoading = ref(false);
 	const user = computed<userBean>(() => {
 		return state.user;

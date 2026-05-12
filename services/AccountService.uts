@@ -10,6 +10,17 @@ const account_co = uniCloud.importObject("hm_account_co");
 //   errMsg : string,
 //   detail : string
 // }
+// uniCloud.addInterceptor("callFunction",{
+//   invoke(args) {
+// 	  console.log("addd===========");
+//     // 获取当前语言：zh / en
+//     const lang = 'en' // 你可以从 this.$i18n.locale 获取
+    
+//     // 自动注入到云对象 context
+//     args.custom = args.custom || {}
+//     args.custom.lang = lang;
+//   }
+// });
 class AccountServiceClass {
 
 	constructor() {
@@ -117,6 +128,7 @@ class AccountServiceClass {
 			}
 			return true;
 		} catch (error) {
+			console.error(error)
 			throw new Error(error.message as string);
 		}
 	}
@@ -216,14 +228,8 @@ class AccountServiceClass {
 	}
 	async getuserByToken() : Promise<userBean | null> {
 		const res = await DB.callFunction("hm_getUser", { type: 'token', value: uni.getStorageSync("hm_token") });
-		console.log("用户信息1：：", res);
-		//const res = await DB.getCollection("hm-user", { hm_token: uni.getStorageSync("hm_token") });
-		//console.log("用户信息：：",res);
-		//const list =res['data'] as Array<UTSJSONObject>;
 		const userObj = res['result'] as UTSJSONObject;
 		let user : userBean | null = null;
-		// if(list!=null&&list.length>0){
-		// 	const userObj=list[0];
 		user = {
 			_id: userObj.getString("_id") ?? "",
 			idCard: userObj.getString("idCard") ?? "",

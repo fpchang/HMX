@@ -2,11 +2,11 @@
 	<view>
 		<view class="chart-container" id="incomePieChart">
 			<view class="title-area">
-				<text class="chart-subtitle">当月收入</text>
+				<text class="chart-subtitle">{{i18n.global.t("finance.monthly_income")}}</text>
 				<view>
 			
 					<view class="select" @click="showDatePicker=!showDatePicker">
-						<text class="txt">{{month}}月</text>
+						<text class="txt">{{month}}</text>
 						<image src="/static/images/arrow.png" style="width: 16px;height: 16px;"></image>
 					</view>
 				</view>
@@ -24,6 +24,7 @@
 	import { userBean } from "@/bean/userBean";
 	import {DateTimePickerExtend } from "@/uni_modules/rice-ui";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import i18n from '@/i18n/index.uts';
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -90,7 +91,7 @@
 				  ],
 				series: [
 					{
-						name: '当月收入',
+						name: i18n.global.t("finance.monthly_income"),
 						type: 'pie',
 						radius: ['40%', '70%'],
 						avoidLabelOverlap: false,
@@ -107,8 +108,8 @@
 						          show: true,
 						          position: 'center',
 						          formatter: [
-						            `{title|总收入}`,
-						            `{value|${total}元}`
+						            `{title|${i18n.global.t("finance.total_income")}}`,
+						            `{value|${total}}`
 						          ].join('\n'),
 						          rich: {
 						            title: {

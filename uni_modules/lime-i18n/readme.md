@@ -62,7 +62,7 @@ export function createApp(){
 import i18n from './i18n';
 
 // 翻译文本
-const title = i18n.global.t('page.title', null, null)
+const title = i18n.global.t('page.title')
 const welcome = i18n.$t('message.welcome', { name: '李四' })
 
 // 切换语言
@@ -77,7 +77,7 @@ const switchLanguage = () => {
 const instance = getCurrentInstance()!
 const title = instance.proxy.$t('page.title')
 const title2 = instance.proxy.$i18n.$t('page.title2')
-const welcome = instance.proxy.$i18n.global.t('message.welcome', null, null) // t函数要写全所有参数
+const welcome = instance.proxy.$i18n.global.t('message.welcome') 
 
 // 切换语言
 const switchLanguage = () => {
@@ -98,7 +98,7 @@ export default {
 	getTranslatedText() {
 		const title = this.$t('page.title')
 		const title2 = this.$i18n.$t('page.title2')
-		const welcome = this.$i18n.global.t('message.welcome', null, null) // t函数要写全所有参数
+		const welcome = this.$i18n.global.t('message.welcome') 
 	},
 	// 切换语言
     switchLanguage() {

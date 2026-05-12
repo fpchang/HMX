@@ -11,6 +11,7 @@ class ComFuc {
 	constructor() { }
 	async getUser() : Promise<userBean | null> {
 		const user = await AccountService.getuserByToken();
+		console.log("getuser===",user)
 		if (user != null) {
 			uni.setStorageSync("user", user);
 			setUser(user);

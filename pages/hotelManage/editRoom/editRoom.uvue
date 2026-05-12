@@ -7,14 +7,15 @@
 				</navigator>
 
 				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
 			</view>
 		</template>
 		<template #right>
 			<view class="navbar-btn" v-if="pageType!=2">
 				<!-- <text class="txt">保存</text> -->
-				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
-					textColor="#007aff" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+				<rice-button @click="submitForm" type="default" size="mini" :text="i18n.global.t('common.btn_txt_save',[''])" color="rgba(0,0,0,0)"
+					textColor="#007aff" textSize="14px" :loadingText="i18n.global.t('common.saving')" :loading="submitLoading">
+				</rice-button>
 			</view>
 		</template>
 	</rice-navbar>

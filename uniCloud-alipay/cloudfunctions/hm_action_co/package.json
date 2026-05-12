@@ -1,0 +1,16 @@
+{
+  "name": "hm_action_co",
+  "dependencies": {
+    "dateFormat": "file:../common/dateFormat",
+    "encryptPassword": "file:../common/encryptPassword",
+    "errorEvent": "file:../common/errorEvent",
+    "tokenEvent": "file:../common/tokenEvent"
+  },
+  "extensions": {
+    "uni-cloud-jql": {},
+    "uni-cloud-sms": {},
+    "uni-cloud-verify": {},
+    "uni-cloud-push": {},
+    "uni-cloud-ext-storage": {}
+  }
+}

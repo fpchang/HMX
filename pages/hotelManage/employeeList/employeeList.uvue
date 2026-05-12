@@ -8,14 +8,14 @@
 
 				<image src="/static/icons/list.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">员工列表</text>
+				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{i18n.global.t("hotel.list_employee")}}</text>
 			</view>
 		</template>
 		<template #right>
 			<view class="navbar-btn" v-if="permissionList.includes('EMPLOYEE_CREATE')">
-				<image src="/static/icons/add.png" style="width:18px;height: 18px;"></image>
+				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
-				<text class="txt" @click="addEmployee">添加员工</text>
+				<text class="txt" @click="addEmployee">{{i18n.global.t("common.btn_txt_create",[i18n.global.t("hotel.title_employee")])}}</text>
 
 
 			</view>
@@ -41,7 +41,7 @@
 							<view>
 								<text
 									style="color:#1d2129;font-size: 18px;line-height: 28px;margin-bottom: 8px;">{{employee.employee_name}}</text>
-								<rice-tag type="primary" :text="roleFormat(employee.role)" text-size="12px" round
+								<rice-tag type="primary" :text="roleFormat(employee.role)" text-size="12px" 
 									:color="getRoleColor(employee.role)" />
 
 							</view>
@@ -78,7 +78,7 @@
 							<xt-control :showView="false" :showEdit="showControl_edit(employee)" :show-delete="showControl_delete(employee)"  @del="deleteEmployee(employee)" @edit="editEmployee(employee)"></xt-control>
 						</view>
 					</view>
-					<view class="control-area" v-if="false">
+					<!-- <view class="control-area" v-if="false">
 
 						<view class="control-icons-item" @click="editEmployee(employee)"
 							v-if="showControl_edit(employee)">
@@ -91,12 +91,12 @@
 							<rice-icon color="#ff4d4f" name="delete" size="14px" />
 							<text style="color:#ff4d4f;font-size: 16px;">删除</text>
 						</view>
-					</view>
+					</view> -->
 				</view>
 			</view>
 		</view>
 		<view v-if="submitLoading" style="margin-top:68px;display: flex;flex-direction: row;justify-content: center;">
-			<rice-loading color="#787878" text="加载中…" />
+			<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
 		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
@@ -111,6 +111,7 @@
 	import { HotelService } from '@/services/HotelService';
 	import { employeeAction } from "./employeeAction.uts";
 	import {userBean} from "@/bean/userBean";
+		import i18n from '@/i18n/index.uts';
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -127,9 +128,9 @@
 	});
 	const roleFormat = (key : string) : string => {
 		const m : Map<string, string> = new Map([
-			["administrator", "超级管理员"],
-			["manager", "管理员"],
-			["normal", "员工"]
+			["administrator", i18n.global.t("permission.administrator")],
+			["manager", i18n.global.t("permission.manager")],
+			["normal",i18n.global.t("permission.normal")]
 		])
 		const value = m.get(key)
 		if (value != null) {
@@ -167,13 +168,13 @@
 			"EMPLOYEE_CREATE"
 		)) {
 			showDialog({
-				title: '没有足够的权限',
-				message: "请联系负责人",
-				showCancelButton: false,
-				confirm: () => {
-					hideDialog();
-				}
-			})
+										title: i18n.global.t('permission.noPermission'),
+										message: i18n.global.t('permission.contactAdmin'),
+										showCancelButton: false,
+										confirm: () => {
+											hideDialog();
+										}
+									})
 			return;
 		}
 		uni.navigateTo({
@@ -185,13 +186,13 @@
 			"EMPLOYEE_UPDATE"
 		)) {
 			showDialog({
-				title: '没有足够的权限',
-				message: "请联系负责人",
-				showCancelButton: false,
-				confirm: () => {
-					hideDialog();
-				}
-			})
+										title: i18n.global.t('permission.noPermission'),
+										message: i18n.global.t('permission.contactAdmin'),
+										showCancelButton: false,
+										confirm: () => {
+											hideDialog();
+										}
+									})
 			return;
 		}
 		console.log("edit");
@@ -208,31 +209,33 @@
 			"EMPLOYEE_DELETE"
 		)) {
 			showDialog({
-				title: '没有足够的权限',
-				message: "请联系负责人",
-				showCancelButton: false,
-				confirm: () => {
-					hideDialog();
-				}
-			})
+										title: i18n.global.t('permission.noPermission'),
+										message: i18n.global.t('permission.contactAdmin'),
+										showCancelButton: false,
+										confirm: () => {
+											hideDialog();
+										}
+									})
 			return;
 		}
 		console.log("delete");
 		showDialog({
-			title: '确认删除此员工',
-			message: "删除后将无法恢复，确认删除吗？",
+			title: i18n.global.t("common.confirmDelete"),
+			message: i18n.global.t("common.deleteOrderTip"),
+			cancelButtonText:i18n.global.t("common.btn_txt_cancel"),
+			confirmButtonText:i18n.global.t("common.btn_confirm"),
 			beforeClose: async () : Promise<boolean> => {
 				try {
 					await HotelService.deleteEmployee(em._id);
 					uni.showToast({
-						title:"删除成功",
+						title:i18n.global.t("common.delete_success"),
 						icon:"none"
 					});
 					await employeeAction.getEmplolyeeList(hotel_id.value);
 					return true;
 				} catch (e) {
 					uni.showToast({
-						title: "系统异常",
+						title:i18n.global.t("common.system_error"),
 						icon: "none"
 					});
 					return false;

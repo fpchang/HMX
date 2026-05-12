@@ -1,5 +1,5 @@
 import BaseFormatter from './format'
-import { warn, error, isString, getAllKeys } from './util'
+import { getAllKeys } from './util'
 import { Composer, Interpolate, Link, WarnDefault, LinkedModify, PluralizationRule, StringOrNull, NumberOrNull, Availabilities } from './types'
 
 // #ifndef APP
@@ -49,7 +49,7 @@ function setTabBarItems(tabbar : string[] | null) {
 			index,
 			// success() {},
 			fail(err) {
-				warn(err.errMsg)
+				console.warn(err.errMsg)
 			}
 		} as SetTabBarItemOptions)
 	})
@@ -103,7 +103,7 @@ function getModifiers(options : UTSJSONObject) : Map<string, LinkedModify> {
 			try {
 				_modifiers.set(key, value as LinkedModify)
 			} catch (e) {
-				error(35, '自定义修饰器函数必须是类型：(str: string) => string')
+				console.warn(35, '自定义修饰器函数必须是类型：(str: string) => string')
 			}
 		}
 	})
@@ -118,7 +118,7 @@ function getPluralizationRules(options : UTSJSONObject) : Map<string, Pluralizat
 				_pluralizationRules.set(key, value as PluralizationRule)
 			} catch (e) {
 				if (process.env.NODE_ENV !== 'production') {
-					error(35, '自定义复数化规则函数必须是类型: ( choice: number, choicesLength: number) => number')
+					console.warn(35, '自定义复数化规则函数必须是类型: ( choice: number, choicesLength: number) => number')
 				}
 			}
 		}
@@ -220,7 +220,7 @@ export function createComposer(options : UTSJSONObject = {}, __root : Composer |
 			// 去掉字符串前面的 @:、@.case: 、括号及大括号
 			const linkPlaceholder : string = link.replace(linkPrefix!, '').replace(bracketsMatcher, '')
 			if (visitedLinkStack.includes(linkPlaceholder)) {
-				warn(`发现循环引用。"${link}"已经在link"已经在${visitedLinkStack.reverse().join(' <- ')}链中访问过`)
+				console.warn(`发现循环引用。"${link}"已经在link"已经在${visitedLinkStack.reverse().join(' <- ')}链中访问过`)
 				return ret
 			}
 			if (_interpolate == null || _warnDefault == null) {
@@ -393,7 +393,7 @@ export function createComposer(options : UTSJSONObject = {}, __root : Composer |
 	 */
 	const d = (date : any, key : StringOrNull, locale : StringOrNull, options : UTSJSONObject | null) : string => {
 		if (!availabilities.dateTimeFormat) {
-			warn('无法格式化日期值，因为不支持 Intl.DateTimeFormat. ' + `key: ${key}, locale: ${locale}, options: ${options}`)
+			console.warn('无法格式化日期值，因为不支持 Intl.DateTimeFormat. ' + `key: ${key}, locale: ${locale}, options: ${options}`)
 			return `${date}`
 		}
 
@@ -407,7 +407,7 @@ export function createComposer(options : UTSJSONObject = {}, __root : Composer |
 		const formats = _datetimeFormats.value!.get(__locale)
 		let formatter;
 		if (formats == null || formats!.getJSON(key) == null) {
-			warn(`回退到根号下的日期时间本地化：key '${key}'。`)
+			console.warn(`回退到根号下的日期时间本地化：key '${key}'。`)
 			return `${date}`
 		}
 		const format = formats!.getJSON(key) ?? {}
@@ -432,7 +432,7 @@ export function createComposer(options : UTSJSONObject = {}, __root : Composer |
 	 */
 	const n = (number : number, key : StringOrNull, locale : StringOrNull, options : UTSJSONObject | null) : string => {
 		if (!availabilities.numberFormat) {
-			warn('无法格式化数字值，因为不支持 Intl.NumberFormat. ' + `key: ${key}, locale: ${locale}, options: ${options}`)
+			console.warn('无法格式化数字值，因为不支持 Intl.NumberFormat. ' + `key: ${key}, locale: ${locale}, options: ${options}`)
 			return number.toString()
 		}
 
@@ -446,7 +446,7 @@ export function createComposer(options : UTSJSONObject = {}, __root : Composer |
 		const formats = _numberFormats.value!.get(__locale)
 		let formatter;
 		if (formats == null || formats!.getJSON(key) == null) {
-			warn(`回退到根号下的数字本地化：key '${key}'`)
+			console.warn(`回退到根号下的数字本地化：key '${key}'`)
 			return number.toString()
 		}
 		const format = formats!.getJSON(key)

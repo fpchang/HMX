@@ -218,6 +218,17 @@ export default {
 			valid_customer_hotelAddress:"请选择填写地址",
 			valid_customer_hotelName:"请填写酒店名称",
 			
+			valid_room_type_name:"请填写房型名称",
+			valid_room_type_bed:"请选择床位",
+			valid_room_type_guestNumber:"入住人数最少1人",
+			valid_room_type_priceBase:"房型价格不得低于1元",
+			
+			valid_room_name:"房间名不能为空",
+			valid_room_type:"请选择房型",
+			valid_room_nums:"至少添加一个房间",
+			
+			
+			
 		}
 	},
 	
@@ -311,7 +322,11 @@ export default {
 				select_room_num:'共{0}间可订',
 				has_select_room_num:'已选择{0}间房',
 				btn_txt:"确认选择",
-				no_room_select_tips:"当前日期房间已经订完，请确认房间数据"
+				no_room_select_tips:"当前日期房间已经订完，请确认房间数据",
+				
+				valid_order_room:"请选择房间",
+				valid_order_user_name:"请输入客户名",
+				valid_order_amount:"请输入总价"
 		}
 	},
 	finance:{

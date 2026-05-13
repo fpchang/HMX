@@ -67,6 +67,7 @@
 	import { HotelService } from "../../services/HotelService.uts";
 	import { loginEvent, loginOut } from "@/store/store.uts";
 	import i18n from '@/i18n/index.uts';
+	import {cloudApi} from "@/api/cloudApi.uts";
 	const title2 = i18n.global.t('title');
 	let isReading = ref(false);
 	let refresher_triggered = ref(false);
@@ -161,6 +162,8 @@
 
 			isReading.value = true;
 		}
+		
+		cloudApi("getSecret")
 	});
 	onLoad(() => {
 		initData();
@@ -169,7 +172,8 @@
 	onMounted(() => {
 	});
 
-import {cloudApi} from "@/api/cloudApi.uts";
+
+
 </script>
 
 <style scoped lang="scss">

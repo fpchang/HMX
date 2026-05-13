@@ -1,14 +1,18 @@
 	import { orderBean } from "@/bean/orderBean.uts";
+	import i18n from '@/i18n/index.uts';
 export const  validForm = (order:orderBean):boolean=>{
 	let msg ="";
 	if(order.reservedRoomList.length<1){
-		msg ="请选择房间";
+		//msg ="请选择房间";
+		msg =i18n.global.t("");
 	}
 	if(order.userName==""){
-		msg="请输入客户名";
+		//msg="请输入客户名";
+		msg =i18n.global.t("");
 	}
 	if(order.totalAmount<1){
-		msg="请输入总价";
+		//msg="请输入总价";
+		msg =i18n.global.t("");
 	}
 	if(msg!=""){
 		uni.showToast({

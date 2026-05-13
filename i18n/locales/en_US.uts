@@ -210,10 +210,21 @@ export default {
 			room_type_images: "Room Type Images",
 			path_room_type_name: "Enter Room Type Name",
 
-			"valid_customer_service_weChat": "Customer service WeChat Is Required",
-			"valid_customer_serviceTel": "Customer service phone number  Is Required",
-			"valid_customer_hotelAddress": "Hotel address  Is Required",
-			"valid_customer_hotelName": "Hotel name  Is Required"
+			valid_customer_service_weChat: "Customer service WeChat Is Required",
+			valid_customer_serviceTel: "Customer service phone number  Is Required",
+			valid_customer_hotelAddress: "Hotel address  Is Required",
+			valid_customer_hotelName: "Hotel name  Is Required",
+			
+			valid_room_type_name: "The room type name is required",
+			valid_room_type_bed: "Please select bed type",
+			valid_room_type_guestNumber: "Minimum check-in number is 1 person",
+			valid_room_type_priceBase: "Room type price cannot be less than 1",
+			
+			valid_room_name:"Room name is required",
+			valid_room_type:"Select room type",
+			valid_room_nums:"At least one room must be added",
+			
+			
 		}
 
 
@@ -303,7 +314,10 @@ export default {
 			select_room_num: 'Total {0} rooms available',
 			has_select_room_num: '{0} rooms selected',
 			btn_txt: "Confirm Selection",
-			no_room_select_tips: "No rooms available for the selected date. Please check room availability."
+			no_room_select_tips: "No rooms available for the selected date. Please check room availability.",
+			valid_order_room: "At least one room must be selected",
+			valid_order_user_name: "Customer Name is required",
+			valid_order_amount: "Total Price is required"
 		}
 	},
 	finance: {

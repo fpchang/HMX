@@ -9,7 +9,7 @@ export const cloudApi = async (name, data = {}) => {
 	try {
 		// 拆分 云对象名.方法名
 		const [objectName, functionName] = name.split('.');
-		if (!objectName || !functionName) {
+		if (!functionName) {
 			throw new Error('调用格式错误，正确格式：对象名.方法名');
 		}
 

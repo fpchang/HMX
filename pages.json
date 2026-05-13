@@ -201,12 +201,7 @@
 				"navigationStyle": "custom"
 			}
 		},
-		{
-			"path": "pages/lottery/lottery",
-			"style": {
-				"navigationBarTitleText": ""
-			}
-		},
+		
 		{
 			"path": "pages/hotelManage/createEmployee/createEmployee",
 			"style": {
@@ -276,7 +271,7 @@
 		{
 			"path": "pages/financialManagement/inExManage/inExDetail/inExDetail",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "收支详情"
 			}
 		}
 		

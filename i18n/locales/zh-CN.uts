@@ -39,6 +39,8 @@ export default {
 		}
 	},
 	form: {
+		phone:"手机号",
+		userName:"用户名",
 		valid_required: "必填项",
 		valid_required_email: "邮箱不能为空",
 		valid_required_phone: "手机号不能为空",
@@ -65,6 +67,7 @@ export default {
 			mine: "我的"
 		},
 	permission: {
+		role:"角色",
 		noPermission: "没有足够的权限",
 		contactAdmin: "请联系负责人",
 		administrator:"超级管理员",
@@ -226,6 +229,22 @@ export default {
 			valid_room_name:"房间名不能为空",
 			valid_room_type:"请选择房型",
 			valid_room_nums:"至少添加一个房间",
+			
+			employee_name:"员工名",
+			employee_phone:"手机号",
+			employee_account:"账号",
+			pach_employee_name:"请输入员工名",
+			pach_employee_phone:"请输入员工手机号",
+			pach_employee_account:"请输入员工账号",
+			valid_employee_name:"请填写员工名称",
+			valid_employee_account:"请填写员工账号",
+			valid_employee_company:"未关联公司",
+			valid_employee_account_duplicate:"已有相同账号",
+			valid_employee_phone_duplicate:"已有相同手机号",
+			valid_employee_phone:"手机号不合法",
+			tips_phone:"*确认输入的手机号已经注册，否则无法添加",
+			tips_account:"*确认输入的账号已经注册，否则无法添加"
+			
 			
 			
 			

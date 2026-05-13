@@ -4,7 +4,7 @@ import { userBean } from '@/bean/userBean';
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 const se_co= uniCloud.importObject("send_email_co");
 const account_co = uniCloud.importObject("hm_account_co");
-
+//const action_co = uniCloud.importObject("hm_action_co") as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
 // type CallObjectResult = {
 //   errCode : number,
 //   errMsg : string,

@@ -31,7 +31,7 @@
 						arrow :url="it.url" :border="false" >
 						<template #leftIcon>
 							<view style="padding-right: 8px;">
-								<image :src="it.icon" style="width: 20px;height: 20px;" mode="aspectFit"></image>
+								<image :src="it.icon" style="width: 40px;height:40px;" mode="aspectFit"></image>
 							</view>
 
 						</template>
@@ -79,25 +79,25 @@
 			title_icon: "/static/icons/homemenu/hotel-anage.png",
 			title_color: "rgb(30,30,30)",
 			menu_item_list: [{
-				icon: "/static/icons/homemenu/linestyle/room-type-line.png",
+				icon: "/static/icons/homemenu/room-type1.png",
 				label: i18n.global.t("function.btn_txt_room_type"),
 				bgColor: "rgba(22, 93, 255, 0.1)",
 				url: "/pages/hotelManage/roomTypeList/roomTypeList"
 			},
 			{
-				icon: "/static/icons/homemenu/linestyle/room-line.png",
+				icon: "/static/icons/homemenu/room1.png",
 				label: i18n.global.t("function.btn_txt_room"),
 				bgColor: "rgba(22, 93, 255, 0.1)",
 				url: "/pages/hotelManage/roomList/roomList"
 			},
 			{
-				icon: "/static/icons/homemenu/linestyle/employee-line.png",
+				icon: "/static/icons/homemenu/employee1.png",
 				label: i18n.global.t("function.btn_txt_room_employee"),
 				bgColor: "rgba(22, 93, 255, 0.1)",
 				url: "/pages/hotelManage/employeeList/employeeList"
 			},
 			{
-				icon: "/static/icons/homemenu/linestyle/preview-line.png",
+				icon: "/static/icons/homemenu/hotel2.png",
 				label: i18n.global.t("function.btn_txt_room_preview"),
 				bgColor: "rgba(22, 93, 255, 0.1)",
 				url: `/pages/hotelDisplay/hotelDisplay?hotel_id=${hotel.value?._id}`
@@ -109,7 +109,7 @@
 			title_icon: "/static/icons/homemenu/financia-green.png",
 			title_color: "rgb(30,30,30)",
 			menu_item_list: [{
-				icon: "/static/icons/homemenu/linestyle/income-line.png",
+				icon: "/static/icons/homemenu/income.png",
 				label: i18n.global.t("function.btn_txt_income_expense"),
 				bgColor: "rgba(72,187,120,0.1)",
 				url: "/pages/financialManagement/inExManage/inExManage"
@@ -121,7 +121,7 @@
 			// 	url: "/pages/financialManagement/expense/expense"
 			// },
 			{
-				icon: "/static/icons/homemenu/linestyle/financial-statistics-line.png",
+				icon: "/static/icons/homemenu/financial-statistics1.png",
 				label: i18n.global.t("function.btn_txt_fm_chart"),
 				bgColor: "rgba(72,187,120,0.1)",
 				url: "/pages/financialManagement/fmchart/fmchart"
@@ -134,13 +134,13 @@
 			title_icon: "/static/icons/homemenu/order-manage.png",
 			title_color: "rgb(30,30,30)",
 			menu_item_list: [{
-				icon: "/static/icons/homemenu/linestyle/order-line.png",
+				icon: "/static/icons/homemenu/order1.png",
 				label: i18n.global.t("function.btn_txt_order"),
 				bgColor: "rgba(237,137,54,0.1)",
 				url: "/pages/order/orderList/orderList"
 			},
 			{
-				icon: "/static/icons/homemenu/linestyle/order-add-line.png",
+				icon: "/static/icons/homemenu/order-add1.png",
 				label: i18n.global.t("function.btn_txt_create_order"),
 				bgColor: "rgba(237,137,54,0.1)",
 				url: "/pages/order/createOrder/createOrder"
@@ -222,8 +222,8 @@
 						// box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
 						.icon-style {
-							width: 20px;
-							height: 20px;
+							width: 40px;
+							height: 40px;
 						}
 					}
 

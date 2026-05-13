@@ -40,6 +40,8 @@ export default {
 		}
 	},
 	form: {
+		phone:"Phone",
+		userName:"User Name",
 		valid_required: "This field is required",
 		valid_required_email: "Email cannot be empty",
 		valid_required_phone: "Phone number cannot be empty",
@@ -65,6 +67,7 @@ export default {
 		mine: "Mine"
 	},
 	permission: {
+		role:"Role",
 		noPermission: "Insufficient permissions",
 		contactAdmin: "Please contact administrator",
 		administrator: "Super Admin",
@@ -224,7 +227,20 @@ export default {
 			valid_room_type:"Select room type",
 			valid_room_nums:"At least one room must be added",
 			
-			
+			employee_name:"Employee Name",
+			employee_phone:"Phone",
+			employee_account:"Account",
+			pach_employee_name:"Enter Employee Name",
+			pach_employee_phone:"Enter Employee Phone",
+			pach_employee_account:"Enter Employee Account",
+			valid_employee_name: "Employee name is required",
+			valid_employee_account: "Employee account is required",
+			valid_employee_company: "Not associated with a company",
+			valid_employee_account_duplicate: "The same account already exists",
+			valid_employee_phone_duplicate:"The same phone already exists",
+			valid_employee_phone: "Invalid phone number",
+			tips_phone: "*Confirm the entered phone number is registered, otherwise it cannot be added",
+			tips_account: "*Confirm the entered account is registered, otherwise it cannot be added"
 		}
 
 

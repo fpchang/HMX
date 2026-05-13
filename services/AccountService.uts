@@ -125,6 +125,7 @@ class AccountServiceClass {
 			const token = data.getString("token") ?? ""
 			if (token != "") {
 				uni.setStorageSync("hm_token", token as string);
+				uni.setStorageSync("uniIdToken", token as string);
 			}
 			return true;
 		} catch (error) {
@@ -144,8 +145,9 @@ class AccountServiceClass {
 			const token = data.getString("token") ?? ""
 			if (token != "") {
 				uni.setStorageSync("hm_token", token as string);
+				uni.setStorageSync("uniIdToken", token as string);
 			}
-			//uni.setStorageSync("account", userForm.value.account);
+		
 			return true;
 		} catch (err) {
 			uni.showToast({

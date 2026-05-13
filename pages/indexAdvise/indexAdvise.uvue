@@ -169,7 +169,7 @@
 	onMounted(() => {
 	});
 
-
+import {cloudApi} from "@/api/cloudApi.uts";
 </script>
 
 <style scoped lang="scss">

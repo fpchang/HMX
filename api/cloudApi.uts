@@ -1,0 +1,41 @@
+/**
+ * 封闭云对象调用方法
+ * 自动在参数中添加本地 token，无需手动传入
+ * 用法：await cloudApi('对象名.方法名', 自定义参数)
+ */
+
+// 统一调用入口
+export const cloudApi = async (name, data = {}) => {
+	try {
+		// 拆分 云对象名.方法名
+		const [objectName, functionName] = name.split('.');
+		if (!objectName || !functionName) {
+			throw new Error('调用格式错误，正确格式：对象名.方法名');
+		}
+
+		// 获取本地存储的 token（uni-app / 微信小程序通用）
+		const token = uni.getStorageSync('token') || '';
+
+		// 合并参数：原参数 + token
+		const postData = {
+			...data,
+			token
+		};
+
+		// 调用云对象
+		const res = await uniCloud.callFunction({
+			name: objectName,
+			data: {
+				[functionName]: postData
+			}
+		});
+
+		// 返回标准结果
+		return Promise.resolve(res.result);
+	} catch (err) {
+		console.error('云对象调用异常：', err);
+		return Promise.reject(err);
+	}
+};
+
+export default cloudApi;

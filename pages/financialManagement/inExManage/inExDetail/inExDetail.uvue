@@ -1,17 +1,17 @@
 <template>
 	<scroll-view style="flex:1">
-	<view style="padding: 14px;display: flex;flex-direction:row;justify-content: center;">
+	<view style="padding: 14px;display: flex;flex-direction:row;justify-content: center;" v-if="fm!=null">
 		<view style="background-color: #fff;border-radius: 14px;padding:24px 14px;max-width: 500px;flex:1"> 
 			<rice-cell-group >
-			  <rice-cell icon="/static/icons/fm/time.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.transaction_date')" :value="formatDate(fm.ioeTime)" />
-			  <rice-cell icon="/static/icons/fm/sztype.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.voucher_Type')" :value="formatTypeName( fm.type)" />
-			  <rice-cell v-if=" fm.billType=='income'" icon="/static/icons/fm/income.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.income')" :value="fm.amount" />
-			  <rice-cell v-if=" fm.billType=='expenses'" icon="/static/icons/fm/expenses.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.expense')" :value="fm.amount" />
+			  <rice-cell icon="/static/icons/fm/time.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.transaction_date')" :value="formatDate(fm?.ioeTime)" />
+			  <rice-cell icon="/static/icons/fm/sztype.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.voucher_Type')" :value="formatTypeName( fm?.type)" />
+			  <rice-cell v-if=" fm?.billType=='income'" icon="/static/icons/fm/income.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.income')" :value="fm?.amount" />
+			  <rice-cell v-if=" fm?.billType=='expenses'" icon="/static/icons/fm/expenses.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.expense')" :value="fm?.amount" />
 			  <rice-cell icon="/static/icons/fm/mark.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('form.remark')" :value="fm?.mark" />
 			
 			</rice-cell-group>
 			
-					<view> 
+					<view style="margin-top:20px"> 
 					  <rice-row :gutter="8">
 						   <rice-col :span="10"></rice-col>
 						   
@@ -56,10 +56,16 @@
 		incomeAndExpensesConfigList.value = list;
 	}
 
-	const formatDate = (timestamp : number) : string => {
+	const formatDate = (timestamp : number | null) : string => {
+		if(timestamp==null){
+			return "--";
+		}
 		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
 	}
-	const formatTypeName = (type : string) : string => {
+	const formatTypeName = (type : string | null) : string => {
+		if(type ==null){
+			return "--";
+		}
 		const target = incomeAndExpensesConfigList.value.find(item => item.name == type);
 		if (target != null) {
 			return target.text

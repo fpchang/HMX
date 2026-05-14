@@ -15,7 +15,7 @@
 			<view class="navbar-btn" v-if="permissionList.includes('EMPLOYEE_CREATE')">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
-				<text class="txt" @click="addEmployee">{{i18n.global.t("common.btn_txt_create",[i18n.global.t("hotel.title_employee")])}}</text>
+				<text class="txt" @click="addEmployee">{{i18n.global.t("hotel.title_employee")}}</text>
 
 
 			</view>

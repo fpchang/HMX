@@ -17,7 +17,7 @@
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
 				<text class="txt"
-					@click="addRoom">{{i18n.global.t("common.btn_txt_create",[i18n.global.t("hotel.title_room")])}}</text>
+					@click="addRoom">{{i18n.global.t("hotel.title_room")}}</text>
 
 
 			</view>

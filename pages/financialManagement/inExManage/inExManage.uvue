@@ -1,11 +1,10 @@
 <template>
-	<rice-navbar title="" border>
+	<rice-navbar title="" border height="80px">
 		<template #left>
 			<view style="display: flex;flex-direction: row;align-items: center;">
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
-
 				<image src="/static/icons/list.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
 				<text
@@ -13,13 +12,10 @@
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn">
+			<view class="navbar-btn" style="align-items: end;">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
-
 				<text class="txt"
-					@click="addFm">{{billType=='income'?i18n.global.t("common.btn_txt_create",[i18n.global.t("finance.income")]):i18n.global.t("common.btn_txt_create",[i18n.global.t("finance.expense")])}}</text>
-
-
+					@click="addFm">{{billType=='income'?i18n.global.t("finance.income"):i18n.global.t("finance.expense")}}</text>
 			</view>
 		</template>
 	</rice-navbar>
@@ -169,14 +165,14 @@
 	</view>	
 	<page-container :show="showDeatilPage" position="right" :round="true" @afterleave="showDeatilPage=false" custom-style="background-color: #f5f5f7;width:750rpx">
 		<view class="container" style="width:750rpx;">
-			<view style="margin-top:100px;padding: 14px;display: flex;flex-direction:row;justify-content: center;">
+			<view style="margin-top:100px;padding: 14px;display: flex;flex-direction:row;justify-content: center;" v-if="active_fm!=null">
 				<view style="background-color: #fff;border-radius: 14px;padding:24px 14px;max-width: 500px;flex:1"> 
 					<rice-cell-group>
-					  <rice-cell icon="/static/icons/fm/time.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.transaction_date')" :value="formatDate(active_fm.ioeTime)" :clickable="false"/>
-					  <rice-cell icon="/static/icons/fm/sztype.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.voucher_Type')" :value="formatTypeName( active_fm.type)" :clickable="false"/>
-					  <rice-cell v-if=" active_fm.billType=='income'" icon="/static/icons/fm/income.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.income')" :value="active_fm.amount" :clickable="false"/>
-					  <rice-cell v-if=" active_fm.billType=='expenses'" icon="/static/icons/fm/expenses.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.expense')" :value="active_fm.amount" :clickable="false"/>
-					  <rice-cell icon="/static/icons/fm/mark.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('form.remark')" :value="active_fm.mark" :clickable="false"/>
+					  <rice-cell icon="/static/icons/fm/time.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.transaction_date')" :value="formatDate(active_fm?.ioeTime)" :clickable="false"/>
+					  <rice-cell icon="/static/icons/fm/sztype.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.voucher_Type')" :value="formatTypeName(active_fm?.type)" :clickable="false"/>
+					  <rice-cell v-if=" active_fm?.billType=='income'" icon="/static/icons/fm/income.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.income')" :value="active_fm?.amount" :clickable="false"/>
+					  <rice-cell v-if=" active_fm?.billType=='expenses'" icon="/static/icons/fm/expenses.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.expense')" :value="active_fm?.amount" :clickable="false"/>
+					  <rice-cell icon="/static/icons/fm/mark.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('form.remark')" :value="active_fm?.mark" :clickable="false"/>
 					
 					</rice-cell-group>
 					
@@ -239,9 +235,7 @@
 		return state.roomTypeList;
 	});
 	
-	const showDeatilPage=ref(false);
-	const active_fm=ref<FMBean | null>(null);
-
+	
 	//选择列表
 	let _select_id = ref("income");
 	let _search_key = ref("");
@@ -290,6 +284,20 @@
 		}
 
 	}
+	const showDeatilPage=ref(false);
+	//const active_fm=ref<FMBean | null>(null);
+	const active_id=ref("");
+	// detail item 
+	const active_fm=computed<FMBean | null>(()=>{
+		if(active_id.value==""){
+			return null;
+		}
+		const target = fmResult.value.fmList.find(item=>item._id == active_id.value);
+		if(target!=null){
+			return target;
+		}
+		return null;
+	});
 	const dateChange = (range : string[]) => {
 		dateRange.value = range;
 		getFmList();
@@ -306,10 +314,16 @@
 		console.log(pn, fmResult.value);
 		getFmList();
 	}
-	const formatDate = (timestamp : number) : string => {
+	const formatDate = (timestamp : number | null) : string => {
+		if(timestamp==null){
+			return "--";
+		}
 		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
 	}
-	const formatTypeName = (type : string) : string => {
+	const formatTypeName = (type : string |null) : string => {
+		if(type==null){
+			return "--";
+		}
 		const target = incomeAndExpensesConfigList.value.find(item => item.name == type);
 		if (target != null) {
 			return target.text
@@ -344,7 +358,10 @@
 
 
 	}
-	const deleteFm = async (fm : FMBean) => {
+	const deleteFm = async (fm : FMBean|null) => {
+		if(fm==null){
+			return;
+		}
 		if (submitLoading.value == true) {
 			return;
 		}
@@ -396,7 +413,10 @@
 
 		});
 	}
-	const editFm = async (fm : FMBean) => {
+	const editFm = async (fm : FMBean | null) => {
+		if(fm==null){
+			return;
+		}
 		if (!permissionList.value.includes(
 			"ROOMTYPE_UPDATE"
 		)) {
@@ -413,13 +433,14 @@
 		uni.$once("refrushfmList", () => {
 			getFmList();
 		});
-		showDeatilPage.value=false;
+		//showDeatilPage.value=false;
 		uni.navigateTo({
 			url: `/pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense?pageType=1&fm=${encodeURIComponent(JSON.stringify(fm))}`
 		})
 	}
 	const viewFm=(fm:FMBean)=>{
-		active_fm.value=fm;
+		//active_fm.value=fm;
+		active_id.value=fm._id;
 		showDeatilPage.value=true;
 		// uni.$once("refrushfmList", () => {
 		// 	getFmList();

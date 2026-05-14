@@ -15,8 +15,7 @@
 			<view class="navbar-btn">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
-				<text class="txt" @click="addOrder">{{ i18n.global.t('order.addOrder') }}</text>
-
+				<text class="txt" @click="addOrder">{{ i18n.global.t('order.title_order') }}</text>
 
 			</view>
 		</template>
@@ -367,6 +366,7 @@
 </script>
 
 <style lang="scss">
+
 	.search-area {
 		padding: 18px;
 

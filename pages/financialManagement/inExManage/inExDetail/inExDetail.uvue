@@ -22,7 +22,7 @@
 					    </rice-col>
 					    <rice-col :span="6">
 					      <view>
-							  <rice-button type="error" size="small" plain-fill text="删除"></rice-button>
+							  <rice-button type="error" size="small" plain-fill text="删除" @click="deleteFm"></rice-button>
 						  </view>
 					    </rice-col>
 					 </rice-row>
@@ -49,18 +49,99 @@
 	import { fmState } from "@/store/modules/fmStore.uts";
 	import { userBean } from "@/bean/userBean";
 	import i18n from '@/i18n/index.uts';
+	
+	let submitLoading = ref(true);
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	})
 	const fm = ref<FMBean | null>(null);
-	const incomeAndExpensesConfigList = ref<Array<FMTypeConfigBean>>([]);
-	const getIncomeAndExpensesConfigList = async () => {
-		const list = await FMService.getIncomeAndExpensesConfig();
-		incomeAndExpensesConfigList.value = list;
+	const incomeAndExpensesConfigList = computed<Array<FMTypeConfigBean>>(()=>{
+		return fmState.incomeAndExpensesConfig;
+	});
+	const  getfm= async (fm_id:string)=>{
+		await FMService.getFmById(fm_id);
 	}
-
 	const formatDate = (timestamp : number | null) : string => {
 		if(timestamp==null){
 			return "--";
 		}
 		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
+	}
+	const deleteFm=async (fm:FMBean)=>{
+		 if (submitLoading.value == true) {
+		 	return;
+		 }
+		 if (!permissionList.value.includes(
+		 	"ROOMTYPE_DELETE"
+		 )) {
+		 	showDialog({
+		 		title: i18n.global.t('permission.noPermission'),
+		 		message: i18n.global.t('permission.contactAdmin'),
+		 		showCancelButton: false,
+		 		confirm: () => {
+		 			hideDialog();
+		 		}
+		 	})
+		 	return;
+		 }
+		 console.log("delete")
+		 showDialog({
+		 	title: i18n.global.t("common.confirmDelete"),
+		 	message: i18n.global.t("common.deleteOrderTip"),
+		 	cancelButtonText: i18n.global.t("common.btn_txt_cancel"),
+		 	confirmButtonText: i18n.global.t("common.btn_confirm"),
+		 	beforeClose: async () : Promise<boolean> => {
+		 		try {
+		 			await FMService.deleteFm(fm._id);
+					uni.$emit("refrushfmList");
+					uni.navigateBack();
+		 			hideDialog();
+		 			return true;
+		 		} catch (errMsg) {
+		 			uni.showToast({
+		 				title: i18n.global.t("common.delete_fail"),
+		 				icon: "none"
+		 			})
+		 			return false;
+		 		}
+		 
+		 
+		 	},
+		 	confirm: () => {
+		 		console.log("confirm1111111");
+		 		
+		 	}, cancel: () => {
+		 		hideDialog();
+		 	}
+		 
+		 });
+		 
+		 
+	}
+	const editFm=(fm:FMBean)=>{
+		if (!permissionList.value.includes(
+			"ROOMTYPE_UPDATE"
+		)) {
+			showDialog({
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+
+		uni.navigateTo({
+			url: `/pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense?pageType=1&fm=${encodeURIComponent(JSON.stringify(fm))}`
+		})
 	}
 	const formatTypeName = (type : string | null) : string => {
 		if(type ==null){
@@ -72,29 +153,22 @@
 		}
 		return "--"
 	}
-	const init = async () => {
-		//let d:MOONTH_START_END_TIMESTAMP=TIME.getTodayStartTimeAndEndTime(new Date());
-		await getIncomeAndExpensesConfigList();
-
-	}
 	onLoad(params => {
 		console.log("params", params);
 		try {
 			const fm_t = params.getString("fm");
 
 			if (fm_t != null) {
-				console.log("2222")
 				let decoded = decodeURIComponent(fm_t);
 				if (decoded != null) {
 					fm.value = JSON.parse<FMBean>(decoded)!;
-					console.log("bbbbbbb", fm.value);
+					//getfm(fm.value._id);
 				}
 			}
 		} catch (e) {
 			console.error(e)
 		}
 	});
-	init();
 </script>
 
 <style lang="scss">

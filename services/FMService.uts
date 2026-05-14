@@ -108,7 +108,40 @@ class FMServiceClass {
 		}
 
 	}
-
+	async getFmById(fm_id : string):Promise<FMBean>{
+		const w = {
+			_id:fm_id
+		}
+		try {
+			const res = await DB.getCollection("hm-incomeAndExpenses",w);
+			const data = res['data'] as Array<UTSJSONObject>;
+			if(data.length>0){
+				const item = data[0]
+				const fm:FMBean={
+					_id: item.getString("_id") ?? "",
+					amount: item.getNumber("amount") ?? 0,
+					billType: item.getString("billType") ?? "",
+					createTime: item.getNumber("createTime") ?? 0,
+					creater: item.getString("creater") ?? "",
+					//data_status: item.getNumber("data_status") ?? 0,
+					hotel_id: item.getString("hotel_id") ?? "",
+					ioeTime: item.getNumber("ioeTime") ?? 0,
+					mark: item.getString("mark") ?? "",
+					type: item.getString("type") ?? "",
+					unit: item.getString("unit") ?? ""
+				}
+				console.log("getfm",fm)
+				 return fm;
+			}else{
+				throw new Error("not find data");
+			}
+		
+			
+		} catch (error) {
+			throw new Error("get data fail");
+		
+		}
+	}
 
 	//获取收入与支出分类
 	async getIncomeAndExpensesDateBySearch(hotel_id : string, billType : string, keyword : string, dateRange : string[], pageNo : number, pageSize : number) : Promise<FMDataListResult> {

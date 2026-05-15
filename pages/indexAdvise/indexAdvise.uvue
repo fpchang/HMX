@@ -81,6 +81,7 @@
 	};
 	const popup_confirm = ref(null);
 	const toLogin = () => {
+		//i18n.global.locale.value = i18n.global.locale.value == 'zh-CN' ? 'en-US' : 'zh-CN';
 		uni.navigateTo({
 			url: "/pages/login/login",
 		});
@@ -103,7 +104,13 @@
 		}
 		showPopu.value = false;
 	};
-	const funcList = [
+	type funType={
+		title:string,
+		img:string,
+		info:string
+	}
+	const funcList = computed<Array<funType>>(()=>{
+		const list:Array<funType>= [
 		{
 			title: i18n.global.t('indexAdvise.coreFunction.orderManage'),
 			img: "/static/icons/homemenu/order1.png",
@@ -131,6 +138,8 @@
 			info: i18n.global.t('indexAdvise.coreFunction.hotelDisplay_content'),
 		}
 	];
+	return list;
+	}) 
 	const navTopHeight = computed(() => {
 		// #ifdef MP-WEIXIN
 		return "100px";

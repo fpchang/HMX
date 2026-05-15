@@ -1,11 +1,20 @@
 <script lang="uts">
-	
+	import i18n from '@/i18n/index.uts';
   // #ifdef APP-ANDROID || APP-HARMONY
 	let firstBackTime = 0
   // #endif
+  const setLanuage=()=>{
+	  const sys = uni.getSystemInfoSync();
+	  const osLanguage = sys.osLanguage;
+	  let local='en-US';
+	 if(osLanguage.includes('Hans') || osLanguage.includes('Hant')){
+		 local='zh-CN';
+	 }
+	  i18n.global.locale.value = local;
+  }
 	export default {
 		onLaunch: function () {
-			console.log('App Launch')
+	
 			//#ifdef APP-ANDROID
 			const showMoreMessage = uni.getStorageSync("showMoreMessage");
 			if(showMoreMessage!="0"){
@@ -14,7 +23,7 @@
 				});
 			}
 			//#endif
-								
+			//	setLanuage();				
 		},
 		onShow: function () {
 			console.log('App Show')

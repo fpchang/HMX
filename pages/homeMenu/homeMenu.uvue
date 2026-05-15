@@ -6,9 +6,9 @@
 					<image :src="item.title_icon" class="icon-stye"></image>
 					<text class="txt" :style="{'color':item.title_color}">{{item.title}}</text>
 				</view>
-				<view>
+				<view  v-if=" i18n.global.locale.value == 'zh-CN'">
 					<l-space :wrap="true" :size="14">
-						<view  v-for="it in item.menu_item_list" :key="it.label" style=";min-width:90px;flex:1">
+						<view  v-for="it in item.menu_item_list" :key="it.label" style=";min-width:80px;flex:1;padding:8px 0;">
 							<navigator :url="it.url" hover-class="none">
 								<view class="item-content">
 									<view class="groupIcon">
@@ -25,7 +25,7 @@
 					</l-space>
 				</view> 
 								
-				<rice-cell-group v-if="false">
+				<rice-cell-group v-if=" i18n.global.locale.value != 'zh-CN'">
 
 					<rice-cell center size="medium"  :title="it.label" v-for="it in item.menu_item_list"
 						arrow :url="it.url" :border="false" >

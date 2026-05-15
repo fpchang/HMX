@@ -5,10 +5,11 @@
   // #endif
   const setLanuage=()=>{
 	  const sys = uni.getSystemInfoSync();
+	  console.log('sys',sys);
 	  const osLanguage = sys.osLanguage;
-	  let local='en-US';
-	 if(osLanguage.includes('Hans') || osLanguage.includes('Hant')){
-		 local='zh-CN';
+	  let local='zh-CN';
+	 if(osLanguage!="undefined"&&!osLanguage.includes('zh-')){
+		 local='en-US';
 	 }
 	  i18n.global.locale.value = local;
   }
@@ -23,7 +24,7 @@
 				});
 			}
 			//#endif
-			//	setLanuage();				
+				setLanuage();				
 		},
 		onShow: function () {
 			console.log('App Show')

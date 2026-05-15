@@ -3,10 +3,10 @@
 		<view class="card">
 			<rice-form :model="emailForm" :rules="registerRule" ref="emailFormRef" label-width="100px"
 				class="demo-form">
-				<rice-form-item name="email" required label-position="top">
+				<rice-form-item name="email" required label-position="top" :border-bottom="false">
 					<rice-input v-model="emailForm['email']" :placeholder="i18n.global.t('register.pach_email')" :focus-border="true" />
 				</rice-form-item>
-				<rice-form-item name="emailCode" required label-position="top">
+				<rice-form-item name="emailCode" required label-position="top" :border-bottom="false">
 					<view class="input-row" style="border:1px solid #dcdfe6">
 						<view style="flex:1;display: flex;padding:0 8px;">
 							<rice-input v-model="emailForm['emailCode']" :placeholder="i18n.global.t('register.pach_email_code')" border="none"
@@ -169,16 +169,8 @@
 </script>
 <style scoped lang="scss">
 	.verifyEmailComponent {
-		flex: 1;
-		// background: linear-gradient(180deg, #f2f5f9 0%, #e6ebf5 100%);
-		padding: 0 16px;
-		box-sizing: border-box;
 		.card {
-			background: #ffffff;
-			padding-top: 20px;
-			border-radius: 20px;
-			// padding: 40px 20px;
-			// box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+			
 		}
 		
 		.title {

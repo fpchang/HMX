@@ -2,19 +2,19 @@
 	<view>
 		<rice-form :model="userForm" :rules="rule" ref="userFormRef" label-width="100px" class="demo-form">
 			<rice-form-item name="phone" label-position="top" :border-bottom="false">
-				<view class="input-row" >
-					<view style="flex:1;display: flex;">
+				
+					<view style="flex:1;overflow: hidden;">
 				<rice-input v-model="userForm.phone" :placeholder="i18n.global.t('login.pach_phone')"  :maxlength="11"  focus-border/>
 				</view>
-				</view>
+				
 			</rice-form-item>
 			<rice-form-item name="smsCode"  required  label-position="top" :border-bottom="false">
 				<!-- <rice-input v-model="userForm['smsCode']" placeholder="请输入验证码" border="none" :maxlength="4" /> -->
-				<view class="input-row" style="border:1px solid #dcdfe6" >
-					<view style="flex:1;display: flex;padding-left: 8px;">
+				<view  class="group-formitem" style="flex:1;overflow: hidden;">
+					<view style="flex:1;display: flex;">
 
-						<rice-input  :placeholder="i18n.global.t('login.pach_sms')" type="number" v-model="userForm.smsCode"
-							:maxlength="4"  border="none"/>
+						<rice-input style="width: 100%;"  :placeholder="i18n.global.t('login.pach_sms')" type="number" v-model="userForm.smsCode"
+							:maxlength="4" />
 
 					</view>
 					<view style="display: flex;flex-direction: row;align-items: center;">
@@ -199,15 +199,13 @@
 </script>
 
 <style lang="scss">
-	.input-row {
+	.group-formitem {
 		
-		width: 100%;
 		display: flex;
 		flex:1;
 		flex-direction: row;
 		justify-content: space-between;
-	
-		overflow: hidden;
+		
 	}
 
 	.btn-code {

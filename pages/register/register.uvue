@@ -1,10 +1,16 @@
 <template>
-	
+
 	<view class="page">
 		<view class="card">
 			<view class="title"><text class="txt">{{i18n.global.t('register.register_account')}}</text></view>
-			<verifyEmailComponent @setEmailEvent="setEmailEvent" v-if="process==0"></verifyEmailComponent>
-			<verifyAccountComponent @setAccountEvent="setAccountEvent" v-if="process==1"></verifyAccountComponent>
+			<view>
+				<verifyEmailComponent @setEmailEvent="setEmailEvent" v-if="process==0"></verifyEmailComponent>
+			</view>
+			<view>
+				<verifyAccountComponent @setAccountEvent="setAccountEvent" v-if="process==1"></verifyAccountComponent>
+			</view>
+
+
 		</view>
 	</view>
 </template>
@@ -17,7 +23,7 @@
 	import verifyEmailComponent from "./components/verifyEmailComponent.uvue";
 	import i18n from '@/i18n/index.uts';
 	const submitLoading = ref(false);
-	const process=ref(0);
+	const process = ref(0);
 	type userType = {
 		account : string,
 		email : string,
@@ -37,7 +43,7 @@
 
 	const userFormRef = ref<RiceFormComponentPublicInstance | null>(null);
 	const codeDisabled = ref(false);
-	
+
 	// 注册提交
 	const handleRegister = async () => {
 		if (submitLoading.value == true) {
@@ -77,65 +83,64 @@
 		}
 	}
 	//AccountService.upp();
-const setEmailEvent = (email : string,emailCodeTk:string) => {
+	const setEmailEvent = (email : string, emailCodeTk : string) => {
 		userForm.value.email = email;
 		userForm.value.emailCodeTk = emailCodeTk;
-		process.value=1;
+		process.value = 1;
 	}
-	const setAccountEvent =(account:string,password:string)=>{
+	const setAccountEvent = (account : string, password : string) => {
 		userForm.value.account = account;
 		userForm.value.password = password;
 		handleRegister();
-		
+
 	}
 </script>
 <style scoped lang="scss">
 	.page {
+
 		flex: 1;
-		// background: linear-gradient(180deg, #f2f5f9 0%, #e6ebf5 100%);
-		background: #ffffff;
+		background-color: #fff;
+		padding: 0 24px;
 		box-sizing: border-box;
-		display: flex;
-		align-items: center;
+
 		.card {
-			
-			padding-top: 60px;
+
 			border-radius: 20px;
-			padding: 40px 20px;
+			 padding: 40px 14px;
 			// box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
 		}
-		
+
 		.title {
-		
+
 			text-align: center;
 			margin-bottom: 40px;
-		
+
 			.txt {
 				font-size: 32px;
 				font-weight: 600;
 				color: #1d1d1f;
-				padding-left:14px;
+				padding-left: 14px;
 			}
 		}
-		
+
 		.input-box {
 			margin-bottom: 20px;
 			border-bottom: 0.5px solid #e5e7eb;
 			background-color: #fff;
 			border-radius: 25px;
 		}
-		
+
 		.input {
 			height: 50px;
 			padding: 0 16px;
 			font-size: 16px;
 			color: #1d1d1f;
 		}
-		
+
 		.ph {
 			color: #8e8e93;
 		}
-		
+
 		.btn-register {
 			margin-top: 35px;
 			width: 100%;
@@ -148,19 +153,19 @@ const setEmailEvent = (email : string,emailCodeTk:string) => {
 			font-weight: 500;
 			border: none;
 		}
-		
+
 		.input-row {
-		
+
 			width: 100%;
 			height: 100%;
 			display: flex;
 			flex: 1;
 			flex-direction: row;
 			justify-content: space-between;
-		
+
 			overflow: hidden;
 		}
-		
+
 		.btn-code {
 			font-size: 14px;
 			color: #007aff;
@@ -170,11 +175,9 @@ const setEmailEvent = (email : string,emailCodeTk:string) => {
 			padding: 0 8px;
 			margin: 0 4px;
 		}
-		
+
 		.btn-code[disabled] {
 			color: #8e8e93;
 		}
 	}
-
-	
 </style>

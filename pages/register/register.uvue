@@ -95,6 +95,8 @@ const setEmailEvent = (email : string,emailCodeTk:string) => {
 		// background: linear-gradient(180deg, #f2f5f9 0%, #e6ebf5 100%);
 		background: #ffffff;
 		box-sizing: border-box;
+		display: flex;
+		align-items: center;
 		.card {
 			
 			padding-top: 60px;

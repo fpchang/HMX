@@ -194,7 +194,8 @@ export default {
 			recreation_facilities: "休闲设施",
 			athleticFacility_facilities: "运动设施",
 			customer_service_hotline: "客服电话",
-			customer_ervice_weChat: "客服微信",
+			customer_service_weChat: "客服微信",
+			
 			cover_image: "封面图片",
 			hotel_images: "酒店图片",
 			path_hotel_name: "请输入酒店名称",

@@ -1,17 +1,14 @@
 const utils = require('../utils/index.js');
-const tokenEvent = require('../../common/tokenEvent/index.js');
 
 module.exports = {
 	async fm_createPayOrder(event) {
-		const { $token } = event;
 		const db = uniCloud.database();
 		const dbJQL = uniCloud.databaseForJQL({
 			event,
 			context: this.getClientInfo()
 		});
 		try {
-			const verifyTokenObj = utils.utils_verifyToken($token, tokenEvent.getSecret());
-			const { phone } = verifyTokenObj.value;
+			const { phone } = this._tokenInfo;
 			const res = await dbJQL.collection("hm-memberOrder").add({
 				phone
 			});

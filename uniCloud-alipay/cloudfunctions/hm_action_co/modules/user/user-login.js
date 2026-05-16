@@ -1,5 +1,4 @@
 const utils = require('../utils/index.js');
-const tokenEvent = require('../../common/tokenEvent/index.js');
 
 module.exports = {
 	async user_login(userForm) {
@@ -31,7 +30,7 @@ module.exports = {
 			const userRes = await dbJQL.collection('hm-user').where(`phone=='${phone}'`).get();
 			if (userRes.data.length > 0) {
 				const user = userRes.data[0];
-				const newToken = tokenEvent.getToken({
+				const newToken =utils.utils_getToken({
 					phone: phone,
 					account: user.account,
 					account_id: user._id
@@ -68,7 +67,7 @@ module.exports = {
 				return { errCode: 1, errMsg: "账号密码不正确" };
 			}
 			const user = userRes.data[0];
-			const newToken = tokenEvent.getToken({
+			const newToken =utils.utils_getToken({
 				phone: user.phone,
 				account: user.account,
 				account_id: user._id
@@ -105,7 +104,7 @@ module.exports = {
 			const userRes = await dbJQL.collection('hm-user').where(`phone=='${phone}'`).get();
 			if (userRes.data.length > 0) {
 				const user = userRes.data[0];
-				const newToken = tokenEvent.getToken({
+				const newToken =utils.utils_getToken({
 					phone: user.phone,
 					account: user.account,
 					account_id: user._id

@@ -156,23 +156,20 @@
 		}, 1000);
 	};
 	const initData = (async () => {
-		const action = uniCloud.importObject("hm_action_co");
-		console.log(action);
-		//const htlist = await action.hotel_getList();
-		// const orlist = await action.order_getList();
-		// console.log("11111",orlist)
 		try {
 			console.log("验证token");
-			const res = await loginEvent();;
-			console.log("验证token结果", res);
-			accessin();
+			const flag:boolean = await loginEvent();;
+			if(flag){
+				isReading.value = true;
+				accessin();
+				
+			}
+			
 		} catch (error) {
 			console.log("err", error);
 
 			isReading.value = true;
-		}
-		
-		//cloudApi("getSecret")
+		}		
 	});
 	onLoad(() => {
 		initData();

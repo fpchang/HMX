@@ -1,5 +1,4 @@
 const utils = require('../utils/index.js');
-const tokenEvent = require('../../common/tokenEvent/index.js');
 
 module.exports = {
 	async user_sendSms(event) {
@@ -7,7 +6,7 @@ module.exports = {
 		const db = uniCloud.database();
 		const smsCode = this.user_randomSms();
 		if (this.getClientInfo().SPACEINFO.spaceId == "env-00jxh1m2dpmq" || this.user_isTestAccount(phone)) {
-			const newToken = tokenEvent.getToken({ phone: phone, smsCode: 1234 }, utils.utils_getSecret(), 300);
+			const newToken =utils.utils_getToken({ phone: phone, smsCode: 1234 }, utils.utils_getSecret(), 300);
 			return { code: 0, tk: newToken };
 		}
 		const { appId } = this.getClientInfo();
@@ -23,7 +22,7 @@ module.exports = {
 				}
 			});
 			console.log("发送短信验证结果=====", res);
-			const newToken = tokenEvent.getToken({ phone: phone, smsCode: smsCode }, utils.utils_getSecret(), 300);
+			const newToken =utils.utils_getToken({ phone: phone, smsCode: smsCode }, utils.utils_getSecret(), 300);
 			return { code: 0, tk: newToken };
 		} catch (err) {
 			console.log(JSON.stringify(err))

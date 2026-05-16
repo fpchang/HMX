@@ -55,5 +55,18 @@ module.exports = {
 	// ==================== errorEvent ====================
 	utils_getTokenError(msg = "token无效") {
 		return { code: 9999, msg: msg }
+	},
+	//获取客户端语言
+	utils_getLanuage(clientInfo){
+		 // const sys = uni.getSystemInfoSync();
+		 // const clientInfo = this.getClientInfo();
+		  const osLanguage = clientInfo.osLanguage;
+		  let local='zh-CN';
+		 if(osLanguage!=null&&!osLanguage.includes('zh-')){
+			 local='en-US';
+		 }
+		 
+		//  i18n.global.locale.value = local;
+		return local;
 	}
 }

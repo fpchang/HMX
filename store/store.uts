@@ -112,32 +112,22 @@ export const setPermissionList = (list : Array<string>) => {
  * @param {*} noLoginEvent 未登录时直接触发
  * @returns 
  */
-export const loginEvent = async () : Promise<string> => {
+export const loginEvent = async ():Promise<boolean>  => {
 	const token = uni.getStorageSync("hm_token") as string | null;
 	if (token == null || token == "") {
 		//未登录
 		clearCache();
-		return Promise.reject("未登录");
+		return false;
 	}
 
-	const res = await AccountService.validToken();
-	const result = res['result'] as UTSJSONObject;
-	console.log("res", res);
-	const code = result.getNumber("errCode")??0;
-	const errmsg = result.getString("errMsg")??"";
-	if (code != 0) {
-		
-		if (errmsg != "") {
-			uni.showToast({
-				title: errmsg,
-				duration: 2000,
-				icon: "none",
-			});
-		}
+	const flag: boolean = await AccountService.validToken();
+
+	if (!flag) {				
 		clearCache();
-		return Promise.reject("token验证失败");
+		return false
 	}
-	return Promise.resolve('token验证通过')
+	return  true;
+	//return Promise.resolve('token验证通过')
 };
 export const clearCache =  () : void => {
 	// uni.removeStorageSync("hm_token");

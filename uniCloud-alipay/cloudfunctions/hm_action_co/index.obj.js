@@ -9,12 +9,11 @@ const scenicSpot = require("./modules/scenicSpot/index.js");
 const fm = require("./modules/fm/index.js");
 const config = require("./modules/config/index.js");
 const utils = require("./modules/utils/index.js");
-const tokenEvent = require("./common/tokenEvent/index.js");
-
+const { getI18nMsg } = require('./i18n/index.js');
 const methodList = [
-	'user_login',
-	'user_register',
-	'user_sendSms',
+	//'user_login',
+	//'user_register',
+	//'user_sendSms',
 	'user_validToken',
 	'user_getUser',
 	'user_closeAccount',
@@ -72,20 +71,32 @@ const methodList = [
 ];
 
 module.exports = {
+	/**
+	 * this._tokenInfo:解析的token
+	 * this.$t 国际化对象
+	 */
 	_before: function () {
+		const clientInfo = this.getClientInfo();
+		const lang = utils.utils_getLanuage(clientInfo);
+		console.log('客户端语言',lang);
+		this.$t = getI18nMsg(lang);
+		console.log("$t",this.$t);
+		
 		const methodName = this.getMethodName();
 		if (methodList.includes(methodName)) {
-			const clientInfo = this.getClientInfo();
-			console.log("AAAAAAAAAAAAA",clientInfo)
-			const token = clientInfo.token || clientInfo.headers?.token;
-			if (token) {
+			const token = this.getUniIdToken();
+			if(!token){
+				return {errCode:"9999",errMsg:"",data:[]}
+			}	
 				const secret = utils.utils_getSecret();
 				const verifyResult = utils.utils_verifyToken(token, secret);
 				if (verifyResult) {
 					this._tokenInfo = verifyResult.value;
-					this._user = verifyResult.value;
+				
 				}
-			}
+				
+			
+			
 		}
 	},
 	getTokenInfo: function () {

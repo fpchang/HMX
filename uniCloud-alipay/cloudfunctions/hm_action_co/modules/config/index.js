@@ -9,17 +9,15 @@ module.exports = {
 	},
 
 	async permission_getPermission(event) {
-		const { hotel_id, $token } = event;
+		const { hotel_id} = event;
 		const dbJQL = uniCloud.databaseForJQL({
 			event,
 			context: this.getClientInfo()
 		})
-		if (!$token) {
-			return { errCode: "302", errMsg: "没有token，无法确定权限", data: [] }
-		}
+		
 		try {
-			const verifyTokenObj = utils.utils_verifyToken($token, "****");
-			const { phone } = verifyTokenObj.value;
+
+			const { phone } = this._tokenInfo;
 			const roleObj = await dbJQL.collection("hm-employee").where({ hotel_id, phone }).get();
 			let role_name = "normal";
 			if (roleObj.data.length > 0) {
@@ -45,17 +43,15 @@ module.exports = {
 	},
 
 	async permission_getPermission_x(event) {
-		const { hotel_id, $token } = event;
+		const { hotel_id } = event;
 		const dbJQL = uniCloud.databaseForJQL({
 			event,
 			context: this.getClientInfo()
 		})
-		if (!$token) {
-			throw new Error("没有token，无法确定权限")
-		}
+
 		try {
-			const verifyTokenObj = utils.utils_verifyToken($token, "****");
-			const { account_id } = verifyTokenObj.value;
+			
+			const { account_id } = this._tokenInfo;
 			const roleObj = await dbJQL.collection("hm-employee").where({ hotel_id, account_id }).get();
 			let role_name = "normal";
 			if (roleObj.data.length > 0) {

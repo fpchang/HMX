@@ -29,17 +29,14 @@ module.exports = {
 	},
 
 	async user_closeAccount(event) {
-		const { $token } = event;
-		if (!$token) {
-			throw new Error("token不能为空")
-		}
+
 		const dbJQL = uniCloud.databaseForJQL({
 			event,
 			context: this.getClientInfo()
 		})
 		try {
-			const verifyTokenObj = utils.utils_verifyToken($token, "****");
-			const { phone } = verifyTokenObj.value;
+			
+			const { phone } = this._tokenInfo;
 			const time = Date.now();
 			const res = await dbJQL.collection("hm-user").where({ phone: phone }).update({ accountStatus: 9, closeAccountDateTime: time });
 			return res;

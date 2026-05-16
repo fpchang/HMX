@@ -9,15 +9,7 @@ module.exports = {
 				errCode: 102
 			};
 		}
-		const secret = utils.utils_getSecret();
-		const verifT = utils.utils_verifyToken(token, secret);
-		console.log("verifT::", verifT)
-		if (!verifT || !verifT.value.account_id) {
-			return {
-				errMsg: "验证用户身份失败",
-				errCode: 200
-			};
-		}
+	
 		const flag = await this.user_validPasswordIsCorrent(verifT.value.account_id, originPassword);
 		if (!flag) {
 			return {

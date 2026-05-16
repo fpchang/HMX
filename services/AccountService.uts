@@ -4,7 +4,7 @@ import { userBean } from '@/bean/userBean';
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 const se_co= uniCloud.importObject("send_email_co");
 const account_co = uniCloud.importObject("hm_account_co");
-//const action_co = uniCloud.importObject("hm_action_co") as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
+const action_co = uniCloud.importObject("hm_action_co",{customUI:true}) as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
 // type CallObjectResult = {
 //   errCode : number,
 //   errMsg : string,
@@ -38,9 +38,22 @@ class AccountServiceClass {
 		//  const data:UTSJSONObject={"a":1};
 		return DB.callFunction("hm_getConfig");
 	}
-	validToken() : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+	async validToken() : Promise<boolean> {
 		// const token:string = uni.getStorageSync('hm_token').toString();
-		return DB.callFunction("hm_validToken");
+		//return DB.callFunction("hm_validToken");
+		try {
+			const res = await action_co.user_validToken();
+			console.log("valid token",res);
+			const errCode=res['errCode'] as number;
+			const errMsg=res['errMsg'] as string;
+			if(errCode !=0){
+				return false;
+			}
+			return true;
+		} catch (error) {
+			throw new Error("valid token fail")
+		}
+		
 	}
 	async sendEmailCode(email : string,type:string):Promise<string> {
 		try {

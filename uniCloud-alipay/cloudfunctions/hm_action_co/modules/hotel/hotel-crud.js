@@ -1,11 +1,10 @@
 const utils = require('../utils/index.js');
 
 module.exports = {
-	async hotel_createHotel(event) {
-		let { $user, hotelObj } = event;
-		console.log("hotel_createHotel", event);
+	async hotel_createHotel(hotelObj) {
+		console.log("hotel_createHotel", hotelObj);
 		const dbJQL = uniCloud.databaseForJQL({
-			event,
+			hotelObj,
 			context: this.getClientInfo()
 		})
 		try {
@@ -38,14 +37,14 @@ module.exports = {
 		}
 	},
 
-	async hotel_updateHotel(event) {
-		let { hotel_id, hotelObj } = event;
-		console.log("hotel_updateHotel", event);
+	async hotel_updateHotel(params) {
+		let { hotel_id, hotelObj } = params;
+		console.log("hotel_updateHotel", hotelObj);
 		if (!hotel_id) {
 			throw new Error("缺少hotel_id")
 		}
 		const dbJQL = uniCloud.databaseForJQL({
-			event,
+			params,
 			context: this.getClientInfo()
 		})
 		try {
@@ -57,18 +56,14 @@ module.exports = {
 	},
 
 	async hotel_deleteHotel(event) {
-		const { hotel_id, $token } = event;
+		const { hotel_id} = event;
 		const dbJQL = uniCloud.databaseForJQL({
 			event,
 			context: this.getClientInfo()
 		});
 		try {
-			const secret = utils.utils_getSecret();
-			const verifT = utils.utils_verifyToken($token, secret);
-			if (!verifT) {
-				throw new Error("token无效")
-			}
-			const { phone, account_id } = verifT.value;
+		
+			const { phone, account_id } = this._tokenInfo;
 			const res = await dbJQL.collection("hm-hotel").doc(hotel_id).get();
 			if (res.data[0].ownership_id != account_id) {
 				throw new Error("权限不足")

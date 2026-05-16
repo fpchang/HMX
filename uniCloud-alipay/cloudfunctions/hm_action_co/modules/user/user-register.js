@@ -1,5 +1,4 @@
 const utils = require('../utils/index.js');
-const tokenEvent = require('../../common/tokenEvent/index.js');
 
 module.exports = {
 	async user_register(userForm = {}) {
@@ -28,7 +27,7 @@ module.exports = {
 	async user_registerByPhone(phone) {
 		console.log("注册");
 		const secret = utils.utils_getSecret();
-		const newToken = tokenEvent.getToken({
+		const newToken =utils.utils_getToken({
 			phone: phone
 		}, secret, (new Date().getTime() + 1000 * 60 * 60 * 24 * 30));
 		const dbJQL = uniCloud.databaseForJQL();

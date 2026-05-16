@@ -2,11 +2,12 @@
   "name": "hm_action_co",
   "dependencies": {
     "crypto": "^1.0.1",
+    "jsonwebtoken": "^9.0.3",
     "dateFormat": "file:../common/dateFormat",
     "encryptPassword": "file:../common/encryptPassword",
     "errorEvent": "file:../common/errorEvent",
-    "jsonwebtoken": "^9.0.3",
-    "tokenEvent": "file:../common/tokenEvent"
+    "tokenEvent": "file:../common/tokenEvent",
+    "uni-id-common": "file:../../../uni_modules/uni-id-common/uniCloud/cloudfunctions/common/uni-id-common"
   },
   "extensions": {
     "uni-cloud-jql": {},

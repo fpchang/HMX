@@ -173,7 +173,7 @@
 		submitLoading.value = true;
 
 		try {
-			const flag = await AccountService.login({
+			const flag = await AccountService.LoginBySms({
 				loginType: 'code',
 				tk: tk.value,
 				smsCode: userForm.value.smsCode,

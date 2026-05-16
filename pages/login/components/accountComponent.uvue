@@ -90,7 +90,7 @@
 				password:userForm.value.password
 			}
 				submitLoading.value = true;
-				const flag = await AccountService.Login(f);
+				const flag = await AccountService.LoginByAccount(f);
 				
 				if(flag){
 					uni.setStorageSync("account", userForm.value.account);

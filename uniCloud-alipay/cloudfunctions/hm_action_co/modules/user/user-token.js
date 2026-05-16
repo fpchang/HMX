@@ -13,7 +13,7 @@ module.exports = {
 			if (userRes.data.length < 1) {
 				return { errCode: 9992, errMsg: "账号不存在" }
 			}
-			if (userRes.data[0]['hm_token'] != this.getUniIdToken()) {
+			if (userRes.data[0]['hm_token'] != this.$token) {
 				return { errCode: 9991, errMsg: "账号已在别外登录" }
 			} else {
 				return { errCode: 0, errMsg: "",data:true };

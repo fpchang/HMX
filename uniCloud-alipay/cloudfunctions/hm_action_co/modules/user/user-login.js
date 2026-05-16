@@ -1,21 +1,14 @@
 const utils = require('../utils/index.js');
-
+const register = require("./user-register.js");
 module.exports = {
-	async user_login(userForm) {
-		console.log('user_login : ', userForm);
-		let { loginType } = userForm;
-		if (loginType === 'app') {
-			return this.user_loginByApp(userForm);
-		}
-		if (loginType === 'account') {
-			return this.user_loginByAccountAndPassword(userForm)
-		}
-		return this.user_loginBySmsCode(userForm);
-	},
+
 
 	async user_loginByApp(userForm) {
 		console.log("app 一键登录", userForm);
-		const { accessToken, openid } = userForm;
+		const {
+			accessToken,
+			openid
+		} = userForm;
 		const res = await uniCloud.getPhoneNumber({
 			appid: '__UNI__6CB5534',
 			provider: 'univerify',
@@ -30,7 +23,7 @@ module.exports = {
 			const userRes = await dbJQL.collection('hm-user').where(`phone=='${phone}'`).get();
 			if (userRes.data.length > 0) {
 				const user = userRes.data[0];
-				const newToken =utils.utils_getToken({
+				const newToken = utils.utils_getToken({
 					phone: phone,
 					account: user.account,
 					account_id: user._id
@@ -47,14 +40,17 @@ module.exports = {
 					}
 				};
 			}
-			return this.user_registerByPhone(phone);
+			return register.user_registerByPhone(phone);
 		} catch (e) {
 			throw new Error(e)
 		}
 	},
 
 	async user_loginByAccountAndPassword(userForm) {
-		const { account, password } = userForm;
+		const {
+			account,
+			password
+		} = userForm;
 		const dbJQL = uniCloud.databaseForJQL();
 		try {
 			const ep = utils.utils_encryptPassword(password);
@@ -64,10 +60,13 @@ module.exports = {
 			const userRes = await dbJQL.collection('hm-user').where(wstr).get();
 			console.log("uuuu", userRes);
 			if (userRes.data.length < 1) {
-				return { errCode: 1, errMsg: "账号密码不正确" };
+				return {
+					errCode: 1,
+					errMsg: "账号密码不正确"
+				};
 			}
 			const user = userRes.data[0];
-			const newToken =utils.utils_getToken({
+			const newToken = utils.utils_getToken({
 				phone: user.phone,
 				account: user.account,
 				account_id: user._id
@@ -88,23 +87,34 @@ module.exports = {
 	},
 
 	async user_loginBySmsCode(userForm) {
-		let { smsCode, phone, tk } = userForm;
+		let {
+			smsCode,
+			phone,
+			tk
+		} = userForm;
 		const secret = utils.utils_getSecret();
 		const dbJQL = uniCloud.databaseForJQL({
-			event: { userForm },
+			event: {
+				userForm
+			},
 			context: this.getClientInfo()
 		});
-		if (!this.user_isTestAccount(phone)) {
+		if (!user_isTestAccount(phone)) {
 			const verifT = utils.utils_verifyToken(tk, secret);
 			if (!verifT || verifT.value.smsCode != smsCode) {
-				return { errCode: 202, errMsg: "验证码不正确" };
+				return {
+					errCode: 202,
+					errMsg: "验证码不正确",
+					data:{}
+				};
 			}
 		}
 		try {
 			const userRes = await dbJQL.collection('hm-user').where(`phone=='${phone}'`).get();
+			console.log("userRes",userRes);
 			if (userRes.data.length > 0) {
 				const user = userRes.data[0];
-				const newToken =utils.utils_getToken({
+				const newToken = utils.utils_getToken({
 					phone: user.phone,
 					account: user.account,
 					account_id: user._id
@@ -120,9 +130,41 @@ module.exports = {
 					}
 				};
 			}
-			return this.user_registerByPhone(phone)
+			return await register.user_registerByPhone(phone)
 		} catch (e) {
 			throw new Error(e);
 		}
-	}
+	},
+	// async user_login(userForm) {
+	// 	console.log('user_login : ', userForm);
+	// 	console.log("this",this)
+	// 	let {
+	// 		loginType
+	// 	} = userForm;
+	// 	if (loginType === 'app') {
+	// 		return  this.user_loginByApp(userForm);
+	// 	}
+	// 	if (loginType === 'account') {
+	// 		return  this.user_loginByAccountAndPassword(userForm)
+	// 	}
+	// 	return  this.user_loginBySmsCode(userForm);
+	// }
 }
+
+function user_isTestAccount(phone = "", smsCode) {
+		const testAccountList = [{
+			phone: "18516285834",
+			smsCode: "1234"
+		},
+		{
+			phone: "13122905834",
+			smsCode: "1234"
+		},
+		{
+			phone: "19083441181",
+			smsCode: "1234"
+		}
+		]
+		let t = testAccountList.find(item => item.phone == phone);
+		return t ? true : false;
+	}

@@ -4,23 +4,12 @@ import { userBean } from '@/bean/userBean';
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 const se_co= uniCloud.importObject("send_email_co");
 const account_co = uniCloud.importObject("hm_account_co");
-const action_co = uniCloud.importObject("hm_action_co",{customUI:true}) as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
-// type CallObjectResult = {
-//   errCode : number,
-//   errMsg : string,
-//   detail : string
-// }
-// uniCloud.addInterceptor("callFunction",{
-//   invoke(args) {
-// 	  console.log("addd===========");
-//     // 获取当前语言：zh / en
-//     const lang = 'en' // 你可以从 this.$i18n.locale 获取
-    
-//     // 自动注入到云对象 context
-//     args.custom = args.custom || {}
-//     args.custom.lang = lang;
-//   }
-// });
+const action_co = uniCloud.importObject("hm_action_co",{customUI:true});
+const _token=()=>{
+	return {
+		token:uni.getStorageSync("hm_token");
+	}
+}
 class AccountServiceClass {
 
 	constructor() {
@@ -42,7 +31,7 @@ class AccountServiceClass {
 		// const token:string = uni.getStorageSync('hm_token').toString();
 		//return DB.callFunction("hm_validToken");
 		try {
-			const res = await action_co.user_validToken();
+			const res = await action_co.user_validToken(_token());
 			console.log("valid token",res);
 			const errCode=res['errCode'] as number;
 			const errMsg=res['errMsg'] as string;
@@ -130,10 +119,19 @@ class AccountServiceClass {
 			return false;
 		}
 	}
-	//login v2 co
-	async Login(userForm:UTSJSONObject): Promise<boolean>{
+	async LoginByAccount(userForm:UTSJSONObject): Promise<boolean>{
 		try {
-			const res = await account_co.login(userForm);
+			//const res = await account_co.login(userForm);
+			const res = await action_co.user_loginByAccountAndPassword(userForm);
+			const errCode = res['errCode'] as number;
+			const errMsg = res['errMsg'] as string;
+			if(errCode!=0){
+				uni.showToast({
+					title:errMsg,
+					icon:"none"
+				});
+				return false;
+			}
 			const data = res['data'] as UTSJSONObject;	
 			const token = data.getString("token") ?? ""
 			if (token != "") {
@@ -146,32 +144,53 @@ class AccountServiceClass {
 			throw new Error(error.message as string);
 		}
 	}
-	async login(userForm : UTSJSONObject) : Promise<boolean> {
+	async LoginBySms(userForm:UTSJSONObject): Promise<boolean>{
 		try {
-			const res = await DB.callFunction("hm_login", { userForm });
-			const result = res.result as UTSJSONObject;
-			if (result.getNumber("errCode") != 0) {
-				throw new Error(result.getString("errMsg") ?? "系统异常")；
-			}
-			const data = result.getJSON("data") ?? {}
-			//const code = result.getNumber("code",99);		
+			//const res = await account_co.login(userForm);
+			const res = await action_co.user_loginBySmsCode(userForm);
+			console.log("login=====",res);
+			const data = res['data'] as UTSJSONObject;	
 			const token = data.getString("token") ?? ""
 			if (token != "") {
 				uni.setStorageSync("hm_token", token as string);
 				uni.setStorageSync("uniIdToken", token as string);
 			}
-		
 			return true;
-		} catch (err) {
+		} catch (error) {
+			console.log(error.message)
 			uni.showToast({
-				title: err.message as string,
-				icon: "none"
+				title:error.message as string,
+				icon:"none"
 			})
-			throw new Error(err.message.toString());
-
+			throw new Error(error.message as string);
 		}
-
 	}
+	async LoginByAPP(userForm:UTSJSONObject): Promise<boolean>{
+		try {
+			//const res = await account_co.login(userForm);
+			const res = await action_co.user_loginByApp(userForm);
+			const errCode = res['errCode'] as number;
+			const errMsg = res['errMsg'] as string;
+			if(errCode!=0){
+				uni.showToast({
+					title:errMsg,
+					icon:"none"
+				});
+				return false;
+			}
+			const data = res['data'] as UTSJSONObject;	
+			const token = data.getString("token") ?? ""
+			if (token != "") {
+				uni.setStorageSync("hm_token", token as string);
+				uni.setStorageSync("uniIdToken", token as string);
+			}
+			return true;
+		} catch (error) {
+			console.error(error)
+			throw new Error(error.message as string);
+		}
+	}
+	
 	/**
 	 * 更新密码
 	 */

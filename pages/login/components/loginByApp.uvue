@@ -79,7 +79,7 @@
 		}
 		try {
 			submitLoading.value = true;
-			const flag = await AccountService.Login(userForm);
+			const flag = await AccountService.LoginByAPP(userForm);
 			if (flag) {
 				uni.reLaunch({
 					url: "/pages/index/index",

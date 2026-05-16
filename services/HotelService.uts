@@ -6,8 +6,13 @@ import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
 import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
-const action_co = uniCloud.importObject("hm_action_co") as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
-
+const action_co = uniCloud.importObject("hm_action_co");
+ //as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
+const _token=()=>{
+	return {
+		token:uni.getStorageSync("hm_token");
+	}
+}
 type employeeList_Res = {
 	code : number;
 	errCode : number;
@@ -144,7 +149,7 @@ class HotelServiceClass {
 	*/
 	async getHotelList() : Promise<Array<hotelBean>> {
 		//const res = await DB.callFunction("hm_getHotelList_x");
-		const res =await action_co.hotel_getHotelList();
+		const res =await action_co.hotel_getHotelList(_token());
 		console.log("hotellist",res);
 		//const result = res.result as UTSJSONObject;
 		const data = res['data'] as Array<UTSJSONObject>;

@@ -31,19 +31,7 @@ module.exports = {
 		}
 	},
 
-	user_isTestAccount(phone = "", smsCode) {
-		const testAccountList = [{
-			phone: "18516285834",
-			smsCode: "1234"
-		},
-		{
-			phone: "13122905834",
-			smsCode: "1234"
-		}
-		]
-		let t = testAccountList.find(item => item.phone == phone);
-		return t ? true : false;
-	},
+	
 
 	user_randomSms() {
 		let res = '';

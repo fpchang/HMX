@@ -60,9 +60,9 @@ module.exports = {
 	utils_getLanuage(clientInfo){
 		 // const sys = uni.getSystemInfoSync();
 		 // const clientInfo = this.getClientInfo();
-		  const osLanguage = clientInfo.osLanguage;
+		  const appLanguage = clientInfo.appLanguage;
 		  let local='zh-CN';
-		 if(osLanguage!=null&&!osLanguage.includes('zh-')){
+		 if(appLanguage!=null&&!appLanguage.includes('zh')){
 			 local='en-US';
 		 }
 		 

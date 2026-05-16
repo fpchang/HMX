@@ -1,6 +1,4 @@
 const utils = require('../utils/index.js');
-
-
 const userLogin = require('./user-login.js');
 const userRegister = require('./user-register.js');
 const userPassword = require('./user-password.js');

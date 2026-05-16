@@ -158,13 +158,13 @@
 	const initData = (async () => {
 		try {
 			console.log("验证token");
-			const flag:boolean = await loginEvent();;
+			const flag = await loginEvent() as boolean;
 			if(flag){
-				isReading.value = true;
+				
 				accessin();
 				
 			}
-			
+			isReading.value = true;
 		} catch (error) {
 			console.log("err", error);
 

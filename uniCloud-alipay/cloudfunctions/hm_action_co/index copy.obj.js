@@ -80,23 +80,19 @@ module.exports = {
 		const lang = utils.utils_getLanuage(clientInfo);
 		console.log('客户端语言',lang);
 		this.$t = getI18nMsg(lang);
-	//	console.log("$t",this.$t);
+		console.log("$t",this.$t);
+		
 		const methodName = this.getMethodName();
 		if (methodList.includes(methodName)) {
-			const params = this.getParams();
-			  
-			  console.log('前端参数：', params)
-			const token = params[params.length-1]['token'];
-			console.log("token====",token);
+			const token = this.getUniIdToken();
 			if(!token){
 				return {errCode:"9999",errMsg:"",data:[]}
 			}	
 				const secret = utils.utils_getSecret();
 				const verifyResult = utils.utils_verifyToken(token, secret);
 				if (verifyResult) {
-					console.log("设置token",verifyResult.value);
 					this._tokenInfo = verifyResult.value;
-					this.$token=token;
+				
 				}
 				
 			
@@ -109,12 +105,7 @@ module.exports = {
 	getUser: function () {
 		return this._user || {};
 	},
-	async hotel_getHotelList(){},
-	async user_validToken(){},
-	async user_loginByAccountAndPassword(){},
-	async user_loginBySmsCode(){},
-	async user_loginByApp(){},
-	 ...hotel,
+	...hotel,
 	...order,
 	...user,
 	...room,

@@ -1,6 +1,6 @@
 const utils = require('../utils/index.js');
 
-module.exports = {
+const regitster={
 	async user_register(userForm = {}) {
 		console.log("user_register", userForm);
 		const { account, email, password } = userForm;
@@ -25,12 +25,13 @@ module.exports = {
 	},
 
 	async user_registerByPhone(phone) {
-		console.log("注册");
+		console.log("注册",phone);
 		const secret = utils.utils_getSecret();
 		const newToken =utils.utils_getToken({
 			phone: phone
 		}, secret, (new Date().getTime() + 1000 * 60 * 60 * 24 * 30));
 		const dbJQL = uniCloud.databaseForJQL();
+		console.log("注册对象",this.user_formatUser(phone, newToken))
 		const res = await dbJQL.collection('hm-user').add(this.user_formatUser(phone, newToken));
 		return {
 			errCode: 0,
@@ -87,27 +88,9 @@ module.exports = {
 			"avatar": "",
 			"blongEmployment": []
 		}
-	},
-
-	user_formatUser(account, password, email = '') {
-		return {
-			idCard: "",
-			vipStartDateStamp: "",
-			isVip: false,
-			nickName: "",
-			account: account,
-			password: password,
-			email: email,
-			userName: "",
-			vipEndDate: "",
-			vipEndDateStamp: "",
-			closeAccountDateTime: null,
-			vipStartDate: "",
-			wxNickName: "",
-			wxOpenId: "",
-			hm_token: "",
-			avatar: "",
-			accountStatus: 1
-		}
 	}
+
+	
 }
+
+module.exports = regitster;

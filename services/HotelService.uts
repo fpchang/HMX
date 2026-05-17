@@ -6,7 +6,8 @@ import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
 import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
-const action_co = uniCloud.importObject("hm_action_co");
+import {getTokenObject} from "@/api/cloudApi.uts";
+const action_co = uniCloud.importObject("hm_action_co",{customUI:true});
  //as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
 const _token=()=>{
 	return {
@@ -148,37 +149,44 @@ class HotelServiceClass {
 	 * 获取当前用户关联酒店列表(包括老板与用户)
 	*/
 	async getHotelList() : Promise<Array<hotelBean>> {
-		//const res = await DB.callFunction("hm_getHotelList_x");
-		const res =await action_co.hotel_getHotelList(_token());
-		console.log("hotellist",res);
-		//const result = res.result as UTSJSONObject;
-		const data = res['data'] as Array<UTSJSONObject>;
-		let hotelList:Array<hotelBean>=[];
-		data.forEach(item=>{
-			const hotel:hotelBean={
-				_id:item.getString("_id")??"",
-				ownership_id:item.getString("ownership_id")??"",
-				 belong: item.getString("belong")??"",
-				 hotelCoordinate: item.getArray<number>("hotelCoordinate")??[],
-				 hotelIntroduction: item.getString("hotelIntroduction")??"",
-				 hotelName:  item.getString("hotelName")??"",
-				 firstImages:  item.getString("firstImages")??"" ,
-				  imagesList: item.getArray<string>("imagesList")??[] ,
-				 athleticFacility:item.getArray<string>("athleticFacility")??[] ,
-				 cateringServices: item.getArray<string>("cateringServices")??[],
-				 recreationFacility: item.getArray<string>("recreationFacility")??[],
-				 feature: item.getArray<string>("feature")??[],
-				 serviceTel:  item.getString("serviceTel")??"" ,
-				 wechat:  item.getString("wechat")??"" ,
-				 hotelAddress:  item.getString("hotelAddress")??"",
-				 hotelAddressArea:  item.getString("hotelAddressArea")??"" ,
-				 hotelAddressCode:  item.getString("hotelAddressCode")??"",
-				 baseFacility: item.getArray<string>("baseFacility")??[] ,
-				 curRole:item.getString("curRole")??""
-			}
-			hotelList.push(hotel)
-		})
-		return hotelList;
+		try {
+			//const res = await DB.callFunction("hm_getHotelList_x");
+			const res =await action_co.hotel_getHotelList(getTokenObject());
+			console.log("hotellist",res);
+			//const result = res.result as UTSJSONObject;
+			const data = res['data'] as Array<UTSJSONObject>;
+			let hotelList:Array<hotelBean>=[];
+			data.forEach(item=>{
+				const hotel:hotelBean={
+					_id:item.getString("_id")??"",
+					ownership_id:item.getString("ownership_id")??"",
+					 belong: item.getString("belong")??"",
+					 hotelCoordinate: item.getArray<number>("hotelCoordinate")??[],
+					 hotelIntroduction: item.getString("hotelIntroduction")??"",
+					 hotelName:  item.getString("hotelName")??"",
+					 firstImages:  item.getString("firstImages")??"" ,
+					  imagesList: item.getArray<string>("imagesList")??[] ,
+					 athleticFacility:item.getArray<string>("athleticFacility")??[] ,
+					 cateringServices: item.getArray<string>("cateringServices")??[],
+					 recreationFacility: item.getArray<string>("recreationFacility")??[],
+					 feature: item.getArray<string>("feature")??[],
+					 serviceTel:  item.getString("serviceTel")??"" ,
+					 wechat:  item.getString("wechat")??"" ,
+					 hotelAddress:  item.getString("hotelAddress")??"",
+					 hotelAddressArea:  item.getString("hotelAddressArea")??"" ,
+					 hotelAddressCode:  item.getString("hotelAddressCode")??"",
+					 baseFacility: item.getArray<string>("baseFacility")??[] ,
+					 curRole:item.getString("curRole")??""
+				}
+				hotelList.push(hotel)
+			})
+			return hotelList;
+		} catch (error:Error) {
+			uni.showModal({
+				title:error.message
+			})
+		}
+		
 	}
 	/**
 	 *所属于 当前用户酒店

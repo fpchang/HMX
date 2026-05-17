@@ -82,22 +82,32 @@ module.exports = {
 		this.$t = getI18nMsg(lang);
 	//	console.log("$t",this.$t);
 		const methodName = this.getMethodName();
+		//throw new Error("爱情")
+		console.log("方法",methodName);
 		if (methodList.includes(methodName)) {
 			const params = this.getParams();
-			  
-			  console.log('前端参数：', params)
-			const token = params[params.length-1]['token'];
-			console.log("token====",token);
-			if(!token){
-				return {errCode:"9999",errMsg:"",data:[]}
-			}	
-				const secret = utils.utils_getSecret();
-				const verifyResult = utils.utils_verifyToken(token, secret);
-				if (verifyResult) {
-					console.log("设置token",verifyResult.value);
-					this._tokenInfo = verifyResult.value;
-					this.$token=token;
-				}
+			  try{
+				  if(params.length<1){
+					  throw new Error("token is not correct")
+				  }
+				  console.log('前端参数：', params)
+				  const token = params[params.length-1]['$token'];
+				  console.log("token====",token);
+				  if(!token){
+					  console.log('1134456767')
+						throw new Error("token is not correct")
+				  }	
+				  	const secret = utils.utils_getSecret();
+				  	const verifyResult = utils.utils_verifyToken(token, secret);
+				  	if (verifyResult) {
+				  		console.log("设置token",verifyResult.value,token);
+				  		this._tokenInfo = verifyResult.value;
+				  		this.$token=token;
+				  	}
+			  }catch(e){
+				 throw new Error(e)
+			  }
+			
 				
 			
 			

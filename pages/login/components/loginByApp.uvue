@@ -36,6 +36,7 @@
 <script setup>
 	import { AccountService } from "@/services/AccountService";
 	import i18n from '@/i18n/index.uts';
+	import { setToken } from "@/store/store.uts";
 	const props = defineProps({
 		isAgree: {
 			type: Boolean,
@@ -127,6 +128,7 @@
 			if (token != null) {
 				uni.setStorageSync("hm_token", token as string);
 				uni.setStorageSync("uniIdToken", token as string);
+				setToken(token);
 			}
 			uni.setStorageSync("phone", phone.value);
 			uni.reLaunch({

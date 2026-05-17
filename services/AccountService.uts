@@ -2,9 +2,11 @@ import { DB } from '../api/DB';
 import { callFunctionRes } from "@/bean/DBBean";
 import { userBean } from '@/bean/userBean';
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+import { setToken } from "@/store/store.uts";
 const se_co= uniCloud.importObject("send_email_co");
 const account_co = uniCloud.importObject("hm_account_co");
 const action_co = uniCloud.importObject("hm_action_co",{customUI:true});
+import {getTokenObject} from "@/api/cloudApi.uts";
 const _token=()=>{
 	return {
 		token:uni.getStorageSync("hm_token");
@@ -31,15 +33,10 @@ class AccountServiceClass {
 		// const token:string = uni.getStorageSync('hm_token').toString();
 		//return DB.callFunction("hm_validToken");
 		try {
-			const res = await action_co.user_validToken(_token());
-			console.log("valid token",res);
-			const errCode=res['errCode'] as number;
-			const errMsg=res['errMsg'] as string;
-			if(errCode !=0){
-				return false;
-			}
+			await action_co.user_validToken(getTokenObject());
 			return true;
-		} catch (error) {
+		} catch (error:Error) {
+			console.log(error)
 			throw new Error("valid token fail")
 		}
 		
@@ -135,8 +132,10 @@ class AccountServiceClass {
 			const data = res['data'] as UTSJSONObject;	
 			const token = data.getString("token") ?? ""
 			if (token != "") {
+				setToken(token);
 				uni.setStorageSync("hm_token", token as string);
 				uni.setStorageSync("uniIdToken", token as string);
+				
 			}
 			return true;
 		} catch (error) {
@@ -152,6 +151,7 @@ class AccountServiceClass {
 			const data = res['data'] as UTSJSONObject;	
 			const token = data.getString("token") ?? ""
 			if (token != "") {
+				setToken(token);
 				uni.setStorageSync("hm_token", token as string);
 				uni.setStorageSync("uniIdToken", token as string);
 			}
@@ -181,6 +181,7 @@ class AccountServiceClass {
 			const data = res['data'] as UTSJSONObject;	
 			const token = data.getString("token") ?? ""
 			if (token != "") {
+				setToken(token);
 				uni.setStorageSync("hm_token", token as string);
 				uni.setStorageSync("uniIdToken", token as string);
 			}

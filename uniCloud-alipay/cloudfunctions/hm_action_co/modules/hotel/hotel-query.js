@@ -1,7 +1,7 @@
 const utils = require('../utils/index.js');
 
 module.exports = {
-	async hotel_getHotelList(params) {
+	async hotel_getHotelList() {
 		console.log("$t2",this.$t);
 		console.log("thistoken",this._tokenInfo);
 		const dbJQL = uniCloud.databaseForJQL();

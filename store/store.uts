@@ -8,6 +8,7 @@ import { userBean ,getInitUser} from "@/bean/userBean";
 import { hotelBean } from "../bean/hotelBean";
 export type State = {
 	//存放状态
+	token:string,
 	isLogin : boolean,
 	config : UTSJSONObject, //配置信息 | null
 	viewWidth : number, //可视宽度
@@ -23,6 +24,7 @@ export type State = {
 }
 // 实例化为state
 export const state = reactive({
+	token:"",
 	isLogin: false,
 	config: {} as UTSJSONObject,
 	viewWidth: 0,
@@ -38,7 +40,9 @@ export const state = reactive({
 } as State);
 // 定义修改属性值的方法
 
-
+export const setToken = (t:string) => {
+	state.token = t;
+};
 export const setIsLogin = (bool : boolean) => {
 	state.isLogin = bool;
 };

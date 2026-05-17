@@ -1,5 +1,6 @@
 <template>
 	<scroll-view class="indexAdvise-page" :refresher-enabled="false" v-if="isReading" :show-scrollbar="false">
+		<!-- <rice-button text="测试" @click=test()></rice-button> -->
 		<view class="hotel-container">
 			<!-- 顶部渐变标题栏 -->
 			<view class="top-banner">
@@ -74,6 +75,15 @@
 	let submitLoading = ref(false);
 	let agreeGetPhone = ref(false);
 	let showPopu = ref(false);
+	
+	import { setToken } from "@/store/store.uts";
+	import {getParamsObject} from "@/api/cloudApi.uts"
+	const test=()=>{
+		console.log("111",getParamsObject({}));
+		setToken("AAAAA");
+		console.log("2222",getParamsObject({}));
+	}
+	
 	const accessin = () => {
 		uni.reLaunch({
 			url: "/pages/index/index",

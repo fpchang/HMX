@@ -74,9 +74,8 @@ class ComFuc {
 		await this.checkHotel(n_hotel_id);
 	}
 	async getPermissionList(hotel_id : string) : Promise<Array<string>> {
-		const pes = await PermissionService.getPermissionList(hotel_id);
-		const result = pes['result'] as UTSJSONObject;
-		const list = result.get("data") as Array<string>;
+		const list = await PermissionService.getPermissionList(hotel_id);	
+		setPermissionList(list);
 		return list;
 	}
 	/*

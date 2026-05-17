@@ -1,4 +1,5 @@
 import { orderSourceBean, orderBean,formatOrder, OrderRoomTypeBean, OrderDataListResult, remainRoomTypeBean } from '@/bean/orderBean';
+import {action_co,getTokenObject} from "@/api/cloudApi.uts";
 type remainRoomBean = {
 	_id : string
 	room_name : string

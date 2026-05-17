@@ -8,47 +8,8 @@ module.exports = {
 		return config[spaceId];
 	},
 
-	async permission_getPermission(event) {
-		const { hotel_id} = event;
-		const dbJQL = uniCloud.databaseForJQL({
-			event,
-			context: this.getClientInfo()
-		})
-		
-		try {
-
-			const { phone } = this._tokenInfo;
-			const roleObj = await dbJQL.collection("hm-employee").where({ hotel_id, phone }).get();
-			let role_name = "normal";
-			if (roleObj.data.length > 0) {
-				role_name = roleObj.data[0]['role'];
-			} else {
-				console.log("没有查到用户角色,为超级管理员");
-				role_name = "administrator"
-			}
-			if (role_name == "administrator") {
-				const resper = await dbJQL.collection("hm-permission").field("permission_name").get();
-				let perArr = resper.data.map(item => item.permission_name);
-				return perArr
-			}
-			console.warn("role_name", role_name);
-			const permission_select = dbJQL.collection("hm-permission").getTemp();
-			const role_permission_select = dbJQL.collection("hm-role-permission").where({ role_name }).getTemp();
-			const res = await dbJQL.collection(role_permission_select, permission_select).get();
-			console.warn("222222>>", res)
-			return this.permission_formatPermissionToArray(res.data);
-		} catch (e) {
-			throw new Error(e)
-		}
-	},
-
-	async permission_getPermission_x(event) {
-		const { hotel_id } = event;
-		const dbJQL = uniCloud.databaseForJQL({
-			event,
-			context: this.getClientInfo()
-		})
-
+	async permission_getPermission(hotel_id) {
+		const dbJQL = uniCloud.databaseForJQL()
 		try {
 			
 			const { account_id } = this._tokenInfo;

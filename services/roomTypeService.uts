@@ -5,6 +5,7 @@ import { roomTypeBean, formatRoomTypeList } from "@/bean/roomTypeBean.uts";
 import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
 import { roomBean } from '../bean/roomBean';
+import {action_co,getTokenObject} from "@/api/cloudApi.uts";
 type employeeList_Res = {
 	code : number;
 	errCode : number;

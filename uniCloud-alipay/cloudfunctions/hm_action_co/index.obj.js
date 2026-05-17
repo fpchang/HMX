@@ -88,14 +88,14 @@ module.exports = {
 			const params = this.getParams();
 			  try{
 				  if(params.length<1){
-					  throw new Error("token is not correct")
+					  throw new Error("token is incorrect1"+methodName)
 				  }
 				  console.log('前端参数：', params)
 				  const token = params[params.length-1]['$token'];
 				  console.log("token====",token);
 				  if(!token){
 					  console.log('1134456767')
-						throw new Error("token is not correct")
+						throw new Error("token is incorrect2"+methodName)
 				  }	
 				  	const secret = utils.utils_getSecret();
 				  	const verifyResult = utils.utils_verifyToken(token, secret);
@@ -104,8 +104,8 @@ module.exports = {
 				  		this._tokenInfo = verifyResult.value;
 				  		this.$token=token;
 				  	}
-			  }catch(e){
-				 throw new Error(e)
+			  }catch(error){
+				 throw error;
 			  }
 			
 				

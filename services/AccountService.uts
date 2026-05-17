@@ -5,8 +5,7 @@ import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 import { setToken } from "@/store/store.uts";
 const se_co= uniCloud.importObject("send_email_co");
 const account_co = uniCloud.importObject("hm_account_co");
-const action_co = uniCloud.importObject("hm_action_co",{customUI:true});
-import {getTokenObject} from "@/api/cloudApi.uts";
+import {action_co,getTokenObject,RequestFailModal} from "@/api/cloudApi.uts";
 const _token=()=>{
 	return {
 		token:uni.getStorageSync("hm_token");
@@ -37,6 +36,7 @@ class AccountServiceClass {
 			return true;
 		} catch (error:Error) {
 			console.log(error)
+			RequestFailModal(error.message);
 			throw new Error("valid token fail")
 		}
 		
@@ -138,8 +138,9 @@ class AccountServiceClass {
 				
 			}
 			return true;
-		} catch (error) {
+		} catch (error:Error) {
 			console.error(error)
+			RequestFailModal(error.message);
 			throw new Error(error.message as string);
 		}
 	}
@@ -156,12 +157,9 @@ class AccountServiceClass {
 				uni.setStorageSync("uniIdToken", token as string);
 			}
 			return true;
-		} catch (error) {
+		} catch (error:Error) {
 			console.log(error.message)
-			uni.showToast({
-				title:error.message as string,
-				icon:"none"
-			})
+			RequestFailModal(error.message);
 			throw new Error(error.message as string);
 		}
 	}
@@ -186,8 +184,9 @@ class AccountServiceClass {
 				uni.setStorageSync("uniIdToken", token as string);
 			}
 			return true;
-		} catch (error) {
+		} catch (error:Error) {
 			console.error(error)
+			RequestFailModal(error.message);
 			throw new Error(error.message as string);
 		}
 	}
@@ -262,33 +261,44 @@ class AccountServiceClass {
 		return user;
 	}
 	async getuserByToken() : Promise<userBean | null> {
-		const res = await DB.callFunction("hm_getUser", { type: 'token', value: uni.getStorageSync("hm_token") });
-		const userObj = res['result'] as UTSJSONObject;
-		let user : userBean | null = null;
-		user = {
-			_id: userObj.getString("_id") ?? "",
-			idCard: userObj.getString("idCard") ?? "",
-			ipStartDateStamp: userObj.getString("ipStartDateStamp") ?? "",
-			isVip: userObj.getBoolean("isVip") ?? false,
-			nickName: userObj.getString("nickName") ?? "",
-			phone: userObj.getString("phone") ?? "",
-			email: userObj.getString("email") ?? "",
-			userId: userObj.getString("userId") ?? "",
-			userName: userObj.getString("userName") ?? "",
-			vipEndDate: userObj.getString("vipEndDate") ?? "",
-			vipEndDateStamp: userObj.getString("vipEndDateStamp") ?? "",
-			closeAccountDateTime: userObj.getNumber("closeAccountDateTime") ?? null,
-			vipStartDate: userObj.getString("vipStartDate") ?? "",
-			wxNickName: userObj.getString("wxNickName") ?? "",
-			wxOpenId: userObj.getString("wxOpenId") ?? "",
-			hm_token: userObj.getString("hm_token") ?? "",
-			avatar: userObj.getString("avatar") ?? "",
-			account: userObj.getString("account") ?? "",
-			accountStatus: userObj.getNumber("accountStatus") ?? 1
+		//const res = await DB.callFunction("hm_getUser", { type: 'token', value: uni.getStorageSync("hm_token") });
+		try{
+			const res = await action_co.user_getUser(getTokenObject());
+			const data = res['data'] as Array<UTSJSONObject>;
+			if(data.length<1){
+				throw new Error("dont valid user");
+			}
+			const userObj = data[0] as UTSJSONObject;
+			let user : userBean | null = null;
+			user = {
+				_id: userObj.getString("_id") ?? "",
+				idCard: userObj.getString("idCard") ?? "",
+				ipStartDateStamp: userObj.getString("ipStartDateStamp") ?? "",
+				isVip: userObj.getBoolean("isVip") ?? false,
+				nickName: userObj.getString("nickName") ?? "",
+				phone: userObj.getString("phone") ?? "",
+				email: userObj.getString("email") ?? "",
+				userId: userObj.getString("userId") ?? "",
+				userName: userObj.getString("userName") ?? "",
+				vipEndDate: userObj.getString("vipEndDate") ?? "",
+				vipEndDateStamp: userObj.getString("vipEndDateStamp") ?? "",
+				closeAccountDateTime: userObj.getNumber("closeAccountDateTime") ?? null,
+				vipStartDate: userObj.getString("vipStartDate") ?? "",
+				wxNickName: userObj.getString("wxNickName") ?? "",
+				wxOpenId: userObj.getString("wxOpenId") ?? "",
+				hm_token: userObj.getString("hm_token") ?? "",
+				avatar: userObj.getString("avatar") ?? "",
+				account: userObj.getString("account") ?? "",
+				accountStatus: userObj.getNumber("accountStatus") ?? 1
+			}
+			
+			//}
+			return user;
+		}catch(error:Error){
+			RequestFailModal(error.message);
+			throw error;
 		}
-
-		//}
-		return user;
+		
 	}
 	async updateUser(_id : string, userObj : UTSJSONObject) : Promise<boolean> {
 		try {

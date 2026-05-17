@@ -6,8 +6,7 @@ import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
 import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
-import {getTokenObject} from "@/api/cloudApi.uts";
-const action_co = uniCloud.importObject("hm_action_co",{customUI:true});
+import {action_co,getTokenObject} from "@/api/cloudApi.uts";
  //as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
 const _token=()=>{
 	return {

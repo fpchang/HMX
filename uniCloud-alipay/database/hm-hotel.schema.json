@@ -3,9 +3,9 @@
 	"required": ["ownership_id", "hotelName","dataStatus"],
 	"permission": {
 		"read": true,
-		"create": true,
-		"update": true,
-		"delete": true
+		"create": false,
+				"update": false,
+				"delete": false
 	},
 	 // "fieldRules": [{
   //   "rule": "end_date == null || end_date != null && create_date < end_date", // 校验规则

@@ -1,7 +1,9 @@
 const utils = require('../utils/index.js');
 
+
 module.exports = {
-	async user_updatePassword(token, password, originPassword) {
+	//通过原密码修改密码
+	async user_updatePassword(password, originPassword) {
 		console.log("oooo", originPassword, password);
 		if (!password) {
 			return {
@@ -9,18 +11,18 @@ module.exports = {
 				errCode: 102
 			};
 		}
-	
-		const flag = await this.user_validPasswordIsCorrent(verifT.value.account_id, originPassword);
+		const {account_id} = this._tokenInfo;
+		const flag = await this.user_validPasswordIsCorrent(account_id, originPassword);
 		if (!flag) {
 			return {
 				errMsg: "原密码不正确",
 				errCode: 103
 			};
 		}
-		const res = await this.user_resetPassword(verifT.value.account_id, password);
+		const res = await this.user_resetPassword(account_id, password);
 		return res;
 	},
-
+//重置密码
 	async user_resetPassword(_id, password) {
 		if (!password) {
 			return { errCode: 10, errMsg: "密码不能为空" }
@@ -30,7 +32,7 @@ module.exports = {
 		const res = await db.collection("hm-user").doc(_id).update({ password: ep });
 		return res;
 	},
-
+//通过邮箱验证码重置密码
 	async user_resetPasswordByEmailCode(email, emailCode, emailCodeTk, password) {
 		try {
 			const secret = utils.utils_getSecret();
@@ -61,7 +63,7 @@ module.exports = {
 			throw new Error(error);
 		}
 	},
-
+//通过 邮箱 重置密码
 	async user_resetPasswordByEmail(email, password) {
 		if (!password) {
 			return { errCode: 101, errMsg: "密码不能为空" }
@@ -74,7 +76,7 @@ module.exports = {
 		const res = await db.collection("hm-user").where({ email: email }).update({ password: ep });
 		return res;
 	},
-
+	//检验密码是否正确
 	async user_validPasswordIsCorrent(_id, password) {
 		const db = uniCloud.databaseForJQL();
 		const user = await db.collection("hm-user").doc(_id).get();

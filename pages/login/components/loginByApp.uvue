@@ -78,7 +78,6 @@
 			accessToken: accessToken,
 			openid: openid
 		}
-		try {
 			submitLoading.value = true;
 			const flag = await AccountService.LoginByAPP(userForm);
 			if (flag) {
@@ -86,69 +85,8 @@
 					url: "/pages/index/index",
 				});
 			}
-		} catch (error) {
-
-		}
-
-	}
-	const takePhoneNumber2 = async (accessToken : string, openId : string) => {
-		// 云函数取号
-		try {
-
-			const res = await uniCloud.callFunction({
-				name: 'hm_login',
-				data: {
-					userForm: {
-						phone: "",
-						smsCode: "",
-						loginType: "app"
-					},
-					access_token: accessToken, // 客户端一键登录接口返回的access_token
-					openid: openId // 客户端一键登录接口返回的openid
-				}
-			});
-			console.log("取号结果", res);
-			const result = res.result as UTSJSONObject;
-			const data = result.data as UTSJSONObject;
-			const code = result.errCode as number;
-			const msg = result.errMsg as string;
-			submitLoading.value = false;
-			uni.hideLoading();
-			if (code != 0) {
-				uni.showToast({
-					title: msg,
-					duration: 2000,
-					icon: "error",
-				});
-				submitLoading.value = false;
-				uni.hideLoading();
-				return;
-			}
-			const token = data['token'] as string | null;
-			if (token != null) {
-				uni.setStorageSync("hm_token", token as string);
-				uni.setStorageSync("uniIdToken", token as string);
-				setToken(token);
-			}
-			uni.setStorageSync("phone", phone.value);
-			uni.reLaunch({
-				url: "/pages/index/index",
-			});
-			// 关闭登录页
-			uniVerifyManager.value?.close();
-		} catch (error) {
-			console.log("eeee", error);
-			submitLoading.value = false;
-			uni.hideLoading();
-			uniVerifyManager.value?.close();
-			uni.showModal({
-				title:i18n.global.t('login.login_fail'),
-				content: i18n.global.t('login.login_fail_content'),
-				showCancel: false
-			});
-
-
-		}
+			submitLoading.value = true;
+		
 
 	}
 

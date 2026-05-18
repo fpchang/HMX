@@ -162,41 +162,54 @@
 		v-if="!submitLoading&&fmResult!=null&&fmResult.count>fmResult.pageSize">
 		<l-pagination v-model="fmResult.pageNo" :disabled="submitLoading" :total="fmResult?.count"
 			:page-size="fmResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
-	</view>	
-	<page-container :show="showDeatilPage" position="right" :round="true" @afterleave="showDeatilPage=false" custom-style="background-color: #f5f5f7;width:750rpx">
+	</view>
+	<page-container :show="showDeatilPage" position="right" :round="true" @afterleave="showDeatilPage=false"
+		custom-style="background-color: #f5f5f7;width:750rpx">
 		<view class="container" style="width:750rpx;">
-			<view style="margin-top:100px;padding: 14px;display: flex;flex-direction:row;justify-content: center;" v-if="active_fm!=null">
-				<view style="background-color: #fff;border-radius: 14px;padding:24px 14px;max-width: 500px;flex:1"> 
+			<view style="margin-top:100px;padding: 14px;display: flex;flex-direction:row;justify-content: center;"
+				v-if="active_fm!=null">
+				<view style="background-color: #fff;border-radius: 14px;padding:24px 14px;max-width: 500px;flex:1">
 					<rice-cell-group>
-					  <rice-cell icon="/static/icons/fm/time.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.transaction_date')" :value="formatDate(active_fm?.ioeTime)" :clickable="false"/>
-					  <rice-cell icon="/static/icons/fm/sztype.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.voucher_Type')" :value="formatTypeName(active_fm?.type)" :clickable="false"/>
-					  <rice-cell v-if=" active_fm?.billType=='income'" icon="/static/icons/fm/income.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.income')" :value="active_fm?.amount" :clickable="false"/>
-					  <rice-cell v-if=" active_fm?.billType=='expenses'" icon="/static/icons/fm/expenses.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.expense')" :value="active_fm?.amount" :clickable="false"/>
-					  <rice-cell icon="/static/icons/fm/mark.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('form.remark')" :value="active_fm?.mark" :clickable="false"/>
-					
+						<rice-cell icon="/static/icons/fm/time.png" :title-style="{'paddingLeft':'4px'}" center
+							:title="i18n.global.t('finance.transaction_date')" :value="formatDate(active_fm?.ioeTime)"
+							:clickable="false" />
+						<rice-cell icon="/static/icons/fm/sztype.png" :title-style="{'paddingLeft':'4px'}" center
+							:title="i18n.global.t('finance.voucher_Type')" :value="formatTypeName(active_fm?.type)"
+							:clickable="false" />
+						<rice-cell v-if=" active_fm?.billType=='income'" icon="/static/icons/fm/income.png"
+							:title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.income')"
+							:value="active_fm?.amount" :clickable="false" />
+						<rice-cell v-if=" active_fm?.billType=='expenses'" icon="/static/icons/fm/expenses.png"
+							:title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.expense')"
+							:value="active_fm?.amount" :clickable="false" />
+						<rice-cell icon="/static/icons/fm/mark.png" :title-style="{'paddingLeft':'4px'}" center
+							:title="i18n.global.t('form.remark')" :value="active_fm?.mark" :clickable="false" />
+
 					</rice-cell-group>
-					
-							<view style="margin-top:20px"> 
-							  <rice-row :gutter="8">
-								   <rice-col :span="10"></rice-col>
-								   
-							    <rice-col :span="6">
-							       <view>
-							       		<rice-button type="primary" size="small"  plain-fill text="修改" @click="editFm(active_fm)"></rice-button>
-							       </view>
-							    </rice-col>
-							    <rice-col :span="6">
-							      <view>
-									  <rice-button type="error" size="small" plain-fill text="删除" @click="deleteFm(active_fm)"></rice-button>
-								  </view>
-							    </rice-col>
-							 </rice-row>
-							</view>
-					
+
+					<view style="margin-top:20px">
+						<rice-row :gutter="8">
+							<rice-col :span="10"></rice-col>
+
+							<rice-col :span="6">
+								<view>
+									<rice-button type="primary" size="small" plain-fill text="修改"
+										@click="editFm(active_fm)"></rice-button>
+								</view>
+							</rice-col>
+							<rice-col :span="6">
+								<view>
+									<rice-button type="error" size="small" plain-fill text="删除"
+										@click="deleteFm(active_fm)"></rice-button>
+								</view>
+							</rice-col>
+						</rice-row>
+					</view>
+
 				</view>
-			</view>	
+			</view>
 		</view>
-		
+
 	</page-container>
 </template>
 
@@ -210,8 +223,8 @@
 	import { FMService } from "@/services/FMService";
 	import { roomBean } from '@/bean/roomBean';
 	import { FMBean, FMDataListResult, FMTypeConfigBean } from '@/bean/FMBean';
-	import { state } from "@/store/store";	
-	import { fmState,setIncomeAndExpensesConfig } from "@/store/modules/fmStore.uts";
+	import { state } from "@/store/store";
+	import { fmState, setIncomeAndExpensesConfig } from "@/store/modules/fmStore.uts";
 	import { userBean } from "@/bean/userBean";
 	import i18n from '@/i18n/index.uts';
 	import { comFunction } from "@/pages/index/ComFuc";
@@ -234,8 +247,8 @@
 	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
 		return state.roomTypeList;
 	});
-	
-	
+
+
 	//选择列表
 	let _select_id = ref("income");
 	let _search_key = ref("");
@@ -250,7 +263,7 @@
 		return result;
 	});
 
-	const incomeAndExpensesConfigList = computed<Array<FMTypeConfigBean>>(()=>{
+	const incomeAndExpensesConfigList = computed<Array<FMTypeConfigBean>>(() => {
 		return fmState.incomeAndExpensesConfig;
 	});
 	const getIncomeAndExpensesConfigList = async () => {
@@ -284,16 +297,16 @@
 		}
 
 	}
-	const showDeatilPage=ref(false);
+	const showDeatilPage = ref(false);
 	//const active_fm=ref<FMBean | null>(null);
-	const active_id=ref("");
+	const active_id = ref("");
 	// detail item 
-	const active_fm=computed<FMBean | null>(()=>{
-		if(active_id.value==""){
+	const active_fm = computed<FMBean | null>(() => {
+		if (active_id.value == "") {
 			return null;
 		}
-		const target = fmResult.value.fmList.find(item=>item._id == active_id.value);
-		if(target!=null){
+		const target = fmResult.value.fmList.find(item => item._id == active_id.value);
+		if (target != null) {
 			return target;
 		}
 		return null;
@@ -315,13 +328,13 @@
 		getFmList();
 	}
 	const formatDate = (timestamp : number | null) : string => {
-		if(timestamp==null){
+		if (timestamp == null) {
 			return "--";
 		}
 		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
 	}
-	const formatTypeName = (type : string |null) : string => {
-		if(type==null){
+	const formatTypeName = (type : string | null) : string => {
+		if (type == null) {
 			return "--";
 		}
 		const target = incomeAndExpensesConfigList.value.find(item => item.name == type);
@@ -358,8 +371,8 @@
 
 
 	}
-	const deleteFm = async (fm : FMBean|null) => {
-		if(fm==null){
+	const deleteFm = async (fm : FMBean | null) => {
+		if (fm == null) {
 			return;
 		}
 		if (submitLoading.value == true) {
@@ -387,14 +400,16 @@
 			beforeClose: async () : Promise<boolean> => {
 				try {
 					const flag = await FMService.deleteFm(fm._id);
-					if(flag){
-					getFmList();
-					showDeatilPage.value=false;
-					hideDialog();
-					return true;
-					}			
-					
-				} catch (errMsg) {
+					if (flag) {
+						getFmList();
+						showDeatilPage.value = false;
+						hideDialog();
+						return true;
+					} else {
+						return false;
+					}
+
+				} catch (error : Error) {
 					// uni.showToast({
 					// 	title: i18n.global.t("common.delete_fail"),
 					// 	icon: "none"
@@ -406,7 +421,7 @@
 			},
 			confirm: () => {
 				console.log("confirm1111111");
-				
+
 			}, cancel: () => {
 				hideDialog();
 			}
@@ -414,7 +429,7 @@
 		});
 	}
 	const editFm = async (fm : FMBean | null) => {
-		if(fm==null){
+		if (fm == null) {
 			return;
 		}
 		if (!permissionList.value.includes(
@@ -438,10 +453,10 @@
 			url: `/pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense?pageType=1&fm=${encodeURIComponent(JSON.stringify(fm))}`
 		})
 	}
-	const viewFm=(fm:FMBean)=>{
+	const viewFm = (fm : FMBean) => {
 		//active_fm.value=fm;
-		active_id.value=fm._id;
-		showDeatilPage.value=true;
+		active_id.value = fm._id;
+		showDeatilPage.value = true;
 		// uni.$once("refrushfmList", () => {
 		// 	getFmList();
 		// });	
@@ -636,10 +651,10 @@
 
 	.detail_panal {
 		width: 100%;
-		flex:1;
+		flex: 1;
 		background-color: #fff;
 		border-radius: 12px;
-		
+
 		.content {
 
 			.card-item {

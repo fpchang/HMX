@@ -6,12 +6,6 @@ import { setToken } from "@/store/store.uts";
 import {action_co,getTokenObject,RequestFailModal} from "@/api/cloudApi.uts";
 const se_co= uniCloud.importObject("send_email_co");
 const account_co = uniCloud.importObject("hm_account_co");
-
-const _token=()=>{
-	return {
-		token:uni.getStorageSync("hm_token");
-	}
-}
 class AccountServiceClass {
 
 	constructor() {
@@ -30,8 +24,6 @@ class AccountServiceClass {
 		return DB.callFunction("hm_getConfig");
 	}
 	async validToken() : Promise<boolean> {
-		// const token:string = uni.getStorageSync('hm_token').toString();
-		//return DB.callFunction("hm_validToken");
 		try {
 			await action_co.user_validToken(getTokenObject());
 			return true;
@@ -121,16 +113,8 @@ class AccountServiceClass {
 	async LoginByAccount(userForm:UTSJSONObject): Promise<boolean>{
 		try {
 			//const res = await account_co.login(userForm);
-			const res = await action_co.user_loginByAccountAndPassword(userForm);
-			const errCode = res['errCode'] as number;
-			const errMsg = res['errMsg'] as string;
-			if(errCode!=0){
-				uni.showToast({
-					title:errMsg,
-					icon:"none"
-				});
-				return false;
-			}
+			const res = await action_co.user_loginByAccountAndPassword(userForm,getTokenObject());
+			console.log("AAAAAAAA",res);
 			const data = res['data'] as UTSJSONObject;	
 			const token = data.getString("token") ?? ""
 			if (token != "") {
@@ -143,7 +127,8 @@ class AccountServiceClass {
 		} catch (error:Error) {
 			console.error(error)
 			RequestFailModal(error.message);
-			throw new Error(error.message as string);
+			//throw new Error(error.message as string);
+			return false;
 		}
 	}
 	async LoginBySms(userForm:UTSJSONObject): Promise<boolean>{
@@ -169,15 +154,6 @@ class AccountServiceClass {
 		try {
 			//const res = await account_co.login(userForm);
 			const res = await action_co.user_loginByApp(userForm);
-			const errCode = res['errCode'] as number;
-			const errMsg = res['errMsg'] as string;
-			if(errCode!=0){
-				uni.showToast({
-					title:errMsg,
-					icon:"none"
-				});
-				return false;
-			}
 			const data = res['data'] as UTSJSONObject;	
 			const token = data.getString("token") ?? ""
 			if (token != "") {
@@ -189,7 +165,8 @@ class AccountServiceClass {
 		} catch (error:Error) {
 			console.error(error)
 			RequestFailModal(error.message);
-			throw new Error(error.message as string);
+			//throw new Error(error.message as string);
+			return false;
 		}
 	}
 	
@@ -198,12 +175,15 @@ class AccountServiceClass {
 	 */
 	async updatePassword(password:string,originPassword:string):Promise<boolean>{
 		try {
-			const token = uni.getStorageSync("hm_token");
-			await account_co.updatePassword(token,password,originPassword);
+			//const token = uni.getStorageSync("hm_token");
+			//await account_co.updatePassword(token,password,originPassword);
+			await action_co.user_updatePassword(password,originPassword,getTokenObject());
 			return true;
-		} catch (error) {
+		} catch (error:Error) {
 			console.log("1eeeeeeee",error);
-			throw new Error(error.message as string);
+			RequestFailModal(error.message);
+			//throw new Error(error.message as string);
+			return false;
 			
 		}
 	}
@@ -266,6 +246,7 @@ class AccountServiceClass {
 		//const res = await DB.callFunction("hm_getUser", { type: 'token', value: uni.getStorageSync("hm_token") });
 		try{
 			const res = await action_co.user_getUser(getTokenObject());
+			console.log("222222",res);
 			const data = res['data'] as Array<UTSJSONObject>;
 			if(data.length<1){
 				throw new Error("dont valid user");

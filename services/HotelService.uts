@@ -160,9 +160,10 @@ class HotelServiceClass {
 			})
 			return hotelList;
 		} catch (error:Error) {
-			uni.showModal({
-				title:error.message
-			})
+			// uni.showModal({
+			// 	title:error.message
+			// })
+			return [];
 		}
 		
 	}
@@ -170,7 +171,8 @@ class HotelServiceClass {
 	 *所属于 当前用户酒店
 	 */
 	getHotelListOfUser(phone : string) : Promise<UniCloudDBGetResult> {
-		return DB.getCollection("hm-hotel", { belong: phone })
+		const w = { belong: phone } as UTSJSONObject;
+		return DB.getCollection("hm-hotel",w )
 	}
 	/**
 	 * 根据id获取酒店信息
@@ -271,8 +273,9 @@ class HotelServiceClass {
 	}
 	async addEmployee(employeeForm : employeeBean) : Promise<boolean> {
 		try {
-			const { employee_name, hotel_id,account, phone, role, mark } = employeeForm;			
-			const res = await DB.callFunction("hm_addEmployee", { employeeObj: {employee_name, hotel_id, phone,account, role, mark } });
+			const { employee_name, hotel_id,account, phone, role, mark } = employeeForm;
+			const employeeObj= {employee_name, hotel_id, phone,account, role, mark }；
+			const res = await DB.callFunction("hm_addEmployee", employeeObj);
 			console.log("eeeee",res);
 			
 			const result = res['result'] as UTSJSONObject;
@@ -284,14 +287,15 @@ class HotelServiceClass {
 			//const hasCauseMessage = (err.cause?.cause?.message ?? '').length > 0;
 			//const msg=hasCauseMessage ? JSON.parseObject(err.cause?.cause?.message ?? ''):'系统异常，添加失败';
 			
-			showDialog({
-				title: '添加失败',
-				message: err.message.toString(),
-				showCancelButton: false,
-				confirm: () => {
-					throw new Error(err.message.toString());
-				}
-			})
+			// showDialog({
+			// 	title: '添加失败',
+			// 	message: err.message.toString(),
+			// 	showCancelButton: false,
+			// 	confirm: () => {
+			// 		throw new Error(err.message.toString());
+			// 	}
+			// })
+			return false;
 		}
 
 	}

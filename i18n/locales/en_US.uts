@@ -250,7 +250,7 @@ export default {
 	setcontent: {
 		btn_txt_sys_set: "Settings",
 		btn_txt_feedback: "Feedback"
-	}
+	},
 	gather: {
 		today: 'Today',
 		tomorrow: 'Tomorrow',

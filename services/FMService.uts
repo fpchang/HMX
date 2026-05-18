@@ -4,7 +4,7 @@ import { dayuts } from '@/uni_modules/lime-dayuts';
 import { TIME, MOONTH_START_END_TIMESTAMP, getMonthFirstDay, getMonthLastDay } from "@/static/utils/TIME";
 import { fmState } from "@/store/modules/fmStore.uts";
 import { charPietItem } from "@/bean/chartBean.uts";
-import {action_co,getTokenObject} from "@/api/cloudApi.uts";
+import {action_co,getTokenObject,RequestFailModal} from "@/api/cloudApi.uts";
 class FMServiceClass {
 	constructor() {
 		// this.DB=DB;
@@ -88,23 +88,17 @@ class FMServiceClass {
 		}
 
 	}
-	async deleteFm(fm_id : string) {
+	async deleteFm(fm_id : string):Promise<boolean> {
 		try {
-			const res = await DB.callFunction("hm_deleteFm", {
-				_id: fm_id,
-			});
-			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber('code') ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(result.message as string);
-			}
-		} catch (error) {
-			throw new Error("删除失败");
+			// const res = await DB.callFunction("hm_deleteFm", {
+			// 	_id: fm_id,
+			// });
+			await action_co.fm_deleteFm(fm_id,getTokenObject());
+			return true;
+		} catch (error:Error) {
+			RequestFailModal(error.message);
+			//throw new Error("删除失败");
+			return false;
 
 		}
 

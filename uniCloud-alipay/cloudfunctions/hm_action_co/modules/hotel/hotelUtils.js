@@ -2,12 +2,13 @@ module.exports = {
 	hotel_validHotel(hotel) {
 		return "";
 	},
-
 	hotel_foramtHotel(hotel) {
 		if (!hotel) {
 			return {};
 		}
-		let result = { ...hotel };
+		let result = {
+			...hotel
+		};
 		if (result.hasOwnProperty("curRole")) {
 			delete result['curRole'];
 		}

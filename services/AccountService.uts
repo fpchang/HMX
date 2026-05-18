@@ -3,9 +3,10 @@ import { callFunctionRes } from "@/bean/DBBean";
 import { userBean } from '@/bean/userBean';
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 import { setToken } from "@/store/store.uts";
+import {action_co,getTokenObject,RequestFailModal} from "@/api/cloudApi.uts";
 const se_co= uniCloud.importObject("send_email_co");
 const account_co = uniCloud.importObject("hm_account_co");
-import {action_co,getTokenObject,RequestFailModal} from "@/api/cloudApi.uts";
+
 const _token=()=>{
 	return {
 		token:uni.getStorageSync("hm_token");
@@ -37,7 +38,8 @@ class AccountServiceClass {
 		} catch (error:Error) {
 			console.log(error)
 			RequestFailModal(error.message);
-			throw new Error("valid token fail")
+		//	throw new Error("valid token fail");
+			return false;
 		}
 		
 	}

@@ -125,7 +125,7 @@ export const loginEvent = async ():Promise<boolean>  => {
 	}
 
 	const flag: boolean = await AccountService.validToken();
-
+	console.log("store valid token res",flag)
 	if (!flag) {				
 		clearCache();
 		return false

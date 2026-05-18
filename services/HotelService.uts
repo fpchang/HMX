@@ -6,7 +6,7 @@ import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
 import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
-import {action_co,getTokenObject} from "@/api/cloudApi.uts";
+import {action_co,getTokenObject,RequestFailModal} from "@/api/cloudApi.uts";
  //as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
 const _token=()=>{
 	return {
@@ -75,24 +75,15 @@ class HotelServiceClass {
 	 */
 	async createHotel(hotelObj : hotelBean) : Promise<boolean> {
 		try {
-			const res = await DB.callFunction("hm_createHotel", { hotelObj });
+			//const res = await DB.callFunction("hm_createHotel", { hotelObj });
 			//console.log("create hotel", res);
-			const result = res["result"] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				console.log("code error", code);
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(message);
-			}
-			
+			await action_co.hotel_createHotel(hotelObj,getTokenObject());			
 			return true;
 		} catch (error) {
 			//console.error(error);
-			throw new Error("创建失败");
+			//throw new Error("创建失败");
+				RequestFailModal(error.message);
+				return false;
 		}
 
 
@@ -100,27 +91,15 @@ class HotelServiceClass {
 	async updateHotel(hotel_id : string, hotelObj : hotelBean) : Promise<boolean> {
 		console.log("UPDATE+++++===", hotelObj);
 		try {
-			const res = await DB.callFunction("hm_updateHotel", { hotel_id, hotelObj });
+			//const res = await DB.callFunction("hm_updateHotel", { hotel_id, hotelObj });
+			const res = await action_co.hotel_updateHotel(hotel_id, hotelObj,getTokenObject());
 			console.log("update hotel", res);
-			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				console.log("code error", code);
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(message);
-			}
-			uni.showToast({
-				title: "更新成功",
-				icon: "none"
-			});
-
+			
 			return true;
-		} catch (error) {
-			throw new Error("更新失败");
+		} catch (error:Error) {
+			//throw new Error("更新失败");
+			RequestFailModal(error.message);
+			return false;
 		}
 	}
 

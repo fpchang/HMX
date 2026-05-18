@@ -385,20 +385,20 @@
 			cancelButtonText: i18n.global.t("common.btn_txt_cancel"),
 			confirmButtonText: i18n.global.t("common.btn_confirm"),
 			beforeClose: async () : Promise<boolean> => {
-
-				//await roomTypeService.deleteFm(room._id);
-				//await comFunction.getRoomTypeList(hotel_id.value);
 				try {
-					await FMService.deleteFm(fm._id);
+					const flag = await FMService.deleteFm(fm._id);
+					if(flag){
 					getFmList();
 					showDeatilPage.value=false;
 					hideDialog();
 					return true;
+					}			
+					
 				} catch (errMsg) {
-					uni.showToast({
-						title: i18n.global.t("common.delete_fail"),
-						icon: "none"
-					})
+					// uni.showToast({
+					// 	title: i18n.global.t("common.delete_fail"),
+					// 	icon: "none"
+					// })
 					return false;
 				}
 

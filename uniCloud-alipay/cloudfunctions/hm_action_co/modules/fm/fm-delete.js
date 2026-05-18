@@ -1,14 +1,12 @@
 module.exports = {
-	async fm_deleteFm(event) {
-		let { _id } = event;
-		console.log("fm_deleteFm", event);
+	async fm_deleteFm(_id) {
 		const db = uniCloud.database();
 		const dCmd = db.command;
 		try {
-			const result = await db.collection('hm-incomeAndExpenses').doc(_id).remove();
-			return { code: 0, data: [], message: "" };
+			const res = await db.collection('hm-incomeAndExpenses').doc(_id).remove();
+			return res;
 		} catch (error) {
-			throw new Error("删除失败");
+			throw new Error("delete fail");
 		}
 	}
 }

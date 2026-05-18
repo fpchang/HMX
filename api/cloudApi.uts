@@ -13,6 +13,9 @@ export const getTokenObject=():UTSJSONObject=>{
 }
 export const action_co = uniCloud.importObject("hm_action_co", { customUI: true });
 export const RequestFailModal=(msg:string)=>{
+	if(msg==""){
+		return;
+	}
 	 showDialog({
 	    title: '请求异常',
 	    message: msg,

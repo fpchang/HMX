@@ -1,11 +1,7 @@
 module.exports = {
-	async order_addOrder(event) {
-		let { orderObj } = event;
-		console.log("order_addOrder", event);
-		const dbJQL = uniCloud.databaseForJQL({
-			event,
-			context: this.getClientInfo()
-		})
+	async order_addOrder(orderObj) {
+		console.log("order_addOrder", orderObj);
+		const dbJQL = uniCloud.databaseForJQL();
 		if (!orderObj['reservedRoomList'] || orderObj['reservedRoomList'].length < 1) {
 			orderObj.reservedRoomList = this.order_getRoomList(orderObj.roomTypeArray);
 		}

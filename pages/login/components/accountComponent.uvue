@@ -108,7 +108,7 @@
 	}
 	onShow(()=>{
 		const acstorage = uni.getStorageSync("account");
-		if(acstorage!=null){
+		if(acstorage!=null && acstorage!=""){
 			userForm.value.account= acstorage as string;
 		}
 	})

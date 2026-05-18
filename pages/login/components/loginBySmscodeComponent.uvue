@@ -192,6 +192,12 @@
 			submitLoading.value = false;
 		}
 	};
+	onShow(()=>{
+		const storage_phone = uni.getStorageSync("phone");
+		if(storage_phone!=null && storage_phone!=""){
+			userForm.value.phone=storage_phone;
+		}
+	})
 	// 页面销毁
 	onUnmounted(() => {
 		clearTimer();

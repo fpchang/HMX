@@ -12,7 +12,7 @@
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn" style="align-items: end;">
+			<view class="navbar-btn">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 				<text class="txt"
 					@click="addFm">{{billType=='income'?i18n.global.t("finance.income"):i18n.global.t("finance.expense")}}</text>

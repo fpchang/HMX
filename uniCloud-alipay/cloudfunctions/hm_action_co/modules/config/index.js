@@ -9,7 +9,7 @@ module.exports = {
 	},
 
 	async permission_getPermission(hotel_id) {
-		const dbJQL = uniCloud.databaseForJQL()
+		const dbJQL = uniCloud.databaseForJQL();
 		try {
 			
 			const { account_id } = this._tokenInfo;

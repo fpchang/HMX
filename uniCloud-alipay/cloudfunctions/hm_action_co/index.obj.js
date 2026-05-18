@@ -124,6 +124,16 @@ module.exports = {
 	async user_loginByAccountAndPassword(){},
 	async user_loginBySmsCode(){},
 	async user_loginByApp(){},
+	
+	async permission_getPermission(){},
+	async user_getUser(){},
+	async hotel_createHotel(){},
+	async hotel_updateHotel(){},
+	async order_deleteOrder(){},
+	async order_addOrder(){},
+	async order_deleteOrder(){},
+	async fm_deleteFm(){},
+	
 	 ...hotel,
 	...order,
 	...user,

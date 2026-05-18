@@ -57,7 +57,7 @@ class OrderServiceClass {
 			//const res = await DB.callFunction("hm_addOrder", { orderObj: obj });
 			await action_co.order_addOrder(obj,getTokenObject());	
 			return true
-		} catch (error) {
+		} catch (error:Error) {
 			RequestFailModal(error.message);
 			//throw new Error("创建失败");
 			return false;

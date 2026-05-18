@@ -79,7 +79,7 @@ class HotelServiceClass {
 			//console.log("create hotel", res);
 			await action_co.hotel_createHotel(hotelObj,getTokenObject());			
 			return true;
-		} catch (error) {
+		} catch (error:Error) {
 			//console.error(error);
 			//throw new Error("创建失败");
 				RequestFailModal(error.message);

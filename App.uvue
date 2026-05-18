@@ -16,8 +16,11 @@
 		i18n.global.locale.value = local;
 	}
 	const setTokenEvent = () => {
-		const token = uni.getStorageSync("hm_token");
-		setToken(token);
+		const token = uni.getStorageSync("hm_token") as string;
+		if(token !=null && token !=""){
+			setToken(token);
+		}
+		
 	}
 	export default {
 		onLaunch: function () {

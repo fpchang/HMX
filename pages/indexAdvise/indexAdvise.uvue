@@ -88,6 +88,9 @@
 		uni.reLaunch({
 			url: "/pages/index/index",
 		});
+		// uni.reLaunch({
+		// 	url: "/uni_modules/uni-id-pages-x/pages/login/login?type=username"
+		// });
 	};
 	const popup_confirm = ref(null);
 	const toLogin = () => {
@@ -95,6 +98,9 @@
 		uni.navigateTo({
 			url: "/pages/login/login",
 		});
+		// uni.navigateTo({
+		// 	url: "/uni_modules/uni-id-pages-x/pages/login/login?type=username"
+		// });
 	};
 	const toLoginEvent = () => {
 		toLogin();

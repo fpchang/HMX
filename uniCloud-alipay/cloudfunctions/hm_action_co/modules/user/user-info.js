@@ -1,10 +1,23 @@
 module.exports = {
 	async user_getUser() {
-	const dbJQL = uniCloud.databaseForJQL()
+	const dbJQL = uniCloud.databaseForJQL();
+		const db = uniCloud.database();
 		const field = "_id,isVip,nickName,phone,userName,avatar,closeAccountDateTime,account,email,accountStatus";
+		const fieldObj = {
+		    _id: true,
+		    isVip: true,
+		    nickName: true,
+		    phone: true,
+		    userName: true,
+		    avatar: true,
+		    closeAccountDateTime: true,
+		    account: true,
+		    email: true,
+		    accountStatus: true
+		};
 		let w ={ hm_token: this.$token };
 		try {
-			const res = await dbJQL.collection("hm-user").where(w).field(field).get();
+			const res = await db.collection("hm-user").where(w).field(fieldObj).get();
 			const user = res.data[0];
 			console.log("user",user);
 			if (!user) {

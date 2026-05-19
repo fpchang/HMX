@@ -48,7 +48,7 @@ class WeixinServer {
     openid,
     session_key
   }) {
-    //console.log(access_token, openid, session_key);
+    console.log(access_token, openid, session_key);
     const signature = crypto.createHmac('sha256', session_key).update('').digest('hex')
     return uniCloud.httpclient.request(WeixinServer.User_Encrypt_Key_Url, {
       dataType: 'json',
@@ -139,7 +139,7 @@ function isAliyun() {
 }
 
 WeixinServer.GetResponseData = function(response) {
-  //console.log("WeixinServer::response", response)
+  console.log("WeixinServer::response", response)
 
   if (!(response.status === HTTP_STATUS.SUCCESS || response.statusCodeValue === HTTP_STATUS.SUCCESS)) {
     throw new BridgeError(response.status || response.statusCodeValue, response.status || response.statusCodeValue)

@@ -3,11 +3,22 @@ const utils = require('../utils/index.js');
 module.exports = {
 	async user_validToken() {
 		const dbJQL = uniCloud.databaseForJQL();
+		const db = uniCloud.database();
+		const dbcmd = db.command;
 		try {
 			const token = uniCloud.gett
 			const { phone, account, account_id } = this._tokenInfo;
-			const sql = `_id=='${account_id+""}'||phone=='${phone+""}'||account=='${account+""}'`
-			const userRes = await dbJQL.collection("hm-user").where(sql).get();
+			//const sql = `_id=='${account_id+""}'||phone=='${phone+""}'||account=='${account+""}'`
+			//const userRes = await dbJQL.collection("hm-user").where(sql).get();
+			const userRes = await uniCloud.database().collection("hm-user").where(
+			{
+				 "$or": [
+				    { "_id": account_id },
+				    { "phone": phone },
+				    { "account": account }
+				  ]
+			}
+			).get();
 			console.log("userRes",userRes)
 			if (userRes.data.length < 1) {
 				return { errCode: 9992, errMsg: "account is not find" }

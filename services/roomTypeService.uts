@@ -5,7 +5,7 @@ import { roomTypeBean, formatRoomTypeList } from "@/bean/roomTypeBean.uts";
 import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
 import { roomBean } from '../bean/roomBean';
-import {action_co,getTokenObject} from "@/api/cloudApi.uts";
+import {action_co ,getTokenObject,RequestFailModal} from "@/api/cloudApi.uts";
 type employeeList_Res = {
 	code : number;
 	errCode : number;
@@ -25,9 +25,22 @@ class RoomTypeClass {
 	 * 获取当前酒店房型信息
 	*/
 	async getRoomTypeList(hotel_id : string) : Promise<Array<roomTypeBean>> {
+
 		try {
-			const params = { hotel_id } as UTSJSONObject;
-			const res = await DB.getCollection("hm-roomType,hm-room", params);
+			// const params = { hotel_id } as UTSJSONObject;
+			// const res = await DB.getCollection("hm-roomType,hm-room", params);
+			// const data = res['data'] as Array<UTSJSONObject>;
+			// let roomTypeList : Array<roomTypeBean> = formatRoomTypeList(data);
+			// console.log("房型列表：：",roomTypeList)
+			// return roomTypeList;
+			//const res = action_co.getRoomTypeIncludeRoomList(hotel_id,getTokenObject());
+			
+			const dbJQL = uniCloud.databaseForJQL();			
+			const roomTypeTemp = dbJQL.collection('hm-roomType')
+			  .where(`hotel_id == "${hotel_id}"`) .getTemp();		
+			const roomTemp = dbJQL.collection('hm-room') .getTemp();
+			const res = await dbJQL.collection(roomTypeTemp, roomTemp)
+			  .get();
 			const data = res['data'] as Array<UTSJSONObject>;
 			let roomTypeList : Array<roomTypeBean> = formatRoomTypeList(data);
 			return roomTypeList;

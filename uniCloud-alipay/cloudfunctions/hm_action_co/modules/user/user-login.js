@@ -18,7 +18,9 @@ module.exports = {
 		console.log("换到的手机号", res);
 		const phone = res.phoneNumber;
 		const secret = utils.utils_getSecret();
-		const dbJQL = uniCloud.databaseForJQL();
+		const dbJQL = uniCloud.databaseForJQL({
+			clientInfo: this.getClientInfo()
+		});
 		try {
 			const userRes = await dbJQL.collection('hm-user').where(`phone=='${phone}'`).get();
 			if (userRes.data.length > 0) {
@@ -51,13 +53,35 @@ module.exports = {
 			account,
 			password
 		} = userForm;
-		const dbJQL = uniCloud.databaseForJQL();
+		const dbJQL = uniCloud.databaseForJQL({
+			clientInfo: this.getClientInfo()
+		});
+		const db = uniCloud.database();
 		try {
 			const ep = utils.utils_encryptPassword(password);
 			const secret = utils.utils_getSecret();
-			const wstr = `(account=='${account}'||email=='${account}'||phone=='${account}')&&password=='${ep}'`;
-			console.log(wstr)
-			const userRes = await dbJQL.collection('hm-user').where(wstr).get();
+			// const wstr = `(account=='${account}'||email=='${account}'||phone=='${account}')&&password=='${ep}'`;
+			// console.log(wstr)
+			// const userRes = await dbJQL.collection('hm-user').where(wstr).get();
+			const w = {
+				$and: [{
+						$or: [{
+								account: account
+							}, // 这里的 account 是变量
+							{
+								email: account
+							},
+							{
+								phone: account
+							}
+						]
+					},
+					{
+						password: ep
+					} // ep 是变量
+				]
+			};
+			 const userRes = await db.collection('hm-user').where(w).get();
 			console.log("uuuu", userRes);
 			if (userRes.data.length < 1) {
 				return {
@@ -71,7 +95,7 @@ module.exports = {
 				account: user.account,
 				account_id: user._id
 			}, secret, (new Date().getTime() + 1000 * 60 * 60 * 24 * 30));
-			await dbJQL.collection('hm-user').doc(user._id).update({
+			await db.collection('hm-user').doc(user._id).update({
 				'hm_token': newToken
 			});
 			return {
@@ -94,24 +118,32 @@ module.exports = {
 		} = userForm;
 		const secret = utils.utils_getSecret();
 		const dbJQL = uniCloud.databaseForJQL({
+
+			clientInfo: this.getClientInfo(),
+
 			event: {
 				userForm
 			},
 			context: this.getClientInfo()
 		});
+		const db = uniCloud.database();
 		if (!user_isTestAccount(phone)) {
 			const verifT = utils.utils_verifyToken(tk, secret);
 			if (!verifT || verifT.value.smsCode != smsCode) {
 				return {
 					errCode: 202,
 					errMsg: "验证码不正确",
-					data:{}
+					data: {}
 				};
 			}
 		}
 		try {
-			const userRes = await dbJQL.collection('hm-user').where(`phone=='${phone}'`).get();
-			console.log("userRes",userRes);
+			console.log(11111)
+			//const userRes = await dbJQL.collection('hm-user').where(`phone=='${phone}'`).get();
+			const userRes = await db.collection('hm-user').where({
+				phone
+			}).get();
+			console.log("userRes", userRes);
 			if (userRes.data.length > 0) {
 				const user = userRes.data[0];
 				const newToken = utils.utils_getToken({
@@ -119,7 +151,10 @@ module.exports = {
 					account: user.account,
 					account_id: user._id
 				}, secret, (new Date().getTime() + 1000 * 60 * 60 * 24 * 30));
-				await dbJQL.collection('hm-user').doc(user._id).update({
+				// await dbJQL.collection('hm-user').doc(user._id).update({
+				// 	'hm_token': newToken
+				// });
+				await db.collection('hm-user').doc(user._id).update({
 					'hm_token': newToken
 				});
 				return {
@@ -132,7 +167,12 @@ module.exports = {
 			}
 			return await register.user_registerByPhone(phone)
 		} catch (e) {
-			throw new Error(e);
+			//throw new Error(e);
+			return {
+				errCode: 202,
+				errMsg: e.errMsg,
+				data: {}
+			};
 		}
 	},
 	// async user_login(userForm) {
@@ -152,7 +192,7 @@ module.exports = {
 }
 
 function user_isTestAccount(phone = "", smsCode) {
-		const testAccountList = [{
+	const testAccountList = [{
 			phone: "18516285834",
 			smsCode: "1234"
 		},
@@ -164,7 +204,7 @@ function user_isTestAccount(phone = "", smsCode) {
 			phone: "19083441181",
 			smsCode: "1234"
 		}
-		]
-		let t = testAccountList.find(item => item.phone == phone);
-		return t ? true : false;
-	}
+	]
+	let t = testAccountList.find(item => item.phone == phone);
+	return t ? true : false;
+}

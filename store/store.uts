@@ -42,6 +42,7 @@ export const state = reactive({
 
 export const setToken = (t:string) => {
 	state.token = t;
+	 uniCloud.setCustomClientInfo({"hm_token":t});
 };
 export const setIsLogin = (bool : boolean) => {
 	state.isLogin = bool;
@@ -123,9 +124,11 @@ export const loginEvent = async ():Promise<boolean>  => {
 		clearCache();
 		return false;
 	}
-
-	const flag: boolean = await AccountService.validToken();
+	const flag: boolean = await AccountService.validToken(token);
 	console.log("store valid token res",flag)
+	if(flag){
+		 uniCloud.setCustomClientInfo({"hm_token":token});
+	}
 	if (!flag) {				
 		clearCache();
 		return false

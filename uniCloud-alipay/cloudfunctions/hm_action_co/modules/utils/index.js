@@ -3,7 +3,7 @@ const crypto = require('crypto');
 
 module.exports = {
 	// ==================== dateFormat ====================
-	utils_dateFormat(d, fmt) {
+	dateFormat(d, fmt) {
 		let o = {
 			"M+": d.getMonth() + 1,
 			"d+": d.getDate(),
@@ -18,7 +18,7 @@ module.exports = {
 	},
 
 	// ==================== encryptPassword ====================
-	utils_encryptPassword(password) {
+	encryptPassword(password) {
 		const salt = '****';
 		const hash = crypto.createHmac('sha256', salt)
 			.update(password)
@@ -27,11 +27,11 @@ module.exports = {
 	},
 
 	// ==================== tokenEvent ====================
-	utils_getToken(value, secret, expiresIn) {
+	getToken(value, secret, expiresIn) {
 		return jwt.sign({ value }, secret, { expiresIn })
 	},
 
-	utils_verifyToken(token, secret) {
+	verifyToken(token, secret) {
 		try {
 			return jwt.verify(token, secret);
 		} catch (error) {
@@ -39,12 +39,12 @@ module.exports = {
 		}
 	},
 
-	utils_getSecret() {
+	getSecret() {
 		return "****";
 	},
 
-	utils_checkToken(token, secret) {
-		let vt = this.utils_verifyToken(token, secret);
+	checkToken(token, secret) {
+		let vt = this.verifyToken(token, secret);
 		if (!vt) return false;
 		if (new Date().getTime() > vt.exp * 1000) {
 			return false;
@@ -53,11 +53,11 @@ module.exports = {
 	},
 
 	// ==================== errorEvent ====================
-	utils_getTokenError(msg = "token无效") {
+	getTokenError(msg = "token无效") {
 		return { code: 9999, msg: msg }
 	},
 	//获取客户端语言
-	utils_getLanuage(clientInfo){
+	getLanuage(clientInfo){
 		 // const sys = uni.getSystemInfoSync();
 		 // const clientInfo = this.getClientInfo();
 		  const appLanguage = clientInfo.appLanguage;

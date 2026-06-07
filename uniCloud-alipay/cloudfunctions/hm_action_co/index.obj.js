@@ -14,7 +14,7 @@ const methodList = [
 	//'user_login',
 	//'user_register',
 	//'user_sendSms',
-	'user_validToken',
+	//'user_validToken',
 	'user_getUser',
 	'user_closeAccount',
 	'user_checkLogin',
@@ -77,7 +77,8 @@ module.exports = {
 	 */
 	_before: function () {
 		const clientInfo = this.getClientInfo();
-		const lang = utils.utils_getLanuage(clientInfo);
+		console.log("clientInfo==",clientInfo);
+		const lang = utils.getLanuage(clientInfo);
 		console.log('客户端语言',lang);
 		this.$t = getI18nMsg(lang);
 	//	console.log("$t",this.$t);
@@ -87,18 +88,19 @@ module.exports = {
 		if (methodList.includes(methodName)) {
 			const params = this.getParams();
 			  try{
-				  if(params.length<1){
-					  throw new Error("token is incorrect1"+methodName)
-				  }
+				  // if(params.length<1){
+					 //  throw new Error("token is incorrect1"+methodName)
+				  // }
 				  console.log('前端参数：', params)
-				  const token = params[params.length-1]['$token'];
+				 // const token = params[params.length-1]['$token'];
+				 const token = clientInfo.hm_token;
 				  console.log("token====",token);
 				  if(!token){
 					  console.log('1134456767')
 						throw new Error("token is incorrect2"+methodName)
 				  }	
-				  	const secret = utils.utils_getSecret();
-				  	const verifyResult = utils.utils_verifyToken(token, secret);
+				  	const secret = utils.getSecret();
+				  	const verifyResult = utils.verifyToken(token, secret);
 				  	if (verifyResult) {
 				  		console.log("设置token",verifyResult.value,token);
 				  		this._tokenInfo = verifyResult.value;
@@ -119,20 +121,20 @@ module.exports = {
 	getUser: function () {
 		return this._user || {};
 	},
-	async hotel_getHotelList(){},
-	async user_validToken(){},
-	async user_loginByAccountAndPassword(){},
-	async user_loginBySmsCode(){},
-	async user_loginByApp(){},
+	// async hotel_getHotelList(){},
+	// async user_validToken(){},
+	// async user_loginByAccountAndPassword(){},
+	// async user_loginBySmsCode(){},
+	// async user_loginByApp(){},
 	
-	async permission_getPermission(){},
-	async user_getUser(){},
-	async hotel_createHotel(){},
-	async hotel_updateHotel(){},
-	async order_deleteOrder(){},
-	async order_addOrder(){},
-	async order_deleteOrder(){},
-	async fm_deleteFm(){},
+	// async permission_getPermission(){},
+	// async user_getUser(){},
+	// async hotel_createHotel(){},
+	// async hotel_updateHotel(){},
+	// async order_deleteOrder(){},
+	// async order_addOrder(){},
+	// async order_deleteOrder(){},
+	// async fm_deleteFm(){},
 	
 	 ...hotel,
 	...order,

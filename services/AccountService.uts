@@ -5,11 +5,11 @@ import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 import { setToken } from "@/store/store.uts";
 import {action_co,getTokenObject,RequestFailModal} from "@/api/cloudApi.uts";
 const se_co= uniCloud.importObject("send_email_co");
-const account_co = uniCloud.importObject("hm_account_co");
+//const account_co = uniCloud.importObject("hm_account_co");
 class AccountServiceClass {
 
 	constructor() {
-
+		
 	}
 	/**
 	 * 发送短信验证吗
@@ -23,15 +23,16 @@ class AccountServiceClass {
 		//  const data:UTSJSONObject={"a":1};
 		return DB.callFunction("hm_getConfig");
 	}
-	async validToken() : Promise<boolean> {
-		try {
-			await action_co.user_validToken(getTokenObject());
-			return true;
+	async validToken(token:string) : Promise<boolean> {
+		try {			
+			const res = await action_co.user_validToken(token);
+			const flag = res['data'] as boolean;
+			return flag;
 		} catch (error:Error) {
 			console.log(error)
 			RequestFailModal(error.message);
-		//	throw new Error("valid token fail");
-			return false;
+			throw new Error("valid token fail");
+			//return false;
 		}
 		
 	}
@@ -92,7 +93,8 @@ class AccountServiceClass {
 	//验证邮箱与验证码
 	async validEmailAndCode(email : string,emailCode:string,emailCodeTk:string):Promise<boolean>{
 		try {
-			await account_co.validEmailAndCode(email,emailCode,emailCodeTk);
+			//await account_co.validEmailAndCode(email,emailCode,emailCodeTk);
+				await action_co.validEmailAndCode(email,emailCode,emailCodeTk);
 			return true;
 		} catch (error) {
 			//return false;
@@ -103,7 +105,7 @@ class AccountServiceClass {
 	async register(user : UTSJSONObject) : Promise<boolean> {
 		console.log("user---", user)
 		try {
-			await account_co.register(user);
+			await action_co.register(user);
 			return true
 		} catch (error) {
 			console.log("aaaaaaaaa",error);
@@ -189,7 +191,7 @@ class AccountServiceClass {
 	}
 	async resetPasswordByEmail(email:string,emailCode:string, emailCodeTk:string, password:string):Promise<boolean>{
 		try {
-			await account_co.resetPasswordByEmailCode(email,emailCode, emailCodeTk, password);
+			await action_co.resetPasswordByEmailCode(email,emailCode, emailCodeTk, password);
 			return true;
 		} catch (error) {
 			throw new Error(error.message as string)

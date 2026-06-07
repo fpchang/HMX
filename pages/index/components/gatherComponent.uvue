@@ -4,7 +4,7 @@
       <view class="stats-tab">
         <button 
           class="tab-btn" 
-          :class="{ active: activeIndex == 0 }"
+          :class="[activeIndex == 0?'active':'' ]"
           @click="tabClick(0)"
 		  style="margin-right: 10px;"
         >
@@ -12,7 +12,7 @@
         </button>
         <button 
           class="tab-btn" 
-          :class="{ active: activeIndex == 1 }"
+          :class="[activeIndex == 1?'active':'' ]"
           @click="tabClick(1)"
         >
           {{ i18n.global.t("gather.tomorrow") }}

@@ -117,7 +117,7 @@
                     "certpath" : "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1778562532405.cer",
                     "keyAlias" : "debugKey",
                     "keyPassword" : "0000001B8FB9584A49D836956094DB30B6E3B1E4CFFB74D8996885543C770EF1464429B512693D105B7182",
-                    "profile" : "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1778562532405.p7b",
+                    "profile" : "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1780405514506.p7b",
                     "signAlg" : "SHA256withECDSA",
                     "storeFile" : "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1778562532405.p12",
                     "storePassword" : "0000001B8FB9584A49D836956094DB30B6E3B1E4CFFB74D8996885543C770EF1464429B512693D105B7182"

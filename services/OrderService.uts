@@ -53,14 +53,17 @@ class OrderServiceClass {
 			totalAmount: orderObj.totalAmount,
 			reservedRoomList: orderObj.reservedRoomList
 		}
+		console.log("9999")
 		try {
 			//const res = await DB.callFunction("hm_addOrder", { orderObj: obj });
-			await action_co.order_addOrder(obj,getTokenObject());	
+			const res = await action_co.order_addOrder(obj);	
+			console.log("添加订单===",res);
 			return true
 		} catch (error:Error) {
+			console.log("eeeeee");
 			RequestFailModal(error.message);
-			//throw new Error("创建失败");
-			return false;
+			throw new Error("创建失败");
+		
 		}
 
 	}
@@ -82,10 +85,10 @@ class OrderServiceClass {
 			orderStatus: orderStatus == 'all' ? dbCmd.neq(999) : orderStatus,
 			$or: [{ userName: new RegExp(`${keyword}`) }, { wxNickName: new RegExp(`${keyword}`) }, { phone: new RegExp(`${keyword}`) }]
 		}
-		//console.log("过滤条件", w);
+		console.log("过滤条件", w);
 		try {
 			const res = await db.collection("hm-order").where(w).orderBy("createTime desc").skip(skipnum).limit(pageSize).get({ getCount: true });
-			//console.log("order request", res)
+			console.log("order request", res)
 			const data = res['data'] as Array<UTSJSONObject>;
 			let orderList : Array<orderBean> = []
 			if (data != null) {

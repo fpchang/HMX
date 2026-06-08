@@ -17,18 +17,21 @@ class UserRegister{
 		if (!verifT || verifT.value.emailCode != emailCode) {
 			return {
 				errCode: 202,
-				errMsg: "邮箱验证码不正确"
+				errMsg: "邮箱验证码不正确",
+				data:false
 			};
 		}
 		if (verifT.value.email != email) {
 			return {
 				errCode: 202,
-				errMsg: "邮箱与验证码不匹配"
+				errMsg: "邮箱与验证码不匹配",
+				data:false
 			};
 		}
 		return {
 			errCode: 0,
-			errMsg: ""
+			errMsg: "",
+			data:true
 		};
 	}
 	async register(user = {}) {
@@ -47,6 +50,7 @@ class UserRegister{
 			const user = this.formatUser(account, ep, email);
 			console.log(user)
 			const result = await dbJQL.collection('hm-user').add(user);
+			console.log("注册结果",result)
 			return result
 		} catch (error) {
 			console.log(error)

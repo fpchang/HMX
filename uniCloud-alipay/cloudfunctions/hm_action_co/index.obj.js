@@ -8,6 +8,7 @@ const menu = require("./modules/menu/index.js");
 const scenicSpot = require("./modules/scenicSpot/index.js");
 const fm = require("./modules/fm/index.js");
 const config = require("./modules/config/index.js");
+const email = require("./modules/email/index.js");
 const utils = require("./modules/utils/index.js");
 const { getI18nMsg } = require('./i18n/index.js');
 const methodList = [
@@ -147,4 +148,5 @@ module.exports = {
 	...fm,
 	...config,
 	...utils,
+	...email
 }

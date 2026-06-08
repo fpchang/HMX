@@ -3,7 +3,7 @@ import { callFunctionRes } from "@/bean/DBBean";
 import { userBean } from '@/bean/userBean';
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 import { setToken } from "@/store/store.uts";
-import {action_co,getTokenObject,RequestFailModal} from "@/api/cloudApi.uts";
+import {action_co,RequestFailModal} from "@/api/cloudApi.uts";
 const se_co= uniCloud.importObject("send_email_co");
 //const account_co = uniCloud.importObject("hm_account_co");
 class AccountServiceClass {
@@ -14,15 +14,25 @@ class AccountServiceClass {
 	/**
 	 * 发送短信验证吗
 	 */
-	sendSmsCode(phone : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		const data : UTSJSONObject = { phone };
-		return DB.callFunction("hm-sendSms", data);
+	async sendSmsCode(phone : string) : Promise<string> {
+		//const data : UTSJSONObject = { phone };
+	//	return DB.callFunction("hm-sendSms", data);
+	try {
+		const res = await action_co.user_sendSms(phone);
+		const data = res['data'] as UTSJSONObject;
+		const tk = data.getString("tk")??"";
+		return tk;
+	} catch (error) {
+		RequestFailModal(error.message);
+		throw new Error(error.message)
+	}
+		
 	}
 	//腾讯地图 web secret =   qvQRgL3QqGosrlh7BrIyleFrs3Phs0X9
-	getConfig() : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		//  const data:UTSJSONObject={"a":1};
-		return DB.callFunction("hm_getConfig");
-	}
+	// getConfig() : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+	// 	//  const data:UTSJSONObject={"a":1};
+	// 	return DB.callFunction("hm_getConfig");
+	// }
 	async validToken(token:string) : Promise<boolean> {
 		try {			
 			const res = await action_co.user_validToken(token);
@@ -38,7 +48,7 @@ class AccountServiceClass {
 	}
 	async sendEmailCode(email : string,type:string):Promise<string> {
 		try {
-			const res = await se_co.sendEmailCode(email,type);
+			const res = await action_co.sendEmailCode(email,type);
 			console.log("send email code", res);
 			const data = res['data'] as UTSJSONObject;
 			const emailCodeTk = data.getString("emailCodeTk")??"";
@@ -46,16 +56,12 @@ class AccountServiceClass {
 		} catch (error) {
 			throw new Error(error.message as string)
 		}
-
-
-
 	}
 	/**
 	 * 注册账号验证是否存在
 	 */
 
 	async validRegisterAccount(account : string) : Promise<boolean> {
-		console.log("aacc", account);
 		if (account == "") {
 			throw new Error("账号不能为空")
 		}
@@ -71,7 +77,6 @@ class AccountServiceClass {
 
 	}
 	async validRegisterByEmail(email : string) : Promise<boolean> {
-		console.log("aacc", email);
 		let flag = false;
 		if (email == "") {
 			throw new Error("邮箱不能为空");
@@ -85,8 +90,7 @@ class AccountServiceClass {
 			}
 			return flag;
 		} catch (e) {
-			throw new Error("系统异常");
-			
+			throw new Error("system error");			
 		}
 		
 	}
@@ -94,8 +98,9 @@ class AccountServiceClass {
 	async validEmailAndCode(email : string,emailCode:string,emailCodeTk:string):Promise<boolean>{
 		try {
 			//await account_co.validEmailAndCode(email,emailCode,emailCodeTk);
-				await action_co.validEmailAndCode(email,emailCode,emailCodeTk);
-			return true;
+			const res =	await action_co.user_validEmailAndCode(email,emailCode,emailCodeTk);
+			const data = res['data'] as boolean;
+			return data;
 		} catch (error) {
 			//return false;
 			console.log("eeee",error)
@@ -105,25 +110,22 @@ class AccountServiceClass {
 	async register(user : UTSJSONObject) : Promise<boolean> {
 		console.log("user---", user)
 		try {
-			await action_co.register(user);
+			await action_co.user_register(user);
 			return true
 		} catch (error) {
-			console.log("aaaaaaaaa",error);
 			return false;
 		}
 	}
 	async LoginByAccount(userForm:UTSJSONObject): Promise<boolean>{
 		try {
 			//const res = await account_co.login(userForm);
-			const res = await action_co.user_loginByAccountAndPassword(userForm,getTokenObject());
-			console.log("AAAAAAAA",res);
+			const res = await action_co.user_loginByAccountAndPassword(userForm);
 			const data = res['data'] as UTSJSONObject;	
 			const token = data.getString("token") ?? ""
 			if (token != "") {
 				setToken(token);
 				uni.setStorageSync("hm_token", token as string);
-				uni.setStorageSync("uniIdToken", token as string);
-				
+				uni.setStorageSync("uniIdToken", token as string);				
 			}
 			return true;
 		} catch (error:Error) {
@@ -179,7 +181,7 @@ class AccountServiceClass {
 		try {
 			//const token = uni.getStorageSync("hm_token");
 			//await account_co.updatePassword(token,password,originPassword);
-			await action_co.user_updatePassword(password,originPassword,getTokenObject());
+			await action_co.user_updatePassword(password,originPassword);
 			return true;
 		} catch (error:Error) {
 			console.log("1eeeeeeee",error);
@@ -191,9 +193,10 @@ class AccountServiceClass {
 	}
 	async resetPasswordByEmail(email:string,emailCode:string, emailCodeTk:string, password:string):Promise<boolean>{
 		try {
-			await action_co.resetPasswordByEmailCode(email,emailCode, emailCodeTk, password);
+			await action_co.user_resetPasswordByEmailCode(email,emailCode, emailCodeTk, password);
 			return true;
-		} catch (error) {
+		} catch (error:Error) {
+			RequestFailModal(error.message)
 			throw new Error(error.message as string)
 		}
 	}
@@ -247,7 +250,7 @@ class AccountServiceClass {
 	async getuserByToken() : Promise<userBean | null> {
 		//const res = await DB.callFunction("hm_getUser", { type: 'token', value: uni.getStorageSync("hm_token") });
 		try{
-			const res = await action_co.user_getUser(getTokenObject());
+			const res = await action_co.user_getUser();
 			console.log("222222",res);
 			const data = res['data'] as Array<UTSJSONObject>;
 			if(data.length<1){

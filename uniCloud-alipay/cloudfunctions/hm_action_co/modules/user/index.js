@@ -28,39 +28,42 @@ const {UserToken} = require("./action/UserToken.js");
 module.exports = {
 	//token验证
 	async user_validToken(token){		 
-		return new UserToken(this).validToken(token);
+		return await new UserToken(this).validToken(token);
 	},
 	//账号密码登录
 	async user_loginByAccountAndPassword(userForm){
-		return new UserLogin(this).loginByAccountAndPassword(userForm);
+		return await new UserLogin(this).loginByAccountAndPassword(userForm);
 	},
 	//短信验证码登录
 	async user_loginBySmsCode(userForm){
-		return new UserLogin(this).loginBySmsCode(userForm);
+		return await new UserLogin(this).loginBySmsCode(userForm);
 	},
 	//一键登录
 	async user_loginByApp(userForm){
-		return new UserLogin(this).loginByApp(userForm);
+		return await new UserLogin(this).loginByApp(userForm);
 	},
 	//账号注册验证邮件与验证码
 	async user_validEmailAndCode(email,emailCode,emailCodeTk){
-		return new UserRegister(this).validEmailAndCode(email,emailCode,emailCodeTk);
+		return await new UserRegister(this).validEmailAndCode(email,emailCode,emailCodeTk);
 	},
 	// 账号注册
 	async user_register(user){
-		return new UserRegister(this).register(user);
+		return await new UserRegister(this).register(user);
 	},
 	//修改密码
 	async user_updatePassword(password,originPassword){
-		return new UserPassword(this).updatePassword(password,originPassword);
+		return await new UserPassword(this).updatePassword(password,originPassword);
 	},
 	//根据token获取用户信息
 	async user_getUser(){
 		console.log("111111",this)
-		return new UserAction(this).getUser();
+		return await new UserAction(this).getUser();
 	},
 	//邮箱验证码重置密码
 	async user_resetPasswordByEmailCode(email,emailCode, emailCodeTk, password){
-		return new UserPassword(this).resetPasswordByEmailCode(email,emailCode, emailCodeTk, password);
+		return await  new UserPassword(this).resetPasswordByEmailCode(email,emailCode, emailCodeTk, password);
 	},
+	async user_sendSms(phone){
+		return  await new UserToken(this).sendSms(phone);
+	}
 }

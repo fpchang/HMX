@@ -126,7 +126,7 @@ class UserLogin{
 			event: {
 				userForm
 			},
-			context: this.getClientInfo()
+			context: this.ctx.getClientInfo()
 		});
 		const db = uniCloud.database();
 		if (!isTestAccount(phone)) {
@@ -178,15 +178,15 @@ class UserLogin{
 			};
 		}
 	}
-	async sendSms(event) {
-		let { appid, phone, templateId = 'uni_sms_test' } = event;
+	async sendSms(phone) {
+		//let { appid, phone, templateId = 'uni_sms_test' } = event;
 		const db = uniCloud.database();
 		const smsCode = this.randomSms();
-		if (this.getClientInfo().SPACEINFO.spaceId == "env-00jxh1m2dpmq" || this.isTestAccount(phone)) {
+		if (this.ctx.getClientInfo().SPACEINFO.spaceId == "env-00jxh1m2dpmq" || this.isTestAccount(phone)) {
 			const newToken =utils.getToken({ phone: phone, smsCode: 1234 }, utils.getSecret(), 300);
-			return { code: 0, tk: newToken };
+			return {errCode:0,errMsg:"", tk: newToken };
 		}
-		const { appId } = this.getClientInfo();
+		const { appId } = this.ctx.getClientInfo();
 		try {
 			const res = await uniCloud.sendSms({
 				appid: appId,
@@ -200,11 +200,11 @@ class UserLogin{
 			});
 			console.log("发送短信验证结果=====", res);
 			const newToken =utils.getToken({ phone: phone, smsCode: smsCode }, utils.getSecret(), 300);
-			return { code: 0, tk: newToken };
+			return {errMsg:"",errCode:0, data:{ tk: newToken}};
 		} catch (err) {
-			console.log(JSON.stringify(err))
-			console.log(err.errMsg)
-			throw new Error(err);
+			// console.log(JSON.stringify(err))
+			// console.log(err.errMsg)
+			// throw new Error(err);
 		}
 	}
 	

@@ -65,5 +65,8 @@ module.exports = {
 	},
 	async user_sendSms(phone){
 		return  await new UserToken(this).sendSms(phone);
+	},
+	async user_closeAccount(){
+		return  await new UserAction(this).closeAccount();
 	}
 }

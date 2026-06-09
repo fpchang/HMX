@@ -4,8 +4,7 @@ import { userBean } from '@/bean/userBean';
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 import { setToken } from "@/store/store.uts";
 import {action_co,RequestFailModal} from "@/api/cloudApi.uts";
-const se_co= uniCloud.importObject("send_email_co");
-//const account_co = uniCloud.importObject("hm_account_co");
+
 class AccountServiceClass {
 
 	constructor() {
@@ -205,8 +204,8 @@ class AccountServiceClass {
 	 */
 	async closeAccount() : Promise<boolean> {
 		try {
-			const res = await DB.callFunction("hm_closeAccount");
-			console.log("11111注销账号", res)
+			//const res = await DB.callFunction("hm_closeAccount");
+			await action_co.user_closeAccount();
 			return true;
 		} catch (error) {
 			throw new Error("账号注销失败")

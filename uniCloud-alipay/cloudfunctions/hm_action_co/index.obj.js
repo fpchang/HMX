@@ -136,7 +136,9 @@ module.exports = {
 	// async order_addOrder(){},
 	// async order_deleteOrder(){},
 	// async fm_deleteFm(){},
-	
+	async employee_addEmployee(employeeObj){},
+	async employee_editEmployee(employeeObj){},
+	async employee_deleteEmployee(employee_id){},
 	 ...hotel,
 	...order,
 	...user,

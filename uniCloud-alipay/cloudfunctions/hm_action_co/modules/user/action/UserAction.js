@@ -44,14 +44,14 @@ class UserAction{
 	/**
 	 * 账号注销
 	 */
-	async user_closeAccount() {
+	async closeAccount() {
 	
-		const dbJQL = uniCloud.databaseForJQL()
+		const db = uniCloud.database();
 		try {
 			
 			const { account_id } = this.ctx._tokenInfo;
 			const time = Date.now();
-			const res = await dbJQL.collection("hm-user").where({ _id: account_id }).update({ accountStatus: 9, closeAccountDateTime: time });
+			const res = await db.collection("hm-user").where({ _id: account_id }).update({ accountStatus: 9, closeAccountDateTime: time });
 			return res;
 		} catch (e) {
 			throw new Error(e)

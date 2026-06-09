@@ -6,7 +6,7 @@ import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
 import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
-import {action_co,getTokenObject,RequestFailModal} from "@/api/cloudApi.uts";
+import {action_co,RequestFailModal} from "@/api/cloudApi.uts";
  //as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
 const _token=()=>{
 	return {
@@ -291,18 +291,7 @@ class HotelServiceClass {
 				console.log("add employee",res)
 			return true;
 		} catch (err:Error) {
-			//const hasCauseMessage = (err.cause?.cause?.message ?? '').length > 0;
-			//const msg=hasCauseMessage ? JSON.parseObject(err.cause?.cause?.message ?? ''):'系统异常，添加失败';
-			
-			// showDialog({
-			// 	title: '添加失败',
-			// 	message: err.message.toString(),
-			// 	showCancelButton: false,
-			// 	confirm: () => {
-			// 		throw new Error(err.message.toString());
-			// 	}
-			// })
-			//return false;
+			RequestFailModal(err.message);
 			throw new Error(err.message)
 		}
 

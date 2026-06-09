@@ -3,9 +3,9 @@
 	"required": ["hotel_id", "orderStatus","checkInStartDateTimeStamp","checkInStartDateTimeStamp"],
 	"permission": {
 		"read": true,
-		"create": false,
-				"update": false,
-				"delete": false
+		"create": true,
+		"update": false,
+		"delete": false
 	},
 	"properties": {
 		"_id": {

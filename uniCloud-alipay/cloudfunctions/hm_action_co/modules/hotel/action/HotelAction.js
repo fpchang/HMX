@@ -6,7 +6,7 @@ class HotelAction{
 	}
 	async createHotel(hotelObj) {
 		console.log("hotel_createHotel", hotelObj);
-		const db = uniCloud.database()
+		const db = uniCloud.databaseForJQL();
 		try {
 			const validstr = hotelUtils.hotel_validHotel(hotelObj);
 			if (validstr != "") {

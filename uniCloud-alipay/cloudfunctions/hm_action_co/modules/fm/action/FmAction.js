@@ -12,7 +12,7 @@ class FmAction{
 			type: fm.type,
 			mark: fm.mark
 		}
-		const db = uniCloud.database();
+		const db = uniCloud.databaseForJQL();
 		try {
 			const res =  await db.collection("hm-incomeAndExpenses").add(fmObj);
 			return res;

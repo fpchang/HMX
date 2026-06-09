@@ -4,7 +4,7 @@ class OrderAction{
 	}
 	async addOrder(orderObj) {
 		console.log("order_addOrder", orderObj);
-		const db = uniCloud.database();
+		const db = uniCloud.databaseForJQL();
 		// if (!orderObj['reservedRoomList'] || orderObj['reservedRoomList'].length < 1) {
 		// 	orderObj.reservedRoomList = this.order_getRoomList(orderObj.roomTypeArray);
 		// }
@@ -19,7 +19,7 @@ class OrderAction{
 		}
 		
 	}
-	async order_deleteOrder(_id) {
+	async deleteOrder(_id) {
 		const db = uniCloud.database();
 		const res = await db.collection("hm-order").doc(_id).update({ 'orderStatus': 10 });
 		return res;

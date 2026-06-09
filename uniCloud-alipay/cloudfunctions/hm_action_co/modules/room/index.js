@@ -1,11 +1,16 @@
-const roomAdd = require('./room-add.js');
-const roomUpdate = require('./room-update.js');
-const roomDelete = require('./room-delete.js');
-const roomQuery = require('./room-query.js');
+const {RoomAction} = require("./action/RoomAction.js");
 
 module.exports = {
-	...roomAdd,
-	...roomUpdate,
-	...roomDelete,
-	...roomQuery
+async room_addRoom(room) {
+		return await new RoomAction(this).addRoom(room);
+	},
+	async room_updateRoom(room) {
+		return await new RoomAction(this).updateRoom(room);
+	},
+	async room_getRemainderRoomList() {
+		return await new RoomAction(this).getRemainderRoomList();
+	},
+	async room_deleteRoom(_id) {
+		return await new RoomAction(this).deleteRoom();
+	}
 }

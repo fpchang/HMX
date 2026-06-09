@@ -4,7 +4,7 @@ class EmployeeAction {
 		this.ctx = ctx;
 	}
 	async addEmployee(employeeObj) {
-		const db = uniCloud.database();
+		const db = uniCloud.databaseForJQL();
 		const {
 			phone,
 			account

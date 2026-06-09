@@ -223,13 +223,16 @@
 			const flag = await HotelService.createHotel(hotelForm.value);
 			if(flag){
 			submitLoading.value = false;
-
 			comFunction.init();
-			uni.navigateBack();
-			uni.showToast({
-				title: i18n.global.t('common.add_success'),
-				icon: "none"
+			uni.navigateBack({
+				success(){
+					uni.showToast({
+						title: i18n.global.t('common.add_success'),
+						icon: "none"
+					});
+				}
 			});
+			
 			}else{
 				submitLoading.value = false;
 			

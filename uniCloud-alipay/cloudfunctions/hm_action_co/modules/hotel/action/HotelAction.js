@@ -6,24 +6,21 @@ class HotelAction{
 	}
 	async createHotel(hotelObj) {
 		console.log("hotel_createHotel", hotelObj);
-		const dbJQL = uniCloud.databaseForJQL()
+		const db = uniCloud.database()
 		try {
 			const validstr = hotelUtils.hotel_validHotel(hotelObj);
 			if (validstr != "") {
 				return { errCode: 10, errMsg: validstr,data:[] };
 			}
 			if (!hotelObj.ownership_id && hotelObj.belong) {
-				console.log(3333)
-				const user = await dbJQL.collection('hm-user').where({ phone: hotelObj.belong }).get();
+				const user = await db.collection('hm-user').where({ phone: hotelObj.belong }).get();
 				console.log("uuu", user);
 				const oid = user.data[0]["_id"];
 				if (oid) {
 					hotelObj.ownership_id = oid;
 				}
 			}
-			console.log(4444)
-			const result = await dbJQL.collection('hm-hotel').add(hotelUtils.hotel_foramtHotel(hotelObj));
-			console.log(555,result)
+			const result = await db.collection('hm-hotel').add(hotelUtils.hotel_foramtHotel(hotelObj));
 			const employeeForm = {
 				"employee_name": "店主",
 				"hotel_id": result.id,
@@ -31,7 +28,7 @@ class HotelAction{
 				"role": "administrator"
 			}
 			console.log("create hotel employee", employeeForm)
-			await dbJQL.collection('hm-employee').add(employeeForm);
+			await db.collection('hm-employee').add(employeeForm);
 			return { code: 0, message: "" };
 		} catch (e) {
 			throw new Error(e);
@@ -42,9 +39,9 @@ class HotelAction{
 		if (!hotel_id) {
 			throw new Error("缺少hotel_id")
 		}
-		const dbJQL = uniCloud.databaseForJQL()
+		const db = uniCloud.database()
 		try {
-			const result = await dbJQL.collection('hm-hotel').doc(hotel_id).update(hotelUtils.hotel_foramtHotel(hotelObj));
+			const result = await db.collection('hm-hotel').doc(hotel_id).update(hotelUtils.hotel_foramtHotel(hotelObj));
 			return result;
 		} catch (e) {
 			throw new Error(e)
@@ -52,15 +49,15 @@ class HotelAction{
 	}
 	
 	async deleteHotel(hotel_id) {
-		const dbJQL = uniCloud.databaseForJQL();
+		const db = uniCloud.database();
 		try {		
-			const { phone, account_id } = this._tokenInfo;
-			const res = await dbJQL.collection("hm-hotel").doc(hotel_id).get();
+			const { phone, account_id } = this.ctx._tokenInfo;
+			const res = await db.collection("hm-hotel").doc(hotel_id).get();
 			if (res.data[0].ownership_id != account_id) {
 				//throw new Error("权限不足")
 				return {errCode:33,errMsg:"Insufficient permissions",data:[]}
 			}
-			const dres = await dbJQL.collection("hm-hotel").doc(hotel_id).update({ dataStatus: 10 });
+			const dres = await db.collection("hm-hotel").doc(hotel_id).update({ dataStatus: 10 });
 			return dres;
 		} catch (e) {
 			throw new Error(e)
@@ -97,7 +94,7 @@ class HotelAction{
 		    newRoot: {
 		      $mergeObjects: [
 		        '$hotelInfo',        // 酒店的所有字段（_id, name, address...）
-		        { role: '$role' }    // 从 employee 记录中取出 role 字段
+		        { curRole: '$role' }    // 从 employee 记录中取出 role 字段
 		      ]
 		    }
 		  })

@@ -8,28 +8,31 @@
 
 				<image src="/static/icons/list.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{i18n.global.t("hotel.hotel_list")}}</text>
+				<text
+					style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{i18n.global.t("hotel.hotel_list")}}</text>
 			</view>
 		</template>
 		<template #right>
 			<view class="navbar-btn">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
-				
-					<text class="txt" @click="addHotel">{{i18n.global.t("common.btn_txt_create",[i18n.global.t("hotel.title")])}}</text>
-				
+
+				<text class="txt"
+					@click="addHotel">{{i18n.global.t("common.btn_txt_create",[i18n.global.t("hotel.title")])}}</text>
+
 
 			</view>
 		</template>
 	</rice-navbar>
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1" v-if="!submitLoading&&hotelList.length>0">
+
 	<!-- #endif -->
 		<view class="card-list">
 			<view class="card-list-item" v-for="hotel of hotelList">
 				<view class="card">
 					<view class="img-area">
-						<image :src="hotel.firstImages" v-if="hotel.firstImages!=''"
-							style="height: 100%;width: 100%;" mode="aspectFill">
+						<image :src="hotel.firstImages" v-if="hotel.firstImages!=''" style="height: 100%;width: 100%;"
+							mode="aspectFill">
 						</image>
 						<image src="/static/images/noimg.png" v-if="hotel.firstImages==''"
 							style="height: 80%;width: 80%;" mode="aspectFit">
@@ -47,31 +50,34 @@
 							<view class="card-subtitle" style="margin-top: 15px;">
 								<image src="/static/icons/administrator.png"
 									style="width:18px;height:18px;margin-right: 4px;"></image>
-								<text class="txt">{{i18n.global.t("hotel.storekeeper")}}：{{belong(hotel.belong??"")}}</text>
+								<text
+									class="txt">{{i18n.global.t("hotel.storekeeper")}}：{{belong(hotel.belong??"")}}</text>
 							</view>
 							<view class="card-subtitle">
 								<image src="/static/icons/role.png" style="width:18px;height:18px;margin-right: 4px;">
 								</image>
-								<text class="txt">{{i18n.global.t("hotel.role")}}：{{roleFormat(hotel.curRole ?? '')}}</text>
+								<text
+									class="txt">{{i18n.global.t("hotel.role")}}：{{roleFormat(hotel.curRole ?? '')}}</text>
 							</view>
-							
+
 						</view>
 						<view class="state">
 							<text class="txt">{{i18n.global.t('hotel.normal_operation')}}</text>
 						</view>
 					</view>
-
 					<view class="control">
-						<xt-control :showEdit="hotel.curRole == 'administrator'" :showDelete="hotel.curRole == 'administrator'" @del="deleteHotel(hotel)" @view="viewDetail(hotel)" @edit="editHotel(hotel)"></xt-control>
+						<xt-control :showEdit="hotel.curRole == 'administrator'"
+							:showDelete="hotel.curRole == 'administrator'" @del="deleteHotel(hotel)"
+							@view="viewDetail(hotel)" @edit="editHotel(hotel)"></xt-control>
 					</view>
 				</view>
 			</view>
 
 		</view>
 	<!-- #ifdef APP -->
-	</scroll-view>	
+	</scroll-view>
 	<!-- #endif -->
-<l-empty :description="i18n.global.t('common.noData',[''])" v-if="!submitLoading&&hotelList.length<1" />
+	<l-empty :description="i18n.global.t('common.noData',[''])" v-if="!submitLoading&&hotelList.length<1" />
 </template>
 
 <script setup>
@@ -80,7 +86,7 @@
 	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { HotelService } from "@/services/HotelService.uts";
-	import {hotelBean} from "@/bean/hotelBean.uts"
+	import { hotelBean } from "@/bean/hotelBean.uts"
 	import i18n from '@/i18n/index.uts';
 	let submitLoading = ref(false);
 	const hotelList = computed<Array<hotelBean>>(() => {
@@ -119,24 +125,24 @@
 		});
 	}
 	const deleteHotel = async (targetObj : hotelBean) => {
-		console.log("targetObj",targetObj);
+		console.log("targetObj", targetObj);
 		if (targetObj.curRole != "administrator") {
 			showDialog({
-										title: i18n.global.t('permission.noPermission'),
-										message: i18n.global.t('permission.contactAdmin'),
-										showCancelButton: false,
-										confirm: () => {
-											hideDialog();
-										}
-									})
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
 			return;
 		}
 
 		showDialog({
 			title: i18n.global.t("common.confirmDelete"),
 			message: i18n.global.t("common.deleteOrderTip"),
-			cancelButtonText:i18n.global.t("common.btn_txt_cancel"),
-			confirmButtonText:i18n.global.t("common.btn_confirm"),
+			cancelButtonText: i18n.global.t("common.btn_txt_cancel"),
+			confirmButtonText: i18n.global.t("common.btn_confirm"),
 			beforeClose: async () : Promise<boolean> => {
 				try {
 					await HotelService.deleteHotel(targetObj._id as string);
@@ -169,7 +175,6 @@
 			url: `/pages/hotelManage/createHotel/createHotel?pageType=2&&hotel_item=${encodeURIComponent(JSON.stringify(hotel_item))}`,
 		});
 	}
-
 </script>
 
 <style lang="scss">

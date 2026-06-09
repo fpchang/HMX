@@ -145,13 +145,21 @@ import i18n from '@/i18n/index.uts';
 	const editEmployee = async () => {
 		submitLoading.value = true;
 		try {
-			await HotelService.editEmployee(employeeForm.value);
-			submitLoading.value = false;
-			employeeAction.getEmplolyeeList(hotel_id.value);
-			uni.navigateBack();
+			const flag = await HotelService.editEmployee(employeeForm.value);
+			if(flag){
+				submitLoading.value = false;
+				employeeAction.getEmplolyeeList(hotel_id.value);
+				uni.navigateBack({success(){
+					uni.showToast({
+						title:"update success",
+						icon:"none"
+					})
+				}});
+			}
+			
 		} catch (error) {
 			showDialog({
-				title: '更新失败',
+				title: 'update fail',
 				message:error.message.toString(),
 				showCancelButton: false,
 				confirm: () => {

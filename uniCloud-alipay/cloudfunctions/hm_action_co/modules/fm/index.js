@@ -1,13 +1,7 @@
-const fmDelete = require('./fm-delete.js');
-const fmTask = require('./fm-task.js');
-const fmPay = require('./fm-pay.js');
-const fmRecharge = require('./fm-recharge.js');
-const fmConfig = require('./fm-config.js');
+const {FmAction} = require('./action/FmAction.js');
 
 module.exports = {
-	...fmDelete,
-	...fmTask,
-	...fmPay,
-	...fmRecharge,
-	...fmConfig
+	async fm_add(fm){
+		return await new FmAction(this).add(fm);
+	}
 }

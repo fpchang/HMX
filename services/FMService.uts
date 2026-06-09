@@ -46,20 +46,24 @@ class FMServiceClass {
 			mark: item.mark
 		}
 		try {
-			const res = await DB.add("hm-incomeAndExpenses", fm);
+			// const res = await DB.add("hm-incomeAndExpenses", fm);
+			// const id = res['id'] as string;
+			// if (id == "") {
+			// 	uni.showToast({
+			// 		title: "添加异常",
+			// 		icon: "none"
+			// 	});
+			// 	throw new Error("添加失败");
+			// }
+			// uni.showToast({
+			// 	title: "添加成功",
+			// 	icon: "none"
+			// });
+			// return true;
+			const res = await action_co.fm_add(fm);
 			const id = res['id'] as string;
-			if (id == "") {
-				uni.showToast({
-					title: "添加异常",
-					icon: "none"
-				});
-				throw new Error("添加失败");
-			}
-			uni.showToast({
-				title: "添加成功",
-				icon: "none"
-			});
-			return true;
+			console.log("add order",res);
+			return id!="";
 		} catch (error) {
 			throw new Error("添加收支失败");
 		}

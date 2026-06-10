@@ -3,23 +3,16 @@ class RoomTypeAction {
 	constructor(ctx) {
 		this.ctx = ctx;
 	}
-	async addRoomType(event) {
-		let {
-			roomTypeObj
-		} = event;
-		console.log("roomType_addRoomType", event);
+	async addRoomType(roomTypeObj) {
 		const dbJQL = uniCloud.databaseForJQL({
-			event,
 			context: this.ctx.getClientInfo()
-		})
+		});
+		
 		const result = await dbJQL.collection('hm-roomType').add(roomTypeObj);
+		console.log("roomtype add 2222",result)
 		return result;
 	}
-	async deleteRoomType_x(event) {
-		let {
-			_id
-		} = event;
-		console.log("roomType_deleteRoomType_x", event);
+	async deleteRoomType(_id) {
 		const db = uniCloud.database();
 		const dCmd = db.command;
 		const result = await db.collection('hm-roomType').doc(_id).remove();
@@ -37,12 +30,11 @@ class RoomTypeAction {
 				});
 			})
 		}
-		const dbJQL = uniCloud.databaseForJQL({
-			event,
-			context: this.ctx.getClientInfo()
-		})
-		const result = await dbJQL.collection('hm-roomType').doc(_id).update(roomTypeObj);
-		return result;
+		const db = uniCloud.databaseForJQL();
+		return await db.collection('hm-roomType').doc(_id).update(roomTypeObj);
+		
+
+		
 	}
 	async getRoomType(hotel_id) {
 		const dbJQL = uniCloud.databaseForJQL({

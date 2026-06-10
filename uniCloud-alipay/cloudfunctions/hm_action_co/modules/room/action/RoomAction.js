@@ -3,7 +3,7 @@ class RoomAction {
 	constructor(ctx) {
 		this.ctx = ctx;
 	}
-	async room_addRoom(roomList) {
+	async addRoom(roomList) {
 		const dbJQL = uniCloud.databaseForJQL({
 			context: this.ctx.getClientInfo()
 		})
@@ -14,14 +14,14 @@ class RoomAction {
 			throw new Error(error);
 		}
 	}
-	async room_updateRoom(room) {
+	async updateRoom(room) {
 		let { _id } = room;
 		if (!_id) {
 			throw new Error("缺少_id")
 		}
 		const dbJQL = uniCloud.database();
-		const result = await dbJQL.collection('hm-room').doc(_id).update(room);
-		return result;
+		 await dbJQL.collection('hm-room').doc(_id).update(room);
+		return {code:0,errMsg:"",errCode:0,update:1};
 	}
 	async getRemainderRoomList(params) {
 		let { hotel_id, startTime, endTime } = params;

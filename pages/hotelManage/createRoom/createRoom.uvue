@@ -163,18 +163,23 @@
 			return;
 		}
 		try {
-			await roomTypeService.addRoom(roomForm.value.roomList);
-			await comFunction.getRoomTypeList(hotel_id.value);
-			uni.navigateBack();
-			submitLoading.value = false;
-			uni.showToast({
-				title: "添加房间成功",
-				icon: "none"
-			});
+			const flag = await roomTypeService.addRoom(roomForm.value.roomList);
+			if(flag){
+				await comFunction.getRoomTypeList(hotel_id.value);
+				uni.navigateBack({success(){
+					uni.showToast({
+						title:i18n.global.t("common.add_success"),
+						icon: "none"
+					});
+				}});
+				submitLoading.value = false;
+				
+			}
+			
 		} catch (error) {
 			submitLoading.value = false;
 			uni.showToast({
-				title: "添加房间失败",
+				title: i18n.global.t("common.add_fail"),
 				icon: "none"
 			});
 		}

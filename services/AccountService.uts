@@ -21,7 +21,7 @@ class AccountServiceClass {
 		const data = res['data'] as UTSJSONObject;
 		const tk = data.getString("tk")??"";
 		return tk;
-	} catch (error) {
+	} catch (error:Error) {
 		RequestFailModal(error.message);
 		throw new Error(error.message)
 	}
@@ -52,7 +52,7 @@ class AccountServiceClass {
 			const data = res['data'] as UTSJSONObject;
 			const emailCodeTk = data.getString("emailCodeTk")??"";
 			return emailCodeTk;
-		} catch (error) {
+		} catch (error:Error) {
 			throw new Error(error.message as string)
 		}
 	}
@@ -70,7 +70,7 @@ class AccountServiceClass {
 			const data = res['data'] as Array<UTSJSONObject>;
 			const flag = data.length > 0;
 			return flag;
-		} catch (e) {
+		} catch (error::Error) {
 			throw new Error("系统异常");
 		}
 
@@ -88,7 +88,7 @@ class AccountServiceClass {
 				flag=true;
 			}
 			return flag;
-		} catch (e) {
+		} catch (error::Error) {
 			throw new Error("system error");			
 		}
 		
@@ -100,7 +100,7 @@ class AccountServiceClass {
 			const res =	await action_co.user_validEmailAndCode(email,emailCode,emailCodeTk);
 			const data = res['data'] as boolean;
 			return data;
-		} catch (error) {
+		} catch (error:Error) {
 			//return false;
 			console.log("eeee",error)
 			throw new Error(error.message as string);
@@ -111,7 +111,7 @@ class AccountServiceClass {
 		try {
 			await action_co.user_register(user);
 			return true
-		} catch (error) {
+		} catch (error:Error) {
 			return false;
 		}
 	}
@@ -207,7 +207,7 @@ class AccountServiceClass {
 			//const res = await DB.callFunction("hm_closeAccount");
 			await action_co.user_closeAccount();
 			return true;
-		} catch (error) {
+		} catch (error:Error) {
 			throw new Error("账号注销失败")
 		}
 
@@ -291,7 +291,7 @@ class AccountServiceClass {
 		try {
 			await DB.update("hm-user", _id, userObj);
 			return true;
-		} catch (e) {
+		} catch (error:Error) {
 			throw new Error("更新失败");
 		}
 

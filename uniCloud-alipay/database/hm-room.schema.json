@@ -3,7 +3,7 @@
 	"required": ["room_name", "room_type_id", "hotel_id"],
 	"permission": {
 		"read": true,
-		"create": false,
+		"create": true,
 				"update": false,
 				"delete": false
 	},

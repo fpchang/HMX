@@ -1,4 +1,5 @@
 const utils = require('../../utils/index.js');
+const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: true });
 class UserRegister{
 	constructor(ctx){
 		this.ctx= ctx;
@@ -50,14 +51,29 @@ class UserRegister{
 			const user = this.formatUser(account, ep, email);
 			console.log(user)
 			const result = await dbJQL.collection('hm-user').add(user);
-			console.log("注册结果",result)
+			console.log("注册结果",result);
+			const id= result.id;
+			this.regitserUniId(id,account, ep, email,"");
 			return result
 		} catch (error) {
 			console.log(error)
 			throw new Error(error);
 		}
 	}
-	
+	async regitserUniId(_id,account,password,email,phone){
+		//uni-id 注册
+		const data ={
+			_id:_id,
+			"username": account,
+			"password": password,
+			email:email,
+			mobile:phone,
+			mobile_confirmed:0,
+			email_confirmed:1,
+			
+		}
+		await uniIdCo.registerUser(data);
+	}
 	async registerByPhone(phone) {
 		console.log("注册",phone);
 		const secret = utils.getSecret();
@@ -67,6 +83,8 @@ class UserRegister{
 		const dbJQL = uniCloud.databaseForJQL();
 		console.log("注册对象",this.formatUser(phone, newToken))
 		const res = await dbJQL.collection('hm-user').add(this.formatUser(phone, newToken));
+		const id= res.id;
+		this.regitserUniId(id,"", "", "",phone);
 		return {
 			errCode: 0,
 			errMsg: "",

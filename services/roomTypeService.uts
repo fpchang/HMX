@@ -90,11 +90,13 @@ class RoomTypeClass {
 		console.log("删除房型：：", roomType_id);
 
 		try {
-			 await action_co.roomType_deleteRoomType(roomType_id);
-			 return true;
+			 const res = await action_co.roomType_deleteRoomType(roomType_id);
+			 console.log("delete room type",res)
+			 const val = res['deleted'] as number;
+			 return val==1;
 		} catch (error:Error) {
 			RequestFailModal(error.message)
-			throw new Error("删除房型失败");
+			throw new Error("delete room type fail");
 		}
 
 	}
@@ -127,20 +129,21 @@ class RoomTypeClass {
 				priceBase,
 				independentBathroom
 			}
-			const res = await action_co.roomType_addRoomType(roomTypeObj)
-			console.log("add roomtype",res);
-			return true;
+			const res = await action_co.roomType_addRoomType(roomTypeObj);
+			const code = res['code'] as number;
+			return code ==0;
 		} catch (error:Error) {
 			RequestFailModal(error.message);
-			throw new Error("创建房型失败");
+			throw new Error("create room Type error");
 		}
 
 	}
 
-	async updateRoomType(_id : string, roomTypeForm : roomTypeBean) : Promise<boolean> {
+	async updateRoomType(roomTypeForm : roomTypeBean) : Promise<boolean> {
 
 		try {
 			const {
+				_id,
 				hotel_id,
 				name,
 				area,
@@ -154,6 +157,7 @@ class RoomTypeClass {
 				priceBase,
 				independentBathroom } = roomTypeForm;
 			const roomTypeObj = {
+				_id,
 				hotel_id,
 				name,
 				area,
@@ -167,20 +171,23 @@ class RoomTypeClass {
 				priceBase,
 				independentBathroom
 			}
-			const res = await DB.callFunction("hm_updateRoomType", { _id, roomTypeObj });
-			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(result.message as string);
-			}
-
-			return true;
-		} catch (error) {
+			// const res = await DB.callFunction("hm_updateRoomType", { _id, roomTypeObj });
+			// const result = res['result'] as UTSJSONObject;
+			// const code = result.getNumber("code") ?? 0;
+			// const message = result.getString("message") ?? "";
+			// if (code != 0) {
+			// 	uni.showToast({
+			// 		title: message,
+			// 		icon: "none"
+			// 	});
+			// 	throw new Error(result.message as string);
+			// }
+			const res = await action_co.roomType_updateRoomType(roomTypeObj);
+			console.log("update room type",res);
+			const code = res['code'] as number;
+			return code ==0;
+		} catch (error:Error) {
+			RequestFailModal(error.message);
 			throw new Error("更新失败");
 		}
 	}
@@ -194,21 +201,23 @@ class RoomTypeClass {
 					"room_type_id": item.room_type_id
 				})
 			});
-			const res = await DB.callFunction("hm_addRoom", { roomList: list });
-			console.log("add room", res);
-			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				console.log("code error", code);
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(message);
-			}
-			
-			return true;
+			// const res = await DB.callFunction("hm_addRoom", { roomList: list });
+			// console.log("add room", res);
+			// const result = res['result'] as UTSJSONObject;
+			// const code = result.getNumber("code") ?? 0;
+			// const message = result.getString("message") ?? "";
+			// if (code != 0) {
+			// 	console.log("code error", code);
+			// 	uni.showToast({
+			// 		title: message,
+			// 		icon: "none"
+			// 	});
+			// 	throw new Error(message);
+			// }
+			const res = await action_co.room_addRoom(list);
+			console.log("add room",res);
+			const code = res['code'] as number;
+			return code ==0;
 		} catch (error) {
 			throw new Error("添加房间失败");
 
@@ -219,29 +228,29 @@ class RoomTypeClass {
 	 */
 	async editRoom(room : roomBean) : Promise<boolean> {
 		try {
-			const _id=room._id;
 			const roomObj={
-				
+				_id:room._id,
 				hotel_id: room.hotel_id,
 				room_name: room.room_name,
 				room_type_id: room.room_type_id
 			}
-			const res = await DB.callFunction("hm_updateRoom", {_id, roomObj});
-			console.log("edit room", res);
-			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				console.log("code error", code);
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(message);
-			}
-			
-			return true;
-		} catch (error) {
+			// const res = await DB.callFunction("hm_updateRoom", {_id, roomObj});
+			// console.log("edit room", res);
+			// const result = res['result'] as UTSJSONObject;
+			// const code = result.getNumber("code") ?? 0;
+			// const message = result.getString("message") ?? "";
+			// if (code != 0) {
+			// 	console.log("code error", code);
+			// 	uni.showToast({
+			// 		title: message,
+			// 		icon: "none"
+			// 	});
+			// 	throw new Error(message);
+			// }
+			const res = await action_co.room_updateRoom(roomObj);
+			const code = res['code'] as number;
+			return code ==0;
+		} catch (error:Error) {
 			throw new Error("修改房间失败");
 	
 		}
@@ -252,19 +261,28 @@ class RoomTypeClass {
 	async deleteRoom(room_id : string) : Promise<boolean> {
 		console.log("1111", room_id);
 		try {
-			const res = await DB.callFunction("hm_deleteRoom_x", { _id: room_id });
-			console.log("delete", res);
-			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(result.message as string);
+			// const res = await DB.callFunction("hm_deleteRoom_x", { _id: room_id });
+			// console.log("delete", res);
+			// const result = res['result'] as UTSJSONObject;
+			// const code = result.getNumber("code") ?? 0;
+			// const message = result.getString("message") ?? "";
+			// if (code != 0) {
+			// 	uni.showToast({
+			// 		title: message,
+			// 		icon: "none"
+			// 	});
+			// 	throw new Error(result.message as string);
+			// }
+			// return true;
+			try {
+				 const res = await action_co.room_deleteRoome(room_id);
+				 console.log("delete room",res)
+				 const code = res['code'] as number;
+				 return code ==0;
+			} catch (error:Error) {
+				RequestFailModal(error.message)
+				throw new Error("delete room type fail");
 			}
-			return true;
 		} catch (error) {
 			throw new Error("删除房间失败");
 		}

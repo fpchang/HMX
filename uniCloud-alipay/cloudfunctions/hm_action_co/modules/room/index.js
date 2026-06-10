@@ -1,8 +1,8 @@
 const {RoomAction} = require("./action/RoomAction.js");
 
 module.exports = {
-async room_addRoom(room) {
-		return await new RoomAction(this).addRoom(room);
+async room_addRoom(roomList) {
+		return await new RoomAction(this).addRoom(roomList);
 	},
 	async room_updateRoom(room) {
 		return await new RoomAction(this).updateRoom(room);

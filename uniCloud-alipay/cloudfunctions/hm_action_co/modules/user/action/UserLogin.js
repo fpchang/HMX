@@ -1,5 +1,5 @@
 const utils = require('../../utils/index.js');
-const Register = require("./UserRegister.js");
+const {UserRegister} = require("./UserRegister.js");
 class UserLogin{
 	constructor(ctx){
 		this.ctx= ctx;
@@ -43,7 +43,7 @@ class UserLogin{
 					}
 				};
 			}
-			const register = new Register(this.ctx);
+			const register = new UserRegister(this.ctx);
 			return register.registerByPhone(phone);
 		} catch (e) {
 			throw new Error(e)

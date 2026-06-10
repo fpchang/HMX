@@ -1,8 +1,3 @@
-const orderAdd = require('./order-add.js');
-const orderDelete = require('./order-delete.js');
-const orderTask = require('./order-task.js');
-const orderDishes = require('./order-dishes.js');
-const orderQuery = require('./order-query.js');
 
 const {OrderAction} = require('./action/OrderAction.js');
 module.exports = {

@@ -70,7 +70,7 @@ class AccountServiceClass {
 			const data = res['data'] as Array<UTSJSONObject>;
 			const flag = data.length > 0;
 			return flag;
-		} catch (error::Error) {
+		} catch (error:Error) {
 			throw new Error("系统异常");
 		}
 
@@ -88,7 +88,7 @@ class AccountServiceClass {
 				flag=true;
 			}
 			return flag;
-		} catch (error::Error) {
+		} catch (error:Error) {
 			throw new Error("system error");			
 		}
 		
@@ -119,6 +119,7 @@ class AccountServiceClass {
 		try {
 			//const res = await account_co.login(userForm);
 			const res = await action_co.user_loginByAccountAndPassword(userForm);
+			console.log("11111",res);
 			const data = res['data'] as UTSJSONObject;	
 			const token = data.getString("token") ?? ""
 			if (token != "") {

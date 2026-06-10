@@ -160,7 +160,7 @@
 		roomList: [],
 		independentBathroom: true
 	});
-	watch(priceBase,val=>{
+	watch(priceBase,(val:string)=>{
 		roomTypeForm.value.priceBase=parseFloat(val);
 	})
 	const titleImg=computed<string>(()=>{

@@ -25,6 +25,8 @@ const {UserRegister} = require("./action/UserRegister.js");
 const {UserAction} = require("./action/UserAction.js");
 const {UserPassword} = require("./action/UserPassword.js");
 const {UserToken} = require("./action/UserToken.js");
+const {UserPermission} = require("./action/UserPermission.js");
+
 module.exports = {
 	//token验证
 	async user_validToken(token){		 
@@ -68,5 +70,8 @@ module.exports = {
 	},
 	async user_closeAccount(){
 		return  await new UserAction(this).closeAccount();
+	},
+	async user_getPermission(hotel_id){
+		return await new UserPermission(this).getPermission(hotel_id)
 	}
 }

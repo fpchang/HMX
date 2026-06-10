@@ -21,5 +21,15 @@ class FmAction{
 		}
 	
 	}
+	async deleteFm(_id){
+		const db =uniCloud.database();
+		const dCmd=db.command;
+		try {
+			const result = await db.collection('hm-incomeAndExpenses').doc(_id).remove();
+			return {code:0,errCode:0,errMsg:"",deleted:1};
+		} catch (error) {
+			throw new Error("删除失败");
+		}
+	}
 }
 module.exports = {FmAction};

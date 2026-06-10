@@ -77,7 +77,7 @@ class HotelServiceClass {
 		try {
 			//const res = await DB.callFunction("hm_createHotel", { hotelObj });
 			//console.log("create hotel", res);
-			await action_co.hotel_createHotel(hotelObj,getTokenObject());			
+			await action_co.hotel_createHotel(hotelObj);			
 			return true;
 		} catch (error:Error) {
 			//console.error(error);
@@ -92,7 +92,7 @@ class HotelServiceClass {
 		console.log("UPDATE+++++===", hotelObj);
 		try {
 			//const res = await DB.callFunction("hm_updateHotel", { hotel_id, hotelObj });
-			const res = await action_co.hotel_updateHotel(hotel_id, hotelObj,getTokenObject());
+			const res = await action_co.hotel_updateHotel(hotel_id, hotelObj);
 			console.log("update hotel", res);
 			
 			return true;

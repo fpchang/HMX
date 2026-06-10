@@ -275,7 +275,7 @@ class RoomTypeClass {
 			// }
 			// return true;
 			try {
-				 const res = await action_co.room_deleteRoome(room_id);
+				 const res = await action_co.room_deleteRoom(room_id);
 				 console.log("delete room",res)
 				 const code = res['code'] as number;
 				 return code ==0;

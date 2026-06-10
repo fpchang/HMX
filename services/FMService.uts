@@ -97,7 +97,7 @@ class FMServiceClass {
 			// const res = await DB.callFunction("hm_deleteFm", {
 			// 	_id: fm_id,
 			// });
-			await action_co.fm_deleteFm(fm_id,getTokenObject());
+			await action_co.fm_deleteFm(fm_id);
 			return true;
 		} catch (error:Error) {
 			RequestFailModal(error.message);

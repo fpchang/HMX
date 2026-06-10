@@ -92,7 +92,7 @@
 		}
 		submitLoading.value = true;
 		const flag = await AccountService.LoginByAccount(f);
-
+		console.log("ffflag",flag);
 		if (flag) {
 			uni.setStorageSync("account", userForm.value.account);
 			uni.reLaunch({

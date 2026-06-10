@@ -176,7 +176,7 @@
 				
 			}
 			
-		} catch (error) {
+		} catch (error:Error) {
 			submitLoading.value = false;
 			uni.showToast({
 				title: i18n.global.t("common.add_fail"),

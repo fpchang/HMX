@@ -247,7 +247,8 @@
 		if(submitLoading.value==true){
 			return;
 		}
-		let flag : boolean = validForm(orderForm.value)
+		let flag : boolean = validForm(orderForm.value);
+		console.log("33333",flag);
 		if (flag == false) {
 			return;
 		}

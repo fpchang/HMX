@@ -4,15 +4,15 @@ export const  validForm = (order:orderBean):boolean=>{
 	let msg ="";
 	if(order.reservedRoomList.length<1){
 		//msg ="请选择房间";
-		msg =i18n.global.t("");
+		msg =i18n.global.t("order.create_order.valid_order_room");
 	}
 	if(order.userName==""){
 		//msg="请输入客户名";
-		msg =i18n.global.t("");
+		msg =i18n.global.t("order.create_order.valid_order_user_name");
 	}
 	if(order.totalAmount<1){
 		//msg="请输入总价";
-		msg =i18n.global.t("");
+		msg =i18n.global.t("order.create_order.valid_order_amount");
 	}
 	if(msg!=""){
 		uni.showToast({

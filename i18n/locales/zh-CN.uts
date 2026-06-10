@@ -316,7 +316,7 @@ export default {
 		// 按钮
 		next: "下一步",
 		completeRegister: "完成注册",
-		registerSuccess: "注册成功"
+		registerSuccess: "注册成功",
 		all_roomType: "全部房型",
 		create_order: {
 			edit_order_info: '修改订单信息',

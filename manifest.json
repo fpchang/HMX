@@ -114,13 +114,30 @@
             "bundleName" : "ys.hotelsys.fun",
             "signingConfigs" : {
                 "default" : {
-                    "certpath" : "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1778562532405.cer",
+                    "certpath" : "c:\\Users\\hanfe\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1781158169180.cer",
                     "keyAlias" : "debugKey",
-                    "keyPassword" : "0000001B8FB9584A49D836956094DB30B6E3B1E4CFFB74D8996885543C770EF1464429B512693D105B7182",
-                    "profile" : "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1780405514506.p7b",
+                    "keyPassword" : "0000001A7DE9AF79650DE214EF19310598664A0762F874DF66A159CFE927B001D39319D337E91D95FA16",
+                    "profile" : "c:\\Users\\hanfe\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1781158169180.p7b",
                     "signAlg" : "SHA256withECDSA",
-                    "storeFile" : "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1778562532405.p12",
-                    "storePassword" : "0000001B8FB9584A49D836956094DB30B6E3B1E4CFFB74D8996885543C770EF1464429B512693D105B7182"
+                    "storeFile" : "c:\\Users\\hanfe\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1781158169180.p12",
+                    "storePassword" : "0000001A7DE9AF79650DE214EF19310598664A0762F874DF66A159CFE927B001D39319D337E91D95FA16"
+                }
+            },
+            "icons" : {
+                "foreground" : "D:/workspace-uniapp/HMX/static/icons/appicons/1024x1024.png",
+                "background" : "D:/workspace-uniapp/HMX/static/icons/appicons/1024x1024.png"
+            },
+            "splashScreens" : {
+                "startWindowIcon" : "D:/workspace-uniapp/HMX/static/icons/appicons/1024x1024.png"
+            },
+            "modules" : {
+                "uni-location" : {
+                    "system" : {}
+                },
+                "uni-map" : {
+                    "tencent" : {
+                        "key" : "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+                    }
                 }
             }
         }

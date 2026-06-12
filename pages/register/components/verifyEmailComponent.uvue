@@ -73,7 +73,7 @@
 			[
 				{ required: true, message: i18n.global.t('form.valid_required_email') },
 				// { min: 3, max: 25, message: '字数需为 3 至 25 位', trigger: 'blur' },
-				{ pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message:123},
+				{ pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message:i18n.global.t('form.valid_email') },
 				{ validator: emailvalidAccount, trigger: 'blur', message:i18n.global.t('regitster.valid_email_hanused') }
 			]
 		],
@@ -113,17 +113,15 @@
 			//console.log(`请在${timer}s 后再试`);
 			return;
 		}
-		const result = await emailFormRef.value!.validate();
-		console.log(result);
+		
+		const result = await emailFormRef.value!.validateFields(['email'])
+		//const result = await emailFormRef.value!.validate();
 		if (result != true) {
-			const errsName = (result as FormValidateErrors[]).map(v => v.name);
-			if (errsName.includes("email")) {
 				uni.showToast({
 					title: i18n.global.t('form.valid_email'),
 					icon: "none"
 				})
-				return;
-			}
+				return;			
 		}
 		
 		try {

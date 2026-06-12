@@ -19,6 +19,9 @@ const methodList = [
 	'user_loginByAccountAndPassword',
 	'user_register',
 	'user_sendSms',
+	'sendEmailCode',
+	'validEmailAndCode',
+	'user_validEmailAndCode',
 	'user_validToken'
 
 ];
@@ -40,7 +43,8 @@ module.exports = {
 			try {
 				const token = clientInfo.hm_token;
 				if (!token) {
-					throw new Error("token is incorrect")
+						throw new Error("token is incorrect");
+				
 				}
 				const secret = utils.getSecret();
 				const verifyResult = utils.verifyToken(token, secret);

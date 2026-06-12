@@ -53,6 +53,7 @@ class AccountServiceClass {
 			const emailCodeTk = data.getString("emailCodeTk")??"";
 			return emailCodeTk;
 		} catch (error:Error) {
+			RequestFailModal(error.message);
 			throw new Error(error.message as string)
 		}
 	}
@@ -83,6 +84,7 @@ class AccountServiceClass {
 		try {
 			const params = { email } as UTSJSONObject;
 			const res = await DB.getCollection("hm-user", params);
+			console.log("valid email",res)
 			const data = res['data'] as Array<UTSJSONObject>;
 			if( data.length <1){
 				flag=true;
@@ -103,6 +105,7 @@ class AccountServiceClass {
 		} catch (error:Error) {
 			//return false;
 			console.log("eeee",error)
+			RequestFailModal(error.message);
 			throw new Error(error.message as string);
 		}
 	}

@@ -1,5 +1,5 @@
 const utils = require('../../utils/index.js');
-const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: true });
+//const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: true });
 class UserRegister{
 	constructor(ctx){
 		this.ctx= ctx;
@@ -53,7 +53,7 @@ class UserRegister{
 			const result = await dbJQL.collection('hm-user').add(user);
 			console.log("注册结果",result);
 			const id= result.id;
-			this.regitserUniId(id,account, ep, email,"");
+			//this.regitserUniId(id,account, ep, email,"");
 			return result
 		} catch (error) {
 			console.log(error)
@@ -72,7 +72,7 @@ class UserRegister{
 			email_confirmed:1,
 			
 		}
-		await uniIdCo.registerUser(data);
+		//await uniIdCo.registerUser(data);
 	}
 	async registerByPhone(phone) {
 		console.log("注册",phone);
@@ -81,8 +81,7 @@ class UserRegister{
 			phone: phone
 		}, secret, (new Date().getTime() + 1000 * 60 * 60 * 24 * 30));
 		const dbJQL = uniCloud.databaseForJQL();
-		console.log("注册对象",this.formatUser(phone, newToken))
-		const res = await dbJQL.collection('hm-user').add(this.formatUser(phone, newToken));
+		const res = await dbJQL.collection('hm-user').add(this.formatUser("","","",phone, newToken));
 		const id= res.id;
 		this.regitserUniId(id,"", "", "",phone);
 		return {
@@ -118,7 +117,7 @@ class UserRegister{
 		return msg;
 	}
 	
-	formatUser(phone, token) {
+	formatUser(account="",password="",email="",phone="", token) {
 		let vipStartDateStamp = new Date().getTime();
 		let vipEndDateStamp = new Date().getTime() + 30 * 1000 * 60 * 60 * 24;
 		const phone_s = phone.substr(-4);
@@ -127,8 +126,10 @@ class UserRegister{
 			"vipStartDateStamp": vipStartDateStamp,
 			"isVip": true,
 			"nickName": "",
+			"account":account,
 			"phone": phone,
-			"password": "",
+			"password": password,
+			"email":email,
 			"userId": phone,
 			"userName": `用户${phone_s}`,
 			"vipEndDate": utils.dateFormat(new Date(vipEndDateStamp), "yyyy-MM-dd HH:mm:ss"),

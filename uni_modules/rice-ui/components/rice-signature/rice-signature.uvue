@@ -1,5 +1,5 @@
 <template>
-	<view :class="signatureClass" :style="[signatureStyle,customStyle]">
+	<view class="rice-signature" :class="ns.theme()" :style="[signatureStyle,customStyle]">
 		<view class="rice-signature__wrapper" :style="wrapperStyle" ref="wrapperRef">
 			<canvas class="rice-signature__canvas" :id="canvasId" type="2d" :disable-scroll="!disabled"
 				@touchstart="onTouchstart" @touchmove="onTouchmove" @touchend="onTouchend" @touchcancel="onTouchend"></canvas>
@@ -18,32 +18,14 @@
 </template>
 
 <script setup>
-	/**
-	 * @description Signature
-	 * @property {String} type 导出图片的格式,可选jpeg，默认png
-	 * @property {String|Number} width canvas宽度，默认100%
-	 * @property {String|Number} height canvas高度,默认200px
-	 * @property {Boolean} disabled 是否禁用
-	 * @property {String} tips 签名版中间的提示语
-	 * @property {String|Number} tipsSize 提示语大小，默认24px;
-	 * @property {String} tipsColor 提示语颜色
-	 * @property {String} lineColor 笔触颜色
-	 * @property {Number} lineWidth 线条宽度
-	 * @property {String} bgColor canvas背景颜色，也就是导出图片的背景颜色
-	 * @property {String} contentBgColor 容器的背景颜色，导出图片的背景颜色为透明,如果设置了bgColor，该值无效
-	 * @property {String} clearButtonText 清除按钮文案，为空时不显示此按钮，默认 清除
-	 * @property {String} confirmButtonText 确认按钮文案，为空时不显示此按钮，默认 确认
-	 * @property {Object} customStyle 自定义样式
-	 *
-	 */
-
+	
 	import { useNamespace } from "../../libs/use"
 	import { addUnit, debugWarn, hasStrValue, getRandomStr } from "../../libs/utils"
 	import { SignatureProps, SignaturePoint, SignatureCanvasSize } from "./type.uts"
-
+	
 	defineOptions({
-		name:'rice-signature',
-		styleIsolation: 'app-and-page'
+		name: 'rice-signature',
+		styleIsolation: "app-and-page"
 	})
 
 	const ns = useNamespace('signature')
@@ -272,8 +254,6 @@
 		paddingLeft: '14px',
 		paddingRight: '14px',
 	})
-
-	const signatureClass = computed(() => [ns.b(''), ns.theme()])
 
 
 	// #ifdef MP

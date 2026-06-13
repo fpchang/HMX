@@ -3,18 +3,18 @@
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<rice-cell-group border>
-			<rice-cell title="账号安全" url="/pages/set/accountSafe/accountSafe" :arrow="true" />
-			<rice-cell title="清除缓存" :clickable="true" @click="clearCache" />
-			<rice-cell title="关于议宿" url="/pages/set/aboutYisu/aboutYisu" :arrow="true" />
+			<rice-cell :title="i18n.global.t('setcontent.accountSecurity')" url="/pages/set/accountSafe/accountSafe" :arrow="true" />
+			<rice-cell :title="i18n.global.t('setcontent.clearCache')" :clickable="true" @click="clearCache" />
+			<rice-cell :title="i18n.global.t('setcontent.aboutYisu')" url="/pages/set/aboutYisu/aboutYisu" :arrow="true" />
 		</rice-cell-group>
 		<view style="margin-top:20px">
 			<rice-cell-group border>
-				<rice-cell title="用户协议" url="/pages/common/userAgreement/userAgreement" :arrow="true" />
-				<rice-cell title="隐私政策" url="/pages/common/privacyPolicy/privacyPolicy" :arrow="true" />
+				<rice-cell :title="i18n.global.t('userAgreement.title')" url="/pages/common/userAgreement/userAgreement" :arrow="true" />
+				<rice-cell :title="i18n.global.t('privacy.title')" url="/pages/common/privacyPolicy/privacyPolicy" :arrow="true" />
 			</rice-cell-group>
 		</view>
 		<view style="margin-top: 20px;">
-			<rice-button text="退出登录" @click="loginOutEvent"></rice-button>
+			<rice-button :text="i18n.global.t('setcontent.logout')" @click="loginOutEvent"></rice-button>
 		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>
@@ -24,6 +24,7 @@
 <script setup>
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 	import { loginOut } from "@/store/store.uts";
+	import i18n from '@/i18n/index.uts';
 	const clearCache = () => {
 		uni.showToast({
 			title: '清除成功',
@@ -51,6 +52,11 @@
 
 		});
 	}
+	onLoad(() => {
+		uni.setNavigationBarTitle({
+			title: i18n.global.t("setcontent.btn_txt_sys_set")
+		})
+	})
 </script>
 
 <style>

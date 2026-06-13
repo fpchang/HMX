@@ -187,7 +187,6 @@ class AccountServiceClass {
 			await action_co.user_updatePassword(password,originPassword);
 			return true;
 		} catch (error:Error) {
-			console.log("1eeeeeeee",error);
 			RequestFailModal(error.message);
 			//throw new Error(error.message as string);
 			return false;
@@ -209,10 +208,14 @@ class AccountServiceClass {
 	async closeAccount() : Promise<boolean> {
 		try {
 			//const res = await DB.callFunction("hm_closeAccount");
-			await action_co.user_closeAccount();
-			return true;
+			const res = await action_co.user_closeAccount();
+			console.log("111111",res)
+			const data = res['data'] as boolean;
+			return data;
 		} catch (error:Error) {
-			throw new Error("账号注销失败")
+		
+			RequestFailModal(error.message);
+			throw new Error("账号注销失败");
 		}
 
 	}

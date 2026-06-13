@@ -121,6 +121,7 @@ class UserRegister{
 		let vipStartDateStamp = new Date().getTime();
 		let vipEndDateStamp = new Date().getTime() + 30 * 1000 * 60 * 60 * 24;
 		const phone_s = phone.substr(-4);
+		const uname = phone_s||account.substr(-4);
 		return {
 			"idCard": "",
 			"vipStartDateStamp": vipStartDateStamp,
@@ -131,7 +132,7 @@ class UserRegister{
 			"password": password,
 			"email":email,
 			"userId": phone,
-			"userName": `用户${phone_s}`,
+			"userName": `用户${phone_s||uname }`,
 			"vipEndDate": utils.dateFormat(new Date(vipEndDateStamp), "yyyy-MM-dd HH:mm:ss"),
 			"vipEndDateStamp": vipEndDateStamp,
 			"vipStartDate": utils.dateFormat(new Date(vipStartDateStamp), "yyyy-MM-dd HH:mm:ss"),

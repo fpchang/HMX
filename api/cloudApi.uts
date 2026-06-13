@@ -17,7 +17,7 @@ export const RequestFailModal=(msg:string)=>{
 		return;
 	}
 	 showDialog({
-	    title: '请求异常',
+	    title: 'Error message',
 	    message: msg,
 		showCancelButton:false,
 	    confirm: () => {

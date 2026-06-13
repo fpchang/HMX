@@ -51,8 +51,14 @@ class UserAction{
 			
 			const { account_id } = this.ctx._tokenInfo;
 			const time = Date.now();
+			const hotelListRes = await db.collection("hm-hotel").where({ownership_id:account_id}).get();
+			console.log("hotelList",hotelListRes);
+			if(hotelListRes.data.length){
+				return {errCode:998,errMsg:"please delete hotel before cancel your account ",data:{}}
+			}
 			const res = await db.collection("hm-user").where({ _id: account_id }).update({ accountStatus: 9, closeAccountDateTime: time });
-			return res;
+			console.log("close account",res)
+			return {code:0,errCode:0,errMsg:"",data:res.updated==1};
 		} catch (e) {
 			throw new Error(e)
 		}

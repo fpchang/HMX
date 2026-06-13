@@ -33,8 +33,10 @@
 	}
 	const loginOutEvent = () => {
 		showDialog({
-			title: '确认退出',
+			title: i18n.global.t("setcontent.logout"),
 			message: "",
+			cancelButtonText: i18n.global.t("common.btn_txt_cancel"),
+			confirmButtonText: i18n.global.t("common.btn_confirm"),
 			beforeClose: async () : Promise<boolean> => {
 				try {
 					loginOut();

@@ -1,4 +1,4 @@
-import { DB } from '../api/DB';
+import { DB,dbJQL } from '../api/DB';
 import { FMBean, FMTypeConfigBean, FMDataListResult } from '@/bean/FMBean';
 import { dayuts } from '@/uni_modules/lime-dayuts';
 import { TIME, MOONTH_START_END_TIMESTAMP, getMonthFirstDay, getMonthLastDay } from "@/static/utils/TIME";
@@ -11,7 +11,7 @@ class FMServiceClass {
 		//  this.validTokenRequest=null;
 	}
 	async getIncomeAndExpensesConfig() : Promise<Array<FMTypeConfigBean>> {
-		const db = uniCloud.databaseForJQL();
+		const db =dbJQL;
 		const dbCmd = db.command;
 		try {
 			const w = {
@@ -144,7 +144,7 @@ class FMServiceClass {
 
 	//获取收入与支出分类
 	async getIncomeAndExpensesDateBySearch(hotel_id : string, billType : string, keyword : string, dateRange : string[], pageNo : number, pageSize : number) : Promise<FMDataListResult> {
-		const db = uniCloud.databaseForJQL();
+		const db = dbJQL;
 		const dbCmd = db.command;
 		let st : number = TIME.getCurrentMonthFirst(new Date());
 		let et : number = TIME.getCurrentMonthLast(new Date());
@@ -162,9 +162,11 @@ class FMServiceClass {
 		let skipnum : number = Math.max((pageNo - 1) * pageSize, 0);
 		//const main = db.collection("hm-incomeAndExpenses").where(w).orderBy("ioeTime desc").skip(skipnum).limit(pageSize).getTemp();
 		//const config = db.collection("hm-incomeAndExpensesConfig").getTemp();
+		console.log(new Date().getTime());
 		try {
 			//const res = await db.collection(main).get({ getCount: true });
 			const res = await db.collection("hm-incomeAndExpenses").where(w).orderBy("ioeTime desc").skip(skipnum).limit(pageSize).get({ getCount: true });
+			console.log(new Date().getTime());
 			console.log("res", res);
 			const data = res['data'] as Array<UTSJSONObject>;
 
@@ -215,7 +217,7 @@ class FMServiceClass {
 
 	//房费统计按店铺分类
 	getRoomOrder(hotel_id : string, st : number, et : number) {
-		const db = uniCloud.databaseForJQL()
+		const db = dbJQL;
 		const s1 = `hotel_id=='${hotel_id}'&&orderStatus==5`;
 		const s2 = `checkInStartDateTimeStamp>=${st}&&checkInStartDateTimeStamp<${et}`;
 		let w = `${s1}&&${s2}`;
@@ -224,7 +226,7 @@ class FMServiceClass {
 	}
 	//房费统计月分组统计
 	getRoomOrderOrderByMonth(hotel_id : string, st : number, et : number) {
-		const db = uniCloud.databaseForJQL();
+		const db = dbJQL;
 		const s1 = `hotel_id=='${hotel_id}'&&orderStatus==5`;
 		const s2 = `checkInStartDateTimeStamp>=${st}&&checkInStartDateTimeStamp<${et}`;
 		let w = `${s1}&&${s2}`;
@@ -233,7 +235,7 @@ class FMServiceClass {
 	}
 	//获取收入与支出分类
 	async getIncomeAndExpenses(hotel_id : string, billType : string = 'income', st : number, et : number) {
-		const db = uniCloud.databaseForJQL();
+		const db = dbJQL;
 		const dbCmd = db.command;
 		const w = {
 			hotel_id: hotel_id,
@@ -249,7 +251,7 @@ class FMServiceClass {
 	}
 	//按月统计
 	getIncomeAndExpensesByMonth(hotel_id : string, billType : string = 'income', st : number, et : number) {
-		const db = uniCloud.databaseForJQL();
+		const db = dbJQL;
 		const dbCmd = db.command;
 		const w = {
 			hotel_id: hotel_id,
@@ -262,7 +264,7 @@ class FMServiceClass {
 
 	//获取当月收入统计
 	async getIncomeCurrentMonth(hotel_id : string, month : string) : Promise<Array<charPietItem>> {
-		const db = uniCloud.databaseForJQL();
+		const db = dbJQL;
 		const dbCmd = db.command;
 		const monthFirst = getMonthFirstDay(month);
 		const monthLast = getMonthLastDay(month);
@@ -302,7 +304,7 @@ class FMServiceClass {
 
 	//获取当月支出统计
 	async getExpensesCurrentMonth(hotel_id : string, month : string) : Promise<Array<charPietItem>> {
-		const db = uniCloud.databaseForJQL();
+		const db = dbJQL;
 		const dbCmd = db.command;
 		const monthFirst = getMonthFirstDay(month);
 		const monthLast = getMonthLastDay(month);
@@ -340,7 +342,7 @@ class FMServiceClass {
 	 * year:年份
 	 */
 	async getIncomeAndExpensesCurrentYear(hotel_id : string, year : string, billType : string) {
-		const db = uniCloud.databaseForJQL();
+		const db = dbJQL;
 		const dbCmd = db.command;
 		const yearFirst = new Date(new Date(year).getFullYear(), 0, 1).getTime();
 		const yearLast = new Date(new Date(year).getFullYear(), 12, 1).getTime() - 1;

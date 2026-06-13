@@ -1,4 +1,4 @@
-import { DB } from '../api/DB';
+import { DB,dbJQL } from '../api/DB';
 import { callFunctionRes } from "@/bean/DBBean";
 import { userBean } from '@/bean/userBean';
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";

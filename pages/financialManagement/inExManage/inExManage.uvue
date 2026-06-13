@@ -1,5 +1,5 @@
 <template>
-	<rice-navbar title="" border height="80px">
+	<rice-navbar title="" border>
 		<template #left>
 			<view style="display: flex;flex-direction: row;align-items: center;">
 				<navigator open-type="navigateBack">
@@ -150,7 +150,7 @@
 			</rice-collapse>
 		</view>
 		<view v-if="submitLoading" style="display: flex;flex-direction: row;justify-content: center;">
-			<rice-loading color="#787878" :text="i18n.global.t('common.noData',[''])" />
+			<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
 		</view>
 		<view v-if="!submitLoading&&fmResult.fmList.length<1">
 			<l-empty :description="i18n.global.t('common.noData',[''])" />
@@ -420,7 +420,7 @@
 
 			},
 			confirm: () => {
-				console.log("confirm1111111");
+			//	console.log("confirm1111111");
 
 			}, cancel: () => {
 				hideDialog();

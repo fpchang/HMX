@@ -5,7 +5,7 @@ type remainRoomBean = {
 	room_name : string
 }
 
-import { DB } from '@/api/DB';
+import { DB,dbJQL } from '@/api/DB';
 import { dayuts } from '@/uni_modules/lime-dayuts';
 import { TIME, MOONTH_START_END_TIMESTAMP } from "@/static/utils/TIME";
 import { roomTypeBean } from '../bean/roomTypeBean';
@@ -62,7 +62,7 @@ class OrderServiceClass {
 	}
 	async getOrderListBySearch(hotel_id : string, dateRange : string[], orderStatus : string | number, keyword : string, pageNo : number, pageSize : number) : Promise<OrderDataListResult> {
 		let skipnum : number = Math.max((pageNo - 1) * pageSize, 0);
-		const db = uniCloud.databaseForJQL();
+		const db = dbJQL;
 		const dbCmd = db.command;
 		let st : number = TIME.getCurrentMonthFirst(new Date());
 		let et : number = TIME.getCurrentMonthLast(new Date());
@@ -152,7 +152,7 @@ class OrderServiceClass {
 		let list : roomBean[] = [];
 
 		try {
-			const db = uniCloud.databaseForJQL();
+			const db = dbJQL;
 			let jql = `hotel_id=='${hotel_id}'&&orderType=='normal'&&(orderStatus==0||orderStatus==1)&&(` +
 				`${endTime}<=checkInEndDateTimeStamp&&${endTime}>checkInStartDateTimeStamp||` +
 				`${startTime}>=checkInStartDateTimeStamp&&${endTime}<=checkInEndDateTimeStamp||` +

@@ -1,4 +1,4 @@
-import { DB } from '../api/DB';
+import { DB,dbJQL } from '../api/DB';
 import { callFunctionRes } from "@/bean/DBBean";
 import { hotelBean } from '../bean/hotelBean';
 import { roomTypeBean, formatRoomTypeList } from "@/bean/roomTypeBean.uts";
@@ -57,7 +57,7 @@ class HotelServiceClass {
 		return list;
 	}
 	async getOpendbCityChina(type : number) : Promise<Array<UTSJSONObject>> {
-		const db = uniCloud.databaseForJQL();
+		const db = dbJQL;
 		//const res = await db.collection("opendb-city-china").field("code as value, name as text, eq(type, 2) as isleaf").get();
 		const res = await db.collection("opendb-city-china").where({ type }).get();
 		//return  DB.getCollection("opendb-city-china")

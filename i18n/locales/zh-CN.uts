@@ -118,7 +118,7 @@ export default {
 		pach_sms: "请输入验证码",
 		btn_txt_password: "忘记密码",
 		btn_txt: "登录",
-		btn_app_txt: "一键登录"，
+		btn_app_txt: "一键登录",
 		btn_getSms: "获取短信验证码",
 		btn_getVerificationCode: "获取验证码",
 		getphone_loading: "手机号获取中…",
@@ -300,12 +300,11 @@ export default {
 		statusCancelled: "已撤销",
 
 		// 订单信息
-		guest: "住客：",
-		checkInTime: "入住时间：",
-		checkOutTime: "退房时间：",
-		room: "房间：",
-		remark: "备注信息：",
-		roomPrice: "房价：",
+		guest: "住客",
+		checkInTime: "入住时间",
+		checkOutTime: "退房时间",
+		remark: "备注信息",
+		roomPrice: "房价",
 
 		// 权限/提示
 		noPermission: "没有足够的权限",

@@ -273,11 +273,13 @@
 	}
 
 	const submitForm = async () => {
+		submitLoading.value = true;
 		const flag : boolean = validForm(hotelForm.value);
 		if (flag == false) {
+			submitLoading.value = false;
 			return;
 		}
-		submitLoading.value = true;
+		
 		hotelForm.value.belong = user.value['phone'] as string;
 		hotelForm.value.ownership_id=user.value._id;
 		const address = `${hotelForm.value.hotelAddressArea}${hotelForm.value.hotelAddress}`;

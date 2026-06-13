@@ -189,12 +189,9 @@
 	});
 	onLoad(() => {
 		initData();
-
 	})
 	onMounted(() => {
 	});
-
-
 
 </script>
 

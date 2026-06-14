@@ -62,15 +62,15 @@
 							<view class="swiper-menu-style">
 								<view class="menu-item detail" @click="viewFm(fm)">
 									<rice-icon name="eyes" color="#fff" />
-									<text class="slot-text">详情</text>
+									<text class="slot-text">{{i18n.global.t("common.btn_txt_details",[''])}}</text>
 								</view>
 								<view class="menu-item edit" @click="editFm(fm)">
 									<rice-icon name="edit" color="#fff" />
-									<text class="slot-text">编辑</text>
+									<text class="slot-text">{{i18n.global.t("common.btn_txt_edit")}}</text>
 								</view>
 								<view class="menu-item del" @click="deleteFm(fm)">
 									<rice-icon name="delete" color="#fff" />
-									<text class="slot-text">删除</text>
+									<text class="slot-text">{{i18n.global.t("common.btn_txt_delete")}}</text>
 								</view>
 
 
@@ -193,13 +193,13 @@
 
 							<rice-col :span="6">
 								<view>
-									<rice-button type="primary" size="small" plain-fill text="修改"
+									<rice-button type="primary" size="small" plain-fill :text="i18n.global.t('common.btn_txt_modify',[''])"
 										@click="editFm(active_fm)"></rice-button>
 								</view>
 							</rice-col>
 							<rice-col :span="6">
 								<view>
-									<rice-button type="error" size="small" plain-fill text="删除"
+									<rice-button type="error" size="small" plain-fill :text="i18n.global.t('common.btn_txt_delete')"
 										@click="deleteFm(active_fm)"></rice-button>
 								</view>
 							</rice-col>

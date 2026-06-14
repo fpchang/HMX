@@ -14,6 +14,7 @@ export default {
 		btn_txt_create: "Create {0}",
 		btn_txt_save: "Save {0}",
 		btn_txt_submit: "Submit",
+		btn_txt_edit: "edit",
 		btn_txt_delete: "Delete",
 		btn_confirm: "Confirm",
 		btn_txt_cancel: "Cancel",

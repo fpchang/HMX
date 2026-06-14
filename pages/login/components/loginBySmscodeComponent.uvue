@@ -4,7 +4,7 @@
 			<rice-form-item name="phone" label-position="top" :border-bottom="false">
 				
 					<view style="flex:1;overflow: hidden;">
-				<rice-input v-model="userForm.phone" :placeholder="i18n.global.t('login.pach_phone')"  :maxlength="11"  focus-border/>
+				<rice-input v-model="userForm.phone" :placeholder="i18n.global.t('login.pach_phone')"  :maxlength="11"  focus-border />
 				</view>
 				
 			</rice-form-item>

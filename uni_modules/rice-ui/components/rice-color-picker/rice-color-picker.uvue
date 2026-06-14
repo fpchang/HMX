@@ -307,7 +307,6 @@
 			return
 		}
 		// #endif
-
 		panelLeft.value = rect.left
 		panelTop.value = rect.top
 	}

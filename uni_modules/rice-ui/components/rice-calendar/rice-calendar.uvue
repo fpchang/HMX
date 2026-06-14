@@ -6,27 +6,34 @@
 			<text v-if="showTitle" class="rice-calendar__title__text">{{title}}</text>
 			<rice-icon v-if="closeable" :name="closeIcon" :custom-style="closeStyle" size="20px" @click="clickClose" />
 		</view>
-		<view v-if="switchMode!='none'||showSubtitle" class="rice-calendar__switch">
-			<view v-if="switchMode!='none'" class="rice-calendar__switch__action">
-				<rice-icon v-if="switchMode!='month'" name="double-left" :custom-style="switchArrowStyle"
-					@click="getLastYear" />
-				<rice-icon name="arrow-left" :custom-style="switchArrowStyle" @click="getLastMonth" />
+		<slot name="header" :panelDate="getPanelYearMonth()" :currentWeek="currentWeekIndex+1">
+			<view v-if="switchMode!='none'||showSubtitle" class="rice-calendar__switch">
+				<view v-if="switchMode!='none'" class="rice-calendar__switch__action">
+					<rice-icon v-if="switchMode!='month'" name="double-left" :custom-style="switchArrowStyle"
+						@click="getLastYear" />
+					<rice-icon name="arrow-left" :custom-style="switchArrowStyle" @click="getLastMonth" />
+				</view>
+				<text v-if="showSubtitle" class="rice-calendar__switch__text">{{formatPanelDate}}</text>
+				<view v-if="switchMode!='none'" class="rice-calendar__switch__action">
+					<rice-icon name="arrow-right" :custom-style="switchArrowStyle" @click="getNextMonth" />
+					<rice-icon v-if="switchMode!='month'" name="double-right" :custom-style="switchArrowStyle"
+						@click="getNextYear" />
+				</view>
 			</view>
-			<text v-if="showSubtitle" class="rice-calendar__switch__text">{{formatPanelDate}}</text>
-			<view v-if="switchMode!='none'" class="rice-calendar__switch__action">
-				<rice-icon name="arrow-right" :custom-style="switchArrowStyle" @click="getNextMonth" />
-				<rice-icon v-if="switchMode!='month'" name="double-right" :custom-style="switchArrowStyle"
-					@click="getNextYear" />
-			</view>
-		</view>
+		</slot>
 		<view class="rice-calendar__header">
 			<text flatten v-for="item in weekList" :key="item" class="rice-calendar__week">{{item}}</text>
 		</view>
-		<view class="rice-calendar__body" ref="bodyRef" @click="onClick">
+		<view class="rice-calendar__body" :class="{'rice-calendar__body--week':weeklyCalendar}" ref="bodyRef"
+			@click="onClick">
+			<!-- #ifdef VUE3-VAPOR || MP ||WEB -->
+			<text v-if="showMonthMark" class="rice-calendar__body__mark">{{currentMonth}}</text>
+			<!-- #endif -->
 			<!-- #ifdef VUE3-VAPOR || WEB || MP -->
-			<view class="rice-calendar__days" flatten v-for="(item,index) in monthDays" :key="index">
-				<view v-for="day in item" :key="day.date" flatten class="rice-calendar__day" :class="getDayClass(day,index)"
-					:style="getDayStyle(day,index)" @click="handleClick(day)">
+			<view class="rice-calendar__days" v-for="(item,index) in displayMonthDays" flatten
+				:key="getWeekRowKey(item, index)">
+				<view v-for="day in item" :key="day.fullDate" class="rice-calendar__day" :class="getDayClass(day,index)"
+					:style="getDayStyle(day,index)" flatten @click="handleClick(day)">
 					<text v-if="hasStrValue(day.topInfo)" flatten class="rice-calendar__day__top"
 						:class="getDayTextClass(day,index,'top')" :style="getTopTextStyle(day)">{{day.topInfo}}</text>
 					<text class="rice-calendar__day__text" :class="getDayTextClass(day,index,'inner')"
@@ -36,6 +43,7 @@
 				</view>
 			</view>
 			<!-- #endif -->
+
 		</view>
 		<view v-if="showConfirmBtn" class="rice-calendar__footer">
 			<rice-button :color="color" type="primary" :disabled="confirmDisabled" :text="confirmText" shape="round"
@@ -48,7 +56,7 @@
 	import { useNamespace, usePopup as usePopupBottom, useSafeArea, safeAreaInsets } from "../../libs/use"
 	import { isDark } from "../../libs/store"
 	import { dateuts, Coloruts } from "../../libs/plugin"
-	import { CalendarProps, CalendarData, GridItem } from "./type.uts"
+	import { CalendarProps, CalendarData, CalendarSwitchPanelType, CalendarPanelChangeResult, GridItem } from "./type.uts"
 	import { addUnit, getPxNum, clamp, hasStrValue } from "../../libs/utils"
 	import { getMonthDays, getDateRange, getFirstWeekDays, getIsBetween, getIsSelected, formatDate } from "./utils"
 
@@ -61,8 +69,9 @@
 	useSafeArea()
 	const emit = defineEmits<{
 		select : [value: string | string[]],
-		confirm : [value: string | string[]], f
+		confirm : [value: string | string[]],
 		unselect : [value: string],
+		panelChange : [value: CalendarPanelChangeResult],
 		clickDisabledDate : [value: string],
 		clickClose : [],
 		open : [],
@@ -70,6 +79,10 @@
 		opened : [],
 		closed : [],
 		overRange : [],
+	}>()
+
+	defineSlots<{
+		header(props : { panelDate : string, currentWeek : number }) : any
 	}>()
 
 
@@ -93,6 +106,10 @@
 		closeOnClickOverlay: true,
 		safeAreaInsetBottom: null,
 		zIndex: 999,
+		weeklyCalendar: false,
+		showWeeklyText: true,
+		showFullDate: null, //补齐前后月日期，始终显示完整 7 列，周日历默认为true
+		showMonthMark: false,
 		customStyle: () : UTSJSONObject => ({})
 	})
 
@@ -111,11 +128,20 @@
 	})
 
 	const isShow = computed(() => props.usePopup ? realShow.value : true)
-
+	const _showFullDate = computed<boolean>(() => props.showFullDate ?? props.weeklyCalendar)
 
 	// #ifdef APP && !VUE3-VAPOR
 	let drawBody : (() => Promise<void>) | null = null
 	// #endif
+
+	//该日期是否禁用，主要作用于文字样式
+	const getDayIsDisabled = (day : CalendarData) => {
+		//非禁用的日期（一行中上一个月剩余的那几天，下个月开始的那几天）且当前选中了，返回 false
+		// if (isSelected && !day.disabled) return false
+		//周日历上一个月/下一个月多出的那几天文字不置灰
+		if (props.weeklyCalendar && day.disabled == false) return false
+		return day.disabled == true || day.isCurrentMonth == false
+	}
 
 
 	const getInitDate = () : string[] => {
@@ -155,7 +181,7 @@
 		return getDateRange(dateuts().format('YYYY-MM-DD'), props.minDate, props.maxDate)
 	}
 
-	// #ifdef APP
+	// #ifdef APP 
 	const primaryColor = ref('')
 
 	const activeColor = computed<string>(() => {
@@ -178,9 +204,74 @@
 
 	const currentPanelDate = ref(getInitPanelDate())
 	const monthDays = ref<Array<Array<CalendarData>>>([])
-	monthDays.value = getMonthDays([currentPanelDate.value], firstDayOfWeek.value, props.formatter, props.minDate, props.maxDate)
+	monthDays.value = getMonthDays([currentPanelDate.value], firstDayOfWeek.value, props.formatter, props.minDate, props.maxDate, _showFullDate.value)
 
-	const formatPanelDate = computed(() => dateuts(currentPanelDate.value).format('YYYY年M月'))
+	const currentMonth = computed(() => dateuts(currentPanelDate.value).format('M'))
+
+	const currentWeekIndex = computed(() : number => {
+		if (props.weeklyCalendar == false) return 0
+		const panelDate = formatDate(currentPanelDate.value)
+		for (let week = 0; week < monthDays.value.length; week++) {
+			const weekItem = monthDays.value[week]
+			const dayIndex = weekItem.findIndex(day => day.fullDate == panelDate)
+			if (dayIndex != -1) {
+				return week
+			}
+		}
+		return 0
+	})
+
+	const displayMonthDays = computed(() : Array<Array<CalendarData>> => {
+		if (props.weeklyCalendar == false) {
+			return monthDays.value
+		}
+		if (monthDays.value.length == 0) {
+			return [] as Array<Array<CalendarData>>
+		}
+		return [monthDays.value[currentWeekIndex.value]] as Array<Array<CalendarData>>
+	})
+
+
+	/**
+	 * 必写，不然鸿蒙蒸汽模式日期可能不显示
+	 */
+	const displayMonthDaysRenderKey = computed(() : string => {
+		// #ifdef  APP-HARMONY
+		const list = displayMonthDays.value
+		const rowCount = list.length
+		const first = rowCount > 0 && list[0].length > 0 ? list[0][0].fullDate : 'empty'
+		const lastRow = rowCount > 0 ? list[rowCount - 1] : [] as CalendarData[]
+		const last = lastRow.length > 0 ? lastRow[lastRow.length - 1].fullDate : 'empty'
+		return `${currentPanelDate.value}-${rowCount}-${first}-${last}`
+		// #endif
+
+		// #ifndef APP-HARMONY
+		return '1'
+		// #endif
+	})
+
+	const getWeekRowKey = (weekItem : Array<CalendarData>, index : number) : string => {
+		// #ifndef APP-HARMONY
+		return `${index}`
+		// #endif
+		// #ifdef APP-HARMONY
+		const first = weekItem.length > 0 ? weekItem[0].fullDate : `empty-${index}`
+		const last = weekItem.length > 0 ? weekItem[weekItem.length - 1].fullDate : `empty-${index}`
+		return `${props.weeklyCalendar}-${displayMonthDaysRenderKey.value}-${first}-${last}-${index}`
+		// #endif
+	}
+
+	const getRealWeekIndex = (index : number) => {
+		if (props.weeklyCalendar == false) return index
+		return currentWeekIndex.value + index
+	}
+
+	const formatPanelDate = computed(() => {
+		if (props.weeklyCalendar && props.showWeeklyText) {
+			return `${dateuts(currentPanelDate.value).format('YYYY年M月')} 第${currentWeekIndex.value + 1}周`
+		}
+		return dateuts(currentPanelDate.value).format('YYYY年M月')
+	})
 
 	/**
 	 * 周期
@@ -212,23 +303,187 @@
 		return props.lunar ? day.lunarInfo?.IDayCn : null
 	}
 
+	/**
+	 * 获取当前日历对应的年月
+	 */
+
+	const getPanelYearMonth = () => {
+		return dateuts(currentPanelDate.value).format('YYYY-MM')
+	}
+
+	const getPanelYearMonthByDate = (panelDate : string) : string => {
+		return dateuts(panelDate).format('YYYY-MM')
+	}
+
+	const getPanelWeekByDate = (panelDate : string) : number => {
+		if (props.weeklyCalendar == false) {
+			return 1
+		}
+		const normalizedDate = formatDate(panelDate)
+		const panelMonthDays = getMonthDays([normalizedDate], firstDayOfWeek.value, props.formatter, props.minDate, props.maxDate, _showFullDate.value)
+		for (let week = 0; week < panelMonthDays.length; week++) {
+			const weekItem = panelMonthDays[week]
+			const dayIndex = weekItem.findIndex(day => day.fullDate == normalizedDate)
+			if (dayIndex != -1) {
+				return week + 1
+			}
+		}
+		return 1
+	}
+
+	const getPanelRowsByDate = (panelDate : string) : Array<Array<CalendarData>> => {
+		const normalizedDate = props.weeklyCalendar ? formatDate(panelDate) : panelDate
+		const panelMonthDays = getMonthDays([normalizedDate], firstDayOfWeek.value, props.formatter, props.minDate, props.maxDate, _showFullDate.value)
+		if (props.weeklyCalendar == false) {
+			return panelMonthDays
+		}
+		for (let week = 0; week < panelMonthDays.length; week++) {
+			const weekItem = panelMonthDays[week]
+			const dayIndex = weekItem.findIndex(day => day.fullDate == normalizedDate)
+			if (dayIndex != -1) {
+				return [weekItem] as Array<Array<CalendarData>>
+			}
+		}
+		return panelMonthDays.length > 0 ? [panelMonthDays[0]] as Array<Array<CalendarData>> : [] as Array<Array<CalendarData>>
+	}
+
+	const getPanelChangeResultByDate = (panelDate : string) : CalendarPanelChangeResult => {
+		const panelRows = getPanelRowsByDate(panelDate)
+		const panelYearMonth = getPanelYearMonthByDate(panelDate)
+		let firstDate = dateuts(panelDate).startOf('month').format('YYYY-MM-DD')
+		let lastDate = dateuts(panelDate).endOf('month').format('YYYY-MM-DD')
+		let prevMonthFirstDate = ''
+		let nextMonthLastDate = ''
+		if (props.weeklyCalendar && panelRows.length > 0) {
+			firstDate = ''
+			lastDate = ''
+		}
+		for (let rowIndex = 0; rowIndex < panelRows.length; rowIndex++) {
+			const row = panelRows[rowIndex]
+			for (let dayIndex = 0; dayIndex < row.length; dayIndex++) {
+				const day = row[dayIndex]
+				const dayYearMonth = dateuts(day.fullDate).format('YYYY-MM')
+				if (props.weeklyCalendar && dayYearMonth == panelYearMonth) {
+					if (firstDate == '') {
+						firstDate = day.fullDate
+					}
+					lastDate = day.fullDate
+				}
+				if (dayYearMonth < panelYearMonth && prevMonthFirstDate == '') {
+					prevMonthFirstDate = day.fullDate
+				}
+				if (dayYearMonth > panelYearMonth) {
+					nextMonthLastDate = day.fullDate
+				}
+			}
+		}
+		if (props.weeklyCalendar && firstDate == '') {
+			firstDate = dateuts(panelDate).format('YYYY-MM-DD')
+			lastDate = firstDate
+		}
+		return {
+			firstDate,
+			lastDate,
+			panelDate: panelYearMonth,
+			prevMonthFirstDate,
+			nextMonthLastDate,
+			week: getPanelWeekByDate(panelDate)
+		}
+	}
+
+	const emitPanelChangeByDate = (panelDate : string) => {
+		emit('panelChange', getPanelChangeResultByDate(panelDate))
+	}
+
+	const getPanelDate = () => {
+		return getPanelYearMonth()
+	}
+
+	const setPanelDate = (panelDate : string) => {
+		currentPanelDate.value = panelDate
+		emitPanelChangeByDate(panelDate)
+	}
+
+
+	const shiftPanelDate = (step : number, unit : string, format : string) => {
+		//@ts-ignore
+		const panelDate = dateuts(currentPanelDate.value).add(step, unit).format(format)
+		setPanelDate(panelDate)
+	}
+
 
 	const getLastMonth = () => {
-		currentPanelDate.value = dateuts(currentPanelDate.value).subtract(1, 'month').format('YYYY-M')
+		if (props.weeklyCalendar) {
+			shiftPanelDate(-7, 'day', 'YYYY-MM-DD')
+		} else {
+			shiftPanelDate(-1, 'month', 'YYYY-MM')
+		}
 	}
 
 	const getNextMonth = () => {
-		currentPanelDate.value = dateuts(currentPanelDate.value).add(1, 'month').format('YYYY-M')
+		if (props.weeklyCalendar) {
+			shiftPanelDate(7, 'day', 'YYYY-MM-DD')
+		} else {
+			shiftPanelDate(1, 'month', 'YYYY-MM')
+		}
 	}
 
 	const getLastYear = () => {
-		currentPanelDate.value = dateuts(currentPanelDate.value).subtract(1, 'year').format('YYYY-M')
+		if (props.weeklyCalendar) {
+			shiftPanelDate(-1, 'month', 'YYYY-MM-DD')
+		} else {
+			shiftPanelDate(-1, 'year', 'YYYY-MM')
+		}
 	}
 
 	const getNextYear = () => {
-		currentPanelDate.value = dateuts(currentPanelDate.value).add(1, 'year').format('YYYY-M')
-
+		if (props.weeklyCalendar) {
+			shiftPanelDate(1, 'month', 'YYYY-MM-DD')
+		} else {
+			shiftPanelDate(1, 'year', 'YYYY-MM')
+		}
 	}
+
+	const getLastWeek = () => {
+		if (props.weeklyCalendar == false) return
+		shiftPanelDate(-7, 'day', 'YYYY-MM-DD')
+	}
+
+	const getNextWeek = () => {
+		if (props.weeklyCalendar == false) return
+		shiftPanelDate(7, 'day', 'YYYY-MM-DD')
+	}
+
+	const switchPanelMonth = (step : number) => {
+		const format = props.weeklyCalendar ? 'YYYY-MM-DD' : 'YYYY-MM'
+		shiftPanelDate(step, 'month', format)
+	}
+
+	const switchPanelYear = (step : number) => {
+		const format = props.weeklyCalendar ? 'YYYY-MM-DD' : 'YYYY-MM'
+		shiftPanelDate(step, 'year', format)
+	}
+
+
+
+	//@ts-ignore
+	const switchPanel = (type : CalendarSwitchPanelType) => {
+		if (type == 'prev-week') {
+			getLastWeek()
+		} else if (type == 'next-week') {
+			getNextWeek()
+		} else if (type == 'prev-month') {
+			switchPanelMonth(-1)
+		} else if (type == 'next-month') {
+			switchPanelMonth(1)
+		} else if (type == 'next-year') {
+			switchPanelYear(1)
+		} else if (type == 'prev-year') {
+			switchPanelYear(-1)
+		}
+	}
+
+
 
 	/**
 	 * 选择超出最多可选天数
@@ -267,6 +522,8 @@
 		show.value = false
 	}
 
+	let drawTimer : number | null = null
+
 
 	const handleSelect = (date : string[]) => {
 		if (props.mode == 'range' && date.length >= 2 && props.maxRange != null) {
@@ -289,7 +546,7 @@
 
 	const handleClick = (day : CalendarData) => {
 		const fullDate = day.fullDate
-		if (props.readonly == true) return
+		if (props.readonly == true || (day.isCurrentMonth == false && !props.weeklyCalendar)) return
 		if (day.disabled == true) {
 			emit('clickDisabledDate', fullDate)
 			return
@@ -335,21 +592,33 @@
 	}
 	const bodyRef = shallowRef<UniElement | null>(null)
 
+	let cachedRowHeight = 0
+
 	// #ifdef APP && !VUE3-VAPOR
 	let gridItem = [] as Array<GridItem>
+	let gridCacheKey = ''
+	let cachedBodyWidth = 0
+	let cachedOneWidth = 0
+	let cachedTextColor = ''
+	let cachedInfoTextColor = ''
+	let cachedMarkColor = ''
+	let cachedDisabledColor = ''
+	let cachedPrimaryColor = ''
+	let cachedRangeTintColor = ''
 	// #endif
 
 	// #ifdef APP
 	const getCalendarGrid = (width : number) => {
 		const gridList = [] as GridItem[]
 		const oneWidth = width / weekList.value.length
-		const oneHeight = getPxNum(addUnit(props.rowHeight))
-		for (let week = 0; week < monthDays.value.length; week++) {
-			const weekItem = monthDays.value[week]
+		const oneHeight = cachedRowHeight > 0 ? cachedRowHeight : getPxNum(addUnit(props.rowHeight))
+		for (let week = 0; week < displayMonthDays.value.length; week++) {
+			const weekItem = displayMonthDays.value[week]
+			const realWeekIndex = getRealWeekIndex(week)
 			for (let day = 0; day < weekItem.length; day++) {
 				const dayItem = weekItem[day]
 				let space = day
-				if (week == 0) {
+				if (realWeekIndex == 0) {
 					space = 7 - weekItem.length + day
 				}
 				gridList.push({
@@ -367,46 +636,142 @@
 
 	// #ifdef APP && !VUE3-VAPOR
 
+	const bodyHeight = ref(300)
+
+	//缓存部分数据，避免每次重绘都重复取样式和重复算格子
+	const getDrawGridCacheKey = () : string => {
+		const weekCount = displayMonthDays.value.length
+		const firstWeek = weekCount > 0 ? displayMonthDays.value[0] : [] as CalendarData[]
+		const lastWeek = weekCount > 0 ? displayMonthDays.value[weekCount - 1] : [] as CalendarData[]
+		const firstDay = firstWeek.length > 0 ? firstWeek[0].fullDate : 'empty'
+		const lastDay = lastWeek.length > 0 ? lastWeek[lastWeek.length - 1].fullDate : 'empty'
+		return `${currentPanelDate.value}-${currentWeekIndex.value}-${weekCount}-${firstDay}-${lastDay}-${props.rowHeight}`
+	}
+
+	//缓存色彩数据
+	const syncDrawTheme = () => {
+		if (calendarRef.value == null) return
+		cachedTextColor = calendarRef.value.style.getPropertyValue('--rice-text-color')
+		cachedInfoTextColor = calendarRef.value.style.getPropertyValue('--rice-calendar-info-text')
+		cachedMarkColor = calendarRef.value.style.getPropertyValue('--rice-calendar-mark-color')
+		cachedDisabledColor = calendarRef.value.style.getPropertyValue('--rice-calendar-disabled-text')
+		primaryColor.value = calendarRef.value.style.getPropertyValue('--rice-primary-color')
+		cachedPrimaryColor = activeColor.value
+		cachedRangeTintColor = getTintColor(cachedPrimaryColor)
+	}
+
+	const syncGridCache = (width : number) => {
+		const nextKey = getDrawGridCacheKey()
+		if (nextKey == gridCacheKey && cachedBodyWidth == width && gridItem.length > 0) {
+			return
+		}
+		gridItem = getCalendarGrid(width)
+		gridCacheKey = nextKey
+		cachedBodyWidth = width
+		cachedOneWidth = width / weekList.value.length
+	}
+
+	function scheduleDrawBody(delay : number = 0) {
+		if (drawTimer != null) clearTimeout(drawTimer!)
+		drawTimer = setTimeout(() => {
+			drawBody?.()
+		}, delay)
+	}
+
+	const getNormalizedCurrentDates = () : string[] => {
+		if (currentDate.value.length == 0) {
+			return [] as string[]
+		}
+		return currentDate.value.map(item => formatDate(item))
+	}
+
+	const getDrawBottomInfo = (day : CalendarData, normalizedDates : string[]) : string | null => {
+		if (hasStrValue(day.bottomInfo)) return day.bottomInfo!
+		if (props.mode == 'range') {
+			if (props.allowSameDay == true
+				&& normalizedDates.length >= 2
+				&& normalizedDates[0] == normalizedDates[1]
+				&& day.fullDate == normalizedDates[0]) {
+				return '开始/结束'
+			}
+			if (normalizedDates.length >= 1 && day.fullDate == normalizedDates[0]) return '开始'
+			if (normalizedDates.length >= 2 && day.fullDate == normalizedDates[1]) return '结束'
+		}
+		return props.lunar ? day.lunarInfo?.IDayCn : null
+	}
+
+	const getDrawDayState = (day : CalendarData, normalizedDates : string[]) => {
+		const disabled = getDayIsDisabled(day)
+		const fullDate = day.fullDate
+		const start = normalizedDates.length >= 1 ? normalizedDates[0] : null
+		const end = normalizedDates.length >= 2 ? normalizedDates[1] : null
+		let isSelected = false
+		if (props.mode == 'range') {
+			isSelected = start == fullDate || end == fullDate
+		} else if (props.mode == 'multiple') {
+			isSelected = normalizedDates.includes(fullDate)
+		} else {
+			isSelected = start == fullDate
+		}
+		const isBetween = props.mode == 'range' && start != null && end != null && fullDate > start && fullDate < end
+		return {
+			disabled,
+			isSelected,
+			isBetween,
+		} as UTSJSONObject
+	}
+
 	drawBody = async () => {
 		if (bodyRef.value == null) return
 		const rect = await bodyRef.value!.getBoundingClientRectAsync()!
 
 		// #ifdef APP-HARMONY
 		//鸿蒙平台要加这段代码，不然切换月份的还是可能会导致最后一行显示不出来，原因未知
-		bodyRef.value?.style.setProperty('height', rect.height - 0.01 + 'px')
+		bodyRef.value?.style.setProperty('height', bodyHeight.value - 0.01 + 'px')
 		// #endif
 		const ctx = bodyRef.value!.getDrawableContext()!
+		syncGridCache(rect.width)
+		syncDrawTheme()
 		ctx.reset()
-		gridItem = getCalendarGrid(rect.width)
-		//每个日期的宽高
-		const oneWidth = rect.width / weekList.value.length
-		const oneHeight = getPxNum(addUnit(props.rowHeight))
-		//文字颜色
-		const textColor = calendarRef.value!.style.getPropertyValue('--rice-text-color')
-		//日期颜色
-		const textColor2 = calendarRef.value!.style.getPropertyValue('--rice-calendar-info-text')
-		//禁用颜色
-		const disabledColor = calendarRef.value!.style.getPropertyValue('--rice-calendar-disabled-text')
-		primaryColor.value = calendarRef.value!.style.getPropertyValue('--rice-primary-color')
-		const primary = activeColor.value
+		const oneWidth = cachedOneWidth
+		const oneHeight = cachedRowHeight
+		const textColor = cachedTextColor
+		const textColor2 = cachedInfoTextColor
+		const markColor = cachedMarkColor
+		const disabledColor = cachedDisabledColor
+		const primary = cachedPrimaryColor
+		const rangeTintColor = cachedRangeTintColor
+		const normalizedDates = getNormalizedCurrentDates()
 		ctx.fillStyle = textColor
 		ctx.textAlign = 'center'
+		if (props.showMonthMark) {
+			ctx.beginPath()
+			ctx.fillStyle = markColor
+			ctx.font = '160'
+			// #ifdef  APP-IOS
+			ctx.fillText(currentMonth.value, rect.width / 2, bodyHeight.value / 2 + 70)
+			// #endif
+			// #ifndef APP-IOS
+			ctx.fillText(currentMonth.value, rect.width / 2, bodyHeight.value / 2 + 50)
+			// #endif
+			ctx.fillStyle = textColor
+		}
 
-		for (let week = 0; week < monthDays.value.length; week++) {
-			const weekItem = monthDays.value[week]
+		let gridIndex = 0
+		for (let week = 0; week < displayMonthDays.value.length; week++) {
+			const weekItem = displayMonthDays.value[week]
 
 			for (let day = 0; day < weekItem.length; day++) {
 				const dayItem = weekItem[day]
-				const bottomInfo = getBottomInfo(dayItem)
-				const disabled = dayItem.disabled == true
-				const isSelected = getIsSelected(dayItem, currentDate.value, props.mode)
-				const isBetween = getIsBetween(dayItem, currentDate.value)
-				let space = day
-				if (week == 0) {
-					space = 7 - weekItem.length + day
-				}
-				const top = oneHeight * week + 4
-				const left = space * oneWidth
+				const grid = gridItem[gridIndex]
+				gridIndex++
+				const dayState = getDrawDayState(dayItem, normalizedDates)
+				const isSelected = dayState['isSelected'] as boolean
+				const disabled = dayState['disabled'] as boolean
+				const isBetween = dayState['isBetween'] as boolean
+				const bottomInfo = getDrawBottomInfo(dayItem, normalizedDates)
+				const top = grid.y
+				const left = grid.x
 				if (isSelected) {
 					ctx.fillStyle = primary
 					ctx.fillRect(left, top, oneWidth, oneHeight)
@@ -415,7 +780,7 @@
 					ctx.fillStyle = textColor
 				}
 				if (isBetween && props.mode == 'range') {
-					ctx.fillStyle = getTintColor(primary)
+					ctx.fillStyle = rangeTintColor
 
 					ctx.fillRect(left, top, oneWidth, oneHeight)
 					ctx.fillStyle = primary
@@ -464,12 +829,18 @@
 		}
 	}
 
-	let drawTimer : number | null = null
+
+
 	const drawCalendar = async () => {
 		if (!isShow.value) return
 		await nextTick()
-		if (monthDays.value.length > 0) {
-			const height = monthDays.value.length * getPxNum(props.rowHeight)
+		if (displayMonthDays.value.length > 0) {
+			const rowHeight = getPxNum(addUnit(props.rowHeight))
+			cachedRowHeight = rowHeight
+			const height = props.weeklyCalendar
+				? rowHeight
+				: displayMonthDays.value.length * rowHeight
+
 			// #ifdef APP-HARMONY
 			//鸿蒙平台要加这段代码，不然切换月份的还是可能会导致最后一行显示不出来，原因未知
 			bodyRef.value?.style.setProperty('height', height + 0.01 + 'px')
@@ -477,11 +848,9 @@
 			// #ifndef APP-HARMONY
 			bodyRef.value?.style.setProperty('height', height + 'px')
 			// #endif
+			bodyHeight.value = height
 		}
-		if (drawTimer != null) clearTimeout(drawTimer!)
-		drawTimer = setTimeout(() => {
-			drawBody!()
-		}, 50)
+		scheduleDrawBody(50)
 	}
 
 	// #endif
@@ -545,10 +914,10 @@
 	const getDayClass = (day : CalendarData, index : number) => {
 		const css = [] as string[]
 		const pre = 'rice-calendar__day'
-		if (day.disabled == true) {
+		const isSelect = getIsSelected(day, currentDate.value, props.mode)
+		if (getDayIsDisabled(day)) {
 			css.push(`${pre}--disabled`)
 		}
-		const isSelect = getIsSelected(day, currentDate.value, props.mode)
 		if (isSelect) {
 			css.push(`${pre}--selected`)
 		}
@@ -573,10 +942,10 @@
 	const getDayTextClass = (day : CalendarData, index : number, type : string) => {
 		const css = [] as string[]
 		const pre = 'rice-calendar__day'
-		if (day.disabled == true) {
+		const isSelect = getIsSelected(day, currentDate.value, props.mode)
+		if (getDayIsDisabled(day)) {
 			css.push(`${pre}--disabled__text`)
 		}
-		const isSelect = getIsSelected(day, currentDate.value, props.mode)
 		if (isSelect) {
 			css.push(`${pre}--selected__text`)
 		}
@@ -588,7 +957,7 @@
 
 	const getDayStyle = (day : CalendarData, index : number) => {
 		const css = new Map<string, string>()
-		if (index == 0 && day.date == 1) {
+		if (getRealWeekIndex(index) == 0 && day.date == 1 && !_showFullDate.value) {
 			const realDay = (day.day + 7 - firstDayOfWeek.value) % 7
 			css.set('margin-left', `${(100 * realDay) / 7}%`)
 		}
@@ -633,7 +1002,8 @@
 			if (isSelect) {
 				css.set('color', '#f5f5f5')
 			} else {
-				css.set('color', day.disabled == true ? 'var(--rice-calendar-disabled-text)' : 'var(--rice-text-color)')
+				const disabled = getDayIsDisabled(day)
+				css.set('color', disabled ? 'var(--rice-calendar-disabled-text)' : 'var(--rice-text-color)')
 			}
 			// #endif
 			if (getIsBetween(day, currentDate.value) && props.mode == 'range') css.set('color', props.color!)
@@ -693,38 +1063,65 @@
 	})
 
 	watch(() : any | null => props.date, () => {
+		const previousPanelDate = currentPanelDate.value
 		currentDate.value = getInitDate()
+		let nextPanelDate = previousPanelDate
 		if (typeof props.date == 'string') {
-			currentPanelDate.value = props.date as string
+			nextPanelDate = props.date as string
 		} else if (Array.isArray(props.date)) {
 			const d = props.date as string[]
 			if (d.length > 0) {
-				currentPanelDate.value = d[0]
+				nextPanelDate = d[0]
 			}
+		}
+		currentPanelDate.value = nextPanelDate
+		const previousYearMonth = getPanelYearMonthByDate(previousPanelDate)
+		const nextYearMonth = getPanelYearMonthByDate(nextPanelDate)
+		const previousWeek = getPanelWeekByDate(previousPanelDate)
+		const nextWeek = getPanelWeekByDate(nextPanelDate)
+		if (previousYearMonth != nextYearMonth || previousWeek != nextWeek) {
+			emit('panelChange', getPanelChangeResultByDate(nextPanelDate))
 		}
 	})
 
 	watch(
 		[
 			() : string | null => props.minDate,
-			() : string | null => props.maxDate
+			() : string | null => props.maxDate,
 		],
 		() => {
 			currentDate.value = getInitDate()
-			monthDays.value = getMonthDays([currentPanelDate.value], firstDayOfWeek.value, props.formatter, props.minDate, props.maxDate)
+			monthDays.value = getMonthDays([currentPanelDate.value], firstDayOfWeek.value, props.formatter, props.minDate, props.maxDate, _showFullDate.value)
 		})
 
 
-	watch(currentPanelDate, () => {
-		monthDays.value = getMonthDays([currentPanelDate.value], firstDayOfWeek.value, props.formatter, props.minDate, props.maxDate)
+
+	watch(() : boolean => props.weeklyCalendar, (newVal : boolean) => {
+		const normalizedDate = formatDate(currentPanelDate.value)
+		const nextPanelDate = newVal ? normalizedDate : dateuts(normalizedDate).format('YYYY-MM')
+		if (nextPanelDate != currentPanelDate.value) {
+			currentPanelDate.value = nextPanelDate
+			return
+		}
+		monthDays.value = getMonthDays([nextPanelDate], firstDayOfWeek.value, props.formatter, props.minDate, props.maxDate, _showFullDate.value)
 		// #ifdef APP && !VUE3-VAPOR
 		drawCalendar()
 		// #endif
 	})
 
+
+	watch([currentPanelDate, _showFullDate], () => {
+		monthDays.value = getMonthDays([currentPanelDate.value], firstDayOfWeek.value, props.formatter, props.minDate, props.maxDate, _showFullDate.value)
+		// #ifdef APP && !VUE3-VAPOR
+		drawCalendar()
+		// #endif
+	})
+
+
+
 	// #ifdef APP && !VUE3-VAPOR
 
-	watch(isDark, async () => {
+	watch([isDark, () : boolean => props.weeklyCalendar, () : boolean => props.showMonthMark], async () => {
 		await nextTick()
 		drawCalendar()
 	})
@@ -736,9 +1133,11 @@
 		}
 	})
 
+
 	onUnmounted(() => {
 		if (drawTimer != null) clearTimeout(drawTimer)
 	})
+
 	// #endif
 
 	onMounted(() => {
@@ -749,6 +1148,11 @@
 		// #ifdef APP && !VUE3-VAPOR
 		drawCalendar()
 		// #endif
+	})
+
+	defineExpose({
+		switchPanel,
+		getPanelDate,
 	})
 </script>
 
@@ -765,6 +1169,8 @@
 			transition-property: transform;
 			transform: translateY(100%);
 		}
+
+
 
 		&__title {
 			position: relative;
@@ -825,18 +1231,44 @@
 
 
 		&__body {
+			position: relative;
 			/* #ifdef APP && !VUE3-VAPOR */
 			height: 300px;
 			/* #endif */
-			margin: 0 2px;
+			margin: 0 2px 4px;
+
+			&--week {
+				/* #ifdef APP && !VUE3-VAPOR */
+				height: 60px;
+				/* #endif */
+			}
+
+
+			&__mark {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				/* #ifdef APP */
+				z-index: -1;
+				/* #endif */
+				/* #ifndef APP */
+				z-index: 0;
+				/* #endif */
+				color: var(--rice-calendar-mark-color);
+				font-size: 160px;
+				pointer-events: none;
+
+			}
 		}
 
 		&__footer {
-			padding: 16px;
+			padding: 12px 16px 16px;
 		}
 
 		/* #ifdef VUE3-VAPOR || WEB || MP */
 		&__days {
+			z-index: 2;
 			flex-direction: row;
 			margin-top: 4px;
 		}

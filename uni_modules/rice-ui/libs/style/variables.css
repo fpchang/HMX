@@ -34,6 +34,7 @@
 	--rice-calendar-background: #fff;
 	--rice-calendar-info-text: #969799;
 	--rice-calendar-disabled-text: #c8c9cc;
+	--rice-calendar-mark-color: rgba(242, 243, 245, 0.8);
 	--rice-cascader-background: #fff;
 	--rice-cascader-disabled-text-color: rgba(0, 0, 0, .26);
 	--rice-cell-background: #fff;
@@ -124,6 +125,7 @@
 	--rice-calendar-background: #242424;
 	--rice-calendar-info-text: #cdcbcb;
 	--rice-calendar-disabled-text: #646566;
+	--rice-calendar-mark-color: rgba(100, 101, 102, 0.2);
 	--rice-cascader-background: #242424;
 	--rice-cascader-disabled-text-color: rgba(255, 255, 255, .35);
 	--rice-cell-background: #242424;

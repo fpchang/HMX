@@ -50,7 +50,8 @@
 
 	const displayValue = ref("")
 	const isFocus = ref(props.focus)
-
+	
+	//@ts-ignore
 	const getCodeNum = (index : number) => displayValue.value.charAt(index)
 
 	watch(modelValue, (newVal : string | null) => {
@@ -158,7 +159,7 @@
 		return css
 	})
 
-
+	//@ts-ignore
 	const getBoxStyle = (index : number) => {
 		const css = new Map<string, string>()
 		const space = getPxNum(props.space)

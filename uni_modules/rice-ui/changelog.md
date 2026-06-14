@@ -1,3 +1,9 @@
+## 1.1.8（2026-06-12）
+- 蒸汽模式APP体验： [鸿蒙](https://appgallery.huawei.com/app/detail?id=com.rice.xui)、[iOS](https://apps.apple.com/cn/app/riceui/id6742657989)
+- [新增] Calendar 日历组件库新增 周日历，显示月份背景，补齐前后月日期等属性 [文档](https://riceui.cn/components/calendar.html)
+- [新增] Signature 签名组件新增 撤销上一步操作的功能 [文档](https://riceui.cn/components/signature.html)
+- [新增] Slider 新增 click-change 属性，支持点击直接跳到对应位置 [文档](https://riceui.cn/components/slider.html)
+- [提示] RiceUI组件库在**鸿蒙蒸汽模式中** HBuilderx 需要5.08以上的版本，**iOS的蒸汽模式** HBuilderx 需要5.11以上的版本，非蒸汽模式推荐在5.0以上的版本中使用
 ## 1.1.6（2026-06-08）
 - 蒸汽模式APP体验： [鸿蒙](https://appgallery.huawei.com/app/detail?id=com.rice.xui)、[iOS](https://apps.apple.com/cn/app/riceui/id6742657989), 好用的话麻烦给个五星好评~
 - [新增] 瀑布流组件 [文档](https://riceui.cn/components/waterflow.html)

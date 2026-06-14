@@ -261,7 +261,7 @@
 		} as DateTimePickerExtend
 
 		mode.value.forEach((m, i) => {
-			if (result[m] != null) result[m] = currentValues.value[i]
+			if (result[m] != null && currentValues.value.length > 0) result[m] = currentValues.value[i]
 		})
 		const normalized = normalizePickerExtend(result)
 		const newVal = `${normalized.year}-${normalized.month}-${normalized.day} ${normalized.hour}:${normalized.minute}:${normalized.second}`

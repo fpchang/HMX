@@ -100,13 +100,13 @@
 
 		flex: 1;
 		background-color: #fff;
-		padding: 0 24px;
+		padding: 10px 14px;
 		box-sizing: border-box;
 
 		.card {
-
+			
 			border-radius: 20px;
-			 padding: 40px 14px;
+			 padding: 40px 8px;
 			// box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
 		}
 

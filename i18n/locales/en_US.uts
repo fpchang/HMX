@@ -125,7 +125,7 @@ export default {
 		"btn_txt": "Sign In",
 		"btn_app_txt": "Phone Quick Login",
 		"btn_getSms": "Get SMS Code",
-		"btn_getVerificationCode": "Get Verification Code",
+		"btn_getVerificationCode": "Get Code",
 		"getphone_loading": "Retrieving phone number…",
 		valid_required: "required",
 		"valid_agree": "Please agree to the User Agreement and Privacy Policy first",
@@ -164,7 +164,9 @@ export default {
 		email_tips: "* If you do not receive the email verification code, please check your spam mailbox",
 		btn_txt: "Next",
 		btn_txt_complete: "Complete Registration",
-		register_success: "Registration Successful"
+		register_success: "Registration Successful",
+		oldPassword: "Old Password",
+		tipNoNeedFill: "optional"
 	},
 	hotel: {
 		title: "Hotel",

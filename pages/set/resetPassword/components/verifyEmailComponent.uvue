@@ -4,12 +4,12 @@
 			<rice-form :model="emailForm" :rules="registerRule" ref="emailFormRef" label-width="100px"
 				class="demo-form">
 				<rice-form-item name="email" required label-position="top">
-					<rice-input v-model="emailForm['email']" placeholder="请输入邮箱" border="none" />
+					<rice-input v-model="emailForm['email']"  :placeholder="i18n.global.t('register.pach_email')" border="none" />
 				</rice-form-item>
 				<rice-form-item name="emailCode" required label-position="top">
 					<view class="input-row">
 						<view style="flex:1;display: flex;">
-							<rice-input v-model="emailForm['emailCode']" placeholder="邮箱验证码" border="none"
+							<rice-input v-model="emailForm['emailCode']":placeholder="i18n.global.t('register.pach_email_code')" border="none"
 								:maxlength="4" type="number" />
 						</view>
 						<view style="display: flex;flex-direction: row;align-items: center;">
@@ -22,12 +22,12 @@
 				</rice-form-item>
 				<view>
 					<view class="tooltips">
-						<text class="txt">* 如收不到邮箱验证码，请检查垃圾邮箱箱中是否存在</text>
+						<text class="txt">{{i18n.global.t('register.email_tips')}}</text>
 					</view>
 				</view>
 			</rice-form>
 			<view style="margin-top: 24px;">
-				<rice-button type="primary" text="下一步" class="btn" shape="round" @click="nextEvent"
+				<rice-button type="primary":text="i18n.global.t('register.btn_txt')" class="btn" shape="round" @click="nextEvent"
 					:loading="submitLoading" />
 			</view>
 		</view>
@@ -38,6 +38,7 @@
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
 	import { AccountService } from "@/services/AccountService";
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import i18n from '@/i18n/index.uts';
 	const emit = defineEmits(["setEmailEvent"]);
 	const submitLoading = ref(false);
 	type emailFormType = {
@@ -52,12 +53,12 @@
 	});
 
 	const emailFormRef = ref<RiceFormComponentPublicInstance | null>(null);
-	const codeText = ref('获取验证码');
+	const codeText = ref(i18n.global.t('login.btn_getVerificationCode'));
 	const codeDisabled = ref(false);
 	let timer = 0;
 	const emailvalidAccount = async (email : any | null) => {
 		if (email == null) {
-			return "邮箱不能为空";
+			return i18n.global.t('form.valid_required_email');
 		}
 		const flag = await AccountService.validRegisterByEmail(email.toString());
 		return !flag;
@@ -66,17 +67,17 @@
 		[
 			"email",
 			[
-				{ required: true, message: '请输入邮箱' },
-				{ min: 3, max: 25, message: '字数需为 3 至 25 位', trigger: 'blur' },
-				{ pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: '邮箱格式不正确' },
-				{ validator: emailvalidAccount, trigger: 'blur', message: "此邮箱关联账户不存在" }
+				{ required: true, message: i18n.global.t('form.valid_required_email') },
+				// { min: 3, max: 25, message: '字数需为 3 至 25 位', trigger: 'blur' },
+				{ pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message:i18n.global.t('form.valid_email') },
+				{ validator: emailvalidAccount, trigger: 'blur', message:i18n.global.t('regitster.valid_email_hanused') }
 			]
 		],
 		[
 			"emailCode",
 			[
-				{ required: true, message: '请输入邮箱验证码' },
-				{ min: 4, max: 4, message: '字数需为 4 位', trigger: 'blur' }
+				{ required: true, message: i18n.global.t('form.valid_required_email') },
+				{ min: 4, max: 4, message:i18n.global.t('regitster.valid_email_num') , trigger: 'blur' }
 			]
 		]
 	])
@@ -86,7 +87,7 @@
 			clearInterval(timer);
 			timer = 0;
 		}
-		codeText.value = '获取验证码';
+		codeText.value = i18n.global.t('login.btn_getSms') ;
 		codeDisabled.value = false;
 	};
 	const startTimeTask = () => {
@@ -114,7 +115,7 @@
 			console.log('校验失败的name合集', errsName)
 			if (errsName.includes("email")) {
 				uni.showToast({
-					title: "邮箱输入有误",
+					title: i18n.global.t('form.valid_email'),
 					icon: "none"
 				})
 				return;

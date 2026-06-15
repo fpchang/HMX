@@ -44,8 +44,8 @@ export default {
 	form: {
 		phone: "手机号",
 		userName: "用户名",
-		account:"账号",
-		email:"邮箱",
+		account: "账号",
+		email: "邮箱",
 		valid_required: "必填项",
 		valid_required_email: "邮箱不能为空",
 		valid_required_phone: "手机号不能为空",
@@ -62,7 +62,7 @@ export default {
 		tab_title_select_province: "请选择省份",
 		tab_title_select_city: "请选择城市",
 		tab_title_select_district: "请选择区/县",
-		btn_change_password:"修改密码",
+		btn_change_password: "修改密码",
 		accountCancel: "账号注销",
 		accountRecover: "账号恢复"
 
@@ -264,12 +264,24 @@ export default {
 	},
 
 	setcontent: {
+		 "companyName": "湖州玄天科技有限公司",
 		btn_txt_sys_set: "设置",
 		btn_txt_feedback: "意见反馈",
 		accountSecurity: "账号安全",
 		clearCache: "清除缓存",
 		aboutYisu: "关于议宿",
-		logout: "退出登录"
+		logout: "退出登录",
+		"enterprise": "企业",
+		"contactPerson": "联系人",
+		"recordNo": "备案号",
+		"enterpriseName": "企业名称",
+		"contactName": "联系人姓名",
+		"contactPhone": "联系电话",
+		"contactEmail": "联系邮箱",
+		"recordNumber": "备案编号",
+		"fillEnterprise": "请输入企业名称",
+		"fillContact": "请输入联系人",
+		"fillRecordNo": "请输入备案号"
 
 	},
 	gather: {

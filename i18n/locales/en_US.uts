@@ -35,7 +35,7 @@ export default {
 		confirmCancelAccount: "Confirm Cancellation"
 		deleteOrderTip: "Cannot be restored after deletion, confirm?",
 		"cancelTip": "Your account can be restored within 7 days after cancellation. All account data will be permanently deleted after the 7-day period.",
- 
+
 		units: {
 			year: "Year",
 			month: "Month",
@@ -46,8 +46,8 @@ export default {
 	form: {
 		phone: "Phone",
 		userName: "User Name",
-		account:"account",
-		email:"email",
+		account: "account",
+		email: "email",
 		valid_required: "This field is required",
 		valid_required_email: "Email cannot be empty",
 		valid_required_phone: "Phone number cannot be empty",
@@ -64,7 +64,7 @@ export default {
 		tab_title_select_province: "Select Province",
 		tab_title_select_city: "Select City",
 		tab_title_select_district: "Select District/County",
-		btn_change_password:"change password",
+		btn_change_password: "change password",
 		accountCancel: "Account Cancellation",
 		accountRecover: "Account Recovery"
 	},
@@ -259,12 +259,24 @@ export default {
 
 	},
 	setcontent: {
+		"companyName": "Huzhou Xuantian Technology Co., Ltd.",
 		btn_txt_sys_set: "Settings",
 		btn_txt_feedback: "Feedback",
 		accountSecurity: "Account Security",
 		clearCache: "Clear Cache",
 		aboutYisu: "About Yisu",
-		logout: "Log Out"
+		logout: "Log Out",
+		"enterprise": "Enterprise",
+		"contactPerson": "Contact Person",
+		"recordNo": "Record No.",
+		"enterpriseName": "Enterprise Name",
+		"contactName": "Contact Name",
+		"contactPhone": "Contact Phone",
+		"contactEmail": "Contact Email",
+		"recordNumber": "Registration Number",
+		"fillEnterprise": "Please enter enterprise name",
+		"fillContact": "Please enter contact person",
+		"fillRecordNo": "Please enter record number"
 	},
 	gather: {
 		today: 'Today',

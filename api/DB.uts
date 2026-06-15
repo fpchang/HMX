@@ -4,18 +4,18 @@ class DBConnect{
   constructor(){
   }
 
-  async callFunction(name:string,data:UTSJSONObject={}):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
+ //  async callFunction(name:string,data:UTSJSONObject={}):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
   
-	let groupData = UTSJSONObject.assign(data,{
-        $user:uni.getStorageSync('user'),
-        $token:uni.getStorageSync('hm_token')
-      });
+	// let groupData = UTSJSONObject.assign(data,{
+ //        $user:uni.getStorageSync('user'),
+ //        $token:uni.getStorageSync('hm_token')
+ //      });
 
-	return  uniCloud.callFunction({
-	  	name:name,
-	  	data:groupData
-	  })
-  }
+	// return  uniCloud.callFunction({
+	//   	name:name,
+	//   	data:groupData
+	//   })
+ //  }
    getCollection(dbName:string,w:(string | UTSJSONObject)):Promise<UniCloudDBGetResult>{
 	   let wh = w;
 	   if(w==""){

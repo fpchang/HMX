@@ -223,7 +223,7 @@
 			let obj = roomTypeList.value.find(item => item._id == room_type_id) as roomTypeBean;
 			return obj.name??"-";
 	}
-	const getRemainRoomCountByDate=(time:Number)=> {
+	const getRemainRoomCountByDate=(time:number)=> {
 	  let count = 0;
 	  for (let item of checkInOrderList.value) {
 	    let s1 =

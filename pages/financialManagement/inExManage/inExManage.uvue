@@ -409,7 +409,7 @@
 						return false;
 					}
 
-				} catch (error : Error) {
+				} catch (error:Error) {
 					// uni.showToast({
 					// 	title: i18n.global.t("common.delete_fail"),
 					// 	icon: "none"

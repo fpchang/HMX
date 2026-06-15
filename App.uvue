@@ -1,5 +1,5 @@
 <script lang="uts">
-	import uniIdPageInit from '@/uni_modules/uni-id-pages-x/init.uts';
+	//import uniIdPageInit from '@/uni_modules/uni-id-pages-x/init.uts';
 	import { setToken } from "@/store/store.uts";
 	import i18n from '@/i18n/index.uts';
 	// #ifdef APP-ANDROID || APP-HARMONY
@@ -14,7 +14,7 @@
 		if (osLanguage != null && !osLanguage.includes('zh-')) {
 			local = 'en-US';
 		}
-		i18n.global.locale.value = local;
+		//i18n.global.locale.value = local;
 	}
 	const setTokenEvent = () => {
 		const token = uni.getStorageSync("hm_token") as string;
@@ -36,7 +36,7 @@
 			//#endif
 			setLanuage();
 			setTokenEvent();
-			 uniIdPageInit();
+			// uniIdPageInit();
 		},
 		onShow: function () {
 			console.log('App Show')

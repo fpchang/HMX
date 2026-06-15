@@ -309,16 +309,16 @@ class AccountServiceClass {
 	getRechargeConfig() : Promise<UniCloudDBGetResult> {
 		return DB.getCollection("hm-rechargeConfig", { status: true });
 	}
-	createRechargeOrder(rechargeConfig_id : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return DB.callFunction("hm_createRechargeOrder", { rechargeConfig_id });
-	}
+	// createRechargeOrder(rechargeConfig_id : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+	// 	return DB.callFunction("hm_createRechargeOrder", { rechargeConfig_id });
+	// }
 
-	getMpPhoneNumber(code : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return DB.callFunction("getMpPhoneNumber", { code } as UTSJSONObject);
-	}
-	loginMp(code : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
-		return DB.callFunction("hm_loginMp", { code } as UTSJSONObject);
-	}
+	// getMpPhoneNumber(code : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+	// 	return DB.callFunction("getMpPhoneNumber", { code } as UTSJSONObject);
+	// }
+	// loginMp(code : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
+	// 	return DB.callFunction("hm_loginMp", { code } as UTSJSONObject);
+	// }
 }
 //module.exports =new AccountService();
 export var AccountService = new AccountServiceClass();

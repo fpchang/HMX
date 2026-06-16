@@ -158,6 +158,7 @@ export default {
 		pach_email: "请输入邮箱",
 		pach_email_code: "请输入邮箱验证码",
 		valid_email_hanused: "此邮箱已注册",
+		 valid_email_emailNotRegister: "此邮箱未注册",
 		valid_email_num: "邮箱验证码为 4 位",
 		valid_password_again: "请再次输入密码",
 		valid_account_require: "账号不能为空",

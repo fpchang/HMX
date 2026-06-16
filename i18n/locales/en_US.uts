@@ -156,6 +156,7 @@ export default {
 		pach_email: "Enter your email",
 		pach_email_code: "Enter  verification code",
 		valid_email_hanused: "This email is already registered",
+		valid_email_emailNotRegister: "This email is not registered.",
 		valid_email_num: "Email verification code is 4 digits",
 		valid_password_again: "Enter your password again",
 		valid_account_require: "Account cannot be empty",

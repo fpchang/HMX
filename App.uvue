@@ -1,5 +1,6 @@
 <script lang="uts">
 	//import uniIdPageInit from '@/uni_modules/uni-id-pages-x/init.uts';
+	import {action_co} from "@/api/cloudApi.uts";
 	import { setToken } from "@/store/store.uts";
 	import i18n from '@/i18n/index.uts';
 	// #ifdef APP-ANDROID || APP-HARMONY
@@ -14,7 +15,7 @@
 		if (osLanguage != null && !osLanguage.includes('zh-')) {
 			local = 'en-US';
 		}
-		//i18n.global.locale.value = local;
+		i18n.global.locale.value = local;
 	}
 	const setTokenEvent = () => {
 		const token = uni.getStorageSync("hm_token") as string;
@@ -23,9 +24,20 @@
 		}
 		
 	}
+	const start=()=>{
+		 setTimeout(() => {
+		    try {
+		      // 调用云对象空/轻量方法，触发云端实例常驻，消除首次接口冷启动
+		       action_co.preHeat()
+		    } catch(e) {
+		      // 预热失败不影响业务，静默捕获
+		      console.log('云对象预热静默失败', e)
+		    }
+		  }, 0)
+	}
 	export default {
 		onLaunch: function () {
-
+			start();
 			//#ifdef APP-ANDROID
 			const showMoreMessage = uni.getStorageSync("showMoreMessage");
 			if (showMoreMessage != "0") {

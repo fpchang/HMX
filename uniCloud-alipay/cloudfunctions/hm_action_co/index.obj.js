@@ -62,6 +62,9 @@ module.exports = {
 
 		}
 	},
+	preHeat(){
+		return {errCode:0,errMsg:"",data:1}
+	},
 	getTokenInfo: function() {
 		return this._tokenInfo || {};
 	},

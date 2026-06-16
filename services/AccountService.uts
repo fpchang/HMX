@@ -195,7 +195,8 @@ class AccountServiceClass {
 	}
 	async resetPasswordByEmail(email:string,emailCode:string, emailCodeTk:string, password:string):Promise<boolean>{
 		try {
-			await action_co.user_resetPasswordByEmailCode(email,emailCode, emailCodeTk, password);
+			const res = await action_co.user_resetPasswordByEmailCode(email,emailCode, emailCodeTk, password);
+			console.log("邮箱重置密码",res)
 			return true;
 		} catch (error:Error) {
 			RequestFailModal(error.message)

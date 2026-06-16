@@ -70,7 +70,7 @@
 				{ required: true, message: i18n.global.t('form.valid_required_email') },
 				// { min: 3, max: 25, message: '字数需为 3 至 25 位', trigger: 'blur' },
 				{ pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message:i18n.global.t('form.valid_email') },
-				{ validator: emailvalidAccount, trigger: 'blur', message:i18n.global.t('regitster.valid_email_hanused') }
+				{ validator: emailvalidAccount, trigger: 'blur', message:i18n.global.t('register.valid_email_emailNotRegister') }
 			]
 		],
 		[
@@ -109,17 +109,16 @@
 			//console.log(`请在${timer}s 后再试`);
 			return;
 		}
-		const result = await emailFormRef.value!.validate();
+		const result = await emailFormRef.value!.validateFields(['email'])
+		// const result2 = await emailFormRef.value!.validate();
+		// const errsName = (result2 as FormValidateErrors[]).map(v => v.name)
+		//     console.log('校验失败的name合集', errsName)
 		if (result != true) {
-			const errsName = (result as FormValidateErrors[]).map(v => v.name)
-			console.log('校验失败的name合集', errsName)
-			if (errsName.includes("email")) {
 				uni.showToast({
 					title: i18n.global.t('form.valid_email'),
 					icon: "none"
 				})
-				return;
-			}
+				return;			
 		}
 		
 		try {
@@ -142,14 +141,15 @@
 		if(submitLoading.value==true){
 			return;
 		}
+		submitLoading.value=true;
 		const result = await emailFormRef.value!.validate();
 		console.log("result", result);
 		//校验成功
 		if (result != true) {
 			console.log("校验失败");
+			submitLoading.value=false;
 			return;
 		}
-		//emit("setEmailEvent",emailForm.value.email,emailForm.value.emailCodeTk);
 		try {
 			submitLoading.value = true;
 			const flag = await AccountService.validEmailAndCode(emailForm.value.email, emailForm.value.emailCode, emailForm.value.emailCodeTk);

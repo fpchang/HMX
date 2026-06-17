@@ -52,10 +52,14 @@ class RoomAction {
 		return remainRoomList;
 	}
 	async deleteRoom(_id) {
+		if(_id==""||_id==undefined||_id==null){
+			return {errCode:987,errMsg:"room id is not empty"}
+		}
 		const db = uniCloud.database();
 		const dCmd = db.command;
-		const result = await db.collection('hm-room').doc(_id).remove();
-		return result;
+		const res = await db.collection('hm-room').doc(_id).remove();
+		console.log("delete room",_id,res)
+		return {errCode:0,errMsg:"",data:res.deleted==1};
 	}
 }
 module.exports = {

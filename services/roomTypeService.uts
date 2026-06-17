@@ -268,8 +268,8 @@ class RoomTypeClass {
 			try {
 				 const res = await action_co.room_deleteRoom(room_id);
 				 console.log("delete room",res)
-				 const code = res['code'] as number;
-				 return code ==0;
+				 const data = res['data'] as boolean;
+				 return data;
 			} catch (error:Error) {
 				RequestFailModal(error.message)
 				throw new Error("delete room type fail");

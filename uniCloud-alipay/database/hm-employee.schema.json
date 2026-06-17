@@ -3,7 +3,7 @@
 	"required": ["hotel_id", "data_status"],
 	"permission": {
 		"read": true,
-		"create": false,
+		"create": true,
 		"update": false,
 		"delete": false
 	},

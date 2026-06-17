@@ -11,6 +11,6 @@ async room_addRoom(roomList) {
 		return await new RoomAction(this).getRemainderRoomList();
 	},
 	async room_deleteRoom(_id) {
-		return await new RoomAction(this).deleteRoom();
+		return await new RoomAction(this).deleteRoom(_id);
 	}
 }

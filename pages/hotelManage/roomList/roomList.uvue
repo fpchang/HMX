@@ -248,15 +248,18 @@
 
 			beforeClose: async () : Promise<boolean> => {
 				try {
-					await roomTypeService.deleteRoom(room._id);
-					await comFunction.getRoomTypeList(hotel_id.value);
-					hideDialog();
-					uni.showToast({
-						title: i18n.global.t("common.delete_success"),
-						icon: "none"
-					});
-					closeSwiper();
-					return true;
+					const flag = await roomTypeService.deleteRoom(room._id);
+					if(flag){
+						await comFunction.getRoomTypeList(hotel_id.value);
+						hideDialog();
+						uni.showToast({
+							title: i18n.global.t("common.delete_success"),
+							icon: "none"
+						});
+						closeSwiper();
+						return true;
+					}
+					return false;
 				} catch (e) {
 					uni.showToast({
 						title: i18n.global.t("common.system_error"),

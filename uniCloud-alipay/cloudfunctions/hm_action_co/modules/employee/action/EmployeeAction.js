@@ -56,7 +56,10 @@ class EmployeeAction {
 		const targetRes = await db.collection('hm-user').where(sql).get();
 		const user = targetRes.data[0];
 		if (!user) {
-			throw new Error("账号或手机号无效，请员工先注册")
+			return {
+				errCode: 101,
+				errMsg: "账号或手机号无效，请员工先注册"
+			};
 		}
 		const u_id = user._id;
 		employeeObj.account_id = u_id;

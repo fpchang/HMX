@@ -13,10 +13,13 @@ class RoomTypeAction {
 		return result;
 	}
 	async deleteRoomType(_id) {
+		if(_id==""||_id==undefined||_id==null){
+			return {errCode:987,errMsg:"room type id is not empty"}
+		}
 		const db = uniCloud.database();
 		const dCmd = db.command;
-		const result = await db.collection('hm-roomType').doc(_id).remove();
-		return result;
+		const res = await db.collection('hm-roomType').doc(_id).remove();
+		return {errCode:0,errMsg:"",data:res.deleted==1};
 	}
 	async updateRoomType(roomTypeObj) {
 		const {

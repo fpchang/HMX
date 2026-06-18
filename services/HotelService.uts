@@ -89,7 +89,6 @@ class HotelServiceClass {
 
 	}
 	async updateHotel(hotel_id : string, hotelObj : hotelBean) : Promise<boolean> {
-		console.log("UPDATE+++++===", hotelObj);
 		try {
 			//const res = await DB.callFunction("hm_updateHotel", { hotel_id, hotelObj });
 			const res = await action_co.hotel_updateHotel(hotel_id, hotelObj);

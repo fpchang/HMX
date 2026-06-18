@@ -224,6 +224,11 @@ import i18n from '@/i18n/index.uts';
 					role: found.role,
 					mark: found.mark
 				};
+				if(employeeForm.value.phone!=""){
+					accountType.value="phone"
+				}else{
+					accountType.value="account"
+				}
 			}
 			// else {
 			// 	employeeForm.value = {

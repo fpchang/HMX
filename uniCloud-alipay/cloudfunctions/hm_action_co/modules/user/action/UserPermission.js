@@ -6,7 +6,6 @@ class UserPermission {
 	async getPermission(hotel_id) {
 		const dbJQL = uniCloud.databaseForJQL();
 		try {
-			console.log("3333",this.ctx)
 			const { account_id } = this.ctx._tokenInfo;
 			const roleObj = await dbJQL.collection("hm-employee").where({ hotel_id, account_id }).get();
 			let role_name = "normal";

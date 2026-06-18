@@ -37,7 +37,9 @@
 	}
 	export default {
 		onLaunch: function () {
+					
 			start();
+			setLanuage();
 			//#ifdef APP-ANDROID
 			const showMoreMessage = uni.getStorageSync("showMoreMessage");
 			if (showMoreMessage != "0") {
@@ -46,7 +48,7 @@
 				});
 			}
 			//#endif
-			setLanuage();
+	
 			setTokenEvent();
 			// uniIdPageInit();
 		},

@@ -175,12 +175,12 @@
 		try {
 			console.log("验证token");
 			const flag = await loginEvent() as boolean;
-			if(flag){
-				
-				accessin();
-				
+			if(flag){				
+				accessin();				
+			}else{
+				isReading.value = true;
 			}
-			isReading.value = true;
+			
 		} catch (error) {
 			console.log("err", error);
 

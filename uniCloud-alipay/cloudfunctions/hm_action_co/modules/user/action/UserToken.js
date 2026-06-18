@@ -4,7 +4,6 @@ class UserToken {
 		this.ctx = ctx;
 	}
 	async validToken(token) {
-		console.log("validtoken",token)
 		const secret = utils.getSecret();
 		const verifyResult = utils.verifyToken(token, secret);
 		if (!verifyResult) {
@@ -16,19 +15,7 @@ class UserToken {
 		const dbcmd = db.command;
 		try {
 
-			const userRes = await uniCloud.database().collection("hm-user").where({
-				"$or": [{
-						"_id": account_id
-					},
-					{
-						"phone": phone
-					},
-					{
-						"account": account
-					}
-				]
-			}).get();
-			console.log("userRes", userRes)
+			const userRes = await uniCloud.database().collection("hm-user").where({"_id": account_id}).get();
 			if (userRes.data.length < 1) {
 				return {
 					errCode: 0,

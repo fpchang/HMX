@@ -75,6 +75,7 @@ class HotelAction{
 		if (!account_id) {
 			sql = phone ?{phone} :{account}
 		}
+		console.log("employee",sql)
 		const res = await db.collection('hm-employee')
 		  .aggregate()
 		  // 1. 筛选当前员工的所有任职记录

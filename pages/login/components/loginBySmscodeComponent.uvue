@@ -131,12 +131,9 @@
 		//uni.showLoading({ title: "" });
 		smsLoading.value=true;
 		try {
-			const tk = await AccountService.sendSmsCode(userForm.value.phone);
-			// const data = res.result as UTSJSONObject;
-			// console.log("res", res);
-			// const tkstr = data.tk as string;
-			// tk.value = tkstr;
-			uni.setStorageSync("tk", tk);
+			const tkstr = await AccountService.sendSmsCode(userForm.value.phone);
+			tk.value = tkstr;
+			uni.setStorageSync("tk", tkstr);
 			//uni.hideLoading();
 			smsLoading.value=false;
 			startTimeTask();

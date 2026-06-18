@@ -18,8 +18,10 @@ class AccountServiceClass {
 	//	return DB.callFunction("hm-sendSms", data);
 	try {
 		const res = await action_co.user_sendSms(phone);
+		console.log(9999,res)
 		const data = res['data'] as UTSJSONObject;
-		const tk = data.getString("tk")??"";
+		const tk = data["tk"] as string;
+		console.log(1000,tk);
 		return tk;
 	} catch (error:Error) {
 		RequestFailModal(error.message);
@@ -184,12 +186,14 @@ class AccountServiceClass {
 		try {
 			//const token = uni.getStorageSync("hm_token");
 			//await account_co.updatePassword(token,password,originPassword);
-			await action_co.user_updatePassword(password,originPassword);
-			return true;
+			const res = await action_co.user_updatePassword(password,originPassword);
+			console.log("11111",res)
+			const code = res['code'] as number;
+			return code==0;
 		} catch (error:Error) {
 			RequestFailModal(error.message);
-			//throw new Error(error.message as string);
-			return false;
+			throw new Error(error.message as string);
+			//return false;
 			
 		}
 	}

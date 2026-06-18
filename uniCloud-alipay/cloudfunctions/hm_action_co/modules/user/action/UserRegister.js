@@ -81,7 +81,9 @@ class UserRegister{
 			phone: phone
 		}, secret, (new Date().getTime() + 1000 * 60 * 60 * 24 * 30));
 		const dbJQL = uniCloud.databaseForJQL();
-		const res = await dbJQL.collection('hm-user').add(this.formatUser("","","",phone, newToken));
+		const userFormat = this.formatUser("","","",phone, newToken);
+		console.log("userFormat",userFormat);
+		const res = await dbJQL.collection('hm-user').add(userFormat);
 		const id= res.id;
 		this.regitserUniId(id,"", "", "",phone);
 		return {
@@ -116,21 +118,28 @@ class UserRegister{
 		}
 		return msg;
 	}
-	
+
 	formatUser(account="",password="",email="",phone="", token) {
 		let vipStartDateStamp = new Date().getTime();
 		let vipEndDateStamp = new Date().getTime() + 30 * 1000 * 60 * 60 * 24;
 		const phone_s = phone.substr(-4);
 		const uname = phone_s||account.substr(-4);
-		return {
+		let accountObj = {};
+		if(account){
+			accountObj.account=account;
+		}
+		if(email){
+			accountObj.email=email;
+		}
+		if(phone){
+			accountObj.phone=phone;
+		}
+		const baseObj = {
 			"idCard": "",
 			"vipStartDateStamp": vipStartDateStamp,
 			"isVip": true,
 			"nickName": "",
-			"account":account,
-			"phone": phone,
 			"password": password,
-			"email":email,
 			"userId": phone,
 			"userName": `用户${phone_s||uname }`,
 			"vipEndDate": utils.dateFormat(new Date(vipEndDateStamp), "yyyy-MM-dd HH:mm:ss"),
@@ -142,6 +151,8 @@ class UserRegister{
 			"avatar": "",
 			"blongEmployment": []
 		}
+		const result = Object.assign(baseObj,accountObj);
+		return result;
 	}
 	
 }

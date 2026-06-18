@@ -1,5 +1,6 @@
 const utils = require('../../utils/index.js');
 const {UserRegister} = require("./UserRegister.js");
+const {isTestAccount} = require("../testUserConfig.js");
 class UserLogin{
 	constructor(ctx){
 		this.ctx= ctx;
@@ -113,6 +114,7 @@ class UserLogin{
 	}
 	
 	async loginBySmsCode(userForm) {
+		console.log(111,userForm)
 		let {
 			smsCode,
 			phone,
@@ -129,8 +131,9 @@ class UserLogin{
 			context: this.ctx.getClientInfo()
 		});
 		const db = uniCloud.database();
-		if (!isTestAccount(phone)) {
+		//if (!this.isTestAccount(phone)) {
 			const verifT = utils.verifyToken(tk, secret);
+			console.log("3333",tk,verifT)
 			if (!verifT || verifT.value.smsCode != smsCode) {
 				return {
 					errCode: 202,
@@ -138,7 +141,7 @@ class UserLogin{
 					data: {}
 				};
 			}
-		}
+		//}
 		try {
 			console.log(11111)
 			//const userRes = await dbJQL.collection('hm-user').where(`phone=='${phone}'`).get();
@@ -167,8 +170,9 @@ class UserLogin{
 					}
 				};
 			}
-			const register = new Register(this.ctx);
-			return await register.registerByPhone(phone)
+			const register =await  new UserRegister(this.ctx).registerByPhone(phone);
+			console.log("register===",register);
+			return register;
 		} catch (e) {
 			//throw new Error(e);
 			return {
@@ -182,9 +186,11 @@ class UserLogin{
 		//let { appid, phone, templateId = 'uni_sms_test' } = event;
 		const db = uniCloud.database();
 		const smsCode = this.randomSms();
-		if (this.ctx.getClientInfo().SPACEINFO.spaceId == "env-00jxh1m2dpmq" || this.isTestAccount(phone)) {
+		//console.log("spaceinfo",this.ctx.getClientInfo())
+		if (this.ctx.getCloudInfo().spaceId == "env-00jxh1m2dpmq" || isTestAccount(phone)) {
+			console.log("测试账号",1234)
 			const newToken =utils.getToken({ phone: phone, smsCode: 1234 }, utils.getSecret(), 300);
-			return {errCode:0,errMsg:"", tk: newToken };
+			return {errCode:0,errMsg:"", data:{tk: newToken }};
 		}
 		const { appId } = this.ctx.getClientInfo();
 		try {
@@ -215,23 +221,7 @@ class UserLogin{
 		for (var i = 0; i < 4; i++) res += Math.floor(Math.random() * 10);
 		return res;
 	}
-	isTestAccount(phone = "", smsCode) {
-		const testAccountList = [{
-				phone: "18516285834",
-				smsCode: "1234"
-			},
-			{
-				phone: "13122905834",
-				smsCode: "1234"
-			},
-			{
-				phone: "19083441181",
-				smsCode: "1234"
-			}
-		]
-		let t = testAccountList.find(item => item.phone == phone);
-		return t ? true : false;
-	}
+	
 }
 
 module.exports = {UserLogin};

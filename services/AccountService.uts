@@ -189,7 +189,7 @@ class AccountServiceClass {
 			const res = await action_co.user_updatePassword(password,originPassword);
 			console.log("11111",res)
 			const code = res['code'] as number;
-			return code==0;
+			return code==0?true:false;
 		} catch (error:Error) {
 			RequestFailModal(error.message);
 			throw new Error(error.message as string);
@@ -214,7 +214,6 @@ class AccountServiceClass {
 		try {
 			//const res = await DB.callFunction("hm_closeAccount");
 			const res = await action_co.user_closeAccount();
-			console.log("111111",res)
 			const data = res['data'] as boolean;
 			return data;
 		} catch (error:Error) {

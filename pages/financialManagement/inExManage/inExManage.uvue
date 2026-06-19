@@ -12,10 +12,10 @@
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn">
+			<view class="navbar-btn" @click="addFm">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 				<text class="txt"
-					@click="addFm">{{billType=='income'?i18n.global.t("finance.income"):i18n.global.t("finance.expense")}}</text>
+					>{{billType=='income'?i18n.global.t("finance.income"):i18n.global.t("finance.expense")}}</text>
 			</view>
 		</template>
 	</rice-navbar>

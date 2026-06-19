@@ -13,11 +13,11 @@
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn">
+			<view class="navbar-btn" @click="addHotel">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
 				<text class="txt"
-					@click="addHotel">{{i18n.global.t("common.btn_txt_create",[i18n.global.t("hotel.title")])}}</text>
+					>{{i18n.global.t("common.btn_txt_create",[i18n.global.t("hotel.title")])}}</text>
 
 
 			</view>

@@ -12,10 +12,10 @@
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn">
+			<view class="navbar-btn" @click="addOrder">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
-				<text class="txt" @click="addOrder">{{ i18n.global.t('order.title_order') }}</text>
+				<text class="txt" >{{ i18n.global.t('order.title_order') }}</text>
 
 			</view>
 		</template>

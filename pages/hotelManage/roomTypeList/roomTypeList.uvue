@@ -13,10 +13,10 @@
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn">
+			<view class="navbar-btn" @click="addRoomType">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
-				<text class="txt" @click="addRoomType">{{i18n.global.t("hotel.title_room_type")}}</text>
+				<text class="txt" >{{i18n.global.t("hotel.title_room_type")}}</text>
 
 
 			</view>

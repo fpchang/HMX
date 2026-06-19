@@ -13,10 +13,10 @@
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn" v-if="permissionList.includes('EMPLOYEE_CREATE')">
+			<view class="navbar-btn" @click="addEmployee" v-if="permissionList.includes('EMPLOYEE_CREATE')">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
-				<text class="txt" @click="addEmployee">{{i18n.global.t("hotel.title_employee")}}</text>
+				<text class="txt" >{{i18n.global.t("hotel.title_employee")}}</text>
 
 
 			</view>

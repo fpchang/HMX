@@ -25,12 +25,12 @@
 		
 	</scroll-view>
 	<view v-if="!dataReading" style="margin-top:168px;display: flex;flex-direction: row;justify-content: center;">
-		<rice-loading color="#787878" text="加载中…" />
+		<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
 	</view>
-	<view style="margin-top: 168px;" v-if="dataReading&&hotel_id==''">
-		<l-empty description="没有酒店" />
+	<view style="margin-top: 68px;" v-if="dataReading&&hotel_id==''">
+		<l-empty :description="i18n.global.t('common.noData',[i18n.global.t('hotel.title')])" />
 		<view style="display: flex;flex-direction: row;align-items: center;justify-content: center;">
-			<rice-button type="primary" icon="plus" text="创建酒店" @click="createHotel"></rice-button>
+			<rice-button type="primary" icon="plus" :text="i18n.global.t('common.btn_txt_create',[i18n.global.t('hotel.title')])" @click="createHotel"></rice-button>
 		</view>
 	</view>
 
@@ -70,10 +70,10 @@
 						<rice-icon name="bars" size="32px" color="#007AFF"></rice-icon>
 					</view>
 					<view class="title">
-						<text class="txt">酒店列表</text>
+						<text class="txt">{{i18n.global.t('hotel.hotel_list')}}</text>
 					</view>
 					<navigator url="/pages/hotelManage/hotelList/hotelList" hover-class="none">
-						<view class="btn"><text class="txt">管理</text></view>
+						<view class="btn"><text class="txt">{{i18n.global.t('hotel.btn_txt_manage')}}</text></view>
 					</navigator>
 				</view>
 				<scroll-view style="background:#fff;height:500px">
@@ -126,6 +126,7 @@
 	import { comFunction } from "./ComFuc.uts";
 	import { userBean } from "@/bean/userBean";
 	import { hotelBean } from "@/bean/hotelBean";
+	import i18n from '@/i18n/index.uts';
 	const submitLoading = ref(false);
 	const showRange = ref(false);
 	const showPopup = ref(false);
@@ -180,17 +181,6 @@
 			url: "/pages/hotelManage/createHotel/createHotel"
 		})
 	}
-	// onLoad(async ():Promise<void>=>{
-	//  await comFunction.init();
-	//  dataReading.value=true;
-	// })
-	// onBeforeMount(async ()=>{
-	//  console.log("index onBeforeMound");
-	//     comFunction.init();
-	//    dataReading.value=true;
-	//    //return Promise.resolve({aa:111});
-	// })
-
 	const init = async () => {
 		//comFunction.loadStorage();
 		submitLoading.value=true;
@@ -208,7 +198,19 @@
 		refreshState.value = false;
 
 	}
-	init();
+	
+	// 动态设置 tabbar 文字
+	 const setTabBarI18n=()=> {
+	   uni.setTabBarItem({ index: 0, text: i18n.global.t('tab.home') });
+	  uni.setTabBarItem({ index: 1, text: i18n.global.t('tab.roomStatus') });
+	  uni.setTabBarItem({ index: 2, text: i18n.global.t('tab.finance') });
+	  uni.setTabBarItem({ index: 3, text: i18n.global.t('tab.function') });
+	  uni.setTabBarItem({ index: 4, text: i18n.global.t('tab.mine') });
+	}
+	onLoad(() => {
+		init();
+	  setTabBarI18n()
+	})	
 </script>
 
 <style lang="scss">

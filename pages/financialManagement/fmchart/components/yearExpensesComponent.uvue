@@ -2,11 +2,11 @@
 	<view>
 		<view class="chart-container" id="incomePieChart">
 			<view class="title-area">
-				<text class="chart-subtitle">当年支出</text>
+				<text class="chart-subtitle">{{i18n.global.t("finance.annual_expense")}}</text>
 				<view>
 			
 					<view class="select" @click="showDatePicker=!showDatePicker">
-						<text class="txt">{{year}}年</text>
+						<text class="txt">{{year}}</text>
 						<image src="/static/images/arrow.png" style="width: 16px;height: 16px;"></image>
 					</view>
 				</view>
@@ -22,7 +22,8 @@
 	import { state } from '@/store/store.uts';
 	import { charPietItem } from "@/bean/chartBean.uts";
 	import { userBean } from "@/bean/userBean";
-	import {DateTimePickerExtend } from "@/uni_modules/rice-ui"
+	import {DateTimePickerExtend } from "@/uni_modules/rice-ui";
+	import i18n from '@/i18n/index.uts';
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});

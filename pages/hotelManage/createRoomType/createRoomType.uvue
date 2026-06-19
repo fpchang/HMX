@@ -1,21 +1,23 @@
 <template>
 	<rice-navbar title="" border>
 		<template #left>
-			<view style="display: flex;flex-direction: row;">
+			<view style="display: flex;flex-direction: row;align-items: center;">
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
 
 				<image  :src="titleImg"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
 			</view>
 		</template>
 		<template #right>
+		
 			<view class="navbar-btn" v-if="pageType!=2">
-
-				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
-					textColor="#007aff" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+				<rice-button @click="submitForm" type="default" size="mini" :text="i18n.global.t('common.btn_txt_save',[''])" color="rgba(0,0,0,0)"
+					textColor="#007aff" textSize="14px" :loadingText="i18n.global.t('common.saving')" :loading="submitLoading">
+				</rice-button>
+			
 			</view>
 		</template>
 	</rice-navbar>
@@ -23,23 +25,23 @@
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
-			<xt-form-item label="房型名称" tips="" required>
+			<xt-form-item :label="i18n.global.t('hotel.form.room_type_name')" tips="" required>
 				<view>
-					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入酒店名称"
+					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('hotel.form.path_room_type_name')"
 						borderColor="#dcdfe6" :disabled="pageType==2" v-model="roomTypeForm.name"></rice-input>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="面积" tips="" required>
+			<xt-form-item :label="i18n.global.t('hotel.form.area')" tips="" required>
 				<view>
 					<rice-stepper v-model="roomTypeForm.area" input-width="42" button-size="38" font-size="15" :min="5" :auto-fixed ="false" :disabled="pageType==2" integer/>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="入住人数" required>
+			<xt-form-item :label="i18n.global.t('hotel.form.max_guests')" required>
 				<view>
 					<rice-stepper v-model="roomTypeForm.guestNumber" input-width="42" button-size="38" font-size="15" :min="1" :auto-fixed ="false" :disabled="pageType==2" integer/>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="床位" tips="" required>
+			<xt-form-item :label="i18n.global.t('hotel.form.bed_configuration')" tips="" required>
 
 				<view class="checkbox-group">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
@@ -55,12 +57,13 @@
 				</view>
 				<!-- </rice-checkbox-group> -->
 			</xt-form-item>
-			<xt-form-item label="价格" tips="" required>
-				<!-- <rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入价格"
-					borderColor="#dcdfe6" :disabled="pageType==2" type="number" v-model="roomTypeForm.priceBase"></rice-input> -->
-				<rice-stepper v-model="roomTypeForm.priceBase" input-width="150" button-size="38" font-size="15" :auto-fixed ="false" :disabled="pageType==2" />
+			<xt-form-item :label="i18n.global.t('hotel.form.room_price')" tips="" required>
+				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入价格"
+					borderColor="#dcdfe6" :disabled="pageType==2" type="digit" v-model="priceBase"></rice-input>
+				<!-- <rice-stepper v-model="roomTypeForm.priceBase" input-width="150" button-size="38" font-size="15" :auto-fixed ="false" :disabled="pageType==2" />
+			 -->
 			</xt-form-item>
-			<xt-form-item label="屋内设施" tips="" required>
+			<xt-form-item :label="i18n.global.t('hotel.form.facilities_amenities')" tips="" required>
 
 				<rice-checkbox-group @change="recreationCheckboxChange" direction="row" v-model="roomTypeForm.facility">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
@@ -70,14 +73,14 @@
 				</rice-checkbox-group>
 			</xt-form-item>
 
-			<xt-form-item label="封面图片" tips="" required>
+			<xt-form-item :label="i18n.global.t('hotel.form.cover_image')" tips="" required>
 				<view>
 					<xt-file-upload :max-count="1" :filePath="`HM/client/${hotel_id}/roomType`"
 						:default_files_list="[roomTypeForm.firstImages]" @uploadSuccess="uploadFirstImageSuccess"
 						accept="image" :readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="房型图片" tips="" required>
+			<xt-form-item :label="i18n.global.t('hotel.form.room_type_images')" tips="" required>
 				<view>
 					<xt-file-upload :max-count="3" :default_files_list="roomTypeForm.imagesList"
 						@uploadSuccess="uploadImageListSuccess" :filePath="`HM/client/${hotel_id}/roomType`"
@@ -101,6 +104,7 @@
 	import { validRoomTypeForm } from "./roomTypeFormVaild.uts";
 	import {userBean} from "@/bean/userBean";
 	import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
+	import i18n from '@/i18n/index.uts';
 	type bedType = {
 		name : string,
 		checked : boolean,
@@ -109,9 +113,11 @@
 	const pageType = ref(0);
 	const title = computed(() => {
 		if (pageType.value == 0) {
-			return '创建房型';
-		}
-		return pageType.value == 1 ? '修改房型信息' : '房型信息';
+					return i18n.global.t("common.btn_txt_create", [i18n.global.t('hotel.title_room_type')]);
+				}
+				const modify_title = i18n.global.t("common.btn_txt_modify", [i18n.global.t('hotel.title_room_type')]);
+				const detail_title = i18n.global.t("common.btn_txt_eetails", [i18n.global.t('hotel.title_room_type')]);
+				return pageType.value == 1 ? modify_title : detail_title;
 	})
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
@@ -137,6 +143,8 @@
 			return { name: item.name, count: item.count } as bedBean;
 		})
 	})
+	const priceBase=ref("");
+
 	let roomTypeForm = ref<roomTypeBean>({
 		_id:"",
 		hotel_id: hotel_id.value,
@@ -152,6 +160,9 @@
 		roomList: [],
 		independentBathroom: true
 	});
+	watch(priceBase,(val:string)=>{
+		roomTypeForm.value.priceBase=parseFloat(val);
+	})
 	const titleImg=computed<string>(()=>{
 		if(pageType.value==0){
 			return "/static/icons/addpage.png"
@@ -165,17 +176,23 @@
 	const addRoomType = async () => {
 		submitLoading.value = true;
 		try {
-			await roomTypeService.addRoomType(roomTypeForm.value);
-			await comFunction.getRoomTypeList(hotel_id.value);
-			submitLoading.value = false;
-			uni.navigateBack();
-			uni.showToast({
-				title: "房型添加成功",
-				icon: "none"
-			});
+			const flag = await roomTypeService.addRoomType(roomTypeForm.value);
+			if(flag){
+				await comFunction.getRoomTypeList(hotel_id.value);
+				submitLoading.value = false;
+				uni.navigateBack({success(){
+					uni.showToast({
+						title:i18n.global.t('common.add_success'),
+						icon: "none"
+					});
+				}});
+				
+			}
+			
 		} catch (error) {
+			submitLoading.value = false;
 			uni.showToast({
-							title: "添加失败",
+							title: i18n.global.t('common.add_fail'),
 							icon: "none"
 						});
 		}
@@ -185,10 +202,13 @@
 		submitLoading.value = true;
 		//	const id = roomTypeForm.value._id._value as string;
 		//roomTypeForm.value._id=roomType_id.value;
-		await roomTypeService.updateRoomType(edit_roomType_id.value, roomTypeForm.value);
-		await comFunction.getRoomTypeList(hotel_id.value);
-		submitLoading.value = false;
-		uni.navigateBack();
+		const flag = await roomTypeService.updateRoomType(roomTypeForm.value);
+		if(flag){
+			await comFunction.getRoomTypeList(hotel_id.value);
+			submitLoading.value = false;
+			uni.navigateBack();
+		}
+		
 	}
 	const submitForm = () => {
 		//roomTypeForm.value.hotel_id=hotel_id.value;

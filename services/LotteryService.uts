@@ -1,4 +1,4 @@
-import{DB} from '../api/DB';
+import{DB,dbJQL} from '../api/DB';
 class LotteryClass{
 	
 	constructor(){
@@ -7,7 +7,7 @@ class LotteryClass{
 
 async addKl8(list:Array<UTSJSONObject>): Promise<boolean> {
 	try {
-		await uniCloud.databaseForJQL().collection("lottery-kl8").add(list);
+		await dbJQL.collection("lottery-kl8").add(list);
 		return true;
 	} catch (error) {
 		//TODO handle the exception

@@ -1,7 +1,7 @@
-import { createComposer } from './composer'
-import { error, warn, getAllKeys } from './util'
+// import { createComposer } from './composer'
+import { ComposerClass, createComposer } from './composer-class'
+import { getAllKeys } from './util'
 import { I18nErrorCodes } from './errors'
-import { AnyOrNull, NumberOrNull, StringOrNull, Composer } from './types'
 type I18nMode = "legacy" | "composition"
 
 // #ifndef APP
@@ -10,16 +10,16 @@ type VuePlugin = any
 
 let lime_i18n : UvueI18n | null = null
 class UvueI18n {
-	private __global : Composer
+	private __global : ComposerClass
 	private __scope : EffectScope
-	constructor(options : UTSJSONObject = {}, root : Composer | null = null) {
+	constructor(options : UTSJSONObject = {}, root : ComposerClass | null = null) {
 		this.__scope = effectScope()
-		this.__global = this.__scope.run(() : Composer => createComposer(UTSJSONObject.assign({}, options), root))!
+		this.__global = this.__scope.run(() : ComposerClass => createComposer(UTSJSONObject.assign({}, options), root))!
 	}
 	get mode() : I18nMode {
 		return "composition"
 	}
-	get global() : Composer {
+	get global() : ComposerClass {
 		return this.__global
 	}
 	get availableLocales():string[] {
@@ -28,22 +28,22 @@ class UvueI18n {
 	dispose() {
 		this.__scope.stop()
 	}
-	$t(key : string, values : AnyOrNull = null, locale : StringOrNull = null):string {
+	$t(key : string, values : any|null = null, locale : string|null = null):string {
 		const isLocale = typeof values == 'string'
 		const _values = isLocale ? null : values
 		const _locale = isLocale ? values as string : locale
 		return this.global.t(key, _values, _locale)
 	}
-	$tc(key : string, choice : NumberOrNull = null, values : AnyOrNull = null, locale : StringOrNull = null) : string {
+	$tc(key : string, choice : number|null = null, values : any|null = null, locale : string|null = null) : string {
 		const isLocale = typeof values == 'string'
 		const _values = isLocale ? null : values
 		const _locale = isLocale ? values as string : locale
 		return this.global.tc(key, choice, _values, _locale)
 	}
-	$d(date: any, key: StringOrNull = null, locale : StringOrNull = null, options: UTSJSONObject | null = null):string {
+	$d(date: any, key: string|null = null, locale : string|null = null, options: UTSJSONObject | null = null):string {
 		return this.global.d(date, key, locale, options)
 	}
-	$n(number: number, key: StringOrNull = null, locale : AnyOrNull = null, options: UTSJSONObject | null = null):string {
+	$n(number: number, key: string|null = null, locale : any|null = null, options: UTSJSONObject | null = null):string {
 		const _locale = typeof locale == 'string' ? locale as string : null
 		const _options = typeof locale == 'object' && locale != null ? locale as UTSJSONObject : options
 		return this.global.n(number, key, _locale, _options)
@@ -51,22 +51,22 @@ class UvueI18n {
 	get install() : VuePlugin {
 		const _install = (app : VueApp) => {
 			app.config.globalProperties.$i18n = lime_i18n!
-			app.config.globalProperties.$t = function (key : string, values : AnyOrNull = null, locale : StringOrNull = null) : string {
+			app.config.globalProperties.$t = function (key : string, values : any|null = null, locale : string|null = null) : string {
 				const isLocale = typeof values == 'string'
 				const _values = isLocale ? null : values
 				const _locale = isLocale ? values as string : locale
 				return lime_i18n!.global.t(key, _values, _locale)
 			}
-			app.config.globalProperties.$tc = function (key : string, choice : NumberOrNull = null, values : AnyOrNull = null, locale : StringOrNull = null) : string {
+			app.config.globalProperties.$tc = function (key : string, choice : number|null = null, values : any|null = null, locale : string|null = null) : string {
 				const isLocale = typeof values == 'string'
 				const _values = isLocale ? null : values
 				const _locale = isLocale ? values as string : locale
 				return lime_i18n!.global.tc(key, choice, _values, _locale)
 			}
-			app.config.globalProperties.$d = function(date: any, key: StringOrNull = null, locale : StringOrNull = null, options: UTSJSONObject | null = null):string {
+			app.config.globalProperties.$d = function(date: any, key: string|null = null, locale : string|null = null, options: UTSJSONObject | null = null):string {
 				return lime_i18n!.global.d(date, key, locale, options)
 			}
-			app.config.globalProperties.$n = function(number: number, key: StringOrNull = null, locale : AnyOrNull = null, options: UTSJSONObject | null = null):string {
+			app.config.globalProperties.$n = function(number: number, key: string|null = null, locale : any|null = null, options: UTSJSONObject | null = null):string {
 				const _locale = typeof locale == 'string' ? locale as string : null
 				const _options = typeof locale == 'object' && locale != null ? locale as UTSJSONObject : options
 				return lime_i18n!.global.n(number, key, _locale, _options)
@@ -93,7 +93,7 @@ export function createI18n(options : UTSJSONObject = {}) : UvueI18n {
 export function useI18n(options : UTSJSONObject = {}) : UvueI18n {
 	const instance = getCurrentInstance()
 	if (instance == null) {
-		error(I18nErrorCodes.MUST_BE_CALL_SETUP_TOP)
+		console.error(I18nErrorCodes.MUST_BE_CALL_SETUP_TOP)
 	}
 	return new UvueI18n(options, lime_i18n!.global)//.global
 }

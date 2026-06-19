@@ -1,19 +1,23 @@
 	import { roomBean } from "@/bean/roomBean.uts";
+	import i18n from '@/i18n/index.uts';
 export const  validForm = (roomList:Array<roomBean>):boolean=>{
 	let msg ="";
 	roomList.forEach(item=>{
 		if(item.room_name==""){
-			msg="房间名不能为空";
+			//msg="房间名不能为空";
+			msg=i18n.global.t("hotel.form.valid_room_name");
 			return;
 		}
 		if(item.room_type_id==""){
-			msg="请选择房型";
+			//msg="请选择房型";
+			msg=i18n.global.t("hotel.form.valid_room_type");
 			return;
 		}
 		
 	})
 	if(roomList.length<1){
-		msg="至少添加一个房间";
+		//msg="至少添加一个房间";
+		msg=i18n.global.t("hotel.form.valid_room_nums");
 		
 	}
 	if(msg!=""){

@@ -95,3 +95,33 @@ $uni-font-size-paragraph:15px;
 	  	padding-left: 4px;
 	  }
   }
+  
+  .swiper-menu-style{
+  	display: flex;
+  	flex-direction: row;
+  	height: 100%;
+  	.menu-item{
+  		display: flex;
+  		flex-direction: row;
+  		align-items: center;
+  		justify-content: center;
+  		padding:0 8px;
+  		// border-radius: 8px;
+  		.slot-text{
+  			color:#fff;
+  			font-size: 14px;
+  			padding-left: 4px;
+  		}
+  		
+  	}
+	.detail{
+		background-color: #606266;
+	}
+  	.del{
+  		background-color: #F56C6C ;
+  	}
+  	.edit{
+  		background-color: #409EFF ;
+  	}
+  	 
+  }

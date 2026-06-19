@@ -2,8 +2,8 @@
 	"name": "议宿",
 	"appid": "__UNI__6CB5534",
 	"description": "酒店与民宿管理",
-	"versionName": "3.0.2",
-	"versionCode": "302",
+	"versionName": "3.0.3",
+	"versionCode": "303",
 	"uni-app-x": {},
 	/* 快应用特有相关 */
 	"quickapp": {},
@@ -37,6 +37,9 @@
 					"xxhdpi": "",
 					"xxxhdpi": ""
 				}
+			},
+			"modules": {
+				"uni-ad": {}
 			}
 		}
 	},
@@ -48,6 +51,11 @@
 						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
 					},
 					"system": {}
+				},
+				"uni-map": {
+					"tencent": {
+						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+					}
 				}
 			},
 			"icons": {
@@ -115,7 +123,34 @@
 				"tablet"
 			],
 			"bundleName": "ys.hotelsys.fun",
-			"signingConfigs": {}
+			"signingConfigs": {
+				"default": {
+					"certpath": "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1778562532405.cer",
+					"keyAlias": "debugKey",
+					"keyPassword": "0000001B8FB9584A49D836956094DB30B6E3B1E4CFFB74D8996885543C770EF1464429B512693D105B7182",
+					"profile": "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1780405514506.p7b",
+					"signAlg": "SHA256withECDSA",
+					"storeFile": "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1778562532405.p12",
+					"storePassword": "0000001B8FB9584A49D836956094DB30B6E3B1E4CFFB74D8996885543C770EF1464429B512693D105B7182"
+				}
+			},
+			"icons": {
+				"foreground": "static/icons/appicons/1024x1024.png",
+				"background": "static/icons/appicons/1024x1024.png"
+			},
+			"splashScreens": {
+				"startWindowIcon": "static/icons/appicons/1024x1024.png"
+			},
+			"modules": {
+				"uni-location": {
+					"system": {}
+				},
+				"uni-map": {
+					"tencent": {
+						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+					}
+				}
+			}
 		}
 	}
 }

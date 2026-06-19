@@ -1,16 +1,22 @@
 <template>
 	<view class="operation">
-		<l-grid :inset="true">
-			<l-grid-item  v-for="item of menuList" :text="item.label" :image="item.icon" :url="item.url" openType="navigateTo" />
-			
-		</l-grid>
-		<!-- <rice-grid :column-num="4" :border="false">
-		  <rice-grid-item v-for="item of menuList" :key="item.label" :icon="item.icon" text="内容" />
-		</rice-grid> -->
+		<!-- <l-grid :inset="true" bgColor="#ffffff" :column="3">
+			<l-grid-item  v-for="item of menuList" :text="item.label" :image="item.icon" :url="item.url" openType="navigateTo" />			
+		</l-grid> -->
+		<l-space :wrap="true" :size="24">
+			<navigator v-for="item of menuList" :url="item.url">
+			<view  class="menu-item">				
+					<image :src="item.icon" class="img"></image>
+					<text class="txt">{{item.label}}</text>
+				
+			</view>
+			</navigator>
+		</l-space>
 	</view>
 </template>
 
 <script setup>
+	import i18n from '@/i18n/index.uts';
 	type menu = {
 		icon : string,
 		label : string,
@@ -19,29 +25,24 @@
 	}
 	const menuList : Array<menu> = [{
 		icon: "/static/icons/mine/set.png",
-		label: "系统设置",
+		label: i18n.global.t("setcontent.btn_txt_sys_set"),
 		bgColor:"#165dff1a",
 		url: "/pages/set/set"
 	},
 	{
 		icon: "/static/icons/mine/fedback.png",
-		label: "意见反馈",
+		label: i18n.global.t("setcontent.btn_txt_feedback"),
 		bgColor:"#722ed11a",
 		url: "/pages/mine/feedback/feedback"
-	},
-	// {
-	// 	icon: "/static/icons/mine/kf.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
-	// 	label: "客服中心",
-	// 	bgColor:"#faad141a",
-	// 	url: "/pages/order/createOrder/createOrder"
-	// }
+	}
 	]
 </script>
 
 <style lang="scss">
 	.operation{
 		background-color: #fff;
-		border-radius: 8px;
+		border-radius: 14px;
+		padding:24px;
 	}
 	.card {
 		// background-color: #fff;
@@ -63,7 +64,7 @@
 			
 
 			.list-item {
-				width: 85px;
+				width: 95px;
 				height:100px;
 				display: flex;
 				flex-direction: column;
@@ -88,6 +89,21 @@
 					color: #64748b;
 				}
 			}
+		}
+	}
+	.menu-item{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		.img{
+			width: 45px;
+			height: 45px;
+			margin-bottom: 8px;
+		}
+		.txt{
+			font-size: 13px;
+			color: #64748b;
 		}
 	}
 </style>

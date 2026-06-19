@@ -32,7 +32,7 @@
 			"style": {
 				"navigationBarTitleText": "用户协议"
 			}
-		}, 
+		},
 		{
 			"path": "pages/home/home",
 			"style": {
@@ -52,44 +52,39 @@
 			}
 		},
 		{
-			"path" : "pages/order/orderState/orderState",
-			"style" : 
-			{
-				"navigationBarTitleText" : "房态",
+			"path": "pages/order/orderState/orderState",
+			"style": {
+				"navigationBarTitleText": "房态",
 				"navigationStyle": "custom"
 			}
 		},
 		{
-			"path" : "pages/financialManagement/financiaHome/financiaHome",
-			"style" : 
-			{
-				"navigationBarTitleText" : "财务中心",
-				"navigationBarBackgroundColor":"#007aff", //"linear-gradient(135deg, #2563eb, #3b82f6)",
+			"path": "pages/financialManagement/financiaHome/financiaHome",
+			"style": {
+				"navigationBarTitleText": "财务中心",
+				"navigationBarBackgroundColor": "#007aff", //"linear-gradient(135deg, #2563eb, #3b82f6)",
 				"navigationBarTextStyle": "white"
-				
+
 			}
-			
+
 		},
 		{
-			"path" : "pages/homeMenu/homeMenu",
-			"style" : 
-			{
-				"navigationBarTitleText" : "功能"
+			"path": "pages/homeMenu/homeMenu",
+			"style": {
+				"navigationBarTitleText": "功能"
 			}
 		},
 		{
-			"path" : "pages/mine/mine",
-			"style" : 
-			{
-				"navigationBarTitleText" : "",
+			"path": "pages/mine/mine",
+			"style": {
+				"navigationBarTitleText": "",
 				"navigationStyle": "custom"
 			}
 		},
 		{
-			"path" : "pages/order/createOrder/createOrder",
-			"style" : 
-			{
-				"navigationBarTitleText" : "",
+			"path": "pages/order/createOrder/createOrder",
+			"style": {
+				"navigationBarTitleText": "",
 				"navigationStyle": "custom"
 			}
 		},
@@ -201,12 +196,7 @@
 				"navigationStyle": "custom"
 			}
 		},
-		{
-			"path": "pages/lottery/lottery",
-			"style": {
-				"navigationBarTitleText": ""
-			}
-		},
+
 		{
 			"path": "pages/hotelManage/createEmployee/createEmployee",
 			"style": {
@@ -230,12 +220,12 @@
 		{
 			"path": "pages/hotelDisplay/hotelDisplay",
 			"style": {
-				"navigationBarTitleText": "", 
+				"navigationBarTitleText": "",
 				"navigationStyle": "custom",
 				"backgroundColorContent": "#f8f9fa"
 			}
 		},
-	
+
 		{
 			"path": "pages/login/loginapp/loginapp",
 			"style": {
@@ -272,63 +262,125 @@
 			"style": {
 				"navigationBarTitleText": ""
 			}
+		},
+		{
+			"path": "pages/financialManagement/inExManage/inExDetail/inExDetail",
+			"style": {
+				"navigationBarTitleText": "收支详情"
+			}
 		}
-		
+
+		// , {
+		// 	"path": "uni_modules/uni-id-pages-x/pages/login/login",
+		// 	"style": {
+		// 		"enablePullDownRefresh": false,
+		// 		"navigationBarTitleText": "登录账号"
+		// 	}
+		// }, {
+		// 	"path": "uni_modules/uni-id-pages-x/pages/userinfo/userinfo",
+		// 	"style": {
+		// 		"enablePullDownRefresh": false,
+		// 		"navigationBarTitleText": "我的资料"
+		// 	}
+		// }, {
+		// 	"path": "uni_modules/uni-id-pages-x/pages/register/register",
+		// 	"style": {
+		// 		"enablePullDownRefresh": false,
+		// 		"navigationBarTitleText": "注册"
+		// 	}
+		// }, {
+		// 	"path": "uni_modules/uni-id-pages-x/pages/retrieve/retrieve",
+		// 	"style": {
+		// 		"enablePullDownRefresh": false,
+		// 		"navigationBarTitleText": "重置密码"
+		// 	}
+		// }, {
+		// 	"path": "uni_modules/uni-id-pages-x/pages/common/webview/webview",
+		// 	"style": {
+		// 		"enablePullDownRefresh": false,
+		// 		"navigationBarTitleText": ""
+		// 	}
+		// }, {
+		// 	"path": "uni_modules/uni-id-pages-x/pages/userinfo/deactivate/deactivate",
+		// 	"style": {
+		// 		"enablePullDownRefresh": false,
+		// 		"navigationBarTitleText": "注销账号"
+		// 	}
+		// }, {
+		// 	"path": "uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile",
+		// 	"style": {
+		// 		"enablePullDownRefresh": false,
+		// 		"navigationBarTitleText": "绑定手机号码"
+		// 	}
+		// }, {
+		// 	"path": "uni_modules/uni-id-pages-x/pages/userinfo/setNickname/setNickname",
+		// 	"style": {
+		// 		"enablePullDownRefresh": false,
+		// 		"navigationBarTitleText": "设置昵称",
+		// 		"navigationStyle": "custom"
+		// 	}
+		// }, {
+		// 	"path": "uni_modules/uni-id-pages-x/pages/userinfo/realnameAuth/realnameAuth",
+		// 	"style": {
+		// 		"enablePullDownRefresh": false,
+		// 		"navigationBarTitleText": "实名认证"
+		// 	}
+		//}
 	],
 	"globalStyle": {
 		"navigationBarTitleText": "",
 		"navigationBarTextStyle": "black",
 		//*"navigationBarBackgroundColor": "#0765ae",*/
 		"backgroundColor": "#f5f5f7",
-		"backgroundColorContent":"#f5f5f7",
+		"backgroundColorContent": "#f5f5f7",
 		"rpxCalcMaxDeviceWidth": 3000,
 		"rpxCalcBaseDeviceWidth": 1024,
 		"rpxCalcIncludeWidth": 750,
-		 "resizable": true
+		"resizable": true
 	},
 	"tabBar": {
-			"color": "#787878",
-			"selectedColor": "#007aff",
-			"borderStyle": "white",
-			"backgroundColor": "#ffffff",
-			"redDotColor":"#ff0000",
-			"backgroundColor":"#ffffff",
-			//"spacing":"5px",
-			//"fontSize":"12px",
-			"iconWidth":"20px",
-			//"height":"80px",
-			"list": [{
-					"pagePath": "pages/index/index",
-					"iconPath": "/static/icons/tabbar/home-black.png",
-					"selectedIconPath": "/static/icons/tabbar/home-blue.png",
-					"text": "首页"
-				},
-				{
-					"pagePath": "pages/order/orderState/orderState",
-					"iconPath": "/static/icons/tabbar/ft-black.png",
-					"selectedIconPath": "/static/icons/tabbar/ft-blue.png",
-					"text": "房态"
-				},
-				{
-					"pagePath": "pages/financialManagement/financiaHome/financiaHome",
-					"iconPath": "/static/icons/tabbar/fm-black.png",
-					"selectedIconPath": "/static/icons/tabbar/fm-blue.png",
-					"text": "财务"
-				},
-				
-				{
-					"pagePath": "pages/homeMenu/homeMenu",
-					"iconPath": "/static/icons/tabbar/fun-black.png",
-					"selectedIconPath": "/static/icons/tabbar/fun-blue.png",
-					"text": "功能"
-				},
-				{
-					"pagePath": "pages/mine/mine",
-					"iconPath": "/static/icons/tabbar/mine-black.png",
-					"selectedIconPath": "/static/icons/tabbar/mine-blue.png",
-					"text": "我的"
-				}
-			]
-		},
+		"color": "#787878",
+		"selectedColor": "#007aff",
+		"borderStyle": "#EEEEEE ",
+		"backgroundColor": "#ffffff",
+		"redDotColor": "#ff0000",
+		"backgroundColor": "#ffffff",
+		//"spacing":"5px",
+		"fontSize": "10px",
+		"iconWidth": "24px",
+		"height": "60px",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"iconPath": "/static/icons/tabbar/home-black.png",
+				"selectedIconPath": "/static/icons/tabbar/home-blue.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/order/orderState/orderState",
+				"iconPath": "/static/icons/tabbar/ft-black.png",
+				"selectedIconPath": "/static/icons/tabbar/ft-blue.png",
+				"text": "房态"
+			},
+			{
+				"pagePath": "pages/financialManagement/financiaHome/financiaHome",
+				"iconPath": "/static/icons/tabbar/fm-black.png",
+				"selectedIconPath": "/static/icons/tabbar/fm-blue.png",
+				"text": "财务"
+			},
+
+			{
+				"pagePath": "pages/homeMenu/homeMenu",
+				"iconPath": "/static/icons/tabbar/fun-black.png",
+				"selectedIconPath": "/static/icons/tabbar/fun-blue.png",
+				"text": "功能"
+			},
+			{
+				"pagePath": "pages/mine/mine",
+				"iconPath": "/static/icons/tabbar/mine-black.png",
+				"selectedIconPath": "/static/icons/tabbar/mine-blue.png",
+				"text": "我的"
+			}
+		]
+	},
 	"uniIdRouter": {}
 }

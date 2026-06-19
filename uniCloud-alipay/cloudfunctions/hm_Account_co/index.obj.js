@@ -1,5 +1,6 @@
 // 云对象教程: https://uniapp.dcloud.net.cn/uniCloud/cloud-obj
 // jsdoc语法提示教程：https://ask.dcloud.net.cn/docs/#//ask.dcloud.net.cn/article/129
+const i18n = require('./i18n');
 const tokenEvent = require('tokenEvent');
 const {
 	RegisterClass
@@ -12,9 +13,20 @@ const {
 } = require('./login/LoginAction.js');
 module.exports = {
 	_before: function() { // 通用预处理器
-		const methodName = this.getMethodName()
+	const token = this.getUniIdToken()
+	console.log("22222::",token)
+		const methodName = this.getMethodName();
+		//const clientInfo = this.getClientInfo();
+		const {appLanguage} = this.getClientInfo();
+		//zh-Hans
+		console.log("appLanguage:::",appLanguage);
+		// const lang = this.params?.custom?.lang || 'zh'
+		const lang = appLanguage=='zh-Hans'?'zh':'en';
+		    this.t = i18n(lang);
+			console.log("test lanage::",this.t.loginSuccess);
 	},
 	async login(userForm) {
+		
 		let {
 			loginType
 		} = userForm;

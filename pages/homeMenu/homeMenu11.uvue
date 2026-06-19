@@ -1,0 +1,116 @@
+<template>
+  <view class="function-page">
+    <!-- 酒店设置模块 -->
+    <view class="section">
+      <view class="section-title">
+        <uni-icons type="gear-filled" color="#007AFF" size="20"></uni-icons>
+        <text>Hotel Settings</text>
+      </view>
+      <view class="bento-grid">
+        <view class="card card-small" style="background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);">
+          <uni-icons type="home" color="#1976D2" size="28"></uni-icons>
+          <text class="card-text">Room Type Management</text>
+        </view>
+        <view class="card card-small" style="background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);">
+          <uni-icons type="gear" color="#388E3C" size="28"></uni-icons>
+          <text class="card-text">Room Management</text>
+        </view>
+        <view class="card card-small" style="background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);">
+          <uni-icons type="person" color="#F57C00" size="28"></uni-icons>
+          <text class="card-text">Staff Management</text>
+        </view>
+        <view class="card card-large" style="background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%);">
+          <uni-icons type="info" color="#7B1FA2" size="32"></uni-icons>
+          <text class="card-text">Hotel Display</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 财务模块 -->
+    <view class="section">
+      <view class="section-title">
+        <uni-icons type="wallet-filled" color="#4CAF50" size="20"></uni-icons>
+        <text>Finance</text>
+      </view>
+      <view class="bento-grid">
+        <view class="card card-large" style="background: linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 100%);">
+          <uni-icons type="wallet" color="#0097A7" size="32"></uni-icons>
+          <text class="card-text">Income & Expense Management</text>
+        </view>
+        <view class="card card-large" style="background: linear-gradient(135deg, #E0F2F1 0%, #B2DFDB 100%);">
+          <uni-icons type="bars" color="#00796B" size="32"></uni-icons>
+          <text class="card-text">Financial Statistics</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 订单模块 -->
+    <view class="section">
+      <view class="section-title">
+        <uni-icons type="list" color="#FF9800" size="20"></uni-icons>
+        <text>Orders</text>
+      </view>
+      <view class="bento-grid">
+        <view class="card card-large" style="background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);">
+          <uni-icons type="list" color="#F57C00" size="32"></uni-icons>
+          <text class="card-text">Order Management</text>
+        </view>
+        <view class="card card-small" style="background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);">
+          <uni-icons type="plus" color="#D32F2F" size="28"></uni-icons>
+          <text class="card-text">Create Order</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<style scoped>
+.function-page {
+  padding: 16px;
+  background-color: #f5f7fa;
+}
+.section {
+  margin-bottom: 24px;
+}
+.section-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.card {
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+.card:active {
+  transform: scale(0.98);
+}
+.card-small {
+  aspect-ratio: 1;
+}
+.card-large {
+  grid-column: span 1;
+  aspect-ratio: 2 / 1;
+}
+.card-text {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+}
+</style>

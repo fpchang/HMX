@@ -58,27 +58,6 @@ export function getAllKeys(map:Map<string, UTSJSONObject>):string[] {
 	return keys
 }
 
-/**
- * 打印警告信息
- * @param {string} msg - 警告信息
- * @param {Error} err - 可选的错误对象
- */
-export function warn(msg : string, code:number = -1) {
-	if(process.env.NODE_ENV !== 'production') {
-		console.warn(`[uvue-i18n] : ${code!=-1?warnMessages.get(code):msg}`)
-	}
-}
-/** 
- * 打印错误信息
- * @param {string} msg - 错误信息
- * @param {Error} err - 可选的错误对象
- */
-export function error(code: number, msg : string|null = null) {
-	if(process.env.NODE_ENV !== 'production') {
-		console.error(`[uvue-i18n] : ${msg ?? errorMessages.get(code)}`)
-	}
-}
-
 export function isArray(value : any) : boolean {
 	return Array.isArray(value)
 }

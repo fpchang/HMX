@@ -7,13 +7,13 @@
 				</navigator>
 
 				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 18px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
 			</view>
 		</template>
 		<template #right>
 			<view class="navbar-btn" v-if="pageType!=2">
-				<rice-button @click="submitForm" type="default" size="mini" text="保存" color="rgba(0,0,0,0)"
-					textColor="#007aff" textSize="14px" loadingText="正在保存" :loading="submitLoading"></rice-button>
+				<rice-button @click="submitForm" type="default" size="mini" :text="i18n.global.t('common.btn_txt_save',[''])" color="rgba(0,0,0,0)"
+					textColor="#007aff" textSize="14px" :loadingText="i18n.global.t('common.saving')" :loading="submitLoading"></rice-button>
 			</view>
 		</template>
 	</rice-navbar>
@@ -21,7 +21,7 @@
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
-			<xt-form-item label="来源" tips="" required>
+			<xt-form-item :label="i18n.global.t('order.create_order.source')" tips="" required>
 				<rice-radio-group v-model="orderForm.orderSource" direction="row" @change="orderSourceChange">
 					<view style="display: flex;flex-direction: column;width: 100%;">
 						<view v-for="item of source"> <rice-radio :value="item.value" :label="item.text"
@@ -31,7 +31,7 @@
 				</rice-radio-group>
 
 			</xt-form-item>
-			<xt-form-item label="日期" tips="" required>
+			<xt-form-item :label="i18n.global.t('order.create_order.date')" tips="" required>
 				<view class="select">
 					<view class="content" @click="showCalendarEvent">
 						<text class="txt">{{dateRange.join(" ~ ") }}</text>
@@ -40,17 +40,7 @@
 				</view>
 
 			</xt-form-item>
-			<xt-form-item label="房型房间" tips="" required>
-				<!-- <view class="room-list-item" style="display: flex;flex-direction: row;align-items: center;"
-					v-for="room_id of orderForm.reservedRoomList">
-
-					<view class="room-label-container" style="flex: 1">
-						{{formatRoomName(room_id)}}
-					</view>
-					<view class="del-style" @click="deleteRoom(index)" v-if="orderForm.reservedRoomList.length>1">
-						<image src="/static/icons/delete.png" style="width:20px;height:20px"></image>
-					</view>
-				</view> -->
+			<xt-form-item :label="i18n.global.t('order.create_order.room_type_room')" tips="" required>
 				<view class="select-room-style" v-if="!showAddRoom">
 					<view class="room-content">
 						<text class="txt">{{formatRoomList(orderForm.reservedRoomList)}}</text>
@@ -61,34 +51,34 @@
 				</view>
 				<view @click="addNewRoom" class="addNew-btn" v-if="showAddRoom">
 					<rice-icon name="plus" size="16px" color="#007aff" />
-					<text class="txt">选择房间</text>
+					<text class="txt">{{i18n.global.t('order.create_order.select_room')}}</text>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="客户名" tips="" required>
+			<xt-form-item :label="i18n.global.t('order.create_order.customer_name')" tips="" required>
 
-				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服微信"
+				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('order.create_order.please_enter_wechat')"
 					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.userName"></rice-input>
 			</xt-form-item>
-			<xt-form-item label="联系电话" tips="">
-				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入客服电话"
+			<xt-form-item :label="i18n.global.t('order.create_order.contact_phone')" tips="">
+				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('order.create_order.please_enter_phone')"
 					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.phone" :maxlength="11"
 					type="number"></rice-input>
 
 			</xt-form-item>
-			<xt-form-item label="定金" tips="">
+			<xt-form-item :label="i18n.global.t('order.create_order.deposit')" tips="">
 
 				<rice-stepper v-model="orderForm.downPayment" input-width="150" button-size="38" font-size="15"
 					:auto-fixed="false" :disabled="pageType==2" />
 			</xt-form-item>
-			<xt-form-item label="总价" tips="" required>
+			<xt-form-item :label="i18n.global.t('order.create_order.total_price')" tips="" required>
 				<rice-stepper v-model="orderForm.totalAmount" input-width="150" button-size="38" font-size="15"
 					:auto-fixed="false" :disabled="pageType==2" />
 
 			</xt-form-item>
-			<xt-form-item label="备注" tips="">
+			<xt-form-item :label="i18n.global.t('form.remark')" tips="">
 				<view>
 
-					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="请输入备注内容"
+					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('order.create_order.pach_remark')"
 						layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
 						v-model="orderForm.mark"></rice-textarea>
 				</view>
@@ -98,13 +88,13 @@
 	</scroll-view>
 	<!-- #endif -->
 	<rice-calendar v-model:show="showCalendar" mode="range" :min-date="initDateObj.minDate" :date="dateRange"
-		@confirm="rangeConfirm"></rice-calendar>
-	<l-popup v-model="showCheckRoomPanal" position="right" :closeable="true" :safeAreaInsetBottom="true"
+		@confirm="rangeConfirm" :title="i18n.global.t('form.canendar_title')" :show-subtitle="true"></rice-calendar>
+<!-- 	<l-popup v-model="showCheckRoomPanal" position="right" :closeable="true" :safeAreaInsetBottom="true"
 		:safeAreaInsetTop="true" bgColor="#f5f7fa" :preventScrollThrough="true">
 		<view style="width:700rpx;padding:60px 0">
 			<checkRoomComponent></checkRoomComponent>
 		</view>
-	</l-popup>
+	</l-popup> -->
 </template>
 
 <script setup>
@@ -123,6 +113,7 @@
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import checkRoomComponent from "./components/checkRoomComponent.uvue";
 	import { orderState, getGatherEvent } from "@/store/modules/orderStore";
+	import i18n from '@/i18n/index.uts';
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -153,9 +144,9 @@
 	let submitLoading = ref(false);
 	const title = computed(() => {
 		if (pageType.value == 0) {
-			return '添加订单';
+			return i18n.global.t('order.create_order.addOrder');
 		}
-		return pageType.value == 1 ? '修改订单信息' : '订单信息';
+		return pageType.value == 1 ? i18n.global.t('order.create_order.edit_order_info') : i18n.global.t('order.create_order.order_info');
 	});
 	const titleImg = computed<string>(() => {
 		if (pageType.value == 0) {
@@ -228,7 +219,7 @@
 			source.value = list;
 		} catch (error) {
 			uni.showToast({
-				title: "获取订单来源失败",
+				title: i18n.global.t('order.create_order.get_order_source_fail'),
 				icon: "none"
 			})
 		}
@@ -256,25 +247,31 @@
 		if(submitLoading.value==true){
 			return;
 		}
-		let flag : boolean = validForm(orderForm.value)
+		submitLoading.value=true;
+		let flag : boolean = validForm(orderForm.value);
 		if (flag == false) {
+			submitLoading.value=false;
 			return;
 		}
-		submitLoading.value=true;
+		
 		try {
-			await OrderService.addOrder(orderForm.value);
-			uni.$emit("refrushOrderList");
-			getGatherEvent(hotel_id.value);//nm==刷新首页
-			uni.navigateBack();
-			submitLoading.value = false;
-			uni.showToast({
-				title: "添加成功",
-				icon: "none"
-			});
+			const flag = await OrderService.addOrder(orderForm.value);
+			if(flag){
+				uni.$emit("refrushOrderList");
+				getGatherEvent(hotel_id.value);//nm==刷新首页
+				uni.navigateBack();
+				submitLoading.value = false;
+				uni.showToast({
+					title: i18n.global.t('common.add_success'),
+					icon: "none"
+				});
+			}
+			
 		} catch (error) {
+			console.log("99001021")
 			submitLoading.value = false;
 			uni.showToast({
-				title: "添加订单失败",
+				title: i18n.global.t('common.add_fail'),
 				icon: "none"
 			});
 		}

@@ -3,13 +3,13 @@
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<rice-cell-group border>
-			<rice-cell title="用户名" :value="user.userName" />
-			<rice-cell title="账号" :value="user.account" />
-			<rice-cell title="手机号" :value="emergency_phone_number((user.phone ?? '') as string)" />
-			<rice-cell title="邮箱" :value="user.email" />
-			<rice-cell title="修改密码" arrow @click="updatePassword" />
-			<rice-cell v-if="accountIsValid==true" title="账号注销" :arrow="true" @click="closeAccount" />
-			<rice-cell v-if="accountIsValid==false" title="账号恢复" :label="closeDateStr" :arrow="true"
+			<rice-cell :title="i18n.global.t('form.userName')" :value="user.userName" />
+			<rice-cell :title="i18n.global.t('form.account')" :value="user.account" />
+			<rice-cell :title="i18n.global.t('form.phone')" :value="emergency_phone_number((user.phone ?? '') as string)" />
+			<rice-cell :title="i18n.global.t('form.email')" :value="user.email" />
+			<rice-cell :title="i18n.global.t('form.btn_change_password')" arrow @click="updatePassword" />
+			<rice-cell v-if="accountIsValid==true" :title="i18n.global.t('form.accountCancel')" :arrow="true" @click="closeAccount" />
+			<rice-cell v-if="accountIsValid==false" :title="i18n.global.t('form.accountRecover')" :label="closeDateStr" :arrow="true"
 				@click="recoverAccount" />
 		</rice-cell-group>
 	<!-- #ifdef APP -->
@@ -26,6 +26,7 @@
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
+	import i18n from '@/i18n/index.uts';
 	const user = computed<userBean>(() => {
 		return state.user;
 	});
@@ -43,32 +44,35 @@
 		return "";
 	})
 	const updatePassword=async ()=>{
-		if(user.value.account===""){
-			uni.showToast({
-				title:"无账号信息，请先设置账号",
-				icon:"none"
-			});
-			return;
-		}
+		// if(user.value.account===""){
+		// 	uni.showToast({
+		// 		title:"无账号信息，请先设置账号",
+		// 		icon:"none"
+		// 	});
+		// 	return;
+		// }
 		uni.navigateTo({
 			url:"/pages/set/updatePassword/updatePassword"
 		})
 	}
 	const closeAccount = () => {
 		showDialog({
-			title: '确认注销',
-			message: "注销后7天内可恢复，超过7天将失去账号数据",
+			title:i18n.global.t("common.confirmCancelAccount"),
+			message:i18n.global.t("common.cancelTip"),
 			beforeClose: async () : Promise<boolean> => {
 				try {
-					const phone = user.value.phone;
-					const res = await HotelService.getHotelListOfUser(phone);
-					const list = res['data'] as UTSJSONObject[];
-					if (list != null && list.length > 0) {
-						uni.showToast({ title: "当前用户名下有关联酒店", icon: "none" });
-						return true;
+					// const phone = user.value.phone;
+					// const res = await HotelService.getHotelListOfUser(phone);
+					// const list = res['data'] as UTSJSONObject[];
+					// if (list != null && list.length > 0) {
+					// 	uni.showToast({ title: "当前用户名下有关联酒店", icon: "none" });
+					// 	return true;
+					// }
+					const flag = await AccountService.closeAccount();
+					if(flag){
+						loginOut();
+						
 					}
-					await AccountService.closeAccount();
-					loginOut();
 					return true;
 
 				} catch (e) {

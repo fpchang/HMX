@@ -1,4 +1,8 @@
 <template>
+	<scroll-view  
+		 style="flex:1;background:#f5f5f5;display: flex;flex-direction: column"
+		:show-scrollbar="false">
+		
 	<view style="padding:20px">
 		<view class=" split-item">
 			<navigator url="./editUser/editUser">
@@ -30,9 +34,9 @@
 				<l-empty description="没有数据"/>
 			</view> -->
 			<view class="title">
-				<text class="txt">当前酒店</text>
+				<text class="txt">{{i18n.global.t("hotel.current_hotel")}}</text>
 				<navigator url="/pages/hotelManage/hotelList/hotelList">
-					<text class="btn-txt">查看全部</text>
+					<text class="btn-txt">{{i18n.global.t("hotel.btn_txt_view_all")}}</text>
 				</navigator>
 
 			</view>
@@ -58,30 +62,23 @@
 							</view>
 						</view>
 						<view class="state">
-							<text class="txt">正常运营</text>
+							<text class="txt">{{i18n.global.t('hotel.normal_operation')}}</text>
 						</view>
 					</view>
 				</block>
 				<view v-if="hotel_id==''">
-					<l-empty description="没有数据" />
+					<l-empty :description="i18n.global.t('common.noData',[''])" />
 				</view>
 			</view>
 		</view>
 
 		<!-- 2. 当前酒店区域 -->
 		<view class="split-item">
-			<!-- 	<rice-cell-group border>
-				<rice-cell icon="set-fill" title="设置" url="/pages/set/set" :arrow="true" />
-				<rice-cell icon="chat-fill" title="意见反馈" url="/pages/mine/feedback/feedback" :arrow="true" />
-			</rice-cell-group> -->
-			<!-- <view class="title">
-				<text class="txt">当前酒店</text>			
-			</view> -->
 			<operation></operation>
 		</view>
 
 	</view>
-
+</scroll-view>
 </template>
 
 <script setup lang="uts">
@@ -90,6 +87,7 @@
 	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
 	import { userBean } from "@/bean/userBean";
 	import { hotelBean } from "@/bean/hotelBean.uts";
+	import i18n from '@/i18n/index.uts';
 	const user = computed<userBean>(() => {
 		return state.user;
 	});
@@ -168,7 +166,7 @@
 
 		.card {
 			background-color: #fff;
-			border-radius: 12px;
+			border-radius: 14px;
 			margin-bottom: 32px;
 
 			.img-area {
@@ -233,7 +231,7 @@
 		padding: 20px 15px;
 		box-sizing: border-box;
 		margin-top: 40px;
-		border-radius: 12px;
+		border-radius: 14px;
 
 
 	}

@@ -1,5 +1,6 @@
 <template>
 	<scroll-view class="indexAdvise-page" :refresher-enabled="false" v-if="isReading" :show-scrollbar="false">
+		<!-- <rice-button text="测试" @click=test()></rice-button> -->
 		<view class="hotel-container">
 			<!-- 顶部渐变标题栏 -->
 			<view class="top-banner">
@@ -67,22 +68,39 @@
 	import { HotelService } from "../../services/HotelService.uts";
 	import { loginEvent, loginOut } from "@/store/store.uts";
 	import i18n from '@/i18n/index.uts';
+	//import {cloudApi} from "@/api/cloudApi.uts";
 	const title2 = i18n.global.t('title');
 	let isReading = ref(false);
 	let refresher_triggered = ref(false);
 	let submitLoading = ref(false);
 	let agreeGetPhone = ref(false);
 	let showPopu = ref(false);
+	
+	import { setToken } from "@/store/store.uts";
+	import {getParamsObject} from "@/api/cloudApi.uts"
+	const test=()=>{
+		console.log("111",getParamsObject({}));
+		setToken("AAAAA");
+		console.log("2222",getParamsObject({}));
+	}
+	
 	const accessin = () => {
 		uni.reLaunch({
 			url: "/pages/index/index",
 		});
+		// uni.reLaunch({
+		// 	url: "/uni_modules/uni-id-pages-x/pages/login/login?type=username"
+		// });
 	};
 	const popup_confirm = ref(null);
 	const toLogin = () => {
+		//i18n.global.locale.value = i18n.global.locale.value == 'zh-CN' ? 'en-US' : 'zh-CN';
 		uni.navigateTo({
 			url: "/pages/login/login",
 		});
+		// uni.navigateTo({
+		// 	url: "/uni_modules/uni-id-pages-x/pages/login/login?type=username"
+		// });
 	};
 	const toLoginEvent = () => {
 		toLogin();
@@ -102,7 +120,13 @@
 		}
 		showPopu.value = false;
 	};
-	const funcList = [
+	type funType={
+		title:string,
+		img:string,
+		info:string
+	}
+	const funcList = computed<Array<funType>>(()=>{
+		const list:Array<funType>= [
 		{
 			title: i18n.global.t('indexAdvise.coreFunction.orderManage'),
 			img: "/static/icons/homemenu/order1.png",
@@ -130,6 +154,8 @@
 			info: i18n.global.t('indexAdvise.coreFunction.hotelDisplay_content'),
 		}
 	];
+	return list;
+	}) 
 	const navTopHeight = computed(() => {
 		// #ifdef MP-WEIXIN
 		return "100px";
@@ -146,29 +172,26 @@
 		}, 1000);
 	};
 	const initData = (async () => {
-		const action = uniCloud.importObject("hm_action_co");
-		console.log(action);
-		//const htlist = await action.hotel_getList();
-		// const orlist = await action.order_getList();
-		// console.log("11111",orlist)
 		try {
 			console.log("验证token");
-			const res = await loginEvent();;
-			console.log("验证token结果", res);
-			accessin();
+			const flag = await loginEvent() as boolean;
+			if(flag){				
+				accessin();				
+			}else{
+				isReading.value = true;
+			}
+			
 		} catch (error) {
 			console.log("err", error);
 
 			isReading.value = true;
-		}
+		}		
 	});
 	onLoad(() => {
 		initData();
-
 	})
 	onMounted(() => {
 	});
-
 
 </script>
 

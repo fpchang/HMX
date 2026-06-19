@@ -109,7 +109,7 @@
 						          position: 'center',
 						          formatter: [
 						            `{title|${i18n.global.t("finance.total_income")}}`,
-						            `{value|${total}}`
+						            `{value|￥${total}}`
 						          ].join('\n'),
 						          rich: {
 						            title: {

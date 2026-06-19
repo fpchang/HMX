@@ -1,20 +1,56 @@
 <script lang="uts">
-	
-  // #ifdef APP-ANDROID || APP-HARMONY
+	//import uniIdPageInit from '@/uni_modules/uni-id-pages-x/init.uts';
+	import {action_co} from "@/api/cloudApi.uts";
+	import { setToken } from "@/store/store.uts";
+	import i18n from '@/i18n/index.uts';
+	// #ifdef APP-ANDROID || APP-HARMONY
 	let firstBackTime = 0
-  // #endif
+	// #endif
+	const setLanuage = () => {
+		const sys = uni.getSystemInfoSync();
+		console.log('sys', sys);
+		const osLanguage = sys.osLanguage;
+		let local = 'zh-CN';
+		console.log(osLanguage != null)
+		if (osLanguage != null && !osLanguage.includes('zh-')) {
+			local = 'en-US';
+		}
+		i18n.global.locale.value = local;
+	}
+	const setTokenEvent = () => {
+		const token = uni.getStorageSync("hm_token") as string;
+		if(token !=null && token !=""){
+			setToken(token);
+		}
+		
+	}
+	const start=()=>{
+		 setTimeout(() => {
+		    try {
+		      // 调用云对象空/轻量方法，触发云端实例常驻，消除首次接口冷启动
+		       action_co.preHeat()
+		    } catch(e) {
+		      // 预热失败不影响业务，静默捕获
+		      console.log('云对象预热静默失败', e)
+		    }
+		  }, 0)
+	}
 	export default {
 		onLaunch: function () {
-			console.log('App Launch')
+					
+			start();
+			setLanuage();
 			//#ifdef APP-ANDROID
 			const showMoreMessage = uni.getStorageSync("showMoreMessage");
-			if(showMoreMessage!="0"){
+			if (showMoreMessage != "0") {
 				uni.openDialogPage({
-					url:"/pages/common/androidPrivacy/androidPrivacy",animationType:'none'
+					url: "/pages/common/androidPrivacy/androidPrivacy", animationType: 'none'
 				});
 			}
 			//#endif
-								
+	
+			setTokenEvent();
+			// uniIdPageInit();
 		},
 		onShow: function () {
 			console.log('App Show')
@@ -48,6 +84,7 @@
 
 <style>
 	@import "@/uni_modules/rice-ui/libs/style/index.css";
+
 	/*每个页面公共css */
 	.uni-row {
 		flex-direction: row;

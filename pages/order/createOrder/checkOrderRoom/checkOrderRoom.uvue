@@ -1,7 +1,7 @@
 <template>
 	<view class="checkRoom" v-if="remainRoomTypeList.length>0&&!submitLoading">
 		<view class="tab-container">
-			<rice-tabs v-model="activeIndex" :list="menuList" @clickTab="tabClick" line-width="70%" s></rice-tabs>
+			<rice-tabs v-model="activeIndex" :list="menuList" @clickTab="tabClick" line-width="70%"></rice-tabs>
 		</view>
 		<scroll-view style="flex:1">
 			<rice-checkbox-group v-model="checkVal" @change="onGroupChange">
@@ -111,7 +111,7 @@
 	})
 	const menuList = computed<TabsOptions[]>(() => {
 		let list : TabsOptions[] = [];
-		if (checkVal.value.length > 0) {
+		if (remainRoomTypeList.value.length > 0) {
 			list.push({
 				name: i18n.global.t("order.all_roomType"),
 				value: 'all',
@@ -242,7 +242,7 @@
 		flex-direction: column;
 
 		.tab-container {
-			margin: 0 16px;
+			// margin: 0 16px;
 			padding: 8px 0;
 			background-color: #fff;
 			border-radius: 8px;
@@ -251,7 +251,7 @@
 
 	.roomType-container {
 		padding: 16px;
-
+		box-sizing:border-box;
 		.rt-title {
 			display: flex;
 			flex-direction: row;
@@ -271,8 +271,9 @@
 			flex-wrap: wrap;
 
 			.card-list-item {
-				min-width: 360px;
+				min-width: 320px;
 				padding: 15px 0;
+				box-sizing: border-box;
 				flex: 1;
 
 				.card {

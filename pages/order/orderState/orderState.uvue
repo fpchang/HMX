@@ -10,10 +10,10 @@
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn">
-				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
+			<view class="navbar-btn" @click="orderManage">
+				<image src="/static/icons/list.png" style="width:18px;height: 18px;"></image>
 
-				<text class="txt" @click="orderManage">{{i18n.global.t("order.orderManage")}}</text>
+				<text class="txt" >{{i18n.global.t("order.orderManage")}}</text>
 
 
 			</view>
@@ -223,7 +223,7 @@
 			let obj = roomTypeList.value.find(item => item._id == room_type_id) as roomTypeBean;
 			return obj.name??"-";
 	}
-	const getRemainRoomCountByDate=(time:Number)=> {
+	const getRemainRoomCountByDate=(time:number)=> {
 	  let count = 0;
 	  for (let item of checkInOrderList.value) {
 	    let s1 =

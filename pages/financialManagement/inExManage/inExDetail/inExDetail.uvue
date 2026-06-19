@@ -1,178 +1,239 @@
 <template>
-	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
-	<!-- #endif -->
-		<view class="detail_panal">
-				<view class="content">
-					<view class="card-item">
-						<view class="fl-c">
-							<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
-							<text class="label">{{i18n.global.t("finance.transaction_date")}}：</text>
-						</view>
-						<text class="val-style">{{formatDate( fm.ioeTime)}}</text>
+	<view style="padding: 14px;display: flex;flex-direction:row;justify-content: center;" v-if="fm!=null">
+		<view style="background-color: #fff;border-radius: 14px;padding:24px 14px;max-width: 500px;flex:1"> 
+			<rice-cell-group >
+			  <rice-cell icon="/static/icons/fm/time.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.transaction_date')" :value="formatDate(fm?.ioeTime)" />
+			  <rice-cell icon="/static/icons/fm/sztype.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.voucher_Type')" :value="formatTypeName( fm?.type)" />
+			  <rice-cell v-if=" fm?.billType=='income'" icon="/static/icons/fm/income.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.income')" :value="fm?.amount" />
+			  <rice-cell v-if=" fm?.billType=='expenses'" icon="/static/icons/fm/expenses.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('finance.expense')" :value="fm?.amount" />
+			  <rice-cell icon="/static/icons/fm/mark.png" :title-style="{'paddingLeft':'4px'}" center :title="i18n.global.t('form.remark')" :value="fm?.mark" />
+			
+			</rice-cell-group>
+			
+					<view style="margin-top:20px"> 
+					  <rice-row :gutter="8">
+						   <rice-col :span="10"></rice-col>
+						   
+					    <rice-col :span="6">
+					       <view>
+					       		<rice-button type="primary" size="small"  plain-fill text="修改"></rice-button>
+					       </view>
+					    </rice-col>
+					    <rice-col :span="6">
+					      <view>
+							  <rice-button type="error" size="small" plain-fill text="删除" @click="deleteFm"></rice-button>
+						  </view>
+					    </rice-col>
+					 </rice-row>
 					</view>
-					<view class="card-item">
-						<view class="fl-c">
-							<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
-							<text class="label">{{i18n.global.t("finance.voucher_Type")}}：</text>
-						</view>
-						<text class="val-style">{{formatTypeName( fm.type)}}</text>
-					</view>
-					<view class="card-item" v-if=" fm.billType=='income'">
-						<view class="fl-c">
-							<image src="/static/icons/fm/income.png" style="width: 16px;height: 16px;"></image>
-							<text
-								class="label">{{i18n.global.t("finance.income")}}{{i18n.global.t("finance.amount")}}：</text>
-						</view>
-						<text class="val-style" style="color:#047857">¥{{ fm.amount}}</text>
-					</view>
-					<view class="card-item" v-if=" fm.billType=='expenses'">
-						<view class="fl-c">
-							<image src="/static/icons/fm/expenses.png" style="width: 16px;height: 16px;">
-							</image>
-							<text
-								class="label">{{i18n.global.t("finance.expense")}}{{i18n.global.t("finance.amount")}}：</text>
-						</view>
-						<text class="val-style" style="color:#b91c1c">¥{{ fm.amount}}</text>
-					</view>
-		
-					<view class="card-item" style="margin-bottom: 0;">
-						<view class="fl-c">
-							<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
-							<text class="label">{{i18n.global.t("form.remark")}}：</text>
-						</view>
-						<text class="val-style">
-							{{ fm.mark}}
-						</text>
-					</view>
-				</view>
-		
-				
-			</view>
-		
-	<!-- #ifdef APP -->
+			
+		</view>
+	</view>	
+	
 	</scroll-view>
-	<!-- #endif -->
+
 </template>
 
 <script setup>
-			import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
-			import { dayuts } from '@/uni_modules/lime-dayuts';
-			import { TIME, getMonthDateArray } from "@/static/utils/TIME";
-			import { ActionSheetAction } from "@/uni_modules/rice-ui";
-			import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
-			import { roomTypeBean } from '@/bean/roomTypeBean';
-			import { FMService } from "@/services/FMService";
-			import { roomBean } from '@/bean/roomBean';
-			import { FMBean, FMDataListResult, FMTypeConfigBean } from '@/bean/FMBean';
-			import { state } from "@/store/store";
-			import { fmState } from "@/store/modules/fmStore.uts";
-			import { userBean } from "@/bean/userBean";
-			import i18n from '@/i18n/index.uts';
-		const fm=ref<FMBean | null>(null);
-		const incomeAndExpensesConfigList = ref<Array<FMTypeConfigBean>>([]);
-		const getIncomeAndExpensesConfigList = async () => {
-			const list = await FMService.getIncomeAndExpensesConfig();
-			incomeAndExpensesConfigList.value = list;
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import { TIME, getMonthDateArray } from "@/static/utils/TIME";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { FMService } from "@/services/FMService";
+	import { roomBean } from '@/bean/roomBean';
+	import { FMBean, FMDataListResult, FMTypeConfigBean } from '@/bean/FMBean';
+	import { state } from "@/store/store";
+	import { fmState } from "@/store/modules/fmStore.uts";
+	import { userBean } from "@/bean/userBean";
+	import i18n from '@/i18n/index.uts';
+	
+	let submitLoading = ref(true);
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	})
+	const fm = ref<FMBean | null>(null);
+	const incomeAndExpensesConfigList = computed<Array<FMTypeConfigBean>>(()=>{
+		return fmState.incomeAndExpensesConfig;
+	});
+	const  getfm= async (fm_id:string)=>{
+		await FMService.getFmById(fm_id);
+	}
+	const formatDate = (timestamp : number | null) : string => {
+		if(timestamp==null){
+			return "--";
 		}
-		
-		const formatDate = (timestamp : number) : string => {
-			return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
-		}
-		const formatTypeName = (type : string) : string => {
-			const target = incomeAndExpensesConfigList.value.find(item => item.name == type);
-			if (target != null) {
-				return target.text
-			}
-			return "--"
-		}
-		const init = async () => {
-			//let d:MOONTH_START_END_TIMESTAMP=TIME.getTodayStartTimeAndEndTime(new Date());
-			await getIncomeAndExpensesConfigList();
-		
-		}
-		onLoad(params => {
-			console.log("params",params);
-			try {
-				const fm_t = params.getString("fm");
-		
-				if (fm_t != null) {
-					console.log("2222")
-					let decoded = decodeURIComponent(fm_t);
-					if (decoded != null) {
-						fm.value = JSON.parse<FMBean>(decoded)!;
-						console.log("bbbbbbb", fm.value);
-					}
+		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
+	}
+	const deleteFm=async (fm:FMBean)=>{
+		 if (submitLoading.value == true) {
+		 	return;
+		 }
+		 if (!permissionList.value.includes(
+		 	"ROOMTYPE_DELETE"
+		 )) {
+		 	showDialog({
+		 		title: i18n.global.t('permission.noPermission'),
+		 		message: i18n.global.t('permission.contactAdmin'),
+		 		showCancelButton: false,
+		 		confirm: () => {
+		 			hideDialog();
+		 		}
+		 	})
+		 	return;
+		 }
+		 console.log("delete")
+		 showDialog({
+		 	title: i18n.global.t("common.confirmDelete"),
+		 	message: i18n.global.t("common.deleteOrderTip"),
+		 	cancelButtonText: i18n.global.t("common.btn_txt_cancel"),
+		 	confirmButtonText: i18n.global.t("common.btn_confirm"),
+		 	beforeClose: async () : Promise<boolean> => {
+		 		try {
+		 			await FMService.deleteFm(fm._id);
+					uni.$emit("refrushfmList");
+					uni.navigateBack();
+		 			hideDialog();
+		 			return true;
+		 		} catch (errMsg) {
+		 			uni.showToast({
+		 				title: i18n.global.t("common.delete_fail"),
+		 				icon: "none"
+		 			})
+		 			return false;
+		 		}
+		 
+		 
+		 	},
+		 	confirm: () => {
+		 		console.log("confirm1111111");
+		 		
+		 	}, cancel: () => {
+		 		hideDialog();
+		 	}
+		 
+		 });
+		 
+		 
+	}
+	const editFm=(fm:FMBean)=>{
+		if (!permissionList.value.includes(
+			"ROOMTYPE_UPDATE"
+		)) {
+			showDialog({
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
 				}
-			} catch (e) {
-				console.error(e)
+			})
+			return;
+		}
+
+		uni.navigateTo({
+			url: `/pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense?pageType=1&fm=${encodeURIComponent(JSON.stringify(fm))}`
+		})
+	}
+	const formatTypeName = (type : string | null) : string => {
+		if(type ==null){
+			return "--";
+		}
+		const target = incomeAndExpensesConfigList.value.find(item => item.name == type);
+		if (target != null) {
+			return target.text
+		}
+		return "--"
+	}
+	onLoad(params => {
+		console.log("params", params);
+		try {
+			const fm_t = params.getString("fm");
+
+			if (fm_t != null) {
+				let decoded = decodeURIComponent(fm_t);
+				if (decoded != null) {
+					fm.value = JSON.parse<FMBean>(decoded)!;
+					//getfm(fm.value._id);
+				}
 			}
-		});
-		init();
+		} catch (e) {
+			console.error(e)
+		}
+	});
 </script>
 
 <style lang="scss">
-		.detail_panal {
-			
-			flex:1;
-			background-color: #fff;
-			border-radius: 12px;
-			padding:24px;
-			.content {
-		
-				.card-item {
-		
-					margin-top: 15px;
+	.detail_panal {
+
+		flex: 1;
+		background-color: #fff;
+		border-radius: 12px;
+		padding: 24px;
+
+		.content {
+
+			.card-item {
+
+				margin-top: 15px;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: space-between;
+
+				&:first-child {
+					margin-top: 0;
+				}
+
+				.fl-c {
 					display: flex;
 					flex-direction: row;
 					align-items: center;
-					justify-content: space-between;
-		
-					&:first-child {
-						margin-top: 0;
-					}
-		
-					.fl-c {
-						display: flex;
-						flex-direction: row;
-						align-items: center;
-					}
-		
-					.label {
-						color: #787878;
-						font-size: 13px;
-						padding-left: 8px;
-					}
-		
-					.val-style {
-						color: #787878;
-						font-size: 13px;
-					}
-		
 				}
-			}
-		
-		
-		
-			.control {
-		
-				display: flex;
-				flex-direction: row;
-				justify-content: flex-end;
-				// background-color: #f9fafb;
-				align-items: center;
-		
-		
-				.txt {
-					font-size: 20px;
-					font-weight: 700;
-					color: #f53f3f;
-					padding-top: 5px;
+
+				.label {
+					color: #787878;
+					font-size: 13px;
+					padding-left: 8px;
 				}
-		
-				.txt-in {
-					color: #00b42a;
+
+				.val-style {
+					color: #787878;
+					font-size: 13px;
 				}
+
 			}
 		}
+
+
+
+		.control {
+
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-end;
+			// background-color: #f9fafb;
+			align-items: center;
+
+
+			.txt {
+				font-size: 20px;
+				font-weight: 700;
+				color: #f53f3f;
+				padding-top: 5px;
+			}
+
+			.txt-in {
+				color: #00b42a;
+			}
+		}
+	}
 </style>

@@ -1,16 +1,16 @@
 <template>
-	<view class="page">
+	<view class="verifyAccountComponent">
 		<view class="card">
 			<rice-form :model="userForm" :rules="registerRule" ref="userFormRef" label-width="100px" class="demo-form">
-				<rice-form-item name="account" label-position="top">
-					<rice-input v-model="userForm['account']" :placeholder="i18n.global.t('login.valid_account') " border="none" />
+				<rice-form-item name="account" label-position="top" :border-bottom="false">
+					<rice-input v-model="userForm['account']" :placeholder="i18n.global.t('login.valid_account') " :focus-border="true" />
 				</rice-form-item>
-				<rice-form-item name="password" required label-position="top">
-					<rice-input v-model="userForm['password']" :placeholder="i18n.global.t('login.pach_sms')" border="none" type="password" />
+				<rice-form-item name="password"  label-position="top" :border-bottom="false">
+					<rice-input v-model="userForm['password']" :placeholder="i18n.global.t('login.pach_password')"  type="password"  :focus-border="true"/>
 				</rice-form-item>
-				<rice-form-item name="confirmPassword" required label-position="top">
-					<rice-input v-model="userForm['confirmPassword']" :placeholder="i18n.global.t('register.valid_password_again') " border="none"
-						type="password" />
+				<rice-form-item name="confirmPassword"  label-position="top" :border-bottom="false">
+					<rice-input v-model="userForm['confirmPassword']" :placeholder="i18n.global.t('register.valid_password_again') "
+						type="password"  :focus-border="true"/>
 				</rice-form-item>
 			</rice-form>
 			<view style="margin-top: 24px;">
@@ -81,6 +81,7 @@
 		[
 			"password",
 			[
+				{ required: true, message: i18n.global.t("login.valid_password") },
 				//函数校验
 				{ validator: passwordValidator },
 				//正则校验
@@ -90,6 +91,7 @@
 		[
 			"confirmPassword",
 			[
+				{ required: true, message: i18n.global.t("login.valid_password") },
 				//函数校验
 				{ validator: passwordConfirmValidator },
 				//正则校验
@@ -115,87 +117,71 @@
 
 </script>
 <style scoped lang="scss">
-	.page {
-		flex: 1;
-		// background: linear-gradient(180deg, #f2f5f9 0%, #e6ebf5 100%);
-		padding: 0 16px;
-		box-sizing: border-box;
-	}
-
-	.card {
-		background: #ffffff;
-		padding-top: 60px;
-		border-radius: 20px;
-		padding: 40px 20px;
-		// box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-	}
-
-	.title {
-
-		text-align: center;
-		margin-bottom: 40px;
-
-		.txt {
-			font-size: 32px;
-			font-weight: 600;
+	.verifyAccountComponent {
+		
+		.card {
+		
+		}
+		
+		
+		
+		.input-box {
+			margin-bottom: 20px;
+			border-bottom: 0.5px solid #e5e7eb;
+			background-color: #fff;
+			border-radius: 25px;
+		}
+		
+		.input {
+			height: 50px;
+			padding: 0 16px;
+			font-size: 16px;
 			color: #1d1d1f;
+		}
+		
+		.ph {
+			color: #8e8e93;
+		}
+		
+		.btn-register {
+			margin-top: 35px;
+			width: 100%;
+			height: 50px;
+			line-height: 50px;
+			background: #007aff;
+			color: #fff;
+			border-radius: 25px;
+			font-size: 17px;
+			font-weight: 500;
+			border: none;
+		}
+		
+		.input-row {
+		
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex: 1;
+			flex-direction: row;
+			justify-content: space-between;
+		
+			overflow: hidden;
+		}
+		
+		.btn-code {
+			font-size: 14px;
+			color: #007aff;
+			background: #fff;
+			border: none;
+			outline: none;
+			padding: 0 8px;
+			margin: 0 4px;
+		}
+		
+		.btn-code[disabled] {
+			color: #8e8e93;
 		}
 	}
 
-	.input-box {
-		margin-bottom: 20px;
-		border-bottom: 0.5px solid #e5e7eb;
-		background-color: #fff;
-		border-radius: 25px;
-	}
-
-	.input {
-		height: 50px;
-		padding: 0 16px;
-		font-size: 16px;
-		color: #1d1d1f;
-	}
-
-	.ph {
-		color: #8e8e93;
-	}
-
-	.btn-register {
-		margin-top: 35px;
-		width: 100%;
-		height: 50px;
-		line-height: 50px;
-		background: #007aff;
-		color: #fff;
-		border-radius: 25px;
-		font-size: 17px;
-		font-weight: 500;
-		border: none;
-	}
-
-	.input-row {
-
-		width: 100%;
-		height: 100%;
-		display: flex;
-		flex: 1;
-		flex-direction: row;
-		justify-content: space-between;
-
-		overflow: hidden;
-	}
-
-	.btn-code {
-		font-size: 14px;
-		color: #007aff;
-		background: #fff;
-		border: none;
-		outline: none;
-		padding: 0 8px;
-		margin: 0 4px;
-	}
-
-	.btn-code[disabled] {
-		color: #8e8e93;
-	}
+	
 </style>

@@ -1,26 +1,27 @@
 <template>
 	<view>
 		<rice-form :model="userForm" :rules="rule" ref="userFormRef" label-width="100px" class="demo-form">
-			<rice-form-item name="phone" label-position="top">
-				<view class="input-row" >
-					<view style="flex:1;display: flex;">
-				<rice-input v-model="userForm.phone" :placeholder="i18n.global.t('login.pach_phone')" border="none" :maxlength="11" />
+			<rice-form-item name="phone" label-position="top" :border-bottom="false">
+				
+					<view style="flex:1;overflow: hidden;">
+				<rice-input v-model="userForm.phone" :placeholder="i18n.global.t('login.pach_phone')"  :maxlength="11"  focus-border />
 				</view>
-				</view>
+				
 			</rice-form-item>
-			<rice-form-item name="smsCode"  required  label-position="top">
+			<rice-form-item name="smsCode"  required  label-position="top" :border-bottom="false">
 				<!-- <rice-input v-model="userForm['smsCode']" placeholder="请输入验证码" border="none" :maxlength="4" /> -->
-				<view class="input-row" >
+				<view  class="group-formitem" style="flex:1;overflow: hidden;">
 					<view style="flex:1;display: flex;">
 
-						<rice-input  :placeholder="i18n.global.t('login.pach_sms')" type="number" v-model="userForm.smsCode"
-							:maxlength="4" border="none" />
+						<rice-input style="width: 100%;"  :placeholder="i18n.global.t('login.pach_sms')" type="number" v-model="userForm.smsCode"
+							:maxlength="4" />
 
 					</view>
 					<view style="display: flex;flex-direction: row;align-items: center;">
-						<text class="btn-code" @click="sendSmsCode">
+						<!-- <text class="btn-code" @click="sendSmsCode">
 							{{ codeText }}
-						</text>
+						</text> -->
+						<rice-button  type="primary" :text="codeText"  @click="sendSmsCode" textColor="#fff" :loading="smsLoading"></rice-button>
 					</view>
 				</view>
 
@@ -59,6 +60,7 @@
 		smsCode: ''
 	});
 	const submitLoading = ref(false);
+	const smsLoading = ref(false);
 	const tk = ref("");
 	const codeText = ref(i18n.global.t('login.btn_getSms'));
 	const codeDisabled = ref(false);
@@ -126,18 +128,17 @@
 			//console.log(`请在${timer}s 后再试`);
 			return;
 		}
-		uni.showLoading({ title: "" });
+		//uni.showLoading({ title: "" });
+		smsLoading.value=true;
 		try {
-			const res = await AccountService.sendSmsCode(userForm.value.phone);
-			const data = res.result as UTSJSONObject;
-			console.log("res", res);
-			const tkstr = data.tk as string;
+			const tkstr = await AccountService.sendSmsCode(userForm.value.phone);
 			tk.value = tkstr;
-			uni.setStorageSync("tk", tk);
-			uni.hideLoading();
+			uni.setStorageSync("tk", tkstr);
+			//uni.hideLoading();
+			smsLoading.value=false;
 			startTimeTask();
 		} catch (error) {
-			console.error(error);
+			smsLoading.value=false;
 			uni.showToast({
 				title:i18n.global.t('login.send_sms_fail')
 			})
@@ -169,7 +170,7 @@
 		submitLoading.value = true;
 
 		try {
-			const flag = await AccountService.login({
+			const flag = await AccountService.LoginBySms({
 				loginType: 'code',
 				tk: tk.value,
 				smsCode: userForm.value.smsCode,
@@ -188,6 +189,12 @@
 			submitLoading.value = false;
 		}
 	};
+	onShow(()=>{
+		const storage_phone = uni.getStorageSync("phone");
+		if(storage_phone!=null && storage_phone!=""){
+			userForm.value.phone=storage_phone as string;
+		}
+	})
 	// 页面销毁
 	onUnmounted(() => {
 		clearTimer();
@@ -195,25 +202,18 @@
 </script>
 
 <style lang="scss">
-	.input-row {
+	.group-formitem {
 		
-		width: 100%;
 		display: flex;
 		flex:1;
 		flex-direction: row;
 		justify-content: space-between;
-	
-		overflow: hidden;
+		
 	}
 
 	.btn-code {
-		font-size: 14px;
-		color: #007aff;
-		background: #fff;
-		border: none;
-		outline: none;
-		padding: 0 8px;
-		margin: 0 4px;
+
+	
 	}
 
 	.btn-code[disabled] {
@@ -225,6 +225,7 @@
 		padding-top: 8px;
 		text-align: center;
 		padding-top: 12px;
+		line-height: 22px;
 	
 	}
 </style>

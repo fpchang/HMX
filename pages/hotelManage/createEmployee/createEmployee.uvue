@@ -25,49 +25,49 @@
 
 	<!-- #endif -->
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
-			<xt-form-item label="用户名" tips="" required>
+			<xt-form-item :label="i18n.global.t('hotel.form.employee_name')" tips="" required>
 				<view>
 					<rice-input style="height: 40px;" clearable clear-trigger="always" placeholderStyle="font-size:14px"
-						classic placeholder="请输入员工名" borderColor="#dcdfe6" :disabled="pageType==2||isAdministrator"
+						classic :placeholder="i18n.global.t('hotel.form.pach_employee_name')" borderColor="#dcdfe6" :disabled="pageType==2||isAdministrator"
 						v-model="employeeForm.employee_name"></rice-input>
 				</view>
 			</xt-form-item>
 			<view style="padding:20px;border:1px solid #eee;border-radius: 12px  ;">
 				<rice-radio-group v-model="accountType" direction="row" style="margin-bottom: 20px;">
-					<rice-radio value="phone" label="手机号"></rice-radio>
-					<rice-radio value="account" label="普通账号"></rice-radio>
+					<rice-radio value="phone" :label="i18n.global.t('form.phone')"></rice-radio>
+					<rice-radio value="account" :label="i18n.global.t('hotel.form.employee_account')"></rice-radio>
 				</rice-radio-group>
-				<xt-form-item label="手机号" tips="*确认输入的手机号已经注册，否则无法添加" required v-if="accountType=='phone'">
+				<xt-form-item :label="i18n.global.t('form.phone')" :tips="i18n.global.t('hotel.form.tips_phone')" required v-if="accountType=='phone'">
 					<view>
 						<rice-input style="height: 40px;" placeholderStyle="font-size:14px" clearable
-							clear-trigger="always" classic placeholder="请输入手机号" borderColor="#dcdfe6"
+							clear-trigger="always" classic :placeholder="i18n.global.t('hotel.form.pach_employee_phone')" borderColor="#dcdfe6"
 							:disabled="pageType==2" v-model="employeeForm.phone" :maxlength="11"
 							type="number"></rice-input>
 					</view>
 				</xt-form-item>
-				<xt-form-item label="登录账号" tips="*确认输入的账号已经注册，否则无法添加" required v-if="accountType=='account'">
+				<xt-form-item :label="i18n.global.t('hotel.form.employee_account')" :tips="i18n.global.t('hotel.form.tips_account')" required v-if="accountType=='account'">
 					<view>
 						<rice-input style="height: 40px;" placeholderStyle="font-size:14px" clearable
-							clear-trigger="always" classic placeholder="请输入账号名称" borderColor="#dcdfe6"
+							clear-trigger="always" classic :placeholder="i18n.global.t('hotel.form.pach_employee_account')" borderColor="#dcdfe6"
 							:disabled="pageType==2" v-model="employeeForm.account"></rice-input>
 					</view>
 				</xt-form-item>
 			</view>
 
-			<xt-form-item label="角色" tips="" required>
+			<xt-form-item :label="i18n.global.t('permission.role')" tips="" required>
 				<view>
 					<rice-radio-group v-model="employeeForm.role" direction="row">
 
-						<view style="margin:4px"> <rice-radio value="manager" label="管理员"></rice-radio></view>
-						<view style="margin:4px"><rice-radio value="normal" label="普通员工"></rice-radio></view>
+						<view style="margin:4px"> <rice-radio value="manager" :label="i18n.global.t('permission.manager')"></rice-radio></view>
+						<view style="margin:4px"><rice-radio value="normal" :label="i18n.global.t('permission.normal')"></rice-radio></view>
 
 					</rice-radio-group>
 				</view>
 			</xt-form-item>
-			<xt-form-item label="备注" tips="" required>
+			<xt-form-item :label="i18n.global.t('form.remark')" tips="" required>
 				<view>
 
-					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic placeholder="备注内容"
+					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('form.pach_remark')"
 						layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
 						v-model="employeeForm.mark"></rice-textarea>
 				</view>
@@ -85,7 +85,7 @@
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 	import { HotelService } from '@/services/HotelService.uts';
 	import { employeeAction } from "../employeeList/employeeAction.uts";
-
+import i18n from '@/i18n/index.uts';
 	let pageType = ref(0);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -94,10 +94,17 @@
 		return state.user;
 	});
 	const title = computed(() => {
+		// if (pageType.value == 0) {
+		// 	return '添加员工';
+		// }
+		// return pageType.value == 1 ? '修改员工信息' : '员工信息';
+		
 		if (pageType.value == 0) {
-			return '添加员工';
+			return i18n.global.t("common.btn_txt_create",[i18n.global.t('hotel.title_employee')]);
 		}
-		return pageType.value == 1 ? '修改员工信息' : '员工信息';
+		const modify_title= i18n.global.t("common.btn_txt_modify",[i18n.global.t('hotel.title_employee')]);
+		const detail_title= i18n.global.t("common.btn_txt_eetails",[i18n.global.t('hotel.title_employee')]);
+		return pageType.value == 1 ? modify_title:detail_title;
 	});
 	const accountType = ref("phone");
 
@@ -138,13 +145,21 @@
 	const editEmployee = async () => {
 		submitLoading.value = true;
 		try {
-			await HotelService.editEmployee(employeeForm.value);
-			submitLoading.value = false;
-			employeeAction.getEmplolyeeList(hotel_id.value);
-			uni.navigateBack();
+			const flag = await HotelService.editEmployee(employeeForm.value);
+			if(flag){
+				submitLoading.value = false;
+				employeeAction.getEmplolyeeList(hotel_id.value);
+				uni.navigateBack({success(){
+					uni.showToast({
+						title:"update success",
+						icon:"none"
+					})
+				}});
+			}
+			
 		} catch (error) {
 			showDialog({
-				title: '更新失败',
+				title: 'update fail',
 				message:error.message.toString(),
 				showCancelButton: false,
 				confirm: () => {
@@ -209,6 +224,11 @@
 					role: found.role,
 					mark: found.mark
 				};
+				if(employeeForm.value.phone!=""){
+					accountType.value="phone"
+				}else{
+					accountType.value="account"
+				}
 			}
 			// else {
 			// 	employeeForm.value = {

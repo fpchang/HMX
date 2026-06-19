@@ -13,11 +13,11 @@
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn">
+			<view class="navbar-btn" @click="addRoom">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
 				<text class="txt"
-					@click="addRoom">{{i18n.global.t("common.btn_txt_create",[i18n.global.t("hotel.title_room")])}}</text>
+					>{{i18n.global.t("hotel.title_room")}}</text>
 
 
 			</view>
@@ -248,15 +248,18 @@
 
 			beforeClose: async () : Promise<boolean> => {
 				try {
-					await roomTypeService.deleteRoom(room._id);
-					await comFunction.getRoomTypeList(hotel_id.value);
-					hideDialog();
-					uni.showToast({
-						title: i18n.global.t("common.delete_success"),
-						icon: "none"
-					});
-					closeSwiper();
-					return true;
+					const flag = await roomTypeService.deleteRoom(room._id);
+					if(flag){
+						await comFunction.getRoomTypeList(hotel_id.value);
+						hideDialog();
+						uni.showToast({
+							title: i18n.global.t("common.delete_success"),
+							icon: "none"
+						});
+						closeSwiper();
+						return true;
+					}
+					return false;
 				} catch (e) {
 					uni.showToast({
 						title: i18n.global.t("common.system_error"),

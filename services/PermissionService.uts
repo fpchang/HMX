@@ -1,5 +1,6 @@
-import{DB} from '../api/DB';
+import{DB,dbJQL} from '../api/DB';
 import {callFunctionRes} from "@/bean/DBBean";
+import {action_co,getTokenObject,RequestFailModal} from "@/api/cloudApi.uts";
 class PermissionServiceClass{
     constructor(){
       
@@ -23,29 +24,37 @@ class PermissionServiceClass{
      /*
     *获取权限列表
     */
-    getPermissionList(hotel_id:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{
-        return DB.callFunction("hm_getPermission_x",{hotel_id});
+    async getPermissionList(hotel_id:string):Promise<Array<string>>{
+        //return DB.callFunction("hm_getPermission_x",{hotel_id});
+		try {
+			const res = await action_co.user_getPermission(hotel_id);
+			console.log("permission list---",res)
+			const data = res['data'] as Array<string>;
+			return data;
+		} catch (error:Error) {
+			//TODO handle the exception
+			RequestFailModal(error.message);
+			throw new Error("get permission fail");
+		}
+		
     }
 	/*
     *根据角色的权限列表
     */
-    getRolePermissionList(hotel_id:string):Promise<UniCloudCallFunctionResult<UTSJSONObject>>{  
-        // return new Promise(async (resolve,reject)=>{
-        //     try {
-        //         const db = uniCloud.database();
-        //     const permission_select = db.collection("hm-permission").getTemp();
-        //     const role_permission_select = db.collection("hm-role-permission").where({role_name}).getTemp();
-        //     const res = await db.collection(role_permission_select,permission_select).get(); 
-        //     //console.log("result",res); 
-        //     resolve(this.formatPermissionToArray(res.result.data))
-        //     } catch (error) {
-        //         reject(error)
-        //     }
-            
-        // })
-         return DB.callFunction("hm_getPermission",{hotel_id})           
+ //   async getRolePermissionList(hotel_id:string):Promise<Array<string>>{  
+ //         //return DB.callFunction("hm_getPermission",{hotel_id})  
+	// 	 try{
+	// 		  const res = action_co.user_getPermission(hotel_id);
+	// 		  console.log("permission ===",res)
+	// 		  const list = res['data'] as Array<string>;
+	// 		  return list;
+	// 	 }catch(error:Error){
+	// 		 RequestFailModal(error.message);
+	// 		 throw new Error(error.message)
+	// 	 }
+	
   
-    }
+ //    }
     /*
     *获取用户权限列表
     */

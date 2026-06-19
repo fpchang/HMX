@@ -8,14 +8,15 @@
 
 				<image src="/static/icons/list.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{i18n.global.t("hotel.room_type_list")}}</text>
+				<text
+					style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{i18n.global.t("hotel.room_type_list")}}</text>
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn">
+			<view class="navbar-btn" @click="addRoomType">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
-				<text class="txt" @click="addRoomType">{{i18n.global.t("common.btn_txt_create",[i18n.global.t("hotel.title_room_type")])}}</text>
+				<text class="txt" >{{i18n.global.t("hotel.title_room_type")}}</text>
 
 
 			</view>
@@ -57,14 +58,16 @@
 							<view class="card-subtitle">
 								<navigator :url="`/pages/hotelManage/roomList/roomList?roomType_id=${roomType._id}`">
 									<view style="display: flex;flex-direction: row;align-items: center;">
-										<text style=" font-weight:400;color: #1d2129;font-size: 14px;">{{i18n.global.t("hotel.room_count")}}：</text>
+										<text
+											style=" font-weight:400;color: #1d2129;font-size: 14px;">{{i18n.global.t("hotel.room_count")}}：</text>
 										<text class="txt-num"
 											style="color: #00b42f;font-size: 14px;padding:0 4px;">{{roomType.roomList.length}}</text>
-										<text style="color: #4e5969;font-size: 14px;"> {{i18n.global.t("hotel.unit_room")}}</text>
-										<rice-icon name="arrow-right"/>
+										<text style="color: #4e5969;font-size: 14px;">
+											{{i18n.global.t("hotel.unit_room")}}</text>
+										<rice-icon name="arrow-right" />
 									</view>
 								</navigator>
-								
+
 								<view style="display: flex;flex-direction:row; align-items: center;">
 
 									<xt-control @del="deleteRoomType(roomType)" @view="viewDetail(roomType)"
@@ -110,7 +113,7 @@
 
 	</scroll-view>
 	<view style="margin-top:80px" v-if="roomTypeList.length<1">
-		<l-empty :description="i18n.global.t('common.noData',[''])"  />
+		<l-empty :description="i18n.global.t('common.noData',[''])" />
 	</view>
 
 </template>
@@ -172,13 +175,13 @@
 			"ROOMTYPE_UPDATE"
 		)) {
 			showDialog({
-							title: i18n.global.t('permission.noPermission'),
-							message: i18n.global.t('permission.contactAdmin'),
-							showCancelButton: false,
-							confirm: () => {
-								hideDialog();
-							}
-						})
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
 			return;
 		}
 		uni.navigateTo({
@@ -191,13 +194,13 @@
 			"ROOMTYPE_CREATE"
 		)) {
 			showDialog({
-										title: i18n.global.t('permission.noPermission'),
-										message: i18n.global.t('permission.contactAdmin'),
-										showCancelButton: false,
-										confirm: () => {
-											hideDialog();
-										}
-									})
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
 			return;
 		}
 		uni.navigateTo({
@@ -209,36 +212,39 @@
 			"ROOMTYPE_DELETE"
 		)) {
 			showDialog({
-										title: i18n.global.t('permission.noPermission'),
-										message: i18n.global.t('permission.contactAdmin'),
-										showCancelButton: false,
-										confirm: () => {
-											hideDialog();
-										}
-									})
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
 			return;
 		}
 
 		showDialog({
 			title: i18n.global.t("common.confirmDelete"),
 			message: i18n.global.t("common.deleteOrderTip"),
-			cancelButtonText:i18n.global.t("common.btn_txt_cancel"),
-			confirmButtonText:i18n.global.t("common.btn_confirm"),
+			cancelButtonText: i18n.global.t("common.btn_txt_cancel"),
+			confirmButtonText: i18n.global.t("common.btn_confirm"),
 			beforeClose: async () : Promise<boolean> => {
 				try {
 					// const o = targetObj['_id'] as UTSJSONObject;
 					// const id = o["_value"] as string;
-					await roomTypeService.deleteRoomType(roomType._id);
-					await comFunction.getRoomTypeList(hotel_id.value);
-					hideDialog();
-					uni.showToast({
-						title: "删除成功",
-						icon: "none"
-					});
-					return true;
+					const flag = await roomTypeService.deleteRoomType(roomType._id);
+					if (flag) {
+						await comFunction.getRoomTypeList(hotel_id.value);
+						hideDialog();
+						uni.showToast({
+							title: i18n.global.t("common.delete_success"),
+							icon: "none"
+						});
+						return true;
+					}
+					return false;
 				} catch (e) {
 					uni.showToast({
-						title: "删除房型失败",
+						title: i18n.global.t("common.system_error"),
 						icon: "none"
 					});
 					return false;

@@ -1,0 +1,77 @@
+// 导入云对象
+
+import {state} from "@/store/store.uts";
+import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+export const getParamsObject=(p:UTSJSONObject):UTSJSONObject=>{
+	const token = state.token;
+	p.$token = token;
+	return p;
+}
+export const getTokenObject=():UTSJSONObject=>{
+	const $token = state.token;
+	return {$token} as UTSJSONObject;
+}
+export const action_co = uniCloud.importObject("hm_action_co", { customUI: true });
+export const RequestFailModal=(msg:string)=>{
+	if(msg==""){
+		return;
+	}
+	 showDialog({
+	    title: 'Error message',
+	    message: msg,
+		showCancelButton:false,
+	    confirm: () => {
+	      hideDialog();
+	    },
+	    cancel: () => {
+	      console.log('cancel')
+	    }
+	  })
+}
+// 标准返回值类型（云对象统一格式）
+// export type RequestRes = {
+// 	errCode: number;
+// 	errMsg: string;
+// 	data: UTSJSONObject | null;
+// };
+
+
+// // 统一云调用入口（UTS 严格类型 + 全端兼容）
+// export const cloudApi = async (
+// 	functionName: string,
+// 	params:UTSJSONObject
+// ):Promise<UTSJSONObject> => {
+// 	console.log("云调用：", functionName);
+
+// 	try {
+// 		if (functionName=="") {
+// 			throw new Error("请传入云对象方法名");
+// 		}
+
+// 		// 获取 token
+// 		const token = uni.getStorageSync("hm_token") as string;
+// 		const tokenObject ={token} as UTSJSONObject;
+
+// 		// 调用 + 安全类型断言
+// 		//const res = await action_co[functionName](params);
+// 		let res:UTSJSONObject;
+// 			switch (functionName) {
+// 					case "getHotelList":
+// 						res = await action_co.hotel_getHotelList(tokenObject);
+// 						break;
+					
+// 					default:
+// 						throw new Error(`未定义方法：${functionName}`);
+// 				}
+
+// 			return res;
+// 	} catch (err: Error) {
+// 		console.error("调用失败：", err);
+// 		uni.showModal({
+// 			title:err.message
+// 		})
+		
+// 	}
+// };
+
+// export default cloudApi;

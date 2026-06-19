@@ -1,0 +1,37 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": false,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"currencyName": {
+			"description": "货币名称",
+			"bsonType": "string"
+		},
+		"code": {
+			"description": "货币代码",
+			"bsonType": "符号"
+		},
+		"symbol": {
+			"description": "货币名称",
+			"bsonType": "string"
+		},
+		"fullEnglishName": {
+			"description": "英文名称",
+			"bsonType": "string"
+		},
+		"decimalDigits": {
+			"description": "保留位数",
+			"bsonType": "int",
+			"defaultValue":2
+		}
+	}
+}

@@ -12,10 +12,10 @@
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn">
+			<view class="navbar-btn" @click="saveUser">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
-				<text class="txt" @click="saveUser">保存</text>
+				<text class="txt" >保存</text>
 
 
 			</view>

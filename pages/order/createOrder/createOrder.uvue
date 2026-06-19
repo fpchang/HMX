@@ -247,22 +247,28 @@
 		if(submitLoading.value==true){
 			return;
 		}
-		let flag : boolean = validForm(orderForm.value)
+		submitLoading.value=true;
+		let flag : boolean = validForm(orderForm.value);
 		if (flag == false) {
+			submitLoading.value=false;
 			return;
 		}
-		submitLoading.value=true;
+		
 		try {
-			await OrderService.addOrder(orderForm.value);
-			uni.$emit("refrushOrderList");
-			getGatherEvent(hotel_id.value);//nm==刷新首页
-			uni.navigateBack();
-			submitLoading.value = false;
-			uni.showToast({
-				title: i18n.global.t('common.add_success'),
-				icon: "none"
-			});
+			const flag = await OrderService.addOrder(orderForm.value);
+			if(flag){
+				uni.$emit("refrushOrderList");
+				getGatherEvent(hotel_id.value);//nm==刷新首页
+				uni.navigateBack();
+				submitLoading.value = false;
+				uni.showToast({
+					title: i18n.global.t('common.add_success'),
+					icon: "none"
+				});
+			}
+			
 		} catch (error) {
+			console.log("99001021")
 			submitLoading.value = false;
 			uni.showToast({
 				title: i18n.global.t('common.add_fail'),

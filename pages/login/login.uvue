@@ -18,7 +18,7 @@
 					短信验证
 				</text> -->
 				<rice-tabs v-model="currentTab" :list="list" @clickTab="tabClick" :shrink="false" style="flex: 1;"
-					bg-color="transparent" line-width="80%"></rice-tabs>
+					bg-color="transparent" line-width="75%"></rice-tabs>
 			</view>
 
 			<!-- 账号密码登录 -->
@@ -47,7 +47,7 @@
 						<image v-show="isAgree" src="/static/icons/confirm_selcted.png" class="form-icon"></image>
 
 					</view>
-					<view style="display: flex;flex-direction: row;flex-wrap:wrap">
+					<view style="display: flex;flex-direction: row;flex-wrap:wrap;align-items: center;">
 						<text class="ct">{{i18n.global.t('login.agreenTxt_one')}}</text>
 						<text class="ct-txt-btn" @click="openUserAgreement">{{i18n.global.t('login.userAgreement')}}</text>
 						<text class="ct">{{i18n.global.t('login.agreenTxt_two')}}</text>
@@ -171,9 +171,14 @@
 		background-color: #fff;
 		flex:1;
 		padding: 0 24px;
+		display: flex;
+		justify-content: center;
+		flex-direction: row;
 	}
 
 	.wrap {
+		flex: 1;
+		max-width: 500px;
 		padding-top: 60px;
 	}
 
@@ -335,6 +340,7 @@
 		align-items: center;
 
 		.ct {
+			line-height: 22px;
 			font-size: 13px;
 			color: gray;
 

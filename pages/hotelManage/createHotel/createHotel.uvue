@@ -220,33 +220,38 @@
 
 	const addHotel = async () => {
 		try {
-			const res = await HotelService.createHotel(hotelForm.value);
-			console.log("res:::::::", res);
+			const flag = await HotelService.createHotel(hotelForm.value);
+			if(flag){
 			submitLoading.value = false;
-
 			comFunction.init();
-			uni.navigateBack();
-			uni.showToast({
-				title: i18n.global.t('common.add_success'),
-				icon: "none"
+			uni.navigateBack({
+				success(){
+					uni.showToast({
+						title: i18n.global.t('common.add_success'),
+						icon: "none"
+					});
+				}
 			});
+			
+			}else{
+				submitLoading.value = false;
+			
+			}
+			
 
 
 		} catch (e) {
 			submitLoading.value = false;
 			//console.error("保存失败", e)
-			uni.showToast({
-				title: i18n.global.t('common.add_fail'),
-				icon: "none"
-			});
+			
 		}
 
 	}
 	const updateHotel = async () => {
 		try {
 			const id = hotelForm.value._id as string;
-			await HotelService.updateHotel(id, hotelForm.value);
-			
+			const flag = await HotelService.updateHotel(id, hotelForm.value);
+			if(flag){
 			submitLoading.value = false;
 			await comFunction.getHotelList();
 			setHotelId(hotel_id.value);
@@ -259,17 +264,22 @@
 					});
 				}
 			});
+			}else{
+				submitLoading.value = false;
+			}
 		} catch (e) {
 			submitLoading.value = false;
 		}
 	}
 
 	const submitForm = async () => {
+		submitLoading.value = true;
 		const flag : boolean = validForm(hotelForm.value);
 		if (flag == false) {
+			submitLoading.value = false;
 			return;
 		}
-		submitLoading.value = true;
+		
 		hotelForm.value.belong = user.value['phone'] as string;
 		hotelForm.value.ownership_id=user.value._id;
 		const address = `${hotelForm.value.hotelAddressArea}${hotelForm.value.hotelAddress}`;

@@ -2,9 +2,15 @@
   <view class="container">
     <view class="stats-section">
       <view class="stats-tab">
-        <button 
+		  <view   :class="[activeIndex == 0?'tab-btn tab-btn-active':'tab-btn' ]"   @click="tabClick(0)" style="margin-right:10px">
+			  <text :class="activeIndex == 0?'tabtxt-active':'txt'"> {{ i18n.global.t("gather.today") }}</text>
+		  </view>
+		   <view  :class="[activeIndex == 1?'tab-btn tab-btn-active':'tab-btn' ]"   @click="tabClick(1)">
+			    <text :class="activeIndex == 1?'tabtxt-active':'txt'"> {{ i18n.global.t("gather.tomorrow") }}</text>
+		   </view>
+      <!--  <button 
           class="tab-btn" 
-          :class="{ active: activeIndex == 0 }"
+          :class="[activeIndex == 0?'active':'' ]"
           @click="tabClick(0)"
 		  style="margin-right: 10px;"
         >
@@ -12,11 +18,11 @@
         </button>
         <button 
           class="tab-btn" 
-          :class="{ active: activeIndex == 1 }"
+          :class="[activeIndex == 1?'active':'' ]"
           @click="tabClick(1)"
         >
-          {{ i18n.global.t("gather.tomorrow") }}
-        </button>
+     
+        </button> -->
       </view>
 
       <!-- 统计数据卡片 -->
@@ -215,7 +221,7 @@
 	init();
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* 全局容器 */
 .container {
   width: 100%;
@@ -265,15 +271,24 @@
   padding: 10px;
   border-radius: 8px;
   background-color: #fff;
-  color: #333;
   border: none;
   font-size: 15px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:58px;
+  
 }
+.tab-btn-active {
+  background-color: #007AFF;  
+}
+.tabtxt{
+  	    color: #333333!important;
+  }
+  .tabtxt-active{
+	  color: #ffffff!important;
+  }
 
-.tab-btn.active {
-  background-color: #007AFF;
-  color: #fff;
-}
 
 .stats-card {
   background-color: #fff;

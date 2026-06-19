@@ -59,7 +59,7 @@
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('hotel.form.room_price')" tips="" required>
 				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入价格"
-					borderColor="#dcdfe6" :disabled="pageType==2" type="digit" v-model="roomTypeForm.priceBase"></rice-input>
+					borderColor="#dcdfe6" :disabled="pageType==2" type="digit" v-model="priceBase"></rice-input>
 				<!-- <rice-stepper v-model="roomTypeForm.priceBase" input-width="150" button-size="38" font-size="15" :auto-fixed ="false" :disabled="pageType==2" />
 			 -->
 			</xt-form-item>
@@ -143,6 +143,8 @@
 			return { name: item.name, count: item.count } as bedBean;
 		})
 	})
+	const priceBase=ref("");
+
 	let roomTypeForm = ref<roomTypeBean>({
 		_id:"",
 		hotel_id: hotel_id.value,
@@ -158,6 +160,9 @@
 		roomList: [],
 		independentBathroom: true
 	});
+	watch(priceBase,(val:string)=>{
+		roomTypeForm.value.priceBase=parseFloat(val);
+	})
 	const titleImg=computed<string>(()=>{
 		if(pageType.value==0){
 			return "/static/icons/addpage.png"
@@ -171,17 +176,23 @@
 	const addRoomType = async () => {
 		submitLoading.value = true;
 		try {
-			await roomTypeService.addRoomType(roomTypeForm.value);
-			await comFunction.getRoomTypeList(hotel_id.value);
-			submitLoading.value = false;
-			uni.navigateBack();
-			uni.showToast({
-				title: "房型添加成功",
-				icon: "none"
-			});
+			const flag = await roomTypeService.addRoomType(roomTypeForm.value);
+			if(flag){
+				await comFunction.getRoomTypeList(hotel_id.value);
+				submitLoading.value = false;
+				uni.navigateBack({success(){
+					uni.showToast({
+						title:i18n.global.t('common.add_success'),
+						icon: "none"
+					});
+				}});
+				
+			}
+			
 		} catch (error) {
+			submitLoading.value = false;
 			uni.showToast({
-							title: "添加失败",
+							title: i18n.global.t('common.add_fail'),
 							icon: "none"
 						});
 		}
@@ -191,10 +202,13 @@
 		submitLoading.value = true;
 		//	const id = roomTypeForm.value._id._value as string;
 		//roomTypeForm.value._id=roomType_id.value;
-		await roomTypeService.updateRoomType(edit_roomType_id.value, roomTypeForm.value);
-		await comFunction.getRoomTypeList(hotel_id.value);
-		submitLoading.value = false;
-		uni.navigateBack();
+		const flag = await roomTypeService.updateRoomType(roomTypeForm.value);
+		if(flag){
+			await comFunction.getRoomTypeList(hotel_id.value);
+			submitLoading.value = false;
+			uni.navigateBack();
+		}
+		
 	}
 	const submitForm = () => {
 		//roomTypeForm.value.hotel_id=hotel_id.value;

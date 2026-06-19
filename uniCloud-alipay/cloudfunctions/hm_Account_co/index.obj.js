@@ -13,7 +13,8 @@ const {
 } = require('./login/LoginAction.js');
 module.exports = {
 	_before: function() { // 通用预处理器
-	console.log("22222::",this.params)
+	const token = this.getUniIdToken()
+	console.log("22222::",token)
 		const methodName = this.getMethodName();
 		//const clientInfo = this.getClientInfo();
 		const {appLanguage} = this.getClientInfo();

@@ -191,6 +191,7 @@
 		if(submitLoading.value==true){
 			return;
 		}
+		submitLoading.value=true;
 		if(amount.value!=""){
 			fmForm.value.amount = parseFloat(amount.value);
 		}
@@ -199,6 +200,7 @@
 		// console.log(fmForm.value);
 		// return;
 		if (flag == false) {
+			submitLoading.value=false;
 			return;
 		}
 		// console.log("add   ",fmForm.value)

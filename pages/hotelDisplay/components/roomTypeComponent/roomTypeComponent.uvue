@@ -1,6 +1,6 @@
 <template>
 	<!-- #ifdef APP||H5 -->
-	<scroll-view style="flex:1" @scroll="scrollPage">
+	<!-- <scroll-view style="flex:1" @scroll="scrollPage"> -->
 	<!-- #endif -->
 		<view class="card-list" v-if="roomTypeList!=null">
 			
@@ -36,7 +36,7 @@
 		</view>
 
 	<!-- #ifdef APP || H5 -->
-	</scroll-view>
+	<!-- </scroll-view> -->
 	<!-- #endif -->
 
 </template>
@@ -49,6 +49,9 @@
 	import { roomTypeService } from "@/services/roomTypeService";
 	import {roomTypeBean} from "@/bean/roomTypeBean.uts";
 	import { hotelBean } from "@/bean/hotelBean";
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	let submitLoading = ref(false);
 	const props = defineProps({
 		hotel_id:{
@@ -126,7 +129,7 @@
 		flex-wrap: wrap;
 
 		.card-list-item {
-			min-width: 360px;
+			min-width: 320px;
 			padding: 15px;
 			flex: 1;
 

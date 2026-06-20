@@ -78,7 +78,7 @@
 				</view>
 				<scroll-view style="background:#fff;height:500px">
 					<view style="display: flex;flex-wrap:wrap;flex-direction: row;">
-						<view v-for="item of hotelList" style="padding: 10px;flex:1;min-width:360px;"
+						<view v-for="item of hotelList" style="padding: 10px;flex:1;min-width:320px;"
 							@click="checkHotel((item._id as string))">
 							<view style="display: flex" :class="['zcard', item._id==hotel_id? 'zcard-active':'']">
 								<view class="img-container">
@@ -127,6 +127,9 @@
 	import { userBean } from "@/bean/userBean";
 	import { hotelBean } from "@/bean/hotelBean";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	const submitLoading = ref(false);
 	const showRange = ref(false);
 	const showPopup = ref(false);

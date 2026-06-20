@@ -5,7 +5,10 @@
 			<image  :src="item.icon" class="icon-stye"></image>
 			<text class="txt">{{item.name}}</text>
 		</view>
-			<view class="list">		
+		<rice-grid :column-num="columnNum" :border="false">
+		  <rice-grid-item v-for="it in item.support" :key="it" :icon="getConfig(it).icon" :text="getConfig(it).name" />
+		</rice-grid>
+			<!-- <view class="list">		
 				<view class="list-item" v-for="it in item.support">
 					
 						<view class="item-content">
@@ -19,7 +22,7 @@
 				</view>		
 				<view v-for="item in 8" style="height:0;padding:0 15px"></view>
 		
-			</view>
+			</view> -->
 		</view>
 	</view>
 </template>
@@ -28,12 +31,24 @@
 	import { HotelService } from "@/services/HotelService.uts";
 	import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
 	import {sf} from "./type.uts";
+	import { state } from "@/store/store";
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	const props = defineProps({
 		list:{
 			type:Array<sf>,
 			default:[]
 		}
 	});
+	const columnNum= computed(()=>{
+		let num = 3;
+		const w = state.viewWidth;
+		if(w!=0){
+			 num = Math.floor((w-30)/80);
+		}
+		return num
+	})
 	console.log("list::",props.list);
 	const facilityConfigList = ref<Array<facilityConfig_type>>([]);
 	const getConfigList=async ()=>{

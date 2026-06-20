@@ -105,6 +105,9 @@
 	import {userBean} from "@/bean/userBean";
 	import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	type bedType = {
 		name : string,
 		checked : boolean,

@@ -37,6 +37,9 @@
 	import { AccountService } from "@/services/AccountService";
 	import i18n from '@/i18n/index.uts';
 	import { setToken } from "@/store/store.uts";
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	const props = defineProps({
 		isAgree: {
 			type: Boolean,

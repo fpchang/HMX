@@ -127,6 +127,9 @@
 	import { roomTypeBean } from "@/bean/roomTypeBean.uts";
 	import { hotelBean } from "@/bean/hotelBean";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	let submitLoading = ref(false);
 
 	const hotel_id = computed(() => {
@@ -294,7 +297,7 @@
 		flex-wrap: wrap;
 
 		.card-list-item {
-			min-width: 360px;
+			min-width: 320px;
 			padding: 15px;
 			flex: 1;
 

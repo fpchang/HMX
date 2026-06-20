@@ -1,7 +1,8 @@
 <template>
 	<scroll-view class="indexAdvise-page" :refresher-enabled="false" v-if="isReading" :show-scrollbar="false">
 		<!-- <rice-button text="测试" @click=test()></rice-button> -->
-		<view class="hotel-container">
+
+		
 			<!-- 顶部渐变标题栏 -->
 			<view class="top-banner">
 				<text class="banner-title">{{i18n.global.t('indexAdvise.title')}}</text>
@@ -56,11 +57,7 @@
 			<view class="download-section">
 				<button class="download-btn" @click="toLoginEvent">{{i18n.global.t('indexAdvise.loginBtnTxt')}}</button>
 			</view>
-
-		</view>
 		
-
-
 	</scroll-view>
 </template>
 
@@ -68,6 +65,9 @@
 	import { HotelService } from "../../services/HotelService.uts";
 	import { loginEvent, loginOut } from "@/store/store.uts";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	//import {cloudApi} from "@/api/cloudApi.uts";
 	const title2 = i18n.global.t('title');
 	let isReading = ref(false);
@@ -78,12 +78,18 @@
 	
 	import { setToken } from "@/store/store.uts";
 	import {getParamsObject} from "@/api/cloudApi.uts"
-	const test=()=>{
-		console.log("111",getParamsObject({}));
-		setToken("AAAAA");
-		console.log("2222",getParamsObject({}));
-	}
-	
+	const setLanuage = () => {
+			const sys = uni.getSystemInfoSync();
+			console.log('sys', sys);
+			const osLanguage = sys.osLanguage;
+			let local = 'zh-CN';
+			console.log(osLanguage != null)
+			if (osLanguage != null && !osLanguage.includes('zh-')) {
+				local = 'en-US';
+			}
+			i18n.global.locale.value = local;
+		}
+	//setLanuage();
 	const accessin = () => {
 		uni.reLaunch({
 			url: "/pages/index/index",

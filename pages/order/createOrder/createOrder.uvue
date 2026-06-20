@@ -114,6 +114,9 @@
 	import checkRoomComponent from "./components/checkRoomComponent.uvue";
 	import { orderState, getGatherEvent } from "@/store/modules/orderStore";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});

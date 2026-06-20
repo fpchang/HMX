@@ -1,6 +1,6 @@
 <template>
 	<view class="fm-search">
-		<view class="select-item" style="min-width:360px">
+		<view class="select-item" style="min-width:320px">
 			<view>
 				<l-space :wrap="true" :fill="true"> 
 					<view style="min-width: 60px;" v-for="item of checkType"><rice-button
@@ -39,6 +39,9 @@
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import { TIME, MOONTH_START_END_TIMESTAMP, getMonthDateArray } from "@/static/utils/TIME";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	//selectAction下拉 选择
 	//searchAction input点击搜索
 	//searchInputChange 输入框变化
@@ -116,7 +119,7 @@
 
 		.select-item {
 			margin-bottom: 12px;
-			min-width: 300px;
+			min-width: 280px;
 			// padding: 0 15px;
 
 			flex: 1;

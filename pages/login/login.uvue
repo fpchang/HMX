@@ -78,8 +78,11 @@
 	import loginBySmscodeComponent from "./components/loginBySmscodeComponent.uvue"
 	import loginByApp from "./components/loginByApp.uvue"
 	import i18n from '@/i18n/index.uts';
+	
 	//import { ref, onUnmounted } from 'vue';
-
+defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	// 选项卡
 	const currentTab = ref(0);
 

@@ -4,7 +4,9 @@
 	"description": "酒店与民宿管理",
 	"versionName": "3.0.3",
 	"versionCode": "303",
-	"uni-app-x": {},
+	"uni-app-x": {
+		"styleIsolationVersion": "2"
+	},
 	/* 快应用特有相关 */
 	"quickapp": {},
 	/* 小程序特有相关 */
@@ -132,6 +134,15 @@
 					"signAlg": "SHA256withECDSA",
 					"storeFile": "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1778562532405.p12",
 					"storePassword": "0000001B8FB9584A49D836956094DB30B6E3B1E4CFFB74D8996885543C770EF1464429B512693D105B7182"
+				},
+				"release": {
+					"certpath": "/Users/sky/工作资料/项目资料/hm/app打包/鸿蒙证书/ys publish.cer",
+					"keyAlias": "releaseKey",
+					"keyPassword": "000000199AC12739CADB691C0DE6FF817F060684118ACD6124DBCCA5E29AF23C442829084DDB160E5F",
+					"profile": "/Users/sky/工作资料/项目资料/hm/app打包/鸿蒙证书/ys-publish-profileRelease.p7b",
+					"signAlg": "SHA256withECDSA",
+					"storeFile": "/Users/sky/工作资料/项目资料/hm/app打包/鸿蒙证书/publish.p12",
+					"storePassword": "00000019E5187A0C1464C93014515598FE7B4204B9C7979B35E2BA600AFBA54CA47DF673E1F0CEFC29"
 				}
 			},
 			"icons": {

@@ -118,7 +118,7 @@
 
 		.select-item {
 			margin-bottom: 12px;
-			min-width: 300px;
+			min-width: 290px;
 			// padding: 0 15px;
 
 			flex: 1;

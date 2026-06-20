@@ -47,6 +47,9 @@
 
 <script setup>
 	import { hotelBean } from '@/bean/hotelBean';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	const props = defineProps({
 		hotel:{
 			type:hotelBean,

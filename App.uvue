@@ -1,11 +1,16 @@
 <script lang="uts">
 	//import uniIdPageInit from '@/uni_modules/uni-id-pages-x/init.uts';
 	import {action_co} from "@/api/cloudApi.uts";
-	import { setToken } from "@/store/store.uts";
+	import { setToken ,setViewWidth} from "@/store/store.uts";
 	import i18n from '@/i18n/index.uts';
 	// #ifdef APP-ANDROID || APP-HARMONY
 	let firstBackTime = 0
 	// #endif
+	
+	const setViewWidthEvent=()=>{	
+		const win = uni.getWindowInfo();
+		setViewWidth(win.windowWidth);
+	}
 	const setLanuage = () => {
 		const sys = uni.getSystemInfoSync();
 		console.log('sys', sys);
@@ -39,6 +44,7 @@
 		onLaunch: function () {
 					
 			start();
+			setViewWidthEvent();
 			setLanuage();
 			//#ifdef APP-ANDROID
 			const showMoreMessage = uni.getStorageSync("showMoreMessage");

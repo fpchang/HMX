@@ -18,11 +18,59 @@
 			</view>
 		</template>
 	</rice-navbar>
-	<swiper :current="activeIndex" style="height: auto;flex: 1;background-color:#f8f9fa;" @change="swiperChange"
-		:circular="true">
-		<swiper-item>
 
-			<scroll-view style="flex:1">
+	<scroll-view class="scroll-list" style="flex:1">
+		<view v-show="activeIndex==0">
+			<view>
+				<imageSwiperComponent :hotel="hotel" v-if="hotel!=null"></imageSwiperComponent>
+			</view>
+			<view class="information">
+				<view class="title"><text class="txt">{{hotel?.hotelName}}</text></view>
+				<view class="subtitle">
+					<image src="/static/icons/hoteldisplay/location.png" style="width: 16px;height: 16px;"></image>
+					<text class="txt">{{hotel?.hotelAddress}}</text>
+				</view>
+			</view>
+			<view class="cotent-list-container">
+				<view class="title">
+					<text class="txt">酒店特色</text>
+				</view>
+				<view class="content">
+					<!-- <listComponent></listComponent> -->
+					<view class="tag-list" style="display: flex;flex-direction: row;" v-if="hotel!=null">
+						<view class="tag-list-item" v-for="item of hotel.feature"><rice-tag type="warning" :text="item"
+								size="large" /></view>
+
+					</view>
+
+				</view>
+			</view>
+
+			<view class="cotent-list-container">
+				<view class="title">
+					<text class="txt">酒店设施</text>
+				</view>
+				<view class="content">
+					<services-facilities ref="servicesFacilitiesRes" :hotel_id="hotel_id"></services-facilities>
+				</view>
+			</view>
+
+
+		</view>
+		<view v-show="activeIndex==1">
+
+			<roomTypeComponent :hotel_id="hotel_id"></roomTypeComponent>
+
+		</view>
+
+	</scroll-view>
+
+
+	<swiper v-if="false" :current="activeIndex" style="flex: 1;background-color:#f8f9fa;" @change="swiperChange"
+		:circular="true" class="tab-swiper" :style="{height: `${swiperHeight}px`}" touch-angle="35" duration="300">
+		<swiper-item style="flex:1">
+
+			<scroll-view class="scroll-list" style="flex:1">
 				<view>
 					<imageSwiperComponent :hotel="hotel" v-if="hotel!=null"></imageSwiperComponent>
 				</view>
@@ -39,11 +87,12 @@
 					</view>
 					<view class="content">
 						<!-- <listComponent></listComponent> -->
-						<view class="tag-list" style="display: flex;flex-direction: row;" v-if="hotel!=null"> 
-							<view class="tag-list-item" v-for="item of hotel.feature"><rice-tag type="warning" :text="item"  size="large"/></view>
-							
+						<view class="tag-list" style="display: flex;flex-direction: row;" v-if="hotel!=null">
+							<view class="tag-list-item" v-for="item of hotel.feature"><rice-tag type="warning"
+									:text="item" size="large" /></view>
+
 						</view>
-						
+
 					</view>
 				</view>
 
@@ -59,14 +108,15 @@
 			</scroll-view>
 
 		</swiper-item>
-		<swiper-item>
-			<!-- #ifdef APP -->
-			<scroll-view style="flex:1">
-			<!-- #endif -->
-				<roomTypeComponent :hotel_id="hotel_id"></roomTypeComponent>
-			<!-- #ifdef APP -->
+		<swiper-item style="flex:1">
+
+			<scroll-view class="scroll-list" style="flex:1" :scroll-with-animation="true" enhanced bounces="false"
+				fast-deceleration="true">
+
+				<view>
+					<roomTypeComponent :hotel_id="hotel_id"></roomTypeComponent>
+				</view>
 			</scroll-view>
-			<!-- #endif -->
 		</swiper-item>
 	</swiper>
 
@@ -79,17 +129,17 @@
 	// import share from "./components/share.uvue";
 	import roomTypeComponent from "./components/roomTypeComponent/roomTypeComponent.uvue"
 	import listComponent from "./components/listComponent/listComponent.uvue";
-	import  servicesFacilities from "./components/servicesFacilities.uvue"
+	import servicesFacilities from "./components/servicesFacilities.uvue"
 	import { roomTypeService } from '@/services/roomTypeService';
 	import { hotelBean } from '@/bean/hotelBean';
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { HotelService } from '@/services/HotelService';
-	
+
 	// 在 uni-app-x 中不支持 InstanceType<typeof Component>，直接声明为 any
 	const servicesFacilitiesRes = ref<ComponentPublicInstance | null>(null);
 	const hotel_id = ref("");
-	const hotel =ref<hotelBean | null>(null);
-	const roomTypeList=ref<Array<roomTypeBean >| null>(null);
+	const hotel = ref<hotelBean | null>(null);
+	const roomTypeList = ref<Array<roomTypeBean> | null>(null);
 	const activeIndex = ref(0);
 	const list = ref<TabsOptions[]>([{
 		name: '首页',
@@ -107,36 +157,29 @@
 		activeIndex.value = event.detail.current;
 		console.log(event)
 	}
-	
-	const initData=async ()=>{
+
+	const initData = async () => {
 		//roomTypeList.value =await roomTypeService.getRoomTypeList(hotel_id.value);
 		hotel.value = await HotelService.getHotelInfoById(hotel_id.value);
-			
+
 	}
-	onReady(()=>{
-		// const instance = getCurrentInstance();
-		// if(instance!=null){
-		// 	servicesFacilitiesRes.value=instance.refs['servicesFacilitiesRes'] as ComponentPublicInstance;
-		// 	console.log("ssss33333",servicesFacilitiesRes.value)
-		// 	servicesFacilitiesRes.value.$callMethod("setHotelId",hotel_id.value)
-		// }
-		
-		// if (servicesFacilitiesRes.value != null) {
-		// 	servicesFacilitiesRes.value.setHotelId(hotel_id.value);
-		// 	if (hotel.value != null) {
-		// 		// 使用安全调用，避免 setHotel 方法不存在导致运行时异常
-		// 		(servicesFacilitiesRes.value as any)?.setHotel?.(hotel.value);
-		// 	}
-		// 	if (roomTypeList.value != null) {
-		// 		servicesFacilitiesRes.value.setRoomTypeList(roomTypeList.value);
-		// 	}
-		// }
+	const swiperHeight = ref(0)
+
+	// 计算swiper可视高度
+	const calcSwiperHeight = () => {
+		const sys = uni.getSystemInfoSync()
+		const navRPX = 80
+		const navPx = uni.rpx2px(navRPX)
+		swiperHeight.value = sys.windowHeight - navPx - sys.safeAreaInsets.bottom
+	}
+	onReady(() => {
+		calcSwiperHeight()
 	})
 	onLoad(params => {
 		console.log("params:", params);
-		const h_id : string = params.getString("hotel_id")??"";
+		const h_id : string = params.getString("hotel_id") ?? "";
 		if (h_id != null) {
-			hotel_id.value =h_id;
+			hotel_id.value = h_id;
 			initData()
 		}
 	})
@@ -145,6 +188,13 @@
 <style lang="scss">
 	.hotel-display {
 		background-color: #f8f9fa;
+	}
+
+	.scroll-list {
+		width: 100%;
+		height: 100%;
+		/* 必加，否则无法滚动 */
+		background: #f5f5f5;
 	}
 
 	.information {
@@ -176,7 +226,7 @@
 
 	.cotent-list-container {
 		// margin-bottom: 32px;
-		padding: 24px;
+		padding: 15px;
 
 		.title {
 			border-left: 4px solid #2a5d98;
@@ -194,11 +244,13 @@
 			margin-top: 16px;
 		}
 	}
-.tag-list{
-	display: flex;
-	flex-direction: row;
-	.tag-list-item{
-		padding:4px 8px;
+
+	.tag-list {
+		display: flex;
+		flex-direction: row;
+
+		.tag-list-item {
+			padding: 4px 8px;
+		}
 	}
-}
 </style>

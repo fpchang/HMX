@@ -48,6 +48,9 @@
 	import { userBean } from "@/bean/userBean";
 	import { MineService } from "@/services/MineService.uts";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	const submitLoading = ref(false);
 	const user = computed<userBean>(() => {
 		return state.user;

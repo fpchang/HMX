@@ -13,6 +13,9 @@
 	import { sf } from "./listComponent/type.uts";
 	import { roomTypeService } from '@/services/roomTypeService';
 	import { HotelService } from '@/services/HotelService';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	const props = defineProps({
 		hotel_id: {
 			type: String,

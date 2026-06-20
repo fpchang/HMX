@@ -26,6 +26,9 @@
 	import { AccountService } from "@/services/AccountService";
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	const emit =defineEmits(["setAccountEvent"]);
 	const submitLoading = ref(false);
 	type userType = {

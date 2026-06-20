@@ -513,7 +513,7 @@
 		flex-wrap: wrap;
 
 		.card-list-item {
-			min-width: 360px;
+			min-width: 320px;
 			padding: 7.5px 15px;
 			flex: 1;
 

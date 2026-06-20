@@ -115,7 +115,7 @@
 		flex-wrap: wrap;
 		.select-item{
 			margin-bottom: 12px;
-			min-width: 300px;
+			min-width: 290px;
 			
 			
 			flex:1;

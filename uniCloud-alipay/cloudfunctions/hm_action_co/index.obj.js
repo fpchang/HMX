@@ -14,6 +14,7 @@ const {
 	getI18nMsg
 } = require('./i18n/index.js');
 const methodList = [
+	'preHeat',
 	'user_loginBySmsCode',
 	'user_loginByApp',
 	'user_loginByAccountAndPassword',

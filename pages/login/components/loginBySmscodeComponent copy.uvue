@@ -1,0 +1,234 @@
+<template>
+	<view>
+		<rice-form :model="userForm" :rules="rule" ref="userFormRef" label-width="100px" class="demo-form">
+			<rice-form-item name="phone" label-position="top" :border-bottom="false">
+				
+					<view style="flex:1;overflow: hidden;">
+				<rice-input v-model="userForm.phone" :placeholder="i18n.global.t('login.pach_phone')"  :maxlength="11"  focus-border />
+				</view>
+				
+			</rice-form-item>
+			<rice-form-item name="smsCode"  required  label-position="top" :border-bottom="false">
+				<!-- <rice-input v-model="userForm['smsCode']" placeholder="请输入验证码" border="none" :maxlength="4" /> -->
+				<view  class="group-formitem" style="flex:1;overflow: hidden;">
+					<view style="flex:1;display: flex;">
+
+						<rice-input style="width: 100%;"  :placeholder="i18n.global.t('login.pach_sms')" type="number" v-model="userForm.smsCode"
+							:maxlength="4" />
+
+					</view>
+					<view style="display: flex;flex-direction: row;align-items: center;">
+						<!-- <text class="btn-code" @click="sendSmsCode">
+							{{ codeText }}
+						</text> -->
+						<rice-button  type="primary" :text="codeText"  @click="sendSmsCode" textColor="#fff" :loading="smsLoading"></rice-button>
+					</view>
+				</view>
+
+			</rice-form-item>
+			<view><text class="ct">{{i18n.global.t('login.tips')}}</text></view>
+		</rice-form>
+		<view style="margin-top: 24px;">
+			<rice-button type="primary" :text="i18n.global.t('login.btn_txt')" class="btn" shape="round" @click="accountLogin"
+				:loading="submitLoading" />
+		</view>
+		
+	</view>
+</template>
+
+<script setup>
+	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
+	import { AccountService } from "@/services/AccountService";
+	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
+	import { ref, computed } from "vue";
+	import { state, setUser } from '@/store/store.uts';
+	import { userFormBean } from "@/bean/loginBean.uts";
+	import { userBean } from "@/bean/userBean";
+	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
+	const props = defineProps({
+		isAgree: {
+			type: Boolean,
+			default: false
+		}
+	});
+	type userFormType={
+		phone: string,
+		smsCode: string
+	}
+	const userForm = ref<userFormType>({
+		phone: '',
+		smsCode: ''
+	});
+	const submitLoading = ref(false);
+	const smsLoading = ref(false);
+	const tk = ref("");
+	const codeText = ref(i18n.global.t('login.btn_getSms'));
+	const codeDisabled = ref(false);
+	let timer = 0;
+	const userFormRef = ref<RiceFormComponentPublicInstance | null>(null);
+
+	//密码的校验函数
+	const smsCodeValidator = (value : any | null) => {
+		const val = value as string
+		if (val.length < 4) return '验证码的长度不能小于4位'
+		//if (val.startsWith('123456')) return '密码开头不能为连续的123456'
+		//只有返回 true 才表示校验通过
+		return true
+	}
+	const rule = new Map<string, FormRules[]>([
+		[
+			"phone",
+			[
+				{ required: true, message: i18n.global.t('login.pach_phone') },
+				{ min: 11, max: 11, message: i18n.global.t('login.valid_phone_num'), trigger: 'change' }
+			]
+		],
+		[
+			"smsCode",
+			[
+				{ required: true, message: i18n.global.t('form.valid_required') },
+				//函数校验
+				{ min: 4, max: 4, message: i18n.global.t('login.valid_sms_num'), trigger: 'change' },
+				//正则校验
+				{ pattern: /\d.*/, message: i18n.global.t('login.valid_sms') },
+			]
+		]
+	])
+
+	// 清除定时器
+	const clearTimer = () => {
+		if (timer != 0) {
+			clearInterval(timer);
+			timer = 0;
+		}
+		codeText.value = i18n.global.t('login.btn_getSms');
+		codeDisabled.value = false;
+	};
+	const startTimeTask = () => {
+		codeDisabled.value = true;
+		let count = 60;
+		codeText.value = `${count}s`;
+
+		timer = setInterval(() => {
+			count--;
+			if (count <= 0) {
+				clearTimer();
+				return;
+			}
+			codeText.value = `${count}s`;
+		}, 1000);
+	}
+	// 发送验证码
+	const sendSmsCode = async () => {
+		if (userForm.value.phone == "" || userForm.value.phone.length !== 11) {
+			uni.showToast({ title:i18n.global.t('login.pach_phone'), icon: 'none' });
+			return;
+		}
+		if(timer!=0){
+			//console.log(`请在${timer}s 后再试`);
+			return;
+		}
+		//uni.showLoading({ title: "" });
+		smsLoading.value=true;
+		try {
+			const tkstr = await AccountService.sendSmsCode(userForm.value.phone);
+			tk.value = tkstr;
+			uni.setStorageSync("tk", tkstr);
+			//uni.hideLoading();
+			smsLoading.value=false;
+			startTimeTask();
+		} catch (error) {
+			smsLoading.value=false;
+			uni.showToast({
+				title:i18n.global.t('login.send_sms_fail')
+			})
+		}
+
+	};
+	// 短信登录
+	const accountLogin = async () => {
+		const result = await userFormRef.value!.validate();
+		console.log("result",result);
+		//校验成功
+		if(result!=true){
+			console.log("校验失败");
+			return;
+		}
+		if (!props.isAgree) {
+			uni.showToast({ title:i18n.global.t('login.valid_agree'), icon: 'none' });
+			return;
+		}
+		// if (userForm.value.phone == "" || userForm.value.phone.length !== 11) {
+		// 	uni.showToast({ title: '请输入正确手机号', icon: 'none' });
+		// 	return;
+		// }
+		// if (userForm.value.smsCode == "") {
+		// 	uni.showToast({ title: '请输入验证码', icon: 'none' });
+		// 	return;
+		// }
+
+		submitLoading.value = true;
+
+		try {
+			const flag = await AccountService.LoginBySms({
+				loginType: 'code',
+				tk: tk.value,
+				smsCode: userForm.value.smsCode,
+				phone: userForm.value.phone
+			});
+			if(flag){
+				uni.setStorageSync("phone", userForm.value.phone);
+				//getUserInfo();
+				uni.reLaunch({
+					url: "/pages/index/index",
+				});
+			}
+			
+		} catch (error) {
+			console.log("登录失败", error);
+			submitLoading.value = false;
+		}
+	};
+	onShow(()=>{
+		const storage_phone = uni.getStorageSync("phone");
+		if(storage_phone!=null && storage_phone!=""){
+			userForm.value.phone=storage_phone as string;
+		}
+	})
+	// 页面销毁
+	onUnmounted(() => {
+		clearTimer();
+	});
+</script>
+
+<style lang="scss">
+	.group-formitem {
+		
+		display: flex;
+		flex:1;
+		flex-direction: row;
+		justify-content: space-between;
+		
+	}
+
+	.btn-code {
+
+	
+	}
+
+	.btn-code[disabled] {
+		color: #8e8e93;
+	}
+	.ct {
+		font-size: 12px;
+		color: gray;
+		padding-top: 8px;
+		text-align: center;
+		padding-top: 12px;
+		line-height: 22px;
+	
+	}
+</style>

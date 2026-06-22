@@ -18,7 +18,7 @@
 			default:[]
 		}
 	});
-	let filesList = ref<UploaderFileItem[]>([]);
+	const filesList = ref<UploaderFileItem[]>([]);
 	const emit = defineEmits(['uploadSuccess']);
 	const returnResult=()=>{
 		let list:Array<string> = [];
@@ -175,6 +175,6 @@ const onBeforeUpload=async ()=>{}
 
 </script>
 
-<style lang="scss">
+<style>
 
 </style>

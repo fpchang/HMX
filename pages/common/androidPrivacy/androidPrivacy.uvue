@@ -13,7 +13,7 @@
 			:use-dialog-page="true" 
 			:custom-style="{'padding':0}">
 			<slot>
-				<scroll-view class="message-content" :scroll-y="true">
+				<scroll-view class="message-content">
 					<view>
 						<text class="txt">
 							{{ i18n.global.t('dialog.tipRead') }}

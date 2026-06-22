@@ -1,6 +1,7 @@
 import App from './App.uvue';
 import { createSSRApp } from 'vue';
 import i18n from './i18n';
+import "@/uni_modules/rice-ui/libs/style/index.css";
 //uni.setLocale('en');
 // main.uts
 //import i18n from './i18n';

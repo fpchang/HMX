@@ -1,28 +1,13 @@
 <template>
 	<view>
-	<view class="card" v-for="item of list">
-		<view class="title-style">
-			<image  :src="item.icon" class="icon-stye"></image>
-			<text class="txt">{{item.name}}</text>
-		</view>
-		<rice-grid :column-num="columnNum" :border="false">
-		  <rice-grid-item v-for="it in item.support" :key="it" :icon="getConfig(it).icon" :text="getConfig(it).name" />
-		</rice-grid>
-			<!-- <view class="list">		
-				<view class="list-item" v-for="it in item.support">
-					
-						<view class="item-content">
-							<view class="groupIcon">
-								<image :src="getConfig(it).icon" class="icon-style" mode="aspectFit"></image>
-							</view>
-							<view style="">
-								<text class="label">{{getConfig(it).name}}</text>
-							</view>
-						</view>					
-				</view>		
-				<view v-for="item in 8" style="height:0;padding:0 15px"></view>
-		
-			</view> -->
+		<view class="facility-card-box" v-for="item of list">
+			<view class="card-title-row">
+				<image :src="item.icon" class="title-icon-img"></image>
+				<text class="card-title-text">{{item.name}}</text>
+			</view>
+			<rice-grid :column-num="columnNum" :border="false">
+				<rice-grid-item v-for="it in item.support" :key="it" :icon="getConfig(it).icon" :text="getConfig(it).name" />
+			</rice-grid>
 		</view>
 	</view>
 </template>
@@ -33,7 +18,7 @@
 	import {sf} from "./type.uts";
 	import { state } from "@/store/store";
 	defineOptions({
-		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+		styleIsolation: "isolated"
 	})
 	const props = defineProps({
 		list:{
@@ -77,122 +62,33 @@
 		return item;
 	}
 	getConfigList();
-	// const menuList : Array<menu>=[{
-	// name: "房型设施",
-	// 			icon: "home.svg",
-	// 			liIcon: "ri:building-4-fill",
-	// 			type: "roomType",
-	// 			support: arr
-	// 		},
-	// 		{
-	// 			icon: "/static/icons/homemenu/room1.png",
-	// 			label: "房间管理",
-	// 			bgColor: "rgba(22, 93, 255, 0.1)",
-	// 			url: "/pages/hotelManage/roomList/roomList"
-	// 		},
-	// 		{
-	// 			icon: "/static/icons/homemenu/employee1.png",
-	// 			label: "员工管理",
-	// 			bgColor: "rgba(22, 93, 255, 0.1)",
-	// 			url: "/pages/hotelManage/employeeList/employeeList"
-	// 		},
-	// 		{
-	// 			icon: "/static/icons/homemenu/hotel2.png",
-	// 			label: "酒店展示",
-	// 			bgColor: "rgba(22, 93, 255, 0.1)",
-	// 			url: "/pages/hotelDisplay/hotelDisplay"
-	// 		}
-	
-	
-	
-		
-	// ]
 </script>
 
-<style lang="scss" scoped>
-	.card {
-		margin-bottom: 24px;
-		padding:15px 10px;
-		background-color: #fff;
-		border-radius: 12px;
-
-		.title-style {
-			padding: 5px 5px 15px 5px;
-			color: #1f2937;
-			font-weight: 700;
-			font-size: 24px;
-			display: flex;
-			flex-direction: row;
-			align-items: flex-end;
-
-			.icon-stye {
-				width: 18px;
-				height: 18px;
-				margin-right: 4px;
-			}
-
-			.txt {
-				color: #1f2937;
-				font-weight: 700;
-				font-size: 16px;
-			}
-		}
-
-		.list {
-			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-			justify-content: space-between;
-
-			.list-item {
-
-				min-width: 75px;
-				
-				flex: 1;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: center;
-				padding: 15px 0;
-
-				.item-content {
-					// background-color: #fff;
-					// padding: 18px;
-					border-radius: 12px;
-					min-width: 75px;
-					/*&:hover{
-						transform: scale(1.1);
-					}
-					*/
-					.groupIcon {
-						// width: 60px;
-						height: 60px;
-						display: flex;
-						flex-direction: row;
-						align-items: center;
-						justify-content: center;
-						border-radius: 12px;
-						//  background-color: #fff;
-						// box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-
-						.icon-style {
-							width: 38px;
-							height: 38px;
-						}
-					}
-
-					.label {
-						font-size: 14px;
-						padding-top: 8px;
-						color: #64748b;
-						overflow: hidden;
-						text-overflow: ellipsis;
-						white-space: nowrap;
-						text-align:center;
-					}
-				}
-
-			}
-		}
-	}
+<style>
+/* 设施分组卡片容器 */
+.facility-card-box {
+	margin-bottom: 24px;
+	padding:15px 10px;
+	background-color: #fff;
+	border-radius: 12px;
+}
+/* 卡片标题行（图标+文字） */
+.card-title-row {
+	padding: 5px 5px 15px 5px;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-end;
+}
+/* 标题左侧小图标 */
+.title-icon-img {
+	width: 18px;
+	height: 18px;
+	margin-right: 4px;
+}
+/* 标题文字 */
+.card-title-text {
+	color: #1f2937;
+	font-weight: 700;
+	font-size: 16px;
+}
 </style>

@@ -1,0 +1,221 @@
+<template>
+	<view>
+		<view class="app-split">
+			<view class="split-line-wrapper">
+				<view class="split-line"></view>
+				<!-- <text class="split-line-text">其他方式</text> -->
+				<view class="split-line"></view>
+			</view>
+			<view class="con" v-if="phone!=''">
+				<!-- <image src="/static/icons/phone.png" style="width: 16px;height: 16px;"></image>
+				<text class="w-text">手机一键登录</text> -->
+				<view style="display: flex;flex-direction: row;align-items: center;justify-content: center;">
+					<text class="tit">{{phone}}</text>
+					<!-- <view style="width:40px;margin-left: 12px;">
+						<rice-button text="换号" shape="round" size="mini" @click="switchLoginType('code')"></rice-button>
+					</view> -->
+
+				</view>
+				<view><text class="ct">{{i18n.global.t('login.tips')}}</text></view>
+			</view>
+			<view class="con" v-if="phone==''">
+				<view style="display: flex;flex-direction: row;justify-content: center;">
+					<rice-loading color="#787878" :text="i18n.global.t('login.getphone_loading')" />
+				</view>
+			</view>
+			<view class="btn-content">
+				<rice-button type="primary" :text="i18n.global.t('login.btn_app_txt')" class="btn" shape="round" @click="verify(false)"
+					:loading="submitLoading" />
+
+			</view>
+
+		</view>
+	</view>
+</template>
+
+<script setup>
+	import { AccountService } from "@/services/AccountService";
+	import i18n from '@/i18n/index.uts';
+	import { setToken } from "@/store/store.uts";
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
+	const props = defineProps({
+		isAgree: {
+			type: Boolean,
+			default: false
+		}
+	});
+	const uniVerifyManager = ref(null as UniVerifyManager | null)
+	const phone = ref('')
+	const slogan = ref('')
+	const privacyName = ref('')
+	const privacyUrl = ref('')
+
+	let submitLoading = ref(false);
+	const preLogin = (callback : (() => void)) => {
+		uniVerifyManager.value?.preLogin({
+			success: (res) => {
+				phone.value = res.number;
+				slogan.value = res.slogan;
+				privacyName.value = res.privacyName;
+				privacyUrl.value = res.privacyUrl;
+				console.log("pre login success");
+				callback();
+			},
+			fail: (err) => {
+				console.error("pre login fail => " + JSON.stringify(err));
+				const hasCauseMessage = (err.cause?.cause?.message ?? '').length > 0
+				uni.showModal({
+					title: i18n.global.t('login.pre_login_fail'),
+					content: hasCauseMessage ? JSON.parseObject(err.cause?.cause?.message ?? '')?.getString("errorDesc") : err.errMsg,
+					showCancel: false
+				});
+			}
+		});
+	}
+	const takePhoneNumber = async (accessToken : string, openid : string) => {
+		const userForm = {
+
+			loginType: "app",
+			accessToken: accessToken,
+			openid: openid
+		}
+			submitLoading.value = true;
+			const flag = await AccountService.LoginByAPP(userForm);
+			if (flag) {
+				uni.reLaunch({
+					url: "/pages/index/index",
+				});
+			}
+			submitLoading.value = true;
+		
+
+	}
+
+	const login = (fullScreen : boolean) => {
+
+		uniVerifyManager.value?.login({
+			uniVerifyStyle: {
+				fullScreen: fullScreen,
+				loginBtnText:i18n.global.t('login.btn_app_txt'),
+				logoPath: "/static/images/ys.png"
+			},
+			success: (res) => {
+				console.log("login success => " + JSON.stringify(res));
+				takePhoneNumber(res.accessToken, res.openId);
+			},
+			fail: (err) => {
+				console.error("login fail => " + err);
+				submitLoading.value = false;
+			}
+		});
+	}
+
+	const verify = (fullScreen : boolean) => {
+		if (uniVerifyManager.value == null) {
+			uni.showToast({
+				title: i18n.global.t('login.no_support_login_app'),
+				icon: "none",
+			});
+			return;
+		}
+		if (!props.isAgree) {
+			uni.showToast({
+				title:i18n.global.t('login.valid_login_app_agree'),
+				icon: "none",
+			});
+			return;
+		}
+		if (submitLoading.value == true) {
+			return;
+		}
+		if ('production' === process.env.NODE_ENV && '__UNI__HelloUniAppX' === uni.getAppBaseInfo().appId) {
+			// uni.showModal({
+			// 	title: '提示',
+			// 	content: '一键登录为收费功能，当前环境暂不支持'i18n.global.t('login.btn_app_txt'),
+			// 	showCancel: false
+			// })
+			return
+		}
+		// 校验预登录是否有效
+		submitLoading.value = true;
+		//uni.showLoading({ title: "" });
+		const isPreLoginValid = uniVerifyManager.value?.isPreLoginValid() ?? false;
+		if (isPreLoginValid) {
+			// 预登录有效，执行登录
+			login(fullScreen);
+		} else {
+			// 预登录无效，执行预登录
+			preLogin(() => {
+				login(fullScreen);
+			})
+		}
+	}
+	
+
+	onLoad(() => {
+		uniVerifyManager.value = uni.getUniVerifyManager();
+		// 预登录
+		preLogin(() => { });
+	})
+</script>
+
+<style lang="scss">
+	/* 微信登录 */
+	.app-split {
+		align-items: center;
+
+		.con {
+			.tit {
+				text-align: center;
+				font-size: 24px;
+			}
+
+			.ct {
+				font-size: 12px;
+				color: gray;
+				padding-top: 8px;
+
+
+			}
+		}
+	}
+
+	.split-line-wrapper {
+		flex-direction: row;
+		align-items: center;
+		margin-bottom: 15px;
+	}
+
+	.split-line {
+		flex: 1;
+		height: 0.5px;
+		background-color: #e0e0e0;
+	}
+
+	.split-line-text {
+		padding: 0 10px;
+		font-size: 12px;
+		color: #999999;
+	}
+
+	/* 登录按钮 */
+	.btn-content {
+		width: 100%;
+		margin: 24px 0 12px 0;
+	}
+
+	.btn-login {
+		width: 100%;
+		height: 50px;
+		line-height: 50px;
+		background-color: #007aff;
+		color: #fff;
+		font-size: 17px;
+		font-weight: 500;
+		border-radius: 25px;
+		border: none;
+
+	}
+</style>

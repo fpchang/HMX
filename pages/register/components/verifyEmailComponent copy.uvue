@@ -1,0 +1,262 @@
+<template>
+	<view class="verifyEmailComponent">
+		<view class="card">
+			<rice-form :model="emailForm" :rules="registerRule" ref="emailFormRef" label-width="100px"
+				class="demo-form">
+				<rice-form-item name="email" required label-position="top" :border-bottom="false">
+					<rice-input v-model="emailForm['email']" :placeholder="i18n.global.t('register.pach_email')" :focus-border="true" />
+				</rice-form-item>
+				<rice-form-item name="emailCode" required label-position="top" :border-bottom="false">
+					<view class="input-row" style="border:1px solid #dcdfe6">
+						<view style="flex:1;display: flex;padding:0 8px;">
+							<rice-input v-model="emailForm['emailCode']" :placeholder="i18n.global.t('register.pach_email_code')" border="none"
+								:maxlength="4" type="number" />
+						</view>
+						<view style="display: flex;flex-direction: row;align-items: center;">
+							<!-- <text class="btn-code" @click="sendEmailCode">
+								{{ codeText }}
+							</text> -->
+								<rice-button  type="primary" :text="codeText"  @click="sendEmailCode" textColor="#fff" :loading="smsLoading"></rice-button>
+					
+						</view>
+					</view>
+
+				</rice-form-item>
+				<view>
+					<view class="tooltips">
+						<text class="txt">{{i18n.global.t('register.email_tips')}}</text>
+					</view>
+				</view>
+			</rice-form>
+			<view style="margin-top: 24px;">
+				<rice-button type="primary" :text="i18n.global.t('register.btn_txt')" class="btn" shape="round" @click="nextEvent"
+					:loading="submitLoading" />
+			</view>
+		</view>
+	</view>
+</template>
+
+<script setup lang="uts">
+	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
+	import { AccountService } from "@/services/AccountService";
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
+	const emit = defineEmits(["setEmailEvent"]);
+	const submitLoading = ref(false);
+	const smsLoading = ref(false);
+	type emailFormType = {
+		email : string,
+		emailCode : string,
+		emailCodeTk : string
+	}
+	const emailForm = ref<emailFormType>({
+		email: "",
+		emailCode: "",
+		emailCodeTk: ""
+	});
+
+	const emailFormRef = ref<RiceFormComponentPublicInstance | null>(null);
+	const codeText = ref(i18n.global.t('login.btn_getVerificationCode'));
+	const codeDisabled = ref(false);
+	let timer = 0;
+	const emailvalidAccount = async (email : any | null) => {
+		if (email == null) {
+			return  i18n.global.t('form.valid_required_email');
+		}
+		const flag = await AccountService.validRegisterByEmail(email.toString());
+		return flag;
+	}
+
+	const registerRule = new Map<string, FormRules[]>([
+		[
+			"email",
+			[
+				{ required: true, message: i18n.global.t('form.valid_required_email') },
+				// { min: 3, max: 25, message: '字数需为 3 至 25 位', trigger: 'blur' },
+				{ pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message:i18n.global.t('form.valid_email') },
+				{ validator: emailvalidAccount, trigger: 'blur', message:i18n.global.t('register.valid_email_hanused') }
+			]
+		],
+		[
+			"emailCode",
+			[
+				{ required: true, message: i18n.global.t('form.valid_required_email') },
+				{ min: 4, max: 4, message:i18n.global.t('regitster.valid_email_num') , trigger: 'blur' }
+			]
+		]
+	])
+	// 清除定时器
+	const clearTimer = () => {
+		if (timer != 0) {
+			clearInterval(timer);
+			timer = 0;
+		}
+		codeText.value = i18n.global.t('login.btn_getSms') ;
+		codeDisabled.value = false;
+	};
+	const startTimeTask = () => {
+		codeDisabled.value = true;
+		let count = 60;
+		codeText.value = `${count}s`;
+
+		timer = setInterval(() => {
+			count--;
+			if (count <= 0) {
+				clearTimer();
+				return;
+			}
+			codeText.value = `${count}s`;
+		}, 1000);
+	}
+	const sendEmailCode = async () => {
+		if (timer != 0) {
+			//console.log(`请在${timer}s 后再试`);
+			return;
+		}
+	
+		const result = await emailFormRef.value!.validateFields(['email'])
+		// const result2 = await emailFormRef.value!.validate();
+		// const errsName = (result2 as FormValidateErrors[]).map(v => v.name)
+		//     console.log('校验失败的name合集', errsName)
+		if (result != true) {
+				uni.showToast({
+					title: i18n.global.t('form.valid_email'),
+					icon: "none"
+				})
+				return;			
+		}
+		
+		try {
+			//uni.showLoading();
+			smsLoading.value=true;
+			const emailCodeTk = await AccountService.sendEmailCode(emailForm.value.email,"register");
+			console.log("emailCodeTk", emailCodeTk);
+			emailForm.value.emailCodeTk = emailCodeTk;
+			smsLoading.value=false;
+			startTimeTask();
+		} catch (error) {
+			smsLoading.value=false;
+			//uni.hideLoading();
+			// uni.showToast({
+			// 	title: error.message as string,
+			// 	icon: "none"
+			// })
+		}
+	}
+
+	const nextEvent = async () => {
+		if(submitLoading.value==true){
+			return;
+		}
+		const result = await emailFormRef.value!.validate();
+		console.log("result", result);
+		//校验成功
+		if (result != true) {
+			//console.log("校验失败");
+			return;
+		}
+		//emit("setEmailEvent",emailForm.value.email,emailForm.value.emailCodeTk);
+		try {
+			submitLoading.value = true;
+			const flag = await AccountService.validEmailAndCode(emailForm.value.email, emailForm.value.emailCode, emailForm.value.emailCodeTk);
+			if (flag) {
+				emit("setEmailEvent", emailForm.value.email,emailForm.value.emailCodeTk);
+			}
+		} catch (err) {
+			submitLoading.value = false;
+		}
+
+	}
+</script>
+<style scoped lang="scss">
+	.verifyEmailComponent {
+		.card {
+			
+		}
+		
+		.title {
+		
+			text-align: center;
+			margin-bottom: 40px;
+		
+			.txt {
+				font-size: 32px;
+				font-weight: 600;
+				color: #1d1d1f;
+				padding-left: 14px;
+			}
+		}
+		
+		.input-box {
+			margin-bottom: 20px;
+			border-bottom: 0.5px solid #e5e7eb;
+			background-color: #fff;
+			border-radius: 25px;
+		}
+		
+		.input {
+			height: 50px;
+			padding: 0 16px;
+			font-size: 16px;
+			color: #1d1d1f;
+		}
+		
+		.ph {
+			color: #8e8e93;
+		}
+		
+		.btn-register {
+			margin-top: 35px;
+			width: 100%;
+			height: 50px;
+			line-height: 50px;
+			background: #007aff;
+			color: #fff;
+			border-radius: 25px;
+			font-size: 17px;
+			font-weight: 500;
+			border: none;
+		}
+		
+		.input-row {
+		
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex: 1;
+			flex-direction: row;
+			justify-content: space-between;
+		
+			overflow: hidden;
+		}
+		
+		.btn-code {
+			font-size: 14px;
+			color: #007aff;
+			background: #fff;
+			border: none;
+			outline: none;
+			padding: 0 8px;
+			margin: 0 4px;
+		}
+		
+		.btn-code[disabled] {
+			color: #8e8e93;
+		}
+		
+		.tooltips {
+			margin-top: 12px;
+		
+			.txt {
+				color: rgb(134, 144, 156);
+				font-size: 13px;
+			}
+		
+		}
+	}
+
+	
+</style>

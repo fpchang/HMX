@@ -114,6 +114,6 @@ export const getGatherEvent = async (hotel_id : string):Promise<boolean> => {
 	getOrderListByCheckInTommorow(hotel_id);//明日办理入住的客户
 	getOrderListToday(hotel_id);	//今日订单
 	getOrderListTommorow(hotel_id);//明日订单
-	getOrderListTodayAfter(hotel_id);
+	await getOrderListTodayAfter(hotel_id);
 	return true;
 }

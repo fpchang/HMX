@@ -14,30 +14,17 @@
 	import { roomTypeService } from '@/services/roomTypeService';
 	import { HotelService } from '@/services/HotelService';
 	defineOptions({
-		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+		styleIsolation: "isolated"
 	})
 	const props = defineProps({
 		hotel_id: {
 			type: String,
 			default: ""
 		},
-		
 	});
 	const hotel_id = props.hotel_id;
 	const hotel = ref<hotelBean | null>(null);
 	const roomTypeList = ref<Array<roomTypeBean> | null>(null);
-	//const hotel_id = ref<string>("");
-	// const setHotelId=(h:string)=>{
-	// 	console.log("sssssss",h)
-	// 	hotel_id.value=h
-	// }
-	// const setHotel=(h:hotelBean)=>{
-	// 	console.log
-	// 	hotel.value=h
-	// }
-	// const setRoomTypeList=(rm:Array<roomTypeBean>)=>{
-	// 	roomTypeList.value=rm
-	// }
 	const servicesFacilities_data = computed<Array<sf>>(() => {
 		if (roomTypeList.value == null || hotel.value == null) {
 			return []
@@ -56,7 +43,6 @@
 				type: "roomType",
 				support: arr
 			},
-
 			{
 				name: "餐饮设施",
 				icon: "/static/icons/hoteldisplay/canying.png",
@@ -90,6 +76,6 @@
 	console.log("1111", servicesFacilities_data.value)
 </script>
 
-<style lang="scss" scoped>
-
+<style>
+/* 页面无自定义样式，仅保留空style标签兼容编译 */
 </style>

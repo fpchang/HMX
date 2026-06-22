@@ -19,9 +19,9 @@
 		</template>
 	</rice-navbar>
 	<!-- #ifdef APP -->
-	<scroll-view style="flex:1">
+	<scroll-view style="flex:1;background-color: #fff;">
 	<!-- #endif -->
-		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
+		<view style="padding:15px;border-radius: 12px;">
 			<xt-form-item :label="i18n.global.t('finance.voucher_Type')" tips="" required>
 				<view>
 					<rice-radio-group v-model="fmForm.billType" direction="row" :disabled="pageType==1" @change="billTypeChange">

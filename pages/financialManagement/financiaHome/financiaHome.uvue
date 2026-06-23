@@ -171,7 +171,7 @@
 		}
 		return num
 	})
-	const marginLeft=(index:number)=>{
+	const marginLeft=(index:number):string | number=>{
 		if(index==0){
 			return 0;
 		}
@@ -181,6 +181,7 @@
 		if(index % columnNum.value ==0){
 			return 0;
 		}
+		return '12px';
 	}
 	onLoad(params => {
 		init();

@@ -41,7 +41,9 @@
 		  	strokeColor="green" trailColor="#eee" strokeWidth="12" trailWidth="12">
 		  	<text class="stats-value">{{numCustomerOrderToday}}</text>
 		  </l-circle> -->
-					<rice-progress-circle :format="labelFormat(numCustomerOrderToday)" :percentage="numCustomerOrderToday_percent" color="green"  />
+					<rice-progress-circle :percentage="numCustomerOrderToday_percent" color="green">
+						<text class="stats-value">{{ numCustomerOrderToday }}</text>
+					</rice-progress-circle>
 				</view>
 				<view class="stats-item">
 					<text class="stats-label">{{ i18n.global.t("gather.emptyRooms") }}</text>
@@ -49,7 +51,9 @@
 						strokeColor="orange" strokeWidth="12" trailWidth="12">
 						<text class="stats-value">{{ roomCount - numCustomerOrderToday}}</text>
 					</l-circle> -->
-					<rice-progress-circle :format="labelFormat(roomCount - numCustomerOrderToday)" :percentage="(100 - numCustomerOrderToday_percent)" color="orange"  />
+					<rice-progress-circle :percentage="(100 - numCustomerOrderToday_percent)" color="orange">
+						<text class="stats-value">{{ roomCount - numCustomerOrderToday }}</text>
+					</rice-progress-circle>
 				</view>
 			</view>
 			
@@ -68,7 +72,9 @@
 						strokeWidth="12" trailWidth="12">
 						<text class="stats-value">{{numCustomerOrderTommorw}}</text>
 					</l-circle> -->
-					<rice-progress-circle :format="labelFormat(numCustomerOrderTommorw)" :percentage="numCustomerOrderTommorw_percent" color="green"  />
+					<rice-progress-circle :percentage="numCustomerOrderTommorw_percent" color="green">
+						<text class="stats-value">{{ numCustomerOrderTommorw }}</text>
+					</rice-progress-circle>
 					
 				</view>
 				<view class="stats-item">
@@ -77,7 +83,9 @@
 						strokeWidth="12" trailWidth="12">
 						<text class="stats-value">{{numEmptyRoom_format()}}</text>
 					</l-circle> -->
-					<rice-progress-circle :format="labelFormat(roomCount - numCustomerOrderTommorw)" :percentage="(100 - numCustomerOrderTommorw_percent)" color="orange"  />
+					<rice-progress-circle :percentage="(100 - numCustomerOrderTommorw_percent)" color="orange">
+						<text class="stats-value">{{ roomCount - numCustomerOrderTommorw }}</text>
+					</rice-progress-circle>
 					
 				</view>
 			</view>
@@ -188,10 +196,6 @@
 		let num = getRoomCountFromOrderList(orderList);
 		return num;
 	});
-	const labelFormat=(num:number):string=>{
-		return num.toString();
-	}
-
 	const numCustomerOrderToday_percent = computed(() : number => {
 		if (roomCount.value == 0) {
 			return 40;
@@ -295,8 +299,8 @@
 		border-radius: 8px;
 		background-color: #fff;
 		border: none;
-		font-size: 15px;
 		display: flex;
+		flex-direction: row;
 		justify-content: center;
 		align-items: center;
 		height: 58px;
@@ -307,11 +311,13 @@
 		background-color: #007AFF;
 	}
 
-	.tabtxt {
+	.txt {
+		font-size: 15px;
 		color: #333333 !important;
 	}
 
 	.tabtxt-active {
+		font-size: 15px;
 		color: #ffffff !important;
 	}
 
@@ -346,6 +352,7 @@
 		font-size: 24px;
 		font-weight: 600;
 		color: #333;
+		text-align: center;
 	}
 
 	.val-text {

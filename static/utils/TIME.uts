@@ -58,7 +58,7 @@ class TimeClass {
 		const current = time != null ? time : new Date();
 		// current是本周的第几天
 		let nowDayOfWeek = current.getDay();
-		if (nowDayOfWeek === 0) nowDayOfWeek = 7;
+		if (nowDayOfWeek == 0) nowDayOfWeek = 7;
 		const dayNum = 1 * 24 * 60 * 60 * 1000;
 		// 获取本周星期一的时间，星期一作为一周的第一天
 		const firstDate = new Date(current.valueOf() - (nowDayOfWeek - 1) * dayNum);

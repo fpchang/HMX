@@ -35,7 +35,7 @@
 				</view>
 				
 				<view class="hotel-card">
-					<block v-if="hotel_id!=''">
+					<template v-if="hotel_id!=''">
 						<view class="card-img-area">
 							<image 
 								:src="hotel?.firstImages" 
@@ -64,7 +64,7 @@
 								<text class="tag-txt">{{i18n.global.t('hotel.normal_operation')}}</text>
 							</view>
 						</view>
-					</block>
+					</template>
 					<view v-if="hotel_id==''">
 						<l-empty :description="i18n.global.t('common.noData',[''])" />
 					</view>

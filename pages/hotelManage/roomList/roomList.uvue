@@ -147,13 +147,13 @@
 	const searchInputChange = (value : string) => {
 		search_key.value = value;
 	}
-	// const selectRoomType = (val : string) => {
-	// 	console.log("val", val)
-	// 	if (selectId.value == val) {
-	// 		return;
-	// 	}
-	// 	selectId.value = val;
-	// }
+	const selectRoomType = (val : string) => {
+		console.log("val", val)
+		if (selectId.value == val) {
+			return;
+		}
+		selectId.value = val;
+	}
 	const getRoomTypeName = (room_type_id : string) : string => {
 		if (roomTypeList.value != null) {
 			let obj = roomTypeList.value.find(item => item._id == room_type_id) as roomTypeBean;

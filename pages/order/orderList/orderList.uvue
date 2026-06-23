@@ -1,123 +1,259 @@
 <template>
-	<rice-navbar title="" border>
-		<template #left>
-			<view style="display: flex;flex-direction: row;align-items: center;">
-				<navigator open-type="navigateBack">
-					<rice-icon name="arrow-left" size="22px" />
-				</navigator>
+	<view>
+		<rice-navbar title="" border>
+			<template #left>
+				<view style="display: flex;flex-direction: row;align-items: center;">
+					<navigator open-type="navigateBack">
+						<rice-icon name="arrow-left" size="22px" />
+					</navigator>
 
-				<image src="/static/icons/list.png"
-					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{ i18n.global.t('order.orderList') }}</text>
-			</view>
-		</template>
-		<template #right>
-			<view class="navbar-btn" @click="addOrder">
-				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
-				<text class="navbar-btn-txt">{{ i18n.global.t('order.title_order') }}</text>
-			</view>
-		</template>
-	</rice-navbar>
-	
-	<!-- #ifdef APP -->
-	<scroll-view style="flex:1">
-	<!-- #endif -->
-		<view class="search-area-root">
-			<view class="search-card">
-				<view class="search-card-item title-row">
-					<text class="title-txt">{{ i18n.global.t('order.orderFilter') }}</text>
-					<l-tag variant="light">{{ i18n.global.t('common.totalCount',[orderResult.count]) }}</l-tag>
+					<image src="/static/icons/list.png"
+						style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+					<text
+						style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{ i18n.global.t('order.orderList') }}</text>
 				</view>
-				<view class="search-card-item select-row">
-					<orderSearchComponent :columns="columns" :initDateRange="dateRange"
-						@searchInputChange="searchInputChange" @selectAction="selectStatus" @dateChange="dateChange"
-						@searchAction="getOrderList" :placeholder="i18n.global.t('order.searchPlaceholder')"></orderSearchComponent>
+			</template>
+			<template #right>
+				<view class="navbar-btn" @click="addOrder">
+					<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
+					<text class="navbar-btn-txt">{{ i18n.global.t('order.title_order') }}</text>
 				</view>
-				<view class="search-card-item empty-row"></view>
-			</view>
+			</template>
+		</rice-navbar>
 
-		</view>
-		<view class="order-list-root">
-			<view class="order-card-item" v-for="order of orderResult.orderList">
-				<view class="order-card">
-					<view class="tag-wrap">
-						<view> 
-						<rice-tag v-if="order.orderStatus==1" type="primary" :text="i18n.global.t('order.statusCheckInPending')" />
-						<rice-tag v-if="order.orderStatus==5" type="success" :text="i18n.global.t('order.statusCompleted')" />
-						<rice-tag v-if="order.orderStatus==10" type="error" :text="i18n.global.t('order.statusCancelled')" />
-						</view>
-					
+		<!-- #ifdef APP -->
+		<scroll-view style="flex:1">
+		<!-- #endif -->
+			<view class="search-area-root">
+				<view class="search-card">
+					<view class="search-card-item title-row">
+						<text class="title-txt">{{ i18n.global.t('order.orderFilter') }}</text>
+						<l-tag variant="light">{{ i18n.global.t('common.totalCount',[orderResult.count]) }}</l-tag>
 					</view>
-					
-					<view class="card-content-wrap">
-						<view class="content-row">
-							<view class="label-flex">
-								<image src="/static/icons/hotelcustomer.png" style="width: 13px;height: 13px;"></image>
-								<text class="label-text">{{ i18n.global.t('order.guest') }}：</text>
-							</view>
-							<text class="value-text">{{order.userName}}</text>
-						</view>
-						<view class="content-row">
-							<view class="label-flex">
-								<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
-								<text class="label-text">{{ i18n.global.t('order.checkInTime') }}：</text>
-							</view>
-							<text class="value-text">{{formatDate(order.checkInStartDateTimeStamp)}}</text>
-						</view>
-						<view class="content-row">
-							<view class="label-flex">
-								<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
-								<text class="label-text">{{ i18n.global.t('order.checkOutTime') }}：</text>
-							</view>
-							<text class="value-text">{{formatDate(order.checkInEndDateTimeStamp)}}</text>
-						</view>
-						<view class="content-row">
-							<view class="label-flex">
-								<image src="/static/icons/roomReserve.png" style="width: 16px;height: 16px;"></image>
-								<text class="label-text">{{i18n.global.t("order.room")}}：</text>
-							</view>
-							<view class="flex-wrap-val" style="display: flex;flex-direction: row;align-items: center;flex: 1;flex-wrap: wrap;justify-content: flex-end;">
-								<text v-for="item of formatRoomList(order.reservedRoomList)" style="padding:0 4px">{{item}}</text> 
-							</view>
-						</view>
-						<view class="content-row no-bottom">
-							<view class="label-flex">
-								<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
-								<text class="label-text">{{ i18n.global.t('order.remark') }}：</text>
-							</view>
-							<text class="value-text">
-								{{order.mark}}
-							</text>
-						</view> 
-						<view class="content-row no-bottom">
-							<view class="label-flex">
-								<image src="/static/icons/fm/income.png" style="width: 16px;height: 16px;"></image>
-								<text class="label-text">{{ i18n.global.t('order.roomPrice') }}：</text>
-							</view>
-							<text class="price-text" style="color:#047857;font-weight: 700;">
-								￥{{order.totalAmount}}
-							</text>
-						</view> 
+					<view class="search-card-item select-row">
+						<orderSearchComponent :columns="columns" :initDateRange="dateRange"
+							@searchInputChange="searchInputChange" @selectAction="selectStatus" @dateChange="dateChange"
+							@searchAction="getOrderList" :placeholder="i18n.global.t('order.searchPlaceholder')">
+						</orderSearchComponent>
 					</view>
+					<view class="search-card-item empty-row"></view>
+				</view>
 
-					<view class="btn-control-wrap">
-						<view>
-							<xt-control @del="deleteOrder(order)" @edit="editOrder(order)" :show-view="false" :show-edit="false" :show-delete="order.orderStatus!=10"></xt-control>
+			</view>
+			<view style="padding:14px;border-radius: 14px;">
+				<view style="border-radius: 14px;background-color: #fff;">
+					<rice-swipe-actions :accordion="true" ref="swipeControlRef">
+						<rice-swipe-actions-item :auto-close="true" v-for="order of orderResult.orderList">
+							<rice-cell :title="order.userName"
+								:label="`${formatDate(order.checkInStartDateTimeStamp)}~${formatDate(order.checkInEndDateTimeStamp)}`"
+								size="large" arrow arrow-direction="left" center :clickable="false" @click="viewOrder(order)">
+								<template #leftIcon>
+									<image mode="aspectFill" :src="formatRommTypeImage(order.reservedRoomList[0])"
+										style="margin-right:8px;width: 100px;height:110px;border-radius: 12px;"
+										class="cell-left-icon"></image>
+								</template>
+								<template #title>
+									<view class="order-title">
+										<text
+											class="order-title-label">{{i18n.global.t('order.guest') }}：{{order.userName}}</text>
+										<view>
+											<rice-tag plain-fill v-if="order.orderStatus==1" type="primary"
+												:text="i18n.global.t('order.statusCheckInPending')" size="small" />
+											<rice-tag plain-fill v-if="order.orderStatus==5" type="success"
+												:text="i18n.global.t('order.statusCompleted')" size="small" />
+											<rice-tag plain-fill v-if="order.orderStatus==10" type="error"
+												:text="i18n.global.t('order.statusCancelled')" size="small" />
+										</view>
+									</view>
+								</template>
+								<template #label>
+									<view class="order-card-simple">
+										<view class="order-card-simple-item"><text
+												class="order-card-simple-txt">{{ i18n.global.t('order.checkInTime') }}：</text><text
+												class="order-card-simple-txt">{{formatDate(order.checkInStartDateTimeStamp)}}</text>
+										</view>
+										<view class="order-card-simple-item"><text
+												class="order-card-simple-txt">{{ i18n.global.t('order.checkOutTime') }}：</text><text
+												class="order-card-simple-txt">{{formatDate(order.checkInEndDateTimeStamp)}}</text>
+										</view>
+										<view class="order-card-simple-item">
+											<text class="order-card-simple-txt">{{i18n.global.t("order.room")}}：</text>
+											<text class="order-card-simple-txt"
+												v-for="item of formatRoomList(order.reservedRoomList)"
+												style="padding:0 4px">{{item}}</text>
+										</view>
+										<view class="order-card-simple-item"><text
+												class="order-card-simple-txt">{{ i18n.global.t('order.roomPrice') }}：</text><text
+												class="order-card-simple-txt order-card-simple-txt-price-text">￥{{order.totalAmount}}</text>
+										</view>
+									</view>
+								</template>
+								<template #rightIcon>
+									<rice-icon name="double-left" style="margin-left: 15px;" />
+								</template>
+							</rice-cell>
+							<template #right>
+								<view class="swipe-menu-container">
+									<view class="menu-item-box menu-detail" @click="viewOrder(order)">
+										<rice-icon name="eyes" color="#fff" />
+										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_details",[''])}}</text>
+									</view>
+									<view class="menu-item-box menu-edit" @click="editOrder(order)">
+										<rice-icon name="edit" color="#fff" />
+										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_edit")}}</text>
+									</view>
+									<view class="menu-item-box menu-del" @click="deleteOrder(order)">
+										<rice-icon name="delete" color="#fff" />
+										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_delete")}}</text>
+									</view>
+								</view>
+							</template>
+						</rice-swipe-actions-item>
+					</rice-swipe-actions>
+				</view>
+			</view>
+			<view class="order-list-root" v-if="false">
+
+				<view class="order-card-item" v-for="order of orderResult.orderList">
+					<view class="order-card">
+						<view class="tag-wrap">
+							<view>
+								<rice-tag v-if="order.orderStatus==1" type="primary"
+									:text="i18n.global.t('order.statusCheckInPending')" />
+								<rice-tag v-if="order.orderStatus==5" type="success"
+									:text="i18n.global.t('order.statusCompleted')" />
+								<rice-tag v-if="order.orderStatus==10" type="error"
+									:text="i18n.global.t('order.statusCancelled')" />
+							</view>
+
+						</view>
+
+						<view class="card-content-wrap">
+							<view class="content-row">
+								<view class="label-flex">
+									<image src="/static/icons/hotelcustomer.png" style="width: 13px;height: 13px;">
+									</image>
+									<text class="label-text">{{ i18n.global.t('order.guest') }}：</text>
+								</view>
+								<text class="value-text">{{order.userName}}</text>
+							</view>
+							<view class="content-row">
+								<view class="label-flex">
+									<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
+									<text class="label-text">{{ i18n.global.t('order.checkInTime') }}：</text>
+								</view>
+								<text class="value-text">{{formatDate(order.checkInStartDateTimeStamp)}}</text>
+							</view>
+							<view class="content-row">
+								<view class="label-flex">
+									<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
+									<text class="label-text">{{ i18n.global.t('order.checkOutTime') }}：</text>
+								</view>
+								<text class="value-text">{{formatDate(order.checkInEndDateTimeStamp)}}</text>
+							</view>
+							<view class="content-row">
+								<view class="label-flex">
+									<image src="/static/icons/roomReserve.png" style="width: 16px;height: 16px;">
+									</image>
+									<text class="label-text">{{i18n.global.t("order.room")}}：</text>
+								</view>
+								<view class="flex-wrap-val"
+									style="display: flex;flex-direction: row;align-items: center;flex: 1;flex-wrap: wrap;justify-content: flex-end;">
+									<text v-for="item of formatRoomList(order.reservedRoomList)"
+										style="padding:0 4px">{{item}}</text>
+								</view>
+							</view>
+							<view class="content-row no-bottom">
+								<view class="label-flex">
+									<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
+									<text class="label-text">{{ i18n.global.t('order.remark') }}：</text>
+								</view>
+								<text class="value-text">
+									{{order.mark}}
+								</text>
+							</view>
+							<view class="content-row no-bottom">
+								<view class="label-flex">
+									<image src="/static/icons/fm/income.png" style="width: 16px;height: 16px;"></image>
+									<text class="label-text">{{ i18n.global.t('order.roomPrice') }}：</text>
+								</view>
+								<text class="price-text" style="color:#047857;font-weight: 700;">
+									￥{{order.totalAmount}}
+								</text>
+							</view>
+						</view>
+
+						<view class="btn-control-wrap">
+							<view>
+								<xt-control @del="deleteOrder(order)" @edit="editOrder(order)" :show-view="false"
+									:show-edit="false" :show-delete="order.orderStatus!=10"></xt-control>
+							</view>
 						</view>
 					</view>
 				</view>
 			</view>
+			<view v-if="submitLoading"
+				style="margin-top:68px;display: flex;flex-direction: row;justify-content: center;">
+				<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
+			</view>
+			<l-empty :description="i18n.global.t('common.noData',[''])"
+				v-if="!submitLoading&&orderResult.orderList.length<1" />
+		<!-- #ifdef APP -->
+		</scroll-view>
+		<!-- #endif -->
+		<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"
+			v-if="!submitLoading&&orderResult!=null&&orderResult.count>orderResult.pageSize">
+			<l-pagination v-model="orderResult.pageNo" :disabled="submitLoading" :total="orderResult?.count"
+				:page-size="orderResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
 		</view>
-		<view v-if="submitLoading" style="margin-top:68px;display: flex;flex-direction: row;justify-content: center;">
-			<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
-		</view>
-		<l-empty :description="i18n.global.t('common.noData',[''])" v-if="!submitLoading&&orderResult.orderList.length<1" />
-	<!-- #ifdef APP -->
-	</scroll-view>
-	<!-- #endif -->
-	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"  v-if="!submitLoading&&orderResult!=null&&orderResult.count>orderResult.pageSize">
-		<l-pagination v-model="orderResult.pageNo" :disabled="submitLoading" :total="orderResult?.count"
-			:page-size="orderResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
+		<page-container :show="showDeatilPage" position="right" :round="true" @afterleave="showDeatilPage=false"
+			custom-style="background-color: #f5f5f7;width:750rpx">
+			<view class="page-wrap-container" style="width:750rpx;">
+				<view style="margin-top:100px;padding: 14px;display: flex;flex-direction:row;justify-content: center;"
+					v-if="active_order!=null">
+					<view style="background-color: #fff;border-radius: 14px;padding:24px 14px;max-width: 500px;flex:1">
+						<rice-cell-group>
+							<rice-cell icon="/static/icons/hotelcustomer.png" :title-style="{'paddingLeft':'4px'}"
+								center :title=" i18n.global.t('order.guest')" :value="active_order.userName"
+								:clickable="false" />
+
+							<rice-cell icon="/static/icons/fm/time.png" :title-style="{'paddingLeft':'4px'}"
+								center :title=" i18n.global.t('order.checkInTime')" :value="formatDate(active_order.checkInStartDateTimeStamp)"
+								:clickable="false" />
+							<rice-cell icon="/static/icons/fm/time.png" :title-style="{'paddingLeft':'4px'}"
+								center :title=" i18n.global.t('order.checkOutTime')" :value="formatDate(active_order.checkInEndDateTimeStamp)"
+								:clickable="false" />
+							<rice-cell icon="/static/icons/roomReserve.png" :title-style="{'paddingLeft':'4px'}"
+								center :title=" i18n.global.t('order.room')" :value="roomListStr(active_order.reservedRoomList)"
+								:clickable="false" />
+							<rice-cell icon="/static/icons/hotelcustomer.png" :title-style="{'paddingLeft':'4px'}"
+								center :title=" i18n.global.t('order.remark')" :value="active_order.mark"
+								:clickable="false" />
+							
+							</rice-cell-group>
+							<view style="margin-top:20px">
+								<rice-row :gutter="8">
+									<rice-col :span="10"></rice-col>
+									<rice-col :span="6">
+										<view>
+											<rice-button type="primary" size="small" plain-fill
+												:text="i18n.global.t('common.btn_txt_modify',[''])"
+												@click="editOrder(active_order)"></rice-button>
+										</view>
+									</rice-col>
+									<rice-col :span="6">
+										<view>
+											<rice-button type="error" size="small" plain-fill
+												:text="i18n.global.t('common.btn_txt_delete')"
+												@click="deleteOrder(active_order)"></rice-button>
+										</view>
+									</rice-col>
+								</rice-row>
+							</view>
+					</view>
+				</view>
+			</view>
+		</page-container>
 	</view>
 </template>
 
@@ -129,19 +265,20 @@
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { OrderService } from "@/services/OrderService";
-	import { orderBean,OrderRoomTypeBean, OrderDataListResult } from '@/bean/orderBean.uts';
+	import { orderBean, OrderRoomTypeBean, OrderDataListResult } from '@/bean/orderBean.uts';
 	import { state } from "@/store/store";
 	import { fmState } from "@/store/modules/fmStore.uts";
 	import { comFunction } from "@/pages/index/ComFuc";
 	import orderSearchComponent from "./components/orderSearchComponent/orderSearchComponent";
 	import { roomBean } from "@/bean/roomBean";
-	import {userBean} from "@/bean/userBean";
-	import {getGatherEvent } from "@/store/modules/orderStore";
+	import { userBean } from "@/bean/userBean";
+	import { getGatherEvent } from "@/store/modules/orderStore";
 	import i18n from '@/i18n/index.uts';
 	defineOptions({
-		styleIsolation: "app"
+		styleIsolation: "isolated"
 	})
 	let submitLoading = ref(false);
+	const showDeatilPage = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -166,15 +303,29 @@
 	const dateRange = ref<string[]>(getMonthDateArray());
 	const columns = computed<Array<Array<PickerOption>>>(() => {
 		let result : Array<Array<PickerOption>> = [[
-				{ text: i18n.global.t('order.statusAll'), value: "all" },
-			      { text: i18n.global.t('order.statusCheckInPending'), value: 1 },
-			      { text: i18n.global.t('order.statusCompleted'), value: 5 },
-			      { text: i18n.global.t('order.statusCancelled'), value: 10 },
+			{ text: i18n.global.t('order.statusAll'), value: "all" },
+			{ text: i18n.global.t('order.statusCheckInPending'), value: 1 },
+			{ text: i18n.global.t('order.statusCompleted'), value: 5 },
+			{ text: i18n.global.t('order.statusCancelled'), value: 10 },
 		]];
 		return result;
 	});
 
-
+	const active_id = ref("");
+	const active_order = computed<orderBean | null>(() => {
+		if (active_id.value == "") {
+			return null;
+		}
+		const target = orderResult.value.orderList.find(item => item._id == active_id.value);
+		if (target != null) {
+			return target;
+		}
+		return null;
+	});
+		const viewOrder = (order : orderBean) => {
+			active_id.value = order._id;
+			showDeatilPage.value = true;
+		}
 	const orderResult = ref<OrderDataListResult>({
 		count: 0,
 		pageNo: 1,
@@ -205,37 +356,72 @@
 	const formatDate = (timestamp : number) => {
 		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
 	}
-	const formatRoomName = (room_id : string):string => {
-			let val="--";
+	const formatRoomName = (room_id : string) : string => {
+		let val = "--";
 		if (roomTypeList.value == null) {
 			return val;
 		}
-		roomTypeList.value.forEach(roomtype=>{
+		roomTypeList.value.forEach(roomtype => {
 			let list = roomtype.roomList as Array<roomBean>;
-			list.forEach(room=>{
-				if(room._id ==room_id){
-					val=room.room_name;
+			list.forEach(room => {
+				if (room._id == room_id) {
+					val = room.room_name;
 					return;
 				}
-				
+
 			})
-		})	
+		})
 		return val;
+	}
+	const formatRommTypeImage = (roomId : string) : string => {
+		let src = "";
+		if (roomTypeList.value == null) {
+			return src;
+		}
+		for (let i = 0; i < roomTypeList.value.length; i++) {
+			const typeItem = roomTypeList.value[i];
+			const roomList = typeItem.roomList || [];
+			// 遍历当前房型下所有房间
+			for (let j = 0; j < roomList.length; j++) {
+				const room = roomList[j];
+				if (room._id == roomId) {
+					src = typeItem.firstImages;
+				}
+			}
+		}
+		// 找不到对应房间返回空
+		return src;
+
 	}
 	const formatRoomList = (list : Array<string>) : Array<string> => {
 		let result : Array<string> = [];
 		list.forEach(room_id => {
 			let room = roomList.value.find(item => item._id == room_id);
-			if(room==null){
+			if (room == null) {
 				result.push("-");
-				
-			}else{
+
+			} else {
 				result.push(room.room_name);
 			}
-			
+
 		})
-	
+
 		return result;
+	}
+	const roomListStr = (list : Array<string>) : string => {
+		let result : Array<string> = [];
+		list.forEach(room_id => {
+			let room = roomList.value.find(item => item._id == room_id);
+			if (room == null) {
+				result.push("-");
+
+			} else {
+				result.push(room.room_name);
+			}
+
+		})
+
+		return result.join("，");
 	}
 	const addOrder = async () => {
 		if (!permissionList.value.includes(
@@ -251,7 +437,7 @@
 			})
 			return;
 		}
-		uni.$once("refrushOrderList", ()=>{
+		uni.$once("refrushOrderList", () => {
 			getOrderList();
 		})
 		uni.navigateTo({
@@ -265,21 +451,21 @@
 		if (!permissionList.value.includes(
 			"ORDER_DELETE"
 		)) {
-		showDialog({
-						title: i18n.global.t('permission.noPermission'),
-						message: i18n.global.t('permission.contactAdmin'),
-						showCancelButton: false,
-						confirm: () => {
-							hideDialog();
-						}
-					})
+			showDialog({
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
 			return;
 		}
 		showDialog({
 			title: i18n.global.t('order.confirmDeleteOrder'),
-			message: i18n.global.t('order.deleteOrderTip')+"?",
+			message: i18n.global.t('order.deleteOrderTip') + "?",
 			beforeClose: async () : Promise<boolean> => {
-				await OrderService.deleteOrder(order._id);				
+				await OrderService.deleteOrder(order._id);
 				await getOrderList();
 				getGatherEvent(hotel_id.value);
 				hideDialog();
@@ -293,18 +479,18 @@
 
 		});
 	}
-	const editOrder = async (order:orderBean) => {
+	const editOrder = async (order : orderBean) => {
 		if (!permissionList.value.includes(
 			"ROOMTYPE_UPDATE"
 		)) {
-		showDialog({
-								title: i18n.global.t('permission.noPermission'),
-								message: i18n.global.t('permission.contactAdmin'),
-								showCancelButton: false,
-								confirm: () => {
-									hideDialog();
-								}
-							})
+			showDialog({
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
 			return;
 		}
 	}
@@ -319,115 +505,191 @@
 </script>
 
 <style>
-/* 顶部搜索区域 */
-.search-area-root {
-	padding: 18px;
-}
-.search-card {
-	background-color: #fff;
-	border-radius: 8px;
-	padding: 16px;
-}
-.search-card-item {
-	margin-bottom: 15px;
-}
-.empty-row {
-	margin-bottom: 0;
-}
-.title-row {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-}
-.title-txt {
-	padding-right: 8px;
-	font-size: 18px;
-	font-weight: 700;
-	color:#999;
-}
-.select-row {
-}
+	/* 顶部搜索区域 */
+	.search-area-root {
+		padding: 18px;
+	}
 
-/* 订单列表外层容器 */
-.order-list-root {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-}
-.order-card-item {
-	min-width: 320px;
-	padding: 7.5px 15px;
-	flex: 1;
-}
-.order-card {
-	background-color: #fff;
-	border-radius: 12px;
-	position: relative;
-}
-.tag-wrap {
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-end;
-	padding: 10px 10px 0 0;
-}
+	.search-card {
+		background-color: #fff;
+		border-radius: 8px;
+		padding: 16px;
+	}
 
-/* 卡片内容区域 */
-.card-content-wrap {
-	padding: 24px;
-}
-.content-row {
-	margin-top: 15px;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-}
-.no-bottom {
-	margin-top: 0;
-}
-.label-flex {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-}
-.label-text {
-	color: #1f2937;
-	font-size: 13px;
-	padding-left: 8px;
-}
-.value-text {
-	color: #1f2937;
-	font-size: 13px;
-}
-.flex-wrap-val {
-	color: #1f2937;
-	font-size: 13px;
-}
-.price-text {
-	font-size: 13px;
-}
+	.search-card-item {
+		margin-bottom: 15px;
+	}
 
-/* 底部操作按钮区域 */
-.btn-control-wrap {
-	padding:0 12px 12px 0;
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-end;
-	align-items: center;
+	.empty-row {
+		margin-bottom: 0;
+	}
+
+	.title-row {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.title-txt {
+		padding-right: 8px;
+		font-size: 18px;
+		font-weight: 700;
+		color: #999;
+	}
+
+	.select-row {}
+
+	/* 订单列表外层容器 */
+	.order-list-root {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	.order-card-item {
+		min-width: 320px;
+		padding: 7.5px 15px;
+		flex: 1;
+	}
+
+	.order-card {
+		background-color: #fff;
+		border-radius: 12px;
+		position: relative;
+	}
+
+	.tag-wrap {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		padding: 10px 10px 0 0;
+	}
+
+	/* 卡片内容区域 */
+	.card-content-wrap {
+		padding: 24px;
+	}
+
+	.content-row {
+		margin-top: 15px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.no-bottom {
+		margin-top: 0;
+	}
+
+	.label-flex {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.label-text {
+		color: #1f2937;
+		font-size: 13px;
+		padding-left: 8px;
+	}
+
+	.value-text {
+		color: #1f2937;
+		font-size: 13px;
+	}
+
+	.flex-wrap-val {
+		color: #1f2937;
+		font-size: 13px;
+	}
+
+	.price-text {
+		font-size: 13px;
+	}
+
+	/* 底部操作按钮区域 */
+	.btn-control-wrap {
+		padding: 0 12px 12px 0;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		align-items: center;
+	}
+
+	.navbar-btn {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		padding: 12px 15px;
+		border-radius: 8px;
+	}
+
+	.navbar-btn-txt {
+		color: #007aff;
+		font-size: 15px;
+		padding-left: 4px;
+	}
+
+	/* 侧滑菜单外层 */
+	.swipe-menu-container {
+		display: flex;
+		flex-direction: row;
+		height: 100%;
+	}
+	/* 侧滑每个按钮项 */
+	.menu-item-box {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 70px;
+		height: 100%;
+	}
+.menu-detail {
+	background-color: #007aff;
 }
+.menu-edit {
+	background-color: #ff7d00;
+}
+.menu-del {
+	background-color: #f53f3f;
+}
+	.order-title {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
 
-.navbar-btn{
-	  display: flex;
-	  flex-direction: row;
-	  align-items: center;
-	  justify-content: center;
-	  padding: 12px 15px;
-	  border-radius: 8px;
-  }
-   .navbar-btn-txt {
-  	color: #007aff;
-  	font-size: 15px;
-  	padding-left: 4px;
-  }
+	.order-title-label {
+		color: #333;
+		font-size: 14px;
+		padding: 4px;
+	}
 
+	.order-card-simple {
+		display: flex;
+
+	}
+
+	.order-card-simple-item {
+		display: flex;
+		flex-direction: row;
+		align-items: baseline;
+		padding: 4px;
+		flex-wrap: wrap;
+	}
+
+	.order-card-simple-txt {
+		font-size: 12px;
+		color: #666;
+	}
+
+	.order-card-simple-txt-price-text {
+		font-size: 16px;
+		color: #F56C6C;
+		font-weight: 600;
+	}
 </style>

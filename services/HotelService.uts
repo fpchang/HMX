@@ -318,9 +318,9 @@ class HotelServiceClass {
 				const obj = {_id, employee_name, hotel_id,account, phone, role, mark};
 				const res = await action_co.employee_editEmployee(obj);
 				return true;
-			} catch (error) {
+			} catch (error:Error) {
 				console.log(error)
-				throw new Error(error.message.toString());
+				throw new Error(error.message);
 			}
 	}
 	

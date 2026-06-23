@@ -11,7 +11,7 @@
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn" v-if="pageType!=2">
+			<view class="navbar-save-btn" v-if="pageType!=2">
 				<rice-button @click="submitForm" type="default" size="mini" :text="i18n.global.t('common.btn_txt_save',[''])" color="rgba(0,0,0,0)"
 					textColor="#007aff" textSize="14px" :loadingText="i18n.global.t('common.saving')" :loading="submitLoading"></rice-button>
 			</view>
@@ -24,38 +24,36 @@
 			<xt-form-item :label="i18n.global.t('order.create_order.source')" tips="" required>
 				<rice-radio-group v-model="orderForm.orderSource" direction="row" @change="orderSourceChange">
 					<view style="display: flex;flex-direction: column;width: 100%;">
-						<view v-for="item of source"> <rice-radio :value="item.value" :label="item.text"
-								style="margin-left:24px;margin-bottom: 12px;"></rice-radio></view>
+						<view v-for="item of source">
+							<rice-radio :value="item.value" :label="item.text"
+								style="margin-left:24px;margin-bottom: 12px;"></rice-radio>
+						</view>
 					</view>
-
 				</rice-radio-group>
-
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('order.create_order.date')" tips="" required>
-				<view class="select">
-					<view class="content" @click="showCalendarEvent">
-						<text class="txt">{{dateRange.join(" ~ ") }}</text>
+				<view class="date-select-box">
+					<view class="date-select-content" @click="showCalendarEvent">
+						<text class="date-select-txt">{{dateRange.join(" ~ ") }}</text>
 						<image src="/static/icons/calendar.png" style="width: 20px;height:20px"></image>
 					</view>
 				</view>
-
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('order.create_order.room_type_room')" tips="" required>
-				<view class="select-room-style" v-if="!showAddRoom">
-					<view class="room-content">
-						<text class="txt">{{formatRoomList(orderForm.reservedRoomList)}}</text>
+				<view class="room-select-wrap" v-if="!showAddRoom">
+					<view class="room-text-box">
+						<text class="room-val-txt">{{formatRoomList(orderForm.reservedRoomList)}}</text>
 					</view>
-					<view class="edit-style" @click="editRoom()">
+					<view class="room-edit-icon" @click="editRoom()">
 						<image src="/static/icons/editpage.png" style="width:20px;height:20px"></image>
 					</view>
 				</view>
-				<view @click="addNewRoom" class="addNew-btn" v-if="showAddRoom">
+				<view @click="addNewRoom" class="room-add-btn" v-if="showAddRoom">
 					<rice-icon name="plus" size="16px" color="#007aff" />
-					<text class="txt">{{i18n.global.t('order.create_order.select_room')}}</text>
+					<text class="add-btn-txt">{{i18n.global.t('order.create_order.select_room')}}</text>
 				</view>
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('order.create_order.customer_name')" tips="" required>
-
 				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('order.create_order.please_enter_wechat')"
 					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.userName"></rice-input>
 			</xt-form-item>
@@ -63,25 +61,19 @@
 				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('order.create_order.please_enter_phone')"
 					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.phone" :maxlength="11"
 					type="number"></rice-input>
-
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('order.create_order.deposit')" tips="">
-
 				<rice-stepper v-model="orderForm.downPayment" input-width="150" button-size="38" font-size="15"
 					:auto-fixed="false" :disabled="pageType==2" />
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('order.create_order.total_price')" tips="" required>
 				<rice-stepper v-model="orderForm.totalAmount" input-width="150" button-size="38" font-size="15"
 					:auto-fixed="false" :disabled="pageType==2" />
-
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('form.remark')" tips="">
-				<view>
-
-					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('order.create_order.pach_remark')"
-						layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
-						v-model="orderForm.mark"></rice-textarea>
-				</view>
+				<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('order.create_order.pach_remark')"
+					layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
+					v-model="orderForm.mark"></rice-textarea>
 			</xt-form-item>
 		</view>
 	<!-- #ifdef APP -->
@@ -89,12 +81,6 @@
 	<!-- #endif -->
 	<rice-calendar v-model:show="showCalendar" mode="range" :min-date="initDateObj.minDate" :date="dateRange"
 		@confirm="rangeConfirm" :title="i18n.global.t('form.canendar_title')" :show-subtitle="true"></rice-calendar>
-<!-- 	<l-popup v-model="showCheckRoomPanal" position="right" :closeable="true" :safeAreaInsetBottom="true"
-		:safeAreaInsetTop="true" bgColor="#f5f7fa" :preventScrollThrough="true">
-		<view style="width:700rpx;padding:60px 0">
-			<checkRoomComponent></checkRoomComponent>
-		</view>
-	</l-popup> -->
 </template>
 
 <script setup>
@@ -114,6 +100,9 @@
 	import checkRoomComponent from "./components/checkRoomComponent.uvue";
 	import { orderState, getGatherEvent } from "@/store/modules/orderStore";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated"
+	})
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -165,7 +154,6 @@
 		initDateObj.start_date as string,
 		initDateObj.end_date as string
 	]);
-// new Date(dayuts(new Date(dateRange[0])).format("YYYY/MM/DD  14:00:00")).getTime()
 	let orderForm = ref<orderBean>({
 		_id: "",
 		checkInEndDate: "",
@@ -205,10 +193,6 @@
 	const showCalendarEvent = () => {
 		showCalendar.value = !showCalendar.value;
 	}
-	// const formatDateTime = (str : string) : number => {
-	// 	let startDate = dayuts(new Date(str)).format("YYYY/MM/DD  14:00:00");
-	// 	let endDate = dayuts(new Date(e[1])).format("YYYY/MM/DD  12:00:00");
-	// }
 	const rangeConfirm = (e : string[]) => {
 		console.log('rangeConfirm', e)
 		dateRange.value = e;
@@ -223,7 +207,6 @@
 				icon: "none"
 			})
 		}
-
 	}
 	const addNewRoom = () => {
 		uni.$once("setRoomTypeList", (list : Array<string>) => {
@@ -258,7 +241,7 @@
 			const flag = await OrderService.addOrder(orderForm.value);
 			if(flag){
 				uni.$emit("refrushOrderList");
-				getGatherEvent(hotel_id.value);//nm==刷新首页
+				getGatherEvent(hotel_id.value);
 				uni.navigateBack();
 				submitLoading.value = false;
 				uni.showToast({
@@ -275,18 +258,15 @@
 				icon: "none"
 			});
 		}
-
 	}
 	const init = async () => {
 		uni.showLoading({title:""})
 		try {
-			
 			await getSource();
 			uni.hideLoading();
 		} catch (error) {
 			uni.hideLoading();
 		}
-
 	}
 	init();
 	watch(dateRange, (n: string[], o: string[]) => {
@@ -297,105 +277,76 @@
 		orderForm.value.reservedRoomList = [];
 	}, {
 		deep:true,
-		immediate: true//先执行一次
+		immediate: true
 	})
 </script>
 
-<style lang="scss">
-	.select-room-style {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: space-between;
+<style>
+/* 房间选择容器 */
+.room-select-wrap {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+.room-text-box {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	border: 1px solid #dcdfe6;
+	flex: 1;
+	padding: 8px;
+	border-radius: 4px;
+}
+.room-val-txt {
+	margin-right: 8px;
+}
+.room-edit-icon {
+	padding-left: 8px;
+}
 
-		.room-content {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			border: 1px solid #dcdfe6;
-			flex: 1;
-			padding: 8px;
-			border-radius: 4px;
-		}
+/* 日期选择框 */
+.date-select-box {
+	position: relative;
+	border: 1px solid #dcdfe6;
+	box-sizing: border-box;
+	overflow: visible;
+	border-radius: 4px;
+}
+.date-select-content {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	height: 36px;
+	padding: 0 8px;
+	overflow: visible;
+}
+.date-select-txt {
+	line-height: 36px;
+}
 
-		.txt {
-			margin-right: 8px;
-		}
-	}
+/* 添加房间按钮 */
+.room-add-btn {
+	flex: 1;
+	background: #fff;
+	padding: 10px 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #ededed;
+	border-radius: 8px;
+}
+.add-btn-txt {
+	font-size: 14px;
+	color: #007aff;
+	margin-left: 6px;
+}
 
-	.room-list-item {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		margin-bottom: 12px;
-
-		.room-label-container {
-			display: flex;
-			height: 36px;
-			padding-left: 8px;
-			line-height: 36px;
-			border-radius: 4px;
-			border: 1px solid #dcdfe6;
-		}
-
-		.del-style {
-			padding-left: 8px;
-		}
-
-
-	}
-
-	.select {
-
-		position: relative;
-		border: 1px solid #dcdfe6;
-		box-sizing: border-box;
-		overflow: visible;
-		border-radius: 4px;
-
-		.content {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			align-items: center;
-			height: 36px;
-			padding: 0 8px;
-			overflow: visible;
-
-			.txt {
-				line-height: 36px;
-			}
-		}
-
-		.select-panal {
-			overflow: visible;
-			width: 100%;
-			position: relative;
-			top: 40px;
-			left: 0;
-
-			.select-list {
-				overflow: visible;
-				background-color: #fff;
-			}
-		}
-	}
-
-	.addNew-btn {
-		flex: 1;
-		background: #fff;
-		padding: 10px 0;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
-		border: 1px solid #ededed;
-		border-radius: 8px;
-
-		.txt {
-			font-size: 14px;
-			color: #007aff;
-
-		}
-	}
+/* 导航栏保存按钮 */
+.navbar-save-btn {
+	display: flex;
+	align-items: center;
+}
 </style>

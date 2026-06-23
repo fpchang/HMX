@@ -398,6 +398,7 @@ export default {
 	},
 	function: {
 		title_navbar: "Function",
+		common_functions:"Common Functions",
 		title_set: "Hotel Settings",
 		title_fm: "Finance Management",
 		title_order: "Orders Management",

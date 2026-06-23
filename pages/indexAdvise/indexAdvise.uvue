@@ -1,43 +1,51 @@
 <template>
 	<scroll-view class="indexAdvise-page" :refresher-enabled="false" v-if="isReading" :show-scrollbar="false">
 		<!-- <rice-button text="测试" @click=test()></rice-button> -->
-		<view class="hotel-container">
-			<!-- 顶部渐变标题栏 -->
-			<view class="top-banner">
-				<text class="banner-title">{{i18n.global.t('indexAdvise.title')}}</text>
-				<text class="banner-sub">{{i18n.global.t('indexAdvise.subtitle')}}</text>
-			</view>
 
-			<!-- 关于我们模块 -->
-			<view class="card-wrap">
-				<view class="section-head">
-					<text class="section-title">{{i18n.global.t('indexAdvise.aboutUs.title')}}</text>
-					<view class="line"></view>
-				</view>
-				<view class="content-card">
-					<text class="about-text">{{i18n.global.t('indexAdvise.aboutUs.content')}}</text>
-				</view>
+
+		<!-- 顶部渐变标题栏 -->
+		<view class="top-banner">
+			<text class="banner-title">{{i18n.global.t('indexAdvise.title')}}</text>
+			<text class="banner-sub">{{i18n.global.t('indexAdvise.subtitle')}}</text>
+		</view>
+
+		<!-- 关于我们模块 -->
+		<view class="card-wrap">
+			<view class="section-head">
+				<text class="section-title">{{i18n.global.t('indexAdvise.aboutUs.title')}}</text>
+				<view class="line"></view>
 			</view>
-			<view class="card-wrap">
-				<view class="section-head">
-					<text class="section-title">{{i18n.global.t('indexAdvise.coreFunction.title')}}</text>
-					<view class="line"></view>
-				</view>
+			<view class="content-card">
+				<text class="about-text">{{i18n.global.t('indexAdvise.aboutUs.content')}}</text>
+			</view>
+		</view>
+		<view class="card-wrap" >
+			<view class="section-head" >
+				<text class="section-title">{{i18n.global.t('indexAdvise.coreFunction.title')}}</text>
+				<view class="line"></view>
+			</view>
+			<view>
+
 				<view>
-
-					<view>
-						<!-- <rice-grid :column-num="2" :border="false" :clickable="false">
-							<rice-grid-item v-for="item  of funcList">
+					<rice-grid :column-num="columnNum" :border="false" :clickable="false" :custom-style="{borderRadius:'12px',backgroundColor:'#fff'}">
+							<rice-grid-item v-for="item  of funcList" :custom-style="{alignItems:'baseline',display:'flex',flexDirection:'row'}">
 								<template #default>
-									<view class="feature-item">
-										<image class="feature-icon" :src="item.img" mode="widthFix"></image>
-										<text class="feature-name">{{item.title}}</text>
-										<text class="feature-desc">{{item.info}}</text>
+									<view style="flex:1;"> 
+									<rice-cell :title="item.title" :label="item.info" center>
+									  <template #leftIcon>
+									    <image :src="item.img" class="left-cion" style="width:40px;height:40px;margin-right:8px;border-radius: 20px;"></image>
+									  </template>
+									 
+									  <!-- <template #value>
+									    <text class="demo-cell__value">{{item.info}}</text>
+									  </template> -->
+									</rice-cell>
 									</view>
+									
 								</template>
 							</rice-grid-item>
-						</rice-grid> -->
-						<l-space :wrap="true" :size="18">
+						</rice-grid>
+				<!-- 	<l-space :wrap="true" :size="18">
 
 							<view v-for="item  of funcList"
 								style="width:300px;min-width: 300px;flex:1;background-color: #fff;border-radius: 14px;">
@@ -45,29 +53,34 @@
 									<text class="feature-desc">{{item.info}}</text>
 								</l-card>
 							</view>
-						</l-space>
-					</view>
-
+						</l-space> -->
+					<!-- <view style="flex:1;background:red" >
+						<l-card v-for="item  of funcList" :title="item.title" :image="item.img" coverMode="widthFix" :lStyle="{margin:'15px'}">
+							<text class="feature-desc">{{item.info}}</text>
+						</l-card>
+					</view> -->
 				</view>
-			</view>
 
-			<view style="height: 100px;"></view>
-			<!-- 底部下载提示 -->
-			<view class="download-section">
-				<button class="download-btn" @click="toLoginEvent">{{i18n.global.t('indexAdvise.loginBtnTxt')}}</button>
 			</view>
-
 		</view>
-		
 
+		<view style="height: 100px;"></view>
+		<!-- 底部下载提示 -->
+		<view class="download-section">
+			<rice-button width="300px" type="primary" shape="round" :text="i18n.global.t('indexAdvise.loginBtnTxt')"  @click="toLoginEvent"></rice-button>
+		</view>
 
 	</scroll-view>
 </template>
 
 <script setup lang="uts">
+	import { state } from "@/store/store";
 	import { HotelService } from "../../services/HotelService.uts";
 	import { loginEvent, loginOut } from "@/store/store.uts";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	//import {cloudApi} from "@/api/cloudApi.uts";
 	const title2 = i18n.global.t('title');
 	let isReading = ref(false);
@@ -75,15 +88,36 @@
 	let submitLoading = ref(false);
 	let agreeGetPhone = ref(false);
 	let showPopu = ref(false);
-	
-	import { setToken } from "@/store/store.uts";
-	import {getParamsObject} from "@/api/cloudApi.uts"
-	const test=()=>{
-		console.log("111",getParamsObject({}));
-		setToken("AAAAA");
-		console.log("2222",getParamsObject({}));
+
+	import { setToken, setViewWidth } from "@/store/store.uts";
+	import { getParamsObject } from "@/api/cloudApi.uts"
+
+	const setViewWidthEvent = () => {
+		const win = uni.getWindowInfo();
+		setViewWidth(win.windowWidth);
 	}
-	
+	const setLanuage = () => {
+
+		const sys = uni.getSystemInfoSync();
+		console.log('sys', sys);
+		const osLanguage = sys.osLanguage;
+		let local = 'zh-CN';
+		console.log(osLanguage != null)
+		if (osLanguage != null && !osLanguage.includes('zh-')) {
+			local = 'en-US';
+		}
+		i18n.global.locale.value = local;
+
+
+	}
+	const setTokenEvent = () => {
+		const token = uni.getStorageSync("hm_token") as string;
+		if (token != null && token != "") {
+			setToken(token);
+		}
+
+	}
+
 	const accessin = () => {
 		uni.reLaunch({
 			url: "/pages/index/index",
@@ -92,7 +126,16 @@
 		// 	url: "/uni_modules/uni-id-pages-x/pages/login/login?type=username"
 		// });
 	};
+
 	const popup_confirm = ref(null);
+	const columnNum = computed(() => {
+		let num = 1;
+		const w = state.viewWidth;
+		if (w != 0) {
+			num = Math.floor(w / 360);
+		}
+		return num
+	});
 	const toLogin = () => {
 		//i18n.global.locale.value = i18n.global.locale.value == 'zh-CN' ? 'en-US' : 'zh-CN';
 		uni.navigateTo({
@@ -120,42 +163,42 @@
 		}
 		showPopu.value = false;
 	};
-	type funType={
-		title:string,
-		img:string,
-		info:string
+	type funType = {
+		title : string,
+		img : string,
+		info : string
 	}
-	const funcList = computed<Array<funType>>(()=>{
-		const list:Array<funType>= [
-		{
-			title: i18n.global.t('indexAdvise.coreFunction.orderManage'),
-			img: "/static/icons/homemenu/order1.png",
-			info: i18n.global.t('indexAdvise.coreFunction.orderManage_content'),
-		},
-		{
-			title: i18n.global.t('indexAdvise.coreFunction.stateManage'),
-			img: "/static/icons/order-blue.png",
-			info: i18n.global.t('indexAdvise.coreFunction.stateManage_content'),
-		}, {
-			title: i18n.global.t('indexAdvise.coreFunction.hotelRoomType'),
-			img: "/static/icons/homemenu/room-type1.png",
-			info: i18n.global.t('indexAdvise.coreFunction.hotelRoomType_content'),
-		}, {
-			title: i18n.global.t('indexAdvise.coreFunction.financialManagement'),
-			img: "/static/icons/homemenu/income.png",
-			info: i18n.global.t('indexAdvise.coreFunction.financialManagement_content'),
-		}, {
-			title: i18n.global.t('indexAdvise.coreFunction.employeeAccount'),
-			img: "/static/icons/homemenu/employee1.png",
-			info: i18n.global.t('indexAdvise.coreFunction.employeeAccount_content'),
-		}, {
-			title: i18n.global.t('indexAdvise.coreFunction.hotelDisplay'),
-			img: "/static/icons/homemenu/hotel2.png",
-			info: i18n.global.t('indexAdvise.coreFunction.hotelDisplay_content'),
-		}
-	];
-	return list;
-	}) 
+	const funcList = computed<Array<funType>>(() => {
+		const list : Array<funType> = [
+			{
+				title: i18n.global.t('indexAdvise.coreFunction.orderManage'),
+				img: "/static/icons/homemenu/order1.png",
+				info: i18n.global.t('indexAdvise.coreFunction.orderManage_content'),
+			},
+			{
+				title: i18n.global.t('indexAdvise.coreFunction.stateManage'),
+				img: "/static/icons/order-blue.png",
+				info: i18n.global.t('indexAdvise.coreFunction.stateManage_content'),
+			}, {
+				title: i18n.global.t('indexAdvise.coreFunction.hotelRoomType'),
+				img: "/static/icons/homemenu/room-type1.png",
+				info: i18n.global.t('indexAdvise.coreFunction.hotelRoomType_content'),
+			}, {
+				title: i18n.global.t('indexAdvise.coreFunction.financialManagement'),
+				img: "/static/icons/homemenu/income.png",
+				info: i18n.global.t('indexAdvise.coreFunction.financialManagement_content'),
+			}, {
+				title: i18n.global.t('indexAdvise.coreFunction.employeeAccount'),
+				img: "/static/icons/homemenu/employee1.png",
+				info: i18n.global.t('indexAdvise.coreFunction.employeeAccount_content'),
+			}, {
+				title: i18n.global.t('indexAdvise.coreFunction.hotelDisplay'),
+				img: "/static/icons/homemenu/hotel2.png",
+				info: i18n.global.t('indexAdvise.coreFunction.hotelDisplay_content'),
+			}
+		];
+		return list;
+	})
 	const navTopHeight = computed(() => {
 		// #ifdef MP-WEIXIN
 		return "100px";
@@ -175,24 +218,27 @@
 		try {
 			console.log("验证token");
 			const flag = await loginEvent() as boolean;
-			if(flag){				
-				accessin();				
-			}else{
+			if (flag) {
+				accessin();
+			} else {
 				isReading.value = true;
 			}
-			
+
 		} catch (error) {
 			console.log("err", error);
 
 			isReading.value = true;
-		}		
+		}
 	});
 	onLoad(() => {
+		setLanuage();
+		setTokenEvent();
+		setViewWidthEvent();
 		initData();
+
 	})
 	onMounted(() => {
 	});
-
 </script>
 
 <style scoped lang="scss">
@@ -226,8 +272,8 @@
 	.top-banner {
 		width: 100%;
 		padding: 60px 20px 30px;
-		background-image: linear-gradient(135deg, #4096ff, #2078f5);
-		background-image: linear-gradient(to bottom righ, #4096ff, #2078f5);
+		// background-image: linear-gradient(135deg, #4096ff, #2078f5);
+		background: linear-gradient(to bottom right, #4096ff, #2078f5);
 		border-bottom-left-radius: 20px;
 		border-bottom-right-radius: 20px;
 		margin-bottom: 15px;
@@ -344,7 +390,6 @@
 
 	/* 4. 底部下载区域 */
 	.download-section {
-		width: 100%;
 		background-color: #fff;
 		display: flex;
 		flex-direction: row;

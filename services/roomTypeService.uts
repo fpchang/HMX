@@ -204,7 +204,7 @@ class RoomTypeClass {
 			}
 			const res = await action_co.room_updateRoom(roomObj);
 			const code = res['code'] as number;
-			const flag = code===0?true:false;
+			const flag = code == 0;
 			return flag;
 		} catch (error:Error) {
 			throw new Error("修改房间失败");

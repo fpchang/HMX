@@ -44,6 +44,9 @@
 	import { roomBean } from '@/bean/roomBean';
 	import { state } from "@/store/store";
 import {userBean} from '@/bean/userBean';
+defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -99,7 +102,7 @@ import {userBean} from '@/bean/userBean';
 			flex-wrap: wrap;
 
 			.card-list-item {
-				min-width: 360px;
+				min-width: 320px;
 				padding: 15px;
 				flex: 1;
 

@@ -1,109 +1,90 @@
 <template>
 	<view class="operation">
-		<!-- <l-grid :inset="true" bgColor="#ffffff" :column="3">
-			<l-grid-item  v-for="item of menuList" :text="item.label" :image="item.icon" :url="item.url" openType="navigateTo" />			
-		</l-grid> -->
-		<l-space :wrap="true" :size="24">
-			<navigator v-for="item of menuList" :url="item.url">
-			<view  class="menu-item">				
-					<image :src="item.icon" class="img"></image>
-					<text class="txt">{{item.label}}</text>
-				
-			</view>
-			</navigator>
-		</l-space>
+		
+		<!-- <l-space :wrap="true" :size="24" direction="horizontal">
+			
+				<navigator v-for="item of menuList" :url="item.url">
+				<view  class="menu-item">				
+						<image :src="item.icon" class="img"></image>
+						<text class="txt">{{item.label}}</text>
+					
+				</view>
+				</navigator>
+			
+		
+		</l-space> -->
+		<rice-grid :column-num="columnNum" :border="false" :custom-style="{backgroundColor:'#f5f5f7'}">
+		  <rice-grid-item :custom-style="{backgroundColor:'#f5f5f7'}" v-for="it in menuList" :key="it.label" :icon="it.icon" :text="it.label" :to="it.url"/>
+		</rice-grid>
 	</view>
 </template>
 
-<script setup>
-	import i18n from '@/i18n/index.uts';
-	type menu = {
-		icon : string,
-		label : string,
-		bgColor:string,
-		url : string
-	}
-	const menuList : Array<menu> = [{
-		icon: "/static/icons/mine/set.png",
+<script setup lang="uts">
+	import { state } from "@/store/store";
+import i18n from '@/i18n/index.uts';
+
+// 蒸汽模式替代scoped，样式隔离
+defineOptions({
+	styleIsolation: "isolated"
+});
+
+type menu = {
+	icon : string,
+	label : string,
+	bgColor:string,
+	url : string
+}
+const columnNum= computed(()=>{
+		let num = 3;
+		const w = state.viewWidth;
+		if(w!=0){
+			 num = Math.floor((w-30)/80);
+		}
+		return num
+	})
+const menuList : Array<menu> = [
+	{
+		//icon: "/static/icons/mine/set.png",
+		icon:"set",
 		label: i18n.global.t("setcontent.btn_txt_sys_set"),
 		bgColor:"#165dff1a",
 		url: "/pages/set/set"
 	},
 	{
-		icon: "/static/icons/mine/fedback.png",
+		//icon: "/static/icons/mine/fedback.png",
+		icon:"help",
 		label: i18n.global.t("setcontent.btn_txt_feedback"),
 		bgColor:"#722ed11a",
 		url: "/pages/mine/feedback/feedback"
 	}
-	]
+]
 </script>
-
 <style lang="scss">
-	.operation{
-		background-color: #fff;
-		border-radius: 14px;
-		padding:24px;
-	}
-	.card {
-		// background-color: #fff;
-		padding: 15px;
+// 外层容器
+.operation {
+	background-color: #fff;
+	border-radius: 14px;
+	// padding: 24px;
+}
 
-		.title {
-			padding: 5px 5px 15px 5px;
+// 单个功能项
+.menu-item {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
 
-			.txt {
-				font-weight: 700;
-				color: #64748b;
-			}
-		}
+// 图标
+.img {
+	width: 45px;
+	height: 45px;
+	margin-bottom: 8px;
+}
 
-		.list {
-			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-			
-
-			.list-item {
-				width: 95px;
-				height:100px;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: center;
-
-				.groupIcon {
-	
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-					justify-content: center;															
-					.icon-style {
-						width: 40px;
-						height: 40px;
-					}
-				}
-
-				.label {
-					font-size: 13px;
-					padding-top: 8px;
-					color: #64748b;
-				}
-			}
-		}
-	}
-	.menu-item{
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		.img{
-			width: 45px;
-			height: 45px;
-			margin-bottom: 8px;
-		}
-		.txt{
-			font-size: 13px;
-			color: #64748b;
-		}
-	}
+// 文字
+.txt {
+	font-size: 13px;
+	color: #64748b;
+}
 </style>

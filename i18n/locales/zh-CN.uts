@@ -412,6 +412,7 @@ export default {
 	//功能页面
 	function: {
 		title_navbar: "功能",
+		common_functions:"常用功能",
 		title_set: "酒店设置",
 		title_fm: "财务管理",
 		title_order: "订单",

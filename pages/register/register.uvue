@@ -1,29 +1,37 @@
 <template>
-
-	<view class="page">
-		<view class="card">
-			<view class="title"><text class="txt">{{i18n.global.t('register.register_account')}}</text></view>
-			<view>
-				<verifyEmailComponent @setEmailEvent="setEmailEvent" v-if="process==0"></verifyEmailComponent>
+	<view class="register-root-page">
+		<view class="register-card-box">
+			<view class="page-title-wrap">
+				<text class="title-text">{{i18n.global.t('register.register_account')}}</text>
 			</view>
-			<view>
-				<verifyAccountComponent @setAccountEvent="setAccountEvent" v-if="process==1"></verifyAccountComponent>
+			<view v-if="showEmailComponent">
+				<verifyEmailComponent key="verifyEmailComponent" @setEmailEvent="setEmailEvent" ></verifyEmailComponent>
 			</view>
-
-
+			<view  v-if="showAccountComponent">
+				<verifyAccountComponent key="verifyAccountComponent" @setAccountEvent="setAccountEvent"></verifyAccountComponent>
+			</view>
 		</view>
 	</view>
 </template>
 
-<script setup lang="uts">
+<script setup>
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
 	import { AccountService } from "@/services/AccountService";
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 	import verifyAccountComponent from "./components/verifyAccountComponent.uvue";
 	import verifyEmailComponent from "./components/verifyEmailComponent.uvue";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated"
+	})
 	const submitLoading = ref(false);
-	const process = ref(0);
+	const process = ref<number>(0);
+	const showAccountComponent = computed<boolean>(()=>{
+		return process.value ==1;
+	})
+	const showEmailComponent = computed<boolean>(()=>{
+		return process.value ==0;
+	})
 	type userType = {
 		account : string,
 		email : string,
@@ -40,11 +48,8 @@
 		confirmPassword: '',
 		emailCodeTk: ""
 	});
-
 	const userFormRef = ref<RiceFormComponentPublicInstance | null>(null);
 	const codeDisabled = ref(false);
-
-	// 注册提交
 	const handleRegister = async () => {
 		if (submitLoading.value == true) {
 			return;
@@ -68,21 +73,10 @@
 				});
 			}
 			submitLoading.value = false;
-
 		} catch (err) {
-			//throw new Error(error.message as string);
 			submitLoading.value = false;
-			// showDialog({
-			// 	title: '注册失败',
-			// 	message: err.message as string,
-			// 	showCancelButton: false,
-			// 	confirm: () => {
-			// 		submitLoading.value = false;
-			// 	}
-			// })
 		}
 	}
-	//AccountService.upp();
 	const setEmailEvent = (email : string, emailCodeTk : string) => {
 		userForm.value.email = email;
 		userForm.value.emailCodeTk = emailCodeTk;
@@ -92,92 +86,32 @@
 		userForm.value.account = account;
 		userForm.value.password = password;
 		handleRegister();
-
 	}
 </script>
-<style scoped lang="scss">
-	.page {
 
-		flex: 1;
-		background-color: #fff;
-		padding: 10px 14px;
-		box-sizing: border-box;
-
-		.card {
-			
-			border-radius: 20px;
-			 padding: 40px 8px;
-			// box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-		}
-
-		.title {
-
-			text-align: center;
-			margin-bottom: 40px;
-
-			.txt {
-				font-size: 32px;
-				font-weight: 600;
-				color: #1d1d1f;
-				padding-left: 14px;
-			}
-		}
-
-		.input-box {
-			margin-bottom: 20px;
-			border-bottom: 0.5px solid #e5e7eb;
-			background-color: #fff;
-			border-radius: 25px;
-		}
-
-		.input {
-			height: 50px;
-			padding: 0 16px;
-			font-size: 16px;
-			color: #1d1d1f;
-		}
-
-		.ph {
-			color: #8e8e93;
-		}
-
-		.btn-register {
-			margin-top: 35px;
-			width: 100%;
-			height: 50px;
-			line-height: 50px;
-			background: #007aff;
-			color: #fff;
-			border-radius: 25px;
-			font-size: 17px;
-			font-weight: 500;
-			border: none;
-		}
-
-		.input-row {
-
-			width: 100%;
-			height: 100%;
-			display: flex;
-			flex: 1;
-			flex-direction: row;
-			justify-content: space-between;
-
-			overflow: hidden;
-		}
-
-		.btn-code {
-			font-size: 14px;
-			color: #007aff;
-			background: #fff;
-			border: none;
-			outline: none;
-			padding: 0 8px;
-			margin: 0 4px;
-		}
-
-		.btn-code[disabled] {
-			color: #8e8e93;
-		}
-	}
+<style>
+/* 页面最外层容器 */
+.register-root-page {
+	flex: 1;
+	background-color: #fff;
+	padding: 10px 14px;
+	box-sizing: border-box;
+}
+/* 注册卡片容器 */
+.register-card-box {
+	border-radius: 20px;
+	padding: 40px 8px;
+}
+/* 标题外层容器 */
+.page-title-wrap {
+	text-align: center;
+	margin-bottom: 40px;
+}
+/* 标题文字 */
+.title-text {
+	font-size: 32px;
+	font-weight: 600;
+	color: #1d1d1f;
+	padding-left: 14px;
+}
 </style>

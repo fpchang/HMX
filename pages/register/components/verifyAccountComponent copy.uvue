@@ -1,0 +1,190 @@
+<template>
+	<view class="verifyAccountComponent">
+		<view class="card">
+			<rice-form :model="userForm" :rules="registerRule" ref="userFormRef" label-width="100px" class="demo-form">
+				<rice-form-item name="account" label-position="top" :border-bottom="false">
+					<rice-input v-model="userForm['account']" :placeholder="i18n.global.t('login.valid_account') " :focus-border="true" />
+				</rice-form-item>
+				<rice-form-item name="password"  label-position="top" :border-bottom="false">
+					<rice-input v-model="userForm['password']" :placeholder="i18n.global.t('login.pach_password')"  type="password"  :focus-border="true"/>
+				</rice-form-item>
+				<rice-form-item name="confirmPassword"  label-position="top" :border-bottom="false">
+					<rice-input v-model="userForm['confirmPassword']" :placeholder="i18n.global.t('register.valid_password_again') "
+						type="password"  :focus-border="true"/>
+				</rice-form-item>
+			</rice-form>
+			<view style="margin-top: 24px;">
+				<rice-button type="primary" :text="i18n.global.t('register.btn_txt_complete')" class="btn" shape="round" @click="accountEvent"
+					:loading="submitLoading" />
+			</view>
+		</view>
+	</view>
+</template>
+
+<script setup lang="uts">
+	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
+	import { AccountService } from "@/services/AccountService";
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
+	const emit =defineEmits(["setAccountEvent"]);
+	const submitLoading = ref(false);
+	type userType = {
+		account : string,
+		password : string,
+		confirmPassword : string
+	}
+	const userForm = ref<userType>({
+		account: '',
+		password: '',
+		confirmPassword: ''
+	});
+	
+	const userFormRef = ref<RiceFormComponentPublicInstance | null>(null);
+	const codeText = ref(i18n.global.t("login.btn_getSms"));
+	const codeDisabled = ref(false);
+	const validAccount = async (account : any | null) => {
+		if (account == null) {
+			return i18n.global.t("register.valid_account_require");
+		}
+		const flag = await AccountService.validRegisterAccount(account.toString());
+		return !flag;
+	}
+	
+	//密码的校验函数
+	const passwordValidator = (value : any | null) => {
+		const val = value as string
+		if (val.length < 6) return i18n.global.t("login.valid_password_num");
+		//if (val.startsWith('123456')) return '密码开头不能为连续的123456'
+		//只有返回 true 才表示校验通过
+		return true
+	}
+	const passwordConfirmValidator = (value : any | null) => {
+		const val = value as string
+		if (val.length < 6) return i18n.global.t("login.valid_password_num");
+		// if (val.startsWith('123456')) return '密码开头不能为连续的123456';
+		if (val != userForm.value.password) {
+			return i18n.global.t("register.valid_password_equal");
+		}
+		//只有返回 true 才表示校验通过
+		return true
+	}
+	const registerRule = new Map<string, FormRules[]>([
+		[
+			"account",
+			[
+				{ required: true, message: i18n.global.t("login.valid_account") },
+				{ min: 3, max: 15, message: i18n.global.t("login.valid_account_num"), trigger: 'blur' },
+				{ pattern: /^(?=.*[a-zA-Z])[a-zA-Z0-9]{4,20}$/, message: i18n.global.t("registe.valid_account_correct")},
+				{ validator: validAccount, trigger: 'blur', message: i18n.global.t("register.valid_account_hasused") }
+			]
+		], 
+		[
+			"password",
+			[
+				{ required: true, message: i18n.global.t("login.valid_password") },
+				//函数校验
+				{ validator: passwordValidator },
+				//正则校验
+				{ pattern: /[a-zA-Z].*\d|\d.*[a-zA-Z]/, message:i18n.global.t("login.valid_password_comb") },
+			]
+		],
+		[
+			"confirmPassword",
+			[
+				{ required: true, message: i18n.global.t("login.valid_password") },
+				//函数校验
+				{ validator: passwordConfirmValidator },
+				//正则校验
+				{ pattern: /[a-zA-Z].*\d|\d.*[a-zA-Z]/, message: i18n.global.t("login.valid_password_comb"), trigger: 'change' },
+			]
+		]
+	])
+
+	const accountEvent= async ()=>{
+		if(submitLoading.value==true){
+			return;
+		}
+		const result = await userFormRef.value!.validate();
+		console.log("result", result);
+		//校验成功
+		if (result != true) {
+			//console.log("校验失败");
+			return;
+		}
+		submitLoading.value=true;
+		emit("setAccountEvent",userForm.value.account,userForm.value.password);
+	}
+
+</script>
+<style scoped lang="scss">
+	.verifyAccountComponent {
+		
+		.card {
+		
+		}
+		
+		
+		
+		.input-box {
+			margin-bottom: 20px;
+			border-bottom: 0.5px solid #e5e7eb;
+			background-color: #fff;
+			border-radius: 25px;
+		}
+		
+		.input {
+			height: 50px;
+			padding: 0 16px;
+			font-size: 16px;
+			color: #1d1d1f;
+		}
+		
+		.ph {
+			color: #8e8e93;
+		}
+		
+		.btn-register {
+			margin-top: 35px;
+			width: 100%;
+			height: 50px;
+			line-height: 50px;
+			background: #007aff;
+			color: #fff;
+			border-radius: 25px;
+			font-size: 17px;
+			font-weight: 500;
+			border: none;
+		}
+		
+		.input-row {
+		
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex: 1;
+			flex-direction: row;
+			justify-content: space-between;
+		
+			overflow: hidden;
+		}
+		
+		.btn-code {
+			font-size: 14px;
+			color: #007aff;
+			background: #fff;
+			border: none;
+			outline: none;
+			padding: 0 8px;
+			margin: 0 4px;
+		}
+		
+		.btn-code[disabled] {
+			color: #8e8e93;
+		}
+	}
+
+	
+</style>

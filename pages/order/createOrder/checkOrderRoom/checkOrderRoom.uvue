@@ -73,6 +73,9 @@
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import {userBean} from '@/bean/userBean';
 		import i18n from '@/i18n/index.uts';
+		defineOptions({
+			styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+		})
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;

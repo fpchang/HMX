@@ -55,13 +55,12 @@
 
 					</view>
 				</view>
-				<!-- </rice-checkbox-group> -->
+			
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('hotel.form.room_price')" tips="" required>
 				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic placeholder="请输入价格"
 					borderColor="#dcdfe6" :disabled="pageType==2" type="digit" v-model="priceBase"></rice-input>
-				<!-- <rice-stepper v-model="roomTypeForm.priceBase" input-width="150" button-size="38" font-size="15" :auto-fixed ="false" :disabled="pageType==2" />
-			 -->
+			
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('hotel.form.facilities_amenities')" tips="" required>
 
@@ -105,6 +104,9 @@
 	import {userBean} from "@/bean/userBean";
 	import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	type bedType = {
 		name : string,
 		checked : boolean,
@@ -126,7 +128,9 @@
 	const user = computed<userBean>(() => {
 		return state.user;
 	});
-	const cloudPath = `/${hotel_id.value}/roomType/`;
+	const cloudPath = computed(()=>{
+		return `/${hotel_id.value}/roomType/`;
+	}) 
 	let edit_roomType_id = ref("");//编辑房型id
 	const roomTypeList = computed<Array<roomTypeBean>>(() => {
 		return state.roomTypeList;
@@ -169,10 +173,14 @@
 		}
 		return pageType.value==1?"/static/icons/editpage.png":"/static/icons/detailpage.png"
 	})
-	let facilityConfig_roomType = ref<Array<facilityConfig_type> | null>(null);
-	HotelService.getConfig_facilityConfig('roomType').then(list => {
+	const facilityConfig_roomType = ref<Array<facilityConfig_type>>([]);
+	const getConfig_facilityConfig= async ()=>{
+		const list = await HotelService.getConfig_facilityConfig('roomType');
 		facilityConfig_roomType.value = list;
-	});
+	}
+	//HotelService.getConfig_facilityConfig('roomType').then(list => {
+	// 	facilityConfig_roomType.value = list;
+	// });
 	const addRoomType = async () => {
 		submitLoading.value = true;
 		try {
@@ -238,6 +246,7 @@
 	}
 
 	onLoad(params => {
+		getConfig_facilityConfig();
 		try {
 			const pt = params.getString("pageType")?? "";
 			const roomType_id = params.getString("roomType_id") ?? "";

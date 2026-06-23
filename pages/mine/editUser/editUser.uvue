@@ -49,7 +49,9 @@
 	import { state, setUser } from '@/store/store.uts';
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { userBean } from "@/bean/userBean";
-
+defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	type formBean = {
 		username : string,
 		avatar : string

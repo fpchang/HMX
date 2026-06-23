@@ -1,29 +1,12 @@
 <script lang="uts">
 	//import uniIdPageInit from '@/uni_modules/uni-id-pages-x/init.uts';
 	import {action_co} from "@/api/cloudApi.uts";
-	import { setToken } from "@/store/store.uts";
+	import { setToken ,setViewWidth} from "@/store/store.uts";
 	import i18n from '@/i18n/index.uts';
 	// #ifdef APP-ANDROID || APP-HARMONY
 	let firstBackTime = 0
 	// #endif
-	const setLanuage = () => {
-		const sys = uni.getSystemInfoSync();
-		console.log('sys', sys);
-		const osLanguage = sys.osLanguage;
-		let local = 'zh-CN';
-		console.log(osLanguage != null)
-		if (osLanguage != null && !osLanguage.includes('zh-')) {
-			local = 'en-US';
-		}
-		i18n.global.locale.value = local;
-	}
-	const setTokenEvent = () => {
-		const token = uni.getStorageSync("hm_token") as string;
-		if(token !=null && token !=""){
-			setToken(token);
-		}
-		
-	}
+	
 	const start=()=>{
 		 setTimeout(() => {
 		    try {
@@ -39,7 +22,7 @@
 		onLaunch: function () {
 					
 			start();
-			setLanuage();
+
 			//#ifdef APP-ANDROID
 			const showMoreMessage = uni.getStorageSync("showMoreMessage");
 			if (showMoreMessage != "0") {
@@ -49,11 +32,13 @@
 			}
 			//#endif
 	
-			setTokenEvent();
+			//setTokenEvent();
 			// uniIdPageInit();
 		},
 		onShow: function () {
-			console.log('App Show')
+			console.log('App Show');
+			// setViewWidthEvent();
+			// setLanuage();
 		},
 		onHide: function () {
 			console.log('App Hide')

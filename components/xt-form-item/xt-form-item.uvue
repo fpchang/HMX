@@ -1,10 +1,15 @@
 <template>
-	<view class="xt-form-item">
-		<view class="label"><text class="txt">{{label}}</text><text class="required-style" v-if="required">*</text></view>
-		<view class="content">
+	<view class="xt-form-item-root">
+		<view class="item-label-wrap">
+			<text class="label-txt">{{label}}</text>
+			<text class="required-mark" v-if="required">*</text>
+		</view>
+		<view class="item-content-wrap">
 			<slot></slot>
 		</view>
-		<view class="tooltips" v-if="showTips"><text class="txt">{{tips}}</text></view>
+		<view class="item-tips-wrap" v-if="showTips">
+			<text class="tips-txt">{{tips}}</text>
+		</view>
 	</view>
 </template>
 
@@ -30,43 +35,46 @@ const props = defineProps({
 const label = props.label;
 </script>
 
-<style lang="scss">
-	.xt-form-item{
-		margin-bottom: 18px;
-		&:last-child{
-			margin-bottom: 0;
-		}
-		.label{
-			
-				margin-bottom: 8px;
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-			.txt{
-				
-				color:rgb(0,0,0.88);
-				font-size: 14px;
-				line-height: 32px;
-			}
-			.required-style{
-				color:rgb(239,68,68);
-			}
-		
-		
-		
-		}
-		.content{
-			display: flex;
-			flex-direction: column;
-		}
-		.tooltips{
-			margin-top: 8px;
-			.txt{
-				color:rgb(134,144,156);
-				font-size: 13px;
-				line-height: 32px;
-			}
-			
-		}
-	}
+<style>
+/* 外层表单项容器 */
+.xt-form-item-root {
+	margin-bottom: 18px;
+}
+/* 最后一项取消底部外边距，手动绑定使用 */
+.last-form-item {
+	margin-bottom: 0;
+}
+/* 标签行容器 */
+.item-label-wrap {
+	margin-bottom: 8px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+/* 标签文字 */
+.label-txt {
+	color: rgba(0,0,0,0.88);
+	font-size: 14px;
+	line-height: 32px;
+}
+/* 必填星号 */
+.required-mark {
+	color: rgb(239,68,68);
+	margin-left: 4px;
+}
+/* 插槽内容容器 */
+.item-content-wrap {
+	display: flex;
+	flex-direction: column;
+}
+/* 提示文字外层 */
+.item-tips-wrap {
+	margin-top: 8px;
+}
+/* 提示文字 */
+.tips-txt {
+	color: rgb(134,144,156);
+	font-size: 13px;
+	line-height: 32px;
+}
 </style>

@@ -2,14 +2,19 @@
 	<scroll-view style="flex: 1;" v-if="hotel_id!=''">
 		<view class="homemenu">
 			<view class="card" v-for="item in menuList">
-				<view class="title">
-					<image :src="item.title_icon" class="icon-stye"></image>
+				<!-- 替换 class 为 card-title，消除层级依赖 -->
+				<view class="card-title">
+					<image :src="item.title_icon" class="icon-stye123"></image>
 					<text class="txt" :style="{'color':item.title_color}">{{item.title}}</text>
 				</view>
-				<view  v-if=" i18n.global.locale.value == 'zh-CN'">
-					<l-space :wrap="true" :size="14">
-						<view  v-for="it in item.menu_item_list" :key="it.label" style=";min-width:80px;flex:1;padding:8px 0;">
-							<navigator :url="it.url" hover-class="none">
+				<view v-if=" i18n.global.locale.value == 'zh-CN'">
+					<rice-grid :column-num="columnNum" :border="false">
+					  <rice-grid-item v-for="it in item.menu_item_list" :key="it.label" :icon="it.icon" :text="it.label" :to="it.url"/>
+					</rice-grid>
+					<!-- <l-space :wrap="true" :size="14">
+						<view v-for="it in item.menu_item_list" :key="it.label"
+							style=" background:green;">
+						
 								<view class="item-content">
 									<view class="groupIcon">
 										<image :src="it.icon" class="icon-style" mode="aspectFit"></image>
@@ -19,16 +24,16 @@
 									</view>
 								</view>
 
-							</navigator>
+							
 						</view>
-						<view style="min-width: 80px;height:0;padding:0;flex:1" v-for="item of 2"></view>
-					</l-space>
-				</view> 
-								
+						
+					</l-space> -->
+				</view>
+
 				<rice-cell-group v-if=" i18n.global.locale.value != 'zh-CN'">
 
-					<rice-cell center size="medium"  :title="it.label" v-for="it in item.menu_item_list"
-						arrow :url="it.url" :border="false" >
+					<rice-cell center size="medium" :title="it.label" v-for="it in item.menu_item_list" arrow
+						:url="it.url" :border="false">
 						<template #leftIcon>
 							<view style="padding-right: 8px;">
 								<image :src="it.icon" style="width: 40px;height:40px;" mode="aspectFit"></image>
@@ -44,13 +49,15 @@
 		<l-empty :description="i18n.global.t('common.noData',[''])" />
 	</view>
 </template>
-
 <script setup>
 	import { state } from "@/store/store";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
 	import { hotelBean } from "@/bean/hotelBean";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	type menu = {
 		icon : string,
 		label : string,
@@ -149,6 +156,14 @@
 
 		}
 	]
+	const columnNum= computed(()=>{
+		let num = 3;
+		const w = state.viewWidth;
+		if(w!=0){
+			 num = Math.floor((w-30)/80);
+		}
+		return num
+	})
 	onLoad(() => {
 		uni.setNavigationBarTitle({
 			title: i18n.global.t("function.title_navbar")
@@ -157,63 +172,73 @@
 </script>
 
 <style lang="scss">
-	.card {
-		margin: 15px;
-		padding: 14px;
-		background-color: #fff;
-		border-radius: 12px;
+// 最外层卡片
+.card {
+	margin:14px;
+	padding:15px;
+	background-color: #fff;
+	border-radius: 12px;
+}
 
-		.title {
-			padding: 5px 5px 15px 5px;
-			color: #1f2937;
-			font-weight: 700;
-			font-size: 24px;
-			display: flex;
-			flex-direction: row;
-			align-items: flex-end;
+// 标题区域（独立平级class，不再嵌套在.card内部）
+.card-title {
+	padding: 5px 5px 15px 5px;
+	color: #1f2937;
+	font-weight: 700;
+	font-size: 24px;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-end;
+}
 
-			.icon-stye {
-				width: 18px;
-				height: 18px;
-				margin-right: 4px;
-			}
+// 标题图标
+.icon-stye123 {
+	width: 18px;
+	height: 18px;
+	margin-right: 4px;
+}
 
-			.txt {
-				color: #1f2937;
-				font-weight: 700;
-				color: #1f2937;
-			}
-		}
+// 标题文字
+.txt {
+	color: #1f2937;
+	font-weight: 700;
+}
 
-		.item-content {	
-		
-			flex:1;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-		
-			.groupIcon {
-				
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-				justify-content: center;
-				border-radius: 12px;
-				.icon-style {
-					width: 30px;
-					height: 30px;
-				}
-			}
-		
-			.label {
-				font-size: 14px;
-				 padding-top: 8px;
-				color: #64748b;
-				overflow: hidden;
-				text-align: center;
-		
-			}
-		}
-	}
+// 单个功能项容器
+.item-content {
+	max-height:80px;
+	max-width:80px;
+	min-width: 80px;
+	min-height: 80px;
+	overflow: hidden;
+	background-color: red;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+// 图标外层容器
+.groupIcon {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	border-radius: 12px;
+}
+
+// 功能小图标
+.icon-style {
+	width: 30px;
+	height: 30px;
+}
+
+// 功能文字标签
+.label {
+	font-size: 14px;
+	padding-top: 8px;
+	color: #64748b;
+	overflow: hidden;
+	text-align: center;
+}
 </style>

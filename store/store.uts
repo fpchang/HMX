@@ -39,7 +39,9 @@ export const state = reactive({
 	location: [] as Array<number>
 } as State);
 // 定义修改属性值的方法
-
+export const setViewWidth=(w:number)=>{
+	state.viewWidth=w;
+}
 export const setToken = (t:string) => {
 	state.token = t;
 	 uniCloud.setCustomClientInfo({"hm_token":t});

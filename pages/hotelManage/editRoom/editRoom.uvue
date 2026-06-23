@@ -59,6 +59,9 @@
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
 	import {userBean} from "@/bean/userBean";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});

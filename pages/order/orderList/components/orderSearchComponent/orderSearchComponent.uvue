@@ -1,36 +1,43 @@
 <template>
-	<view class="fm-search">
-		<view class="select-item" style="min-width:360px">
-			<view>
-				<l-space :wrap="true" :fill="true"> 
+	<view class="fm-search-root">
+		<view class="search-select-item" style="min-width:320px">
+			
+				<!-- <l-space :wrap="true" :fill="true"> 
 					<view style="min-width: 60px;" v-for="item of checkType"><rice-button
 							:type="orderType==item.value?'primary':'info'" size="small" :text="item.text"
 							@click="checkTypeEvent(item.value)"></rice-button></view>
-				</l-space>
+				</l-space> -->
 				
-			</view>
-
+				<view style="display: flex;flex-direction: row;align-items: center;">
+				
+					<view style="margin-right: 8px" v-for="item of checkType">
+						<rice-button
+								:type="orderType==item.value?'primary':'info'" size="small" :text="item.text"
+								@click="checkTypeEvent(item.value)"></rice-button>
+					</view>
+					
+				</view>
 		</view>
-		<view class="select-item">
-			<view class="select">
-				<view class="content" @click="showCalendarEvent">
-					<text class="txt">{{dateRange.join(" ~ ") }}</text>
-					<image src="/static/icons/calendar.png" style="width: 20px;height:20px"></image>
+			<view class="search-select-item">
+				<view class="select-box">
+					<view class="select-content" @click="showCalendarEvent">
+						<text class="select-txt">{{dateRange.join(" ~ ") }}</text>
+						<image src="/static/icons/calendar.png" style="width: 20px;height:20px"></image>
+					</view>
 				</view>
 			</view>
-		</view>
-		<view class="select-item">
-			<view class="select" style="padding-right: 8px;">
-				<rice-search v-model="keystr" input-color="#fff" :clearable="false" :placeholder="placeholder"
-					:custom-style="{'padding':0}" @search="searchEvent" @clickLeftIcon="searchEvent"
-					@input="searchInputChange" @clickAction="searchEvent" show-action left-icon=""
-					action-color="#007aff"  :action-text="i18n.global.t('common.btn_txt_search')"/>
+			<view class="search-select-item">
+				<view class="select-box" style="padding-right: 8px;">
+					<rice-search v-model="keystr" input-color="#fff" :clearable="false" :placeholder="placeholder"
+						:custom-style="{'padding':0}" @search="searchEvent" @clickLeftIcon="searchEvent"
+						@input="searchInputChange" @clickAction="searchEvent" show-action left-icon=""
+						action-color="#007aff" :action-text="i18n.global.t('common.btn_txt_search')" />
+				</view>
 			</view>
+			<rice-calendar :show="showCalendar" mode="range" :date="dateRange"
+				@confirm="rangeConfirm"></rice-calendar>
+	
 		</view>
-		<!-- 	<rice-picker v-model:show="showPicker" :columns="columns" @confirm="onColumnsConfirm"></rice-picker> -->
-		<rice-calendar v-model:show="showCalendar" mode="range" :date="dateRange"
-			@confirm="rangeConfirm"></rice-calendar>
-	</view>
 </template>
 
 <script setup>
@@ -39,9 +46,9 @@
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import { TIME, MOONTH_START_END_TIMESTAMP, getMonthDateArray } from "@/static/utils/TIME";
 	import i18n from '@/i18n/index.uts';
-	//selectAction下拉 选择
-	//searchAction input点击搜索
-	//searchInputChange 输入框变化
+	defineOptions({
+		styleIsolation: "isolated"
+	})
 	const emit = defineEmits(['selectAction', "searchAction", "searchInputChange", "dateChange"]);
 	const props = defineProps({
 		initDateRange: {
@@ -59,9 +66,9 @@
 	}
 	const checkType : Array<TYPE_ORDER> = [
 		{ text: i18n.global.t('order.statusAll'), value: "all" },
-		  { text: i18n.global.t('order.statusCheckInPending'), value: 1 },
-		  { text: i18n.global.t('order.statusCompleted'), value: 5 },
-		  { text: i18n.global.t('order.statusCancelled'), value: 10 },
+		{ text: i18n.global.t('order.statusCheckInPending'), value: 1 },
+		{ text: i18n.global.t('order.statusCompleted'), value: 5 },
+		{ text: i18n.global.t('order.statusCancelled'), value: 10 },
 	]
 	const attrs = useAttrs();
 	let showPicker = ref(false);
@@ -69,7 +76,6 @@
 	const billType = ref("income");
 	let text_val = ref(i18n.global.t("common.select_txt"));
 	let keystr = ref("");
-	//text_val.value = columns.value[0][0]['text'] as string;
 	const orderType = ref<string | number>('all');
 	const dateRange = ref<string[]>(props.initDateRange);
 	const checkTypeEvent = (id : string | number) => {
@@ -82,8 +88,6 @@
 	const showCalendarEvent = () => {
 		showCalendar.value = !showCalendar.value;
 	}
-
-
 	const searchEvent = () => {
 		emit("searchAction", orderType.value, dateRange.value, keystr.value);
 	}
@@ -91,90 +95,73 @@
 		emit("searchInputChange", value);
 	}
 	const rangeConfirm = (e : string[]) => {
-		//console.log('rangeConfirm', e)
-		// let val: string = e.selectedValues[0] as string
-		// let index: number = e.selectedIndex[0] as number
-		// text_val.value = props.columns[0][index]['text'] as string
 		emit("dateChange", e);
-		dateRange.value = e;
+		//dateRange.value = e;
 	}
-	// const onColumnsConfirm = (e : PickerEvent) => {
-	// 	console.log('PickerEvent', e)
-	// 	let val : string = e.selectedValues[0] as string
-	// 	let index : number = e.selectedIndex[0] as number
-	// 	text_val.value = props.columns[0][index]['text'] as string
-	// 	emit("selectAction", val);
-	// }
 </script>
 
-<style lang="scss" scoped>
-	.fm-search {
+<style>
+	/* 外层容器 */
+	.fm-search-root {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		flex-wrap: wrap;
-
-		.select-item {
-			margin-bottom: 12px;
-			min-width: 300px;
-			// padding: 0 15px;
-
-			flex: 1;
-		}
-
-		.select {
-
-			position: relative;
-			border: 1px solid #dcdfe6;
-			box-sizing: border-box;
-			overflow: visible;
-			border-radius: 4px;
-
-			.content {
-				display: flex;
-				flex-direction: row;
-				justify-content: space-between;
-				align-items: center;
-				height: 36px;
-				padding: 0 8px;
-				overflow: visible;
-
-				.txt {
-					line-height: 36px;
-				}
-			}
-
-			.select-panal {
-				overflow: visible;
-				width: 100%;
-				position: relative;
-				top: 40px;
-				left: 0;
-
-				.select-list {
-					overflow: visible;
-					background-color: #fff;
-				}
-			}
-		}
-
 	}
 
+	/* 每一项筛选容器 */
+	.search-select-item {
+		margin-bottom: 12px;
+		min-width: 280px;
+		flex: 1;
+	}
+
+	/* 下拉选择外框 */
+	.select-box {
+		position: relative;
+		border: 1px solid #dcdfe6;
+		box-sizing: border-box;
+		overflow: visible;
+		border-radius: 4px;
+	}
+
+	/* 选择框内部内容行 */
+	.select-content {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		height: 36px;
+		padding: 0 8px;
+		overflow: visible;
+	}
+
+	/* 选择框文字 */
+	.select-txt {
+		line-height: 36px;
+	}
+
+	/* 弹窗面板容器 */
 	.center-panal {
 		padding: 16px;
 		border-radius: 8px;
 		background-color: #f1f1f1;
+	}
 
-		.select-list {
-			min-width: 250px;
+	/* 下拉列表容器 */
+	.select-list {
+		min-width: 250px;
+		overflow: visible;
+		background-color: #fff;
+	}
 
-			.select-list-item {
-				padding: 8px;
+	/* 下拉列表单项 */
+	.select-list-item {
+		padding: 8px;
+	}
 
-				.txt {
-					color: #eee
-				}
-			}
-		}
+	/* 列表文字样式 */
+	.list-item-txt {
+		color: #eee;
 	}
 </style>

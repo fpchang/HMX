@@ -16,6 +16,9 @@
 </template>
 
 <script setup lang="uts">
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
   const title = ref('一键登录')
   const uniVerifyManager = ref(null as UniVerifyManager | null)
   const phone = ref('')

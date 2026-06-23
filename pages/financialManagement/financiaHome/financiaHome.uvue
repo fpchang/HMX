@@ -1,75 +1,80 @@
 <template>
-	<scroll-view style="flex:1" v-if="hotel_id!=''" :refresher-enabled="true" :refresher-triggered="refreshState"
-		@refresherrefresh="refreshData">
-		<view class="content">
-			<!-- 核心指标卡片 -->
-			<view class="card" @click="goToDetail('kpi')">
-				<text class="card-title">{{ i18n.global.t('finance.core_financial_indicators') }}</text>
-
-				<view class="kpi-grid">
-					<view class="kpi-item">
-						<view class="container">
-							<text class="kpi-label">{{ i18n.global.t('finance.monthly_income') }}</text>
-							<view><text class="kpi-value income">¥{{incomeAmount}}</text></view>
-						</view>
+	<scroll-view style="flex:1;background:#f5f7fa;" v-if="hotel_id!=''">
+		<view class="top-header">
+			<text class="header-title">{{i18n.global.t('finance.navbar_title')}}</text>
+		</view>
+		<view class="wrap-content">
+			<!-- 头部总利润卡片 -->
+			<view class="profit-card">
+				<text class="profit-label">{{i18n.global.t('finance.annual_profit')}}</text>
+				<text class="profit-num item-profit">¥{{incomeYearAmount-expensesYearAmount}}</text>
+			</view>
+			   <!-- 核心指标4宫格 -->
+			    <view class="kpi-grid">
+			      <view class="kpi-box income-box" :style="{'margin-left':marginLeft(0)}">
+			        <text class="kpi-txt">{{i18n.global.t('finance.monthly_income')}}</text>
+			        <text class="kpi-money">¥{{incomeAmount}}</text>
+			      </view>
+			      <view class="kpi-box expense-box" :style="{'margin-left':marginLeft(1)}">
+			        <text class="kpi-txt">{{i18n.global.t('finance.monthly_expense')}}</text>
+			        <text class="kpi-money">¥{{expensesAmount}}</text>
+			      </view>
+			      <view class="kpi-box income-box" :style="{'margin-left':marginLeft(2)}">
+			        <text class="kpi-txt">{{i18n.global.t('finance.annual_income')}}</text>
+			        <text class="kpi-money">¥{{incomeYearAmount}}</text>
+			      </view>
+			      <view class="kpi-box expense-box" :style="{'margin-left':marginLeft(3)}">
+			        <text class="kpi-txt">{{i18n.global.t('finance.annual_expense')}}</text>
+					 <text class="kpi-money">¥{{expensesYearAmount}}</text>
+			      </view>
+			    </view>
+			<!-- 本月收入明细 -->
+			<view class="detail-card">
+				<text class="card-main-title">{{i18n.global.t('finance.monthly_income_details')}}</text>
+				<view class="detail-row" v-for="income of incomeMonthList">
+					<view class="row-left">
+						<view class="tag-green"></view>
+						<text class="row-name">{{income.name}}</text>
 					</view>
-					<view class="kpi-item">
-						<view class="container">
-							<text class="kpi-label">{{ i18n.global.t('finance.monthly_expense') }}</text>
-							<view><text class="kpi-value expense">¥{{expensesAmount}}</text></view>
-						</view>
-					</view>
-					<view class="kpi-item">
-						<view class="container">
-							<text class="kpi-label">{{ i18n.global.t('finance.annual_income') }}</text>
-							<view><text class="kpi-value income">¥{{incomeYearAmount}}</text></view>
-						</view>
-					</view>
-					<view class="kpi-item">
-						<view class="container">
-							<text class="kpi-label">{{ i18n.global.t('finance.annual_expense') }}</text>
-							<view><text class="kpi-value expense">¥{{expensesYearAmount}}</text></view>
-						</view>
-					</view>
+					<text class="row-money item-income">¥{{income.value}}</text>
 				</view>
 			</view>
 
-			<!-- 本月财务详情 -->
-			<view class="card" @click="goToDetail('month')">
-				<text class="card-title">{{ i18n.global.t('finance.monthly_income_details') }}</text>
-				<view class="item" v-for="income of incomeMonthList">
-					<view class="container">
-						<text class="label">{{income.name}}</text>
-						<text class="value income">¥{{income.value}}</text>
+			<!-- 本月支出明细 -->
+			<view class="detail-card">
+				<text class="card-main-title">{{i18n.global.t('finance.monthly_expense_details')}}</text>
+				<view class="detail-row" v-for="expenses of expensesMonthList">
+					<view class="row-left">
+						<view class="tag-red"></view>
+						<text class="row-name">{{expenses.name}}</text>
 					</view>
+					<text class="row-money item-expense">¥{{expenses.value}}</text>
 				</view>
 			</view>
 
-			<view class="card" @click="goToDetail('month')">
-				<text class="card-title">{{ i18n.global.t('finance.monthly_expense_details') }}</text>
-				<view class="item" v-for="expenses of expensesMonthList">
-					<view class="container">
-						<text class="label">{{expenses.name}}</text>
-						<text class="value expense">¥{{expenses.value}}</text>
+			<!-- 年度概览 -->
+			<view class="detail-card">
+				<text class="card-main-title">{{i18n.global.t('finance.annual_financial_overview')}}</text>
+				<view class="detail-row">
+					<view class="row-left">
+						<view class="tag-green"></view><text
+							class="row-name">{{i18n.global.t('finance.total_income')}}</text>
 					</view>
+					<text class="row-money item-income">¥{{incomeYearAmount}}</text>
 				</view>
-			</view>
-
-			<!-- 本年财务概览 -->
-			<view class="card" @click="goToDetail('year')">
-				<text class="card-title">{{ i18n.global.t('finance.annual_financial_overview') }}</text>
-
-				<view class="item">
-					<text class="label">{{ i18n.global.t('finance.total_income') }}</text>
-					<text class="value income">¥{{incomeYearAmount}}</text>
+				<view class="detail-row">
+					<view class="row-left">
+						<view class="tag-red"></view><text
+							class="row-name">{{i18n.global.t('finance.total_expense')}}</text>
+					</view>
+					<text class="row-money item-expense">¥{{expensesYearAmount}}</text>
 				</view>
-				<view class="item">
-					<text class="label">{{ i18n.global.t('finance.total_expense') }}</text>
-					<text class="value expense">¥{{expensesYearAmount}}</text>
-				</view>
-				<view class="item">
-					<text class="label">{{ i18n.global.t('finance.annual_profit') }}</text>
-					<text class="value profit">¥{{incomeYearAmount-expensesYearAmount}}</text>
+				<view class="detail-row">
+					<view class="row-left">
+						<view class="tag-gold"></view><text
+							class="row-name">{{i18n.global.t('finance.annual_profit')}}</text>
+					</view>
+					<text class="row-money item-profit">¥{{incomeYearAmount-expensesYearAmount}}</text>
 				</view>
 			</view>
 		</view>
@@ -77,9 +82,7 @@
 	<view v-if="hotel_id==''" style="margin-top: 80px;">
 		<l-empty :description="i18n.global.t('common.noData',[''])" />
 	</view>
-
 </template>
-
 <script setup>
 	import { FMService } from "@/services/FMService";
 	import { state } from '@/store/store.uts';
@@ -88,6 +91,9 @@
 	import { DateTimePickerExtend } from "@/uni_modules/rice-ui";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated"
+	})
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -157,10 +163,30 @@
 		})
 
 	}
+	const columnNum= computed(()=>{
+		let num = 2;
+		const w = state.viewWidth;
+		if(w!=0){
+			 num = Math.floor((w-32)/155);
+		}
+		return num
+	})
+	const marginLeft=(index:number):string | number=>{
+		if(index==0){
+			return 0;
+		}
+		if(columnNum.value==1){
+			return 0;
+		}
+		if(index % columnNum.value ==0){
+			return 0;
+		}
+		return '12px';
+	}
 	onLoad(params => {
 		init();
 		uni.setNavigationBarTitle({
-			title:i18n.global.t("finance.navbar_title")
+			title: i18n.global.t("finance.navbar_title")
 		})
 	})
 	function goToDetail(type : string) {
@@ -173,45 +199,46 @@
 		refreshState.value = false;
 
 	}
+	
 </script>
 
-<style scoped lang="scss">
-	.page {
-		background: #f9f9f9;
-		flex: 1;
+<style>
+	.top-header {
+		width: 100%;
+		background: #1677ff;
+		padding: 60px 0 40px;
+		text-align: center;
 	}
 
-	.navbar {
-		height: 44px;
-		background: #fff;
-		border-bottom: 1px solid #e0e0e0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.navbar-title {
-		font-size: 18px;
+	.header-title {
+		font-size: 22px;
+		color: #fff;
 		font-weight: 500;
+		padding-left:15px;
 	}
 
-	.content {
+	.wrap-content {
 		padding: 16px;
-		
-		
+		margin-top: -20px;
 	}
 
-	.card {
+	.profit-card {
 		background: #fff;
-		border-radius: 8px;
-		padding: 15px;
+		border-radius: 12px;
+		padding: 20px;
 		margin-bottom: 16px;
+		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 	}
 
-	.card-title {
-		font-size: 16px;
-		font-weight: 500;
-		margin-bottom: 16px;
+	.profit-label {
+		font-size: 14px;
+		color: #888;
+	}
+
+	.profit-num {
+		font-size: 32px;
+		font-weight: 700;
+		margin-top: 8px;
 	}
 
 	.kpi-grid {
@@ -220,62 +247,108 @@
 		flex-wrap: wrap;
 	}
 
-	.kpi-item {
+	.kpi-box {
+		margin-left: 12px;
+		margin-bottom:12px;
+		min-width: 160px;
 		flex: 1;
-		min-width: 150px;
+		border-radius: 10px;
+		padding: 16px;
 		box-sizing: border-box;
-		padding: 6px;
-
-		.container {
-
-			background: #f9f9f9;
-			padding: 12px 6px;
-			border-radius: 8px;
-			text-align: center;
-		}
 	}
 
-	.kpi-label {
+	.income-box {
+		background: linear-gradient(to bottom right, #e6f7ef, #d1f0e0);
+	}
+
+	.expense-box {
+		background: linear-gradient(to bottom right, #fdeeee, #fcd8d8);
+	}
+
+	.kpi-txt {
 		font-size: 14px;
-		color: #757575;
+		color: #666;
 	}
 
-	.kpi-value {
-		font-size: 18px;
+	.kpi-money {
+		font-size: 20px;
 		font-weight: 600;
-		margin-top: 4px;
+		margin-top: 6px;
 	}
 
-	.item {
+	.detail-card {
+		background: #fff;
+		border-radius: 12px;
+		padding: 18px;
+		margin-bottom: 16px;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+	}
+
+	.card-main-title {
+		font-size: 17px;
+		font-weight: 500;
+		margin-bottom: 14px;
+		color: #222;
+	}
+
+	.detail-row {
 		display: flex;
+		flex-direction: row;
 		justify-content: space-between;
-		padding: 8px 0;
-		border-bottom: 1px solid #f0f0f0;
+		align-items: center;
+		padding: 12px 0;
+		border-bottom: 1px solid #f3f4f6;
 	}
 
-	.item:last-child {
-		border-bottom: none;
+	.row-left {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
 	}
 
-	.label {
+	.tag-green {
+		width: 4px;
+		height: 16px;
+		background: #27ae60;
+		border-radius: 2px;
+		margin-right: 10px;
+	}
+
+	.tag-red {
+		width: 4px;
+		height: 16px;
+		background: #e74c3c;
+		border-radius: 2px;
+		margin-right: 10px;
+	}
+
+	.tag-gold {
+		width: 4px;
+		height: 16px;
+		background: #f39c12;
+		border-radius: 2px;
+		margin-right: 10px;
+	}
+
+	.row-name {
 		font-size: 15px;
+		color: #333;
 	}
 
-	.value {
-		font-size: 15px;
+	.row-money {
+		font-size: 16px;
 		font-weight: 600;
-		padding: 4px 0;
 	}
 
-	.income {
-		color: #34a853;
+	.item-income {
+		color: #27ae60;
 	}
 
-	.expense {
-		color: #ea4335;
+	.item-expense {
+		color: #e74c3c;
 	}
 
-	.profit {
-		color: #fbbc05;
+	.item-profit {
+		color: #f39c12;
 	}
 </style>

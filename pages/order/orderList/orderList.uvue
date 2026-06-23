@@ -14,9 +14,7 @@
 		<template #right>
 			<view class="navbar-btn" @click="addOrder">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
-
-				<text class="txt" >{{ i18n.global.t('order.title_order') }}</text>
-
+				<text class="navbar-btn-txt">{{ i18n.global.t('order.title_order') }}</text>
 			</view>
 		</template>
 	</rice-navbar>
@@ -24,26 +22,25 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		<view class="search-area">
-			<view class="card">
-				<view class="card-item title-area">
-					<text class="txt">{{ i18n.global.t('order.orderFilter') }}</text>
+		<view class="search-area-root">
+			<view class="search-card">
+				<view class="search-card-item title-row">
+					<text class="title-txt">{{ i18n.global.t('order.orderFilter') }}</text>
 					<l-tag variant="light">{{ i18n.global.t('common.totalCount',[orderResult.count]) }}</l-tag>
 				</view>
-				<view class="card-item  select-area">
+				<view class="search-card-item select-row">
 					<orderSearchComponent :columns="columns" :initDateRange="dateRange"
 						@searchInputChange="searchInputChange" @selectAction="selectStatus" @dateChange="dateChange"
 						@searchAction="getOrderList" :placeholder="i18n.global.t('order.searchPlaceholder')"></orderSearchComponent>
 				</view>
-				<view class="card-item search"></view>
+				<view class="search-card-item empty-row"></view>
 			</view>
 
 		</view>
-		<view class="card-list">
-			<!-- <template v-for="roomType of filterRoomTypeList"> -->
-			<view class="card-list-item" v-for="order of orderResult.orderList">
-				<view class="card">
-					<view style="display: flex;flex-direction: row;justify-content: flex-end;">
+		<view class="order-list-root">
+			<view class="order-card-item" v-for="order of orderResult.orderList">
+				<view class="order-card">
+					<view class="tag-wrap">
 						<view> 
 						<rice-tag v-if="order.orderStatus==1" type="primary" :text="i18n.global.t('order.statusCheckInPending')" />
 						<rice-tag v-if="order.orderStatus==5" type="success" :text="i18n.global.t('order.statusCompleted')" />
@@ -52,91 +49,64 @@
 					
 					</view>
 					
-					<view class="content">
-						<!-- 	<view class="card-item title">
-							<text class="txt">{{formatDate(order.ioeTime)}}</text>
-						</view> -->
-						<view class="card-item">
-							<view class="fl-c">
+					<view class="card-content-wrap">
+						<view class="content-row">
+							<view class="label-flex">
 								<image src="/static/icons/hotelcustomer.png" style="width: 13px;height: 13px;"></image>
-								<text class="label">{{ i18n.global.t('order.guest') }}：</text>
+								<text class="label-text">{{ i18n.global.t('order.guest') }}：</text>
 							</view>
-							<text class="val-style">{{order.userName}}</text>
+							<text class="value-text">{{order.userName}}</text>
 						</view>
-						<view class="card-item">
-							<view class="fl-c">
+						<view class="content-row">
+							<view class="label-flex">
 								<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
-								<text class="label">{{ i18n.global.t('order.checkInTime') }}：</text>
+								<text class="label-text">{{ i18n.global.t('order.checkInTime') }}：</text>
 							</view>
-							<text class="val-style">{{formatDate(order.checkInStartDateTimeStamp)}}</text>
+							<text class="value-text">{{formatDate(order.checkInStartDateTimeStamp)}}</text>
 						</view>
-						<view class="card-item">
-							<view class="fl-c">
+						<view class="content-row">
+							<view class="label-flex">
 								<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
-								<text class="label">{{ i18n.global.t('order.checkOutTime') }}：</text>
+								<text class="label-text">{{ i18n.global.t('order.checkOutTime') }}：</text>
 							</view>
-							<text class="val-style">{{formatDate(order.checkInEndDateTimeStamp)}}</text>
+							<text class="value-text">{{formatDate(order.checkInEndDateTimeStamp)}}</text>
 						</view>
-						<!-- <view class="card-item">
-							<view class="fl-c">
-								<image src="/static/icons/fm/sztype.png" style="width: 16px;height: 16px;"></image>
-								<text class="label">房型：</text>
-							</view>
-							<view class="val-style" style="display: flex;flex-direction: row;align-items: center;">
-								<view v-for="it of order.roomTypeArray" >
-									<text style="padding-left: 8px">{{it.name}}</text>
-									</view>
-							</view>
-						</view> -->
-						<view class="card-item">
-							<view class="fl-c">
+						<view class="content-row">
+							<view class="label-flex">
 								<image src="/static/icons/roomReserve.png" style="width: 16px;height: 16px;"></image>
-								<text class="label">{{i18n.global.t("order.room")}}：</text>
-								
+								<text class="label-text">{{i18n.global.t("order.room")}}：</text>
 							</view>
-							<view class="val-style" style="display: flex;flex-direction: row;align-items: center;flex: 1;flex-wrap: wrap;justify-content: flex-end;">
-								<!-- <view v-for="it of order.roomTypeArray" style="display: flex;flex-direction: row;align-items: center;">
-									<text style="padding-left: 8px" v-for="i of it.roomList">{{formatRoomName(i)}}</text>
-								</view> -->
-							
+							<view class="flex-wrap-val" style="display: flex;flex-direction: row;align-items: center;flex: 1;flex-wrap: wrap;justify-content: flex-end;">
 								<text v-for="item of formatRoomList(order.reservedRoomList)" style="padding:0 4px">{{item}}</text> 
 							</view>
 						</view>
-						<view class="card-item" style="margin-bottom: 0;">
-							<view class="fl-c">
+						<view class="content-row no-bottom">
+							<view class="label-flex">
 								<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
-								<text class="label">{{ i18n.global.t('order.remark') }}：</text>
+								<text class="label-text">{{ i18n.global.t('order.remark') }}：</text>
 							</view>
-							<text class="val-style">
+							<text class="value-text">
 								{{order.mark}}
 							</text>
 						</view> 
-						<view class="card-item" style="margin-bottom: 0;">
-						<!-- <view class="amount-area">
-							<view><text class="label">房价</text></view>
-							<view><text class="num">￥{{order.totalAmount}}</text></view>
-						</view> -->
-						<view class="fl-c">
-							<image src="/static/icons/fm/income.png" style="width: 16px;height: 16px;"></image>
-							<text class="label">{{ i18n.global.t('order.roomPrice') }}：</text>
-						</view>
-						<text class="val-style" style="color:#047857;font-weight: 700;">
-							￥{{order.totalAmount}}
-						</text>
+						<view class="content-row no-bottom">
+							<view class="label-flex">
+								<image src="/static/icons/fm/income.png" style="width: 16px;height: 16px;"></image>
+								<text class="label-text">{{ i18n.global.t('order.roomPrice') }}：</text>
+							</view>
+							<text class="price-text" style="color:#047857;font-weight: 700;">
+								￥{{order.totalAmount}}
+							</text>
 						</view> 
 					</view>
 
-					<view class="control">
-			
+					<view class="btn-control-wrap">
 						<view>
 							<xt-control @del="deleteOrder(order)" @edit="editOrder(order)" :show-view="false" :show-edit="false" :show-delete="order.orderStatus!=10"></xt-control>
 						</view>
-
-
 					</view>
 				</view>
 			</view>
-			<!-- </template> -->
 		</view>
 		<view v-if="submitLoading" style="margin-top:68px;display: flex;flex-direction: row;justify-content: center;">
 			<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
@@ -168,6 +138,9 @@
 	import {userBean} from "@/bean/userBean";
 	import {getGatherEvent } from "@/store/modules/orderStore";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "app"
+	})
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -186,11 +159,10 @@
 	const roomList = computed<Array<roomBean>>(() => {
 		return state.roomList;
 	});
-	//选择列表
 	let _select_id = ref("income");
 	let _search_key = ref("");
 	const orderStatus = ref<string | number>("all");
-	const keyword = ref("");//过滤字段
+	const keyword = ref("");
 	const dateRange = ref<string[]>(getMonthDateArray());
 	const columns = computed<Array<Array<PickerOption>>>(() => {
 		let result : Array<Array<PickerOption>> = [[
@@ -204,19 +176,15 @@
 
 
 	const orderResult = ref<OrderDataListResult>({
-		count: 0,//总数量
-		pageNo: 1,//当前页码
-		pageSize: 20,//每页数量
-		orderList: []//列表
+		count: 0,
+		pageNo: 1,
+		pageSize: 20,
+		orderList: []
 	})
 	const getOrderList = async () => {
 		submitLoading.value = true;
-		// uni.showLoading({
-		// 	title: ""
-		// })
 		const fmr = await OrderService.getOrderListBySearch(hotel_id.value, dateRange.value, orderStatus.value, keyword.value, orderResult.value.pageNo, orderResult.value.pageSize);
 		orderResult.value = fmr as OrderDataListResult;
-		//uni.hideLoading();
 		submitLoading.value = false;
 	}
 	const dateChange = (range : string[]) => {
@@ -254,15 +222,6 @@
 		})	
 		return val;
 	}
-	// const parseRoomList = (roomTypeArray:Array<OrderRoomTypeBean>):Array<string>=>{
-	// 	let list:Array<string>=[];
-	// 	roomTypeArray.forEach(item=>{
-	// 		item.roomList.forEach(roomid=>{
-	// 			list.push(formatRoomName(roomid))
-	// 		})	
-	// 	});
-	// 	return list;
-	// }
 	const formatRoomList = (list : Array<string>) : Array<string> => {
 		let result : Array<string> = [];
 		list.forEach(room_id => {
@@ -320,9 +279,6 @@
 			title: i18n.global.t('order.confirmDeleteOrder'),
 			message: i18n.global.t('order.deleteOrderTip')+"?",
 			beforeClose: async () : Promise<boolean> => {
-				// await roomTypeService.deleteOrder(room._id);
-				// await comFunction.getRoomTypeList(hotel_id.value);
-				// await FMService.deleteOrder(fm._id);
 				await OrderService.deleteOrder(order._id);				
 				await getOrderList();
 				getGatherEvent(hotel_id.value);
@@ -353,186 +309,125 @@
 		}
 	}
 	const init = () => {
-		//let d:MOONTH_START_END_TIMESTAMP=TIME.getTodayStartTimeAndEndTime(new Date());
 		getOrderList();
 	}
 	onPageShow(() => {
-	//	getOrderList();
 	})
 	defineExpose({
-		//getOrderList
 	});
 	init();
 </script>
 
-<style lang="scss">
+<style>
+/* 顶部搜索区域 */
+.search-area-root {
+	padding: 18px;
+}
+.search-card {
+	background-color: #fff;
+	border-radius: 8px;
+	padding: 16px;
+}
+.search-card-item {
+	margin-bottom: 15px;
+}
+.empty-row {
+	margin-bottom: 0;
+}
+.title-row {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+.title-txt {
+	padding-right: 8px;
+	font-size: 18px;
+	font-weight: 700;
+	color:#999;
+}
+.select-row {
+}
 
-	.search-area {
-		padding: 18px;
+/* 订单列表外层容器 */
+.order-list-root {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+.order-card-item {
+	min-width: 320px;
+	padding: 7.5px 15px;
+	flex: 1;
+}
+.order-card {
+	background-color: #fff;
+	border-radius: 12px;
+	position: relative;
+}
+.tag-wrap {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	padding: 10px 10px 0 0;
+}
 
-		.card {
-			background-color: #fff;
-			border-radius: 8px;
-			padding: 16px;
+/* 卡片内容区域 */
+.card-content-wrap {
+	padding: 24px;
+}
+.content-row {
+	margin-top: 15px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+.no-bottom {
+	margin-top: 0;
+}
+.label-flex {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+.label-text {
+	color: #1f2937;
+	font-size: 13px;
+	padding-left: 8px;
+}
+.value-text {
+	color: #1f2937;
+	font-size: 13px;
+}
+.flex-wrap-val {
+	color: #1f2937;
+	font-size: 13px;
+}
+.price-text {
+	font-size: 13px;
+}
 
-			.card-item {
-				margin-bottom: 15px;
+/* 底部操作按钮区域 */
+.btn-control-wrap {
+	padding:0 12px 12px 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+}
 
-				&:last-child {
-					margin: 0;
-				}
-			}
+.navbar-btn{
+	  display: flex;
+	  flex-direction: row;
+	  align-items: center;
+	  justify-content: center;
+	  padding: 12px 15px;
+	  border-radius: 8px;
+  }
+   .navbar-btn-txt {
+  	color: #007aff;
+  	font-size: 15px;
+  	padding-left: 4px;
+  }
 
-			.title-area {
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-
-				.txt {
-					padding-right: 8px;
-					font-size: 18px;
-					font-weight: 700;
-					color:#999;
-				}
-			}
-
-		}
-	}
-
-	.card-list {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-
-		.card-list-item {
-			min-width: 360px;
-			padding: 7.5px 15px;
-			flex: 1;
-
-			.card {
-				background-color: #fff;
-				border-radius: 12px;
-
-				position: relative;
-
-				.icon-area {
-					position: absolute;
-					right: 10px;
-					top: 10px;
-				}
-
-				.top-area {
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-					height: 60px;
-					border-bottom: 1px solid rgba(16, 185, 129, 0.2);
-					background-color: #ecfdf5;
-					padding: 0 24px;
-
-					.txt {
-						line-height: 60px;
-						color: #047857;
-						font-size: 18px;
-						font-weight: 700;
-					}
-
-				}
-
-				.top-area-red {
-					border-bottom: 1px solid rgba(239, 68, 68, 0.2);
-					background-color: #fef2f2;
-
-					.txt {
-						line-height: 60px;
-						color: #b91c1c;
-						font-size: 18px;
-						font-weight: 700;
-					}
-
-				}
-
-				.amount-area {
-					padding: 0 24px;
-					margin-top: 24px;
-
-					.label {
-						color: #6b7280;
-						font-size: 14px;
-						margin-bottom: 4px;
-					}
-
-					.num {
-						line-height: 36px;
-						color: #047857;
-						font-size: 20px;
-						font-weight: 600;
-					}
-
-					.num-red {
-						color: #b91c1c;
-					}
-				}
-
-				.content {
-					padding: 24px;
-
-					.card-item {
-
-						margin-top: 15px;
-						display: flex;
-						flex-direction: row;
-						align-items: center;
-						justify-content: space-between;
-
-						&:first-child {
-							margin-top: 0;
-						}
-
-						.fl-c {
-							display: flex;
-							flex-direction: row;
-							align-items: center;
-						}
-
-						.label {
-							color: #1f2937;
-							font-size: 13px;
-							padding-left: 8px;
-						}
-
-						.val-style {
-							color: #1f2937;
-							font-size: 13px;
-						}
-
-					}
-				}
-
-
-
-				.control {
-					// height: 44px;
-					padding:0 12px 12px 0;
-					display: flex;
-					flex-direction: row;
-					justify-content: flex-end;
-			
-					align-items: center;
-
-					.txt {
-						font-size: 20px;
-						font-weight: 700;
-						color: #f53f3f;
-						padding-top: 5px;
-					}
-
-					.txt-in {
-						color: #00b42a;
-					}
-				}
-			}
-		}
-	}
-	
 </style>

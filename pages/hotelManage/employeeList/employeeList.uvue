@@ -13,24 +13,20 @@
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn" @click="addEmployee" v-if="permissionList.includes('EMPLOYEE_CREATE')">
+			<view class="nav-add-staff-btn" @click="addEmployee" v-if="permissionList.includes('EMPLOYEE_CREATE')">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
-
-				<text class="txt" >{{i18n.global.t("hotel.title_employee")}}</text>
-
-
+				<text class="btn-text">{{i18n.global.t("hotel.title_employee")}}</text>
 			</view>
 		</template>
 	</rice-navbar>
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		<view class="card-list">
-			<view class="card-list-item" v-for="employee of employeeList">
-				<view class="card">
+		<view class="staff-list-wrap">
+			<view class="staff-card-item" v-for="employee of employeeList">
+				<view class="staff-card-box">
 					<view style="display: flex;flex-direction: row;flex: 1;justify-content: space-between;">
 						<view style="flex:1;flex-direction: row;align-items: center;">
-
 							<view style="border-radius: 12px;margin-right: 16px;">
 								<image v-if="employee.role=='administrator'" style="width:64px;height:64px"
 									src="/static/images/administrator.png"></image>
@@ -44,38 +40,29 @@
 									style="color:#1d2129;font-size: 18px;line-height: 28px;margin-bottom: 8px;">{{employee.employee_name}}</text>
 								<rice-tag type="primary" :text="roleFormat(employee.role)" text-size="12px"
 									:color="getRoleColor(employee.role)" />
-
 							</view>
 						</view>
 						<view style="display: flex;flex-direction:row; align-items: center;">
-
-							<!-- <image src="/static/icons/more-control.png" style="width:32px;height:32px"></image> -->
-
-
 						</view>
 					</view>
 					<view>
 						<view style="display: flex;flex-direction: row;align-items: center;margin-top:15px"
 							v-if="employee.account">
-
 							<view>
 								<image src="/static/icons/account.png" style="width:14px;height:14px"></image>
 							</view>
 							<view><text
 									style="color:#272e3b;font-size: 14px;padding-left: 4px;">{{employee.account}}</text>
 							</view>
-
 						</view>
 						<view style="display: flex;flex-direction: row;align-items: center;margin-top:15px"
 							v-if="employee.phone">
-
 							<view>
 								<image src="/static/icons/tel02.png" style="width:14px;height:14px"></image>
 							</view>
 							<view><text @click="makePhone(employee.phone)"
 									style="color:#272e3b;font-size: 14px;padding-left: 4px;">{{employee.phone}}</text>
 							</view>
-
 						</view>
 						<view>
 							<xt-control :showView="false" :showEdit="showControl_edit(employee)"
@@ -83,20 +70,6 @@
 								@edit="editEmployee(employee)"></xt-control>
 						</view>
 					</view>
-					<!-- <view class="control-area" v-if="false">
-
-						<view class="control-icons-item" @click="editEmployee(employee)"
-							v-if="showControl_edit(employee)">
-							<rice-icon color="#165dff" name="edit" size="14px" />
-							<text style="color:#165dff;font-size: 16px;">编辑</text>
-						</view>
-						
-						<view class="control-icons-item" v-if="showControl_delete(employee)"
-							@click="deleteEmployee(employee)">
-							<rice-icon color="#ff4d4f" name="delete" size="14px" />
-							<text style="color:#ff4d4f;font-size: 16px;">删除</text>
-						</view>
-					</view> -->
 				</view>
 			</view>
 		</view>
@@ -117,6 +90,9 @@
 	import { employeeAction } from "./employeeAction.uts";
 	import { userBean } from "@/bean/userBean";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated"
+	})
 	let submitLoading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -127,7 +103,6 @@
 	const permissionList = computed(() => {
 		return state.permissionList;
 	});
-	//const employeeList = ref<Array<employeeBean>>([]);
 	const employeeList = computed<Array<employeeBean>>(() => {
 		return state.employeeList;
 	});
@@ -168,10 +143,7 @@
 		return true;
 	}
 	const addEmployee = async () => {
-		console.log(permissionList.value)
-		if (!permissionList.value.includes(
-			"EMPLOYEE_CREATE"
-		)) {
+		if (!permissionList.value.includes("EMPLOYEE_CREATE")) {
 			showDialog({
 				title: i18n.global.t('permission.noPermission'),
 				message: i18n.global.t('permission.contactAdmin'),
@@ -187,9 +159,7 @@
 		})
 	}
 	const editEmployee = async (em : employeeBean) => {
-		if (!permissionList.value.includes(
-			"EMPLOYEE_UPDATE"
-		)) {
+		if (!permissionList.value.includes("EMPLOYEE_UPDATE")) {
 			showDialog({
 				title: i18n.global.t('permission.noPermission'),
 				message: i18n.global.t('permission.contactAdmin'),
@@ -200,7 +170,6 @@
 			})
 			return;
 		}
-		console.log("edit");
 		if (em.role == 'administrator') {
 			return;
 		}
@@ -210,9 +179,7 @@
 		})
 	}
 	const deleteEmployee = async (em : employeeBean) => {
-		if (!permissionList.value.includes(
-			"EMPLOYEE_DELETE"
-		)) {
+		if (!permissionList.value.includes("EMPLOYEE_DELETE")) {
 			showDialog({
 				title: i18n.global.t('permission.noPermission'),
 				message: i18n.global.t('permission.contactAdmin'),
@@ -223,7 +190,6 @@
 			})
 			return;
 		}
-		console.log("delete");
 		showDialog({
 			title: i18n.global.t("common.confirmDelete"),
 			message: i18n.global.t("common.deleteOrderTip"),
@@ -246,14 +212,11 @@
 					return false;
 				}
 			},
-			confirm: () => {
-			}, cancel: () => {
+			confirm: () => {},
+			cancel: () => {
 				hideDialog();
 			}
-
 		});
-
-
 	}
 	const makePhone = (phone : string) => {
 		let deviceType = uni.getSystemInfoSync().deviceType;
@@ -262,64 +225,52 @@
 		}
 		if (deviceType == "phone") {
 			uni.makePhoneCall({
-				phoneNumber: phone, //仅为示例
-				success: (success) => {
-					//console.log("调用成功", success);
-				},
+				phoneNumber: phone,
+				success: (success) => {}
 			});
 			return;
 		}
 		uni.setClipboardData({
 			data: phone,
-			success: function () {
-				//console.log("success");
-			},
+			success: function () {}
 		});
 	}
 	const init = async () => {
 		submitLoading.value = true;
-		// uni.showLoading({
-		// 	title:""
-		// })
 		await employeeAction.getEmplolyeeList(hotel_id.value);
 		submitLoading.value = false;
-		//uni.hideLoading();
 	}
 	init();
 </script>
 
-<style lang="scss">
-	.card-list {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-
-		.card-list-item {
-			min-width: 360px;
-			padding: 15px;
-			flex: 1;
-
-			.card {
-
-
-				background-color: #fff;
-				border-radius: 15px;
-				padding: 15px;
-
-				.control-area {
-					margin-top: 24px;
-					display: flex;
-					flex-direction: row;
-					justify-content: flex-end;
-
-					.control-icons-item {
-						padding: 6px 10px;
-						display: flex;
-						flex-direction: row;
-						align-items: center;
-					}
-				}
-			}
-		}
-	}
+<style>
+/* 员工列表外层容器 */
+.staff-list-wrap {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+/* 单个卡片容器 */
+.staff-card-item {
+	min-width: 320px;
+	padding: 15px;
+	flex: 1;
+}
+/* 卡片主体 */
+.staff-card-box {
+	background-color: #fff;
+	border-radius: 15px;
+	padding: 15px;
+}
+/* 导航栏新增员工按钮 */
+.nav-add-staff-btn {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+.btn-text {
+	margin-left: 4px;
+	font-size: 14px;
+	color: #007aff;
+}
 </style>

@@ -12,8 +12,10 @@
 						<rice-input style="width: 100%;"  :placeholder="i18n.global.t('login.pach_sms')" type="number" v-model="userForm.smsCode"
 							:maxlength="4" border="none"/>
 					</view>
-					<view style="display: flex;flex-direction: row;align-items: center;">
-						<rice-button  type="primary" :text="codeText"  @click="sendSmsCode" textColor="#fff" :loading="smsLoading"></rice-button>
+					<view style="display: flex;flex-direction: row;align-items: center;" @click="sendSmsCode">
+						<!-- <rice-button  type="primary" :text="codeText"  @click="sendSmsCode" textColor="#fff" :loading="smsLoading"></rice-button>
+					 -->
+					 <text style="color:#1989fa;font-size: 13px;">{{codeText}}</text>
 					</view>
 				</view>
 			</rice-form-item>

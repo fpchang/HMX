@@ -98,10 +98,10 @@
 										<rice-icon name="eyes" color="#fff" />
 										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_details",[''])}}</text>
 									</view>
-									<view class="menu-item-box menu-edit" @click="editOrder(order)">
+									<!-- <view class="menu-item-box menu-edit" @click="editOrder(order)">
 										<rice-icon name="edit" color="#fff" />
 										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_edit")}}</text>
-									</view>
+									</view> -->
 									<view class="menu-item-box menu-del" @click="deleteOrder(order)">
 										<rice-icon name="delete" color="#fff" />
 										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_delete")}}</text>
@@ -112,86 +112,7 @@
 					</rice-swipe-actions>
 				</view>
 			</view>
-			<view class="order-list-root" v-if="false">
 
-				<view class="order-card-item" v-for="order of orderResult.orderList">
-					<view class="order-card">
-						<view class="tag-wrap">
-							<view>
-								<rice-tag v-if="order.orderStatus==1" type="primary"
-									:text="i18n.global.t('order.statusCheckInPending')" />
-								<rice-tag v-if="order.orderStatus==5" type="success"
-									:text="i18n.global.t('order.statusCompleted')" />
-								<rice-tag v-if="order.orderStatus==10" type="error"
-									:text="i18n.global.t('order.statusCancelled')" />
-							</view>
-
-						</view>
-
-						<view class="card-content-wrap">
-							<view class="content-row">
-								<view class="label-flex">
-									<image src="/static/icons/hotelcustomer.png" style="width: 13px;height: 13px;">
-									</image>
-									<text class="label-text">{{ i18n.global.t('order.guest') }}：</text>
-								</view>
-								<text class="value-text">{{order.userName}}</text>
-							</view>
-							<view class="content-row">
-								<view class="label-flex">
-									<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
-									<text class="label-text">{{ i18n.global.t('order.checkInTime') }}：</text>
-								</view>
-								<text class="value-text">{{formatDate(order.checkInStartDateTimeStamp)}}</text>
-							</view>
-							<view class="content-row">
-								<view class="label-flex">
-									<image src="/static/icons/fm/time.png" style="width: 16px;height: 16px;"></image>
-									<text class="label-text">{{ i18n.global.t('order.checkOutTime') }}：</text>
-								</view>
-								<text class="value-text">{{formatDate(order.checkInEndDateTimeStamp)}}</text>
-							</view>
-							<view class="content-row">
-								<view class="label-flex">
-									<image src="/static/icons/roomReserve.png" style="width: 16px;height: 16px;">
-									</image>
-									<text class="label-text">{{i18n.global.t("order.room")}}：</text>
-								</view>
-								<view class="flex-wrap-val"
-									style="display: flex;flex-direction: row;align-items: center;flex: 1;flex-wrap: wrap;justify-content: flex-end;">
-									<text v-for="item of formatRoomList(order.reservedRoomList)"
-										style="padding:0 4px">{{item}}</text>
-								</view>
-							</view>
-							<view class="content-row no-bottom">
-								<view class="label-flex">
-									<image src="/static/icons/fm/mark.png" style="width: 16px;height: 16px;"></image>
-									<text class="label-text">{{ i18n.global.t('order.remark') }}：</text>
-								</view>
-								<text class="value-text">
-									{{order.mark}}
-								</text>
-							</view>
-							<view class="content-row no-bottom">
-								<view class="label-flex">
-									<image src="/static/icons/fm/income.png" style="width: 16px;height: 16px;"></image>
-									<text class="label-text">{{ i18n.global.t('order.roomPrice') }}：</text>
-								</view>
-								<text class="price-text" style="color:#047857;font-weight: 700;">
-									￥{{order.totalAmount}}
-								</text>
-							</view>
-						</view>
-
-						<view class="btn-control-wrap">
-							<view>
-								<xt-control @del="deleteOrder(order)" @edit="editOrder(order)" :show-view="false"
-									:show-edit="false" :show-delete="order.orderStatus!=10"></xt-control>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
 			<view v-if="submitLoading"
 				style="margin-top:68px;display: flex;flex-direction: row;justify-content: center;">
 				<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
@@ -233,14 +154,14 @@
 							</rice-cell-group>
 							<view style="margin-top:20px">
 								<rice-row :gutter="8">
-									<rice-col :span="10"></rice-col>
-									<rice-col :span="6">
+									<rice-col :span="16"></rice-col>
+									<!-- <rice-col :span="6">
 										<view>
 											<rice-button type="primary" size="small" plain-fill
 												:text="i18n.global.t('common.btn_txt_modify',[''])"
 												@click="editOrder(active_order)"></rice-button>
 										</view>
-									</rice-col>
+									</rice-col> -->
 									<rice-col :span="6">
 										<view>
 											<rice-button type="error" size="small" plain-fill
@@ -655,6 +576,12 @@
 }
 .menu-del {
 	background-color: #f53f3f;
+}
+/* 菜单文字 */
+.menu-item-text {
+	color: #fff;
+	font-size: 12px;
+	margin-top: 4px;
 }
 	.order-title {
 		display: flex;

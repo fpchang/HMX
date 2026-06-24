@@ -36,7 +36,9 @@
 		{
 			"path": "pages/home/home",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "",
+				"disableScroll":true,
+				"navigationStyle": "custom"
 			}
 		}, {
 			"path": "uni_modules/rice-ui/pages/action-sheet/action-sheet"
@@ -54,7 +56,9 @@
 		{
 			"path": "pages/order/orderState/orderState",
 			"style": {
+				
 				"navigationBarTitleText": "房态",
+				"disableScroll":true,
 				"navigationStyle": "custom"
 			}
 		},
@@ -62,6 +66,7 @@
 			"path": "pages/financialManagement/financiaHome/financiaHome",
 			"style": {
 				"navigationStyle": "custom",
+				"disableScroll":true,
 				"navigationBarTitleText": "财务中心",
 				"navigationBarBackgroundColor": "#007aff", //"linear-gradient(135deg, #2563eb, #3b82f6)",
 				"navigationBarTextStyle": "white"
@@ -72,14 +77,18 @@
 		{
 			"path": "pages/homeMenu/homeMenu",
 			"style": {
-				"navigationBarTitleText": "功能"
+				"navigationBarTitleText": "功能",
+				"disableScroll":true,
+				"navigationStyle": "custom"
+				
 			}
 		},
 		{
 			"path": "pages/mine/mine",
 			"style": {
 				"navigationBarTitleText": "",
-				"navigationStyle": "custom"
+				"navigationStyle": "custom",
+				"disableScroll":true
 			}
 		},
 		{
@@ -339,49 +348,49 @@
 		"rpxCalcIncludeWidth": 750,
 		"resizable": true
 	},
-	"tabBar": {
-		"color": "#787878",
-		"selectedColor": "#007aff",
-		"borderStyle": "#EEEEEE ",
-		"backgroundColor": "#ffffff",
-		"redDotColor": "#ff0000",
-		"backgroundColor": "#ffffff",
-		//"spacing":"5px",
-		"fontSize": "10px",
-		"iconWidth": "24px",
-		"height": "60px",
-		"list": [{
-				"pagePath": "pages/index/index",
-				"iconPath": "/static/icons/tabbar/home-black.png",
-				"selectedIconPath": "/static/icons/tabbar/home-blue.png",
-				"text": "首页"
-			},
-			{
-				"pagePath": "pages/order/orderState/orderState",
-				"iconPath": "static/icons/tabbar/ft-black.png",
-				"selectedIconPath": "static/icons/tabbar/ft-blue.png",
-				"text": "房态"
-			},
-			{
-				"pagePath": "pages/financialManagement/financiaHome/financiaHome",
-				"iconPath": "static/icons/tabbar/fm-black.png",
-				"selectedIconPath": "static/icons/tabbar/fm-blue.png",
-				"text": "财务"
-			},
+	// "tabBar": {
+	// 	"color": "#787878",
+	// 	"selectedColor": "#007aff",
+	// 	"borderStyle": "#EEEEEE ",
+	// 	"backgroundColor": "#ffffff",
+	// 	"redDotColor": "#ff0000",
+	// 	"backgroundColor": "#ffffff",
+	// 	//"spacing":"5px",
+	// 	"fontSize": "10px",
+	// 	"iconWidth": "24px",
+	// 	"height": "60px",
+	// 	"list": [{
+	// 			"pagePath": "pages/index/index",
+	// 			"iconPath": "/static/icons/tabbar/home-black.png",
+	// 			"selectedIconPath": "/static/icons/tabbar/home-blue.png",
+	// 			"text": "首页"
+	// 		},
+	// 		{
+	// 			"pagePath": "pages/order/orderState/orderState",
+	// 			"iconPath": "static/icons/tabbar/ft-black.png",
+	// 			"selectedIconPath": "static/icons/tabbar/ft-blue.png",
+	// 			"text": "房态"
+	// 		},
+	// 		{
+	// 			"pagePath": "pages/financialManagement/financiaHome/financiaHome",
+	// 			"iconPath": "static/icons/tabbar/fm-black.png",
+	// 			"selectedIconPath": "static/icons/tabbar/fm-blue.png",
+	// 			"text": "财务"
+	// 		},
 
-			{
-				"pagePath": "pages/homeMenu/homeMenu",
-				"iconPath": "static/icons/tabbar/fun-black.png",
-				"selectedIconPath": "static/icons/tabbar/fun-blue.png",
-				"text": "功能"
-			},
-			{
-				"pagePath": "pages/mine/mine",
-				"iconPath": "/static/icons/tabbar/mine-black.png",
-				"selectedIconPath": "static/icons/tabbar/mine-blue.png",
-				"text": "我的"
-			}
-		]
-	},
+	// 		{
+	// 			"pagePath": "pages/homeMenu/homeMenu",
+	// 			"iconPath": "static/icons/tabbar/fun-black.png",
+	// 			"selectedIconPath": "static/icons/tabbar/fun-blue.png",
+	// 			"text": "功能"
+	// 		},
+	// 		{
+	// 			"pagePath": "pages/mine/mine",
+	// 			"iconPath": "/static/icons/tabbar/mine-black.png",
+	// 			"selectedIconPath": "static/icons/tabbar/mine-blue.png",
+	// 			"text": "我的"
+	// 		}
+	// 	]
+	// },
 	"uniIdRouter": {}
 }

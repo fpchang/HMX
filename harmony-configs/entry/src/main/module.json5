@@ -1,0 +1,83 @@
+{
+  "module": {
+    "name": "entry",
+    "type": "entry",
+    "description": "$string:module_desc",
+    "mainElement": "EntryAbility",
+    "deviceTypes": [
+      "phone",
+      "tablet",
+      "2in1"
+    ],
+    "querySchemes": [
+      "mailto",
+      "weixin"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    "pages": "$profile:main_pages",
+    "abilities": [
+      {
+        "name": "EntryAbility",
+        "srcEntry": "./ets/entryability/EntryAbility.ets",
+        "description": "$string:EntryAbility_desc",
+        "icon": "$media:layered_image",
+        "label": "$string:EntryAbility_label",
+        "startWindowIcon": "$media:startIcon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        "skills": [
+          {
+            "entities": [
+              "entity.system.home"
+            ],
+            "actions": [
+              "action.system.home"
+            ]
+          },
+          {
+            "actions": [
+              "ohos.want.action.viewData"
+            ],
+            "uris": [
+              {
+                "scheme": "hellouniappx",
+                "host": "redirect"
+              },
+              {
+                "scheme": "uniappxhello",
+                "host": "redirect"
+              }
+            ]
+          }
+        ],
+        "preferMultiWindowOrientation": "landscape_auto"
+      }
+    ],
+    "metadata": [
+      {
+        "name": "TENCENT_MAP_KEY",
+        "value": ""
+      }
+    ],
+    "requestPermissions": [
+		 {
+		        "name": "ohos.permission.VIBRATE",
+		        "reason": "按钮点击提供触觉震动反馈，提升操作交互体验",
+		        "usedScene": {
+		          "abilities": ["EntryAbility"],
+		          "when": "inuse"
+		        }
+		      },
+		      // APP_TRACKING_CONSENT 完整标准配置
+		      {
+		        "name": "ohos.permission.APP_TRACKING_CONSENT",
+		        "reason": "$string:tracking_permission_desc",
+		        "usedScene": {
+		          "abilities": ["EntryAbility"],
+		          "when": "inuse"
+		        }
+		      }
+    ]
+  }
+}

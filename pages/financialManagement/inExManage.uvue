@@ -77,6 +77,7 @@
 		<view v-if="!submitLoading&&fmResult.fmList.length<1">
 			<l-empty :description="i18n.global.t('common.noData',[''])" />
 		</view>
+		
 	</scroll-view>
 
 	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"

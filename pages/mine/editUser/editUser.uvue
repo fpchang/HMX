@@ -12,12 +12,16 @@
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn" @click="saveUser">
+			<!-- <view class="navbar-btn" @click="saveUser">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 
 				<text class="txt" >保存</text>
 
 
+			</view> -->
+			<view class="navbar-btn">
+				<rice-button @click="saveUser" type="default" size="mini" :text="i18n.global.t('common.btn_txt_save',[''])" color="rgba(0,0,0,0)"
+					textColor="#007aff" textSize="14px" :loadingText="i18n.global.t('common.saving')" :loading="submitLoading"></rice-button>
 			</view>
 		</template>
 	</rice-navbar>
@@ -49,6 +53,7 @@
 	import { state, setUser } from '@/store/store.uts';
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { userBean } from "@/bean/userBean";
+	import i18n from '@/i18n/index.uts';
 defineOptions({
 		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
 	})
@@ -56,6 +61,7 @@ defineOptions({
 		username : string,
 		avatar : string
 	}
+	const submitLoading= ref(false);
 	const user = computed<userBean>(() => {
 		return state.user;
 	});
@@ -85,7 +91,8 @@ defineOptions({
 			})
 			return;
 		}
-		uni.showLoading({ title: "" });
+		submitLoading.value=true;
+		//uni.showLoading({ title: "" });
 		try {
 			if (user.value != null && user.value._id != null) {
 				const userObj = {
@@ -96,6 +103,7 @@ defineOptions({
 				try {
 					await AccountService.updateUser(user.value._id as string, userObj);
 					await comFunction.getUser();
+					submitLoading.value=false;
 					uni.hideLoading();
 					uni.navigateBack();
 					uni.showToast({
@@ -103,6 +111,7 @@ defineOptions({
 						icon: "success"
 					})
 				} catch (error) {
+					submitLoading.value=false;
 					uni.showToast({
 						title: "修改用户信息失败",
 						icon: "error"
@@ -111,6 +120,7 @@ defineOptions({
 				
 
 			} else {
+				submitLoading.value=false;
 				throw new Error("用户信息异常");
 			}
 			

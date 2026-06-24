@@ -1,0 +1,8 @@
+{
+  "string": [
+    {
+      "name": "tracking_permission_desc",
+      "value": "获取设备匿名标识，用于精准推送、广告效果统计，不会收集个人隐私信息"
+    }
+  ]
+}

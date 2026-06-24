@@ -1,5 +1,21 @@
 <template>
-	<scroll-view style="flex: 1;" v-if="hotel_id!=''">
+	<rice-navbar :fixed="false" title="" border v-if="hotel_id!=''">
+			<template #left>
+				<view style="display: flex;flex-direction: row;align-items: center;">
+					<!-- s -->
+	
+					<image src="/static/icons/menu-blue.png"
+						style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+					<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{ i18n.global.t('tab.function') }}
+					</text>
+				</view>
+			</template>
+			
+		</rice-navbar>
+	<scroll-view style="flex: 1;" v-if="hotel_id!=''" :show-scrollbar="false">
+		<!-- <view class="top-header">
+			<text class="header-title">{{i18n.global.t('tab.function')}}</text>
+		</view> -->
 		<view class="homemenu">
 			<view class="card" v-for="item in menuList">
 				<!-- 替换 class 为 card-title，消除层级依赖 -->
@@ -44,6 +60,7 @@
 				</rice-cell-group>
 			</view>
 		</view>
+	<view style="height:50px"></view>
 	</scroll-view>
 	<view style="margin-top: 80px;" v-if="hotel_id==''">
 		<l-empty :description="i18n.global.t('common.noData',[''])" />
@@ -172,6 +189,20 @@
 </script>
 
 <style lang="scss">
+	.top-header {
+		width: 100%;
+		background: #1677ff;
+		padding: 60px 0 40px;
+		text-align: center;
+	}
+	
+	.header-title {
+		font-size: 22px;
+		color: #fff;
+		font-weight: 500;
+		padding-left:15px;
+	}
+	
 // 最外层卡片
 .card {
 	margin:14px;

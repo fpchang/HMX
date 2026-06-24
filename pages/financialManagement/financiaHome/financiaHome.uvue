@@ -1,5 +1,5 @@
 <template>
-	<scroll-view style="flex:1;background:#f5f7fa;" v-if="hotel_id!=''">
+	<scroll-view style="flex:1;background:#f5f7fa;" v-if="hotel_id!=''" :show-scrollbar="false">
 		<view class="top-header">
 			<text class="header-title">{{i18n.global.t('finance.navbar_title')}}</text>
 		</view>
@@ -78,6 +78,7 @@
 				</view>
 			</view>
 		</view>
+		<view style="height:50px"></view>
 	</scroll-view>
 	<view v-if="hotel_id==''" style="margin-top: 80px;">
 		<l-empty :description="i18n.global.t('common.noData',[''])" />

@@ -1,0 +1,21 @@
+// 先定义接口并导出
+export interface LoginResult {
+  code: string;
+  message: string;
+  success: boolean;
+}
+
+export type LoginCallback = (result: LoginResult) => void;
+
+// 类必须加 export
+export class HuaweiAccount {
+  private static authService: any | null = null;
+
+  static quickLogin(clientId: string, callback: LoginCallback): void {
+    // 原有业务代码
+  }
+
+  static logout(): void {
+    // 原有业务代码
+  }
+}

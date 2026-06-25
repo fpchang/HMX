@@ -138,8 +138,11 @@
 	});
 	const toLogin = () => {
 		//i18n.global.locale.value = i18n.global.locale.value == 'zh-CN' ? 'en-US' : 'zh-CN';
+		// uni.navigateTo({
+		// 	url: "/pages/login/loginapp/loginapp",
+		// });
 		uni.navigateTo({
-			url: "/pages/login/login",
+			url: "/pages/login/login"
 		});
 		// uni.navigateTo({
 		// 	url: "/uni_modules/uni-id-pages-x/pages/login/login?type=username"

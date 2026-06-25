@@ -1,0 +1,56 @@
+import { LoginResult, LoginCallback } from '../HuaweiAccount.uts';
+
+// 导入华为 Account Kit iOS SDK
+import HMSAccount
+
+export class HuaweiAccount {
+  static quickLogin(clientId: string, callback: LoginCallback): void {
+    // 1. 配置客户端ID
+    HMSAccountAuthManager.sharedInstance().clientID = clientId;
+    
+    // 2. 构建授权参数
+    let authParam = HMSAccountAuthParam.init();
+    authParam?.scopeArray = [HMSAccountAuthScope.openid, HMSAccountAuthScope.profile];
+    authParam?.responseType = HMSAccountAuthResponseType.code; // 获取授权码
+
+    // 3. 静默登录（一键登录）
+    HMSAccountAuthManager.sharedInstance().silentSignIn(with: authParam, completion: { (authHuaweiId, error) in
+      if let error = error {
+        // 静默登录失败，触发手动登录
+        HMSAccountAuthManager.sharedInstance().signIn(with: authParam, viewController: getUIViewController(), completion: { (authHuaweiId, error) in
+          if let error = error {
+            callback({
+              code: "",
+              message: "手动登录失败：\(error.localizedDescription)",
+              success: false
+            });
+            return;
+          }
+          // 手动登录成功
+          callback({
+            code: authHuaweiId?.authorizationCode ?? "",
+            message: "手动登录成功",
+            success: true
+          });
+        });
+        return;
+      }
+      // 静默登录成功
+      callback({
+        code: authHuaweiId?.authorizationCode ?? "",
+        message: "一键登录成功",
+        success: true
+      });
+    });
+  }
+
+  static logout(): void {
+    HMSAccountAuthManager.sharedInstance().signOut { (success, error) in
+      if success {
+        console.log("退出登录成功");
+      } else {
+        console.log("退出登录失败：\(error?.localizedDescription ?? "")");
+      }
+    };
+  }
+}

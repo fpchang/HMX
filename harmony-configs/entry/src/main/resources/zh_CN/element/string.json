@@ -1,0 +1,73 @@
+{
+  "string": [
+	  {
+	    "name": "vibrate_permission_reason",
+	    "value": "按钮点击提供触觉震动反馈，提升操作交互体验"
+	  },
+
+    {
+      "name": "tracking_permission_desc",
+      "value": "获取设备匿名标识，用于华为账号一键登录、登录状态数据统计，不会收集隐私信息"
+    },
+    {
+      "name": "internet_permission_reason",
+      "value": "应用需要网络访问能力，用于登录、数据请求、加载协议网页"
+    },
+    {
+      "name": "get_network_info_permission_reason",
+      "value": "获取当前网络状态，判断网络是否可用，登录前做网络校验"
+    },
+    {
+      "name": "module_desc",
+      "value": "UniAppX 华为账号登录业务主模块"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "应用主入口，承载华为账号一键登录、业务页面路由能力"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "酒店记账系统"
+    },
+    {
+      "name": "login",
+      "value": "登录 / 注册"
+    },
+    {
+      "name": "personalInfo",
+      "value": "个人信息"
+    },
+    {
+      "name": "phone",
+      "value": "手机号"
+    },
+    {
+      "name": "hwid_no_internet_connect",
+      "value": "网络未连接，请检查网络设置。"
+    },
+    {
+      "name":"hwid_text_button_known",
+      "value":"知道了"
+    },
+    {
+      "name": "other_login_models",
+      "value": "其他方式登录"
+    },
+    {
+      "name": "login_for_enjoy_service",
+      "value": "登录后享受更多服务"
+    },
+    {
+      "name": "bind_huaweiId_number",
+      "value": "华为账号绑定号码"
+    },
+    {
+      "name": "service_error",
+      "value": "服务或网络异常，请稍后重试"
+    },
+    {
+      "name": "logout",
+      "value": "退出登录"
+    }
+  ]
+}

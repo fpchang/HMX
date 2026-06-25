@@ -278,7 +278,33 @@
 			"style": {
 				"navigationBarTitleText": "收支详情"
 			}
+		},
+		{
+			"path": "pages/login/loginAppCustomer/loginAppCustomer",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/login/loginAppCustomer/full-webview-page",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		
 		}
+		// {
+		// 	"path": "pages/loginHwAccount/loginHwAccount",
+		// 	"style": {
+		// 		"navigationBarTitleText": ""
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/loginHwAccount/quickLogin/quickLogin",
+		// 	"style": {
+		// 		"navigationBarTitleText": ""
+		// 	}
+		// }
 
 		// , {
 		// 	"path": "uni_modules/uni-id-pages-x/pages/login/login",

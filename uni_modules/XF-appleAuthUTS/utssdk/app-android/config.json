@@ -1,0 +1,14 @@
+{
+  "dependencies": [
+    "androidx.credentials:credentials:1.6.0",
+    "androidx.credentials:credentials-play-services-auth:1.6.0",
+    "com.google.android.libraries.identity.googleid:googleid:1.1.1"
+  ],
+  "project": {
+    "repositories": [
+      "google()",
+      "mavenCentral()"
+    ]
+  },
+  "minSdkVersion": "21"
+}

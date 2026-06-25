@@ -54,21 +54,15 @@
         "preferMultiWindowOrientation": "landscape_auto"
       }
     ],
-    "metadata": [
-      {
-        "name": "TENCENT_MAP_KEY",
-        "value": ""
-      }
-    ],
     "requestPermissions": [
 		 {
-		        "name": "ohos.permission.VIBRATE",
-		        "reason": "按钮点击提供触觉震动反馈，提升操作交互体验",
-		        "usedScene": {
-		          "abilities": ["EntryAbility"],
-		          "when": "inuse"
-		        }
-		      },
+  "name": "ohos.permission.VIBRATE",
+  "reason": "$string:vibrate_permission_reason",
+  "usedScene": {
+    "abilities": ["EntryAbility"],
+    "when": "inuse"
+  }
+},
 		      // APP_TRACKING_CONSENT 完整标准配置
 		      {
 		        "name": "ohos.permission.APP_TRACKING_CONSENT",
@@ -78,6 +72,31 @@
 		          "when": "inuse"
 		        }
 		      }
-    ]
+			  {
+			    "name": "ohos.permission.INTERNET",
+			    "reason": "$string:internet_permission_reason",
+			    "usedScene": {
+			      "when": "inuse"
+			    }
+			  },
+			  {
+			    "name" : "ohos.permission.GET_NETWORK_INFO",
+			    "reason": "$string:get_network_info_permission_reason",
+			    "usedScene": {
+			      "when": "inuse"
+			    }
+			  }
+    ],
+	"metadata": [
+	  {
+	    "name": "TENCENT_MAP_KEY",
+	    "value": ""
+	  },
+	  {
+	    "name": "client_id",
+	    "value": "6917603310107784764"
+	  }
+	]
   }
+  
 }

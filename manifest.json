@@ -115,6 +115,13 @@
         }
     },
     "app-harmony" : {
+		 "sdkConfigs": {
+		    "oauth": {
+		      "huawei": {
+		        "client_id": "6917603310107784764"
+		      }
+		    }
+		  },
 		 "requestPermissions": [
 		    {
 		      "name": "ohos.permission.VIBRATE",

@@ -135,20 +135,20 @@
 					<view style="background-color: #fff;border-radius: 14px;padding:24px 14px;max-width: 500px;flex:1">
 						<rice-cell-group>
 							<rice-cell icon="/static/icons/hotelcustomer.png" :title-style="{'paddingLeft':'4px'}"
-								center :title=" i18n.global.t('order.guest')" :value="active_order.userName"
+								center :title=" i18n.global.t('order.guest')" :value="active_order?.userName"
 								:clickable="false" />
 
 							<rice-cell icon="/static/icons/fm/time.png" :title-style="{'paddingLeft':'4px'}"
-								center :title=" i18n.global.t('order.checkInTime')" :value="formatDate(active_order.checkInStartDateTimeStamp)"
+								center :title=" i18n.global.t('order.checkInTime')" :value="formatDate(active_order?.checkInStartDateTimeStamp as number)"
 								:clickable="false" />
 							<rice-cell icon="/static/icons/fm/time.png" :title-style="{'paddingLeft':'4px'}"
-								center :title=" i18n.global.t('order.checkOutTime')" :value="formatDate(active_order.checkInEndDateTimeStamp)"
+								center :title=" i18n.global.t('order.checkOutTime')" :value="formatDate(active_order?.checkInEndDateTimeStamp as number)"
 								:clickable="false" />
 							<rice-cell icon="/static/icons/roomReserve.png" :title-style="{'paddingLeft':'4px'}"
-								center :title=" i18n.global.t('order.room')" :value="roomListStr(active_order.reservedRoomList)"
+								center :title=" i18n.global.t('order.room')" :value="roomListStr(active_order?.reservedRoomList ?? [])"
 								:clickable="false" />
 							<rice-cell icon="/static/icons/hotelcustomer.png" :title-style="{'paddingLeft':'4px'}"
-								center :title=" i18n.global.t('order.remark')" :value="active_order.mark"
+								center :title=" i18n.global.t('order.remark')" :value="active_order?.mark"
 								:clickable="false" />
 							
 							</rice-cell-group>
@@ -233,6 +233,13 @@
 	});
 
 	const active_id = ref("");
+	
+	const orderResult = ref<OrderDataListResult>({
+		count: 0,
+		pageNo: 1,
+		pageSize: 20,
+		orderList: []
+	})
 	const active_order = computed<orderBean | null>(() => {
 		if (active_id.value == "") {
 			return null;
@@ -247,12 +254,6 @@
 			active_id.value = order._id;
 			showDeatilPage.value = true;
 		}
-	const orderResult = ref<OrderDataListResult>({
-		count: 0,
-		pageNo: 1,
-		pageSize: 20,
-		orderList: []
-	})
 	const getOrderList = async () => {
 		submitLoading.value = true;
 		const fmr = await OrderService.getOrderListBySearch(hotel_id.value, dateRange.value, orderStatus.value, keyword.value, orderResult.value.pageNo, orderResult.value.pageSize);
@@ -365,8 +366,8 @@
 			url: `/pages/order/createOrder/createOrder`
 		});
 	}
-	const deleteOrder = async (order : orderBean) => {
-		if (submitLoading.value == true) {
+	const deleteOrder = async (order : orderBean | null) => {
+		if (order ==null || submitLoading.value == true) {
 			return;
 		}
 		if (!permissionList.value.includes(

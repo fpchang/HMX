@@ -19,66 +19,79 @@
 			</view>
 		</template>
 	</rice-navbar>
-	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
-	<!-- #endif -->
-		<view class="staff-list-wrap">
-			<view class="staff-card-item" v-for="employee of employeeList">
-				<view class="staff-card-box">
-					<view style="display: flex;flex-direction: row;flex: 1;justify-content: space-between;">
-						<view style="flex:1;flex-direction: row;align-items: center;">
-							<view style="border-radius: 12px;margin-right: 16px;">
-								<image v-if="employee.role=='administrator'" style="width:64px;height:64px"
+		<view style="padding:14px;border-radius: 14px;">
+			<view style="border-radius: 14px;background-color: #fff;">
+				<rice-swipe-actions :accordion="true" ref="swipeControlRef">
+					<rice-swipe-actions-item :auto-close="true" v-for="employee of employeeList">
+						<rice-cell :title="employee.employee_name" :label="employee.phone"
+							 size="large" arrow
+							arrow-direction="left" center @click="viewEmployee(employee)">
+							<template #leftIcon>
+								<image v-if="employee.role=='administrator'" style="margin-right:8px;width:64px;height:64px"
 									src="/static/images/administrator.png"></image>
-								<image v-if="employee.role=='manager'" style="width:64px;height:64px"
+								<image v-if="employee.role=='manager'" style="margin-right:8px;width:64px;height:64px"
 									src="/static/images/manager.png"></image>
-								<image v-if="employee.role=='normal'" style="width:64px;height:64px"
+								<image v-if="employee.role=='normal'" style="margin-right:8px;width:64px;height:64px"
 									src="/static/images/employee.png"></image>
+							</template>
+							<template #title>
+								<view class="em-title">
+									<text
+										class="em-title-label">{{employee.employee_name}}</text>
+									<view>
+										<rice-tag type="primary" :text="roleFormat(employee.role)" text-size="12px"
+											:color="getRoleColor(employee.role)" />
+									</view>
+								</view>
+							</template>
+							<template #label>
+								<view class="label-container">
+									
+									<view style="display: flex;flex-direction: row;align-items: center;margin-top:15px"
+										v-if="employee.account">
+										<view>
+											<image src="/static/icons/account.png" style="width:14px;height:14px"></image>
+										</view>
+										<view><text
+												style="color:#272e3b;font-size: 14px;padding-left: 4px;">{{employee.account}}</text>
+										</view>
+									</view>
+									<view style="display: flex;flex-direction: row;align-items: center;margin-top:15px"
+										v-if="employee.phone">
+										<view>
+											<image src="/static/icons/tel02.png" style="width:14px;height:14px"></image>
+										</view>
+										<view><text @click="makePhone(employee.phone)"
+												style="color:#272e3b;font-size: 14px;padding-left: 4px;">{{employee.phone}}</text>
+										</view>
+									</view>
+								</view>
+							</template>
+							<template #rightIcon>
+								<rice-icon name="double-left" color="#909399" style="margin-left: 15px;" />
+							</template>
+						</rice-cell>
+						<template #right>
+							<view class="swipe-menu-container">
+								<view class="menu-item-box menu-edit" @click="editEmployee(employee)">
+									<rice-icon name="edit" color="#fff" />
+									<text class="menu-item-text">{{i18n.global.t("common.btn_txt_edit")}}</text>
+								</view>
+								<view class="menu-item-box menu-del" @click="deleteEmployee(employee)">
+									<rice-icon name="delete" color="#fff" />
+									<text class="menu-item-text">{{i18n.global.t("common.btn_txt_delete")}}</text>
+								</view>
 							</view>
-							<view>
-								<text
-									style="color:#1d2129;font-size: 18px;line-height: 28px;margin-bottom: 8px;">{{employee.employee_name}}</text>
-								<rice-tag type="primary" :text="roleFormat(employee.role)" text-size="12px"
-									:color="getRoleColor(employee.role)" />
-							</view>
-						</view>
-						<view style="display: flex;flex-direction:row; align-items: center;">
-						</view>
-					</view>
-					<view>
-						<view style="display: flex;flex-direction: row;align-items: center;margin-top:15px"
-							v-if="employee.account">
-							<view>
-								<image src="/static/icons/account.png" style="width:14px;height:14px"></image>
-							</view>
-							<view><text
-									style="color:#272e3b;font-size: 14px;padding-left: 4px;">{{employee.account}}</text>
-							</view>
-						</view>
-						<view style="display: flex;flex-direction: row;align-items: center;margin-top:15px"
-							v-if="employee.phone">
-							<view>
-								<image src="/static/icons/tel02.png" style="width:14px;height:14px"></image>
-							</view>
-							<view><text @click="makePhone(employee.phone)"
-									style="color:#272e3b;font-size: 14px;padding-left: 4px;">{{employee.phone}}</text>
-							</view>
-						</view>
-						<view>
-							<xt-control :showView="false" :showEdit="showControl_edit(employee)"
-								:show-delete="showControl_delete(employee)" @del="deleteEmployee(employee)"
-								@edit="editEmployee(employee)"></xt-control>
-						</view>
-					</view>
-				</view>
+						</template>
+					</rice-swipe-actions-item>
+				</rice-swipe-actions>
 			</view>
 		</view>
 		<view v-if="submitLoading" style="margin-top:68px;display: flex;flex-direction: row;justify-content: center;">
 			<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
 		</view>
-	<!-- #ifdef APP -->
 	</scroll-view>
-	<!-- #endif -->
 	<l-empty description="没有数据" v-if="!submitLoading&&employeeList.length<1" />
 </template>
 
@@ -178,6 +191,9 @@
 			url: `/pages/hotelManage/createEmployee/createEmployee?pageType=1&id=${id}`
 		})
 	}
+	const viewEmployee = (em : employeeBean)=>{
+		
+	}
 	const deleteEmployee = async (em : employeeBean) => {
 		if (!permissionList.value.includes("EMPLOYEE_DELETE")) {
 			showDialog({
@@ -273,4 +289,48 @@
 	font-size: 14px;
 	color: #007aff;
 }
+
+
+/* 侧滑菜单外层 */
+.swipe-menu-container {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+}
+/* 侧滑每个按钮项 */
+.menu-item-box {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 70px;
+	height: 100%;
+}
+.menu-detail {
+	background-color: #007aff;
+}
+.menu-edit {
+	background-color: #ff7d00;
+}
+.menu-del {
+	background-color: #f53f3f;
+}
+/* 菜单文字 */
+.menu-item-text {
+	color: #fff;
+	font-size: 12px;
+	margin-top: 4px;
+}
+.em-title {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.em-title-label {
+		color: #333;
+		font-size: 14px;
+		padding: 4px;
+	}
 </style>

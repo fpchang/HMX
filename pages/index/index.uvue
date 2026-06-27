@@ -65,13 +65,19 @@
 	import mine from "@/pages/mine/mine.uvue";
 	import i18n from '@/i18n/index.uts';
 	const activeIndex = ref<number>(0);
+	type TabBarItem = {
+		pagePath : string,
+		iconPath : string,
+		selectedIconPath : string,
+		text : string
+	}
 
 	// uni.setTabBarItem({ index: 0, text: i18n.global.t('tab.home') });
 	// uni.setTabBarItem({ index: 1, text: i18n.global.t('tab.roomStatus') });
 	// uni.setTabBarItem({ index: 2, text: i18n.global.t('tab.finance') });
 	// uni.setTabBarItem({ index: 3, text: i18n.global.t('tab.function') });
 	// uni.setTabBarItem({ index: 4, text: i18n.global.t('tab.mine') });
-	const tabBarList = [{
+	const tabBarList : Array<TabBarItem> = [{
 		"pagePath": "pages/index/index",
 		"iconPath": "/static/icons/tabbar/home-black.png",
 		"selectedIconPath": "/static/icons/tabbar/home-blue.png",
@@ -103,7 +109,13 @@
 		"text": i18n.global.t('tab.mine')//"我的"
 	}
 	]
-	const listTabName = computed<Array<string>>(() => tabBarList.map(item => item.text));
+	const listTabName = computed<Array<string>>(() => {
+		const result : Array<string> = [];
+		tabBarList.forEach((item : TabBarItem) => {
+			result.push(item.text);
+		});
+		return result;
+	});
 	function syncNavigationBar(index : number) : void {
 		switch (index) {
 			case 0:

@@ -2,7 +2,7 @@
   "module": {
     "name": "entry",
     "type": "entry",
-    "description": "$string:module_desc",
+    "description": "$string:hmx_module_desc",
     "mainElement": "EntryAbility",
     "deviceTypes": [
       "phone",
@@ -20,9 +20,9 @@
       {
         "name": "EntryAbility",
         "srcEntry": "./ets/entryability/EntryAbility.ets",
-        "description": "$string:EntryAbility_desc",
+        "description": "$string:hmx_EntryAbility_desc",
         "icon": "$media:layered_image",
-        "label": "$string:EntryAbility_label",
+        "label": "$string:hmx_EntryAbility_label",
         "startWindowIcon": "$media:startIcon",
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
@@ -57,7 +57,7 @@
     "requestPermissions": [
 		 {
   "name": "ohos.permission.VIBRATE",
-  "reason": "$string:vibrate_permission_reason",
+  "reason": "$string:hmx_vibrate_permission_reason",
   "usedScene": {
     "abilities": ["EntryAbility"],
     "when": "inuse"
@@ -66,7 +66,7 @@
 		      // APP_TRACKING_CONSENT 完整标准配置
 		      {
 		        "name": "ohos.permission.APP_TRACKING_CONSENT",
-		        "reason": "$string:tracking_permission_desc",
+		        "reason": "$string:hmx_tracking_permission_desc",
 		        "usedScene": {
 		          "abilities": ["EntryAbility"],
 		          "when": "inuse"
@@ -74,14 +74,14 @@
 		      }
 			  {
 			    "name": "ohos.permission.INTERNET",
-			    "reason": "$string:internet_permission_reason",
+			    "reason": "$string:hmx_internet_permission_reason",
 			    "usedScene": {
 			      "when": "inuse"
 			    }
 			  },
 			  {
 			    "name" : "ohos.permission.GET_NETWORK_INFO",
-			    "reason": "$string:get_network_info_permission_reason",
+			    "reason": "$string:hmx_get_network_info_permission_reason",
 			    "usedScene": {
 			      "when": "inuse"
 			    }

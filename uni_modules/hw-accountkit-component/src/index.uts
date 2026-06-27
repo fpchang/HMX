@@ -1,2 +1,0 @@
-export { HuaweiAccount } from './platforms/HuaweiAccount.uts';
-export type { LoginResult, LoginCallback } from './platforms/HuaweiAccount.uts';

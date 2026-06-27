@@ -1,47 +1,47 @@
 {
   "string": [
 	  {
-	    "name": "vibrate_permission_reason",
+	    "name": "hmx_vibrate_permission_reason",
 	    "value": "Provide tactile vibration feedback when clicking buttons to improve interaction experience"
 	  },
 	{
-	      "name": "tracking_permission_desc",
+	      "name": "hmx_tracking_permission_desc",
 	      "value": "Obtain anonymous device ID for Huawei one-click login and login status statistics. No personal privacy data will be collected."
 	    },
 	    {
-	      "name": "internet_permission_reason",
+	      "name": "hmx_internet_permission_reason",
 	      "value": "Network access is required for user login, business data requests and privacy agreement page loading."
 	    },
 	    {
-	      "name": "get_network_info_permission_reason",
+	      "name": "hmx_get_network_info_permission_reason",
 	      "value": "Check current network availability to complete network verification before login operation."
 	    },
 	    {
-	      "name": "module_desc",
+	      "name": "hmx_module_desc",
 	      "value": "Main module of UniAppX for Huawei account one-click login service."
 	    },
 	    {
-	      "name": "EntryAbility_desc",
+	      "name": "hmx_EntryAbility_desc",
 	      "value": "Main application entry, providing Huawei one-click login and page routing capabilities."
 	    },
 	    {
-	      "name": "EntryAbility_label",
+	      "name": "hmx_EntryAbility_label",
 	      "value": "Hotel Accounting System"
 	    },
     {
-      "name": "login",
+      "name": "hmx_login",
       "value": "Sign in/Sign up"
     },
     {
-      "name": "personalInfo",
+      "name": "hmx_personalInfo",
       "value": "Personal info"
     },
     {
-      "name": "phone",
+      "name": "hmx_phone",
       "value": "Mobile number"
     },
     {
-      "name": "hwid_no_internet_connect",
+      "name": "hmx_hwid_no_internet_connect",
       "value": "No Internet connection. Check your network settings. "
     },
     {
@@ -49,23 +49,23 @@
       "value":"OK"
     },
     {
-      "name": "other_login_models",
+      "name": "hmx_other_login_models",
       "value": "Other ways to sign in"
     },
     {
-      "name": "login_for_enjoy_service",
+      "name": "hmx_login_for_enjoy_service",
       "value": "Enjoy more services after signing in"
     },
     {
-      "name": "bind_huaweiId_number",
+      "name": "hmx_bind_huaweiId_number",
       "value": "Mobile number associated with HUAWEI ID"
     },
     {
-      "name": "service_error",
+      "name": "hmx_service_error",
       "value": "Service or network exception. Try again later."
     },
     {
-      "name": "logout",
+      "name": "hmx_logout",
       "value": "Sign out"
     }
   ]

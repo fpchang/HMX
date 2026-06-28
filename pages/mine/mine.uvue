@@ -228,6 +228,7 @@ const valueStyle = {
 }
 
 .card-text-wrap {
+	flex:1;
 }
 
 .card-main-title {
@@ -236,6 +237,9 @@ const valueStyle = {
 	color: rgb(30, 30, 30);
 	font-weight: 700;
 	font-size: 16px;
+	overflow:hidden;
+			// text-overflow: ellipsis;
+			white-space: pre-wrap;
 }
 
 .card-sub-title {
@@ -250,6 +254,7 @@ const valueStyle = {
 }
 
 .hotel-state-tag {
+	padding-left:8px;
 }
 .tag-txt {
 	background-color: rgba(255, 152, 0, 0.1);

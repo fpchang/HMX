@@ -36,7 +36,7 @@
 			<view style="background-color: #fff;border-radius: 14px;padding:14px">
 			<rice-cell-group >
 				
-			  <rice-cell center size="medium"  :icon="it.icon" :title="it.label"   v-for="it in menuList"  arrow :url="it.url" :border="false">
+			  <rice-cell   :clickable="false" center size="medium"  :icon="it.icon" :title="it.label"   v-for="it in menuList"  arrow :url="it.url" :border="false">
 				   <template #leftIcon>
 					   <view style="padding-right: 8px;"> 
 					     <rice-icon :name="it.icon" size="20" color="#007AFF"></rice-icon>

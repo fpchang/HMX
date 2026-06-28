@@ -26,7 +26,7 @@
 					<rice-swipe-actions-item :auto-close="true" v-for="employee of employeeList">
 						<rice-cell :title="employee.employee_name" :label="employee.phone"
 							 size="large" arrow
-							arrow-direction="left" center @click="viewEmployee(employee)">
+							arrow-direction="left" center @click="viewEmployee(employee)" :clickable="false">
 							<template #leftIcon>
 								<image v-if="employee.role=='administrator'" style="margin-right:8px;width:64px;height:64px"
 									src="/static/images/administrator.png"></image>

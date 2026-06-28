@@ -105,7 +105,7 @@
 							</template>
 						</rice-swipe-actions-item>
 					</rice-swipe-actions>
-					<rice-cell :border="false" :title="i18n.global.t('hotel.room_count')" :value="roomType.roomList.length" :arrow="true" :url="`/pages/hotelManage/roomList/roomList?roomType_id=${roomType._id}`"></rice-cell>
+					<rice-cell  :clickable="false" :border="false" :title="i18n.global.t('hotel.room_count')" :value="roomType.roomList.length" :arrow="true" :url="`/pages/hotelManage/roomList/roomList?roomType_id=${roomType._id}`"></rice-cell>
 					<view class="empty-control-block"></view>
 				</view>
 				

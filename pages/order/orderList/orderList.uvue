@@ -605,7 +605,7 @@
 	.order-card-simple-item {
 		display: flex;
 		flex-direction: row;
-		align-items: baseline;
+		align-items: flex-start;
 		padding: 4px;
 		flex-wrap: wrap;
 	}

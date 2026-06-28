@@ -93,7 +93,7 @@
 				</rice-scroll-x>
 			</view>
 		</view>
-<view style="height:50px"></view>
+		<view style="height:70px"></view>
 
 
 	</scroll-view>

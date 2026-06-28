@@ -1,14 +1,19 @@
 <template>
 	<view class="container">
 		<view class="safe_content">
-			<text class="close_icon" @click="closePage">{{ closeIcon }}</text>
+			<view class="close_icon-container" @click="closePage">
+				<text class="close_icon" >{{ closeIcon }}</text>
+			</view>
+			
 			<text class="title">一键登录</text>
 			<view class="number">
 				<!-- 移除多余ref，仅保留id -->
 				<text id="number-text" class="number-text">{{ phone }}</text>
 				<text id="slogan-text" class="slogan-text">{{ slogan }}</text>
 			</view>
-			<button id="login-button" class="login-button" @click="loginIn">本机号码一键登录</button>
+			<button id="login-button" class="login-button" @click="loginIn" :loading="submitLoading">
+				本机号码一键登录
+				</button>
 			<view class="privacy">
 				<!-- 移除多余ref -->
 				<!-- <view class="checkbox-wrap">
@@ -95,6 +100,7 @@
 		}
 		// 修复：登录成功后置loading为false
 		submitLoading.value = false;
+		uni.hideLoading();
 	}
 
 	 function loginIn() {
@@ -107,6 +113,7 @@
 	      return;
 	    }else{
 	      submitLoading.value = true;
+		  uni.showLoading();
 	    }
 	    const numberTextElement = instance.$page.getElementById('number-text');
 	    const sloganTextElement = instance.$page.getElementById('slogan-text');
@@ -125,6 +132,7 @@
 	          takePhoneNumber(res.accessToken, res.openId);
 	        },
 	        fail: (error) => {
+				uni.hideLoading();
 	          if (error.errCode == 40001) {
 	            uni.showToast({
 	              title: "请同意服务条款",
@@ -189,20 +197,24 @@
 		height: 100%;
 	}
 
-	.close_icon {
+	.close_icon-container {
+		width:80px;
+		height:80px;
 		position: absolute;
 		left: 90%;
-		top: 15px;
+		top: 55px;
+		
+	}
+	.close_icon{
 		font-family: uni-icon;
 		font-size: 24px;
 	}
-
 	.title {
 		position: absolute;
 		left: 0;
 		right: 0;
 		text-align: center;
-		top: 20px;
+		top: 60px;
 	}
 
 	.number {
@@ -236,8 +248,8 @@
 		top: 40%;
 		position: absolute;
 		left: 10%;
-		background-color: orangered;
-		font-size: 16px;
+		background-color: #1989fa;
+		font-size: 14px;
 		color: white;
 	}
 

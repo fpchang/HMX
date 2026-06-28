@@ -5,9 +5,7 @@
 	"versionName": "3.0.5",
 	"versionCode": "305",
 	"uni-app-x": {
-		"styleIsolationVersion": "2",
-		"vapor-render-target": "bytecode",
-		"vapor": true
+		"styleIsolationVersion": "2"
 	},
 	/* 快应用特有相关 */
 	"quickapp": {},

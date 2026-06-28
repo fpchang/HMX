@@ -243,10 +243,7 @@
 		height: 50px;
 		background-color: rgba(255, 255, 255, 0.72);
 		border: 1rpx solid rgba(245, 245, 245, 0.9);
-		box-shadow:
-			0 4rpx 20rpx rgba(0, 0, 0, 0.06),
-			0 1rpx 4rpx rgba(0, 0, 0, 0.03),
-			inset 0 0 0 1rpx rgba(255, 255, 255, 0.8);
+		/* box-shadow:0 4rpx 20rpx rgba(0, 0, 0, 0.06),0 1rpx 4rpx rgba(0, 0, 0, 0.03),inset 0 0 0 1rpx rgba(255, 255, 255, 0.8); */
 	}
 
 	.bar-class {

@@ -28,9 +28,14 @@
 						<image :src="hotel.firstImages" v-if="hotel.firstImages!=''" style="height: 100%;width: 100%;"
 							mode="aspectFill">
 						</image>
-						<image src="/static/images/noimg.png" v-if="hotel.firstImages==''"
-							style="height: 40%;width: 40%;" mode="aspectFit">
-						</image>
+					
+							<image
+								src="/static/images/noimg.png" 
+								v-if="hotel?.firstImages==''"
+								style="height: 40%;width: 40%;" 
+								mode="aspectFit"
+							></image>
+						
 					</view>
 					<view class="card-title-wrap">
 						<view class="card-title-inner">

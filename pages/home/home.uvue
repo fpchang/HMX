@@ -1,5 +1,5 @@
 <template>
-	<view> 
+	<view style="display: flex;flex:1"> 
 	<rice-navbar :fixed="false" :safe-area-inset-top="true" bg-color="#007AFF" :left-arrow="false">
 		<template #title>
 			<view class="nav-header-wrap">
@@ -17,7 +17,7 @@
 		:show-scrollbar="false">	
 		<gatherComponent></gatherComponent>
 		<operation></operation>
-		<view style="height:50px"></view>
+		<view style="height:70px"></view>
 	</scroll-view>
 	<view v-if="!dataReading" style="margin-top:168px;display: flex;flex-direction: row;justify-content: center;">
 		<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />

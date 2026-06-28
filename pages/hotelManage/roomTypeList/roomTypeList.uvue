@@ -26,43 +26,95 @@
 						<image :src="topImg(roomType.firstImages)" style="height: 100%;width: 100%;" mode="aspectFill">
 						</image>
 					</view>
-					<view class="card-title-wrap">
-						<view class="card-title-inner">
-							<view class="card-name-price-row">
-								<text class="type-name-text">{{roomType.name}}</text>
-								<text class="price-num-text">¥{{roomType.priceBase}}</text>
-							</view>
-							<view class="tag-group-row" style="justify-content: flex-start;margin-bottom: 16px;">
-								<view>
-									<rice-tag :text="`${roomType.area}㎡`" text-color="#4e5969" color="#f2f3f5"
-										:round="true" />
-								</view>
-								<view style="margin-left: 8px;" v-for="it of roomType.bedList">
-									<rice-tag :text="`${it['name']}*${it['count']}`" text-color="#4e5969"
-										color="#f2f3f5" text-size="12px" :round="true" />
-								</view>
-							</view>
-							<view class="room-count-operate-row">
-								<navigator :url="`/pages/hotelManage/roomList/roomList?roomType_id=${roomType._id}`">
-									<view style="display: flex;flex-direction: row;align-items: center;">
-										<text
-											style=" font-weight:400;color: #1d2129;font-size: 14px;">{{i18n.global.t("hotel.room_count")}}：</text>
-										<text class="room-count-text"
-											style="color: #00b42f;font-size: 14px;padding:0 4px;">{{roomType.roomList.length}}</text>
-										<text style="color: #4e5969;font-size: 14px;">
-											{{i18n.global.t("hotel.unit_room")}}</text>
-										<rice-icon name="arrow-right" />
+					<rice-swipe-actions :accordion="true" ref="swipeControlRef">
+						<rice-swipe-actions-item :auto-close="true">
+							<rice-cell :title="roomType.name"
+							:border="false"
+								:label="`123`"
+								size="large" arrow arrow-direction="left" center :clickable="false">
+								<!-- <template #leftIcon>
+									<image mode="aspectFill" :src="formatRommTypeImage(order.reservedRoomList[0])"
+										style="margin-right:8px;width: 100px;height:110px;border-radius: 12px;"
+										class="cell-left-icon"></image>
+								</template> -->
+								<template #title>
+									<view class="order-title">
+									
 									</view>
-								</navigator>
-								<view style="display: flex;flex-direction:row; align-items: center;">
-									<xt-control @del="deleteRoomType(roomType)" @view="viewDetail(roomType)"
-										@edit="editRoomType(roomType)"></xt-control>
+								</template>
+								<template #label>
+									<view class="card-title-wrap" >
+										<view class="card-title-inner">
+											<view class="card-name-price-row">
+												<text class="type-name-text">{{roomType.name}}</text>
+												<text class="price-num-text">¥{{roomType.priceBase}}</text>
+											</view>
+											<view >
+												
+												</view>
+											<view class="tag-group-row" style="justify-content: flex-start;margin-bottom: 16px;" @click="viewDetail(roomType)">
+												<view>
+													<rice-tag :text="`${roomType.area}㎡`" text-color="#4e5969" color="#f2f3f5"
+														:round="true" />
+												</view>
+												<view style="margin-left: 8px;" v-for="it of roomType.bedList">
+													<rice-tag :text="`${it['name']}*${it['count']}`" text-color="#4e5969"
+														color="#f2f3f5" text-size="12px" :round="true" />
+												</view>
+											</view>
+											<view class="room-count-operate-row">
+												<!-- <rice-cell :title="i18n.global.t('hotel.room_count')" :value="roomType.roomList.length" :arrow="true" to="`/pages/hotelManage/roomList/roomList?roomType_id=${roomType._id}`"></rice-cell> -->
+												<!-- <navigator :url="`/pages/hotelManage/roomList/roomList?roomType_id=${roomType._id}`">
+													<view style="display: flex;flex-direction: row;align-items: center;">
+														<text
+															style=" font-weight:400;color: #1d2129;font-size: 14px;">{{i18n.global.t("hotel.room_count")}}：</text>
+														<text class="room-count-text"
+															style="color: #00b42f;font-size: 14px;padding:0 4px;">{{roomType.roomList.length}}</text>
+														<text style="color: #4e5969;font-size: 14px;">
+															{{i18n.global.t("hotel.unit_room")}}</text>
+														<rice-icon name="arrow-right" />
+													</view>
+												</navigator> -->
+												<!-- <view style="display: flex;flex-direction:row; align-items: center;">
+												<xt-control @del="deleteRoomType(roomType)" @view="viewDetail(roomType)"
+														@edit="editRoomType(roomType)"></xt-control>
+												</view> -->
+											</view>
+										</view>
+									</view>
+								</template>
+								<template #rightIcon>
+									<rice-icon name="double-left" style="margin-left: 15px;" />
+								</template>
+							</rice-cell>
+							<template #right>
+								<view class="swipe-menu-container">
+									<view class="menu-item-box menu-detail" @click="viewDetail(roomType)">
+										<rice-icon name="eyes" color="#fff" />
+										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_details",[''])}}</text>
+									</view>
+									<view class="menu-item-box menu-edit" @click="editRoomType(roomType)">
+										<rice-icon name="edit" color="#fff" />
+										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_edit")}}</text>
+									</view>
+									<view class="menu-item-box menu-del" @click="deleteRoomType(roomType)">
+										<rice-icon name="delete" color="#fff" />
+										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_delete")}}</text>
+									</view>
 								</view>
-							</view>
-						</view>
-					</view>
+							</template>
+						</rice-swipe-actions-item>
+					</rice-swipe-actions>
+					<rice-cell :border="false" :title="i18n.global.t('hotel.room_count')" :value="roomType.roomList.length" :arrow="true" :url="`/pages/hotelManage/roomList/roomList?roomType_id=${roomType._id}`"></rice-cell>
 					<view class="empty-control-block"></view>
 				</view>
+				
+				
+				
+				
+				
+				
+				
 			</view>
 		</view>
 	</scroll-view>
@@ -259,7 +311,7 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	padding: 15px;
+/* 	padding: 15px; */
 }
 /* 标题内部容器 */
 .card-title-inner {
@@ -280,7 +332,7 @@
 	font-size: 18px;
 }
 /* 价格文字 */
-price-num-text {
+.price-num-text {
 	color: #165dff;
 	font-size: 20px;
 	font-weight: 700;
@@ -308,5 +360,61 @@ price-num-text {
 }
 /* 底部空白占位 */
 .empty-control-block {
+}
+
+
+	/* 底部操作按钮区域 */
+	.btn-control-wrap {
+		padding: 0 12px 12px 0;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		align-items: center;
+	}
+
+	.navbar-btn {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		padding: 12px 15px;
+		border-radius: 8px;
+	}
+
+	.navbar-btn-txt {
+		color: #007aff;
+		font-size: 15px;
+		padding-left: 4px;
+	}
+
+	/* 侧滑菜单外层 */
+	.swipe-menu-container {
+		display: flex;
+		flex-direction: row;
+		height: 100%;
+	}
+	/* 侧滑每个按钮项 */
+	.menu-item-box {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 70px;
+		height: 100%;
+	}
+.menu-detail {
+	background-color: #007aff;
+}
+.menu-edit {
+	background-color: #ff7d00;
+}
+.menu-del {
+	background-color: #f53f3f;
+}
+/* 菜单文字 */
+.menu-item-text {
+	color: #fff;
+	font-size: 12px;
+	margin-top: 4px;
 }
 </style>

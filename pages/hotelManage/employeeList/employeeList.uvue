@@ -69,16 +69,17 @@
 								</view>
 							</template>
 							<template #rightIcon>
-								<rice-icon name="double-left" color="#909399" style="margin-left: 15px;" />
+								<rice-icon v-if="employee.role=='administrator'" name="" color="#909399" style="margin-left: 15px;" />
+								<rice-icon v-if="employee.role!='administrator'" name="double-left" color="#909399" style="margin-left: 15px;" />
 							</template>
 						</rice-cell>
 						<template #right>
 							<view class="swipe-menu-container">
-								<view class="menu-item-box menu-edit" @click="editEmployee(employee)">
+								<view class="menu-item-box menu-edit" v-if="showControl_edit(employee)" @click="editEmployee(employee)">
 									<rice-icon name="edit" color="#fff" />
 									<text class="menu-item-text">{{i18n.global.t("common.btn_txt_edit")}}</text>
 								</view>
-								<view class="menu-item-box menu-del" @click="deleteEmployee(employee)">
+								<view class="menu-item-box menu-del" v-if="showControl_delete(employee)" @click="deleteEmployee(employee)">
 									<rice-icon name="delete" color="#fff" />
 									<text class="menu-item-text">{{i18n.global.t("common.btn_txt_delete")}}</text>
 								</view>

@@ -5,15 +5,17 @@
 				<input class="tab-input-inner" v-model="name_label" :placeholder="i18n.global.t('hotel.pach_add_feature')" />
 			</view>
 			<view style="margin-left: 8px;">
-				<button class="tab-add-btn" :disabled="name_label==''" @click="addtab">{{btnText}}</button>
+				<!-- <button class="tab-add-btn" :disabled="name_label==''" @click="addtab">{{btnText}}</button> -->
+				<view class="tab-add-btn" @click="addtab"><text class="addtab-txt">{{btnText}}</text></view>
 			</view>
 		</view>
 		<view class="tag-container-row">
 			<view class="single-tag-item" v-for="(str,index) of tablist">
-				<text class="tag-text">{{str}}</text>
+				<!-- <text class="tag-text">{{str}}</text>
 				<view @click="deleteTab(index)">
 					<image src="./delete.png" style="width:16px;height: 16px;"></image>
-				</view>
+				</view> -->
+				<rice-tag closeable type="primary"  :text="str"  @close="deleteTab(index)" />
 			</view>
 		</view>
 	</view>
@@ -100,6 +102,10 @@
 	color: rgb(255, 255, 255);
 	font-size: 12px;
 }
+.addtab-txt{
+	color:#fff;
+	font-size: 13px;
+}
 /* 标签列表外层 */
 .tag-container-row {
 	display: flex;
@@ -108,18 +114,18 @@
 }
 /* 单个标签项 */
 .single-tag-item {
-	border-radius: 100px;
-	padding: 6px 8px;
-	background-color: #999;
-	margin-left: 12px;
-	display: flex;
+	/* border-radius: 100px; */
+	/* padding: 6px 8px; */
+	/* background-color: #999; */
+	/* margin-left: 12px; */
+	/* display: flex;
 	flex-direction: row;
-	align-items: center;
+	align-items: center; */
 }
 /* 标签文字 */
 .tag-text {
 	line-height: 16px;
-	color: #4e5969;
+	color: #fff;
 	font-size: 12px;
 	padding-right: 6px;
 }

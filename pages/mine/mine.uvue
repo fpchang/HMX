@@ -79,7 +79,7 @@
 				<operation></operation>
 			</view>
 		</view>
-		<view style="height:50px"></view>
+		<view style="height:70px"></view>
 	</scroll-view>
 </template>
 <script setup lang="uts">

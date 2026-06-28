@@ -13,7 +13,7 @@
 			    <view class="kpi-grid">
 			      <view class="kpi-box income-box" :style="{'margin-left':marginLeft(0)}">
 			        <text class="kpi-txt">{{i18n.global.t('finance.monthly_income')}}</text>
-			        <text class="kpi-money">¥{{incomeAmount}}</text>
+			        <text class="kpi-money kpi-money-green">¥{{incomeAmount}}</text>
 			      </view>
 			      <view class="kpi-box expense-box" :style="{'margin-left':marginLeft(1)}">
 			        <text class="kpi-txt">{{i18n.global.t('finance.monthly_expense')}}</text>
@@ -21,7 +21,7 @@
 			      </view>
 			      <view class="kpi-box income-box" :style="{'margin-left':marginLeft(2)}">
 			        <text class="kpi-txt">{{i18n.global.t('finance.annual_income')}}</text>
-			        <text class="kpi-money">¥{{incomeYearAmount}}</text>
+			        <text class="kpi-money kpi-money-green">¥{{incomeYearAmount}}</text>
 			      </view>
 			      <view class="kpi-box expense-box" :style="{'margin-left':marginLeft(3)}">
 			        <text class="kpi-txt">{{i18n.global.t('finance.annual_expense')}}</text>
@@ -78,7 +78,7 @@
 				</view>
 			</view>
 		</view>
-		<view style="height:50px"></view>
+		<view style="height:70px"></view>
 	</scroll-view>
 	<view v-if="hotel_id==''" style="margin-top: 80px;">
 		<l-empty :description="i18n.global.t('common.noData',[''])" />
@@ -233,7 +233,7 @@
 
 	.profit-label {
 		font-size: 14px;
-		color: #888;
+		color: #666;
 	}
 
 	.profit-num {
@@ -275,8 +275,11 @@
 		font-size: 20px;
 		font-weight: 600;
 		margin-top: 6px;
+		color:#e74c3c
 	}
-
+	.kpi-money-green{
+		color:#27ae60
+	}
 	.detail-card {
 		background: #fff;
 		border-radius: 12px;
@@ -289,7 +292,7 @@
 		font-size: 17px;
 		font-weight: 500;
 		margin-bottom: 14px;
-		color: #222;
+		color: #333;
 	}
 
 	.detail-row {
@@ -333,7 +336,7 @@
 
 	.row-name {
 		font-size: 15px;
-		color: #333;
+		color: #666;
 	}
 
 	.row-money {

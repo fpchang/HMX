@@ -60,7 +60,7 @@
 				</rice-cell-group>
 			</view>
 		</view>
-	<view style="height:50px"></view>
+	<view style="height:70px"></view>
 	</scroll-view>
 	<view style="margin-top: 80px;" v-if="hotel_id==''">
 		<l-empty :description="i18n.global.t('common.noData',[''])" />

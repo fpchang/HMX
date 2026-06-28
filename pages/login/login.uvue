@@ -34,9 +34,11 @@
 					<image v-show="isAgree" src="/static/icons/confirm_selcted.png" class="form-icon"></image>
 					<view class="text-row">
 						<text class="ct-text">{{i18n.global.t('login.agreenTxt_one')}}</text>
-						<text class="btn-text" @click="openUserAgreement">{{i18n.global.t('login.userAgreement')}}</text>
+						<text class="btn-text"
+							@click="openUserAgreement">{{i18n.global.t('login.userAgreement')}}</text>
 						<text class="ct-text">{{i18n.global.t('login.agreenTxt_two')}}</text>
-						<text class="btn-text" @click="openUserPrivacyPolicy">{{i18n.global.t('login.privacyPolicy')}}</text>
+						<text class="btn-text"
+							@click="openUserPrivacyPolicy">{{i18n.global.t('login.privacyPolicy')}}</text>
 					</view>
 				</view>
 
@@ -58,291 +60,320 @@
 	import loginBySmscodeComponent from "./components/loginBySmscodeComponent.uvue"
 	import loginByApp from "./components/loginByApp.uvue"
 	import i18n from '@/i18n/index.uts';
-	
-defineOptions({
-	styleIsolation: "isolated"
-})
-const currentTab = ref(0);
-const account = ref('');
-const password = ref('');
-const phone = ref('');
-const smsPhone = ref('');
-const smsCode = ref('');
-const isAgree = ref(false);
 
-const uniVerifyManager = ref(null as UniVerifyManager | null)
+	defineOptions({
+		styleIsolation: "isolated"
+	})
+	const currentTab = ref(0);
+	const account = ref('');
+	const password = ref('');
+	const phone = ref('');
+	const smsPhone = ref('');
+	const smsCode = ref('');
+	const isAgree = ref(false);
+
+	const uniVerifyManager = ref(null as UniVerifyManager | null)
 	const slogan = ref('')
 	const privacyName = ref('')
 	const privacyUrl = ref('')
-const switchTab = (index : number) => {
-	currentTab.value = index;
-};
-const list = ref<TabsOptions[]>([{
-	name: i18n.global.t('login.tab_acount'),
-	value: 0
-},
-// {
-// 	name: i18n.global.t('login.tab_login_app'),
-// 	value: 1
-// },
-{
-	name: i18n.global.t('login.tab_login_sms'),
-	value: 1
-}])
-const tabClick = (e : TabsClickTab) => {
-	currentTab.value = e.index;
-}
-const toggleAgree = () => {
-	isAgree.value = !isAgree.value;
-};
-const goRegister = () => {};
-const accountLogin = () => {
-	if (!isAgree.value) {
-		uni.showToast({ title:i18n.global.t('login.valid_agree'), icon: 'none' });
-		return;
+	const switchTab = (index : number) => {
+		currentTab.value = index;
+	};
+	const list = ref<TabsOptions[]>([{
+		name: i18n.global.t('login.tab_acount'),
+		value: 0
+	},
+	// {
+	// 	name: i18n.global.t('login.tab_login_app'),
+	// 	value: 1
+	// },
+	{
+		name: i18n.global.t('login.tab_login_sms'),
+		value: 1
+	}])
+	const tabClick = (e : TabsClickTab) => {
+		currentTab.value = e.index;
 	}
-	if (account.value == "" || password.value == "") {
-		uni.showToast({ title: i18n.global.t('login.valid_password'), icon: 'none' });
-		return;
-	}
-	uni.showToast({ title: i18n.global.t('login.login_success'), icon: 'success' });
-};
-const agreeEvent = () => {
-	console.log(isAgree.value)
-	isAgree.value = !isAgree.value;
-};
-const openUserAgreement = () => {
-	uni.navigateTo({
-		url: "/pages/common/userAgreement/userAgreement",
-	});
-};
-const openUserPrivacyPolicy = () => {
-	uni.navigateTo({
-		url: "/pages/common/privacyPolicy/privacyPolicy",
-	});
-};
+	const toggleAgree = () => {
+		isAgree.value = !isAgree.value;
+	};
+	const goRegister = () => { };
+	const accountLogin = () => {
+		if (!isAgree.value) {
+			uni.showToast({ title: i18n.global.t('login.valid_agree'), icon: 'none' });
+			return;
+		}
+		if (account.value == "" || password.value == "") {
+			uni.showToast({ title: i18n.global.t('login.valid_password'), icon: 'none' });
+			return;
+		}
+		uni.showToast({ title: i18n.global.t('login.login_success'), icon: 'success' });
+	};
+	const agreeEvent = () => {
+		console.log(isAgree.value)
+		isAgree.value = !isAgree.value;
+	};
+	const openUserAgreement = () => {
+		uni.navigateTo({
+			url: "/pages/common/userAgreement/userAgreement",
+		});
+	};
+	const openUserPrivacyPolicy = () => {
+		uni.navigateTo({
+			url: "/pages/common/privacyPolicy/privacyPolicy",
+		});
+	};
 
- const preLogin = (callback: (() => void)) => {
-	    uniVerifyManager.value?.preLogin({
-	      success: (res) => {
-	        phone.value = res.number;
-	        slogan.value = res.slogan;
-	        privacyName.value = res.privacyName;
-	        privacyUrl.value = res.privacyUrl;
-	        console.log("pre login success",res);
-	        callback();
-	      },
-	      fail: (err) => {
-	        console.error("pre login fail => " + JSON.stringify(err));
-	        const hasCauseMessage = (err.cause?.cause?.message ?? '').length > 0
-	        uni.showModal({
-	          title: '预登录失败',
-	          content: hasCauseMessage ? JSON.parseObject(err.cause?.cause?.message ?? '')?.getString("errorDesc") : err.errMsg,
-	          showCancel: false
-	        });
-	      }
-	    });
-	  }
-	
-	  const pushCustomPage = () => {
-	    const url = '/pages/login/loginAppCustomer/loginAppCustomer?phone=' + phone.value + '&slogan=' + slogan.value + '&name=' + privacyName.value + '&link=' + privacyUrl.value;
-	    uni.openDialogPage({
-	      url: url,
-	      animationType: 'slide-in-bottom',
-	      success(res) {
-	        console.log("成功打开自定义登录页面");
-	      },
-	      fail(err) {
-	        console.log(err);
-	      }
-	    })
-	  }
-	
-	  const customLoginIn = () => {
-	    if('production' === process.env.NODE_ENV && '__UNI__HelloUniAppX'===uni.getAppBaseInfo().appId){
-	      uni.showModal({
-	        title: '提示',
-	        content: '一键登录为收费功能，当前环境暂不支持。请在HBuilderX中新建Hello uni-app x项目真机运行体验！',
-	        showCancel: false
-	      })
-	      return
-	    }
-	    const isPreLoginValid = uniVerifyManager.value?.isPreLoginValid() ?? false;
-	    if (isPreLoginValid) {
-	      pushCustomPage();
-	    } else {
-	      preLogin(() => {
-	        pushCustomPage();
-	      })
-	    }
-	  }
-	  	onLoad(() => {
-	  		uniVerifyManager.value = uni.getUniVerifyManager();
-	  		preLogin(() => { customLoginIn();});
-	  	})
-onShow(() => {
-	const accountstorage = uni.getStorageSync("account");
-	if (accountstorage != null) {
-		account.value = accountstorage as string;
+	const preLogin = (callback : (() => void)) => {
+		uniVerifyManager.value?.preLogin({
+			success: (res) => {
+				phone.value = res.number;
+				slogan.value = res.slogan;
+				privacyName.value = res.privacyName;
+				privacyUrl.value = res.privacyUrl;
+				console.log("pre login success", res);
+				callback();
+			},
+			fail: (err) => {
+				console.error("pre login fail => " + JSON.stringify(err));
+				const hasCauseMessage = (err.cause?.cause?.message ?? '').length > 0
+				uni.showModal({
+					title: '预登录失败',
+					content: hasCauseMessage ? JSON.parseObject(err.cause?.cause?.message ?? '')?.getString("errorDesc") : err.errMsg,
+					showCancel: false
+				});
+			}
+		});
 	}
-})
+
+	const pushCustomPage = () => {
+		const url = '/pages/login/loginAppCustomer/loginAppCustomer?phone=' + phone.value + '&slogan=' + slogan.value + '&name=' + privacyName.value + '&link=' + privacyUrl.value;
+		uni.openDialogPage({
+			url: url,
+			animationType: 'slide-in-bottom',
+			success(res) {
+				console.log("成功打开自定义登录页面");
+			},
+			fail(err) {
+				console.log(err);
+			}
+		})
+	}
+
+	const customLoginIn = () => {
+		if ('production' === process.env.NODE_ENV && '__UNI__HelloUniAppX' === uni.getAppBaseInfo().appId) {
+			uni.showModal({
+				title: '提示',
+				content: '一键登录为收费功能，当前环境暂不支持。请在HBuilderX中新建Hello uni-app x项目真机运行体验！',
+				showCancel: false
+			})
+			return
+		}
+		const isPreLoginValid = uniVerifyManager.value?.isPreLoginValid() ?? false;
+		if (isPreLoginValid) {
+			pushCustomPage();
+		} else {
+			preLogin(() => {
+				pushCustomPage();
+			})
+		}
+	}
+	onLoad(() => {
+		//pushCustomPage();
+		uniVerifyManager.value = uni.getUniVerifyManager();
+		preLogin(() => { customLoginIn(); });
+	})
+	onShow(() => {
+		const accountstorage = uni.getStorageSync("account");
+		if (accountstorage != null) {
+			account.value = accountstorage as string;
+		}
+	})
 </script>
 
 <style>
-.page {
-	background-color: #fff;
-	flex:1;
-	padding: 0 24px;
-	display: flex;
-	justify-content: center;
-	flex-direction: row;
-}
-.wrap {
-	flex: 1;
-	max-width: 500px;
-	padding-top: 60px;
-}
-.head {
-	margin-bottom: 40px;
-}
-.title {
-	font-size: 34px;
-	font-weight: 600;
-	color: #1d1d1f;
-}
-.tab-wrap {
-	display: flex;
-	flex-direction: row;
-	border-bottom: 1px solid #e5e5ea;
-	margin-bottom: 12px;
-}
-.form {
-	width: 100%;
-	padding:0 14px;
-	box-sizing: border-box;
-}
-.input-row {
-	background-color: #fff;
-	border-radius: 25px;
-	margin-bottom: 12px;
-	overflow: hidden;
-}
-.input {
-	height: 50px;
-	padding: 0 16px;
-	font-size: 16px;
-	color: #1d1d1f;
-}
-.code-row {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	padding-right: 12px;
-}
-.code-input {
-	flex: 1;
-}
-.btn-code {
-	font-size: 14px;
-	color: #007aff;
-	background: transparent;
-	border: none;
-	padding: 0 8px;
-}
-.btn-code-disabled {
-	color: #8e8e93;
-}
-.tip-box {
-	margin-bottom: 16px;
-}
-.tip-text {
-	font-size: 12px;
-	color: #8e8e93;
-	line-height: 1.4;
-	text-align: center;
-	padding-top: 12px;
-}
-.btn-login {
-	width: 100%;
-	height: 50px;
-	line-height: 50px;
-	background-color: #007aff;
-	color: #fff;
-	font-size: 17px;
-	font-weight: 500;
-	border-radius: 25px;
-	border: none;
-	margin: 24px 0 12px 0;
-}
-.bottom-box {
-	width: 100%;
-}
-.agree-box {
-	display: flex;
-	align-items: center;
-	margin-bottom: 16px;
-}
-.check-box {
-	width: 18px;
-	height: 18px;
-	border-radius: 4px;
-	border: 1px solid #c7c7cc;
-	margin-right: 8px;
-}
-.check-active {
-	background-color: #007aff;
-	border-color: #007aff;
-	position: relative;
-}
-.check-icon {
-	position: absolute;
-	left: 5px;
-	top: 2px;
-	width: 5px;
-	height: 9px;
-	border-right: 2px solid #fff;
-	border-bottom: 2px solid #fff;
-	transform: rotate(45deg);
-}
-.agree-text {
-	font-size: 13px;
-	color: #8e8e93;
-}
-.link-text {
-	color: #007aff;
-}
-.register-box {
-	margin-top: 24px;
-}
-.register-text {
-	font-size: 15px;
-	color: #007aff;
-	text-align: center;
-}
-.up-box {
-	margin: 12px 0 12px 0;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-}
-.text-row {
-	display: flex;
-	flex-direction: row;
-	flex-wrap:wrap;
-	align-items: center;
-}
-.ct-text {
-	line-height: 22px;
-	font-size: 13px;
-	color: gray;
-}
-.btn-text {
-	color: #165dff;
-	font-size: 12px;
-}
-.form-icon {
-	width: 20px;
-	height: 20px;
-}
+	.page {
+		background-color: #fff;
+		flex: 1;
+		padding: 0 24px;
+		display: flex;
+		justify-content: center;
+		flex-direction: row;
+	}
+
+	.wrap {
+		flex: 1;
+		max-width: 500px;
+		padding-top: 60px;
+	}
+
+	.head {
+		margin-bottom: 40px;
+	}
+
+	.title {
+		font-size: 34px;
+		font-weight: 600;
+		color: #1d1d1f;
+	}
+
+	.tab-wrap {
+		display: flex;
+		flex-direction: row;
+		border-bottom: 1px solid #e5e5ea;
+		margin-bottom: 12px;
+	}
+
+	.form {
+		width: 100%;
+		padding: 0 14px;
+		box-sizing: border-box;
+	}
+
+	.input-row {
+		background-color: #fff;
+		border-radius: 25px;
+		margin-bottom: 12px;
+		overflow: hidden;
+	}
+
+	.input {
+		height: 50px;
+		padding: 0 16px;
+		font-size: 16px;
+		color: #1d1d1f;
+	}
+
+	.code-row {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		padding-right: 12px;
+	}
+
+	.code-input {
+		flex: 1;
+	}
+
+	.btn-code {
+		font-size: 14px;
+		color: #007aff;
+		background: transparent;
+		border: none;
+		padding: 0 8px;
+	}
+
+	.btn-code-disabled {
+		color: #8e8e93;
+	}
+
+	.tip-box {
+		margin-bottom: 16px;
+	}
+
+	.tip-text {
+		font-size: 12px;
+		color: #8e8e93;
+		line-height: 1.4;
+		text-align: center;
+		padding-top: 12px;
+	}
+
+	.btn-login {
+		width: 100%;
+		height: 50px;
+		line-height: 50px;
+		background-color: #007aff;
+		color: #fff;
+		font-size: 17px;
+		font-weight: 500;
+		border-radius: 25px;
+		border: none;
+		margin: 24px 0 12px 0;
+	}
+
+	.bottom-box {
+		width: 100%;
+	}
+
+	.agree-box {
+		display: flex;
+		align-items: center;
+		margin-bottom: 16px;
+	}
+
+	.check-box {
+		width: 18px;
+		height: 18px;
+		border-radius: 4px;
+		border: 1px solid #c7c7cc;
+		margin-right: 8px;
+	}
+
+	.check-active {
+		background-color: #007aff;
+		border-color: #007aff;
+		position: relative;
+	}
+
+	.check-icon {
+		position: absolute;
+		left: 5px;
+		top: 2px;
+		width: 5px;
+		height: 9px;
+		border-right: 2px solid #fff;
+		border-bottom: 2px solid #fff;
+		transform: rotate(45deg);
+	}
+
+	.agree-text {
+		font-size: 13px;
+		color: #8e8e93;
+	}
+
+	.link-text {
+		color: #007aff;
+	}
+
+	.register-box {
+		margin-top: 24px;
+	}
+
+	.register-text {
+		font-size: 15px;
+		color: #007aff;
+		text-align: center;
+	}
+
+	.up-box {
+		margin: 12px 0 12px 0;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.text-row {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+	}
+
+	.ct-text {
+		line-height: 22px;
+		font-size: 13px;
+		color: gray;
+	}
+
+	.btn-text {
+		color: #165dff;
+		font-size: 12px;
+	}
+
+	.form-icon {
+		width: 20px;
+		height: 20px;
+	}
 </style>

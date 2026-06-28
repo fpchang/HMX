@@ -11,9 +11,10 @@
 				<view style="display: flex;flex-direction: row;align-items: center;">
 				
 					<view style="margin-right: 8px" v-for="item of checkType">
-						<rice-button
+						<!-- <rice-button
 								:type="orderType==item.value?'primary':'info'" size="small" :text="item.text"
-								@click="checkTypeEvent(item.value)"></rice-button>
+								@click="checkTypeEvent(item.value)"></rice-button> -->
+							<rice-tag :custom-style="{paddingTop:'14px',paddingBottom:'14px'}" :text="item.text"  :color="orderType==item.value?'#1989fa':'#e1e1e1'"  :text-color="orderType==item.value?'#fff':'#666'"  @click="checkTypeEvent(item.value)"></rice-tag>
 					</view>
 					
 				</view>

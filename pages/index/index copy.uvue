@@ -85,7 +85,7 @@
 									<image :src="item.firstImages" v-if="item.firstImages!=''"
 										style="height: 100%;width: 100%;" mode="aspectFill">
 									</image>
-									<image src="/static/images/noimg.png" v-if="item.firstImages==''"
+									<image src="/static/images/nono-img.png" v-if="item.firstImages==''"
 										style="height: 80%;width: 80%;" mode="aspectFit">
 									</image>
 								</view>

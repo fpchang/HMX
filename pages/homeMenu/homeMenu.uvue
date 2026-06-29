@@ -4,7 +4,7 @@
 				<view style="display: flex;flex-direction: row;align-items: center;">
 					<!-- s -->
 	
-					<image src="/static/icons/menu-blue.png"
+					<image src="/static/icons/tab-menu-blue.png"
 						style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
 					<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{ i18n.global.t('tab.function') }}
 					</text>

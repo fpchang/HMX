@@ -77,6 +77,8 @@
 	import { state } from "@/store/store";
 	import { HotelService } from "../../services/HotelService.uts";
 	import { loginEvent, loginOut } from "@/store/store.uts";
+	import { setToken, setViewWidth } from "@/store/store.uts";
+	import { getParamsObject } from "@/api/cloudApi.uts"
 	import i18n from '@/i18n/index.uts';
 	defineOptions({
 		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
@@ -89,8 +91,7 @@
 	let agreeGetPhone = ref(false);
 	let showPopu = ref(false);
 
-	import { setToken, setViewWidth } from "@/store/store.uts";
-	import { getParamsObject } from "@/api/cloudApi.uts"
+	
 
 	const setViewWidthEvent = () => {
 		const win = uni.getWindowInfo();

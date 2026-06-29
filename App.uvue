@@ -18,11 +18,25 @@
 		    }
 		  }, 0)
 	}
+	const setLanuage = () => {
+	
+		const sys = uni.getSystemInfoSync();
+		console.log('sys', sys);
+		const osLanguage = sys.osLanguage;
+		let local = 'zh-CN';
+		console.log(osLanguage != null)
+		if (osLanguage != null && !osLanguage.includes('zh-')) {
+			local = 'en-US';
+		}
+		i18n.global.locale.value = local;
+	
+	
+	}
 	export default {
 		onLaunch: function () {
 					
 			start();
-
+			setLanuage();
 			//#ifdef APP-ANDROID
 			const showMoreMessage = uni.getStorageSync("showMoreMessage");
 			if (showMoreMessage != "0") {

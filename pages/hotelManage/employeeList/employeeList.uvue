@@ -24,6 +24,10 @@
 			<view style="border-radius: 14px;background-color: #fff;">
 				<rice-swipe-actions :accordion="true" ref="swipeControlRef">
 					<rice-swipe-actions-item :auto-close="true" v-for="employee of employeeList">
+						<view style="position:absolute;right:4px;top:4px;;z-index:1000">
+							<rice-tag type="primary" :text="roleFormat(employee.role)" text-size="12px"
+								:color="getRoleColor(employee.role)" />
+						</view>
 						<rice-cell :title="employee.employee_name" :label="employee.phone"
 							 size="large" arrow
 							arrow-direction="left" center @click="viewEmployee(employee)" :clickable="false">
@@ -35,7 +39,7 @@
 								<image v-if="employee.role=='normal'" style="margin-right:8px;width:64px;height:64px"
 									src="/static/images/employee.png"></image>
 							</template>
-							<template #title>
+						<!-- 	<template #title>
 								<view class="em-title">
 									<text
 										class="em-title-label">{{employee.employee_name}}</text>
@@ -44,7 +48,7 @@
 											:color="getRoleColor(employee.role)" />
 									</view>
 								</view>
-							</template>
+							</template> -->
 							<template #label>
 								<view class="label-container">
 									

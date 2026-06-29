@@ -9,6 +9,7 @@ export default {
 		modal_title: "Tip",
 		select_txt: "Please select",
 		btn_txt_search: "Search",
+		btn_txt_switch:"Switch",
 		search_txt: "Enter keywords",
 		btn_txt_next: "Next",
 		btn_txt_create: "Create {0}",
@@ -124,7 +125,7 @@ export default {
 		"pach_sms": "Enter SMS code",
 		"btn_txt_password": "Forgot Password",
 		"btn_txt": "Sign In",
-		"btn_app_txt": "Phone Quick Login",
+		"btn_app_txt": "Phone Quick Login &登录",
 		"btn_getSms": "Get SMS Code",
 		"btn_getVerificationCode": "Get Code",
 		"getphone_loading": "Retrieving phone number…",
@@ -148,7 +149,9 @@ export default {
 		"no_support_login_app": "One-click login is not supported in current environment",
 		"tips_login_regitser": "This phone number is not registered and will automatically create a Yisu account for you",
 		"modal_title": "Prompt",
-		"tips": "Unregistered phone numbers will automatically create a Yisu account after verification"
+		"tips": "Unregistered phone numbers will automatically create a Yisu account after verification",
+		login_agreen_txt:"By logging in, you agree"，
+		"other_login_methods": "Other Login Methods"
 	},
 	register: {
 		title: "Register",
@@ -394,7 +397,9 @@ export default {
 		transaction_category: "Transaction Category",
 		transaction_date: "Transaction Date",
 		amount: "Amount",
-		patch_enter_amount: "Enter Amount"
+		patch_enter_amount: "Enter Amount",
+		valid_form_amount:"Amount is Require",
+		valid_form_type:"Select The category"
 	},
 	function: {
 		title_navbar: "Function",

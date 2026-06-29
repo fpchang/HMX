@@ -28,7 +28,7 @@
 				<view class="search-card">
 					<view class="search-card-item title-row">
 						<text class="title-txt">{{ i18n.global.t('order.orderFilter') }}</text>
-						<l-tag variant="light">{{ i18n.global.t('common.totalCount',[orderResult.count]) }}</l-tag>
+						<l-tag variant="light">{{ i18n.global.t('common.totalCount',[orderResult.count.toString()]) }}</l-tag>
 					</view>
 					<view class="search-card-item select-row">
 						<orderSearchComponent :columns="columns" :initDateRange="dateRange"
@@ -44,26 +44,35 @@
 				<view style="border-radius: 14px;background-color: #fff;">
 					<rice-swipe-actions :accordion="true" ref="swipeControlRef">
 						<rice-swipe-actions-item :auto-close="true" v-for="order of orderResult.orderList">
+							<view style="position:absolute;right:4px;top:4px;;z-index:1000">
+								<rice-tag plain-fill v-if="order.orderStatus==1" type="primary"
+									:text="i18n.global.t('order.statusCheckInPending')" size="small" />
+								<rice-tag plain-fill v-if="order.orderStatus==5" type="success"
+									:text="i18n.global.t('order.statusCompleted')" size="small" />
+								<rice-tag plain-fill v-if="order.orderStatus==10" type="error"
+									:text="i18n.global.t('order.statusCancelled')" size="small" />
+							</view>
 							<rice-cell :title="order.userName"
 								:label="`${formatDate(order.checkInStartDateTimeStamp)}~${formatDate(order.checkInEndDateTimeStamp)}`"
 								size="large" arrow arrow-direction="left" center :clickable="false" @click="viewOrder(order)">
 								<template #leftIcon>
-									<image mode="aspectFill" :src="formatRommTypeImage(order.reservedRoomList[0])"
+									<image mode="aspectFit" :src="formatRommTypeImage(order.reservedRoomList[0])"
 										style="margin-right:8px;width: 100px;height:110px;border-radius: 12px;"
 										class="cell-left-icon"></image>
+									
 								</template>
 								<template #title>
 									<view class="order-title">
 										<text
 											class="order-title-label">{{i18n.global.t('order.guest') }}：{{order.userName}}</text>
-										<view>
+										<!-- <view>
 											<rice-tag plain-fill v-if="order.orderStatus==1" type="primary"
 												:text="i18n.global.t('order.statusCheckInPending')" size="small" />
 											<rice-tag plain-fill v-if="order.orderStatus==5" type="success"
 												:text="i18n.global.t('order.statusCompleted')" size="small" />
 											<rice-tag plain-fill v-if="order.orderStatus==10" type="error"
 												:text="i18n.global.t('order.statusCancelled')" size="small" />
-										</view>
+										</view> -->
 									</view>
 								</template>
 								<template #label>
@@ -296,7 +305,7 @@
 		return val;
 	}
 	const formatRommTypeImage = (roomId : string) : string => {
-		let src = "";
+		let src:string = "/static/images/nono-img.png";
 		if (roomTypeList.value == null) {
 			return src;
 		}
@@ -307,10 +316,14 @@
 			for (let j = 0; j < roomList.length; j++) {
 				const room = roomList[j];
 				if (room._id == roomId) {
-					src = typeItem.firstImages;
+					if(typeItem.firstImages!=""){
+						src = typeItem.firstImages;
+					}
+					
 				}
 			}
 		}
+		console.log(9988,src)
 		// 找不到对应房间返回空
 		return src;
 
@@ -611,7 +624,7 @@
 	}
 
 	.order-card-simple-txt {
-		font-size: 12px;
+		font-size: 14px;
 		color: #666;
 	}
 

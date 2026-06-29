@@ -179,7 +179,6 @@
 		}
 	}
 	onLoad(() => {
-		//pushCustomPage();
 		uniVerifyManager.value = uni.getUniVerifyManager();
 		preLogin(() => { customLoginIn(); });
 	})

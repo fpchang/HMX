@@ -25,7 +25,7 @@
 			<view class="search-card-box">
 				<view class="search-card-row title-row">
 					<text class="title-text">{{i18n.global.t("hotel.room_filter")}}</text>
-					<l-tag variant="light">{{ i18n.global.t('common.totalCount',[filterRoomList.length]) }}</l-tag>
+					<l-tag variant="light">{{ i18n.global.t('common.totalCount',[filterRoomList.length.toString()]) }}</l-tag>
 				</view>
 				<view class="search-card-row select-row">
 					<xt-select :columns="columns" v-model="selectId"

@@ -24,7 +24,7 @@
 			<view class="card">
 				<view class="card-item title-area">
 					<text class="txt">{{i18n.global.t("finance.income_expense_filter")}}</text>
-					<l-tag variant="light">{{ i18n.global.t('common.totalCount',[fmResult.count]) }}</l-tag>
+					<l-tag variant="light">{{ i18n.global.t('common.totalCount',[fmResult.count.toString()]) }}</l-tag>
 				</view>
 				<view class="card-item  select-area" style="margin-bottom: 0;">
 					<fmSearchComponent :columns="columns" :initDateRange="dateRange"

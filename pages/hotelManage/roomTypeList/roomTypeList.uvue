@@ -23,7 +23,9 @@
 			<view class="roomtype-card-item" v-for="(roomType,index) of roomTypeList">
 				<view class="roomtype-card-box">
 					<view class="card-img-block">
-						<image :src="topImg(roomType.firstImages)" style="height: 100%;width: 100%;" mode="aspectFill">
+						<image v-if="roomType.firstImages!=''" :src="roomType.firstImages" style="height: 100%;width: 100%;" mode="aspectFill">
+						</image>
+						<image  v-if="roomType.firstImages==''"  src="/static/images/nono-img.png" style="height: 100%;width: 100%;" mode="aspectFit">
 						</image>
 					</view>
 					<rice-swipe-actions :accordion="true" ref="swipeControlRef">
@@ -151,7 +153,7 @@
 	});
 	const topImg = (imgUrl : string) : string => {
 		if (imgUrl == '') {
-			return '/static/images/noimg.png';
+			return '/static/images/nono-img.png';
 		}
 		return imgUrl;
 	};

@@ -3,13 +3,10 @@
 		<rice-navbar :fixed="false" :safe-area-inset-top="true" bg-color="#007AFF" :left-arrow="false">
 			<template #title>
 				<view class="nav-header-wrap">
-					<view class="hotel-switch-row" @click="showCheckHotel" v-if="hotelList.length>0">
-
-						<text class="hotel-name-txtarea">
-							<text class="hotel-name-text">{{hotel?.hotelName}}</text>
-						
-						</text>
-						<rice-icon name="arrow-down" color="#fff" size="22px" style="margin-left: 8px;" />
+					<view class="hotel-switch-row"  v-if="hotelList.length>0">					
+							<text class="hotel-name-text">{{hotel?.hotelName}}</text>						
+						<!-- <rice-icon name="arrow-down" color="#fff" size="22px" style="margin-left: 8px;" /> -->
+						<rice-button :custom-style="{padding:'0 15px 0 15px'}" shape="round" :text="i18n.global.t('common.btn_txt_switch')" size="small" color="rgba(255,255,255,0.5)" @click="showCheckHotel"></rice-button>
 					</view>
 
 				</view>
@@ -59,7 +56,7 @@
 									<view class="card-img-block">
 										<image :src="item.firstImages" v-if="item.firstImages!=''"
 											style="height: 100%;width: 100%;" mode="aspectFill"></image>
-										<image src="/static/images/noimg.png" v-if="item.firstImages==''"
+										<image src="/static/images/nono-img.png" v-if="item.firstImages==''"
 											style="height: 80%;width: 80%;" mode="aspectFit"></image>
 									</view>
 									<view style="padding: 15px 10px" class="card-text-wrap">
@@ -125,11 +122,11 @@
 	});
 	const topImg = () : string => {
 		if (hotel.value == null) {
-			return '/static/images/noimg.png';
+			return '/static/images/nono-img.png';
 		}
 		const firstImages = hotel.value['firstImages'] as string | null;
 		if (firstImages == '' || firstImages == null) {
-			return '/static/images/noimg.png';
+			return '/static/images/nono-img.png';
 		}
 		return firstImages;
 	};
@@ -176,6 +173,9 @@
 <style>
 	/* 导航标题外层容器 */
 	.nav-header-wrap {
+		min-width:250px;
+		max-width:250px;
+		flex:1;
 		background-color: #007AFF;
 		display: flex;
 		flex-direction: row;
@@ -185,9 +185,9 @@
 
 	/* 酒店名称下拉切换行 */
 	.hotel-switch-row {
-		min-width: 200px;
+/* 		min-width: 200px;
 		max-width:245px;
-	
+	 */
 		flex: 1;
 		display: flex;
 		flex-direction: row;
@@ -196,13 +196,11 @@
 	}
 
 	/* 酒店标题文字 */
-	.hotel-name-txtarea {
+	.hotel-name-text {
 		flex: 1;
 		overflow:hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
-	}
-	.hotel-name-text {
 		font-size: 18px;
 		font-weight: 600;
 		color: #fff;

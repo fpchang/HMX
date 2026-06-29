@@ -8,6 +8,7 @@ export default {
 		modal_title: "提示",
 		select_txt: "请选择",
 		search_txt: "请输入关键字",
+		btn_txt_switch:"切换",
 		btn_txt_search: "搜索",
 		btn_txt_next: "下一步",
 		btn_txt_create: "创建{0}",
@@ -150,7 +151,9 @@ export default {
 		no_support_login_app: "当前环境暂不支持一键登录",
 		tips_login_regitser: "该手机号未注册，将自动为您创建议宿账号",
 		modal_title: "提示",
-		tips: "未注册的手机号验证后自动创建议宿账号"
+		tips: "未注册的手机号验证后自动创建议宿账号",
+		login_agreen_txt:"登录即同意"，
+		"other_login_methods": "其他登录方式"
 	},
 	register: {
 		title: "注册",
@@ -406,7 +409,9 @@ export default {
 		transaction_category: "收支分类",
 		transaction_date: "收支日期",
 		amount: "金额",
-		patch_enter_amount: "请输入金额"
+		patch_enter_amount: "请输入金额",
+		valid_form_amount:"请输入金额",
+		valid_form_type:"请选择收支类型"
 
 	},
 	//功能页面

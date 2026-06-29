@@ -1,19 +1,22 @@
 <template>
 	<view class="container">
-		<view class="safe_content">
+		<view class="safe_content" >
 			<view class="close_icon-container" @click="closePage">
 				<text class="close_icon" >{{ closeIcon }}</text>
 			</view>
 			
-			<text class="title">一键登录</text>
+			<text class="title">{{i18n.global.t('login.tab_login_app')}}</text>
 			<view class="number">
 				<!-- 移除多余ref，仅保留id -->
 				<text id="number-text" class="number-text">{{ phone }}</text>
 				<text id="slogan-text" class="slogan-text">{{ slogan }}</text>
 			</view>
-			<button id="login-button" class="login-button" @click="loginIn" :loading="submitLoading">
-				本机号码一键登录
-				</button>
+			
+				<button id="login-button" class="login-button" @click="loginIn" :loading="submitLoading">
+					{{i18n.global.t('login.btn_app_txt') }}
+					</button>
+		
+			
 			<view class="privacy">
 				<!-- 移除多余ref -->
 				<!-- <view class="checkbox-wrap">
@@ -23,10 +26,10 @@
 					</checkbox-group>
 				</view> -->
 				<checkbox id="privacy-checkbox" class="privacy-checkbox" ref="privacy-checkbox" :checked="false"></checkbox>
-				<text class="privacy-normal-text">登录即同意</text>
+				<text class="privacy-normal-text">{{i18n.global.t('login.login_agreen_txt') }}</text>
 				<text id="privacy-text" class="privacy-text" @click="openLink">{{ privacyName }}</text>
 			</view>
-			<text class="other" @click="otherLogin">其他登录方式</text>
+			<text class="other" @click="otherLogin">{{i18n.global.t('login.other_login_methods') }} </text>
 		</view>
 	</view>
 </template>
@@ -197,11 +200,11 @@
 		height: 100%;
 	}
 
-	.close_icon-container {
-		width:80px;
-		height:80px;
+	.close_icon-container {	
+		width:40px;
+		height:60px;
 		position: absolute;
-		left: 90%;
+		right:20px;
 		top: 55px;
 		
 	}
@@ -235,16 +238,21 @@
 	}
 
 	.slogan-text {
-		margin-top: 10px;
+		margin-top: 15px;
 		width: 100%;
 		font-size: 13px;
 		text-align: center;
 		color: gray;
 		height: 20px;
 	}
-
+	.btn-area{
+		width: 80px;
+		height:44px;
+	}
 	.login-button {
 		width: 80%;
+		height:44px;
+		line-height: 44px;
 		top: 40%;
 		position: absolute;
 		left: 10%;
@@ -255,6 +263,7 @@
 
 	.privacy {
 		margin-top: 10px;
+		line-height: 24px;
 		flex-direction: row;
 		flex-wrap: wrap;
 		top: 45%;

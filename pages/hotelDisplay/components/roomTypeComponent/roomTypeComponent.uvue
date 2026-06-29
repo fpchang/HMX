@@ -55,7 +55,7 @@
 	}
 	const topImg = (imgUrl : string) : string => {
 		if (imgUrl == '') {
-			return '/static/images/noimg.png';
+			return '/static/images/nono-img.png';
 		}
 		return imgUrl;
 	};

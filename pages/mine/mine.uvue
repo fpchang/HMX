@@ -45,9 +45,9 @@
 								mode="aspectFill"
 							></image>
 							<image 
-								src="/static/images/noimg.png" 
+								src="/static/images/nono-img.png" 
 								v-if="hotel?.firstImages==''"
-								style="height: 40%;width: 40%;" 
+								style="height: 80%;width: 80%;" 
 								mode="aspectFit"
 							></image>
 						</view>
@@ -131,7 +131,7 @@ const topImg = () : string => {
 	}
 	const firstImages = hotel.value['firstImages'] as string | null;
 	if (firstImages == '' || firstImages == null) {
-		return '/static/images/noimg.png';
+		return '/static/images/nono-img.png';
 	}
 	return firstImages;
 };

@@ -150,17 +150,17 @@ const filterRoomTypeList = computed<Array<remainRoomTypeBean>>(() => {
 
 const getRemainRoomList = async () => {
 	submitLoading.value=true;
-	uni.showLoading({title:""});
+	//uni.showLoading({title:""});
 	let startTime = new Date(dayuts(dateRange.value[0]).format("YYYY-MM-DD 14:00:00")).getTime();
 	let endTime = new Date(dayuts(dateRange.value[1]).format("YYYY-MM-DD 12:00:00")).getTime();
 	try {
 		const list : Array<roomBean> = await OrderService.getRemainderRoomList(hotel_id.value, startTime, endTime);
 		remainRoomList.value = list;
 		submitLoading.value=false;
-		uni.hideLoading();
+		//uni.hideLoading();
 	} catch (e) {
 		submitLoading.value=false;
-		uni.hideLoading();
+		//uni.hideLoading();
 		uni.showToast({
 			title: i18n.global.t("common.getData_fail",[i18n.global.t("order.orderFilter")]),
 			icon: "none"

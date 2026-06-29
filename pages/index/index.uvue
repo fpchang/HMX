@@ -1,5 +1,5 @@
 <template>
-	<uni-tab style="flex: 1" :active-index="activeIndex" :tab-bar-height="50" :tabContentHeightFull="true"
+	<uni-tab style="flex: 1" :active-index="activeIndex" :tab-bar-height="70" :tabContentHeightFull="true"
 		@change="handleChange">
 		<uni-tab-content>
 			<home></home>
@@ -19,24 +19,8 @@
 		</uni-tab-content>
 
 		<uni-tab-bar class="custom-tab-list-shell custom-tab-list-root">
-			<!-- <view style="background:rgba(0,0,0,0.5);flex:1;border-radius: 25px;height:50px;margin:0 20px;display: flex;flex-direction: row;align-items: center;">
-				<uni-tab-item style="flex:1">
-					<view class="custom-tab-cell">
-						<text class="custom-tab-label" :class="activeIndex == 0 ? 'custom-tab-label-active' : ''">精选</text>
-					</view>
-				</uni-tab-item>
-				<uni-tab-item style="flex:1">
-					<view class="custom-tab-cell">
-						<text class="custom-tab-label" :class="activeIndex == 1 ? 'custom-tab-label-active' : ''">趋势</text>
-					</view>
-				</uni-tab-item>
-				<uni-tab-item style="flex:1">
-					<view class="custom-tab-cell">
-						<text class="custom-tab-label" :class="activeIndex == 2 ? 'custom-tab-label-active' : ''">我的</text>
-					</view>
-				</uni-tab-item>
-			</view> -->
-			<view style="flex:1;max-width: 450px;">
+			
+			<view style="flex:1;max-width: 450px;padding-bottom:20px">
 				<rice-subsection class="tab-bar-style" :list="listTabName" v-model="activeIndex" shape="round"
 					bar-class="bar-class" active-text-class="active-text-class" @clickSub="switchTabEvent">
 					<template #default="{index,subname}">
@@ -58,6 +42,8 @@
 </template>
 
 <script setup lang="uts">
+	import { state } from "@/store/store";
+	import { setToken, setViewWidth } from "@/store/store.uts";
 	import home from "@/pages/home/home.uvue";
 	import orderState from "@/pages/order/orderState/orderState.uvue";
 	import fm from "@/pages/financialManagement/financiaHome/financiaHome";
@@ -160,8 +146,17 @@
 		      }
 		    })
 	}
+	const setTokenEvent = () => {
+		const token = uni.getStorageSync("hm_token") as string;
+		if (token != null && token != "") {
+			setToken(token);
+		}
+	
+	}
 	onLoad(() => {
-		//syncNavigationBar(activeIndex.value)
+		if(state.token==""){
+			setTokenEvent();
+		}
 	})
 </script>
 
@@ -211,8 +206,9 @@
 	}
 
 	.custom-tab-list-root {
+		/* background-color: red; */
 		/* background: linear-gradient(to right, #f7d9a8, #c6ece3); */
-		height: 50px;
+		height: 70px;
 		border-top-width: 0px;
 		background-color: rgba(255, 255, 255, 0);
 		display: flex;
@@ -242,7 +238,8 @@
 	.tab-bar-style {
 		height: 50px;
 		background-color: rgba(255, 255, 255, 0.72);
-		border: 1rpx solid rgba(245, 245, 245, 0.9);
+		border: 0rpx solid rgba(245, 245, 245, 0.9);
+		
 		/* box-shadow:0 4rpx 20rpx rgba(0, 0, 0, 0.06),0 1rpx 4rpx rgba(0, 0, 0, 0.03),inset 0 0 0 1rpx rgba(255, 255, 255, 0.8); */
 	}
 

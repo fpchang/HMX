@@ -23,7 +23,7 @@
 			<view class="search-card-box">
 				<view class="search-card-row title-row">
 					<text class="title-text">{{i18n.global.t("finance.income_expense_filter")}}</text>
-					<l-tag variant="light">{{ i18n.global.t('common.totalCount',[fmResult.count]) }}</l-tag>
+					<l-tag variant="light">{{ i18n.global.t('common.totalCount',[fmResult.count.toString()]) }}</l-tag>
 				</view>
 				<view class="search-card-row select-row">
 					<fmSearchComponent :columns="columns" :initDateRange="dateRange"

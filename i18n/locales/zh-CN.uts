@@ -128,6 +128,7 @@ export default {
 		btn_txt_password: "忘记密码",
 		btn_txt: "登录",
 		btn_app_txt: "一键登录",
+		btn_phone_txt: "本机号码一键登录",
 		btn_getSms: "获取短信验证码",
 		btn_getVerificationCode: "获取验证码",
 		getphone_loading: "手机号获取中…",

@@ -5,7 +5,7 @@
 				<text class="close_icon" >{{ closeIcon }}</text>
 			</view>
 			
-			<text class="title">{{i18n.global.t('login.tab_login_app')}}</text>
+			<!-- <text class="title">{{i18n.global.t('login.tab_login_app')}}</text> -->
 			<view class="number">
 				<!-- 移除多余ref，仅保留id -->
 				<text id="number-text" class="number-text">{{ phone }}</text>
@@ -13,7 +13,7 @@
 			</view>
 			
 				<button id="login-button" class="login-button" @click="loginIn" :loading="submitLoading">
-					{{i18n.global.t('login.btn_app_txt') }}
+					{{i18n.global.t('login.btn_phone_txt') }}
 					</button>
 		
 			
@@ -139,21 +139,18 @@
 	          if (error.errCode == 40001) {
 	            uni.showToast({
 	              title: "请同意服务条款",
-	              position: "bottom",
-	              duration: 2000
+	              icon:'none'
 	            })
 	          } else if (error.errCode == 40002) {
 	            uni.showToast({
 	              title: "授权页不符合规范",
-	              position: "bottom",
-	              duration: 2000
+	               icon:'none'
 	            })
 	          } else {
 	            const errorMsg = JSON.parseObject(error.cause?.cause?.message ?? "")?.getString("errorDesc") ?? error.errMsg;
 	            uni.showToast({
 	              title: errorMsg,
-	              position: "bottom",
-	              duration: 2000
+	               icon:'none'
 	            })
 	          }
 	        },
@@ -163,9 +160,8 @@
 	      })
 	    } else {
 	      uni.showToast({
-	        title: "未获取到页面元素",
-	        position: "bottom",
-	        duration: 2000
+	        title: "系统异常，请尝试其它登录方式",
+	         icon:'none'
 	      })
 	      submitLoading.value = false;
 	    }
@@ -202,10 +198,14 @@
 
 	.close_icon-container {	
 		width:40px;
-		height:60px;
+		height:40px;
 		position: absolute;
 		right:20px;
 		top: 55px;
+		display: flex;
+		flex-direction:row;
+		justify-content: center;
+		align-items: center;
 		
 	}
 	.close_icon{
@@ -252,6 +252,7 @@
 	.login-button {
 		width: 80%;
 		height:44px;
+		border-radius:22px;
 		line-height: 44px;
 		top: 40%;
 		position: absolute;
@@ -296,5 +297,6 @@
 		transform: translateX(-50%);
 		position: absolute;
 		font-size: 14px;
+		color:#666;
 	}
 </style>

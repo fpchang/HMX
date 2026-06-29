@@ -126,6 +126,7 @@ export default {
 		"btn_txt_password": "Forgot Password",
 		"btn_txt": "Sign In",
 		"btn_app_txt": "Phone Quick Login &登录",
+		btn_phone_txt: "One-tap Local Number Login",
 		"btn_getSms": "Get SMS Code",
 		"btn_getVerificationCode": "Get Code",
 		"getphone_loading": "Retrieving phone number…",

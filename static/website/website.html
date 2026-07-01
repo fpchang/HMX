@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="湖州玄天科技,酒店管理系统,酒店PMS系统,民宿管理系统">
+    <meta name="description" content="湖州玄天科技有限公司，专注智能酒店管理系统研发，为酒店、民宿提供一站式数字化解决方案。">
+    <title>湖州玄天科技有限公司 - 智能酒店管理系统研发服务商</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#0FC6C2',
+                        dark: '#1D2129',
+                        light: '#F5F7FA'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .text-shadow { text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .bg-gradient-main { background: linear-gradient(135deg, #165DFF 0%, #0FC6C2 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(22, 93, 255, 0.15); }
+        .line-gradient { background: linear-gradient(90deg, #165DFF, #0FC6C2); height: 3px; width: 60px; border-radius: 3px; }
+        .nav-scroll { background: #ffffff !important; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .nav-scroll a { color: #1D2129 !important; }
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="font-sans text-dark bg-white overflow-x-hidden">
+    <!-- 导航栏 -->
+    <header id="navbar" class="fixed w-full top-0 z-50 transition-all duration-300 bg-transparent">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="#" class="flex items-center gap-3">
+                    <span class="text-primary text-3xl"><i class="fa fa-cogs"></i></span>
+                    <div class="leading-tight">
+                        <div class="text-white text-xl font-bold tracking-wide">湖州玄天科技有限公司</div>
+                        <div class="text-white/70 text-xs">专注酒店数字化解决方案</div>
+                    </div>
+                </a>
+                <nav class="hidden md:flex items-center gap-8">
+                    <a href="#home" class="text-white hover:text-secondary transition-colors font-medium">首页</a>
+                    <a href="#about" class="text-white hover:text-secondary transition-colors font-medium">关于我们</a>
+                    <a href="#product" class="text-white hover:text-secondary transition-colors font-medium">核心产品</a>
+                    <a href="#function" class="text-white hover:text-secondary transition-colors font-medium">产品功能</a>
+                    <a href="#advantage" class="text-white hover:text-secondary transition-colors font-medium">核心优势</a>
+                    <a href="#contact" class="text-white hover:text-secondary transition-colors font-medium">联系我们</a>
+                </nav>
+                <a href="#contact" class="hidden md:block bg-secondary hover:bg-teal-500 text-white px-6 py-2 rounded-full transition-all font-medium">免费咨询</a>
+                <button class="md:hidden text-white text-2xl" id="menuBtn"><i class="fa fa-bars"></i></button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="md:hidden hidden bg-primary/95 backdrop-blur-sm w-full">
+            <div class="flex flex-col items-center py-6 gap-4">
+                <a href="#home" class="text-white hover:text-secondary py-2">首页</a>
+                <a href="#about" class="text-white hover:text-secondary py-2">关于我们</a>
+                <a href="#product" class="text-white hover:text-secondary py-2">核心产品</a>
+                <a href="#function" class="text-white hover:text-secondary py-2">产品功能</a>
+                <a href="#advantage" class="text-white hover:text-secondary py-2">核心优势</a>
+                <a href="#contact" class="text-white hover:text-secondary py-2">联系我们</a>
+                <a href="#contact" class="bg-secondary text-white px-8 py-2 rounded-full mt-2">免费咨询</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner -->
+    <section id="home" class="relative h-screen flex items-center justify-center">
+        <div class="absolute inset-0 w-full h-full bg-cover bg-center" style="background-image: url('https://picsum.photos/id/180/1920/1080')">
+            <div class="absolute inset-0 bg-primary/75"></div>
+        </div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="text-[clamp(2rem,5vw,4rem)] font-bold text-white text-shadow mb-6">湖州玄天科技有限公司</h1>
+            <h2 class="text-[clamp(1.2rem,3vw,1.8rem)] text-white/90 font-medium mb-4">智能酒店管理系统 · 一站式酒店数字化解决方案</h2>
+            <p class="text-white/80 max-w-3xl mx-auto mb-10 leading-relaxed text-lg">专为酒店、民宿、精品公寓、连锁客栈打造的云端PMS管理系统，帮助传统酒店快速数字化转型，降本增效、智能运营、精准增收</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#function" class="bg-secondary text-white px-8 py-3 rounded-full text-lg font-medium hover:bg-teal-500 transition-all">产品功能介绍</a>
+                <a href="#contact" class="border-2 border-white text-white px-8 py-3 rounded-full text-lg font-medium hover:bg-white/10 transition-all">申请免费试用</a>
+            </div>
+            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 text-white">
+                <div class="text-center"><div class="text-3xl md:text-4xl font-bold">1000+</div><div class="text-white/80 mt-2">合作门店</div></div>
+                <div class="text-center"><div class="text-3xl md:text-4xl font-bold">99.9%</div><div class="text-white/80 mt-2">系统稳定率</div></div>
+                <div class="text-center"><div class="text-3xl md:text-4xl font-bold">30+</div><div class="text-white/80 mt-2">功能模块</div></div>
+                <div class="text-center"><div class="text-3xl md:text-4xl font-bold">50%</div><div class="text-white/80 mt-2">人力成本节省</div></div>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-white animate-bounce"><i class="fa fa-angle-down text-3xl"></i></div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section id="about" class="py-20 bg-light">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="text-center mb-16">
+                <span class="text-primary font-medium">关于我们</span>
+                <div class="line-gradient mx-auto my-2"></div>
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-dark">湖州玄天科技有限公司</h2>
+            </div>
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2">
+                    <img src="https://picsum.photos/id/1/800/600" alt="玄天科技企业实力" class="w-full rounded-2xl shadow-xl">
+                </div>
+                <div class="md:w-1/2">
+                    <p class="text-gray-600 leading-relaxed mb-6">湖州玄天科技有限公司是一家专注于<strong>酒店行业数字化软件开发、技术服务、系统落地</strong>的高新技术企业，深耕酒店信息化领域多年，专注为单体酒店、连锁酒店、民宿、长短租公寓提供专业、稳定、易用的智能化酒店管理系统与整体解决方案。</p>
+                    <p class="text-gray-600 leading-relaxed mb-6">公司拥有完整的研发、产品、售后、运维团队，坚持自主研发、持续迭代，摒弃传统老旧系统卡顿、繁琐、收费杂乱的痛点，打造轻量化、云端化、智能化、低成本的新一代酒店PMS管理系统，零基础上手、操作简单、功能全面。</p>
+                    <p class="text-gray-600 leading-relaxed">我们始终以“科技赋能酒店，简化运营流程”为核心理念，助力中小酒店实现数字化升级，降低人工成本、提升管理效率、挖掘营收增量，让酒店经营更简单、更智能、更高效。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心产品 -->
+    <section id="product" class="py-20 bg-white">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="text-center mb-16">
+                <span class="text-primary font-medium">核心产品</span>
+                <div class="line-gradient mx-auto my-2"></div>
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-dark">议宿酒店管理系统</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto mt-4">新一代云端SaaS酒店PMS系统，多端互通、免部署、零维护，适配全品类住宿业态</p>
+            </div>
+            <div class="flex flex-col md:flex-row items-center gap-10">
+                <div class="md:w-1/2">
+                    <img src="https://picsum.photos/id/0/800/500" alt="酒店管理系统后台" class="w-full rounded-2xl shadow-lg">
+                </div>
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl font-bold text-dark mb-4">产品简介</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">玄天智能酒店管理系统是我司主打核心产品，基于微服务云端架构开发，支持电脑端、手机端、小程序多端同步操作，无需服务器、无需本地部署，开通即可使用，自动免费升级迭代。</p>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3"><i class="fa fa-check-circle text-primary mt-1"></i><div><h4 class="font-medium">适配多业态</h4><p class="text-sm text-gray-500">酒店、民宿、公寓、客栈、连锁门店通用</p></div></div>
+                        <div class="flex items-start gap-3"><i class="fa fa-check-circle text-primary mt-1"></i><div><h4 class="font-medium">全渠道打通</h4><p class="text-sm text-gray-500">OTA平台、线下散客、会员、团队订单统一管理</p></div></div>
+                        <div class="flex items-start gap-3"><i class="fa fa-check-circle text-primary mt-1"></i><div><h4 class="font-medium">极简操作</h4><p class="text-sm text-gray-500">可视化房态、一键操作，新人10分钟上手</p></div></div>
+                        <div class="flex items-start gap-3"><i class="fa fa-check-circle text-primary mt-1"></i><div><h4 class="font-medium">数据安全稳定</h4><p class="text-sm text-gray-500">云端备份、数据加密、永久留存不丢失</p></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 产品功能 -->
+    <section id="function" class="py-20 bg-light">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="text-center mb-16">
+                <span class="text-primary font-medium">产品功能</span>
+                <div class="line-gradient mx-auto my-2"></div>
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-dark">全流程智能化管理功能</h2>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-2xl card-hover shadow-sm">
+                    <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl mb-6"><i class="fa fa-home"></i></div>
+                    <h3 class="text-xl font-bold mb-3">智能房态管理</h3>
+                    <p class="text-gray-600 text-sm">可视化全景房态看板，空房、入住、脏房、维修、预留状态实时更新，支持锁房、调房、改价、批量操作，杜绝超售漏售。</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl card-hover shadow-sm">
+                    <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl mb-6"><i class="fa fa-calendar"></i></div>
+                    <h3 class="text-xl font-bold mb-3">全渠道订单管理</h3>
+                    <p class="text-gray-600 text-sm">无缝对接携程、美团、飞猪等OTA平台，自动同步订单与房态，线上线下订单统一后台管理，支持团队、协议、散客预订。</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl card-hover shadow-sm">
+                    <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl mb-6"><i class="fa fa-user"></i></div>
+                    <h3 class="text-xl font-bold mb-3">前台接待系统</h3>
+                    <p class="text-gray-600 text-sm">快速入住、续住、换房、退房、押金管理，支持实名登记、证件读取、入住记录溯源，大幅提升前台工作效率。</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl card-hover shadow-sm">
+                    <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl mb-6"><i class="fa fa-vip"></i></div>
+                    <h3 class="text-xl font-bold mb-3">会员营销体系</h3>
+                    <p class="text-gray-600 text-sm">会员储值、积分、等级、优惠券管理，支持私域引流、复购营销、活动推送，帮助酒店锁定老客户、提升复购率。</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl card-hover shadow-sm">
+                    <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl mb-6"><i class="fa fa-money"></i></div>
+                    <h3 class="text-xl font-bold mb-3">智能财务对账</h3>
+                    <p class="text-gray-600 text-sm">自动统计营收、房费、杂费、退款数据，生成日报、月报、年报，OTA自动对账，杜绝错账、漏账、糊涂账。</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl card-hover shadow-sm">
+                    <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl mb-6"><i class="fa fa-bar-chart"></i></div>
+                    <h3 class="text-xl font-bold mb-3">大数据分析报表</h3>
+                    <p class="text-gray-600 text-sm">入住率、营收数据、客源分析、房型销量、客流趋势可视化展示，为酒店定价、经营决策提供数据支撑。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心优势 -->
+    <section id="advantage" class="py-20 bg-white">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="text-center mb-16">
+                <span class="text-primary font-medium">核心优势</span>
+                <div class="line-gradient mx-auto my-2"></div>
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-dark">为什么选择玄天科技？</h2>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="p-6 bg-light rounded-2xl card-hover text-center">
+                    <div class="text-primary text-4xl mb-4"><i class="fa fa-cloud"></i></div>
+                    <h4 class="font-bold text-lg mb-2">云端SaaS架构</h4>
+                    <p class="text-sm text-gray-600">无需部署服务器、无需维护，开通即用，自动升级，节省硬件成本</p>
+                </div>
+                <div class="p-6 bg-light rounded-2xl card-hover text-center">
+                    <div class="text-primary text-4xl mb-4"><i class="fa fa-mobile"></i></div>
+                    <h4 class="font-bold text-lg mb-2">多端同步操作</h4>
+                    <p class="text-sm text-gray-600">电脑、手机、小程序实时同步，随时随地查房态、管订单、看营收</p>
+                </div>
+                <div class="p-6 bg-light rounded-2xl card-hover text-center">
+                    <div class="text-primary text-4xl mb-4"><i class="fa fa-shield"></i></div>
+                    <h4 class="font-bold text-lg mb-2">数据安全加密</h4>
+                    <p class="text-sm text-gray-600">云端多重备份、数据加密存储，防止数据丢失、泄露、篡改</p>
+                </div>
+                <div class="p-6 bg-light rounded-2xl card-hover text-center">
+                    <div class="text-primary text-4xl mb-4"><i class="fa fa-headphones"></i></div>
+                    <h4 class="font-bold text-lg mb-2">终身售后支持</h4>
+                    <p class="text-sm text-gray-600">一对一教学、7×24小时技术支持、远程协助、持续功能迭代</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系我们 -->
+    <section id="contact" class="py-20 bg-gradient-main text-white">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="text-center mb-16">
+                <span class="text-white/80 font-medium">联系我们</span>
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mt-2">免费试用 · 技术咨询 · 合作对接</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8">
+                    <div class="flex items-center gap-6">
+                        <div class="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center text-xl"><i class="fa fa-building"></i></div>
+                        <div><h4 class="text-lg font-medium">公司名称</h4><p class="text-white/80">湖州玄天科技有限公司</p></div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <div class="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center text-xl"><i class="fa fa-phone"></i></div>
+                        <div><h4 class="text-lg font-medium">咨询电话</h4><p class="text-white/80">19083441181</p></div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <div class="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center text-xl"><i class="fa fa-map-marker"></i></div>
+                        <div><h4 class="text-lg font-medium">公司地址</h4><p class="text-white/80">浙江省湖州市莫干山镇北湖村上下庄一号</p></div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl p-8 shadow-xl">
+                    <h3 class="text-xl font-bold text-dark mb-6">在线预约试用</h3>
+                    <form class="space-y-4">
+                        <input type="text" placeholder="您的姓名" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-primary">
+                        <input type="text" placeholder="联系电话" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-primary">
+                        <input type="text" placeholder="酒店名称" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-primary">
+                        <textarea placeholder="留言需求（免费试用/功能咨询/价格咨询）" rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-primary"></textarea>
+                        <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-all">立即提交预约</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white/70 py-12">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-primary text-2xl"><i class="fa fa-cogs"></i></span>
+                        <span class="text-white text-lg font-bold">湖州玄天科技有限公司</span>
+                    </div>
+                    <p class="text-sm leading-relaxed">专注酒店数字化管理系统研发与落地，助力酒店降本增效、智能升级</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-medium mb-4">快速导航</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#home" class="hover:text-primary transition-colors">首页</a></li>
+                        <li><a href="#about" class="hover:text-primary transition-colors">关于我们</a></li>
+                        <li><a href="#product" class="hover:text-primary transition-colors">核心产品</a></li>
+                        <li><a href="#function" class="hover:text-primary transition-colors">产品功能</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-medium mb-4">联系我们</h4>
+                    <p class="text-sm">地址：浙江省湖州市</p>
+                    <p class="text-sm mt-2">服务：7×24小时技术支持</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-10 pt-6 text-center text-sm">
+                © 2025 湖州玄天科技有限公司 版权所有 | 智能酒店管理系统服务商
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 移动端菜单
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.onclick = () => mobileMenu.classList.toggle('hidden');
+
+        // 导航栏滚动变色
+        const navbar = document.getElementById('navbar');
+        window.onscroll = () => {
+            navbar.classList.toggle('nav-scroll', window.scrollY > 50);
+        };
+
+        // 点击导航关闭移动端菜单
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(){
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>

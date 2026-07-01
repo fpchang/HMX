@@ -1,4 +1,6 @@
 <template>
+	<view style="display: flex;flex:1"> 
+	
 	<rice-navbar :fixed="false" title="" border v-if="hotel_id!=''">
 		<template #left>
 			<view style="display: flex;flex-direction: row;align-items: center;">
@@ -93,7 +95,7 @@
 				</rice-scroll-x>
 			</view>
 		</view>
-		<view style="height:70px"></view>
+		<view style="height:75px"></view>
 
 
 	</scroll-view>
@@ -101,7 +103,7 @@
 		<l-empty :description="hotel_id==''?i18n.global.t('order.noData')   :i18n.global.t('order.noRoom')" />
 	</view>
 
-
+</view>
 
 
 

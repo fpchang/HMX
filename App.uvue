@@ -35,19 +35,21 @@
 	export default {
 		onLaunch: function () {
 					
-			start();
-			setLanuage();
-			//#ifdef APP-ANDROID
-			const showMoreMessage = uni.getStorageSync("showMoreMessage");
+			let showMoreMessage = uni.getStorageSync("showMoreMessage");
+			//#ifndef APP-ANDROID
+				uni.setStorageSync("showMoreMessage",0)
+				showMoreMessage="0";
+			//#endif		
 			if (showMoreMessage != "0") {
 				uni.openDialogPage({
 					url: "/pages/common/androidPrivacy/androidPrivacy", animationType: 'none'
 				});
-			}
-			//#endif
-	
-			//setTokenEvent();
-			// uniIdPageInit();
+			}else{
+				console.log("no android =====")
+				start();
+				setLanuage();
+				
+			}			
 		},
 		onShow: function () {
 			console.log('App Show');

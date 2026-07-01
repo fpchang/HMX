@@ -235,10 +235,17 @@
 		}
 	});
 	onLoad(() => {
-		setLanuage();
-		setTokenEvent();
-		setViewWidthEvent();
-		initData();
+		const showMoreMessage = uni.getStorageSync("showMoreMessage");
+		console.log("9999999",showMoreMessage);
+		if(showMoreMessage == "0"){
+			setLanuage();
+			setViewWidthEvent();
+			setTokenEvent();
+			initData();
+		}else{
+			console.log("不能调用任何权限。。。。。")
+		}
+	
 
 	})
 	onMounted(() => {

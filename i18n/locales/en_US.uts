@@ -523,5 +523,8 @@ export default {
 		msg5: '5. Call: Directly dial displayed phone numbers, requires call permission.',
 		msg6: '6. Storage: Cache app data locally, requires storage permission.',
 		msg7: '7. Network: App requires internet access, requires network permission.',
+		  "msg8": "8：This application integrates third-party SDKs which may also collect data. Details are as follows:",
+		  "msg9": "This application is developed based on the DCloud App Engine (uni-app x). To optimize engine quality, error stack information needs to be collected, which includes: 'Device information (device brand and model, CPU type, screen parameters, OS name and version, network type, IP address, User Agent, device language, time zone, whether the device is an emulator or rooted, anonymous device identifier), application information (app name, package name, version, AppId, integrated SDK information, error stack)'. Purpose of collection: Troubleshoot failures under various scenarios and improve engine quality. Collection method: Data collected automatically by the SDK; no data sharing involved. Third-party entity: Digital Paradise (Beijing) Network Technology Co., Ltd. Privacy Policy Link: DCloud App Engine Privacy Policy"
+
 	}
 };

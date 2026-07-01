@@ -37,10 +37,7 @@
 				</view>
 				<view class="stats-item">
 					<text class="stats-label">{{ i18n.global.t("gather.currentGuests") }}</text>
-					<!-- <l-circle :percent="numCustomerOrderToday_percent" size="100px"
-		  	strokeColor="green" trailColor="#eee" strokeWidth="12" trailWidth="12">
-		  	<text class="stats-value">{{numCustomerOrderToday}}</text>
-		  </l-circle> -->
+					
 					<rice-progress-circle :percentage="numCustomerOrderToday_percent" color="green">
 						<text class="stats-value">{{ numCustomerOrderToday }}</text>
 					</rice-progress-circle>
@@ -352,7 +349,11 @@
 		font-size: 24px;
 		font-weight: 600;
 		color: #333;
-		text-align: center;
+		display:flex;
+		align-item:center;
+		justify-cntent:center;
+		text-align:center;
+		
 	}
 
 	.val-text {

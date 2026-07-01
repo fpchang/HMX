@@ -1,5 +1,8 @@
 <template>
 	<view style="display: flex;flex:1">
+		
+		
+		
 		<rice-navbar :fixed="false" :safe-area-inset-top="true" bg-color="#007AFF" :left-arrow="false">
 			<template #title>
 				<view class="nav-header-wrap">
@@ -8,7 +11,6 @@
 						<!-- <rice-icon name="arrow-down" color="#fff" size="22px" style="margin-left: 8px;" /> -->
 						<rice-button :custom-style="{padding:'0 15px 0 15px'}" shape="round" :text="i18n.global.t('common.btn_txt_switch')" size="small" color="rgba(255,255,255,0.5)" @click="showCheckHotel"></rice-button>
 					</view>
-
 				</view>
 			</template>
 			<template #right>

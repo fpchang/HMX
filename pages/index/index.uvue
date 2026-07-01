@@ -20,7 +20,7 @@
 
 		<uni-tab-bar class="custom-tab-list-shell custom-tab-list-root">
 			
-			<view style="flex:1;max-width: 450px;padding-bottom:20px">
+			<view class="menu-container-style">
 				<rice-subsection class="tab-bar-style" :list="listTabName" v-model="activeIndex" shape="round"
 					bar-class="bar-class" active-text-class="active-text-class" @clickSub="switchTabEvent">
 					<template #default="{index,subname}">
@@ -217,7 +217,14 @@
 		flex-direction: row;
 		justify-content: center;
 	}
-
+	.menu-container-style{
+		flex:1;
+		max-width: 450px;
+		/* #ifdef APP-ANDROID */
+			padding-bottom:20px
+		/* #endif */
+	
+	}
 	.custom-tab-cell {
 		width: 100%;
 		height: 100%;

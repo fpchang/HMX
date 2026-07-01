@@ -148,19 +148,25 @@ export const clearCache =  () : void => {
 	 
 	 setHotelId("");
 	setHotelList([]);
-	 const phone = uni.getStorageSync("phone");
-	 const account = uni.getStorageSync("account");
-	 const showMoreMessage=uni.getStorageSync("showMoreMessage")
-	 uni.clearStorageSync();
-	 if(phone!=null && phone !=""){
-		  uni.setStorageSync("phone", phone);
-	 }
-	if(account!=null && account !=""){
-			  uni.setStorageSync("account", account);
-	}
-	if(showMoreMessage!=null && showMoreMessage !=""){
-		uni.setStorageSync("showMoreMessage", showMoreMessage);
-	}
+	uni.removeStorageSync("hm_token");
+	uni.removeStorageSync("hotel_id");
+	uni.removeStorageSync("tk");
+	
+	//  const phone = uni.getStorageSync("phone");
+	//  const account = uni.getStorageSync("account");
+	//  const showMoreMessage=uni.getStorageSync("showMoreMessage")
+	//  uni.clearStorageSync();
+	//  if(phone!=null && phone !=""){
+	// 	  uni.setStorageSync("phone", phone);
+	//  }
+	// if(account!=null && account !=""){
+	// 		  uni.setStorageSync("account", account);
+	// }
+	// console.log('12345688',showMoreMessage=="0",showMoreMessage==null);
+	// if(showMoreMessage!=null && showMoreMessage !=""){
+	// 	console.log('1234567',showMoreMessage);
+	// 	uni.setStorageSync("showMoreMessage", showMoreMessage);
+	// }
 	 
 };
 export const loginOut = () : void => {

@@ -1,0 +1,15 @@
+<template>
+ 
+   <web-view src="/static/website/website.html"></web-view>
+
+</template>
+
+<script setup>
+const handleHtmlMsg="123";
+</script>
+
+<style>
+.page-wrap{
+	
+}
+</style>

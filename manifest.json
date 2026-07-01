@@ -1,182 +1,170 @@
 {
-	"name": "议宿",
-	"appid": "__UNI__6CB5534",
-	"description": "酒店与民宿管理",
-	"versionName": "3.0.5",
-	"versionCode": "305",
-	"uni-app-x": {
-		"styleIsolationVersion": "2",
-		"vapor": true,
-		"vapor-render-target": "bytecode"
-	},
-	/* 快应用特有相关 */
-	"quickapp": {},
-	/* 小程序特有相关 */
-	"mp-weixin": {
-		"appid": "",
-		"setting": {
-			"urlCheck": false
-		},
-		"usingComponents": true
-	},
-	"mp-alipay": {
-		"usingComponents": true
-	},
-	"mp-baidu": {
-		"usingComponents": true
-	},
-	"mp-toutiao": {
-		"usingComponents": true
-	},
-	"uniStatistics": {
-		"enable": false
-	},
-	"vueVersion": "3",
-	"app": {
-		"distribute": {
-			"icons": {
-				"android": {
-					"hdpi": "",
-					"xhdpi": "",
-					"xxhdpi": "",
-					"xxxhdpi": ""
-				}
-			},
-			"modules": {
-				"uni-ad": {}
-			}
-		}
-	},
-	"app-android": {
-		"permissions": [
-			"<uses-permission android:name=\"android.permission.VIBRATE\"/>"
-		],
-		"distribute": {
-			"modules": {
-				"uni-location": {
-					"tencent": {
-						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
-					},
-					"system": {}
-				},
-				"uni-map": {
-					"tencent": {
-						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
-					}
-				}
-			},
-			"icons": {
-				"hdpi": "static/icons/appicons/72x72.png",
-				"xhdpi": "static/icons/appicons/96x96.png",
-				"xxhdpi": "static/icons/appicons/144x144.png",
-				"xxxhdpi": "static/icons/appicons/192x192.png"
-			}
-		},
-		"icons": {
-			"hdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/72x72.png",
-			"xhdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/96x96.png",
-			"xxhdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/144x144.png",
-			"xxxhdpi": "D:/workspace-uniapp/HM3/unpackage/res/icons/192x192.png"
-		},
-		"splashScreens": {
-			"default": {}
-		},
-		"abiFilters": [
-			"x86_64",
-			"x86",
-			"arm64-v8a",
-			"armeabi-v7a"
-		]
-	},
-	"app-ios": {
-		"distribute": {
-			"modules": {
-				"uni-location": {
-					"system": {},
-					"tencent": {
-						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
-					}
-				},
-				"uni-map": {
-					"tencent": {
-						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
-					}
-				}
-			},
-			"splashScreens": {},
-			"privacyDescription": {
-				"NSPhotoLibraryUsageDescription": "该应用在创建店铺数据上传图片时需要访问您的照片库权限，才可以将本地图片或视频上传",
-				"NSPhotoLibraryAddUsageDescription": "该应用需要存储照片到本地照片库",
-				"NSLocalNetworkUsageDescription": "该应用依赖网络获取数据，以便功能正常使用"
-			},
-			"icons": {
-				"appstore": "static/icons/appicons/1024x1024.png"
-			}
-		}
-	},
-	"web": {
-		"router": {
-			"mode": ""
-		}
-	},
-	"app-harmony": {
-		"sdkConfigs": {
-			"oauth": {
-				"huawei": {
-					"client_id": "6917603310107784764"
-				}
-			}
-		},
-		"requestPermissions": [{
-			"name": "ohos.permission.VIBRATE",
-			"reason": "按钮点击触觉震动反馈"
-		}],
-		"distribute": {
-			"deviceArchs": [
-				"arm64-v8a"
-			],
-			"deviceTypes": [
-				"phone",
-				"tablet"
-			],
-			"bundleName": "ys.hotelsys.fun",
-			"signingConfigs": {
-				"default": {
-					"certpath": "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1778562532405.cer",
-					"keyAlias": "debugKey",
-					"keyPassword": "0000001B8FB9584A49D836956094DB30B6E3B1E4CFFB74D8996885543C770EF1464429B512693D105B7182",
-					"profile": "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1780405514506.p7b",
-					"signAlg": "SHA256withECDSA",
-					"storeFile": "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1778562532405.p12",
-					"storePassword": "0000001B8FB9584A49D836956094DB30B6E3B1E4CFFB74D8996885543C770EF1464429B512693D105B7182"
-				},
-				"release": {
-					"certpath": "/Users/sky/工作资料/项目资料/hm/app打包/鸿蒙证书/ys publish.cer",
-					"keyAlias": "releaseKey",
-					"keyPassword": "000000199AC12739CADB691C0DE6FF817F060684118ACD6124DBCCA5E29AF23C442829084DDB160E5F",
-					"profile": "/Users/sky/工作资料/项目资料/hm/app打包/鸿蒙证书/ys-publish-profileRelease.p7b",
-					"signAlg": "SHA256withECDSA",
-					"storeFile": "/Users/sky/工作资料/项目资料/hm/app打包/鸿蒙证书/publish.p12",
-					"storePassword": "00000019E5187A0C1464C93014515598FE7B4204B9C7979B35E2BA600AFBA54CA47DF673E1F0CEFC29"
-				}
-			},
-			"icons": {
-				"foreground": "static/icons/appicons/1024x1024.png",
-				"background": "static/icons/appicons/1024x1024.png"
-			},
-			"splashScreens": {
-				"startWindowIcon": "static/icons/appicons/1024x1024.png"
-			},
-			"modules": {
-				"uni-location": {
-					"system": {}
-				},
-				"uni-map": {
-					"tencent": {
-						"key": "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
-					}
-				}
-			}
-		}
-	}
+    "name" : "议宿",
+    "appid" : "__UNI__6CB5534",
+    "description" : "酒店与民宿管理",
+    "versionName" : "3.0.5",
+    "versionCode" : "305",
+    "uni-app-x" : {
+        "styleIsolationVersion" : "2"
+    },
+    /* 快应用特有相关 */
+    "quickapp" : {},
+    /* 小程序特有相关 */
+    "mp-weixin" : {
+        "appid" : "",
+        "setting" : {
+            "urlCheck" : false
+        },
+        "usingComponents" : true
+    },
+    "mp-alipay" : {
+        "usingComponents" : true
+    },
+    "mp-baidu" : {
+        "usingComponents" : true
+    },
+    "mp-toutiao" : {
+        "usingComponents" : true
+    },
+    "uniStatistics" : {
+        "enable" : false
+    },
+    "vueVersion" : "3",
+    "app" : {
+        "distribute" : {
+            "icons" : {
+                "android" : {
+                    "hdpi" : "",
+                    "xhdpi" : "",
+                    "xxhdpi" : "",
+                    "xxxhdpi" : ""
+                }
+            },
+            "modules" : {
+                "uni-ad" : {}
+            }
+        }
+    },
+    "app-android" : {
+        "permissions" : [ "<uses-permission android:name=\"android.permission.VIBRATE\"/>" ],
+        "distribute" : {
+            "modules" : {
+                "uni-location" : {
+                    "tencent" : {
+                        "key" : "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+                    },
+                    "system" : {}
+                },
+                "uni-map" : {
+                    "tencent" : {
+                        "key" : "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+                    }
+                }
+            },
+            "icons" : {
+                "hdpi" : "static/icons/appicons/72x72.png",
+                "xhdpi" : "static/icons/appicons/96x96.png",
+                "xxhdpi" : "static/icons/appicons/144x144.png",
+                "xxxhdpi" : "static/icons/appicons/192x192.png"
+            }
+        },
+        "icons" : {
+            "hdpi" : "D:/workspace-uniapp/HM3/unpackage/res/icons/72x72.png",
+            "xhdpi" : "D:/workspace-uniapp/HM3/unpackage/res/icons/96x96.png",
+            "xxhdpi" : "D:/workspace-uniapp/HM3/unpackage/res/icons/144x144.png",
+            "xxxhdpi" : "D:/workspace-uniapp/HM3/unpackage/res/icons/192x192.png"
+        },
+        "splashScreens" : {
+            "default" : {}
+        },
+        "abiFilters" : [ "x86_64", "x86", "arm64-v8a", "armeabi-v7a" ]
+    },
+    "app-ios" : {
+        "distribute" : {
+            "modules" : {
+                "uni-location" : {
+                    "system" : {},
+                    "tencent" : {
+                        "key" : "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+                    }
+                },
+                "uni-map" : {
+                    "tencent" : {
+                        "key" : "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+                    }
+                }
+            },
+            "splashScreens" : {},
+            "privacyDescription" : {
+                "NSPhotoLibraryUsageDescription" : "该应用在创建店铺数据上传图片时需要访问您的照片库权限，才可以将本地图片或视频上传",
+                "NSPhotoLibraryAddUsageDescription" : "该应用需要存储照片到本地照片库",
+                "NSLocalNetworkUsageDescription" : "该应用依赖网络获取数据，以便功能正常使用"
+            },
+            "icons" : {
+                "appstore" : "static/icons/appicons/1024x1024.png"
+            }
+        }
+    },
+    "web" : {
+        "router" : {
+            "mode" : ""
+        }
+    },
+    "app-harmony" : {
+        "sdkConfigs" : {
+            "oauth" : {
+                "huawei" : {
+                    "client_id" : "6917603310107784764"
+                }
+            }
+        },
+        "requestPermissions" : [
+            {
+                "name" : "ohos.permission.VIBRATE",
+                "reason" : "按钮点击触觉震动反馈"
+            }
+        ],
+        "distribute" : {
+            "deviceArchs" : [ "arm64-v8a" ],
+            "deviceTypes" : [ "phone", "tablet" ],
+            "bundleName" : "ys.hotelsys.fun",
+            "signingConfigs" : {
+                "default" : {
+                    "certpath" : "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1778562532405.cer",
+                    "keyAlias" : "debugKey",
+                    "keyPassword" : "0000001B8FB9584A49D836956094DB30B6E3B1E4CFFB74D8996885543C770EF1464429B512693D105B7182",
+                    "profile" : "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1780405514506.p7b",
+                    "signAlg" : "SHA256withECDSA",
+                    "storeFile" : "/Users/sky/Library/Application Support/HBuilder X/extensions/launcher/agc-certs/1778562532405.p12",
+                    "storePassword" : "0000001B8FB9584A49D836956094DB30B6E3B1E4CFFB74D8996885543C770EF1464429B512693D105B7182"
+                },
+                "release" : {
+                    "certpath" : "/Users/sky/工作资料/项目资料/hm/app打包/鸿蒙证书/v2/hmxpublish.cer",
+                    "keyAlias" : "v2",
+                    "keyPassword" : "00000018037EC8928852E44CFA0CB0B2CF95145166DF120014975839D711F058FE109C8D7B11F58C",
+                    "profile" : "/Users/sky/工作资料/项目资料/hm/app打包/鸿蒙证书/v2/hmxprofileRelease.p7b",
+                    "signAlg" : "SHA256withECDSA",
+                    "storeFile" : "/Users/sky/工作资料/项目资料/hm/app打包/鸿蒙证书/v2/hmxv2.p12",
+                    "storePassword" : "00000018F07967EDB90C3202D040B687F1146B82E7CA8987843E2C2A3770EC2D22464AD9D881DDE4"
+                }
+            },
+            "icons" : {
+                "foreground" : "static/icons/appicons/1024x1024.png",
+                "background" : "static/icons/appicons/1024x1024.png"
+            },
+            "splashScreens" : {
+                "startWindowIcon" : "static/icons/appicons/1024x1024.png"
+            },
+            "modules" : {
+                "uni-location" : {
+                    "system" : {}
+                },
+                "uni-map" : {
+                    "tencent" : {
+                        "key" : "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
+                    }
+                }
+            }
+        }
+    }
 }

@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view style="display: flex;flex:1">
 		<rice-navbar title="" border>
 			<template #left>
 				<view style="display: flex;flex-direction: row;align-items: center;">

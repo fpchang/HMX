@@ -1,5 +1,6 @@
 <template>
-	<scroll-view style="flex:1;background:#f5f7fa;" v-if="hotel_id!=''" :show-scrollbar="false">
+	<scroll-view style="flex:1;background:#f5f7fa;" v-if="hotel_id!=''"  :refresher-enabled="true" :refresher-triggered="refreshState"
+			@refresherrefresh="refreshData"  :show-scrollbar="false">
 		<view class="top-header">
 			<text class="header-title">{{i18n.global.t('finance.navbar_title')}}</text>
 		</view>
@@ -95,6 +96,7 @@
 	defineOptions({
 		styleIsolation: "isolated"
 	})
+	const refreshState = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -142,27 +144,32 @@
 	})
 	const init = async () => {
 		//当月支出
-		let expensesMonthRes = FMService.getExpensesCurrentMonth(hotel_id.value, month.value);
+		const expensesMonthRes = FMService.getExpensesCurrentMonth(hotel_id.value, month.value);
 		//当月收入
-		let incomeMonthRes = FMService.getIncomeCurrentMonth(hotel_id.value, month.value);
+		const incomeMonthRes = FMService.getIncomeCurrentMonth(hotel_id.value, month.value);
 		//当年支出
 		const empensesYearRes = FMService.getIncomeAndExpensesCurrentYear(hotel_id.value, year.value, 'expenses');
 		//当年收入
 		const incomeYearRes = FMService.getIncomeAndExpensesCurrentYear(hotel_id.value, year.value, 'income');
 		// 显式指定 Promise.all 的泛型为 any，避免类型推断失败
-		expensesMonthRes.then(list => {
-			expensesMonthList.value = list as Array<charPietItem>;
-		})
-		incomeMonthRes.then(list => {
-			incomeMonthList.value = list as Array<charPietItem>;
-		})
-		empensesYearRes.then(list => {
-			expensesYearList.value = list as Array<Array<string | number>>;
-		})
-		incomeYearRes.then(list => {
-			incomeYearList.value = list as Array<Array<string | number>>;
-		})
-
+		// expensesMonthRes.then(list => {
+		// 	console.log("LLLL",list)
+		// 	expensesMonthList.value = list as Array<charPietItem>;
+		// })
+		// incomeMonthRes.then(list => {
+		// 	incomeMonthList.value = list as Array<charPietItem>;
+		// })
+		// empensesYearRes.then(list => {
+		// 	expensesYearList.value = list as Array<Array<string | number>>;
+		// })
+		// incomeYearRes.then(list => {
+		// 	incomeYearList.value = list as Array<Array<string | number>>;
+		// })
+		const res = await Promise.all([expensesMonthRes,incomeMonthRes,empensesYearRes,incomeYearRes]);
+		expensesMonthList.value = res[0] as  Array<charPietItem>;
+		incomeMonthList.value = res[1] as Array<charPietItem>;
+		expensesYearList.value = res[2] as Array<Array<string | number>>;
+		incomeYearList.value = res[3] as Array<Array<string | number>>;
 	}
 	const columnNum= computed(()=>{
 		let num = 2;
@@ -184,17 +191,22 @@
 		}
 		return '12px';
 	}
+	
 	onLoad(params => {
+		
 		init();
 		uni.setNavigationBarTitle({
 			title: i18n.global.t("finance.navbar_title")
 		})
 	})
+	onShow(()=>{
+		console.log("98888")
+	})
 	function goToDetail(type : string) {
 
 	}
-	const refreshState = ref(false);
 	const refreshData = async () => {
+		console.log(11111)
 		refreshState.value = true;
 		await init();
 		refreshState.value = false;

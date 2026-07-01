@@ -76,7 +76,10 @@
 		if (val.length < 4) return '验证码的长度不能小于4位'
 		return true
 	}
-	const phoneValidAccount = async (phone : any | null) => {
+	const phoneValidAccount = async (phone : string | null) => {
+		if(phone ==null || phone ==""){
+			return i18n.global.t('login.pach_phone');
+		}
 		const flag = await AccountService.validUpdatePhone(phone.toString());
 		return flag;
 	}

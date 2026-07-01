@@ -66,8 +66,8 @@
 	const codeText = ref(i18n.global.t('login.btn_getVerificationCode'));
 	const codeDisabled = ref(false);
 	let timer = 0;
-	const emailvalidAccount = async (email : any | null) => {
-		if (email == null) {
+	const emailvalidAccount = async (email : string | null) => {
+		if (email == null || email =="") {
 			return  i18n.global.t('form.valid_required_email');
 		}
 		const flag = await AccountService.validRegisterByEmail(email.toString());

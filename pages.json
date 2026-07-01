@@ -302,6 +302,18 @@
 				"navigationStyle": "custom"
 			}
 		
+		},
+		{
+			"path": "pages/set/updateEmail/updateEmail",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/set/updatePhone/updatePhone",
+			"style": {
+				"navigationBarTitleText": ""
+			}
 		}
 		
 		// {

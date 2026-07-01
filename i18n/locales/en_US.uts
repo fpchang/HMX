@@ -172,7 +172,9 @@ export default {
 		btn_txt_complete: "Complete Registration",
 		register_success: "Registration Successful",
 		oldPassword: "Old Password",
-		tipNoNeedFill: "optional"
+		tipNoNeedFill: "optional",
+		bind_email:"Bind Email",
+		bind_phone:"Bind Phone"
 	},
 	hotel: {
 		title: "Hotel",

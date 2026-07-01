@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const utils = require('../utils/index.js');
 module.exports = {
 	async sendEmailCode(email,tempKey){
+		console.log("sendEmailCode===",email,tempKey)
 		   const sendEmail = '710357723@qq.com'; //自己的邮箱
 		   //const pass = 'cxosuglunfhkbbjf'; //邮箱的授权码
 		   const pass = 'cxosuglunfhkbbjf';
@@ -35,6 +36,7 @@ module.exports = {
 		   	//return event
 		   }
 	}
+	
 }
 //随机6位短信验证码
 function randomSms() {
@@ -55,6 +57,11 @@ function getEmailTemp(key){
 			emailCode:emailCode,
 			html:`<h1>邮箱验证</h1><p>你正在通过邮箱重置议宿账号密码，验证码为</p><p><text style="font-weight:bold;padding:0 14px;font-size:24px;color:#007aff">${emailCode}<text></p>`
 		},
+		updateEmail:{
+			subject:"验证邮箱",
+			emailCode:emailCode,
+			html:`<h1>邮箱验证</h1><p>你正在为议宿系统绑定邮箱，验证码为</p><p><text style="font-weight:bold;padding:0 14px;font-size:24px;color:#007aff">${emailCode}<text></p>`
+		}
 		
 	}
 	if(!temp[key]){

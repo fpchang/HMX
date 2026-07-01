@@ -174,7 +174,9 @@ export default {
 		btn_txt_complete: "完成注册",
 		register_success: "注册成功",
 		oldPassword: "旧密码",
-		tipNoNeedFill: "无则不填"
+		tipNoNeedFill: "无则不填",
+		bind_email:"绑定邮箱",
+		bind_phone:"绑定手机号"
 	},
 	hotel: {
 		title: "酒店",

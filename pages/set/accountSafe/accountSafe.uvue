@@ -5,8 +5,8 @@
 		<rice-cell-group border>
 			<rice-cell :title="i18n.global.t('form.userName')" :value="user.userName" />
 			<rice-cell :title="i18n.global.t('form.account')" :value="user.account" />
-			<rice-cell :title="i18n.global.t('form.phone')" :value="emergency_phone_number((user.phone ?? '') as string)" />
-			<rice-cell :title="i18n.global.t('form.email')" :value="user.email" />
+			<rice-cell :title="i18n.global.t('form.phone')" :value="emergency_phone_number((user.phone ?? '') as string)" :arrow="true" url="/pages/set/updatePhone/updatePhone"/>
+			<rice-cell :title="i18n.global.t('form.email')" :value="user.email" :arrow="true" url="/pages/set/updateEmail/updateEmail"/>
 			<rice-cell :title="i18n.global.t('form.btn_change_password')" arrow @click="updatePassword" />
 			<rice-cell v-if="accountIsValid==true" :title="i18n.global.t('form.accountCancel')" :arrow="true" @click="closeAccount" />
 			<rice-cell v-if="accountIsValid==false" :title="i18n.global.t('form.accountRecover')" :label="closeDateStr" :arrow="true"

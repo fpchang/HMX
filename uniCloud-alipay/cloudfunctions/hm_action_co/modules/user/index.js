@@ -58,8 +58,16 @@ module.exports = {
 	},
 	//根据token获取用户信息
 	async user_getUser(){
-		console.log("111111",this)
 		return await new UserAction(this).getUser();
+	},
+	async user_validUpdatePhone(phone){
+		return await new UserAction(this).validUpdatePhone(phone);
+	},
+	async user_updateEmail(email, emailCode, emailCodeTk){
+		return await new UserAction(this).updateEmail(email,emailCode, emailCodeTk);
+	},
+	async user_updatePhone(userForm){
+		return await new UserAction(this).updatePhone(userForm);
 	},
 	//邮箱验证码重置密码
 	async user_resetPasswordByEmailCode(email,emailCode, emailCodeTk, password){

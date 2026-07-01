@@ -350,8 +350,8 @@
 		font-weight: 600;
 		color: #333;
 		display:flex;
-		align-item:center;
-		justify-cntent:center;
+		align-items:center;
+		justify-content:center;
 		text-align:center;
 		
 	}

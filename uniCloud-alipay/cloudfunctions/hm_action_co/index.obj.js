@@ -44,8 +44,8 @@ module.exports = {
 			try {
 				const token = clientInfo.hm_token;
 				if (!token) {
-						throw new Error("token is incorrect");
-				
+					throw new Error("token is incorrect");
+
 				}
 				const secret = utils.getSecret();
 				const verifyResult = utils.verifyToken(token, secret);
@@ -63,8 +63,12 @@ module.exports = {
 
 		}
 	},
-	preHeat(){
-		return {errCode:0,errMsg:"",data:1}
+	preHeat() {
+		return {
+			errCode: 0,
+			errMsg: "",
+			data: 1
+		}
 	},
 	getTokenInfo: function() {
 		return this._tokenInfo || {};
@@ -97,6 +101,14 @@ module.exports = {
 	},
 	//修改密码
 	async user_updatePassword(password, originPassword) {
+
+	},
+	async user_updateEmail(email, emailCode, emailCodeTk) {
+
+	},
+	async user_validUpdatePhone(phone){},
+	//修改绑定手机号
+	async user_updatePhone(userForm) {
 
 	},
 	//根据token获取用户信息
@@ -145,27 +157,26 @@ module.exports = {
 
 	},
 	async roomType_addRoomType(roomType) {
-		
+
 	},
 	async roomType_deleteRoomType(roomTypeId) {
-		
+
 	},
 	async roomType_updateRoomType(roomType) {
-		
+
 	},
 	async roomType_getRoomType(hotel_id) {
-	
+
 	},
 	async getRoomTypeIncludeRoomList(hotel_id) {
-	
+
 	},
 	async roomType_getRemainderRoomType(params) {
-	
+
 	},
-	async fm_add(fm){
-	},
-	async fm_deleteFm(_id){},
-	async sendEmailCode(email,tempKey){},
+	async fm_add(fm) {},
+	async fm_deleteFm(_id) {},
+	async sendEmailCode(email, tempKey) {},
 	async employee_addEmployee(employeeObj) {},
 	async employee_editEmployee(employeeObj) {},
 	async employee_deleteEmployee(employee_id) {},

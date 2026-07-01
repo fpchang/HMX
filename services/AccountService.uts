@@ -97,6 +97,17 @@ class AccountServiceClass {
 		}
 		
 	}
+	//修改手机号码时验证 手机号是否被占用
+	async validUpdatePhone(phone:string){
+		try{
+			const res =	await action_co.user_validUpdatePhone(phone);
+			console.log("22222",res);
+			return res['data'] as boolean;
+		}catch(err:Error){
+			throw new Error(err.message);
+		}
+		
+	}
 	//验证邮箱与验证码
 	async validEmailAndCode(email : string,emailCode:string,emailCodeTk:string):Promise<boolean>{
 		try {
@@ -159,6 +170,19 @@ class AccountServiceClass {
 			throw new Error(error.message as string);
 		}
 	}
+	async updatePhone(userForm:UTSJSONObject): Promise<boolean>{
+		try {
+			const res = await action_co.user_updatePhone(userForm);
+			console.log("login=====",res);
+			const data = res['data'] as boolean;	
+			
+			return data;
+		} catch (error:Error) {
+			console.log(error.message)
+			RequestFailModal(error.message);
+			throw new Error(error.message as string);
+		}
+	}
 	async LoginByAPP(userForm:UTSJSONObject): Promise<boolean>{
 		try {
 			//const res = await account_co.login(userForm);
@@ -178,7 +202,20 @@ class AccountServiceClass {
 			return false;
 		}
 	}
-	
+	/**
+	 * 更新邮箱
+	 */
+	async updateEmail(email:string, emailCode:string, emailCodeTk:string):Promise<boolean>{
+		try {
+			const res = await action_co.user_updateEmail(email, emailCode, emailCodeTk);
+			console.log("updateEmail>>>",res);
+			return res['data'] as boolean;
+		} catch (error) {
+			RequestFailModal(error.message);
+			throw new Error(error.message as string);
+		}
+		
+	}
 	/**
 	 * 更新密码
 	 */

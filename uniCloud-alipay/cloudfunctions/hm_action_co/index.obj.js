@@ -117,7 +117,7 @@ module.exports = {
 	},
 	//邮箱验证码重置密码
 	async user_resetPasswordByEmailCode(email, emailCode, emailCodeTk, password) {},
-	async user_sendSms(phone) {
+	async user_sendSms(phone,tempType) {
 
 	},
 	async user_closeAccount() {

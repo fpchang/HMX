@@ -154,7 +154,8 @@ export default {
 		modal_title: "提示",
 		tips: "未注册的手机号验证后自动创建议宿账号",
 		login_agreen_txt:"登录即同意"，
-		"other_login_methods": "其他登录方式"
+		"other_login_methods": "其他登录方式",
+		valid_phone:"请输入正确手机号"
 	},
 	register: {
 		title: "注册",
@@ -176,7 +177,8 @@ export default {
 		oldPassword: "旧密码",
 		tipNoNeedFill: "无则不填",
 		bind_email:"绑定邮箱",
-		bind_phone:"绑定手机号"
+		bind_phone:"绑定手机号",
+		phone_has_used:"此手机号已经被注册"
 	},
 	hotel: {
 		title: "酒店",

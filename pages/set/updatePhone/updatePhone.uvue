@@ -9,7 +9,7 @@
 					<rice-form-item name="phone" label-position="top" :border-bottom="true">
 						<view style="flex:1;overflow: hidden;">
 							<rice-input v-model="userForm.phone" :placeholder="i18n.global.t('login.pach_phone')"
-								:maxlength="11" focus-border border="none" />
+								:maxlength="11" focus-border border="none" type="number"/>
 						</view>
 					</rice-form-item>
 					<rice-form-item name="smsCode" required label-position="top" :border-bottom="true">
@@ -76,11 +76,9 @@
 		if (val.length < 4) return '验证码的长度不能小于4位'
 		return true
 	}
-	const phoneValidAccount = async (phone : string | null) => {
-		if(phone ==null || phone ==""){
-			return i18n.global.t('login.pach_phone');
-		}
+	const phoneValidAccount = async (phone : any | null) => {
 		const flag = await AccountService.validUpdatePhone(phone.toString());
+		console.log("fffff",flag)
 		return flag;
 	}
 	const rule = new Map<string, FormRules[]>([
@@ -88,8 +86,9 @@
 			"phone",
 			[
 				{ required: true, message: i18n.global.t('login.pach_phone') },
-				{ min: 11, max: 11, message: i18n.global.t('login.valid_phone_num'), trigger: 'change' },
-				{ validator: phoneValidAccount, trigger: 'blur', message:'手机号已经被占用' }
+				{ pattern: /^1[3-9]\d{9}$/, message: i18n.global.t("login.valid_phone"), trigger: 'all' },
+				// { min: 11, max: 11, message: i18n.global.t('login.valid_phone_num'), trigger: 'change' },
+				{ validator: phoneValidAccount, trigger: 'blur', message:i18n.global.t("register.phone_has_used") }
 			]
 		],
 		[
@@ -125,16 +124,24 @@
 		}, 1000);
 	}
 	const sendSmsCode = async () => {
-		if (userForm.value.phone == "" || userForm.value.phone.length !== 11) {
-			uni.showToast({ title: i18n.global.t('login.pach_phone'), icon: 'none' });
+		// if (userForm.value.phone == "" || userForm.value.phone.length !== 11) {
+		// 	uni.showToast({ title: i18n.global.t('login.pach_phone'), icon: 'none' });
+		// 	return;
+		// }
+		if(smsLoading.value){
 			return;
 		}
-		if (timer != 0) {
+		if(timer!=0){
 			return;
 		}
-		smsLoading.value = true;
+		smsLoading.value=true;
+		const result = await userFormRef.value!.validateFields(['phone'])
+		if (result != true) {
+			smsLoading.value=false;
+			return;
+		}
 		try {
-			const tkstr = await AccountService.sendSmsCode(userForm.value.phone);
+			const tkstr = await AccountService.sendSmsCode(userForm.value.phone,"updatePhone");
 			tk.value = tkstr;
 			uni.setStorageSync("tk", tkstr);
 			smsLoading.value = false;
@@ -147,13 +154,18 @@
 		}
 	};
 	const submit = async () => {
+		if(submitLoading.value){
+			return;
+		}
+		submitLoading.value = true;
 		const result = await userFormRef.value!.validate();
 		console.log("result", result);
 		if (result != true) {
 			console.log("校验失败");
+			submitLoading.value = false;
 			return;
 		}
-		submitLoading.value = true;
+		
 		try {
 			const flag = await AccountService.updatePhone({
 				tk: tk.value,

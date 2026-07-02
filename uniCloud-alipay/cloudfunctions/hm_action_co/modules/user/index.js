@@ -73,8 +73,8 @@ module.exports = {
 	async user_resetPasswordByEmailCode(email,emailCode, emailCodeTk, password){
 		return await  new UserPassword(this).resetPasswordByEmailCode(email,emailCode, emailCodeTk, password);
 	},
-	async user_sendSms(phone){
-		return  await new UserLogin(this).sendSms(phone);
+	async user_sendSms(phone,tempType){
+		return  await new UserLogin(this).sendSms(phone,tempType);
 	},
 	async user_closeAccount(){
 		return  await new UserAction(this).closeAccount();

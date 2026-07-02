@@ -182,22 +182,23 @@ class UserLogin{
 			};
 		}
 	}
-	async sendSms(phone) {
+	async sendSms(phone,tempType) {
 		//let { appid, phone, templateId = 'uni_sms_test' } = event;
 		const db = uniCloud.database();
 		const smsCode = this.randomSms();
 		//console.log("spaceinfo",this.ctx.getClientInfo())
 		if (this.ctx.getCloudInfo().spaceId == "env-00jxh1m2dpmq" || isTestAccount(phone)) {
-			console.log("测试账号",1234)
 			const newToken =utils.getToken({ phone: phone, smsCode: 1234 }, utils.getSecret(), 300);
 			return {errCode:0,errMsg:"", data:{tk: newToken }};
 		}
 		const { appId } = this.ctx.getClientInfo();
+		const tempid = tempType=="updatePhone"?'38664':'34246';
+		console.log("tempType===",tempid);
 		try {
 			const res = await uniCloud.sendSms({
 				appid: appId,
 				phone: phone,
-				templateId: '34246',
+				templateId: tempid,
 				data: {
 					name: 'DCloud',
 					code: smsCode,

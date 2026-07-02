@@ -3,7 +3,7 @@
 		<rice-form :model="userForm" :rules="rule" ref="userFormRef" label-width="100px" class="demo-form">
 			<rice-form-item name="phone" label-position="top" :border-bottom="true">
 				<view style="flex:1;overflow: hidden;">
-					<rice-input v-model="userForm.phone" :placeholder="i18n.global.t('login.pach_phone')"  :maxlength="11"  focus-border  border="none"/>
+					<rice-input v-model="userForm.phone" :placeholder="i18n.global.t('login.pach_phone')"  :maxlength="11"  focus-border  border="none" type="number"/>
 				</view>
 			</rice-form-item>
 			<rice-form-item name="smsCode"  required  label-position="top" :border-bottom="true">
@@ -72,6 +72,7 @@
 			"phone",
 			[
 				{ required: true, message: i18n.global.t('login.pach_phone') },
+				{ pattern: /^1[3-9]\d{9}$/, message: i18n.global.t("login.valid_phone"), trigger: 'all' },
 				{ min: 11, max: 11, message: i18n.global.t('login.valid_phone_num'), trigger: 'change' }
 			]
 		],
@@ -108,16 +109,25 @@
 		}, 1000);
 	}
 	const sendSmsCode = async () => {
-		if (userForm.value.phone == "" || userForm.value.phone.length !== 11) {
-			uni.showToast({ title:i18n.global.t('login.pach_phone'), icon: 'none' });
+		// if (userForm.value.phone == "" || userForm.value.phone.length !== 11) {
+		// 	uni.showToast({ title:i18n.global.t('login.pach_phone'), icon: 'none' });
+		// 	return;
+		// }
+		if(smsLoading.value){
 			return;
 		}
 		if(timer!=0){
 			return;
 		}
 		smsLoading.value=true;
+		const result = await userFormRef.value!.validateFields(['phone'])
+		if (result != true) {
+			smsLoading.value=false;
+			return;
+		}
+		
 		try {
-			const tkstr = await AccountService.sendSmsCode(userForm.value.phone);
+			const tkstr = await AccountService.sendSmsCode(userForm.value.phone,"login");
 			tk.value = tkstr;
 			uni.setStorageSync("tk", tkstr);
 			smsLoading.value=false;
@@ -130,10 +140,7 @@
 		}
 	};
 	const accountLogin = async () => {
-		const result = await userFormRef.value!.validate();
-		console.log("result",result);
-		if(result!=true){
-			console.log("校验失败");
+		if(submitLoading.value){
 			return;
 		}
 		if (!props.isAgree) {
@@ -141,6 +148,13 @@
 			return;
 		}
 		submitLoading.value = true;
+		const result = await userFormRef.value!.validate();
+		if(result!=true){
+			console.log("校验失败");
+			submitLoading.value = false;
+			return;
+		}
+		
 		try {
 			const flag = await AccountService.LoginBySms({
 				loginType: 'code',

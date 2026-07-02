@@ -151,8 +151,9 @@ export default {
 		"tips_login_regitser": "This phone number is not registered and will automatically create a Yisu account for you",
 		"modal_title": "Prompt",
 		"tips": "Unregistered phone numbers will automatically create a Yisu account after verification",
-		login_agreen_txt:"By logging in, you agree"，
-		"other_login_methods": "Other Login Methods"
+		login_agreen_txt:"By logging in, you agree",
+		"other_login_methods": "Other Login Methods",
+		valid_phone:"Incorrect mobile phone number format"
 	},
 	register: {
 		title: "Register",
@@ -174,7 +175,8 @@ export default {
 		oldPassword: "Old Password",
 		tipNoNeedFill: "optional",
 		bind_email:"Bind Email",
-		bind_phone:"Bind Phone"
+		bind_phone:"Bind Phone",
+		phone_has_used:"The phone number has used"
 	},
 	hotel: {
 		title: "Hotel",

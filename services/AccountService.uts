@@ -13,15 +13,13 @@ class AccountServiceClass {
 	/**
 	 * 发送短信验证吗
 	 */
-	async sendSmsCode(phone : string) : Promise<string> {
+	async sendSmsCode(phone : string,tempType:string) : Promise<string> {
 		//const data : UTSJSONObject = { phone };
 	//	return DB.callFunction("hm-sendSms", data);
 	try {
-		const res = await action_co.user_sendSms(phone);
-		console.log(9999,res)
+		const res = await action_co.user_sendSms(phone,tempType);
 		const data = res['data'] as UTSJSONObject;
 		const tk = data["tk"] as string;
-		console.log(1000,tk);
 		return tk;
 	} catch (error:Error) {
 		RequestFailModal(error.message);

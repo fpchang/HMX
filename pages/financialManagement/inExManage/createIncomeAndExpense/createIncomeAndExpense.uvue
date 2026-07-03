@@ -87,6 +87,7 @@
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import { FMService } from "@/services/FMService";
 	import { validForm } from "./createIncomeAndExpenseFormVaild";
+	import {FmClass} from "@/pages/financialManagement/financiaHome/fm.uts"
 	import i18n from '@/i18n/index.uts';
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -189,11 +190,16 @@
 			return;
 		}
 		try {
+			const fm = new FmClass(hotel_id.value);
 			await FMService.add(fmForm.value);
+			await fm.init();
 			uni.$emit("refrushfmList");
-			uni.navigateBack();
 			submitLoading.value = false;
-			uni.showToast({title:i18n.global.t('common.add_success'),icon:"none"});
+			uni.navigateBack({success(){
+				uni.showToast({title:i18n.global.t('common.add_success'),icon:"none"});
+			}});
+			
+			
 		} catch (error) {
 			console.log("error", error);
 			submitLoading.value = false;

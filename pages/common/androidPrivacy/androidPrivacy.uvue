@@ -2,38 +2,44 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-			<rice-dialog v-model:show="showMoreMessage" 
-			:title="i18n.global.t('dialog.welcomeTitle')" 
-			:show-cancel-button="true"
-			:show-confirm-button="true" 
-			:cancel-button-text="i18n.global.t('dialog.refuseExit')" 
-			:confirm-button-text="i18n.global.t('dialog.agreeUse')" 
-			@cancel="calcelEvent"
-			@confirm="confirmEvent" 
-			:use-dialog-page="true" 
-			:custom-style="{'padding':0}">
+		<rice-dialog v-model:show="showMoreMessage" :title="i18n.global.t('dialog.welcomeTitle')"
+			:show-cancel-button="true" :show-confirm-button="true"
+			:cancel-button-text="i18n.global.t('dialog.refuseExit')"
+			:confirm-button-text="i18n.global.t('dialog.agreeUse')" @cancel="calcelEvent" :before-close="beforeClose"
+			@confirm="confirmEvent" :use-dialog-page="true" :custom-style="{'padding':0}">
 			<slot>
 				<scroll-view class="message-content">
 					<view>
-						<text class="txt">
+						<text class="linktxt">
 							{{ i18n.global.t('dialog.tipRead') }}
 						</text>
 						<view class="row">
-							<text class="txt">{{ i18n.global.t('dialog.youCanRead') }}</text>
+							<text class="linktxt">{{ i18n.global.t('dialog.youCanRead') }}</text>
 							<navigator url="/pages/common/userAgreement/userAgreement">
-								<text class="txt href">{{ i18n.global.t('dialog.serviceAgreement') }}</text>
+								<text class="linktxt linkhref">{{ i18n.global.t('dialog.serviceAgreement') }}</text>
 							</navigator>
 
-							<text class="txt">{{ i18n.global.t('dialog.and') }}</text>
+							<text class="linktxt">{{ i18n.global.t('dialog.and') }}</text>
 							<navigator url="/pages/common/privacyPolicy/privacyPolicy">
-								<text class="txt href">{{ i18n.global.t('dialog.privacyPolicy') }}</text>
+								<text class="linktxt linkhref">{{ i18n.global.t('dialog.privacyPolicy') }}</text>
 							</navigator>
-							
-							<text class="txt">{{ i18n.global.t('dialog.tipContinue') }}</text>
+
+							<text class="linktxt">{{ i18n.global.t('dialog.tipContinue') }}</text>
 						</view>
-						<text class="txt" v-for="item of messages">{{ item }}</text>
+						<text class="linktxt" v-for="item of messages">{{ item }}</text>
 					</view>
 				</scroll-view>
+				<view class="agreen-style">
+					<rice-checkbox v-model="agreen" />
+					<text class="agreen-style-txt">我已阅读并同意</text>
+					<navigator url="/pages/common/userAgreement/userAgreement">
+						<text class="linktxt linkhref">{{ i18n.global.t('dialog.serviceAgreement') }}</text>
+					</navigator>
+					<text class="linktxt">{{ i18n.global.t('dialog.and') }}</text>
+					<navigator url="/pages/common/privacyPolicy/privacyPolicy">
+						<text class="linktxt linkhref">{{ i18n.global.t('dialog.privacyPolicy') }}</text>
+					</navigator>
+				</view>
 			</slot>
 		</rice-dialog>
 	<!-- #ifdef APP -->
@@ -42,12 +48,13 @@
 </template>
 
 <script setup>
-	import {action_co} from "@/api/cloudApi.uts";
+	import { action_co } from "@/api/cloudApi.uts";
 	import { setToken, setViewWidth } from "@/store/store.uts";
 	import i18n from '@/i18n/index.uts';
-	
+
 	const showMoreMessage = ref(true);
-	const messages  = [
+	const agreen = ref(false);
+	const messages = [
 		i18n.global.t('dialog.msg1'),
 		i18n.global.t('dialog.msg2'),
 		i18n.global.t('dialog.msg3'),
@@ -61,20 +68,20 @@
 	const calcelEvent = () => {
 		uni.exit();
 	}
-	const start=()=>{
-		 setTimeout(() => {
-		    try {
-		      // 调用云对象空/轻量方法，触发云端实例常驻，消除首次接口冷启动
-		       action_co.preHeat()
-		    } catch(e) {
-		      // 预热失败不影响业务，静默捕获
-		     // console.log('云对象预热静默失败', e)
-		    }
-		  }, 0)
+	const start = () => {
+		setTimeout(() => {
+			try {
+				// 调用云对象空/轻量方法，触发云端实例常驻，消除首次接口冷启动
+				action_co.preHeat()
+			} catch (e) {
+				// 预热失败不影响业务，静默捕获
+				// console.log('云对象预热静默失败', e)
+			}
+		}, 0)
 	}
-	
+
 	const setLanuage = () => {
-	
+
 		const sys = uni.getSystemInfoSync();
 		console.log('sys', sys);
 		const osLanguage = sys.osLanguage;
@@ -84,20 +91,33 @@
 			local = 'en-US';
 		}
 		i18n.global.locale.value = local;
-	
-	
+
 	}
 	const setViewWidthEvent = () => {
 		const win = uni.getWindowInfo();
 		setViewWidth(win.windowWidth);
 	}
-	const confirmEvent = () => {
-		uni.setStorageSync("showMoreMessage","0");
-		uni.closeDialogPage();
-		uni.reLaunch({
-			url:"/pages/indexAdvise/indexAdvise"
+	const beforeClose = () : Promise<boolean> => {
+		return new Promise((resolve) => {
+			if (!agreen.value) {
+				uni.showToast({
+					title: i18n.global.t("login.valid_agree"),
+					icon: "none"
+				})
+				resolve(false);
+				return;
+			}
+			resolve(true);
+			uni.setStorageSync("showMoreMessage","0");
+			uni.closeDialogPage();
+			uni.reLaunch({
+				url:"/pages/indexAdvise/indexAdvise"
+			})
 		})
-		
+	}
+	const confirmEvent = () => {
+	
+
 	}
 </script>
 
@@ -111,16 +131,29 @@
 			flex-wrap: wrap;
 		}
 
-		.txt {
-			font-size: 14px;
+	
+	}
+	.linktxt {
+			font-size: 12px;
 			color: gray;
 			padding: 4px 0;
 
 		}
 
-		.href {
+		.linkhref {
 			color: #165dff;
-			font-size: 14px;
+			font-size: 12px;
 		}
+	.agreen-style {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		padding-top: 24px;
+	}
+
+	.agreen-style-txt {
+
+		font-size: 12px;
 	}
 </style>

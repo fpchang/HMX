@@ -1,0 +1,42 @@
+import { state } from "@/store/store.uts";
+import { fmState,setIncomeMonthList,setExpensesMonthList,setIncomeYearList,setExpensesYearList } from "@/store/modules/fmStore.uts";
+import { FMService } from "@/services/FMService";
+import { charPietItem } from "@/bean/chartBean.uts";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+export class FmClass {
+	hotel_id : string;
+	constructor(hotel_id : string) {
+		this.hotel_id = hotel_id;
+	}
+	async getExpensesCurrentMonth(month : string) : Promise<Array<charPietItem>> {
+		const list = await FMService.getExpensesCurrentMonth(this.hotel_id, month);
+		setExpensesMonthList(list);
+		return list;
+	}
+	async getIncomeCurrentMonth(month : string) :  Promise<Array<charPietItem>> {
+		const list = await FMService.getIncomeCurrentMonth(this.hotel_id, month);
+		setIncomeMonthList(list);
+		return list;
+	}
+	async getIncomeAndExpensesCurrentYear(year : string, type : string) : Promise<Array<Array<number | string>>> {
+		const list = await FMService.getIncomeAndExpensesCurrentYear(this.hotel_id, year, type);
+		if(type=='income'){
+			setIncomeYearList(list);
+		}
+		if(type=='expenses'){
+			setExpensesYearList(list);
+		}
+		return list;
+	}
+	/**
+	 * 数据开始加载
+	 */
+	async init() {
+		const month = dayuts(new Date()).format("YYYY-MM");
+		const year = new Date().getFullYear().toString();
+		this.getExpensesCurrentMonth(month);
+		this.getIncomeCurrentMonth(month);
+		this.getIncomeAndExpensesCurrentYear(year,'income');
+		await this.getIncomeAndExpensesCurrentYear(year,'expenses');		
+	}
+}

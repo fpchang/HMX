@@ -66,6 +66,7 @@
 			//#endif
 			chart.showLoading();
 			let dataList = await FMService.getIncomeCurrentMonth(hotel_id.value,month.value);
+			console.log("999998",dataList)
 			 const labelStyle = {
 			    color: '#303133',
 			    fontSize: 14,

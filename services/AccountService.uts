@@ -208,7 +208,7 @@ class AccountServiceClass {
 			const res = await action_co.user_updateEmail(email, emailCode, emailCodeTk);
 			console.log("updateEmail>>>",res);
 			return res['data'] as boolean;
-		} catch (error) {
+		} catch (error:Error) {
 			RequestFailModal(error.message);
 			throw new Error(error.message as string);
 		}

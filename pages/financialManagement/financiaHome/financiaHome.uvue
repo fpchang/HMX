@@ -1,6 +1,6 @@
 <template>
-	<scroll-view style="flex:1;background:#f5f7fa;" v-if="hotel_id!=''"  :refresher-enabled="true" :refresher-triggered="refreshState"
-			@refresherrefresh="refreshData"  :show-scrollbar="false">
+	<scroll-view style="flex:1;background:#f5f7fa;" v-if="hotel_id!=''" :refresher-enabled="true"
+		:refresher-triggered="refreshState" @refresherrefresh="refreshData" :show-scrollbar="false">
 		<view class="top-header">
 			<text class="header-title">{{i18n.global.t('finance.navbar_title')}}</text>
 		</view>
@@ -10,25 +10,25 @@
 				<text class="profit-label">{{i18n.global.t('finance.annual_profit')}}</text>
 				<text class="profit-num item-profit">¥{{incomeYearAmount-expensesYearAmount}}</text>
 			</view>
-			   <!-- 核心指标4宫格 -->
-			    <view class="kpi-grid">
-			      <view class="kpi-box income-box" :style="{'margin-left':marginLeft(0)}">
-			        <text class="kpi-txt">{{i18n.global.t('finance.monthly_income')}}</text>
-			        <text class="kpi-money kpi-money-green">¥{{incomeAmount}}</text>
-			      </view>
-			      <view class="kpi-box expense-box" :style="{'margin-left':marginLeft(1)}">
-			        <text class="kpi-txt">{{i18n.global.t('finance.monthly_expense')}}</text>
-			        <text class="kpi-money">¥{{expensesAmount}}</text>
-			      </view>
-			      <view class="kpi-box income-box" :style="{'margin-left':marginLeft(2)}">
-			        <text class="kpi-txt">{{i18n.global.t('finance.annual_income')}}</text>
-			        <text class="kpi-money kpi-money-green">¥{{incomeYearAmount}}</text>
-			      </view>
-			      <view class="kpi-box expense-box" :style="{'margin-left':marginLeft(3)}">
-			        <text class="kpi-txt">{{i18n.global.t('finance.annual_expense')}}</text>
-					 <text class="kpi-money">¥{{expensesYearAmount}}</text>
-			      </view>
-			    </view>
+			<!-- 核心指标4宫格 -->
+			<view class="kpi-grid">
+				<view class="kpi-box income-box" :style="{'margin-left':marginLeft(0)}">
+					<text class="kpi-txt">{{i18n.global.t('finance.monthly_income')}}</text>
+					<text class="kpi-money kpi-money-green">¥{{incomeAmount}}</text>
+				</view>
+				<view class="kpi-box expense-box" :style="{'margin-left':marginLeft(1)}">
+					<text class="kpi-txt">{{i18n.global.t('finance.monthly_expense')}}</text>
+					<text class="kpi-money">¥{{expensesAmount}}</text>
+				</view>
+				<view class="kpi-box income-box" :style="{'margin-left':marginLeft(2)}">
+					<text class="kpi-txt">{{i18n.global.t('finance.annual_income')}}</text>
+					<text class="kpi-money kpi-money-green">¥{{incomeYearAmount}}</text>
+				</view>
+				<view class="kpi-box expense-box" :style="{'margin-left':marginLeft(3)}">
+					<text class="kpi-txt">{{i18n.global.t('finance.annual_expense')}}</text>
+					<text class="kpi-money">¥{{expensesYearAmount}}</text>
+				</view>
+			</view>
 			<!-- 本月收入明细 -->
 			<view class="detail-card">
 				<text class="card-main-title">{{i18n.global.t('finance.monthly_income_details')}}</text>
@@ -93,6 +93,9 @@
 	import { DateTimePickerExtend } from "@/uni_modules/rice-ui";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import i18n from '@/i18n/index.uts';
+	import { fmState} from "@/store/modules/fmStore.uts";
+	
+	import {FmClass} from "./fm.uts"
 	defineOptions({
 		styleIsolation: "isolated"
 	})
@@ -109,13 +112,25 @@
 	const user = computed<userBean>(() => {
 		return state.user;
 	});
-	const month = ref<string>(dayuts(new Date()).format("YYYY-MM"));
-	const year = ref<string>(new Date().getFullYear().toString());
+	// const month = ref<string>(dayuts(new Date()).format("YYYY-MM"));
+	// const year = ref<string>(new Date().getFullYear().toString());
 
-	const incomeMonthList = ref<Array<charPietItem>>([]);
-	const expensesMonthList = ref<Array<charPietItem>>([]);
-	const incomeYearList = ref<Array<Array<string | number>>>([]);
-	const expensesYearList = ref<Array<Array<string | number>>>([]);
+	// const incomeMonthList = ref<Array<charPietItem>>([]);
+	// const expensesMonthList = ref<Array<charPietItem>>([]);
+	// const incomeYearList = ref<Array<Array<number | string>>>([]);
+	// const expensesYearList = ref<Array<Array<number | string>>>([]);
+	const incomeMonthList = computed<Array<charPietItem>>(()=>{
+		return fmState.incomeMonthList;
+	});
+	const expensesMonthList = computed<Array<charPietItem>>(()=>{
+		return fmState.expensesMonthList;
+	});
+	const incomeYearList = computed<Array<Array<number | string>>>(()=>{
+		return fmState.incomeYearList;
+	});
+	const expensesYearList = computed<Array<Array<number | string>>>(()=>{
+		return fmState.expensesYearList;
+	});
 	//月收入金额
 	const incomeAmount = computed<number>(() => {
 		return incomeMonthList.value.reduce((acc, item) => acc + item.value, 0);
@@ -143,76 +158,49 @@
 		return amount;
 	})
 	const init = async () => {
-		//当月支出
-		const expensesMonthRes = FMService.getExpensesCurrentMonth(hotel_id.value, month.value);
-		//当月收入
-		const incomeMonthRes = FMService.getIncomeCurrentMonth(hotel_id.value, month.value);
-		//当年支出
-		const empensesYearRes = FMService.getIncomeAndExpensesCurrentYear(hotel_id.value, year.value, 'expenses');
-		//当年收入
-		const incomeYearRes = FMService.getIncomeAndExpensesCurrentYear(hotel_id.value, year.value, 'income');
-		// 显式指定 Promise.all 的泛型为 any，避免类型推断失败
-		// expensesMonthRes.then(list => {
-		// 	console.log("LLLL",list)
-		// 	expensesMonthList.value = list as Array<charPietItem>;
-		// })
-		// incomeMonthRes.then(list => {
-		// 	incomeMonthList.value = list as Array<charPietItem>;
-		// })
-		// empensesYearRes.then(list => {
-		// 	expensesYearList.value = list as Array<Array<string | number>>;
-		// })
-		// incomeYearRes.then(list => {
-		// 	incomeYearList.value = list as Array<Array<string | number>>;
-		// })
-		const res = await Promise.all([expensesMonthRes,incomeMonthRes,empensesYearRes,incomeYearRes]);
-		expensesMonthList.value = res[0] as  Array<charPietItem>;
-		incomeMonthList.value = res[1] as Array<charPietItem>;
-		expensesYearList.value = res[2] as Array<Array<string | number>>;
-		incomeYearList.value = res[3] as Array<Array<string | number>>;
+		const fm = new FmClass(hotel_id.value);
+		await fm.init();
 	}
-	const columnNum= computed(()=>{
+	const columnNum = computed(() => {
 		let num = 2;
 		const w = state.viewWidth;
-		if(w!=0){
-			 num = Math.floor((w-32)/155);
+		if (w != 0) {
+			num = Math.floor((w - 32) / 155);
 		}
 		return num
 	})
-	const marginLeft=(index:number):string | number=>{
-		if(index==0){
+	const marginLeft = (index : number) : string | number => {
+		if (index == 0) {
 			return 0;
 		}
-		if(columnNum.value==1){
+		if (columnNum.value == 1) {
 			return 0;
 		}
-		if(index % columnNum.value ==0){
+		if (index % columnNum.value == 0) {
 			return 0;
 		}
 		return '12px';
 	}
-	
+
 	onLoad(params => {
-		
+
 		init();
 		uni.setNavigationBarTitle({
 			title: i18n.global.t("finance.navbar_title")
 		})
 	})
-	onShow(()=>{
+	onShow(() => {
 		console.log("98888")
 	})
 	function goToDetail(type : string) {
 
 	}
 	const refreshData = async () => {
-		console.log(11111)
 		refreshState.value = true;
 		await init();
 		refreshState.value = false;
 
 	}
-	
 </script>
 
 <style>
@@ -227,7 +215,7 @@
 		font-size: 22px;
 		color: #fff;
 		font-weight: 500;
-		padding-left:15px;
+		padding-left: 15px;
 	}
 
 	.wrap-content {
@@ -262,7 +250,7 @@
 
 	.kpi-box {
 		margin-left: 12px;
-		margin-bottom:12px;
+		margin-bottom: 12px;
 		min-width: 160px;
 		flex: 1;
 		border-radius: 10px;
@@ -287,11 +275,13 @@
 		font-size: 20px;
 		font-weight: 600;
 		margin-top: 6px;
-		color:#e74c3c
+		color: #e74c3c
 	}
-	.kpi-money-green{
-		color:#27ae60
+
+	.kpi-money-green {
+		color: #27ae60
 	}
+
 	.detail-card {
 		background: #fff;
 		border-radius: 12px;

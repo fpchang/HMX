@@ -1,20 +1,46 @@
 import {FMService} from '@/services/FMService';
 import { FMBean,FMTypeConfigBean } from '@/bean/FMBean';
+import { charPietItem } from "@/bean/chartBean.uts";
 export type FmState = {
 	incomeAndExpensesConfig:Array<FMTypeConfigBean>,
 	fmList : Array<FMBean>,//今天及以后的订单
+	incomeMonthList:Array<charPietItem>, //月收入
+	expensesMonthList:Array<charPietItem>, //月支出
+	incomeYearList:Array<Array<number | string>>, //年收入
+	expensesYearList:Array<Array<number | string>>, //年支出
 }
 
 //实例化
 export const fmState = reactive({
 	incomeAndExpensesConfig:[],
 	fmList: [] as Array<FMBean>,//今天及以后的订单
+	incomeMonthList:[],
+	expensesMonthList:[],
+	incomeYearList:[],
+	expensesYearList:[],
 
 } as FmState)
 
-export const setIncomeAndExpensesConfig = (list : Array<FMTypeConfigBean>) => {
+export const setIncomeAndExpensesConfig = (list :Array<FMTypeConfigBean>) => {
 	fmState.incomeAndExpensesConfig = list;
 }
 export const updateFmList = (list : Array<FMBean>) => {
 	fmState.fmList = list;
 }
+
+export const setIncomeMonthList = (list :Array<charPietItem>) => {
+	fmState.incomeMonthList = list;
+}
+
+export const setExpensesMonthList = (list :Array<charPietItem>) => {
+	fmState.expensesMonthList = list;
+}
+
+export const setIncomeYearList = (list :  Array<Array<number | string>>) => {
+	fmState.incomeYearList = list;
+}
+
+export const setExpensesYearList = (list : Array<Array<number | string>>) => {
+	fmState.expensesYearList = list;
+}
+

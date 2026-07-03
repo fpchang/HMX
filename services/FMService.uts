@@ -264,6 +264,7 @@ class FMServiceClass {
 
 	//获取当月收入统计
 	async getIncomeCurrentMonth(hotel_id : string, month : string) : Promise<Array<charPietItem>> {
+		try {
 		const db = dbJQL;
 		const dbCmd = db.command;
 		const monthFirst = getMonthFirstDay(month);
@@ -294,16 +295,22 @@ class FMServiceClass {
 		if (orderList.length > 0) {
 			const first = orderList[0]
 			const val = first.getNumber("amount") ?? 0
-			const its : charPietItem = { name: "房费", value: val }
+			const its : charPietItem = { name: "订单费用", value: val }
 			arr.push(its)
 		}
 
 		return arr;
+		}catch(error:Error){
+			throw new Error(error.message)
+		}
 	}
 
 
 	//获取当月支出统计
 	async getExpensesCurrentMonth(hotel_id : string, month : string) : Promise<Array<charPietItem>> {
+		try {
+			
+		
 		const db = dbJQL;
 		const dbCmd = db.command;
 		const monthFirst = getMonthFirstDay(month);
@@ -313,16 +320,8 @@ class FMServiceClass {
 			billType: 'expenses',
 			ioeTime: dbCmd.and([dbCmd.gte(monthFirst), dbCmd.lte(monthLast)])
 		}
-
-		// const mt = db.collection("hm-incomeAndExpenses").where(w).getTemp()
-		// const res =await db.collection(mt,"hm-incomeAndExpensesConfig").groupBy('type').groupField('sum(amount) as value').get();
 		const res = await db.collection("hm-incomeAndExpenses", "hm-incomeAndExpensesConfig").where(w).groupBy('type').groupField('sum(amount) as value').get()
 		const expensesList = res["data"] as Array<UTSJSONObject> ?? [];
-		//   let arr =[];
-		// res.result.data.map(item=>{
-		//   arr.push({name:item.type[0].text,value:item.value})
-		// })
-		// return arr;
 		let arr : Array<charPietItem> = [];
 		expensesList.forEach(item => {
 			const typeArray = item.getArray<UTSJSONObject>("type") ?? [];
@@ -336,12 +335,19 @@ class FMServiceClass {
 		})
 
 		return arr;
+		} catch (error:Error) {
+			throw new Error(error.message)
+		}
 	}
 	//获取当年收支统计
 	/**
 	 * year:年份
 	 */
-	async getIncomeAndExpensesCurrentYear(hotel_id : string, year : string, billType : string) {
+	async getIncomeAndExpensesCurrentYear(hotel_id : string, year : string, billType : string):Promise<Array<Array<number | string>>> {
+		
+		try {
+			
+		
 		const db = dbJQL;
 		const dbCmd = db.command;
 		const yearFirst = new Date(new Date(year).getFullYear(), 0, 1).getTime();
@@ -362,7 +368,6 @@ class FMServiceClass {
 			const label = dayuts(new Date(new Date(year).getFullYear(), i)).format("YYYY-MM");
 			const order = orderList.find(item => item.getString("month") == label);
 			const other = otherList.find(item => item.getString("month") == label);
-
 			let count = 0;
 			if (order != null) {
 				count += order.getNumber("amount") ?? 0;
@@ -373,6 +378,9 @@ class FMServiceClass {
 			resultList.push([label, count])
 		}
 		return resultList;
+		} catch (error:Error) {
+			throw new Error(error.message)
+		}
 	}
 
 

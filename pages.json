@@ -1,13 +1,13 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://doc.dcloud.net.cn/uni-app-x/collocation/pagesjson.html
 		//#ifdef H5
-		{
-			"path": "pages/common/website/website",
-			"style": {
-				"navigationBarTitleText": "",
-				"navigationStyle": "custom"
-			}
-		},
+		// {
+		// 	"path": "pages/common/website/website",
+		// 	"style": {
+		// 		"navigationBarTitleText": "",
+		// 		"navigationStyle": "custom"
+		// 	}
+		// },
 		// #endif 
 		
 		{
@@ -239,6 +239,14 @@
 		},
 		{
 			"path": "pages/hotelDisplay/hotelDisplay",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"backgroundColorContent": "#f8f9fa"
+			}
+		},
+		{
+			"path": "pages/hotelDisplay/list-news/list-news",
 			"style": {
 				"navigationBarTitleText": "",
 				"navigationStyle": "custom",

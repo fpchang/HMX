@@ -1,23 +1,15 @@
 <template>
-	<rice-navbar title="" border>
-		<template #left>
-			<view style="display: flex;flex-direction: row;align-items: center;">
-				<navigator open-type="navigateBack">
-					<rice-icon name="arrow-left" size="22px" />
-				</navigator>
-				<image src="/static/icons/mine/hotel.png"
-					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 18px;font-weight: 700;color:#2a5d98;">{{hotel?.hotelName}}</text>
-			</view>
-		</template>
-		<template #right>
-			<view class="nav-tab-wrap">
-				<rice-tabs v-model="activeIndex" :list="list" @clickTab="tabClick" line-color="#2a5d98"
-					title-inactive-color="#4b5563" title-active-color="#2a5d98"></rice-tabs>
-			</view>
-		</template>
+	<!--#ifndef H5-->
+	<rice-navbar   bg-color="#ffffff" left-icon-color="#fff" :left-arrow="false" :border="false" title-color="#fff" :safe-area-inset-top="false">
+	
 	</rice-navbar>
+	<!--#endif-->
 
+	<view class="nav-tab-wrap-container">
+		<rice-tabs v-model="activeIndex"  :shrink="true" :list="list" @clickTab="tabClick" line-color="#2a5d98"
+			title-inactive-color="#4b5563" title-active-color="#2a5d98"></rice-tabs>
+		<!-- <rice-subsection :list="listTab" v-model="activeIndex"  shape="round" /> -->
+	</view>
 	<scroll-view class="scroll-main-view" style="flex:1">
 		<view v-show="activeIndex==0">
 			<view>
@@ -56,51 +48,7 @@
 		</view>
 	</scroll-view>
 
-	<swiper v-if="false" :current="activeIndex" style="flex: 1;background-color:#f8f9fa;" @change="swiperChange"
-		:circular="true" class="tab-swiper-box" :style="{height: `${swiperHeight}px`}" touch-angle="35" duration="300">
-		<swiper-item style="flex:1">
-			<scroll-view class="scroll-main-view" style="flex:1">
-				<view>
-					<imageSwiperComponent :hotel="hotel" v-if="hotel!=null"></imageSwiperComponent>
-				</view>
-				<view class="info-block">
-					<view class="info-title-row"><text class="info-title-text">{{hotel?.hotelName}}</text></view>
-					<view class="info-addr-row">
-						<image src="/static/icons/hoteldisplay/location.png" style="width: 16px;height: 16px;"></image>
-						<text class="info-addr-text">{{hotel?.hotelAddress}}</text>
-					</view>
-				</view>
-				<view class="content-container-block">
-					<view class="container-title-row">
-						<text class="container-title-text">酒店特色</text>
-					</view>
-					<view class="container-content-wrap">
-						<view class="tag-row" style="display: flex;flex-direction: row;" v-if="hotel!=null">
-							<view class="single-tag-box" v-for="item of hotel.feature">
-								<rice-tag type="warning" :text="item" size="large" />
-							</view>
-						</view>
-					</view>
-				</view>
-				<view class="content-container-block">
-					<view class="container-title-row">
-						<text class="container-title-text">酒店设施</text>
-					</view>
-					<view class="container-content-wrap">
-						<services-facilities ref="servicesFacilitiesRes" :hotel_id="hotel_id"></services-facilities>
-					</view>
-				</view>
-			</scroll-view>
-		</swiper-item>
-		<swiper-item style="flex:1">
-			<scroll-view class="scroll-main-view" style="flex:1" :scroll-with-animation="true" enhanced bounces="false"
-				fast-deceleration="true">
-				<view>
-					<roomTypeComponent :hotel_id="hotel_id"></roomTypeComponent>
-				</view>
-			</scroll-view>
-		</swiper-item>
-	</swiper>
+	
 </template>
 
 <script setup>
@@ -114,7 +62,9 @@
 	import { hotelBean } from '@/bean/hotelBean';
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { HotelService } from '@/services/HotelService';
-
+	defineOptions({
+		styleIsolation: "isolated"
+	})
 	const servicesFacilitiesRes = ref<ComponentPublicInstance | null>(null);
 	const hotel_id = ref("");
 	const hotel = ref<hotelBean | null>(null);
@@ -125,7 +75,10 @@
 		value: 'recommedn'
 	}, {
 		name: '房型',
+	}, {
+		name: '政策',
 	}])
+	const listTab = ref<string[]>(['首页', '房型', '1111'])
 	const tabClick = (e : TabsClickTab) => {
 		console.log('TabsClickTab', e)
 	}
@@ -157,68 +110,85 @@
 </script>
 
 <style>
-/* 导航栏tabs外层 */
-.nav-tab-wrap {
-}
-/* 滚动容器 */
-.scroll-main-view {
-	width: 100%;
-	height: 100%;
-	background: #f5f5f5;
-}
-/* swiper外层盒子 */
-.tab-swiper-box {
-	background-color: #f8f9fa;
-}
-/* 酒店基础信息区块 */
-.info-block {
-	padding: 18px;
-}
-/* 酒店名称行 */
-.info-title-row {
-}
-.info-title-text {
-	color: rgb(17, 24, 39);
-	font-size: 24px;
-	font-weight: 700;
-}
-/* 地址行 */
-.info-addr-row {
-	margin-top: 8px;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-}
-.info-addr-text {
-	color: #4b5563;
-	font-size: 16px;
-	margin-left: 4px;
-}
-/* 内容板块外层容器 */
-.content-container-block {
-	padding: 15px;
-}
-/* 板块标题行 */
-.container-title-row {
-	border-left: 4px solid #2a5d98;
-	padding-left: 12px;
-}
-.container-title-text {
-	color: rgb(17, 24, 39);
-	font-size: 18px;
-	font-weight: 700;
-}
-/* 板块内容区域 */
-.container-content-wrap {
-	margin-top: 16px;
-}
-/* 标签横向容器 */
-.tag-row {
-	display: flex;
-	flex-direction: row;
-}
-/* 单个标签盒子 */
-.single-tag-box {
-	padding: 4px 8px;
-}
+	/* 导航栏tabs外层 */
+	.nav-tab-wrap-container {
+		display: flex;
+		flex-direction:row;
+		justify-content: flex-end;
+		background-color: #fff;
+		padding: 4px 14px;
+	}
+
+	/* 滚动容器 */
+	.scroll-main-view {
+		width: 100%;
+		height: 100%;
+		background: #f5f5f5;
+	}
+
+	/* swiper外层盒子 */
+	.tab-swiper-box {
+		background-color: #f8f9fa;
+	}
+
+	/* 酒店基础信息区块 */
+	.info-block {
+		padding: 18px;
+	}
+
+	/* 酒店名称行 */
+	.info-title-row {}
+
+	.info-title-text {
+		color: rgb(17, 24, 39);
+		font-size: 24px;
+		font-weight: 700;
+	}
+
+	/* 地址行 */
+	.info-addr-row {
+		margin-top: 8px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.info-addr-text {
+		color: #4b5563;
+		font-size: 16px;
+		margin-left: 4px;
+	}
+
+	/* 内容板块外层容器 */
+	.content-container-block {
+		padding: 15px;
+	}
+
+	/* 板块标题行 */
+	.container-title-row {
+		border-left: 4px solid #2a5d98;
+		padding-left: 12px;
+	}
+
+	.container-title-text {
+		color: rgb(17, 24, 39);
+		font-size: 18px;
+		font-weight: 700;
+	}
+
+	/* 板块内容区域 */
+	.container-content-wrap {
+		margin-top: 16px;
+	}
+
+	/* 标签横向容器 */
+	.tag-row {
+		display: flex;
+		flex-direction: row;
+	}
+
+	/* 单个标签盒子 */
+	.single-tag-box {
+		padding: 4px 8px;
+	}
 </style>

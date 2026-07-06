@@ -24,9 +24,9 @@
 					bar-class="bar-class" active-text-class="active-text-class" @clickSub="switchTabEvent">
 					<template #default="{index,subname}">
 						<view class="slot-item-class">
-							<image style="width:16px;height:16px" v-if="activeIndex==index" class="slot-icon"
+							<image style="width:20px;height:20px" v-if="activeIndex==index" class="slot-icon"
 								:src="tabBarList[index].selectedIconPath"></image>
-							<image style="width:16px;height:16px" v-else class="slot-icon"
+							<image style="width:20px;height:20px" v-else class="slot-icon"
 								:src="tabBarList[index].iconPath"></image>
 							<text
 								:class="activeIndex==index?'active-text-class slot-text':'slot-text'">{{subname}}</text>
@@ -270,7 +270,7 @@
 
 	.slot-text {
 		text-align: center;
-		font-size: 10px;
+		font-size: 12px;
 		padding-top: 4px
 	}
 </style>

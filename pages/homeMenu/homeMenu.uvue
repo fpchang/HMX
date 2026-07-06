@@ -1,17 +1,17 @@
 <template>
 	<rice-navbar :fixed="false" title="" border v-if="hotel_id!=''">
-			<template #left>
-				<view style="display: flex;flex-direction: row;align-items: center;">
-					<!-- s -->
-	
-					<image src="/static/icons/tab-menu-blue.png"
-						style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-					<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{ i18n.global.t('tab.function') }}
-					</text>
-				</view>
-			</template>
-			
-		</rice-navbar>
+		<template #left>
+			<view style="display: flex;flex-direction: row;align-items: center;">
+				<!-- s -->
+
+				<image src="/static/icons/tab-menu-blue.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{ i18n.global.t('tab.function') }}
+				</text>
+			</view>
+		</template>
+
+	</rice-navbar>
 	<scroll-view style="flex: 1;" v-if="hotel_id!=''" :show-scrollbar="false">
 		<!-- <view class="top-header">
 			<text class="header-title">{{i18n.global.t('tab.function')}}</text>
@@ -25,7 +25,8 @@
 				</view>
 				<view v-if=" i18n.global.locale.value == 'zh-CN'">
 					<rice-grid :column-num="columnNum" :border="false">
-					  <rice-grid-item v-for="it in item.menu_item_list" :key="it.label" :icon="it.icon" :text="it.label" :to="it.url"/>
+						<rice-grid-item v-for="it in item.menu_item_list" :key="it.label" :icon="it.icon"
+							:text="it.label" :to="it.url" />
 					</rice-grid>
 					<!-- <l-space :wrap="true" :size="14">
 						<view v-for="it in item.menu_item_list" :key="it.label"
@@ -60,7 +61,7 @@
 				</rice-cell-group>
 			</view>
 		</view>
-	<view style="height:70px"></view>
+		<view style="height:70px"></view>
 	</scroll-view>
 	<view style="margin-top: 80px;" v-if="hotel_id==''">
 		<l-empty :description="i18n.global.t('common.noData',[''])" />
@@ -125,6 +126,8 @@
 				label: i18n.global.t("function.btn_txt_room_preview"),
 				bgColor: "rgba(22, 93, 255, 0.1)",
 				url: `/pages/hotelDisplay/hotelDisplay?hotel_id=${hotel.value?._id}`
+				//url: `/pages/hotelDisplay/list-news/list-news?hotel_id=${hotel.value?._id}`
+				
 			}],
 
 		},
@@ -173,11 +176,11 @@
 
 		}
 	]
-	const columnNum= computed(()=>{
+	const columnNum = computed(() => {
 		let num = 3;
 		const w = state.viewWidth;
-		if(w!=0){
-			 num = Math.floor((w-30)/80);
+		if (w != 0) {
+			num = Math.floor((w - 30) / 80);
 		}
 		return num
 	})
@@ -195,81 +198,81 @@
 		padding: 60px 0 40px;
 		text-align: center;
 	}
-	
+
 	.header-title {
 		font-size: 22px;
 		color: #fff;
 		font-weight: 500;
-		padding-left:15px;
+		padding-left: 15px;
 	}
-	
-// 最外层卡片
-.card {
-	margin:14px;
-	padding:15px;
-	background-color: #fff;
-	border-radius: 12px;
-}
 
-// 标题区域（独立平级class，不再嵌套在.card内部）
-.card-title {
-	padding: 5px 5px 15px 5px;
-	color: #1f2937;
-	font-weight: 700;
-	font-size: 24px;
-	display: flex;
-	flex-direction: row;
-	align-items: flex-end;
-}
+	// 最外层卡片
+	.card {
+		margin: 14px;
+		padding: 15px;
+		background-color: #fff;
+		border-radius: 12px;
+	}
 
-// 标题图标
-.icon-stye123 {
-	width: 18px;
-	height: 18px;
-	margin-right: 4px;
-}
+	// 标题区域（独立平级class，不再嵌套在.card内部）
+	.card-title {
+		padding: 5px 5px 15px 5px;
+		color: #1f2937;
+		font-weight: 700;
+		font-size: 24px;
+		display: flex;
+		flex-direction: row;
+		align-items: flex-end;
+	}
 
-// 标题文字
-.txt {
-	color: #1f2937;
-	font-weight: 700;
-}
+	// 标题图标
+	.icon-stye123 {
+		width: 18px;
+		height: 18px;
+		margin-right: 4px;
+	}
 
-// 单个功能项容器
-.item-content {
-	max-height:80px;
-	max-width:80px;
-	min-width: 80px;
-	min-height: 80px;
-	overflow: hidden;
-	background-color: red;
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-}
+	// 标题文字
+	.txt {
+		color: #1f2937;
+		font-weight: 700;
+	}
 
-// 图标外层容器
-.groupIcon {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	border-radius: 12px;
-}
+	// 单个功能项容器
+	.item-content {
+		max-height: 80px;
+		max-width: 80px;
+		min-width: 80px;
+		min-height: 80px;
+		overflow: hidden;
+		background-color: red;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
 
-// 功能小图标
-.icon-style {
-	width: 30px;
-	height: 30px;
-}
+	// 图标外层容器
+	.groupIcon {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		border-radius: 12px;
+	}
 
-// 功能文字标签
-.label {
-	font-size: 14px;
-	padding-top: 8px;
-	color: #64748b;
-	overflow: hidden;
-	text-align: center;
-}
+	// 功能小图标
+	.icon-style {
+		width: 30px;
+		height: 30px;
+	}
+
+	// 功能文字标签
+	.label {
+		font-size: 14px;
+		padding-top: 8px;
+		color: #64748b;
+		overflow: hidden;
+		text-align: center;
+	}
 </style>

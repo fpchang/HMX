@@ -245,14 +245,14 @@
 				"backgroundColorContent": "#f8f9fa"
 			}
 		},
-		{
-			"path": "pages/hotelDisplay/list-news/list-news",
-			"style": {
-				"navigationBarTitleText": "",
-				"navigationStyle": "custom",
-				"backgroundColorContent": "#f8f9fa"
-			}
-		},
+		// {
+		// 	"path": "pages/hotelDisplay/list-news/list-news",
+		// 	"style": {
+		// 		"navigationBarTitleText": "",
+		// 		"navigationStyle": "custom",
+		// 		"backgroundColorContent": "#f8f9fa"
+		// 	}
+		// },
 
 		{
 			"path": "pages/login/loginapp/loginapp",
@@ -393,7 +393,34 @@
 		// 		"navigationBarTitleText": "实名认证"
 		// 	}
 		//}
-	],
+	,{
+    "path": "uni_modules/uni-pay-x/pages/success/success",
+    "style": {
+        "backgroundColor": "#F8F8F8",
+        "navigationBarTitleText": "支付成功"
+    }
+}
+,{
+    "path": "uni_modules/uni-pay-x/pages/ad-interactive-webview/ad-interactive-webview",
+    "style": {
+        "backgroundColor": "#F8F8F8",
+        "navigationBarTitleText": "ad"
+    }
+}
+,{
+    "path": "uni_modules/uni-pay-x/pages/pay-desk/pay-desk",
+    "style": {
+        "backgroundColor": "#F8F8F8",
+        "navigationBarTitleText": "收银台"
+    }
+},
+{
+	"path": "pages/mine/recharge/recharge",
+	"style": {
+		"navigationBarTitleText": ""
+	}
+}
+],
 	"globalStyle": {
 		"navigationBarTitleText": "",
 		"navigationBarTextStyle": "black",

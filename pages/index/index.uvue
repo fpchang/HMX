@@ -21,7 +21,7 @@
 			
 			<view class="menu-container-style">
 				<rice-subsection class="tab-bar-style" :list="listTabName" v-model="activeIndex" shape="round"
-					bar-class="bar-class" active-text-class="active-text-class" @clickSub="switchTabEvent">
+					bar-class="bar-class" active-text-class="active-text-class" @clickSub="switchTabEvent" item-class="item-class-style">
 					<template #default="{index,subname}">
 						<view class="slot-item-class">
 							<image style="width:20px;height:20px" v-if="activeIndex==index" class="slot-icon"
@@ -222,7 +222,6 @@
 		/* #ifdef APP-ANDROID */
 			padding-bottom:20px
 		/* #endif */
-	
 	}
 	.custom-tab-cell {
 		width: 100%;
@@ -242,16 +241,18 @@
 	}
 
 	.tab-bar-style {
-		height: 50px;
+		height: 52px;
 		background-color: rgba(255, 255, 255, 0.72);
-		border: 0rpx solid rgba(245, 245, 245, 0.9);
-		
-		/* box-shadow:0 4rpx 20rpx rgba(0, 0, 0, 0.06),0 1rpx 4rpx rgba(0, 0, 0, 0.03),inset 0 0 0 1rpx rgba(255, 255, 255, 0.8); */
-	}
+		border: 1rpx solid rgba(240, 240, 240, 0.9);
+		box-shadow:0px 0px 18px 4px #4040400d;
+}
 
 	.bar-class {
 		/* background: rgba(255, 255, 255, 0.96) !important; */
 		background: rgba(0, 122, 255, 0.1) !important;
+	}
+	.item-class-style{
+		padding:4px 0;
 	}
 
 	.active-text-class {
@@ -265,12 +266,13 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		
 
 	}
 
 	.slot-text {
 		text-align: center;
 		font-size: 12px;
-		padding-top: 4px
+		padding-top: 2px
 	}
 </style>

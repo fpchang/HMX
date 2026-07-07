@@ -91,6 +91,9 @@
 </script>
 
 <style lang="scss">
+	.operation{
+		
+	}
 	/* 快速操作 */
 	.quick-actions {
 		padding: 0 20px 20px;

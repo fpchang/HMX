@@ -72,8 +72,13 @@
 		current.value = e.detail.current
 	}
 	const shareWx = () => {
-		let imgurl = props.hotel.firstImages.split("?")[0] || 'https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/images/app.png';
-		console.log("22222",imgurl);
+		let imgurl ='https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/images/app.png';
+		 
+		if(props.hotel.firstImages!=""){
+			imgurl=props.hotel.firstImages.split("?")[0];
+		}
+		 
+		
 		// #ifdef APP
 		uni.share({
 			provider: "weixin", //分享服务提供商（即weixin|qq|sinaweibo）
@@ -81,7 +86,7 @@
 			scene: "WXSceneSession", //provider 为 weixin 时必选 WXSceneSession分享到聊天界面，WXSceneTimeline分享到朋友圈，WXSceneFavorite分享到微信收藏
 			title: `${props.hotel.hotelName}`, //分享内容的标题
 			summary: `${props.hotel.hotelAddress}`, //分享内容的摘要
-			href: `www.hotelsys.fun/pages/hotelDisplay/hotelDisplay?hotel_id=${props.hotel.hotel_id}`,
+			href: `www.hotelsys.fun/pages/hotelDisplay/hotelDisplay?hotel_id=${props.hotel['hotel_id']}`,
 			// miniProgram: {
 			//   id: "gh_5557133bdd5e",
 			//   type: 0,

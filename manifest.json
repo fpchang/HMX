@@ -2,8 +2,8 @@
 	"name": "议宿",
 	"appid": "__UNI__6CB5534",
 	"description": "酒店与民宿管理",
-	"versionName": "3.0.5",
-	"versionCode": "305",
+	"versionName": "3.0.6",
+	"versionCode": "306",
 	"uni-app-x": {
 		"styleIsolationVersion": "2"
 	},

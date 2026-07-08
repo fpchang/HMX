@@ -1,0 +1,525 @@
+<template>
+	<rice-navbar title="" border>
+		<template #left>
+			<view style="display: flex;flex-direction: row;align-items: center;">
+				<navigator open-type="navigateBack">
+					<rice-icon name="arrow-left" size="22px" />
+				</navigator>
+
+				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+			</view>
+		</template>
+		<template #right>
+			<view class="navbar-save-btn" v-if="pageType!=2">
+				<rice-button @click="submitForm" type="default" size="mini"
+					:text="i18n.global.t('common.btn_txt_save',[''])" color="rgba(0,0,0,0)" textColor="#007aff"
+					textSize="14px" :loadingText="i18n.global.t('common.saving')"
+					:loading="submitLoading"></rice-button>
+			</view>
+		</template>
+	</rice-navbar>
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1">
+	<!-- #endif -->
+		<view
+			style="padding:14px;border-radius: 12px;background-color: #fff;display:flex;flex-direction:row;justify-content: space-between;">
+			<view style="flex:1">
+				<rice-form :model="linenForm" :rules="rules1" ref="formRef1" class="demo-form" label-position="top">
+					<rice-form-item :name="isReturnBack?'flatsheet20_back_num':'flatsheet20_num'" label="2.0米床单数量" required :error-style="{textAlign:isReturnBack?'right':'left'}">
+						<template #label>
+							<view style="display: flex;flex-direction:row;flex:1">
+								<view style="flex:1;"><text style="text-align:center;">2.0米床单数量</text></view>
+								<view style="flex:1"><text style="text-align:center;">2.0米床单归还数量</text></view>
+							</view>
+						</template>
+						<view style="display: flex;flex-direction:row;">
+							<view style="flex:1;padding-right: 8px">
+								<rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量"
+									type="number" :disabled="isReturnBack" />
+							</view>
+							<view style="flex:1;padding-left:8x">
+								<rice-input v-model="linenForm['flatsheet20_back_num']" placeholder="请输入归还床单数量"
+									type="number"  :disabled="!isReturnBack"/>
+							</view>
+						</view>
+
+
+					</rice-form-item>
+					<rice-form-item name="username" label="1.8米床单数量" required>
+						<!-- <rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
+							border="none" /> -->
+						<template #label>
+							<view style="display: flex;flex-direction:row;flex:1">
+								<view style="flex:1;"><text style="text-align:center;">1.8米床单数量</text></view>
+								<view style="flex:1"><text style="text-align:center;">1.8米床单归还数量</text></view>
+							</view>
+						</template>
+						<view style="display: flex;flex-direction:row;">
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量"
+									type="number" :disabled="isReturnBack"/>
+							</view>
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_back_num']" placeholder="请输入归还床单数量"
+									type="number" :disabled="!isReturnBack"/>
+							</view>
+						</view>
+					</rice-form-item>
+					<rice-form-item name="username" label="1.5米床单数量" required>
+						<!-- <rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
+							border="none" /> -->
+						<template #label>
+							<view style="display: flex;flex-direction:row;flex:1">
+								<view style="flex:1;"><text style="text-align:center;">1.5米床单数量</text></view>
+								<view style="flex:1"><text style="text-align:center;">1.5米床单归还数量</text></view>
+							</view>
+						</template>
+						<view style="display: flex;flex-direction:row;">
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量"
+									type="number" :disabled="isReturnBack"/>
+							</view>
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_back_num']" placeholder="请输入归还床单数量"
+									type="number" :disabled="!isReturnBack"/>
+							</view>
+						</view>
+					</rice-form-item>
+					<rice-form-item name="username" label="1.3米床单数量" required>
+						<!-- <rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
+							border="none" /> -->
+						<template #label>
+							<view style="display: flex;flex-direction:row;flex:1">
+								<view style="flex:1;"><text style="text-align:center;">1.3米床单数量</text></view>
+								<view style="flex:1"><text style="text-align:center;">1.3米床单归还数量</text></view>
+							</view>
+						</template>
+						<view style="display: flex;flex-direction:row;">
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量"
+									type="number" :disabled="isReturnBack"/>
+							</view>
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_back_num']" placeholder="请输入归还床单数量"
+									type="number" :disabled="!isReturnBack"/>
+							</view>
+						</view>
+					</rice-form-item>
+					<rice-form-item name="username" label="1.2米床单数量" required>
+						<!-- <rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
+							border="none" /> -->
+						<template #label>
+							<view style="display: flex;flex-direction:row;flex:1">
+								<view style="flex:1;"><text style="text-align:center;">1.2米床单数量</text></view>
+								<view style="flex:1"><text style="text-align:center;">1.2米床单归还数量</text></view>
+							</view>
+						</template>
+						<view style="display: flex;flex-direction:row;">
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量"
+									type="number" :disabled="isReturnBack"/>
+							</view>
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_back_num']" placeholder="请输入归还床单数量"
+									type="number" :disabled="!isReturnBack"/>
+							</view>
+						</view>
+					</rice-form-item>
+					<rice-form-item name="username" label="大被套数量" required>
+						<!-- 	<rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
+							border="none" /> -->
+						<template #label>
+							<view style="display: flex;flex-direction:row;flex:1">
+								<view style="flex:1;"><text style="text-align:center;">大被套数量</text></view>
+								<view style="flex:1"><text style="text-align:center;">大被套归还数量</text></view>
+							</view>
+						</template>
+						<view style="display: flex;flex-direction:row;">
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量"
+									type="number" :disabled="isReturnBack"/>
+							</view>
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_back_num']" placeholder="请输入归还床单数量"
+									type="number" :disabled="!isReturnBack"/>
+							</view>
+						</view>
+					</rice-form-item>
+					<rice-form-item name="username" label="小被套数量" required>
+						<!-- <rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
+							border="none" /> -->
+						<template #label>
+							<view style="display: flex;flex-direction:row;flex:1">
+								<view style="flex:1;"><text style="text-align:center;">小被套数量</text></view>
+								<view style="flex:1"><text style="text-align:center;">小被套归还数量</text></view>
+							</view>
+						</template>
+						<view style="display: flex;flex-direction:row;">
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量"
+									type="number" :disabled="isReturnBack"/>
+							</view>
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_back_num']" placeholder="请输入归还床单数量"
+									type="number" :disabled="!isReturnBack"/>
+							</view>
+						</view>
+					</rice-form-item>
+					<rice-form-item name="username" label="枕套数量" required>
+						<!-- <rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
+							border="none" /> -->
+						<template #label>
+							<view style="display: flex;flex-direction:row;flex:1">
+								<view style="flex:1;"><text style="text-align:center;">枕套数量</text></view>
+								<view style="flex:1"><text style="text-align:center;">枕套归还数量</text></view>
+							</view>
+						</template>
+						<view style="display: flex;flex-direction:row;">
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量"
+									type="number" :disabled="isReturnBack"/>
+							</view>
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_back_num']" placeholder="请输入归还床单数量"
+									type="number" :disabled="!isReturnBack"/>
+							</view>
+						</view>
+					</rice-form-item>
+					<rice-form-item name="username" label="浴巾数量" required>
+						<!-- <rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
+							border="none" /> -->
+						<template #label>
+							<view style="display: flex;flex-direction:row;flex:1">
+								<view style="flex:1;"><text style="text-align:center;">浴巾数量</text></view>
+								<view style="flex:1"><text style="text-align:center;">浴巾归还数量</text></view>
+							</view>
+						</template>
+						<view style="display: flex;flex-direction:row;">
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量"
+									type="number" :disabled="isReturnBack"/>
+							</view>
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_back_num']" placeholder="请输入归还床单数量"
+									type="number" :disabled="!isReturnBack"/>
+							</view>
+						</view>
+					</rice-form-item>
+					<rice-form-item name="username" label="面巾数量" required>
+						<template #label>
+							<view style="display: flex;flex-direction:row;flex:1">
+								<view style="flex:1;"><text style="text-align:center;">面巾数量</text></view>
+								<view style="flex:1"><text style="text-align:center;">面巾归还数量</text></view>
+							</view>
+						</template>
+						<view style="display: flex;flex-direction:row;">
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量"
+									type="number" :disabled="isReturnBack"/>
+							</view>
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_back_num']" placeholder="请输入归还床单数量"
+									type="number" :disabled="!isReturnBack"/>
+							</view>
+						</view>
+					</rice-form-item>
+					<rice-form-item name="username" label="地巾数量" required>
+						<template #label>
+							<view style="display: flex;flex-direction:row;flex:1">
+								<view style="flex:1;"><text style="text-align:center;">地巾数量</text></view>
+								<view style="flex:1"><text style="text-align:center;">地巾归还数量</text></view>
+							</view>
+						</template>
+						<view style="display: flex;flex-direction:row;">
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量"
+									type="number" :disabled="isReturnBack"/>
+							</view>
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_back_num']" placeholder="请输入归还床单数量"
+									type="number" :disabled="!isReturnBack"/>
+							</view>
+						</view>
+					</rice-form-item>
+					<rice-form-item name="username" label="床尾巾数量" required>
+						<template #label>
+							<view style="display: flex;flex-direction:row;flex:1">
+								<view style="flex:1;"><text style="text-align:center;">床尾巾数量</text></view>
+								<view style="flex:1"><text style="text-align:center;">床尾巾归还数量</text></view>
+							</view>
+						</template>
+						<view style="display: flex;flex-direction:row;">
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量"
+									type="number" :disabled="isReturnBack"/>
+							</view>
+							<view style="flex:1;padding:0 8px">
+								<rice-input v-model="linenForm['flatsheet20_back_num']" placeholder="请输入归还床单数量"
+									type="number" :disabled="!isReturnBack"/>
+							</view>
+						</view>
+					</rice-form-item>
+				</rice-form>
+
+			</view>
+		</view>
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+	<rice-calendar v-model:show="showCalendar" mode="range" :min-date="initDateObj.minDate" :date="dateRange"
+		@confirm="rangeConfirm" :title="i18n.global.t('form.canendar_title')" :show-subtitle="true"></rice-calendar>
+</template>
+
+<script setup>
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { roomTypeBean } from '@/bean/roomTypeBean';
+	import { roomBean } from '@/bean/roomBean';
+	import { userBean } from "@/bean/userBean";
+	import { linenWashingType, linenDataListResult } from '@/bean/linenWashingBean.uts';
+	import { OrderService } from "@/services/OrderService.uts";
+	import { state } from "@/store/store";
+	import { comFunction } from "@/pages/index/ComFuc.uts"
+	import { validForm } from "./createLinenVaild.uts";
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { TIME, getMonthDateArray } from "@/static/utils/TIME";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import { orderState, getGatherEvent } from "@/store/modules/orderStore";
+	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui"
+	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated"
+	})
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	});
+	const roomTypeList = computed<Array<roomTypeBean>>(() => {
+		return state.roomTypeList;
+	});
+	const roomList = computed<Array<roomBean>>(() => {
+		return state.roomList;
+	});
+	const formatRoomList = (list : Array<string>) : string => {
+		let result : Array<string> = [];
+		list.forEach((room_id : string) => {
+			let room = roomList.value.find((item : roomBean) => item._id == room_id) as roomBean | null;
+			if (room != null) {
+				result.push(room.room_name);
+			}
+		})
+		return result.join(",");
+	}
+	let pageType = ref(2);//0 创建，1，创建单编辑，2 验收输入，3，验收编辑，4 查看；
+	const isReturnBack=computed<boolean>(()=>{
+		return pageType.value !=0 &&  pageType.value !=1 && pageType.value !=4
+	})
+	const showCheckRoomPanal = ref(false);
+	let submitLoading = ref(false);
+	const title = computed(() => {
+		if (pageType.value == 0) {
+			return i18n.global.t('order.create_order.addOrder');
+		}
+		return pageType.value == 1 ? i18n.global.t('order.create_order.edit_order_info') : i18n.global.t('order.create_order.order_info');
+	});
+	const titleImg = computed<string>(() => {
+		if (pageType.value == 0) {
+			return "/static/icons/addpage.png"
+		}
+		return pageType.value == 1 ? "/static/icons/editpage.png" : "/static/icons/detailpage.png"
+	});
+	const showCalendar = ref(false);
+	const initDateObj = {
+		start_date: dayuts(new Date()).format("YYYY-MM-DD") as string,
+		end_date: dayuts(new Date()).add(1, 'day').format("YYYY-MM-DD") as string,
+		minDate: dayuts(new Date()).format("YYYY-MM-DD") as string
+	}
+	const dateRange = ref<string[]>([
+		initDateObj.start_date as string,
+		initDateObj.end_date as string
+	]);
+	let linenForm = ref<linenWashingType>({
+		_id: "",
+		"hotel_id": "",
+		"flatsheet20_num": "",
+		"flatsheet18_num": "",
+		"flatsheet15_num": "",
+		"flatsheet13_num": "",
+		"flatsheet12_num": "",
+		"duvetCoverMax_num": "",
+		"duvetCoverMini_num": "",
+		"bathTowel_num": "",
+		"faceTowel_num": "",
+		"floorTowel_num": "",
+		"bedRunner_num": "",
+		"flatsheet20_back_num": "",
+		"flatsheet18_back_num": "",
+		"flatsheet15_back_num": "",
+		"flatsheet13_back_num": "",
+		"flatsheet12_back_num": "",
+		"duvetCoverMax_back_num": "",
+		"duvetCoverMini_back_num": "",
+		"bathTowel_back_num": "",
+		"faceTowel_back_num": "",
+		"floorTowel_back_num": "",
+		"bedRunner_back_num": "",
+		"status": 0,
+		mark: ""
+	});
+	const rules1 = new Map<string, FormRules[]>([
+		["flatsheet20_num", [{ required: true, message: '请输入2.0米床单数量' }]],
+		["flatsheet20_back_num", [{ required: true, message: '请输入2.0米床归还单数量' }]],
+		["flatsheet18_num", [{ required: true, message: '请输入1.8米床单数量' }]],
+		["flatsheet15_num", [{ required: true, message: '请输入1.5米床单数量' }]],
+		["flatsheet13_num", [{ required: true, message: '请输入1.3米床单数量' }]],
+		["flatsheet12_num", [{ required: true, message: '请输入1.2米床单数量' }]],
+		["duvetCoverMax_num", [{ required: true, message: '请输入大被套数量数量' }]],
+		["duvetCoverMini_num", [{ required: true, message: '请输入小被套数量数量' }]],
+		["bathTowel_num", [{ required: true, message: '请输入浴巾数量' }]],
+		["faceTowel_num", [{ required: true, message: '请输入面巾数量' }]],
+		["floorTowel_num", [{ required: true, message: '请输入地巾数量' }]],
+		["bedRunner_num", [{ required: true, message: '请输入床尾巾数量' }]],
+	])
+	const showCalendarEvent = () => {
+		showCalendar.value = !showCalendar.value;
+	}
+	const rangeConfirm = (e : string[]) => {
+		console.log('rangeConfirm', e)
+		dateRange.value = e;
+	}
+	const submitForm = async () => {
+		if (submitLoading.value == true) {
+			return;
+		}
+		submitLoading.value = true;
+		let flag : boolean = validForm(linenForm.value);
+		if (flag == false) {
+			submitLoading.value = false;
+			return;
+		}
+
+		try {
+			const flag = await OrderService.addOrder(linenForm.value);
+			if (flag) {
+				uni.$emit("refrushOrderList");
+				getGatherEvent(hotel_id.value);
+				uni.navigateBack();
+				submitLoading.value = false;
+				uni.showToast({
+					title: i18n.global.t('common.add_success'),
+					icon: "none"
+				});
+			}
+
+		} catch (error) {
+			console.log("99001021")
+			submitLoading.value = false;
+			uni.showToast({
+				title: i18n.global.t('common.add_fail'),
+				icon: "none"
+			});
+		}
+	}
+	const init = async () => {
+		uni.showLoading({ title: "" })
+		try {
+			await getSource();
+			uni.hideLoading();
+		} catch (error) {
+			uni.hideLoading();
+		}
+	}
+	init();
+	watch(dateRange, (n : string[], o : string[]) => {
+		linenForm.value.checkInEndDate = n[1];
+		linenForm.value.checkInStartDate = n[0]
+		linenForm.value.checkInStartDateTimeStamp = new Date(dayuts(new Date(n[0])).format("YYYY/MM/DD  14:00:00")).getTime();
+		linenForm.value.checkInEndDateTimeStamp = new Date(dayuts(new Date(n[1])).format("YYYY/MM/DD  12:00:00")).getTime();
+		linenForm.value.reservedRoomList = [];
+	}, {
+		deep: true,
+		immediate: true
+	})
+</script>
+
+<style>
+	/* 房间选择容器 */
+	.room-select-wrap {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.room-text-box {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		border: 1px solid #dcdfe6;
+		flex: 1;
+		padding: 8px;
+		border-radius: 4px;
+	}
+
+	.room-val-txt {
+		margin-right: 8px;
+	}
+
+	.room-edit-icon {
+		padding-left: 8px;
+	}
+
+	/* 日期选择框 */
+	.date-select-box {
+		position: relative;
+		border: 1px solid #dcdfe6;
+		box-sizing: border-box;
+		overflow: visible;
+		border-radius: 4px;
+	}
+
+	.date-select-content {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		height: 36px;
+		padding: 0 8px;
+		overflow: visible;
+	}
+
+	.date-select-txt {
+		line-height: 36px;
+	}
+
+	/* 添加房间按钮 */
+	.room-add-btn {
+		flex: 1;
+		background: #fff;
+		padding: 10px 0;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid #ededed;
+		border-radius: 8px;
+	}
+
+	.add-btn-txt {
+		font-size: 14px;
+		color: #007aff;
+		margin-left: 6px;
+	}
+
+	/* 导航栏保存按钮 */
+	.navbar-save-btn {
+		display: flex;
+		align-items: center;
+	}
+</style>

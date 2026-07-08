@@ -419,7 +419,20 @@
 	"style": {
 		"navigationBarTitleText": ""
 	}
+},
+{
+	"path": "pages/working/LinenWashing/LinenWashingList",
+	"style": {
+		"navigationBarTitleText": ""
+	}
+},
+{
+	"path": "pages/working/LinenWashing/createLinenWashing/createLinenWashing",
+	"style": {
+		"navigationBarTitleText": ""
+	}
 }
+
 ],
 	"globalStyle": {
 		"navigationBarTitleText": "",

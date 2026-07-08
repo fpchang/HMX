@@ -174,8 +174,21 @@
 			}
 			]
 
+		},{
+			title:"日常事务",
+			title_icon: "/static/icons/homemenu/order-manage.png",
+			title_color: "rgb(30,30,30)",
+			menu_item_list:[
+				{
+					icon: "/static/icons/homemenu/linen.png",
+					label: "布草清洗",
+					bgColor: "rgba(237,137,54,0.1)",
+					url: "/pages/working/LinenWashing/LinenWashingList"
+				}
+			]
 		}
 	]
+	const w= state.viewWidth;
 	const columnNum = computed(() => {
 		let num = 3;
 		const w = state.viewWidth;

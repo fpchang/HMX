@@ -1,0 +1,170 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": ["hotel_id"],
+	"permission": {
+		"read": true,
+		"create": false,
+		"update": false,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"hotel_id": {
+			"description": "酒店id",
+			"bsonType": "string",
+			"foreignKey": "hm-hotel._id"
+		},
+		"createTime": {
+			"description": "创建时间",
+			"bsonType": "timestamp",
+			"defaultValue": {
+				"$env": "now"
+			}
+		},
+		"returnBackTime": {
+			"description": "归还时间",
+			"bsonType": "timestamp"
+			
+		},
+		"flatsheet20_num": {
+			"bsonType": "int",
+			"title": "2.0米床单数量",
+			"default": 0
+		},
+		"flatsheet18_num": {
+			"bsonType": "int",
+			"title": "1.8米床单数量",
+			"default": 0
+		},
+		"flatsheet15_num": {
+			"bsonType": "int",
+			"title": "1.5米床单数量",
+			"default": 0
+		},
+		"flatsheet13_num": {
+			"bsonType": "int",
+			"title": "1.3米床单数量",
+			"default": 0
+		},
+		"flatsheet12_num": {
+			"bsonType": "int",
+			"title": "1.2米床单数量",
+			"default": 0
+		},
+		"duvetCoverMax_num": {
+			"bsonType": "int",
+			"title": "大被套数量",
+			"default": 0
+		},
+		"duvetCoverMini_num": {
+			"bsonType": "int",
+			"title": "小被套数量",
+			"default": 0
+		},
+		"pillowcase_num":{
+			"bsonType": "int",
+			"title": "枕套数量",
+			"default": 0
+		},
+		"bathTowel_num": {
+			"bsonType": "int",
+			"title": "浴巾数量",
+			"default": 0
+		},
+		"faceTowel_num": {
+			"bsonType": "int",
+			"title": "面巾数量",
+			"default": 0
+		},
+		"floorTowel_num": {
+			"bsonType": "int",
+			"title": "地巾数量",
+			"default": 0
+		},
+		"bedRunner_num": {
+			"bsonType": "int",
+			"title": "床尾巾数量",
+			"default": 0
+		},
+		
+		
+		"flatsheet20_back_num": {
+			"bsonType": "int",
+			"title": "返还2.0米床单数量",
+			"default": 0
+		},
+		"flatsheet18_back_num": {
+			"bsonType": "int",
+			"title": "返还1.8米床单数量",
+			"default": 0
+		},
+		"flatsheet15_back_num": {
+			"bsonType": "int",
+			"title": "返还1.5米床单数量",
+			"default": 0
+		},
+		"flatsheet13_back_num": {
+			"bsonType": "int",
+			"title": "返还1.3米床单数量",
+			"default": 0
+		},
+		"flatsheet12_back_num": {
+			"bsonType": "int",
+			"title": "返还1.2米床单数量",
+			"default": 0
+		},
+		"duvetCoverMax_back_num": {
+			"bsonType": "int",
+			"title": "返还大被套数量",
+			"default": 0
+		},
+		"duvetCoverMini_back_num": {
+			"bsonType": "int",
+			"title": "返还小被套数量",
+			"default": 0
+		},
+		"pillowcase_back_num":{
+			"bsonType": "int",
+			"title": "返还枕套数量",
+			"default": 0
+		},
+		"bathTowel_back_num": {
+			"bsonType": "int",
+			"title": "返还浴巾数量",
+			"default": 0
+		},
+		"faceTowel_back_num": {
+			"bsonType": "int",
+			"title": "返还面巾数量",
+			"default": 0
+		},
+		"floorTowel_back_num": {
+			"bsonType": "int",
+			"title": "返还地巾数量",
+			"default": 0
+		},
+		"bedRunner_back_num": {
+			"bsonType": "int",
+			"title": "返还床尾巾数量",
+			"default": 0
+		},
+		"unit": {
+			"bsonType": "string",
+			"title": "单位",
+			"default": "条"
+		},
+		"status": {
+			"description": "0 待清洗，1正常完成 9 异常完成，10取消",
+			"bsonType": "int",
+			"enum": [0, 1, 9,10]
+		},
+		"mark": {
+			"bsonType": "string",
+			"title": "备注",
+			"default": ""
+		}
+	}
+}

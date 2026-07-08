@@ -385,6 +385,19 @@ export default {
 			valid_order_amount: "请输入总价"
 		}
 	},
+	washingOrder:{
+		title:"清洗单",
+		statusAll: "全部",
+		statusWashing: "待清洗",
+		statusError: "异常单",
+		statusCompleted: "已完成",
+		statusCancelled: "已撤销",
+		washing_date:"清洗日期",
+		return_back_date:"返还日期",
+		washing_num:"清洗数量",
+		return_back_num:"返回数量",
+		searchPlaceholder:"请输入"
+	},
 	finance: {
 		navbar_title: "财务中心",
 		income: "收入",

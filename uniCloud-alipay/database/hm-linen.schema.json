@@ -4,7 +4,7 @@
 	"required": ["hotel_id"],
 	"permission": {
 		"read": true,
-		"create": false,
+		"create": true,
 		"update": false,
 		"delete": false
 	},
@@ -29,37 +29,27 @@
 			"bsonType": "timestamp"
 			
 		},
-		"flatsheet20_num": {
+		"service_provider":{
+			"description": "服务商",
+			"bsonType": "string"
+		},
+		"flatsheet_max_num": {
 			"bsonType": "int",
-			"title": "2.0米床单数量",
+			"title": "大床单数量",
 			"default": 0
 		},
-		"flatsheet18_num": {
+		"flatsheet_mini_num": {
 			"bsonType": "int",
-			"title": "1.8米床单数量",
+			"title": "小床单数量",
 			"default": 0
 		},
-		"flatsheet15_num": {
-			"bsonType": "int",
-			"title": "1.5米床单数量",
-			"default": 0
-		},
-		"flatsheet13_num": {
-			"bsonType": "int",
-			"title": "1.3米床单数量",
-			"default": 0
-		},
-		"flatsheet12_num": {
-			"bsonType": "int",
-			"title": "1.2米床单数量",
-			"default": 0
-		},
-		"duvetCoverMax_num": {
+		
+		"duvetCover_max_num": {
 			"bsonType": "int",
 			"title": "大被套数量",
 			"default": 0
 		},
-		"duvetCoverMini_num": {
+		"duvetCover_mini_num": {
 			"bsonType": "int",
 			"title": "小被套数量",
 			"default": 0
@@ -91,37 +81,22 @@
 		},
 		
 		
-		"flatsheet20_back_num": {
+		"flatsheet_max_back_num": {
 			"bsonType": "int",
-			"title": "返还2.0米床单数量",
+			"title": "返还大床单数量",
 			"default": 0
 		},
-		"flatsheet18_back_num": {
+		"flatsheet_mini_back_num": {
 			"bsonType": "int",
-			"title": "返还1.8米床单数量",
+			"title": "返还小床单数量",
 			"default": 0
-		},
-		"flatsheet15_back_num": {
-			"bsonType": "int",
-			"title": "返还1.5米床单数量",
-			"default": 0
-		},
-		"flatsheet13_back_num": {
-			"bsonType": "int",
-			"title": "返还1.3米床单数量",
-			"default": 0
-		},
-		"flatsheet12_back_num": {
-			"bsonType": "int",
-			"title": "返还1.2米床单数量",
-			"default": 0
-		},
-		"duvetCoverMax_back_num": {
+		},		
+		"duvetCover_max_back_num": {
 			"bsonType": "int",
 			"title": "返还大被套数量",
 			"default": 0
 		},
-		"duvetCoverMini_back_num": {
+		"duvetCover_mini_back_num": {
 			"bsonType": "int",
 			"title": "返还小被套数量",
 			"default": 0

@@ -13,7 +13,10 @@ import { TIME, MOONTH_START_END_TIMESTAMP } from "@/static/utils/TIME";
  class LinenOrderServiceClass{
 	constructor() { }	
 	async addLinen(linen : linenWashingType) : Promise<boolean> {
-		return false;
+		console.log(linen)
+		const res = await action_co.linen_add(linen);
+		
+		return res['errCode'] ==0;
 	}
 	async getLinenListBySearch(hotel_id : string, dateRange : string[], status : string | number, pageNo : number, pageSize : number) : Promise<linenDataListResult> {
 		let skipnum : number = Math.max((pageNo - 1) * pageSize, 0);
@@ -44,27 +47,25 @@ import { TIME, MOONTH_START_END_TIMESTAMP } from "@/static/utils/TIME";
 						"hotel_id":item.getString("_id") ?? "",
 						"createTime":item.getNumber("createTime") ?? 0 ,
 						"returnBackTime": item.getNumber("returnBackTime") ?? 0,
-						"flatsheet20_num":item.getNumber("flatsheet20_num") ?? 0,
-						"flatsheet18_num":item.getNumber("flatsheet18_num") ?? 0 ,
-						"flatsheet15_num":item.getNumber("flatsheet15_num") ?? 0,
-						"flatsheet13_num":item.getNumber("flatsheet13_num") ?? 0,
-						"flatsheet12_num":item.getNumber("flatsheet12_num") ?? 0,
-						"duvetCoverMax_num":item.getNumber("duvetCoverMax_num") ?? 0 ,
-						"duvetCoverMini_num":item.getNumber("duvetCoverMini_num") ?? 0 ,
+						"service_provider":item.getString("service_provider") ?? "",
+						"flatsheet_max_num":item.getNumber("flatsheet_max_num") ?? 0,
+						"flatsheet_mini_num":item.getNumber("flatsheet_mini_num") ?? 0 ,
+						"duvetCover_max_num":item.getNumber("duvetCoverMax_num") ?? 0 ,
+						"duvetCover_mini_num":item.getNumber("duvetCoverMini_num") ?? 0 ,
 						"bathTowel_num":item.getNumber("bathTowel_num") ?? 0,
 						"faceTowel_num":item.getNumber("faceTowel_num") ?? 0,
 						"floorTowel_num":item.getNumber("floorTowel_num") ?? 0,
-						"bedRunner_num":item.getNumber("bedRunner_num") ?? 0,				
-						"flatsheet20_back_num":item.getNumber("flatsheet20_back_num") ?? 0,
-						"flatsheet18_back_num":item.getNumber("flatsheet18_back_num") ?? 0 ,
-						"flatsheet15_back_num":item.getNumber("flatsheet15_back_num") ?? 0,
-						"flatsheet13_back_num":item.getNumber("flatsheet13_back_num") ?? 0,
-						"flatsheet12_back_num": item.getNumber("flatsheet12_back_num") ?? 0,
-						"duvetCoverMax_back_num":item.getNumber("duvetCoverMax_back_num") ?? 0,
-						"duvetCoverMini_back_num":item.getNumber("duvetCoverMini_back_num") ?? 0 ,
+						"bedRunner_num":item.getNumber("bedRunner_num") ?? 0,	
+							"pillowcase_num":item.getNumber("pillowcase_num") ?? 0,			
+									
+						"flatsheet_max_back_num":item.getNumber("flatsheet_max_back_num") ?? 0,
+						"flatsheet_mini_back_num":item.getNumber("flatsheet_mini_back_num") ?? 0 ,
+						"duvetCover_max_back_num":item.getNumber("duvetCover_max_back_num") ?? 0,
+						"duvetCover_mini_back_num":item.getNumber("duvetCover_mini_back_num") ?? 0 ,
 						"bathTowel_back_num":item.getNumber("bathTowel_back_num") ?? 0 ,
 						"faceTowel_back_num":item.getNumber("faceTowel_back_num") ?? 0 ,
 						"floorTowel_back_num":item.getNumber("floorTowel_back_num") ?? 0,
+						"pillowcase_back_num": item.getNumber("pillowcase_back_num") ?? 0,
 						"bedRunner_back_num": item.getNumber("bedRunner_back_num") ?? 0,
 						"unit":item.getString("unit") ?? "" ,
 						"status":item.getNumber("status") ?? 0 ,

@@ -423,13 +423,15 @@
 {
 	"path": "pages/working/LinenWashing/LinenWashingList",
 	"style": {
-		"navigationBarTitleText": ""
+		"navigationBarTitleText": "",
+		"navigationStyle": "custom"
 	}
 },
 {
 	"path": "pages/working/LinenWashing/createLinenWashing/createLinenWashing",
 	"style": {
-		"navigationBarTitleText": ""
+		"navigationBarTitleText": "",
+		"navigationStyle": "custom"
 	}
 }
 

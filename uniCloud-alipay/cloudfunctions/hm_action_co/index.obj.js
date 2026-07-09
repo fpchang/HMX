@@ -1,5 +1,6 @@
 const hotel = require("./modules/hotel/index.js");
 const order = require("./modules/order/index.js");
+const linen = require("./modules/linen/index.js");
 const user = require("./modules/user/index.js");
 const room = require("./modules/room/index.js");
 const roomType = require("./modules/roomType/index.js");
@@ -182,6 +183,7 @@ module.exports = {
 	async employee_deleteEmployee(employee_id) {},
 	...hotel,
 	...order,
+	...linen,
 	...user,
 	...room,
 	...roomType,

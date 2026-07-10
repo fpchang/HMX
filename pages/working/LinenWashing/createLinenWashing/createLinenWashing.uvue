@@ -26,7 +26,7 @@
 			style="padding:14px;border-radius: 12px;background-color: #fff;display:flex;flex-direction:row;justify-content: space-between;">
 			<view style="flex:1">
 
-				<rice-form :model="linenForm" :rules="rules1" ref="formRef1" class="demo-form" label-position="top"
+				<rice-form :model="linenForm" :rules="rules1" ref="linenFormRef" class="demo-form" label-position="top"
 					:label-style="{'fontSize':'13px'}">
 					<rice-form-item name="service_provider" label="服务商" required>
 						<rice-input v-model="linenForm['service_provider']" placeholder="请输入服务商"
@@ -293,6 +293,8 @@
 		return result.join(",");
 	}
 	let pageType = ref(0);//0 创建，1，创建单编辑，2 验收输入，3，验收编辑，4 查看；
+	
+	const linenFormRef = ref<RiceFormComponentPublicInstance | null>(null);
 	const showReturnBack = computed<boolean>(() => {
 		//return pageType.value == 2 || pageType.value == 3 || pageType.value == 4;
 		return true;
@@ -347,6 +349,8 @@
 		"mark": ""
 	});
 	const rules1 = new Map<string, FormRules[]>([
+		
+		["service_provider", [{ required: true, message: '请输入服务商' }]],
 		["flatsheet_max_num", [{ required: true, message: '请输入大床单数量' }]],
 		["flatsheet_max_back_num", [{ required: true, message: '请输入大床归还单数量' }]],
 		["flatsheet_mini_num", [{ required: true, message: '请输入小床单数量' }]],
@@ -408,13 +412,50 @@
 				});
 			}
 	}
-
+const return_back_num = (linen : linenWashingType) => {
+		const num = linen.flatsheet_max_back_num +
+			linen.flatsheet_mini_back_num +
+			linen.duvetCover_max_back_num +
+			linen.duvetCover_mini_back_num +
+			linen.pillowcase_back_num +
+			linen.bathTowel_back_num +
+			linen.faceTowel_back_num +
+			linen.floorTowel_back_num +
+			linen.bedRunner_back_num;
+		return num;
+	}
+	const washing_num = (linen : linenWashingType) => {
+		const num = linen.flatsheet_max_num +
+			linen.flatsheet_mini_num +
+			linen.duvetCover_max_num +
+			linen.duvetCover_mini_num +
+			linen.bathTowel_num +
+			linen.faceTowel_num +
+			linen.floorTowel_num +
+			linen.bedRunner_num +
+			linen.pillowcase_num;
+		return num;
+	}
 	const submitForm = async () => {
 		if (submitLoading.value == true) {
 			return;
 		}
 		submitLoading.value = true;
 		console.log(linenForm.value);
+		const result = await linenFormRef.value!.validate();
+		if(result!=true){
+			console.log("校验失败");
+			submitLoading.value = false;
+			return;
+		}
+		if(washing_num(linenForm.value)<1){
+			uni.showToast({
+				title:"布草数量最少一件",
+				icon:"none"
+			})
+			submitLoading.value = false;
+			return;
+		}
 		// return;
 		// 新增
 		if (pageType.value == 0) {

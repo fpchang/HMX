@@ -6,10 +6,8 @@ class linenAction{
 		
 		const db = uniCloud.databaseForJQL();
 		const linen=this.formartLene(linenObj);
-		console.log("addlinen", linen);
 		try {
 			const res = await db.collection('hm-linen').add(linen);
-			console.log("2222222",res)
 			return {errCode:0,errMsg:"",data:true};
 		} catch (error) {
 			throw new Error("add linen fail",error);
@@ -26,7 +24,6 @@ class linenAction{
 		console.log("editlinen",_id, linen);
 		try {
 			const res = await db.collection('hm-linen').doc(_id).update(linen);
-			console.log("2222222",res)
 			return {errCode:0,errMsg:"",data:true};
 		} catch (error) {
 			throw new Error("edit linen fail",error);
@@ -80,7 +77,6 @@ class linenAction{
 	
 	}
 	formartLene(obj){
-		console.log("format===",obj,this.ctx._tokenInfo)
 		return {
 			"hotel_id": obj.hotel_id,
 			"service_provider":obj.service_provider,

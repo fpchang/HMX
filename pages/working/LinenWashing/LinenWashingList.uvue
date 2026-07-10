@@ -186,14 +186,14 @@
 								<rice-row :gutter="8">
 									<rice-col :span="8"></rice-col>
 									<rice-col :span="6">
-										<view>
+										<view v-if="active_linen.status==0">
 											<rice-button type="primary" size="small" plain-fill
 												:text="i18n.global.t('common.btn_txt_modify',[''])"
 												@click="editLinen(active_linen)"></rice-button>
 										</view>
 									</rice-col>
 									<rice-col :span="6">
-										<view>
+										<view  v-if="active_linen.status==0">
 											<rice-button type="error" size="small" plain-fill
 												:text="i18n.global.t('common.btn_txt_delete')"
 												@click="deleteLinen(active_linen)"></rice-button>
@@ -242,10 +242,10 @@
 		return state.permissionList;
 	})
 	const currentPage = ref(1);
-	const linenStatus = ref<string | number>("all");
+	const linenStatus = ref<string | number>(0);
 	const dateRange = ref<string[]>(getMonthDateArray());
 	const active_id = ref("");
-	const activeIndex = ref(0);
+	const activeIndex = ref(1);
 	const showCalendar = ref(false);
 	const swipeControlRef = ref<RiceSwipeActionsComponentPublicInstance | null>(null)
 	const list = ref<TabsOptions[]>([

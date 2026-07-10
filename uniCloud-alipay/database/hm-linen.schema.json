@@ -18,6 +18,7 @@
 			"foreignKey": "hm-hotel._id"
 		},
 		"createTime": {
+			"title": "创建时间",
 			"description": "创建时间",
 			"bsonType": "timestamp",
 			"defaultValue": {
@@ -30,6 +31,7 @@
 			
 		},
 		"service_provider":{
+			"title": "服务商",
 			"description": "服务商",
 			"bsonType": "string"
 		},
@@ -134,6 +136,7 @@
 		"status": {
 			"description": "0 待清洗，1正常完成 9 异常完成，10取消",
 			"bsonType": "int",
+			"defaultValue":0,
 			"enum": [0, 1, 9,10]
 		},
 		"mark": {

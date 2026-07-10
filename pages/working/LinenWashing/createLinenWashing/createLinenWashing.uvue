@@ -25,104 +25,125 @@
 		<view
 			style="padding:14px;border-radius: 12px;background-color: #fff;display:flex;flex-direction:row;justify-content: space-between;">
 			<view style="flex:1">
-				<rice-form :model="linenForm" :rules="rules1" ref="formRef1" class="demo-form" label-position="top" >
-					<rice-form-item :name="!showReturnBack?'flatsheet_max_num':'flatsheet_max_back_num'" label="大床单数量" required :error-style="{textAlign:showReturnBack?'right':'left'}">
+
+				<rice-form :model="linenForm" :rules="rules1" ref="formRef1" class="demo-form" label-position="top"
+					:label-style="{'fontSize':'13px'}">
+					<rice-form-item name="service_provider" label="服务商" required>
+						<rice-input v-model="linenForm['service_provider']" placeholder="请输入服务商"
+							 font-size="13px" />
+					</rice-form-item>
+					<rice-form-item :name="!showReturnBack?'flatsheet_max_num':'flatsheet_max_back_num'" label="大床单数量"
+						required :error-style="{textAlign:showReturnBack?'right':'left'}">
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text class="label-txt" style="text-align:left;">大床单数量</text></view>
-								<view style="flex:1" v-if="showReturnBack"><text  class="label-txt" style="text-align:right;">大床单归还数量</text></view>
+								<view style="flex:1;"><text class="label-txt" style="text-align:left;">大床单数量</text>
+								</view>
+								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
+										style="text-align:right;">大床单归还数量</text></view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding-right: 12px">
 								<rice-input v-model="linenForm['flatsheet_max_num']" placeholder="请输入大床单数量"
-									type="number" :disabled="showReturnBack" font-size="13px"/>
+									type="number"  font-size="13px" />
 							</view>
-							<view style="flex:1;padding-left:12px"  v-if="showReturnBack">
+							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
 								<rice-input v-model="linenForm['flatsheet_max_back_num']" placeholder="请输入归还大床单数量"
-									type="number"  :disabled="!showReturnBack" font-size="13px"/>
+									type="number" font-size="13px" />
 							</view>
 						</view>
 
 
 					</rice-form-item>
-					<rice-form-item :name="!showReturnBack?'flatsheet_mini_num':'flatsheet_mini_back_num'" label="小床单数量" required>
+					<rice-form-item :name="!showReturnBack?'flatsheet_mini_num':'flatsheet_mini_back_num'" label="小床单数量"
+						required>
 						<!-- <rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
 							border="none" /> -->
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text  class="label-txt" style="text-align:left;">小床单数量</text></view>
-								<view style="flex:1" v-if="showReturnBack"><text  class="label-txt"  style="text-align:right;">小床单归还数量</text></view>
+								<view style="flex:1;"><text class="label-txt" style="text-align:left;">小床单数量</text>
+								</view>
+								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
+										style="text-align:right;">小床单归还数量</text></view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
 								<rice-input v-model="linenForm['flatsheet_mini_num']" placeholder="请输入小床单数量"
-									type="number" :disabled="showReturnBack" font-size="13px"/>
+									type="number"  font-size="13px" />
 							</view>
-							<view style="flex:1;padding-left:12px"  v-if="showReturnBack">
+							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
 								<rice-input v-model="linenForm['flatsheet_mini_back_num']" placeholder="请输入归还小床单数量"
-									type="number" :disabled="!showReturnBack" font-size="13px"/>
+									type="number"  font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
-					<rice-form-item :name="!showReturnBack?'duvetCover_max_num':'duvetCover_max_back_num'" label="大被套数量" required>
+					<rice-form-item :name="!showReturnBack?'duvetCover_max_num':'duvetCover_max_back_num'" label="大被套数量"
+						required>
 						<!-- 	<rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
 							border="none" /> -->
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text  class="label-txt"  style="text-align:left;">大被套数量</text></view>
-								<view style="flex:1" v-if="showReturnBack"><text  class="label-txt"  style="text-align:right;">大被套归还数量</text></view>
+								<view style="flex:1;"><text class="label-txt" style="text-align:left;">大被套数量</text>
+								</view>
+								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
+										style="text-align:right;">大被套归还数量</text></view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<rice-input v-model="linenForm['duvetCover_max_num']" placeholder="请输入大被套数量2"
-									type="number" :disabled="showReturnBack" font-size="13px"/>
+								<rice-input v-model="linenForm['duvetCover_max_num']" placeholder="请输入大被套数量"
+									type="number"  font-size="13px" />
 							</view>
-							<view style="flex:1;padding-left:12px"  v-if="showReturnBack">
+							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
 								<rice-input v-model="linenForm['duvetCover_max_back_num']" placeholder="请输入归还大被套数量"
-									type="number" :disabled="!showReturnBack" font-size="13px"/>
+									type="number"  font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
-					<rice-form-item :name="!showReturnBack?'flatsheet_max_num':'flatsheet_max_back_num'" label="小被套数量" required>
+					<rice-form-item :name="!showReturnBack?'duvetCover_mini_num':'duvetCover_mini_back_num'"
+						label="小被套数量" required>
 						<!-- <rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
 							border="none" /> -->
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text  class="label-txt"  style="text-align:left;">小被套数量</text></view>
-								<view style="flex:1" v-if="showReturnBack"><text  class="label-txt"  style="text-align:right;">小被套归还数量</text></view>
+								<view style="flex:1;"><text class="label-txt" style="text-align:left;">小被套数量</text>
+								</view>
+								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
+										style="text-align:right;">小被套归还数量</text></view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
 								<rice-input v-model="linenForm['duvetCover_mini_num']" placeholder="请输入小被套数量"
-									type="number" :disabled="showReturnBack" font-size="13px"/>
+									type="number"  font-size="13px" />
 							</view>
-							<view style="flex:1;padding-left:12px"  v-if="showReturnBack">
+							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
 								<rice-input v-model="linenForm['duvetCover_mini_back_num']" placeholder="请输入小被套数量"
-									type="number" :disabled="!showReturnBack" font-size="13px"/>
+									type="number"  font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
-					<rice-form-item :name="!showReturnBack?'pillowcase_num':'pillowcase_back_num'" label="枕套数量" required>
+					<rice-form-item :name="!showReturnBack?'pillowcase_num':'pillowcase_back_num'" label="枕套数量"
+						required>
 						<!-- <rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
 							border="none" /> -->
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text  class="label-txt"  style="text-align:left;">枕套数量</text></view>
-								<view style="flex:1" v-if="showReturnBack"><text  class="label-txt"  style="text-align:right;">枕套归还数量</text></view>
+								<view style="flex:1;"><text class="label-txt" style="text-align:left;">枕套数量</text>
+								</view>
+								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
+										style="text-align:right;">枕套归还数量</text></view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<rice-input v-model="linenForm['pillowcase_num']" placeholder="请输入枕套数量"
-									type="number" :disabled="showReturnBack" font-size="13px"/>
+								<rice-input v-model="linenForm['pillowcase_num']" placeholder="请输入枕套数量" type="number"
+									 font-size="13px" />
 							</view>
-							<view style="flex:1;padding-left:12px"  v-if="showReturnBack">
+							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
 								<rice-input v-model="linenForm['pillowcase_back_num']" placeholder="请输入归还枕套数量"
-									type="number" :disabled="!showReturnBack" font-size="13px"/>
+									type="number"  font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
@@ -131,80 +152,89 @@
 							border="none" /> -->
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text  class="label-txt"  style="text-align:left;">浴巾数量</text></view>
-								<view style="flex:1" v-if="showReturnBack"><text  class="label-txt"  style="text-align:right;">浴巾归还数量</text></view>
+								<view style="flex:1;"><text class="label-txt" style="text-align:left;">浴巾数量</text>
+								</view>
+								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
+										style="text-align:right;">浴巾归还数量</text></view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<rice-input v-model="linenForm['bathTowel_num']" placeholder="请输入浴巾数量"
-									type="number" :disabled="showReturnBack" font-size="13px"/>
+								<rice-input v-model="linenForm['bathTowel_num']" placeholder="请输入浴巾数量" type="number"
+									 font-size="13px" />
 							</view>
-							<view style="flex:1;padding-left:12px"  v-if="showReturnBack">
+							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
 								<rice-input v-model="linenForm['bathTowel_back_num']" placeholder="请输入归还浴巾数量"
-									type="number" :disabled="!showReturnBack" font-size="13px"/>
+									type="number"  font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
 					<rice-form-item :name="!showReturnBack?'faceTowel_num':'faceTowel_back_num'" label="面巾数量" required>
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text  class="label-txt"  style="text-align:left;">面巾数量</text></view>
-								<view style="flex:1" v-if="showReturnBack"><text  class="label-txt"  style="text-align:right;">面巾归还数量</text></view>
+								<view style="flex:1;"><text class="label-txt" style="text-align:left;">面巾数量</text>
+								</view>
+								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
+										style="text-align:right;">面巾归还数量</text></view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<rice-input v-model="linenForm['faceTowel_num']" placeholder="请输入面巾数量"
-									type="number" :disabled="showReturnBack" font-size="13px"/>
+								<rice-input v-model="linenForm['faceTowel_num']" placeholder="请输入面巾数量" type="number"
+									 font-size="13px" />
 							</view>
-							<view style="flex:1;padding-left:12px"  v-if="showReturnBack">
+							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
 								<rice-input v-model="linenForm['faceTowel_back_num']" placeholder="请输入归还面巾数量"
-									type="number" :disabled="!showReturnBack" font-size="13px"/>
+									type="number"  font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
-					<rice-form-item :name="!showReturnBack?'floorTowel_num':'floorTowel_back_num'" label="地巾数量" required>
+					<rice-form-item :name="!showReturnBack?'floorTowel_num':'floorTowel_back_num'" label="地巾数量"
+						required>
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text  class="label-txt"  style="text-align:left;">地巾数量</text></view>
-								<view style="flex:1" v-if="showReturnBack"><text  class="label-txt"  style="text-align:right;">地巾归还数量</text></view>
+								<view style="flex:1;"><text class="label-txt" style="text-align:left;">地巾数量</text>
+								</view>
+								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
+										style="text-align:right;">地巾归还数量</text></view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<rice-input v-model="linenForm['floorTowel_num']" placeholder="请输入地巾数量"
-									type="number" :disabled="showReturnBack" font-size="13px"/>
+								<rice-input v-model="linenForm['floorTowel_num']" placeholder="请输入地巾数量" type="number"
+									 font-size="13px" />
 							</view>
-							<view style="flex:1;padding-left:12px"  v-if="showReturnBack">
+							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
 								<rice-input v-model="linenForm['floorTowel_back_num']" placeholder="请输入归还地巾数量"
-									type="number" :disabled="!showReturnBack" font-size="13px"/>
+									type="number"  font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
 					<rice-form-item :name="!showReturnBack?'bedRunner_num':'bedRunner_back_num'" label="床尾巾数量" required>
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text  class="label-txt"  style="text-align:left;">床尾巾数量</text></view>
-								<view style="flex:1" v-if="showReturnBack"><text  class="label-txt"  style="text-align:right;">床尾巾归还数量</text></view>
+								<view style="flex:1;"><text class="label-txt" style="text-align:left;">床尾巾数量</text>
+								</view>
+								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
+										style="text-align:right;">床尾巾归还数量</text></view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding-right:12px">
-								<rice-input v-model="linenForm['bedRunner_num']" placeholder="请输入床尾巾数量"
-									type="number" :disabled="showReturnBack"  font-size="13px" />
+								<rice-input v-model="linenForm['bedRunner_num']" placeholder="请输入床尾巾数量" type="number"
+									 font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
 								<rice-input v-model="linenForm['bedRunner_back_num']" placeholder="请输入归还床尾巾数量"
-									type="number" :disabled="!showReturnBack" font-size="13px" />
+									type="number"  font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
-					<rice-form-item name="mark" label="备注" >
-						<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('form.pach_remark')"
-							layout="vertical" borderColor="#dcdfe6" 
+					<rice-form-item name="mark" label="备注">
+						<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic
+							:placeholder="i18n.global.t('form.pach_remark')" layout="vertical" borderColor="#dcdfe6"
 							v-model="linenForm['mark']"></rice-textarea>
-						</rice-form-item>
+					</rice-form-item>
 				</rice-form>
 
 			</view>
@@ -236,7 +266,7 @@
 	defineOptions({
 		styleIsolation: "isolated"
 	})
-	
+
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -263,8 +293,9 @@
 		return result.join(",");
 	}
 	let pageType = ref(0);//0 创建，1，创建单编辑，2 验收输入，3，验收编辑，4 查看；
-	const showReturnBack=computed<boolean>(()=>{
-		return pageType.value ==2 ||  pageType.value==3 ||pageType.value==4;
+	const showReturnBack = computed<boolean>(() => {
+		//return pageType.value == 2 || pageType.value == 3 || pageType.value == 4;
+		return true;
 	})
 	const showCheckRoomPanal = ref(false);
 	let submitLoading = ref(false);
@@ -290,10 +321,11 @@
 		initDateObj.start_date as string,
 		initDateObj.end_date as string
 	]);
-	
+
 	let linenForm = ref<linenWashingType>({
-		_id:"",
+		"_id": "",
 		"hotel_id": hotel_id.value,
+		"service_provider": "",
 		"flatsheet_max_num": 0,
 		"flatsheet_mini_num": 0,
 		"duvetCover_max_num": 0,
@@ -302,12 +334,12 @@
 		"faceTowel_num": 0,
 		"floorTowel_num": 0,
 		"bedRunner_num": 0,
-		'pillowcase_num':0,
+		'pillowcase_num': 0,
 		"flatsheet_max_back_num": 0,
 		"flatsheet_mini_back_num": 0,
 		"duvetCover_max_back_num": 0,
 		"duvetCover_mini_back_num": 0,
-		'pillowcase_back_num':0,
+		'pillowcase_back_num': 0,
 		"bathTowel_back_num": 0,
 		"faceTowel_back_num": 0,
 		"floorTowel_back_num": 0,
@@ -333,22 +365,11 @@
 		console.log('rangeConfirm', e)
 		dateRange.value = e;
 	}
-	const submitForm = async () => {
-		if (submitLoading.value == true) {
-			return;
-		}
-		submitLoading.value = true;
-		// let flag : boolean = validForm(linenForm.value);
-		// if (flag == false) {
-		// 	submitLoading.value = false;
-		// 	return;
-		// }
-
+	const addLinen= async ()=>{
 		try {
 			const flag = await LinenOrderService.addLinen(linenForm.value);
 			if (flag) {
 				uni.$emit("refrushlinenList");
-				getGatherEvent(hotel_id.value);
 				uni.navigateBack();
 				submitLoading.value = false;
 				uni.showToast({
@@ -356,15 +377,57 @@
 					icon: "none"
 				});
 			}
-
+		
 		} catch (error) {
-			console.log("99001021")
 			submitLoading.value = false;
 			uni.showToast({
 				title: i18n.global.t('common.add_fail'),
 				icon: "none"
 			});
 		}
+	}
+	const editLinen=async ()=>{
+		
+			try {
+				const flag = await LinenOrderService.editLinen(linenForm.value);
+				if (flag) {
+					uni.$emit("refrushlinenList");
+					uni.navigateBack();
+					submitLoading.value = false;
+					uni.showToast({
+						title: i18n.global.t('common.add_success'),
+						icon: "none"
+					});
+				}
+			
+			} catch (error) {
+				submitLoading.value = false;
+				uni.showToast({
+					title: i18n.global.t('common.add_fail'),
+					icon: "none"
+				});
+			}
+	}
+
+	const submitForm = async () => {
+		if (submitLoading.value == true) {
+			return;
+		}
+		submitLoading.value = true;
+		console.log(linenForm.value);
+		// return;
+		// 新增
+		if (pageType.value == 0) {
+			addLinen();
+			return;
+		}
+		// 编辑
+		if (pageType.value == 1) {
+			editLinen();
+			return;
+		}
+
+		
 	}
 	const init = async () => {
 		uni.showLoading({ title: "" })
@@ -385,6 +448,24 @@
 		deep: true,
 		immediate: true
 	})
+	onLoad(params => {
+		try {
+			const pt = params.get("pageType");
+			const linen = params.get("linen_item");
+			if (pt != null) {
+				pageType.value = parseInt(pt);
+			}
+			if (linen != null) {
+				let decoded = decodeURIComponent(linen as string);
+				if (decoded != null) {
+					console.log("11111", JSON.parse<linenWashingType>(decoded)!)
+					linenForm.value = JSON.parse<linenWashingType>(decoded)!;
+				}
+			}
+		} catch (e) {
+			console.error(e)
+		}
+	});
 </script>
 
 <style>
@@ -461,11 +542,15 @@
 		display: flex;
 		align-items: center;
 	}
-	.label-view{
-		display: flex;flex-direction:row;flex:1;
+
+	.label-view {
+		display: flex;
+		flex-direction: row;
+		flex: 1;
 	}
-	.label-txt{
-		font-size:14px;
-		color:#666;
+
+	.label-txt {
+		font-size: 14px;
+		color: #666;
 	}
 </style>

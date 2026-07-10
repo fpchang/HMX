@@ -1,6 +1,6 @@
 
 export type linenWashingType={
-		"_id"?: string,
+		"_id": string,
 		"hotel_id":string,
 		"createTime"?:number ,
 		"returnBackTime"?: number,

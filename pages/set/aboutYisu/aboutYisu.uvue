@@ -10,7 +10,7 @@
 				<rice-cell-group border>
 					<rice-cell :title="i18n.global.t('setcontent.enterprise')"  :value="i18n.global.t('setcontent.companyName')" />
 					<rice-cell :title="i18n.global.t('setcontent.contactPerson')"  value="19083441181" />
-					<rice-cell :title="i18n.global.t('setcontent.recordNo')"  value="浙ICP备2024130639号-3A" />
+					<rice-cell :title="i18n.global.t('setcontent.recordNo')"  value="浙ICP备2024130639号-5A" />
 				</rice-cell-group>
 
 			</view>

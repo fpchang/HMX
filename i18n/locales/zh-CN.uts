@@ -347,7 +347,7 @@ export default {
 		contactAdmin: "请联系负责人",
 		confirmDeleteOrder: "确认删除此订单",
 		deleteOrderTip: "删除后将无法恢复，确认删除吗？",
-
+		
 		// 按钮
 		next: "下一步",
 		completeRegister: "完成注册",
@@ -385,10 +385,11 @@ export default {
 			valid_order_amount: "请输入总价"
 		}
 	},
+
 	washingOrder:{
 		title:"清洗单",
 		statusAll: "全部",
-		statusWashing: "待清洗",
+		statusWashing: "未完成",
 		statusError: "异常单",
 		statusCompleted: "已完成",
 		statusCancelled: "已撤销",
@@ -396,7 +397,44 @@ export default {
 		return_back_date:"返还日期",
 		washing_num:"清洗数量",
 		return_back_num:"返回数量",
-		searchPlaceholder:"请输入"
+		searchPlaceholder:"请输入",
+		btn_control_txt:"验收",
+		btn_lock_txt:"锁定",
+		confirmLockOrder: "确认锁定此单",
+		lockOrderTip: "锁定后将无法修改，确认锁定吗？",
+		  "createTime": "创建时间",
+		  "returnBackTime": "归还时间",
+		  "service_provider": "服务商",
+		  	"flatsheet_max": "大床单",
+		  	"flatsheet_mini": "小床单",
+		  	"duvetCover_max": "大被套",
+		  	"duvetCover_mini": "小被套",
+		  	"pillowcase": "枕套",
+		  	"bathTowel": "浴巾",
+		  	"faceTowel": "面巾",
+		  	"floorTowel": "地巾",
+		  	"bedRunner": "床尾巾",
+		  
+		  "flatsheet_max_num": "大床单数量",
+		  "flatsheet_mini_num": "小床单数量",
+		  "duvetCover_max_num": "大被套数量",
+		  "duvetCover_mini_num": "小被套数量",
+		  "pillowcase_num": "枕套数量",
+		  "bathTowel_num": "浴巾数量",
+		  "faceTowel_num": "面巾数量",
+		  "floorTowel_num": "地巾数量",
+		  "bedRunner_num": "床尾巾数量",
+		  "flatsheet_max_back_num": "返还大床单数量",
+		  "flatsheet_mini_back_num": "返还小床单数量",
+		  "duvetCover_max_back_num": "返还大被套数量",
+		  "duvetCover_mini_back_num": "返还小被套数量",
+		  "pillowcase_back_num": "返还枕套数量",
+		  "bathTowel_back_num": "返还浴巾数量",
+		  "faceTowel_back_num": "返还面巾数量",
+		  "floorTowel_back_num": "返还地巾数量",
+		  "bedRunner_back_num": "返还床尾巾数量",
+		  "unit": "单位",
+		  "mark": "备注"
 	},
 	finance: {
 		navbar_title: "财务中心",

@@ -71,116 +71,116 @@ module.exports = {
 			data: 1
 		}
 	},
-	getTokenInfo: function() {
-		return this._tokenInfo || {};
-	},
-	getUser: function() {
-		return this._user || {};
-	},
-	async user_validToken(token) {
+	// getTokenInfo: function() {
+	// 	return this._tokenInfo || {};
+	// },
+	// getUser: function() {
+	// 	return this._user || {};
+	// },
+	// async user_validToken(token) {
 
-	},
-	//账号密码登录
-	async user_loginByAccountAndPassword(userForm) {
+	// },
+	// //账号密码登录
+	// async user_loginByAccountAndPassword(userForm) {
 
-	},
-	//短信验证码登录
-	async user_loginBySmsCode(userForm) {
+	// },
+	// //短信验证码登录
+	// async user_loginBySmsCode(userForm) {
 
-	},
-	//一键登录
-	async user_loginByApp(userForm) {
+	// },
+	// //一键登录
+	// async user_loginByApp(userForm) {
 
-	},
-	//账号注册验证邮件与验证码
-	async user_validEmailAndCode(email, emailCode, emailCodeTk) {
+	// },
+	// //账号注册验证邮件与验证码
+	// async user_validEmailAndCode(email, emailCode, emailCodeTk) {
 
-	},
-	// 账号注册
-	async user_register(user) {
+	// },
+	// // 账号注册
+	// async user_register(user) {
 
-	},
-	//修改密码
-	async user_updatePassword(password, originPassword) {
+	// },
+	// //修改密码
+	// async user_updatePassword(password, originPassword) {
 
-	},
-	async user_updateEmail(email, emailCode, emailCodeTk) {
+	// },
+	// async user_updateEmail(email, emailCode, emailCodeTk) {
 
-	},
-	async user_validUpdatePhone(phone){},
-	//修改绑定手机号
-	async user_updatePhone(userForm) {
+	// },
+	// async user_validUpdatePhone(phone){},
+	// //修改绑定手机号
+	// async user_updatePhone(userForm) {
 
-	},
-	//根据token获取用户信息
-	async user_getUser() {
+	// },
+	// //根据token获取用户信息
+	// async user_getUser() {
 
-	},
-	//邮箱验证码重置密码
-	async user_resetPasswordByEmailCode(email, emailCode, emailCodeTk, password) {},
-	async user_sendSms(phone,tempType) {
+	// },
+	// //邮箱验证码重置密码
+	// async user_resetPasswordByEmailCode(email, emailCode, emailCodeTk, password) {},
+	// async user_sendSms(phone,tempType) {
 
-	},
-	async user_closeAccount() {
+	// },
+	// async user_closeAccount() {
 
-	},
-	async user_getPermission(hotel_id) {
+	// },
+	// async user_getPermission(hotel_id) {
 
-	},
-	async room_addRoom(roomList) {
+	// },
+	// async room_addRoom(roomList) {
 
-	},
-	async room_updateRoom(room) {
+	// },
+	// async room_updateRoom(room) {
 
-	},
-	async room_getRemainderRoomList() {
+	// },
+	// async room_getRemainderRoomList() {
 
-	},
-	async room_deleteRoom(_id) {
+	// },
+	// async room_deleteRoom(_id) {
 
-	},
-	async hotel_createHotel(hotelObj) {
+	// },
+	// async hotel_createHotel(hotelObj) {
 
-	},
-	async hotel_updateHotel(hotel_id, hotelObj) {
+	// },
+	// async hotel_updateHotel(hotel_id, hotelObj) {
 
-	},
-	async hotel_deleteHotel(hotel_id) {
+	// },
+	// async hotel_deleteHotel(hotel_id) {
 
-	},
-	async hotel_getHotelList() {
+	// },
+	// async hotel_getHotelList() {
 
-	},
-	async order_addOrder(orderObj) {
+	// },
+	// async order_addOrder(orderObj) {
 
-	},
-	async order_deleteOrder(_id) {
+	// },
+	// async order_deleteOrder(_id) {
 
-	},
-	async roomType_addRoomType(roomType) {
+	// },
+	// async roomType_addRoomType(roomType) {
 
-	},
-	async roomType_deleteRoomType(roomTypeId) {
+	// },
+	// async roomType_deleteRoomType(roomTypeId) {
 
-	},
-	async roomType_updateRoomType(roomType) {
+	// },
+	// async roomType_updateRoomType(roomType) {
 
-	},
-	async roomType_getRoomType(hotel_id) {
+	// },
+	// async roomType_getRoomType(hotel_id) {
 
-	},
-	async getRoomTypeIncludeRoomList(hotel_id) {
+	// },
+	// async getRoomTypeIncludeRoomList(hotel_id) {
 
-	},
-	async roomType_getRemainderRoomType(params) {
+	// },
+	// async roomType_getRemainderRoomType(params) {
 
-	},
-	async fm_add(fm) {},
-	async fm_deleteFm(_id) {},
-	async sendEmailCode(email, tempKey) {},
-	async employee_addEmployee(employeeObj) {},
-	async employee_editEmployee(employeeObj) {},
-	async employee_deleteEmployee(employee_id) {},
+	// },
+	// async fm_add(fm) {},
+	// async fm_deleteFm(_id) {},
+	// async sendEmailCode(email, tempKey) {},
+	// async employee_addEmployee(employeeObj) {},
+	// async employee_editEmployee(employeeObj) {},
+	// async employee_deleteEmployee(employee_id) {},
 	...hotel,
 	...order,
 	...linen,

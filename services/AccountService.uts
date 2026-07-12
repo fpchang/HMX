@@ -38,7 +38,7 @@ class AccountServiceClass {
 			const flag = res['data'] as boolean;
 			return flag;
 		} catch (error:Error) {
-			console.log(error)
+			console.log(error.message)
 			RequestFailModal(error.message);
 			throw new Error("valid token fail");
 			//return false;

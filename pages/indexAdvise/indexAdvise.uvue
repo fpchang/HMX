@@ -229,7 +229,7 @@
 			}
 
 		} catch (error) {
-			console.log("err", error);
+			console.log("err===", error.message,error.name,error.cause);
 
 			isReading.value = true;
 		}

@@ -29,9 +29,9 @@
 
 			<!-- 全局共用：用户协议 + 注册入口 -->
 			<view class="bottom-box">
-				<view class="up-box" @click="agreeEvent" style="padding-right: 2px;">
-					<image v-show="!isAgree" src="/static/icons/circle.png" class="form-icon"></image>
-					<image v-show="isAgree" src="/static/icons/confirm_selcted.png" class="form-icon"></image>
+				<view class="up-box" style="padding-right: 2px;">
+					<image v-show="!isAgree"  @click="agreeEvent" src="/static/icons/circle.png" class="form-icon"></image>
+					<image v-show="isAgree"  @click="agreeEvent" src="/static/icons/confirm_selcted.png" class="form-icon"></image>
 					<view class="text-row">
 						<text class="ct-text">{{i18n.global.t('login.agreenTxt_one')}}</text>
 						<text class="btn-text"

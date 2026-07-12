@@ -1,5 +1,5 @@
 
-const {linenAction} = require('./action/linenAction.js');
+const {linenAction} = require('./action/LinenAction.js');
 module.exports = {
 	async linen_add(lineObj){
 		return await new linenAction(this).add(lineObj);

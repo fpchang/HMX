@@ -13,9 +13,6 @@
 
 	</rice-navbar>
 	<scroll-view style="flex: 1;" v-if="hotel_id!=''" :show-scrollbar="false">
-		<!-- <view class="top-header">
-			<text class="header-title">{{i18n.global.t('tab.function')}}</text>
-		</view> -->
 		<view class="homemenu">
 			<view class="card" v-for="item in menuList">
 				<!-- 替换 class 为 card-title，消除层级依赖 -->
@@ -175,13 +172,13 @@
 			]
 
 		},{
-			title:"日常事务",
+			title:i18n.global.t("function.btn_txt_daily_routine"),
 			title_icon: "/static/icons/homemenu/order-manage.png",
 			title_color: "rgb(30,30,30)",
 			menu_item_list:[
 				{
 					icon: "/static/icons/homemenu/linen.png",
-					label: "布草清洗",
+					label: i18n.global.t("washingOrder.title"),
 					bgColor: "rgba(237,137,54,0.1)",
 					url: "/pages/working/LinenWashing/LinenWashingList"
 				}

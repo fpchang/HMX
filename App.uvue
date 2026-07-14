@@ -21,10 +21,8 @@
 	const setLanuage = () => {
 	
 		const sys = uni.getSystemInfoSync();
-		console.log('sys', sys);
 		const osLanguage = sys.osLanguage;
 		let local = 'zh-CN';
-		console.log(osLanguage != null)
 		if (osLanguage != null && !osLanguage.includes('zh-')) {
 			local = 'en-US';
 		}

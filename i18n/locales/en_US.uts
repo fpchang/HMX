@@ -375,9 +375,10 @@ export default {
 	},
 	washingOrder: {
 		title: "Laundry Order",
+		btn_add_txt:"Laundry",
 		statusAll: "All",
-		statusWashing: "Pending Washing",
-		statusError: "Abnormal Order",
+		statusWashing: "Pending",
+		statusError: "Abnormal",
 		statusCompleted: "Completed",
 		statusCancelled: "Cancelled",
 		washing_date: "Laundry Date",
@@ -420,7 +421,36 @@ export default {
 		  "floorTowel_back_num": "Returned Floor Mats",
 		  "bedRunner_back_num": "Returned Bed Runners",
 		  "unit": "Unit",
-		  "mark": "Remarks"
+		  "mark": "Remarks"，
+		  label_dispatch:"Dispatch",
+		  label_return:"Return",
+		   "form": {
+			   "form_title_add": "New Laundry Order",
+			   "form_title_edit": "Modify Laundry Order",
+			     form_title_view:"view Laundry Order",
+		      "pach_remark": "Enter remarks here",
+		   "placeholder": {
+		     "service_provider": "Enter vendor",
+		     "flatsheet_max_num": "King sheet qty",
+		     "flatsheet_max_back_num": "Returned king sheet qty",
+		     "flatsheet_mini_num": "Twin sheet qty",
+		     "flatsheet_mini_back_num": "Returned twin sheet qty",
+		     "duvetCover_max_num": "King duvet qty",
+		     "duvetCover_max_back_num": "Returned king duvet qty",
+		     "duvetCover_mini_num": "Twin duvet qty",
+		     "duvetCover_mini_back_num": "Returned twin duvet qty",
+		     "pillowcase_num": "Pillowcase qty",
+		     "pillowcase_back_num": "Returned pillowcase qty",
+		     "bathTowel_num": "Bath towel qty",
+		     "bathTowel_back_num": "Returned bath towel qty",
+		     "faceTowel_num": "Face towel qty",
+		     "faceTowel_back_num": "Returned face towel qty",
+		     "floorTowel_num": "Floor mat qty",
+		     "floorTowel_back_num": "Returned floor mat qty",
+		     "bedRunner_num": "Bed runner qty",
+		     "bedRunner_back_num": "Returned bed runner qty"
+		   },
+		    }
 	},
 	finance: {
 		navbar_title: "Financial Center",
@@ -468,7 +498,8 @@ export default {
 		btn_txt_income_expense: "Income & Expense Management",
 		btn_txt_order: "Order",
 		btn_txt_create_order: "Create Order",
-		btn_txt_fm_chart: "Financial Statistics"
+		btn_txt_fm_chart: "Financial Statistics",
+		btn_txt_daily_routine: "Daily Routine"
 	},
 	userAgreement: {
 		title: "User Service Agreement",

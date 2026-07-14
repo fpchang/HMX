@@ -387,7 +387,8 @@ export default {
 	},
 
 	washingOrder:{
-		title:"清洗单",
+		title:"布草清洗"
+		btn_add_txt:"清洗单",
 		statusAll: "全部",
 		statusWashing: "未完成",
 		statusError: "异常单",
@@ -434,7 +435,36 @@ export default {
 		  "floorTowel_back_num": "返还地巾数量",
 		  "bedRunner_back_num": "返还床尾巾数量",
 		  "unit": "单位",
-		  "mark": "备注"
+		  "mark": "备注",
+		  label_dispatch:"送洗",
+		  label_return:"返还",
+		   "form": {
+			   form_title_add:"添加清洗单",
+			   form_title_edit:"修改清洗单",
+			   form_title_view:"查看清洗单",
+		      "pach_remark": "请输入备注信息",
+		      "placeholder": {
+		        "service_provider": "请输入服务商",
+		        "flatsheet_max_num": "请输入大床单数量",
+		        "flatsheet_max_back_num": "请输入归还大床单数量",
+		        "flatsheet_mini_num": "请输入小床单数量",
+		        "flatsheet_mini_back_num": "请输入归还小床单数量",
+		        "duvetCover_max_num": "请输入大被套数量",
+		        "duvetCover_max_back_num": "请输入归还大被套数量",
+		        "duvetCover_mini_num": "请输入小被套数量",
+		        "duvetCover_mini_back_num": "请输入归还小被套数量",
+		        "pillowcase_num": "请输入枕套数量",
+		        "pillowcase_back_num": "请输入归还枕套数量",
+		        "bathTowel_num": "请输入浴巾数量",
+		        "bathTowel_back_num": "请输入归还浴巾数量",
+		        "faceTowel_num": "请输入面巾数量",
+		        "faceTowel_back_num": "请输入归还面巾数量",
+		        "floorTowel_num": "请输入地巾数量",
+		        "floorTowel_back_num": "请输入归还地巾数量",
+		        "bedRunner_num": "请输入床尾巾数量",
+		        "bedRunner_back_num": "请输入归还床尾巾数量"
+		      }
+		    }
 	},
 	finance: {
 		navbar_title: "财务中心",
@@ -484,7 +514,8 @@ export default {
 		btn_txt_income_expense: "收支管理",
 		btn_txt_order: "订单管理",
 		btn_txt_create_order: "添加订单",
-		btn_txt_fm_chart: "财务统计"
+		btn_txt_fm_chart: "财务统计",
+		btn_txt_daily_routine: "日常事务"
 
 
 	},

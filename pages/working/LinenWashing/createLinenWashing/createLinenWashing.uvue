@@ -28,211 +28,268 @@
 
 				<rice-form :model="linenForm" :rules="rules1" ref="linenFormRef" class="demo-form" label-position="top"
 					:label-style="{'fontSize':'13px'}">
-					<rice-form-item name="service_provider" label="服务商" required>
-						<rice-input v-model="linenForm['service_provider']" placeholder="请输入服务商"
-							 font-size="13px" />
+					<rice-form-item name="service_provider" :label="i18n.global.t('washingOrder.service_provider')"
+						required>
+						<rice-input v-model="linenForm['service_provider']"
+							:placeholder="i18n.global.t('washingOrder.form.placeholder.service_provider')" font-size="13px" />
 					</rice-form-item>
-					<rice-form-item :name="!showReturnBack?'flatsheet_max_num':'flatsheet_max_back_num'" label="大床单数量"
-						required :error-style="{textAlign:showReturnBack?'right':'left'}">
+
+					<rice-form-item :name="!showReturnBack?'flatsheet_max_num':'flatsheet_max_back_num'"
+						:label="i18n.global.t('washingOrder.flatsheet_max_num')" required
+						:error-style="{textAlign:showReturnBack?'right':'left'}">
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text class="label-txt" style="text-align:left;">大床单数量</text>
+								<view style="flex:1;">
+									<text class="label-txt"
+										style="text-align:left;">{{i18n.global.t('washingOrder.flatsheet_max_num')}}</text>
 								</view>
-								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
-										style="text-align:right;">大床单归还数量</text></view>
+								<view style="flex:1" v-if="showReturnBack">
+									<text class="label-txt"
+										style="text-align:right;">{{i18n.global.t('washingOrder.flatsheet_max_back_num')}}</text>
+								</view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding-right: 12px">
-								<rice-input v-model="linenForm['flatsheet_max_num']" placeholder="请输入大床单数量"
-									type="number"  font-size="13px" />
+								<rice-input v-model="linenForm['flatsheet_max_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.flatsheet_max_num')" type="number"
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<rice-input v-model="linenForm['flatsheet_max_back_num']" placeholder="请输入归还大床单数量"
+								<rice-input v-model="linenForm['flatsheet_max_back_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.flatsheet_max_back_num')"
 									type="number" font-size="13px" />
 							</view>
 						</view>
-
-
 					</rice-form-item>
-					<rice-form-item :name="!showReturnBack?'flatsheet_mini_num':'flatsheet_mini_back_num'" label="小床单数量"
-						required>
-						<!-- <rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
-							border="none" /> -->
+
+					<rice-form-item :name="!showReturnBack?'flatsheet_mini_num':'flatsheet_mini_back_num'"
+						:label="i18n.global.t('washingOrder.flatsheet_mini_num')" required>
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text class="label-txt" style="text-align:left;">小床单数量</text>
+								<view style="flex:1;">
+									<text class="label-txt"
+										style="text-align:left;">{{i18n.global.t('washingOrder.flatsheet_mini_num')}}</text>
 								</view>
-								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
-										style="text-align:right;">小床单归还数量</text></view>
+								<view style="flex:1" v-if="showReturnBack">
+									<text class="label-txt"
+										style="text-align:right;">{{i18n.global.t('washingOrder.flatsheet_mini_back_num')}}</text>
+								</view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<rice-input v-model="linenForm['flatsheet_mini_num']" placeholder="请输入小床单数量"
-									type="number"  font-size="13px" />
+								<rice-input v-model="linenForm['flatsheet_mini_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.flatsheet_mini_num')" type="number"
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<rice-input v-model="linenForm['flatsheet_mini_back_num']" placeholder="请输入归还小床单数量"
-									type="number"  font-size="13px" />
+								<rice-input v-model="linenForm['flatsheet_mini_back_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.flatsheet_mini_back_num')"
+									type="number" font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
-					<rice-form-item :name="!showReturnBack?'duvetCover_max_num':'duvetCover_max_back_num'" label="大被套数量"
-						required>
-						<!-- 	<rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
-							border="none" /> -->
+
+					<rice-form-item :name="!showReturnBack?'duvetCover_max_num':'duvetCover_max_back_num'"
+						:label="i18n.global.t('washingOrder.duvetCover_max_num')" required>
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text class="label-txt" style="text-align:left;">大被套数量</text>
+								<view style="flex:1;">
+									<text class="label-txt"
+										style="text-align:left;">{{i18n.global.t('washingOrder.duvetCover_max_num')}}</text>
 								</view>
-								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
-										style="text-align:right;">大被套归还数量</text></view>
+								<view style="flex:1" v-if="showReturnBack">
+									<text class="label-txt"
+										style="text-align:right;">{{i18n.global.t('washingOrder.duvetCover_max_back_num')}}</text>
+								</view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<rice-input v-model="linenForm['duvetCover_max_num']" placeholder="请输入大被套数量"
-									type="number"  font-size="13px" />
+								<rice-input v-model="linenForm['duvetCover_max_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.duvetCover_max_num')" type="number"
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<rice-input v-model="linenForm['duvetCover_max_back_num']" placeholder="请输入归还大被套数量"
-									type="number"  font-size="13px" />
+								<rice-input v-model="linenForm['duvetCover_max_back_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.duvetCover_max_back_num')"
+									type="number" font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
+
 					<rice-form-item :name="!showReturnBack?'duvetCover_mini_num':'duvetCover_mini_back_num'"
-						label="小被套数量" required>
-						<!-- <rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
-							border="none" /> -->
+						:label="i18n.global.t('washingOrder.duvetCover_mini_num')" required>
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text class="label-txt" style="text-align:left;">小被套数量</text>
+								<view style="flex:1;">
+									<text class="label-txt"
+										style="text-align:left;">{{i18n.global.t('washingOrder.duvetCover_mini_num')}}</text>
 								</view>
-								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
-										style="text-align:right;">小被套归还数量</text></view>
+								<view style="flex:1" v-if="showReturnBack">
+									<text class="label-txt"
+										style="text-align:right;">{{i18n.global.t('washingOrder.duvetCover_mini_back_num')}}</text>
+								</view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<rice-input v-model="linenForm['duvetCover_mini_num']" placeholder="请输入小被套数量"
-									type="number"  font-size="13px" />
+								<rice-input v-model="linenForm['duvetCover_mini_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.duvetCover_mini_num')" type="number"
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<rice-input v-model="linenForm['duvetCover_mini_back_num']" placeholder="请输入小被套数量"
-									type="number"  font-size="13px" />
+								<rice-input v-model="linenForm['duvetCover_mini_back_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.duvetCover_mini_back_num')"
+									type="number" font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
-					<rice-form-item :name="!showReturnBack?'pillowcase_num':'pillowcase_back_num'" label="枕套数量"
-						required>
-						<!-- <rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
-							border="none" /> -->
+
+					<rice-form-item :name="!showReturnBack?'pillowcase_num':'pillowcase_back_num'"
+						:label="i18n.global.t('washingOrder.pillowcase_num')" required>
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text class="label-txt" style="text-align:left;">枕套数量</text>
+								<view style="flex:1;">
+									<text class="label-txt"
+										style="text-align:left;">{{i18n.global.t('washingOrder.pillowcase_num')}}</text>
 								</view>
-								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
-										style="text-align:right;">枕套归还数量</text></view>
+								<view style="flex:1" v-if="showReturnBack">
+									<text class="label-txt"
+										style="text-align:right;">{{i18n.global.t('washingOrder.pillowcase_back_num')}}</text>
+								</view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<rice-input v-model="linenForm['pillowcase_num']" placeholder="请输入枕套数量" type="number"
-									 font-size="13px" />
+								<rice-input v-model="linenForm['pillowcase_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.pillowcase_num')" type="number"
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<rice-input v-model="linenForm['pillowcase_back_num']" placeholder="请输入归还枕套数量"
-									type="number"  font-size="13px" />
+								<rice-input v-model="linenForm['pillowcase_back_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.pillowcase_back_num')" type="number"
+									font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
-					<rice-form-item :name="!showReturnBack?'bathTowel_num':'bathTowel_back_num'" label="浴巾数量" required>
-						<!-- <rice-input v-model="linenForm['flatsheet20_num']" placeholder="请输入床单数量" type="number"
-							border="none" /> -->
+
+					<rice-form-item :name="!showReturnBack?'bathTowel_num':'bathTowel_back_num'"
+						:label="i18n.global.t('washingOrder.bathTowel_num')" required>
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text class="label-txt" style="text-align:left;">浴巾数量</text>
+								<view style="flex:1;">
+									<text class="label-txt"
+										style="text-align:left;">{{i18n.global.t('washingOrder.bathTowel_num')}}</text>
 								</view>
-								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
-										style="text-align:right;">浴巾归还数量</text></view>
+								<view style="flex:1" v-if="showReturnBack">
+									<text class="label-txt"
+										style="text-align:right;">{{i18n.global.t('washingOrder.bathTowel_back_num')}}</text>
+								</view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<rice-input v-model="linenForm['bathTowel_num']" placeholder="请输入浴巾数量" type="number"
-									 font-size="13px" />
+								<rice-input v-model="linenForm['bathTowel_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.bathTowel_num')" type="number"
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<rice-input v-model="linenForm['bathTowel_back_num']" placeholder="请输入归还浴巾数量"
-									type="number"  font-size="13px" />
+								<rice-input v-model="linenForm['bathTowel_back_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.bathTowel_back_num')" type="number"
+									font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
-					<rice-form-item :name="!showReturnBack?'faceTowel_num':'faceTowel_back_num'" label="面巾数量" required>
+
+					<rice-form-item :name="!showReturnBack?'faceTowel_num':'faceTowel_back_num'"
+						:label="i18n.global.t('washingOrder.faceTowel_num')" required>
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text class="label-txt" style="text-align:left;">面巾数量</text>
+								<view style="flex:1;">
+									<text class="label-txt"
+										style="text-align:left;">{{i18n.global.t('washingOrder.faceTowel_num')}}</text>
 								</view>
-								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
-										style="text-align:right;">面巾归还数量</text></view>
+								<view style="flex:1" v-if="showReturnBack">
+									<text class="label-txt"
+										style="text-align:right;">{{i18n.global.t('washingOrder.faceTowel_back_num')}}</text>
+								</view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<rice-input v-model="linenForm['faceTowel_num']" placeholder="请输入面巾数量" type="number"
-									 font-size="13px" />
+								<rice-input v-model="linenForm['faceTowel_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.faceTowel_num')" type="number"
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<rice-input v-model="linenForm['faceTowel_back_num']" placeholder="请输入归还面巾数量"
-									type="number"  font-size="13px" />
+								<rice-input v-model="linenForm['faceTowel_back_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.faceTowel_back_num')" type="number"
+									font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
-					<rice-form-item :name="!showReturnBack?'floorTowel_num':'floorTowel_back_num'" label="地巾数量"
-						required>
+
+					<rice-form-item :name="!showReturnBack?'floorTowel_num':'floorTowel_back_num'"
+						:label="i18n.global.t('washingOrder.floorTowel_num')" required>
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text class="label-txt" style="text-align:left;">地巾数量</text>
+								<view style="flex:1;">
+									<text class="label-txt"
+										style="text-align:left;">{{i18n.global.t('washingOrder.floorTowel_num')}}</text>
 								</view>
-								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
-										style="text-align:right;">地巾归还数量</text></view>
+								<view style="flex:1" v-if="showReturnBack">
+									<text class="label-txt"
+										style="text-align:right;">{{i18n.global.t('washingOrder.floorTowel_back_num')}}</text>
+								</view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<rice-input v-model="linenForm['floorTowel_num']" placeholder="请输入地巾数量" type="number"
-									 font-size="13px" />
+								<rice-input v-model="linenForm['floorTowel_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.floorTowel_num')" type="number"
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<rice-input v-model="linenForm['floorTowel_back_num']" placeholder="请输入归还地巾数量"
-									type="number"  font-size="13px" />
+								<rice-input v-model="linenForm['floorTowel_back_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.floorTowel_back_num')" type="number"
+									font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
-					<rice-form-item :name="!showReturnBack?'bedRunner_num':'bedRunner_back_num'" label="床尾巾数量" required>
+
+					<rice-form-item :name="!showReturnBack?'bedRunner_num':'bedRunner_back_num'"
+						:label="i18n.global.t('washingOrder.bedRunner_num')" required>
 						<template #label>
 							<view class="label-view">
-								<view style="flex:1;"><text class="label-txt" style="text-align:left;">床尾巾数量</text>
+								<view style="flex:1;">
+									<text class="label-txt"
+										style="text-align:left;">{{i18n.global.t('washingOrder.bedRunner_num')}}</text>
 								</view>
-								<view style="flex:1" v-if="showReturnBack"><text class="label-txt"
-										style="text-align:right;">床尾巾归还数量</text></view>
+								<view style="flex:1" v-if="showReturnBack">
+									<text class="label-txt"
+										style="text-align:right;">{{i18n.global.t('washingOrder.bedRunner_back_num')}}</text>
+								</view>
 							</view>
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding-right:12px">
-								<rice-input v-model="linenForm['bedRunner_num']" placeholder="请输入床尾巾数量" type="number"
-									 font-size="13px" />
+								<rice-input v-model="linenForm['bedRunner_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.bedRunner_num')" type="number"
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<rice-input v-model="linenForm['bedRunner_back_num']" placeholder="请输入归还床尾巾数量"
-									type="number"  font-size="13px" />
+								<rice-input v-model="linenForm['bedRunner_back_num']"
+									:placeholder="i18n.global.t('washingOrder.form.placeholder.bedRunner_back_num')" type="number"
+									font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
-					<rice-form-item name="mark" label="备注">
+
+					<rice-form-item name="mark" :label="i18n.global.t('washingOrder.mark')">
 						<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic
-							:placeholder="i18n.global.t('form.pach_remark')" layout="vertical" borderColor="#dcdfe6"
+							:placeholder="i18n.global.t('washingOrder.form.pach_remark')" layout="vertical" borderColor="#dcdfe6"
 							v-model="linenForm['mark']"></rice-textarea>
 					</rice-form-item>
 				</rice-form>
@@ -243,7 +300,7 @@
 	</scroll-view>
 	<!-- #endif -->
 	<rice-calendar v-model:show="showCalendar" mode="range" :min-date="initDateObj.minDate" :date="dateRange"
-		@confirm="rangeConfirm" :title="i18n.global.t('form.canendar_title')" :show-subtitle="true"></rice-calendar>
+		@confirm="rangeConfirm" :title="i18n.global.t('washingOrder.form.canendar_title')" :show-subtitle="true"></rice-calendar>
 </template>
 
 <script setup>
@@ -293,7 +350,7 @@
 		return result.join(",");
 	}
 	let pageType = ref(0);//0 创建，1，创建单编辑，2 验收输入，3，验收编辑，4 查看；
-	
+
 	const linenFormRef = ref<RiceFormComponentPublicInstance | null>(null);
 	const showReturnBack = computed<boolean>(() => {
 		//return pageType.value == 2 || pageType.value == 3 || pageType.value == 4;
@@ -303,9 +360,9 @@
 	let submitLoading = ref(false);
 	const title = computed(() => {
 		if (pageType.value == 0) {
-			return i18n.global.t('order.create_order.addOrder');
+			return i18n.global.t('washingOrder.form.form_title_add');
 		}
-		return pageType.value == 1 ? i18n.global.t('order.create_order.edit_order_info') : i18n.global.t('order.create_order.order_info');
+		return pageType.value == 1 ? i18n.global.t('washingOrder.form.form_title_edit') : i18n.global.t('washingOrder.form.form_title_view');
 	});
 	const titleImg = computed<string>(() => {
 		if (pageType.value == 0) {
@@ -349,7 +406,7 @@
 		"mark": ""
 	});
 	const rules1 = new Map<string, FormRules[]>([
-		
+
 		["service_provider", [{ required: true, message: '请输入服务商' }]],
 		["flatsheet_max_num", [{ required: true, message: '请输入大床单数量' }]],
 		["flatsheet_max_back_num", [{ required: true, message: '请输入大床归还单数量' }]],
@@ -369,7 +426,7 @@
 		console.log('rangeConfirm', e)
 		dateRange.value = e;
 	}
-	const addLinen= async ()=>{
+	const addLinen = async () => {
 		try {
 			const flag = await LinenOrderService.addLinen(linenForm.value);
 			if (flag) {
@@ -381,7 +438,7 @@
 					icon: "none"
 				});
 			}
-		
+
 		} catch (error) {
 			submitLoading.value = false;
 			uni.showToast({
@@ -390,29 +447,29 @@
 			});
 		}
 	}
-	const editLinen=async ()=>{
-		
-			try {
-				const flag = await LinenOrderService.editLinen(linenForm.value);
-				if (flag) {
-					uni.$emit("refrushlinenList");
-					uni.navigateBack();
-					submitLoading.value = false;
-					uni.showToast({
-						title: i18n.global.t('common.add_success'),
-						icon: "none"
-					});
-				}
-			
-			} catch (error) {
+	const editLinen = async () => {
+
+		try {
+			const flag = await LinenOrderService.editLinen(linenForm.value);
+			if (flag) {
+				uni.$emit("refrushlinenList");
+				uni.navigateBack();
 				submitLoading.value = false;
 				uni.showToast({
-					title: i18n.global.t('common.add_fail'),
+					title: i18n.global.t('common.add_success'),
 					icon: "none"
 				});
 			}
+
+		} catch (error) {
+			submitLoading.value = false;
+			uni.showToast({
+				title: i18n.global.t('common.add_fail'),
+				icon: "none"
+			});
+		}
 	}
-const return_back_num = (linen : linenWashingType) => {
+	const return_back_num = (linen : linenWashingType) => {
 		const num = linen.flatsheet_max_back_num +
 			linen.flatsheet_mini_back_num +
 			linen.duvetCover_max_back_num +
@@ -443,15 +500,15 @@ const return_back_num = (linen : linenWashingType) => {
 		submitLoading.value = true;
 		console.log(linenForm.value);
 		const result = await linenFormRef.value!.validate();
-		if(result!=true){
+		if (result != true) {
 			console.log("校验失败");
 			submitLoading.value = false;
 			return;
 		}
-		if(washing_num(linenForm.value)<1){
+		if (washing_num(linenForm.value) < 1) {
 			uni.showToast({
-				title:"布草数量最少一件",
-				icon:"none"
+				title: "布草数量最少一件",
+				icon: "none"
 			})
 			submitLoading.value = false;
 			return;
@@ -468,7 +525,7 @@ const return_back_num = (linen : linenWashingType) => {
 			return;
 		}
 
-		
+
 	}
 	const init = async () => {
 		uni.showLoading({ title: "" })

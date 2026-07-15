@@ -51,16 +51,14 @@
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding-right: 12px">
-								<!-- <rice-input v-model="linenForm['flatsheet_max_num']"
+								<rice-input v-model="linenForm['flatsheet_max_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.flatsheet_max_num')" type="number"
-									font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['flatsheet_max_num']" input-width="80px"></rice-stepper>
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<!-- <rice-input v-model="linenForm['flatsheet_max_back_num']"
+								<rice-input v-model="linenForm['flatsheet_max_back_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.flatsheet_max_back_num')"
-									type="number" font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['flatsheet_max_back_num']" input-width="80px"></rice-stepper>
+									type="number" font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
@@ -81,16 +79,14 @@
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<!-- <rice-input v-model="linenForm['flatsheet_mini_num']"
+								<rice-input v-model="linenForm['flatsheet_mini_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.flatsheet_mini_num')" type="number"
-									font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['flatsheet_mini_num']" input-width="80px"></rice-stepper>
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<!-- <rice-input v-model="linenForm['flatsheet_mini_back_num']"
+								<rice-input v-model="linenForm['flatsheet_mini_back_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.flatsheet_mini_back_num')"
-									type="number" font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['flatsheet_mini_back_num']" input-width="80px"></rice-stepper>
+									type="number" font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
@@ -111,16 +107,14 @@
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<!-- <rice-input v-model="linenForm['duvetCover_max_num']"
+								<rice-input v-model="linenForm['duvetCover_max_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.duvetCover_max_num')" type="number"
-									font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['duvetCover_max_num']" input-width="80px"></rice-stepper>
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-							<!-- 	<rice-input v-model="linenForm['duvetCover_max_back_num']"
+								<rice-input v-model="linenForm['duvetCover_max_back_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.duvetCover_max_back_num')"
-									type="number" font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['duvetCover_max_back_num']" input-width="80px"></rice-stepper>
+									type="number" font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
@@ -141,16 +135,14 @@
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<!-- <rice-input v-model="linenForm['duvetCover_mini_num']"
+								<rice-input v-model="linenForm['duvetCover_mini_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.duvetCover_mini_num')" type="number"
-									font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['duvetCover_mini_num']" input-width="80px"></rice-stepper>
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<!-- <rice-input v-model="linenForm['duvetCover_mini_back_num']"
+								<rice-input v-model="linenForm['duvetCover_mini_back_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.duvetCover_mini_back_num')"
-									type="number" font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['duvetCover_mini_back_num']" input-width="80px"></rice-stepper>
+									type="number" font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
@@ -171,16 +163,14 @@
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<!-- <rice-input v-model="linenForm['pillowcase_num']"
+								<rice-input v-model="linenForm['pillowcase_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.pillowcase_num')" type="number"
-									font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['pillowcase_num']" input-width="80px"></rice-stepper>
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<!-- <rice-input v-model="linenForm['pillowcase_back_num']"
+								<rice-input v-model="linenForm['pillowcase_back_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.pillowcase_back_num')" type="number"
-									font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['pillowcase_back_num']" input-width="80px"></rice-stepper>
+									font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
@@ -201,16 +191,14 @@
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<!-- <rice-input v-model="linenForm['bathTowel_num']"
+								<rice-input v-model="linenForm['bathTowel_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.bathTowel_num')" type="number"
-									font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['bathTowel_num']" input-width="80px"></rice-stepper>
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<!-- <rice-input v-model="linenForm['bathTowel_back_num']"
+								<rice-input v-model="linenForm['bathTowel_back_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.bathTowel_back_num')" type="number"
-									font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['bathTowel_back_num']" input-width="80px"></rice-stepper>
+									font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
@@ -231,16 +219,14 @@
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<!-- <rice-input v-model="linenForm['faceTowel_num']"
+								<rice-input v-model="linenForm['faceTowel_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.faceTowel_num')" type="number"
-									font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['faceTowel_num']" input-width="80px"></rice-stepper>
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<!-- <rice-input v-model="linenForm['faceTowel_back_num']"
+								<rice-input v-model="linenForm['faceTowel_back_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.faceTowel_back_num')" type="number"
-									font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['faceTowel_back_num']" input-width="80px"></rice-stepper>
+									font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
@@ -261,17 +247,14 @@
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding:0 8px">
-								<!-- <rice-input v-model="linenForm['floorTowel_num']"
+								<rice-input v-model="linenForm['floorTowel_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.floorTowel_num')" type="number"
-									font-size="13px" /> -->
-										<rice-stepper v-model="linenForm['floorTowel_num']" input-width="80px"></rice-stepper>
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<!-- <rice-input v-model="linenForm['floorTowel_back_num']"
+								<rice-input v-model="linenForm['floorTowel_back_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.floorTowel_back_num')" type="number"
-									font-size="13px" /> -->
-										<rice-stepper v-model="linenForm['floorTowel_back_num']" input-width="80px"></rice-stepper>
-									
+									font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>
@@ -292,16 +275,14 @@
 						</template>
 						<view style="display: flex;flex-direction:row;">
 							<view style="flex:1;padding-right:12px">
-								<!-- <rice-input v-model="linenForm['bedRunner_num']"
+								<rice-input v-model="linenForm['bedRunner_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.bedRunner_num')" type="number"
-									font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['bedRunner_num']" input-width="80px"></rice-stepper>
+									font-size="13px" />
 							</view>
 							<view style="flex:1;padding-left:12px" v-if="showReturnBack">
-								<!-- <rice-input v-model="linenForm['bedRunner_back_num']"
+								<rice-input v-model="linenForm['bedRunner_back_num']"
 									:placeholder="i18n.global.t('washingOrder.form.placeholder.bedRunner_back_num')" type="number"
-									font-size="13px" /> -->
-									<rice-stepper v-model="linenForm['bedRunner_back_num']" input-width="80px"></rice-stepper>
+									font-size="13px" />
 							</view>
 						</view>
 					</rice-form-item>

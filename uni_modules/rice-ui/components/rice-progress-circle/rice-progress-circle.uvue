@@ -237,7 +237,7 @@
 	const textStyle = computed(() => {
 		const css = new Map<string, string>()
 		if (props.textSize != null) css.set('font-size', addUnit(props.textSize!))
-		if (props.textColor != null) css.set('color', props.textColor!)
+		if (props.textColor != null) css.set('color', props.textColor)
 		return css
 	})
 

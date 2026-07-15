@@ -59,35 +59,34 @@ class LinenOrderServiceClass {
 			let linenList : Array<linenWashingType> = []
 			if (data != null) {
 				data.forEach((item : UTSJSONObject) => {
-					let linen : linenWashingType = {
-						_id: item.getString("_id") ?? "",
-						"hotel_id": item.getString("hotel_id") ?? "",
-						"createTime": item.getNumber("createTime") ?? 0,
-						"returnBackTime": item.getNumber("returnBackTime") ?? 0,
-						"service_provider": item.getString("service_provider") ?? "",
-						"flatsheet_max_num": item.getNumber("flatsheet_max_num") ?? 0,
-						"flatsheet_mini_num": item.getNumber("flatsheet_mini_num") ?? 0,
-						"duvetCover_max_num": item.getNumber("duvetCover_max_num") ?? 0,
-						"duvetCover_mini_num": item.getNumber("duvetCover_mini_num") ?? 0,
-						"bathTowel_num": item.getNumber("bathTowel_num") ?? 0,
-						"faceTowel_num": item.getNumber("faceTowel_num") ?? 0,
-						"floorTowel_num": item.getNumber("floorTowel_num") ?? 0,
-						"bedRunner_num": item.getNumber("bedRunner_num") ?? 0,
-						"pillowcase_num": item.getNumber("pillowcase_num") ?? 0,
-
-						"flatsheet_max_back_num": item.getNumber("flatsheet_max_back_num") ?? 0,
-						"flatsheet_mini_back_num": item.getNumber("flatsheet_mini_back_num") ?? 0,
-						"duvetCover_max_back_num": item.getNumber("duvetCover_max_back_num") ?? 0,
-						"duvetCover_mini_back_num": item.getNumber("duvetCover_mini_back_num") ?? 0,
-						"bathTowel_back_num": item.getNumber("bathTowel_back_num") ?? 0,
-						"faceTowel_back_num": item.getNumber("faceTowel_back_num") ?? 0,
-						"floorTowel_back_num": item.getNumber("floorTowel_back_num") ?? 0,
-						"pillowcase_back_num": item.getNumber("pillowcase_back_num") ?? 0,
-						"bedRunner_back_num": item.getNumber("bedRunner_back_num") ?? 0,
-						"unit": item.getString("unit") ?? "",
-						"status": item.getNumber("status") ?? 0,
-						mark: item.getString("mark") ?? ""
-					}
+					 let linen: linenWashingType = {
+					    _id: item.getString("_id") ?? "",
+					    hotel_id: item.getString("hotel_id") ?? "",
+					    createTime: item.getNumber("createTime") ?? 0,
+					    returnBackTime: item.getNumber("returnBackTime") ?? 0,
+					    service_provider: item.getString("service_provider") ?? "",
+					    flatsheet_max_num: item.getNumber("flatsheet_max_num") ?? 0,
+					    flatsheet_mini_num: item.getNumber("flatsheet_mini_num") ?? 0,
+					    duvetCover_max_num: item.getNumber("duvetCover_max_num") ?? 0,
+					    duvetCover_mini_num: item.getNumber("duvetCover_mini_num") ?? 0,
+					    bathTowel_num: item.getNumber("bathTowel_num") ?? 0,
+					    faceTowel_num: item.getNumber("faceTowel_num") ?? 0,
+					    floorTowel_num: item.getNumber("floorTowel_num") ?? 0,
+					    bedRunner_num: item.getNumber("bedRunner_num") ?? 0,
+					    pillowcase_num: item.getNumber("pillowcase_num") ?? 0,
+					    flatsheet_max_back_num: item.getNumber("flatsheet_max_back_num") ?? 0,
+					    flatsheet_mini_back_num: item.getNumber("flatsheet_mini_back_num") ?? 0,
+					    duvetCover_max_back_num: item.getNumber("duvetCover_max_back_num") ?? 0,
+					    duvetCover_mini_back_num: item.getNumber("duvetCover_mini_back_num") ?? 0,
+					    bathTowel_back_num: item.getNumber("bathTowel_back_num") ?? 0,
+					    faceTowel_back_num: item.getNumber("faceTowel_back_num") ?? 0,
+					    floorTowel_back_num: item.getNumber("floorTowel_back_num") ?? 0,
+					    pillowcase_back_num: item.getNumber("pillowcase_back_num") ?? 0,
+					    bedRunner_back_num: item.getNumber("bedRunner_back_num") ?? 0,
+					    unit: item.getString("unit") ?? "",
+					    status: item.getNumber("status") ?? 0,
+					    mark: item.getString("mark") ?? ""
+					  }
 					linenList.push(linen);
 				})
 			}

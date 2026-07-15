@@ -136,151 +136,151 @@
 							style="background-color: #fff;border-radius: 14px;padding:24px 14px;max-width: 500px;flex:1">
 							<rice-cell-group>
 								<rice-cell center :title=" i18n.global.t('washingOrder.service_provider')"
-									:value="active_linen.service_provider" :clickable="false">
+									:value="active_linen?.service_provider" :clickable="false">
 
 								</rice-cell>
 								<rice-cell center :title=" i18n.global.t('washingOrder.flatsheet_max')"
-									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen.flatsheet_max_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen.flatsheet_max_back_num}`"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.flatsheet_max_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.flatsheet_max_back_num}`"
 									:clickable="false">
 									<template #value>
 										<view class="value-content">
 											<view><text
-													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen.flatsheet_max_num}}</text>
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.flatsheet_max_num}}</text>
 											</view>
 											<view><text
-													:class="active_linen.flatsheet_max_back_num!=active_linen.flatsheet_max_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen.flatsheet_max_back_num}}</text>
+													:class="active_linen?.flatsheet_max_back_num!=active_linen?.flatsheet_max_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.flatsheet_max_back_num}}</text>
 											</view>
 										</view>
 									</template>
 								</rice-cell>
 								<rice-cell center :title=" i18n.global.t('washingOrder.flatsheet_mini')"
-									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen.flatsheet_mini_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen.flatsheet_mini_back_num}`"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.flatsheet_mini_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.flatsheet_mini_back_num}`"
 									:clickable="false">
 									<template #value>
 										<view class="value-content">
 											<view><text
-													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen.flatsheet_mini_num}}</text>
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.flatsheet_mini_num}}</text>
 											</view>
 											<view><text
-													:class="active_linen.flatsheet_mini_back_num!=active_linen.flatsheet_mini_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen.flatsheet_mini_back_num}}</text>
+													:class="active_linen?.flatsheet_mini_back_num!=active_linen?.flatsheet_mini_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.flatsheet_mini_back_num}}</text>
 											</view>
 										</view>
 									</template>
 								</rice-cell>
 								<rice-cell center :title=" i18n.global.t('washingOrder.duvetCover_max')"
-									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen.duvetCover_max_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen.duvetCover_max_back_num}`"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.duvetCover_max_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.duvetCover_max_back_num}`"
 									:clickable="false">
 									<template #value>
 										<view class="value-content">
 											<view><text
-													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen.duvetCover_max_num}}</text>
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.duvetCover_max_num}}</text>
 											</view>
 											<view><text
-													:class="active_linen.duvetCover_max_back_num!=active_linen.duvetCover_max_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen.duvetCover_max_back_num}}</text>
+													:class="active_linen?.duvetCover_max_back_num!=active_linen?.duvetCover_max_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.duvetCover_max_back_num}}</text>
 											</view>
 										</view>
 									</template>
 								</rice-cell>
 								<rice-cell center :title=" i18n.global.t('washingOrder.duvetCover_mini')"
-									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen.duvetCover_mini_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen.duvetCover_mini_back_num}`"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.duvetCover_mini_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.duvetCover_mini_back_num}`"
 									:clickable="false">
 									<template #value>
 										<view class="value-content">
 											<view><text
-													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen.duvetCover_mini_num}}</text>
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.duvetCover_mini_num}}</text>
 											</view>
 											<view><text
-													:class="active_linen.duvetCover_mini_back_num!=active_linen.duvetCover_mini_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen.duvetCover_mini_back_num}}</text>
+													:class="active_linen?.duvetCover_mini_back_num!=active_linen?.duvetCover_mini_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.duvetCover_mini_back_num}}</text>
 											</view>
 										</view>
 									</template>
 								</rice-cell>
 								<rice-cell center :title=" i18n.global.t('washingOrder.pillowcase')"
-									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen.pillowcase_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen.pillowcase_back_num}`"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.pillowcase_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.pillowcase_back_num}`"
 									:clickable="false">
 									<template #value>
 										<view class="value-content">
 											<view><text
-													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen.pillowcase_num}}</text>
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.pillowcase_num}}</text>
 											</view>
 											<view><text
-													:class="active_linen.pillowcase_back_num!=active_linen.pillowcase_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen.pillowcase_back_num}}</text>
+													:class="active_linen?.pillowcase_back_num!=active_linen?.pillowcase_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.pillowcase_back_num}}</text>
 											</view>
 										</view>
 									</template>
 								</rice-cell>
 								<rice-cell center :title=" i18n.global.t('washingOrder.bathTowel')"
-									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen.bathTowel_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen.bathTowel_back_num}`"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.bathTowel_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.bathTowel_back_num}`"
 									:clickable="false">
 									<template #value>
 										<view class="value-content">
 											<view><text
-													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen.bathTowel_num}}</text>
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.bathTowel_num}}</text>
 											</view>
 											<view><text
-													:class="active_linen.bathTowel_back_num!=active_linen.bathTowel_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen.bathTowel_back_num}}</text>
+													:class="active_linen?.bathTowel_back_num!=active_linen?.bathTowel_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.bathTowel_back_num}}</text>
 											</view>
 										</view>
 									</template>
 								</rice-cell>
 								<rice-cell center :title=" i18n.global.t('washingOrder.faceTowel')"
-									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen.faceTowel_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen.faceTowel_back_num}`"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.faceTowel_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.faceTowel_back_num}`"
 									:clickable="false">
 									<template #value>
 										<view class="value-content">
 											<view><text
-													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen.faceTowel_num}}</text>
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.faceTowel_num}}</text>
 											</view>
 											<view><text
-													:class="active_linen.faceTowel_back_num!=active_linen.faceTowel_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen.faceTowel_back_num}}</text>
+													:class="active_linen?.faceTowel_back_num!=active_linen?.faceTowel_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.faceTowel_back_num}}</text>
 											</view>
 										</view>
 									</template>
 								</rice-cell>
 								<rice-cell center :title=" i18n.global.t('washingOrder.floorTowel')"
-									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen.floorTowel_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen.floorTowel_back_num}`"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.floorTowel_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.floorTowel_back_num}`"
 									:clickable="false">
 									<template #value>
 										<view class="value-content">
 											<view><text
-													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen.floorTowel_num}}</text>
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.floorTowel_num}}</text>
 											</view>
 											<view><text
-													:class="active_linen.floorTowel_back_num!=active_linen.floorTowel_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen.floorTowel_back_num}}</text>
+													:class="active_linen?.floorTowel_back_num!=active_linen?.floorTowel_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.floorTowel_back_num}}</text>
 											</view>
 										</view>
 									</template>
 								</rice-cell>
 
 								<rice-cell center :title=" i18n.global.t('washingOrder.bedRunner')"
-									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen.bedRunner_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen.bedRunner_back_num}`"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.bedRunner_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.bedRunner_back_num}`"
 									:clickable="false">
 									<template #value>
 										<view class="value-content">
 											<view><text
-													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen.bedRunner_num}}</text>
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.bedRunner_num}}</text>
 											</view>
 											<view><text
-													:class="active_linen.bedRunner_back_num!=active_linen.bedRunner_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen.bedRunner_back_num}}</text>
+													:class="active_linen?.bedRunner_back_num!=active_linen?.bedRunner_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.bedRunner_back_num}}</text>
 											</view>
 										</view>
 									</template>
 								</rice-cell>
-								<rice-cell center :title=" i18n.global.t('washingOrder.mark')" :value="active_linen.mark"
+								<rice-cell center :title=" i18n.global.t('washingOrder.mark')" :value="active_linen?.mark"
 									:clickable="false"></rice-cell>
 							</rice-cell-group>
 							<view style="margin-top:20px">
 								<rice-row :gutter="8">
 									<rice-col :span="8"></rice-col>
 									<rice-col :span="6">
-										<view v-if="active_linen.status==0">
+										<view v-if="active_linen?.status==0">
 											<rice-button type="primary" size="small" plain-fill
 												:text="i18n.global.t('common.btn_txt_modify',[''])"
 												@click="editLinen(active_linen)"></rice-button>
 										</view>
 									</rice-col>
 									<rice-col :span="6">
-										<view v-if="active_linen.status==0">
+										<view v-if="active_linen?.status==0">
 											<rice-button type="error" size="small" plain-fill
 												:text="i18n.global.t('common.btn_txt_delete')"
 												@click="deleteLinen(active_linen)"></rice-button>
@@ -399,15 +399,15 @@
 
 	const selectStatus = (e : TabsClickTab) => {
 		console.log(e)
-		linenStatus.value = e.value;
+		linenStatus.value = e.value as number;
 		swipeControlRef.value!.closeAll!();
 		getlinenList();
 	}
 	const pageChange = (pn : number) => {
 		getlinenList();
 	}
-	const formatDate = (timestamp : number | null | undefined) => {
-		if (timestamp == null || timestamp == undefined || timestamp == 0) {
+	const formatDate = (timestamp : number | null ) => {
+		if (timestamp == null  || timestamp == 0) {
 			return "--";
 		}
 		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
@@ -435,7 +435,10 @@
 		});
 	}
 
-	const editLinen = (linen : linenWashingType) => {
+	const editLinen = (linen : linenWashingType | null) => {
+		if(linen==null || submitLoading.value == true){
+			return;
+		}
 		uni.$once("refrushlinenList", () => {
 			swipeControlRef.value!.closeAll!()
 			getlinenList();

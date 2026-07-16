@@ -1,8 +1,6 @@
 <template>
 	<scroll-view class="indexAdvise-page" :refresher-enabled="false" v-if="isReading" :show-scrollbar="false">
 		<!-- <rice-button text="测试" @click=test()></rice-button> -->
-
-
 		<!-- 顶部渐变标题栏 -->
 		<view class="top-banner">
 			<text class="banner-title">{{i18n.global.t('indexAdvise.title')}}</text>

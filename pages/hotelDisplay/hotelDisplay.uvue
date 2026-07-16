@@ -46,6 +46,9 @@
 		<view v-show="activeIndex==1">
 			<roomTypeComponent :hotel_id="hotel_id"></roomTypeComponent>
 		</view>
+		<view v-show="activeIndex==2">
+			<l-empty :description="i18n.global.t('common.noData',[''])" />
+		</view>
 	</scroll-view>
 
 	
@@ -62,6 +65,7 @@
 	import { hotelBean } from '@/bean/hotelBean';
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { HotelService } from '@/services/HotelService';
+	import i18n from '@/i18n/index.uts';
 	defineOptions({
 		styleIsolation: "isolated"
 	})
@@ -99,12 +103,12 @@
 	onReady(() => {
 		calcSwiperHeight()
 	})
-	onLoad(params => {
-		console.log("params:", params);
-		const h_id : string = params.getString("hotel_id") ?? "";
+	onLoad(paramsObj => {
+		console.log("paramsObj:", paramsObj);
+		const h_id : string = paramsObj.getString("hotel_id") ?? "";
 		if (h_id != null) {
 			hotel_id.value = h_id;
-			initData()
+			initData();
 		}
 	})
 </script>

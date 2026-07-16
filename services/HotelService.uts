@@ -179,8 +179,10 @@ class HotelServiceClass {
 	 * 根据id获取酒店信息
 	 */
 	async getHotelInfoById(hotel_id : string):Promise<hotelBean>{
+		const w = { _id: hotel_id };
+		console.log("ww",w)
 		try{
-			const res = await DB.getCollection("hm-hotel", { _id: hotel_id } as UTSJSONObject);
+			const res = await DB.getCollection("hm-hotel",w);
 			console.log("hotel::",res)
 			const data = res['data'] as Array<UTSJSONObject>;
 			const item = data[0] as UTSJSONObject;

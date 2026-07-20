@@ -46,13 +46,12 @@
 	})
 	const props = defineProps({
 		hotel: {
-			type: Object,
 			default: {}
 		}
 
 	});
 
-	const hotelObj = props.hotel;
+	const hotelObj = props.hotel as hotelBean;
 	console.log("hotelobj==", hotelObj, props.hotel)
 	const hotel_id : string = hotelObj?._id ?? "";
 	const firstImages : string = hotelObj?.firstImages ?? "";
@@ -74,10 +73,10 @@
 	const shareWx = () => {
 		let imgurl ='https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/images/app.png';
 		 
-		if(props.hotel.firstImages!=""){
-			imgurl=props.hotel.firstImages.split("?")[0];
+		if(hotelObj.firstImages!=""){
+			imgurl=hotelObj.firstImages.split("?")[0];
 		}
-		const hotelId = props.hotel['_id'];
+		const hotelId = hotelObj['_id'];
 		const timeStamp = Date.now();
 		const shareUrl = `https://www.hotelsys.fun/index.html?_t=${timeStamp}#/pages/hotelDisplay/hotelDisplay?hotel_id=${hotelId}`;
 		console.log("shareUrl",shareUrl);
@@ -86,8 +85,8 @@
 			provider: "weixin", //分享服务提供商（即weixin|qq|sinaweibo）
 			type: 0, //小程序
 			scene: "WXSceneSession", //provider 为 weixin 时必选 WXSceneSession分享到聊天界面，WXSceneTimeline分享到朋友圈，WXSceneFavorite分享到微信收藏
-			title: `${props.hotel.hotelName}`, //分享内容的标题
-			summary: `${props.hotel.hotelAddress}`, //分享内容的摘要
+			title: `${hotelObj.hotelName}`, //分享内容的标题
+			summary: `${hotelObj.hotelAddress}`, //分享内容的摘要
 			href: shareUrl,
 			// miniProgram: {
 			//   id: "gh_5557133bdd5e",

@@ -71,6 +71,7 @@
 		current.value = e.detail.current
 	}
 	const shareWx = () => {
+		console.log("11111")
 		let imgurl ='https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/images/app.png';
 		 
 		if(hotelObj.firstImages!=""){

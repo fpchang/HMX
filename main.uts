@@ -1,7 +1,7 @@
 import App from './App.uvue';
 import { createSSRApp } from 'vue';
 import i18n from './i18n';
- // #ifdef H5
+ //#ifdef H5
 	import "@/uni_modules/rice-ui/libs/style/index.css";
  // #endif
 

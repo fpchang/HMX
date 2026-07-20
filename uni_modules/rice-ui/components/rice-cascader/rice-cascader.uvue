@@ -302,11 +302,16 @@
 
 	let timer : number | null = null
 	watch(tabIndex, async (newVal : number) => {
+		// #ifndef VUE3-VAPOR
 		await nextTick()
 		if (timer != null) clearTimeout(timer!)
 		timer = setTimeout(() => {
 			swiperIndex.value = newVal
 		}, 30)
+		// #endif
+		// #ifdef VUE3-VAPOR
+		swiperIndex.value = newVal
+		// #endif
 	}, {
 		immediate: true
 	})

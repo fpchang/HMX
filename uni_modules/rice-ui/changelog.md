@@ -1,3 +1,7 @@
+## 1.1.9（2026-07-20）
+- 蒸汽模式APP体验： [鸿蒙](https://appgallery.huawei.com/app/detail?id=com.rice.xui)、[iOS](https://apps.apple.com/cn/app/riceui/id6742657989)
+- [新增] 支持Android蒸汽模式，HBuilder X 需要 5.21 以上的版本
+- [提示] RiceUI组件库在**鸿蒙蒸汽模式中** HBuilderx 需要5.08以上的版本，**iOS的蒸汽模式** HBuilderx 需要5.11以上的版本,**Android的蒸汽模式** HBuilderx 需要5.21以上的版本，非蒸汽模式推荐在5.0以上的版本中使用
 ## 1.1.8（2026-06-12）
 - 蒸汽模式APP体验： [鸿蒙](https://appgallery.huawei.com/app/detail?id=com.rice.xui)、[iOS](https://apps.apple.com/cn/app/riceui/id6742657989)
 - [新增] Calendar 日历组件库新增 周日历，显示月份背景，补齐前后月日期等属性 [文档](https://riceui.cn/components/calendar.html)

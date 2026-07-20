@@ -17,9 +17,7 @@
 			</view>
 		</template>
 	</rice-navbar>
-	<!-- #ifdef APP -->
 	<scroll-view style="flex:1;background-color: #fff;">
-	<!-- #endif -->
 		<view style="padding:15px;border-radius: 12px;">
 			<xt-form-item :label="i18n.global.t('finance.voucher_Type')" tips="" required>
 				<view>
@@ -71,9 +69,7 @@
 				</view>
 			</xt-form-item>
 		</view>
-	<!-- #ifdef APP -->
 	</scroll-view>
-	<!-- #endif -->
 </template>
 
 <script setup lang="uts">

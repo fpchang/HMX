@@ -133,7 +133,7 @@
 	let submitLoading = ref(false);
 	const title = computed(() => {
 		if (pageType.value == 0) {
-			return i18n.global.t('order.create_order.addOrder');
+			return i18n.global.t('order.addOrder');
 		}
 		return pageType.value == 1 ? i18n.global.t('order.create_order.edit_order_info') : i18n.global.t('order.create_order.order_info');
 	});

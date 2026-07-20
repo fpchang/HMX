@@ -1,6 +1,6 @@
 <template>
 	<!--#ifndef H5-->
-	<rice-navbar   bg-color="#ffffff" left-icon-color="#fff" :left-arrow="false" :border="false" title-color="#fff" :safe-area-inset-top="false">
+	<rice-navbar   bg-color="#ffffff" left-icon-color="#fff" :left-arrow="showLeftArrrow" :border="false" title-color="#fff" :safe-area-inset-top="false">
 	
 	</rice-navbar>
 	<!--#endif-->
@@ -74,6 +74,12 @@
 	const hotel = ref<hotelBean | null>(null);
 	const roomTypeList = ref<Array<roomTypeBean> | null>(null);
 	const activeIndex = ref(0);
+	const showLeftArrrow=computed(()=>{
+		//#ifdef H5
+			return false;
+		//#endif
+		return true;
+	})
 	const list = ref<TabsOptions[]>([{
 		name: '首页',
 		value: 'recommedn'

@@ -114,6 +114,7 @@
 }
 /* 单个标签项 */
 .single-tag-item {
+	margin-right:4px;
 	/* border-radius: 100px; */
 	/* padding: 6px 8px; */
 	/* background-color: #999; */

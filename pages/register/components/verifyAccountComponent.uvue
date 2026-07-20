@@ -72,7 +72,7 @@
 			[
 				{ required: true, message: i18n.global.t("login.valid_account") },
 				{ min: 3, max: 15, message: i18n.global.t("login.valid_account_num"), trigger: 'blur' },
-				{ pattern: /^(?=.*[a-zA-Z])[a-zA-Z0-9]{4,20}$/, message: i18n.global.t("registe.valid_account_correct")},
+				{ pattern: /^(?=.*[a-zA-Z])[a-zA-Z0-9]{4,20}$/, message: i18n.global.t("register.valid_account_correct")},
 				{ validator: validAccount, trigger: 'blur', message: i18n.global.t("register.valid_account_hasused") }
 			]
 		], 

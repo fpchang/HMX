@@ -50,17 +50,17 @@ function getEmailTemp(key){
 		register:{
 			subject:"验证邮箱",
 			emailCode:emailCode,
-			html:`<h1>邮箱验证</h1><p>你正在通过邮箱注册议宿账号，验证码为</p><p><text style="font-weight:bold;padding:0 14px;font-size:24px;color:#007aff">${emailCode}<text></p>`
+			html:`<h1>邮箱验证</h1><p>你正在通过邮箱注册议宿账号，验证码为</p><p><span style="font-weight:bold;padding:0 14px;font-size:24px;color:#007aff">${emailCode}<span></p>`
 		},
 		resetPassword:{
 			subject:"验证邮箱",
 			emailCode:emailCode,
-			html:`<h1>邮箱验证</h1><p>你正在通过邮箱重置议宿账号密码，验证码为</p><p><text style="font-weight:bold;padding:0 14px;font-size:24px;color:#007aff">${emailCode}<text></p>`
+			html:`<h1>邮箱验证</h1><p>你正在通过邮箱重置议宿账号密码，验证码为</p><p><span style="font-weight:bold;padding:0 14px;font-size:24px;color:#007aff">${emailCode}<span></p>`
 		},
 		updateEmail:{
 			subject:"验证邮箱",
 			emailCode:emailCode,
-			html:`<h1>邮箱验证</h1><p>你正在为议宿系统绑定邮箱，验证码为</p><p><text style="font-weight:bold;padding:0 14px;font-size:24px;color:#007aff">${emailCode}<text></p>`
+			html:`<h1>邮箱验证</h1><p>你正在为议宿系统绑定邮箱，验证码为</p><p><span style="font-weight:bold;padding:0 14px;font-size:24px;color:#007aff">${emailCode}<span></p>`
 		}
 		
 	}

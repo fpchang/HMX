@@ -1,32 +1,29 @@
 <template>
-	<view class="xt-control" v-if="showControl_com">
-		<view class="control-container">
-			<view class="control-item" v-if="!showControl" @click="showControlEvent" style="margin-left: 0;">
-				<image src="/static/icons/more-control.png" style="width:32px;height:32px" @click="showControl"></image>
+	<view class="xt-control-root" v-if="showControl_com">
+		<view class="control-wrap">
+			<view class="control-btn-item" v-if="!showControl" @click="showControlEvent" style="margin-left: 0;">
+				<image src="/static/icons/more-control.png" style="width:32px;height:32px"></image>
 			</view>
-			<view v-if="showControl" class="show-container"> 
-			<view class="control-item view" v-if="showView">
-				<image src="/static/icons/operation/view.png" style="width:18px;height:18px" @click="view"></image>
+			<view v-if="showControl" class="btn-group-wrap">
+				<view class="single-btn-item btn-view" v-if="showView">
+					<image src="/static/icons/operation/view.png" style="width:18px;height:18px" @click="view"></image>
+				</view>
+				<view class="single-btn-item btn-edit" v-if="showEdit">
+					<image src="/static/icons/operation/edit.png" style="width:18px;height:18px" @click="edit"></image>
+				</view>
+				<view class="single-btn-item btn-delete" v-if="showDelete">
+					<image src="/static/icons/operation/delete.png" style="width:18px;height:18px" @click="del"></image>
+				</view>
+				<view class="single-btn-item btn-hide" @click="showControlEvent">
+					<image src="/static/icons/operation/icon-hide.png" style="width:18px;height:18px" @click="hide"></image>
+				</view>
 			</view>
-			<view class="control-item edit" v-if="showEdit">
-				<image src="/static/icons/operation/edit.png" style="width:18px;height:18px" @click="edit"></image>
-			</view>
-			<view class="control-item delete" v-if="showDelete">
-				<image src="/static/icons/operation/delete.png" style="width:18px;height:18px" @click="del"></image>
-			</view>
-			<view class="control-item hide" @click="showControlEvent">
-				<image src="/static/icons/operation/icon-hide.png" style="width:18px;height:18px" @click="hide"></image>
-			</view>
-			</view>
-			
 		</view>
-		
-
 	</view>
 </template>
 
 <script setup>
-	import { watch, ref } from 'vue'
+	import { watch, ref, computed } from 'vue'
 
 	const props = defineProps({
 		id: {
@@ -56,10 +53,8 @@
 			type: Array,
 			default: ['view', 'edit', 'del']
 		}
-
 	})
 	const showControl=ref(false);
-	
 	const emit = defineEmits(['view', 'edit', 'del']);
 	const showControlEvent=()=>{
 		showControl.value=!showControl.value;
@@ -73,55 +68,70 @@
 	const del = () => {
 		emit('del')
 	}
-	const hide = () => {
-
-	}
-	const showControl_com =computed(()=>{
+	const hide = () => {}
+	const showControl_com = computed(()=>{
 		return props.showDelete||props.showEdit||props.showView;
 	})
 </script>
 
-<style lang="scss">
-	.xt-control {
-		min-width: 160px;
-		width: 100%;
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-end;
-		.control-container{
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			width: fit-content;
-		
-			
-			.control-item{
-				height: 40px;
-				width: 40px;
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-				justify-content: center;
-				border-radius: 20px;
-				margin-left: 8px;
-				
-			}
-			.show-container{
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-			}
-			.view{
-				background-color: #f5f7fa;
-			}
-			.edit{
-				background-color: #f5f7fa;
-			}
-			.delete{
-				background-color: #f5f7fa;
-			}
-		}
-		
-		
-	}
+<style>
+/* 最外层容器 */
+.xt-control-root {
+	min-width: 160px;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+}
+/* 操作按钮外层包裹 */
+.control-wrap {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: auto;
+}
+/* 单个圆形按钮通用样式 */
+.single-btn-item {
+	height: 40px;
+	width: 40px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	border-radius: 20px;
+	margin-left: 8px;
+}
+/* 更多按钮 */
+.control-btn-item {
+	height: 40px;
+	width: 40px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	border-radius: 20px;
+	margin-left: 8px;
+}
+/* 展开按钮组容器 */
+.btn-group-wrap {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+/* 查看按钮背景 */
+.btn-view {
+	background-color: #f5f7fa;
+}
+/* 编辑按钮背景 */
+.btn-edit {
+	background-color: #f5f7fa;
+}
+/* 删除按钮背景 */
+.btn-delete {
+	background-color: #f5f7fa;
+}
+/* 收起按钮背景 */
+.btn-hide {
+	background-color: #f5f7fa;
+}
 </style>

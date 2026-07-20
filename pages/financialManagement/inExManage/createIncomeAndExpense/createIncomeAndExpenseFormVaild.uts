@@ -1,12 +1,15 @@
 	import { FMBean } from "@/bean/FMBean.uts";
+	import i18n from '@/i18n/index.uts';
 export const  validForm = (fm:FMBean):boolean=>{
 	let msg ="";
 	
 	if(fm.type==""){
-		msg="请选择收支类型";
+		//msg="请选择收支类型";
+		msg=i18n.global.t("finance.valid_form_type");
 	}
 	if(fm.amount<1){
-		msg="请输入金额";
+		//msg="请输入金额";
+		msg=i18n.global.t("finance.valid_form_amount");
 	}
 	if(msg!=""){
 		uni.showToast({

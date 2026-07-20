@@ -1,10 +1,11 @@
-import { DB } from '../api/DB';
+import { DB,dbJQL } from '../api/DB';
 import { callFunctionRes } from "@/bean/DBBean";
 import { hotelBean } from '../bean/hotelBean';
 import { roomTypeBean, formatRoomTypeList } from "@/bean/roomTypeBean.uts";
 import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
 import { roomBean } from '../bean/roomBean';
+import {action_co ,getTokenObject,RequestFailModal} from "@/api/cloudApi.uts";
 type employeeList_Res = {
 	code : number;
 	errCode : number;
@@ -24,9 +25,13 @@ class RoomTypeClass {
 	 * 获取当前酒店房型信息
 	*/
 	async getRoomTypeList(hotel_id : string) : Promise<Array<roomTypeBean>> {
-		try {
-			const params = { hotel_id } as UTSJSONObject;
-			const res = await DB.getCollection("hm-roomType,hm-room", params);
+
+		try {		
+			const roomTypeTemp = dbJQL.collection('hm-roomType')
+			  .where(`hotel_id == "${hotel_id}"`) .getTemp();		
+			const roomTemp = dbJQL.collection('hm-room') .getTemp();
+			const res = await dbJQL.collection(roomTypeTemp, roomTemp)
+			  .get();
 			const data = res['data'] as Array<UTSJSONObject>;
 			let roomTypeList : Array<roomTypeBean> = formatRoomTypeList(data);
 			return roomTypeList;
@@ -59,7 +64,7 @@ class RoomTypeClass {
 	 */
 	async getRoomListByHotelIdGroupByRoomType(hotel_id : string) : Promise<UniCloudDBGetResult> {
 
-		const db = uniCloud.databaseForJQL();
+		const db = dbJQL;
 		const roomType = db.collection("hm-roomType").where({ hotel_id }).field("hotel_id,_id,name").getTemp();
 		const res = await db.collection(roomType, "hm-room").where({ hotel_id }).get();
 		return res;
@@ -72,27 +77,17 @@ class RoomTypeClass {
 	// addRoomTypePrice(list){
 	//   return DB.add("hm-roomTypePrice",list)
 	// }
-	async deleteRoomType(roomType_id : string) : Promise<void> {
+	async deleteRoomType(roomType_id : string) : Promise<boolean> {
 		console.log("删除房型：：", roomType_id);
 
 		try {
-			const res = await DB.callFunction("hm_deleteRoomType_x", {
-				_id: roomType_id,
-			});
-			console.log("res delete", res);
-			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber('code') ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				console.log("code error", code);
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(result.message as string);
-			}
-		} catch (error) {
-			throw new Error("删除房型失败");
+			 const res = await action_co.roomType_deleteRoomType(roomType_id);
+			 console.log("delete room type",res)
+			 const flag = res['data'] as boolean;
+			 return flag;
+		} catch (error:Error) {
+			RequestFailModal(error.message)
+			throw new Error("delete room type fail");
 		}
 
 	}
@@ -125,31 +120,21 @@ class RoomTypeClass {
 				priceBase,
 				independentBathroom
 			}
-			const res = await DB.callFunction("hm_addRoomType", { roomTypeObj });
-			console.log("res::", res);
-			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber("code");
-			const message = result.getString("message") ?? '';
-			if (code != 0) {
-				console.log("code error", code);
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(message);
-			}
-
-			return true;
-		} catch (error) {
-			throw new Error("创建房型失败");
+			const res = await action_co.roomType_addRoomType(roomTypeObj);
+			const code = res['code'] as number;
+			return code ==0;
+		} catch (error:Error) {
+			RequestFailModal(error.message);
+			throw new Error("create room Type error");
 		}
 
 	}
 
-	async updateRoomType(_id : string, roomTypeForm : roomTypeBean) : Promise<boolean> {
+	async updateRoomType(roomTypeForm : roomTypeBean) : Promise<boolean> {
 
 		try {
 			const {
+				_id,
 				hotel_id,
 				name,
 				area,
@@ -163,6 +148,7 @@ class RoomTypeClass {
 				priceBase,
 				independentBathroom } = roomTypeForm;
 			const roomTypeObj = {
+				_id,
 				hotel_id,
 				name,
 				area,
@@ -176,20 +162,12 @@ class RoomTypeClass {
 				priceBase,
 				independentBathroom
 			}
-			const res = await DB.callFunction("hm_updateRoomType", { _id, roomTypeObj });
-			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(result.message as string);
-			}
-
-			return true;
-		} catch (error) {
+			const res = await action_co.roomType_updateRoomType(roomTypeObj);
+			console.log("update room type",res);
+			const code = res['code'] as number;
+			return code ==0;
+		} catch (error:Error) {
+			RequestFailModal(error.message);
 			throw new Error("更新失败");
 		}
 	}
@@ -203,21 +181,11 @@ class RoomTypeClass {
 					"room_type_id": item.room_type_id
 				})
 			});
-			const res = await DB.callFunction("hm_addRoom", { roomList: list });
-			console.log("add room", res);
-			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				console.log("code error", code);
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(message);
-			}
-			
-			return true;
+			const res = await action_co.room_addRoom(list);
+			console.log("add room",res);
+			const code = res['code'] as number;
+			const flag = code ==0?true:false;
+			return flag;
 		} catch (error) {
 			throw new Error("添加房间失败");
 
@@ -228,29 +196,17 @@ class RoomTypeClass {
 	 */
 	async editRoom(room : roomBean) : Promise<boolean> {
 		try {
-			const _id=room._id;
 			const roomObj={
-				
+				_id:room._id,
 				hotel_id: room.hotel_id,
 				room_name: room.room_name,
 				room_type_id: room.room_type_id
 			}
-			const res = await DB.callFunction("hm_updateRoom", {_id, roomObj});
-			console.log("edit room", res);
-			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				console.log("code error", code);
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(message);
-			}
-			
-			return true;
-		} catch (error) {
+			const res = await action_co.room_updateRoom(roomObj);
+			const code = res['code'] as number;
+			const flag = code == 0;
+			return flag;
+		} catch (error:Error) {
 			throw new Error("修改房间失败");
 	
 		}
@@ -259,21 +215,18 @@ class RoomTypeClass {
 	 * 删除房间
 	 */
 	async deleteRoom(room_id : string) : Promise<boolean> {
-		console.log("1111", room_id);
 		try {
-			const res = await DB.callFunction("hm_deleteRoom_x", { _id: room_id });
-			console.log("delete", res);
-			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(result.message as string);
+			try {
+				 const res = await action_co.room_deleteRoom(room_id);
+				 console.log("delete room",res)
+				 const data = res['data'] as boolean;
+				 console.log("data flag",data)
+				 return data;
+			} catch (error:Error) {
+				console.log("error==",error)
+				RequestFailModal(error.message)
+				throw new Error("delete room type fail");
 			}
-			return true;
 		} catch (error) {
 			throw new Error("删除房间失败");
 		}

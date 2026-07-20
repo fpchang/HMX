@@ -1,0 +1,15 @@
+	import {linenWashingType,linenDataListResult } from '@/bean/linenWashingBean.uts';
+	import i18n from '@/i18n/index.uts';
+export const  validForm = (order:linenWashingType):boolean=>{
+	let msg ="";
+	
+	if(msg!=""){
+		uni.showToast({
+			title:msg,
+			icon:"none"
+		})
+		return false;
+	}
+	
+	return true;
+}

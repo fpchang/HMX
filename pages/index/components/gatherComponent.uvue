@@ -1,10 +1,17 @@
 <template>
-  <view class="container">
-    <view class="stats-section">
-      <view class="stats-tab">
-        <button 
+	<view class="container">
+		<view class="stats-section">
+			<view class="stats-tab">
+				<view :class="[activeIndex == 0?'tab-btn tab-btn-active':'tab-btn' ]" @click="tabClick(0)"
+					style="margin-right:10px">
+					<text :class="activeIndex == 0?'tabtxt-active':'txt'"> {{ i18n.global.t("gather.today") }}</text>
+				</view>
+				<view :class="[activeIndex == 1?'tab-btn tab-btn-active':'tab-btn' ]" @click="tabClick(1)">
+					<text :class="activeIndex == 1?'tabtxt-active':'txt'"> {{ i18n.global.t("gather.tomorrow") }}</text>
+				</view>
+				<!--  <button 
           class="tab-btn" 
-          :class="{ active: activeIndex == 0 }"
+          :class="[activeIndex == 0?'active':'' ]"
           @click="tabClick(0)"
 		  style="margin-right: 10px;"
         >
@@ -12,64 +19,78 @@
         </button>
         <button 
           class="tab-btn" 
-          :class="{ active: activeIndex == 1 }"
+          :class="[activeIndex == 1?'active':'' ]"
           @click="tabClick(1)"
         >
-          {{ i18n.global.t("gather.tomorrow") }}
-        </button>
-      </view>
-
-      <!-- 统计数据卡片 -->
-	  <view class="stats-card" v-if="activeIndex==0">
-	    <view class="stats-item">
-	      <text class="stats-label">{{ i18n.global.t("gather.checkInToday") }}</text>
-	      <text class="stats-value">{{numOrderToday}}</text>
-	    </view>
-	    <view class="stats-item">
-	      <text class="stats-label">{{ i18n.global.t("gather.checkOutToday") }}</text>
-	     <text class="stats-value">{{numAccessOutToday}}</text>
-	    </view>
-	    <view class="stats-item">
-	      <text class="stats-label">{{ i18n.global.t("gather.currentGuests") }}</text>
-		  <l-circle :percent="numCustomerOrderToday_percent" size="100px"
+     
+        </button> -->
+			</view>
+			<!-- 统计数据卡片 -->
+			<view class="stats-card" v-if="activeIndex==0">
+				<view class="stats-item">
+					<text class="stats-label">{{ i18n.global.t("gather.checkInToday") }}</text>
+					<text class="stats-value">{{numOrderToday}}</text>
+				</view>
+				<view class="stats-item">
+					<text class="stats-label">{{ i18n.global.t("gather.checkOutToday") }}</text>
+					<text class="stats-value">{{numAccessOutToday}}</text>
+				</view>
+				<view class="stats-item">
+					<text class="stats-label">{{ i18n.global.t("gather.currentGuests") }}</text>
+					<!-- <l-circle :percent="numCustomerOrderToday_percent" size="100px"
 		  	strokeColor="green" trailColor="#eee" strokeWidth="12" trailWidth="12">
 		  	<text class="stats-value">{{numCustomerOrderToday}}</text>
-		  </l-circle>
-	    </view>
-	    <view class="stats-item">
-	      <text class="stats-label">{{ i18n.global.t("gather.emptyRooms") }}</text>
-		  <l-circle :percent="(100 - numCustomerOrderToday_percent)" trailColor="#eee"
-		  	size="100px" strokeColor="orange" strokeWidth="12" trailWidth="12">
-		  	<text class="stats-value">{{ roomCount - numCustomerOrderToday}}</text>
-		  </l-circle>
-	    </view>
-	  </view>
-      <view class="stats-card" v-if="activeIndex==1">
-        <view class="stats-item">
-          <text class="stats-label">{{ i18n.global.t("gather.checkInTomorrow") }}</text>
-          <text class="stats-value">{{numOrderTommorow}}</text>
-        </view>
-        <view class="stats-item">
-          <text class="stats-label">{{ i18n.global.t("checkOutTomorrow") }}</text>
-          <text class="stats-value">{{numAccessOutTommorow}}</text>
-        </view>
-        <view class="stats-item">
-          <text class="stats-label">{{ i18n.global.t("gather.currentGuests") }}</text>
-		  <l-circle :percent="numCustomerOrderTommorw_percent" size="100px"
-		 	strokeColor="green" strokeWidth="12" trailWidth="12">
-		 	<text class="stats-value">{{numCustomerOrderTommorw}}</text>
-		 </l-circle>
-        </view>
-        <view class="stats-item">
-          <text class="stats-label">{{ i18n.global.t("gather.emptyRooms") }}</text>
-		  <l-circle :percent="(100 - numCustomerOrderTommorw_percent)" size="100px"
-		 	strokeColor="orange" strokeWidth="12" trailWidth="12">
-		 	<text class="stats-value">{{roomCount - numCustomerOrderTommorw}}</text>
-		 </l-circle>
-        </view>
-      </view>
-    </view>
-  </view>
+		  </l-circle> -->
+					<rice-progress-circle :percentage="numCustomerOrderToday_percent" color="green">
+						<text class="stats-value">{{ numCustomerOrderToday }}</text>
+					</rice-progress-circle>
+				</view>
+				<view class="stats-item">
+					<text class="stats-label">{{ i18n.global.t("gather.emptyRooms") }}</text>
+					<!-- <l-circle :percent="(100 - numCustomerOrderToday_percent)" trailColor="#eee" size="100px"
+						strokeColor="orange" strokeWidth="12" trailWidth="12">
+						<text class="stats-value">{{ roomCount - numCustomerOrderToday}}</text>
+					</l-circle> -->
+					<rice-progress-circle :percentage="(100 - numCustomerOrderToday_percent)" color="orange">
+						<text class="stats-value">{{ roomCount - numCustomerOrderToday }}</text>
+					</rice-progress-circle>
+				</view>
+			</view>
+			
+			<view class="stats-card" v-if="activeIndex==1">
+				<view class="stats-item">
+					<text class="stats-label">{{ i18n.global.t("gather.checkInTomorrow") }}</text>
+					<text class="stats-value">{{numOrderTommorow}}</text>
+				</view>
+				<view class="stats-item">
+					<text class="stats-label">{{ i18n.global.t("gather.checkOutTomorrow") }}</text>
+					<text class="stats-value">{{numAccessOutTommorow}}</text>
+				</view>
+				<view class="stats-item">
+					<text class="stats-label">{{ i18n.global.t("gather.currentGuests") }}</text>
+					<!-- <l-circle :percent="numCustomerOrderTommorw_percent" size="100px" strokeColor="green"
+						strokeWidth="12" trailWidth="12">
+						<text class="stats-value">{{numCustomerOrderTommorw}}</text>
+					</l-circle> -->
+					<rice-progress-circle :percentage="numCustomerOrderTommorw_percent" color="green">
+						<text class="stats-value">{{ numCustomerOrderTommorw }}</text>
+					</rice-progress-circle>
+					
+				</view>
+				<view class="stats-item">
+					<text class="stats-label">{{ i18n.global.t("gather.emptyRooms") }}</text>
+					<!-- <l-circle :percent="numEmptyRoom_percenty" size="100px" strokeColor="orange"
+						strokeWidth="12" trailWidth="12">
+						<text class="stats-value">{{numEmptyRoom_format()}}</text>
+					</l-circle> -->
+					<rice-progress-circle :percentage="(100 - numCustomerOrderTommorw_percent)" color="orange">
+						<text class="stats-value">{{ roomCount - numCustomerOrderTommorw }}</text>
+					</rice-progress-circle>
+					
+				</view>
+			</view>
+		</view>
+	</view>
 </template>
 
 <script setup lang="ts">
@@ -82,6 +103,9 @@
 	import { roomTypeBean } from '@/bean/roomTypeBean.uts';
 	import { orderBean } from '@/bean/orderBean';
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	const activeIndex = ref(0);
 	const itemStyle = {
 		fontSize: "20px"
@@ -109,9 +133,9 @@
 	}
 	// 组件挂载后初始化echarts实例 (也可在请求数据后初始化)
 	function initEchart() {
-	
+
 	}
-	function tabClick(index:number) {
+	function tabClick(index : number) {
 		activeIndex.value = index;
 	}
 	const onClick = (index : number) => {
@@ -125,7 +149,7 @@
 		orderList.map(item => {
 			let num = item.reservedRoomList.length;
 			numCount += num;
-	
+
 		});
 		return numCount;
 	}
@@ -177,8 +201,9 @@
 			return 40;
 		}
 		const val = (numCustomerOrderToday.value * 100 / roomCount.value) as number;
-		return parseFloat(val.toFixed(2)) ;
+		return parseFloat(val.toFixed(2));
 	});
+	
 	//明日住客订单
 	const numCustomerOrderTommorw = computed(() : number => {
 		let orderList = orderState.orderListTommorow;
@@ -187,11 +212,19 @@
 	});
 	const numCustomerOrderTommorw_percent = computed(() : number => {
 		if (roomCount.value == 0) {
-			return 0.01;
+			return 0;
 		}
 		const val = (numCustomerOrderTommorw.value * 100 / roomCount.value) as number;
-		return Math.max(parseFloat(val.toFixed(2)),0.01) ;
+		return Math.max(parseFloat(val.toFixed(2)), 0);
 	});
+	
+	//空房数量
+	const numEmptyRoom_percenty=computed<number>(()=>{
+		return 100 - numCustomerOrderTommorw_percent.value;
+	})
+	const numEmptyRoom_format=():string=>{
+		return (roomCount.value - numCustomerOrderTommorw.value).toString();
+	}
 	watch(activeIndex, (indexNew : number, indexOld : number) : void => {
 		if (indexNew == 1) {
 			swiperx.value = '-50%';
@@ -199,7 +232,7 @@
 		}
 		swiperx.value = '0'
 	});
-	
+
 	const init = async () => {
 		getGatherEvent(hotel_id.value);
 	}
@@ -207,7 +240,7 @@
 		init();
 	});
 	onBeforeMount(() => {
-	
+
 	})
 	onMounted(() => {
 		initEchart();
@@ -215,103 +248,122 @@
 	init();
 </script>
 
-<style scoped>
-/* 全局容器 */
-.container {
-  width: 100%;
-  background-color: #f5f5f5;
-  display: flex;
-  flex-direction: column;
-}
+<style scoped lang="scss">
+	/* 全局容器 */
+	.container {
+		width: 100%;
+		background-color: #f5f5f5;
+		display: flex;
+		flex-direction: column;
+	}
 
-/* 顶部导航栏 */
-.header {
-  background-color: #007AFF;
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+	/* 顶部导航栏 */
+	.header {
+		background-color: #007AFF;
+		padding: 16px 20px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
 
-.hotel-info {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-}
+	.hotel-info {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 10px;
+	}
 
-.hotel-name {
-  font-size: 18px;
-  font-weight: 600;
-  color: #fff;
-}
-
-
+	.hotel-name {
+		font-size: 18px;
+		font-weight: 600;
+		color: #fff;
+	}
 
 
-/* 统计模块 */
-.stats-section {
-  padding: 20px;
-}
 
-.stats-tab {
-  display: flex;
-  margin-bottom: 16px;
-  flex-direction: row;
-}
 
-.tab-btn {
-  flex: 1;
-  padding: 10px;
-  border-radius: 8px;
-  background-color: #fff;
-  color: #333;
-  border: none;
-  font-size: 15px;
-}
+	/* 统计模块 */
+	.stats-section {
+		padding: 20px;
+	}
 
-.tab-btn.active {
-  background-color: #007AFF;
-  color: #fff;
-}
+	.stats-tab {
+		display: flex;
+		margin-bottom: 16px;
+		flex-direction: row;
+	}
 
-.stats-card {
-  background-color: #fff;
-  border-radius: 12px;
-  padding:0 20px 20px 20px;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
+	.tab-btn {
+		flex: 1;
+		padding: 10px;
+		border-radius: 8px;
+		background-color: #fff;
+		border: none;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		height: 58px;
 
-}
+	}
 
-.stats-item {
-	margin-top: 20px;
-	flex: 1;
-	min-width: 140px;
+	.tab-btn-active {
+		background-color: #007AFF;
+	}
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+	.txt {
+		font-size: 15px;
+		color: #333333 !important;
+	}
 
-.stats-label {
-  font-size: 14px;
-  color: #323233;
-  padding:8px;
-}
+	.tabtxt-active {
+		font-size: 15px;
+		color: #ffffff !important;
+	}
 
-.stats-value {
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
-}
 
-			.val-text {
-				font-size: 32px;
-				font-weight: 700;
-			}
-.slot-text{
-	text-align: center;font-size: 24px;font-weight: 600;color: #333;
-}
+	.stats-card {
+		background-color: #fff;
+		border-radius: 12px;
+		padding: 0 20px 20px 20px;
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+
+	}
+
+	.stats-item {
+		margin-top: 20px;
+		flex: 1;
+		min-width: 140px;
+
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.stats-label {
+		font-size: 14px;
+		color: #323233;
+		padding: 8px;
+	}
+
+	.stats-value {
+		font-size: 224px;
+		font-weight: 600;
+		color: #333;
+		text-align: center;
+	}
+
+	.val-text {
+		font-size: 32px;
+		font-weight: 700;
+	}
+
+	.slot-text {
+		text-align: center;
+		font-size: 24px;
+		font-weight: 600;
+		color: #333;
+	}
 </style>

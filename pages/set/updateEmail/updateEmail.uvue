@@ -1,0 +1,229 @@
+<template>
+	<view class="register-root-page">
+		<view class="register-card-box">
+			<view class="page-title-wrap">
+				<text class="title-text">{{i18n.global.t('register.bind_email')}}</text>
+			</view>
+	<view class="email-verify-root">
+		<view class="form-card-box">
+			<rice-form :model="emailForm" :rules="registerRule" ref="emailFormRef" label-width="100px"
+				class="demo-form">
+				<rice-form-item name="email" required label-position="top" :border-bottom="true">
+					<rice-input v-model="emailForm['email']" :placeholder="i18n.global.t('register.pach_email')" :focus-border="true" border="none"/>
+				</rice-form-item>
+				<rice-form-item name="emailCode" required label-position="top" :border-bottom="true">
+					<view class="code-input-row">
+						<view style="flex:1;display: flex;padding:0 8px;">
+							<rice-input v-model="emailForm['emailCode']" :placeholder="i18n.global.t('register.pach_email_code')" border="none"
+								:maxlength="4" type="number" />
+						</view>
+						<view style="display: flex;flex-direction: row;align-items: center;">
+							<text style="color:#1989fa;font-size: 13px;" @click="sendEmailCode">{{codeText}}</text>
+							<!-- <rice-button  type="primary" :text="codeText"  @click="sendEmailCode" textColor="#fff" :loading="smsLoading"></rice-button> -->
+						</view>
+					</view>
+				</rice-form-item>
+				<view>
+					<view class="tip-text-wrap">
+						<text class="tip-content">{{i18n.global.t('register.email_tips')}}</text>
+					</view>
+				</view>
+			</rice-form>
+			<view style="margin-top: 24px;">
+				<rice-button type="primary" :text="i18n.global.t('common.btn_confirm')" class="submit-round-btn" shape="round" @click="submit"
+					:loading="submitLoading" />
+					
+			</view>
+		</view>
+	</view>
+</view>
+</view>
+</template>
+
+<script setup>
+	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
+	import { AccountService } from "@/services/AccountService";
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { comFunction } from "@/pages/index/ComFuc.uts";
+	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated"
+	})
+	const emit = defineEmits(["setEmailEvent"]);
+	const submitLoading = ref(false);
+	const smsLoading = ref(false);
+	type emailFormType = {
+		email : string,
+		emailCode : string,
+		emailCodeTk : string
+	}
+	const emailForm = ref<emailFormType>({
+		email: "",
+		emailCode: "",
+		emailCodeTk: ""
+	});
+	const emailFormRef = ref<RiceFormComponentPublicInstance | null>(null);
+	const codeText = ref(i18n.global.t('login.btn_getVerificationCode'));
+	const codeDisabled = ref(false);
+	let timer = 0;
+	const emailvalidAccount = async (email : any | null) => {
+		if (email == null || email =="") {
+			return  i18n.global.t('form.valid_required_email');
+		}
+		const flag = await AccountService.validRegisterByEmail(email.toString());
+		return flag;
+	}
+	const registerRule = new Map<string, FormRules[]>([
+		[
+			"email",
+			[
+				{ required: true, message: i18n.global.t('form.valid_required_email') },
+				{ pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message:i18n.global.t('form.valid_email') },
+				{ validator: emailvalidAccount, trigger: 'blur', message:i18n.global.t('register.valid_email_hanused') }
+			]
+		],
+		[
+			"emailCode",
+			[
+				{ required: true, message: i18n.global.t('form.valid_required_email') },
+				{ min: 4, max: 4, message:i18n.global.t('regitster.valid_email_num') , trigger: 'blur' }
+			]
+		]
+	])
+	const clearTimer = () => {
+		if (timer != 0) {
+			clearInterval(timer);
+			timer = 0;
+		}
+		codeText.value = i18n.global.t('login.btn_getSms') ;
+		codeDisabled.value = false;
+	};
+	const startTimeTask = () => {
+		codeDisabled.value = true;
+		let count = 60;
+		codeText.value = `${count}s`;
+		timer = setInterval(() => {
+			count--;
+			if (count <= 0) {
+				clearTimer();
+				return;
+			}
+			codeText.value = `${count}s`;
+		}, 1000);
+	}
+	const sendEmailCode = async () => {
+		if (timer != 0) {
+			return;
+		}
+		const result = await emailFormRef.value!.validateFields(['email'])
+		if (result != true) {
+				uni.showToast({
+					title: i18n.global.t('form.valid_email'),
+					icon: "none"
+				})
+				return;			
+		}
+		try {
+			smsLoading.value=true;
+			const emailCodeTk = await AccountService.sendEmailCode(emailForm.value.email,"updateEmail");
+			console.log("emailCodeTk", emailCodeTk);
+			emailForm.value.emailCodeTk = emailCodeTk;
+			smsLoading.value=false;
+			startTimeTask();
+		} catch (error) {
+			smsLoading.value=false;
+		}
+	}
+	const submit = async () => {
+		if(submitLoading.value==true){
+			return;
+		}
+		const result = await emailFormRef.value!.validate();
+		console.log("result", result);
+		if (result != true) {
+			return;
+		}
+		try {
+			submitLoading.value = true;
+			const flag = await AccountService.updateEmail(emailForm.value.email, emailForm.value.emailCode, emailForm.value.emailCodeTk);
+			//const flag = await AccountService.validEmailAndCode(emailForm.value.email, emailForm.value.emailCode, emailForm.value.emailCodeTk);
+			if (flag) {
+				await comFunction.getUser();
+				
+				uni.navigateBack({success(){
+								uni.showToast({
+									title:i18n.global.t("common.update_success"),
+									icon:"none"
+								})
+							}});
+			}
+			
+		} catch (err) {
+			submitLoading.value = false;
+		}
+	}
+</script>
+
+<style>
+	/* 页面最外层容器 */
+	.register-root-page {
+		flex: 1;
+		background-color: #fff;
+		padding: 10px 14px;
+		box-sizing: border-box;
+	}
+	/* 注册卡片容器 */
+	.register-card-box {
+		border-radius: 20px;
+		padding: 40px 8px;
+	}
+	/* 标题外层容器 */
+	.page-title-wrap {
+		text-align: center;
+		margin-bottom: 40px;
+	}
+	/* 标题文字 */
+	.title-text {
+		font-size: 32px;
+		font-weight: 600;
+		color: #1d1d1f;
+		padding-left: 14px;
+	}
+/* 组件最外层容器 */
+.email-verify-root {
+}
+/* 表单卡片盒子 */
+.form-card-box {
+}
+/* 验证码输入行容器 */
+.code-input-row {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex: 1;
+	flex-direction: row;
+	justify-content: space-between;
+	overflow: hidden;
+}
+/* 提示文字外层 */
+.tip-text-wrap {
+	margin-top: 12px;
+}
+/* 提示文字内容 */
+.tip-content {
+	color: rgb(134, 144, 156);
+	font-size: 13px;
+}
+/* 底部提交按钮 */
+.submit-round-btn {
+	margin-top: 35px;
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	background: #007aff;
+	color: #fff;
+	font-size: 17px;
+	font-weight: 500;
+	border: none;
+}
+</style>

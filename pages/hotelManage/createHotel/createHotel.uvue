@@ -1,21 +1,20 @@
 <template>
 	<rice-navbar title="" border>
 		<template #left>
-
 			<view style="display: flex;flex-direction: row;align-items: center;">
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
-
 				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
 				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn" v-if="pageType!=2">
-				<!-- <text class="txt">保存</text> -->
-				<rice-button @click="submitForm" type="default" size="mini" :text="i18n.global.t('common.btn_txt_save',[''])" color="rgba(0,0,0,0)"
-					textColor="#007aff" textSize="14px" :loadingText="i18n.global.t('common.saving')" :loading="submitLoading"></rice-button>
+			<view class="nav-save-btn-wrap" v-if="pageType!=2">
+				<rice-button @click="submitForm" type="default" size="mini"
+					:text="i18n.global.t('common.btn_txt_save',[''])" color="rgba(0,0,0,0)" textColor="#007aff"
+					textSize="14px" :loadingText="i18n.global.t('common.saving')"
+					:loading="submitLoading"></rice-button>
 			</view>
 		</template>
 	</rice-navbar>
@@ -25,37 +24,40 @@
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
 			<xt-form-item :label="i18n.global.t('hotel.form.hotel_name')" tips="" required>
 				<view>
-					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('hotel.form.path_hotel_name')"
-						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.hotelName"></rice-input>
+					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic
+						:placeholder="i18n.global.t('hotel.form.path_hotel_name')" borderColor="#dcdfe6"
+						:disabled="pageType==2" v-model="hotelForm.hotelName"></rice-input>
 				</view>
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('hotel.form.hotel_address')" tips="" required>
 				<view>
-					<view @click="selectAddress()" class="address-group">
+					<view @click="selectAddress()" class="addr-select-box">
 						<view>
 							<text style="color:rgba(0,0,0,0.6);font-size: 14px;"
 								v-if="hotelForm.hotelAddressArea==''">{{i18n.global.t("hotel.form.slelect_address")}}</text>
 							<text style="font-size: 14px;"
 								v-if="hotelForm.hotelAddressArea!=''">{{hotelForm.hotelAddressArea}}</text>
 						</view>
-
 						<rice-icon name="arrow-right" color="#dcdfe6" />
 					</view>
 					<view style="height: 100px;">
 						<rice-textarea style="height: 40px;flex: 1;" placeholderStyle="font-size:14px" classic
-							:placeholder="i18n.global.t('hotel.form.path_hotel_address')" layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
+							:placeholder="i18n.global.t('hotel.form.path_hotel_address')" layout="vertical"
+							borderColor="#dcdfe6" :disabled="pageType==2"
 							v-model="hotelForm.hotelAddress"></rice-textarea>
 					</view>
 				</view>
 			</xt-form-item>
-			<xt-form-item :label="i18n.global.t('hotel.form.hotel_feature')" :tips="i18n.global.t('hotel.form.tips_feature')" :showTips="pageType!=2">
+			<xt-form-item :label="i18n.global.t('hotel.form.hotel_feature')"
+				:tips="i18n.global.t('hotel.form.tips_feature')" :showTips="pageType!=2">
 				<view v-if="pageType==0 ||pageType==1">
-					<xt-input-tab v-model="hotelForm.feature" :btnText="i18n.global.t('hotel.btn_txt_add_feature')" list=""></xt-input-tab>
+					<xt-input-tab v-model="hotelForm.feature" :btnText="i18n.global.t('hotel.btn_txt_add_feature')"
+						list=""></xt-input-tab>
 				</view>
-				<view v-if="pageType!=0 &&pageType!=1" class="feature-show-area">
-					<view v-for="txtstr of hotelForm.feature" class="feature-item" style="margin-right: 4px;"><rice-tag
-							size="small" type="primary" :text="txtstr" color="#f2f3f5" text-color="#4e5969" /></view>
-
+				<view v-if="pageType!=0 &&pageType!=1" class="tag-display-wrap">
+					<view v-for="txtstr of hotelForm.feature" class="single-tag-item" style="margin-right: 4px;">
+						<rice-tag size="small" type="primary" :text="txtstr" color="#f2f3f5" text-color="#4e5969" />
+					</view>
 				</view>
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('hotel.form.catering_facilities')" tips="">
@@ -69,13 +71,10 @@
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('hotel.form.basic_facilities')" tips="">
 				<rice-checkbox-group @change="baseCheckboxChange" direction="row" v-model="hotelForm.baseFacility">
-
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
 						v-for="item in facilityConfig_base">
 						<rice-checkbox :disabled="pageType==2" :value="item ['_id']" :label="item.name" />
-
 					</view>
-
 				</rice-checkbox-group>
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('hotel.form.recreation_facilities')" tips="">
@@ -88,7 +87,6 @@
 				</rice-checkbox-group>
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('hotel.form.athleticFacility_facilities')" tips="">
-
 				<rice-checkbox-group @change="athleticFacilityCheckboxChange" direction="row"
 					v-model="hotelForm.athleticFacility">
 					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
@@ -99,23 +97,24 @@
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('hotel.form.customer_service_hotline')" tips="" required>
 				<view>
-					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('hotel.form.path_customer_service_hotline')"
-						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.serviceTel" :maxlength="11"
+					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic
+						:placeholder="i18n.global.t('hotel.form.path_customer_service_hotline')" borderColor="#dcdfe6"
+						:disabled="pageType==2" v-model="hotelForm.serviceTel" :maxlength="11"
 						type="number"></rice-input>
 				</view>
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('hotel.form.customer_service_weChat')" tips="" required>
 				<view>
-					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('hotel.form.path_customer_ervice_weChat')"
-						borderColor="#dcdfe6" :disabled="pageType==2" v-model="hotelForm.wechat"></rice-input>
+					<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic
+						:placeholder="i18n.global.t('hotel.form.path_customer_ervice_weChat')" borderColor="#dcdfe6"
+						:disabled="pageType==2" v-model="hotelForm.wechat"></rice-input>
 				</view>
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('form.remark')" tips="">
 				<view>
-
-					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('form.pach_remark')"
-						layout="vertical" borderColor="#dcdfe6" :disabled="pageType==2"
-						v-model="hotelForm.hotelIntroduction"></rice-textarea>
+					<rice-textarea style="flex: 1;" placeholderStyle="font-size:14px" classic
+						:placeholder="i18n.global.t('form.pach_remark')" layout="vertical" borderColor="#dcdfe6"
+						:disabled="pageType==2" v-model="hotelForm.hotelIntroduction"></rice-textarea>
 				</view>
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('hotel.form.cover_image')" tips="" required>
@@ -128,19 +127,20 @@
 			<xt-form-item :label="i18n.global.t('hotel.form.hotel_images')" tips="" required>
 				<view>
 					<xt-file-upload :max-count="3" :default_files_list="hotelForm.imagesList"
-						@uploadSuccess="uploadImageListSuccess" ::filePath="`HM/client/${hotel_id}/hotel`"
-						accept="image" :readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
+						@uploadSuccess="uploadImageListSuccess" :filePath="`HM/client/${hotel_id}/hotel`" accept="image"
+						:readonly="pageType==2" :deletable="pageType!=2"></xt-file-upload>
 				</view>
 			</xt-form-item>
-
 		</view>
-
 	<!-- #ifdef APP -->
 	</scroll-view>
 	<!-- #endif -->
-	<l-cascader v-model:visible="showSelectAreaPopup" v-model="hotelForm.hotelAddressArea" uniCloud
-		:subTitles="subTitles" :title="i18n.global.t('hotel.form.date_title')" @change="transformAddress" />
-
+	<!-- <l-cascader v-model:visible="showSelectAreaPopup" v-model="hotelForm.hotelAddressArea" uniCloud
+		:subTitles="subTitles" :title="i18n.global.t('hotel.form.date_title')" @change="transformAddress" /> -->
+		<rice-cascader  v-model:show="showSelectAreaPopup" title="省市区数据"
+		  :options="areaList"
+		  :placeholder="`请选择${getText(tabIndex5)}`"
+		  @finish="onFinish" />
 </template>
 
 <script setup>
@@ -148,22 +148,19 @@
 	import { hotelBean } from "@/bean/hotelBean.uts";
 	import { HotelService } from "@/services/HotelService";
 	import { useCascaderAreaData } from '@/uni_modules/lime-shared/areaData';
-	import { state,setHotelId } from '@/store/store.uts';
-	//import amap from "@/common/amap-wx.130";
+	import { state, setHotelId } from '@/store/store.uts';
 	import { Location } from "@/services/LocationService.uts";
 	import { validForm } from "./hotelFormVaild.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { userBean } from "@/bean/userBean";
 	import { facilityConfig_type } from "@/bean/facilityConfig_type.uts";
 	import i18n from '@/i18n/index.uts';
+	import { CascaderOption ,CascaderEvent} from "@/uni_modules/rice-ui"
 	
-	// const props = defineProps({
-	// 	type: {
-	// 		type: Number,
-	// 		default: 0,
-	// 	}
-	// });
-
+	
+	defineOptions({
+		styleIsolation: "isolated"
+	})
 	type form = {
 		username : string,
 		phone : string,
@@ -177,7 +174,7 @@
 		return state.user;
 	});
 	let hotelForm = ref<hotelBean>({
-		ownership_id:"",
+		ownership_id: "",
 		belong: "",
 		hotelName: "",
 		hotelAddress: "",
@@ -195,14 +192,13 @@
 		wechat: "",
 		feature: []
 	});
-
 	const title = computed(() => {
 		if (pageType.value == 0) {
-			return i18n.global.t("common.btn_txt_create",[i18n.global.t('hotel.title')]);
+			return i18n.global.t("common.btn_txt_create", [i18n.global.t('hotel.title')]);
 		}
-		const modify_title= i18n.global.t("common.btn_txt_modify",[i18n.global.t('hotel.title')]);
-		const detail_title= i18n.global.t("common.btn_txt_eetails",[i18n.global.t('hotel.title')]);
-		return pageType.value == 1 ? modify_title:detail_title;
+		const modify_title = i18n.global.t("common.btn_txt_modify", [i18n.global.t('hotel.title')]);
+		const detail_title = i18n.global.t("common.btn_txt_eetails", [i18n.global.t('hotel.title')]);
+		return pageType.value == 1 ? modify_title : detail_title;
 	});
 	const titleImg = computed<string>(() => {
 		if (pageType.value == 0) {
@@ -211,67 +207,104 @@
 		return pageType.value == 1 ? "/static/icons/editpage.png" : "/static/icons/detailpage.png"
 	});
 	let submitLoading = ref(false);
+	
+	
+	
+	let transformAreaData : ((list : Array<UTSJSONObject>) => CascaderOption[]) | null = null
+	const areaList = ref<Array<CascaderOption>>([])
+	transformAreaData = (list : Array<UTSJSONObject>) => {
+	  const result = list.map(item => {
+	    const children = item['children'] as Array<UTSJSONObject> | null
+	    return {
+	      value: item.value as string | number,
+	      text: item.label as string,
+	      extend: { value: item.value as string | number },
+	      children: (children != null && children.length > 0) ? transformAreaData!(children) : null
+	    } as CascaderOption
+	  })
+	  return result
+	}
+	const listori = useCascaderAreaData();
+	// 假设area为后端返回的数据
+	areaList.value = transformAreaData!(listori!);
+	console.log("areaList",areaList)
+	// 设置placeholder
+	const tabIndex5=ref(0)
+	const onFinish = (e : CascaderEvent) => {
+	  // console.log('onFinish', e)
+	  // uni.showToast({
+	  //   title: `选择完成了-${e.value}`,
+	  //   icon: 'none'
+	  // })
+	  hotelForm.value.hotelAddressArea = e.selectedOptions.map(v => v.text).join('/')
+	}
+	
+	const getText = (index : number) => {
+	  if (index == 0) return '省份'
+	  if (index == 1) return '城市'
+	  return '区县'
+	}
+	
 	const getFirstImagesList = () : Array<string> => {
 		if (hotelForm.value.firstImages != "") {
 			return [hotelForm.value.firstImages];
 		}
 		return []
 	}
-
 	const addHotel = async () => {
 		try {
-			const res = await HotelService.createHotel(hotelForm.value);
-			console.log("res:::::::", res);
-			submitLoading.value = false;
-
-			comFunction.init();
-			uni.navigateBack();
-			uni.showToast({
-				title: i18n.global.t('common.add_success'),
-				icon: "none"
-			});
-
-
+			const flag = await HotelService.createHotel(hotelForm.value);
+			if (flag) {
+				submitLoading.value = false;
+				comFunction.init();
+				uni.navigateBack({
+					success() {
+						uni.showToast({
+							title: i18n.global.t('common.add_success'),
+							icon: "none"
+						});
+					}
+				});
+			} else {
+				submitLoading.value = false;
+			}
 		} catch (e) {
 			submitLoading.value = false;
-			//console.error("保存失败", e)
-			uni.showToast({
-				title: i18n.global.t('common.add_fail'),
-				icon: "none"
-			});
 		}
-
 	}
 	const updateHotel = async () => {
 		try {
 			const id = hotelForm.value._id as string;
-			await HotelService.updateHotel(id, hotelForm.value);
-			
-			submitLoading.value = false;
-			await comFunction.getHotelList();
-			setHotelId(hotel_id.value);
-			uni.navigateBack({
-				success() {
-					uni.showToast({
-						title: i18n.global.t('common.update_success'),
-						icon: "none",
-						position: 'top'
-					});
-				}
-			});
+			const flag = await HotelService.updateHotel(id, hotelForm.value);
+			if (flag) {
+				submitLoading.value = false;
+				await comFunction.getHotelList();
+				setHotelId(hotel_id.value);
+				uni.navigateBack({
+					success() {
+						uni.showToast({
+							title: i18n.global.t('common.update_success'),
+							icon: "none",
+							position: 'top'
+						});
+					}
+				});
+			} else {
+				submitLoading.value = false;
+			}
 		} catch (e) {
 			submitLoading.value = false;
 		}
 	}
-
 	const submitForm = async () => {
+		submitLoading.value = true;
 		const flag : boolean = validForm(hotelForm.value);
 		if (flag == false) {
+			submitLoading.value = false;
 			return;
 		}
-		submitLoading.value = true;
 		hotelForm.value.belong = user.value['phone'] as string;
-		hotelForm.value.ownership_id=user.value._id;
+		hotelForm.value.ownership_id = user.value._id;
 		const address = `${hotelForm.value.hotelAddressArea}${hotelForm.value.hotelAddress}`;
 		const location : Array<number> = await Location.getLocation(address);
 		hotelForm.value.hotelCoordinate = location;
@@ -289,7 +322,6 @@
 	const showSelectAreaPopup = ref(false);
 	let optionsAreaData = ref<Array<UTSJSONObject> | null>(null);
 	const subTitles = [i18n.global.t("form.tab_title_select_province"), i18n.global.t("form.tab_title_select_city"), i18n.global.t("form.tab_title_select_district")];
-	//const cascaderValue7 = ref('');
 	const fieldValue7 = ref<string | null>(null);
 	const transformAddress = (value : string, options : UTSJSONObject[]) => {
 		hotelForm.value.hotelAddressArea = options.map((item : UTSJSONObject) : any | null => (item['name'])).join('/');
@@ -299,19 +331,11 @@
 			return;
 		}
 		showSelectAreaPopup.value = true;
-		// if (optionsAreaData.value == null) {
-		// 	uni.showLoading({
-		// 		title: ""
-		// 	});
-		// 	optionsAreaData.value = useCascaderAreaData();
-		// 	uni.hideLoading();
-		// }
-
 	}
-	const facilityConfig_base = ref<Array<facilityConfig_type> | null>(null);
-	const facilityConfig_catering = ref<Array<facilityConfig_type> | null>(null);
-	const facilityConfig_recreation = ref<Array<facilityConfig_type> | null>(null);
-	const facilityConfig_athleticFacility = ref<Array<facilityConfig_type> | null>(null);
+	const facilityConfig_base = ref<Array<facilityConfig_type>>([]);
+	const facilityConfig_catering = ref<Array<facilityConfig_type>>([]);
+	const facilityConfig_recreation = ref<Array<facilityConfig_type>>([]);
+	const facilityConfig_athleticFacility = ref<Array<facilityConfig_type>>([]);
 	const cateringCheckboxChange = (e : string[]) => {
 		hotelForm.value.cateringServices = e;
 	}
@@ -325,28 +349,23 @@
 		hotelForm.value.athleticFacility = e;
 	}
 	const uploadFirstImageSuccess = (list : string[]) => {
-		console.log("得到的list：", list);
-		if(list.length>0){
+		if (list.length > 0) {
 			hotelForm.value.firstImages = list[0];
 			return;
 		}
-		hotelForm.value.firstImages="";
+		hotelForm.value.firstImages = "";
 	}
 	const uploadImageListSuccess = (list : string[]) => {
-		
-		if(list.length>0){
+		if (list.length > 0) {
 			hotelForm.value.imagesList = list;
 			return;
 		}
 		hotelForm.value.imagesList = [];
 	}
-
 	onLoad(params => {
-		//console.log("params",params);
 		try {
 			const pt = params.get("pageType");
 			const h = params.get("hotel_item");
-			//console.log("1111111",pt,h);
 			if (pt != null) {
 				pageType.value = parseInt(pt);
 			}
@@ -354,7 +373,6 @@
 				let decoded = decodeURIComponent(h as string);
 				if (decoded != null) {
 					hotelForm.value = JSON.parse<hotelBean>(decoded)!;
-					console.log("bbbbbbb", hotelForm.value);
 				}
 			}
 		} catch (e) {
@@ -374,14 +392,13 @@
 		HotelService.getConfig_facilityConfig('athleticFacility').then(list => {
 			facilityConfig_athleticFacility.value = list;
 		});
-
 	}
-
 	init();
 </script>
 
-<style lang="scss">
-	.address-group {
+<style>
+	/* 地址选择框 */
+	.addr-select-box {
 		border-radius: 6px;
 		border: 1px solid #dcdfe6;
 		padding: 8px;
@@ -394,17 +411,18 @@
 		box-sizing: border-box;
 	}
 
-	.feature-show-area {
+	/* 特色标签外层容器 */
+	.tag-display-wrap {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-
-		.feature-item {
-			margin-left: 4px;
-		}
-
-		.feature-item:first-child {
-			margin-left: 0;
-		}
 	}
+
+	/* 单个特色标签 */
+	.single-tag-item {
+		margin-left: 4px;
+	}
+
+	/* 导航栏保存按钮外层 */
+	.nav-save-btn-wrap {}
 </style>

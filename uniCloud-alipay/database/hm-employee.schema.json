@@ -4,8 +4,8 @@
 	"permission": {
 		"read": true,
 		"create": true,
-		"update": true,
-		"delete": true
+		"update": false,
+		"delete": false
 	},
 	"properties": {
 		"_id": {

@@ -1,0 +1,69 @@
+<template>
+	<view class="gap-base" :style="wrapStyle">
+		<slot></slot>
+	</view>
+</template>
+
+<script setup lang="uts">
+defineOptions({
+	styleIsolation: "isolated"
+})
+
+const props = defineProps({
+	// 水平间隙 px
+	gapX: {
+		type: Number,
+		default: 12
+	},
+	// 垂直间隙 px
+	gapY: {
+		type: Number,
+		default: 12
+	},
+	// 方向 row / column
+	direction: {
+		type: String,
+		default: "row"
+	},
+	// 是否换行
+	wrap: {
+		type: Boolean,
+		default: false
+	}
+})
+
+// 计算半间距
+const halfX = computed(() => props.gapX / 2)
+const halfY = computed(() => props.gapY / 2)
+type Record={
+	display:string,
+	flexDirection: string,
+	flexWrap: string
+}
+// 父容器负边距，抵消子元素padding带来的边缘空白
+const wrapStyle = computed(() => {
+	let style = {
+		display: "flex",
+		flexDirection: props.direction,
+		flexWrap: props.wrap ? "wrap" : "nowrap"
+	}
+	if (props.direction === "row") {
+		style.marginLeft = `-${halfX.value}px`
+		style.marginRight = `-${halfX.value}px`
+		if (props.wrap) {
+			style.marginBottom = `-${halfY.value}px`
+		}
+	} else {
+		style.marginBottom = `-${halfY.value}px`
+	}
+	return style
+})
+</script>
+
+<style>
+/* 仅单一class，无任何嵌套、后代、伪类选择器 */
+.gap-base {
+	width: 100%;
+	box-sizing: border-box;
+}
+</style>

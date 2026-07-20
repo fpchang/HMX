@@ -1,0 +1,110 @@
+<template>
+  <view class="background">
+    <view class="container">
+     <view class="nav">
+        <view class="left_content">
+          <text class="left_icon" @click="onBack">{{ backIcon }}</text>
+        </view>
+        <view class="title_content">
+          <text class="title">{{ title }}</text>
+        </view>
+      </view>
+      <web-view class="web_container" :src="url"></web-view>
+    </view>
+  </view>
+</template>
+
+<script setup lang="uts">
+
+// 响应式状态
+const url = ref('')
+const title = ref('')
+const animationType = ref('slide-out-bottom')
+const backIcon = ref('\ue601')
+
+// 获取当前页面实例，替代 this.$page
+//const pages = getCurrentPages();
+//const currentPage = pages[0];
+const instance = getCurrentInstance()!.proxy!
+// 页面加载接收参数
+onLoad((options) => {
+  url.value = options.url as string ?? ''
+  title.value = options.title as string ?? ''
+  animationType.value = options.animationType as string ?? 'slide-out-bottom'
+})
+
+// 返回关闭dialogPage
+const onBack = () => {
+  uni.closeDialogPage({
+    dialogPage: instance.$page,
+    animationType: animationType.value,
+    success: (res) => {
+      console.log('closeThisDialog success', res)
+    },
+    fail: (err) => {
+      console.log('closeThisDialog fail', err)
+    }
+  })
+}
+</script>
+
+<style scoped>
+.background {
+  background-color: #007aff;
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  padding-top: var(--status-bar-height);
+  width: 100%;
+  position: absolute;
+  height: 100%;
+}
+
+.nav {
+  width: 100%;
+  height: 45px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+
+.left_content {
+  width: 40px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left_icon {
+  color: white;
+  font-family: uni-icon;
+  font-size: 26px;
+}
+
+.title_content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 45px;
+  right: 45px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  color: white;
+  font-size: 17px;
+}
+
+.web_container {
+  background-color: #f1f1f1;
+  padding-top: 10px;
+  flex: 1;
+  width: 100%;
+}
+</style>

@@ -1,6 +1,13 @@
 
 // 参考链接 https://doc.dcloud.net.cn/uni-app-x/tutorial/ls-plugin.html#setting
 {
+	
+	  "h5": {
+	    "staticCopy": {
+	      "static/root/apple-app-site-association": "apple-app-site-association"
+	    }
+	  }
+	,
     "targets": [
         "APP-ANDROID"
     ]

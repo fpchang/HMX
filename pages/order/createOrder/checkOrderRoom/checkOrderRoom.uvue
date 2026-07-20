@@ -1,333 +1,307 @@
 <template>
-	<view class="checkRoom" v-if="remainRoomTypeList.length>0&&!submitLoading">
-		<view class="tab-container">
-			<rice-tabs v-model="activeIndex" :list="menuList" @clickTab="tabClick" line-width="70%" s></rice-tabs>
+	<view class="checkRoom-wrap" v-if="remainRoomTypeList.length>0&&!submitLoading">
+		<view class="tab-wrap">
+			<rice-tabs v-model="activeIndex" :list="menuList" @clickTab="tabClick" line-width="70%"></rice-tabs>
 		</view>
-		<scroll-view style="flex:1">
+		<scroll-view class="scroll-main">
 			<rice-checkbox-group v-model="checkVal" @change="onGroupChange">
-				<view class="roomType-container" v-for="roomType of filterRoomTypeList">
-					<view class="rt-title">
-						<image src="/static/icons/hotel-room.png" style="width: 16px;height: 16px;margin-right: 8px;">
-						</image>
-						<text class="txt">{{roomType.name}}({{i18n.global.t("order.create_order.select_room_num",[roomType.remainRoomList.length])}})</text>
+				<view class="room-type-item" v-for="roomType of filterRoomTypeList">
+					<view class="rt-head">
+						<image class="rt-icon" src="/static/icons/hotel-room.png"></image>
+						<text class="rt-name">{{roomType.name}}({{i18n.global.t("order.create_order.select_room_num",[roomType.remainRoomList.length])}})</text>
 					</view>
-					<view class="card-list">
-						<view class="card-list-item" v-for="room of roomType.remainRoomList">
-							<view class="card">
-								<view class="card-item">
-									<view class="title">
-
-										<text class="txt">{{room.room_name}}</text>
+					<view class="room-card-row">
+						<view class="room-card-col" v-for="room of roomType.remainRoomList">
+							<view class="room-card">
+								<view class="card-row">
+									<view class="card-name-box">
+										<text class="card-name-txt">{{room.room_name}}</text>
 									</view>
-									<view class="check-area">
+									<view class="card-check-box">
 										<rice-checkbox :value="room._id" label=""></rice-checkbox>
 									</view>
-
 								</view>
-								<!-- 	<view class="card-item subtitle">
-								<text class="txt">
-									{{roomType.name}}
-								</text>
-							</view> -->
-
 							</view>
 						</view>
-
 					</view>
-
 				</view>
 			</rice-checkbox-group>
-
-
 		</scroll-view>
-
-		<view class="bottom-area">
-			<view class="content">
-				<view>
-					<text class="txt">{{i18n.global.t("order.create_order.has_select_room_num",[checkVal.length])}}</text>
-				</view>
-				<view style="min-width:100px">
-					<rice-button type="primary" :text="i18n.global.t('order.create_order.btn_txt')" :disabled="checkVal.length<1"
-						@click="setRoomSelect"></rice-button>
+		<view class="bottom-bar">
+			<view class="bottom-inner">
+				<text class="select-txt">{{i18n.global.t("order.create_order.has_select_room_num",[checkVal.length])}}</text>
+				<view class="btn-box">
+					<rice-button type="primary" :text="i18n.global.t('order.create_order.btn_txt')" :disabled="checkVal.length<1" @click="setRoomSelect"></rice-button>
 				</view>
 			</view>
 		</view>
 	</view>
-	<view v-if="submitLoading" style="margin-top:68px;display: flex;flex-direction: row;justify-content: center;">
+	<view class="loading-wrap" v-if="submitLoading">
 		<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
 	</view>
-	<view v-if="remainRoomList.length<1&&!submitLoading" style="margin-top: 68px;"> 
-	<l-empty :description="i18n.global.t('order.create_order.no_room_select_tips')"  />
+	<view class="empty-wrap" v-if="remainRoomList.length<1&&!submitLoading">
+		<l-empty :description="i18n.global.t('order.create_order.no_room_select_tips')" />
 	</view>
 </template>
 
 <script setup lang="uts">
-	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
-	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
-	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
-	import { roomTypeBean } from '@/bean/roomTypeBean';
-	import { roomBean } from '@/bean/roomBean';
-	import { orderBean, OrderRoomTypeBean, remainRoomTypeBean } from '@/bean/orderBean';
-	import { OrderService } from "@/services/OrderService.uts";
-	import { state } from "@/store/store";
-	import { dayuts } from '@/uni_modules/lime-dayuts';
-	import {userBean} from '@/bean/userBean';
-		import i18n from '@/i18n/index.uts';
-	let submitLoading = ref(false);
-	const hotel_id = computed(() => {
-		return state.hotel_id;
-	});
-	const user = computed<userBean>(() => {
-		return state.user;
-	});
-	const permissionList = computed(() => {
-		return state.permissionList;
-	});
-	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
-		return state.roomTypeList;
-	});
-	const dateRange = ref<string[]>([]);
-	const activeIndex = ref(0);
-	const active_id = ref<string>('all');
-	const checkVal = ref<Array<string>>([]);
-	const remainRoomList = ref<Array<roomBean>>([]);
-	const remainRoomTypeList=computed<Array<remainRoomTypeBean>>(()=>{
-		let list:Array<remainRoomTypeBean>=[];
-		if(roomTypeList.value==null){
-			return list;
-		}
-		roomTypeList.value.forEach(item=>{
-			let rt:remainRoomTypeBean={
-				_id:item._id,
-				name:item.name,
-				remainRoomList:remainRoomList.value.filter(room=>room.room_type_id==item._id) as Array<roomBean>
-			}
-			if(rt.remainRoomList.length>0){
-				list.push(rt);
-			}
-			
-		})
+import { TabsOptions, TabsClickTab } from '@/uni_modules/rice-ui';
+import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+import { roomTypeBean } from '@/bean/roomTypeBean';
+import { roomBean } from '@/bean/roomBean';
+import { orderBean, OrderRoomTypeBean, remainRoomTypeBean } from '@/bean/orderBean';
+import { OrderService } from "@/services/OrderService.uts";
+import { state } from "@/store/store";
+import { dayuts } from '@/uni_modules/lime-dayuts';
+import {userBean} from '@/bean/userBean';
+import i18n from '@/i18n/index.uts';
+
+defineOptions({
+	styleIsolation: "isolated"
+})
+
+let submitLoading = ref(false);
+const hotel_id = computed(() => {
+	return state.hotel_id;
+});
+const user = computed<userBean>(() => {
+	return state.user;
+});
+const permissionList = computed(() => {
+	return state.permissionList;
+});
+const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
+	return state.roomTypeList;
+});
+const dateRange = ref<string[]>([]);
+const activeIndex = ref(0);
+const active_id = ref<string>('all');
+const checkVal = ref<Array<string>>([]);
+const remainRoomList = ref<Array<roomBean>>([]);
+
+const remainRoomTypeList=computed<Array<remainRoomTypeBean>>(()=>{
+	let list:Array<remainRoomTypeBean>=[];
+	if(roomTypeList.value==null){
 		return list;
+	}
+	roomTypeList.value.forEach(item=>{
+		let rt:remainRoomTypeBean={
+			_id:item._id,
+			name:item.name,
+			remainRoomList:remainRoomList.value.filter(room=>room.room_type_id==item._id) as Array<roomBean>
+		}
+		if(rt.remainRoomList.length>0){
+			list.push(rt);
+		}
 	})
-	const menuList = computed<TabsOptions[]>(() => {
-		let list : TabsOptions[] = [];
-		if (checkVal.value.length > 0) {
+	return list;
+})
+
+const menuList = computed<TabsOptions[]>(() => {
+	let list : TabsOptions[] = [];
+	if (remainRoomTypeList.value.length > 0) {
+		list.push({
+			name: i18n.global.t("order.all_roomType"),
+			value: 'all',
+			badge: {
+				value: checkVal.value.length,
+			}
+		})
+	}
+	remainRoomTypeList.value.forEach(item => {
+		let room_idList = item.remainRoomList.map(room=>room._id);
+		let roomListGroup = new Set([...room_idList, ...checkVal.value]);
+		let num =room_idList.length + checkVal.value.length - roomListGroup.size;
+		if (num > 0) {
 			list.push({
-				name: i18n.global.t("order.all_roomType"),
-				value: 'all',
+				name: item.name,
+				value: item._id,
 				badge: {
-					value: checkVal.value.length,
+					value: num
 				}
 			})
-		}
-		remainRoomTypeList.value.forEach(item => {
-			let room_idList = item.remainRoomList.map(room=>room._id);
-			let roomListGroup = new Set([...room_idList, ...checkVal.value]);
-			let num =room_idList.length + checkVal.value.length - roomListGroup.size;
-			if (num > 0) {
-				list.push({
-					name: item.name,
-					value: item._id,
-					badge: {
-						value: num
-					}
-				})
-			} else {
-				list.push({
-					name: item.name,
-					value: item._id
-				})
-			}
-
-		})
-		return list;
-	})
-
-	const onGroupChange = (values : string[]) => {
-		//set val
-	}
-	const tabClick = (e : TabsClickTab) => {
-		console.log('TabsClickTab', e)
-		// uni.showToast({
-		// 	title: `点击了：${e.name}${e.disabled ? '（禁用）' : ''}`,
-		// 	icon: 'none'
-		// })
-		if (e.value != null) {
-			active_id.value = e.value as string;
-		}
-	};
-	const filterRoomTypeList = computed<Array<remainRoomTypeBean>>(() => {
-
-		if (active_id.value == 'all') {
-			return remainRoomTypeList.value;
-		}
-		let list = remainRoomTypeList.value.filter((item : remainRoomTypeBean) => item._id == active_id.value);
-		return list;
-	})
-
-	// const initValidRoomTypeData = async () => {
-	// 	//uni.showLoading();
-	// 	let startTime = dayuts(dateRange.value[0]).format("YYYY-MM-DD 14:00:00");
-	// 	let endTime = new Date(dayuts(dateRange.value[1]).format("YYYY-MM-DD 12:00:00")).getTime();
-	// 	try {
-	// 		const list : Array<remainRoomTypeBean> = await OrderService.getRemainderRoomType(hotel_id.value, startTime, endTime);
-	// 		console.log("剩余房间", list)
-	// 		remainRoomTypeList.value = list;
-	// 	} catch (e) {
-	// 		uni.showToast({
-	// 			title: "获取剩余房间失败",
-	// 			icon: "none"
-	// 		})
-	// 	}
-
-
-	// }
-	const getRemainRoomList = async () => {
-		submitLoading.value=true;
-		uni.showLoading({title:""});
-		let startTime = new Date(dayuts(dateRange.value[0]).format("YYYY-MM-DD 14:00:00")).getTime();
-		let endTime = new Date(dayuts(dateRange.value[1]).format("YYYY-MM-DD 12:00:00")).getTime();
-		try {
-			const list : Array<roomBean> = await OrderService.getRemainderRoomList(hotel_id.value, startTime, endTime);
-			//console.log("剩余房间", list)
-			remainRoomList.value = list;
-			submitLoading.value=false;
-			uni.hideLoading();
-		} catch (e) {
-			submitLoading.value=false;
-			uni.hideLoading();
-			uni.showToast({
-				title: i18n.global.t("common.getData_fail",[i18n.global.t("order.orderFilter")]),
-				icon: "none"
+		} else {
+			list.push({
+				name: item.name,
+				value: item._id
 			})
 		}
-	
-	
-	}
-	
-	
-	//确认选择
-	const setRoomSelect = () => {
-		uni.$emit("setRoomTypeList",checkVal.value);
-		uni.navigateBack();
-	}
-	onLoad(params => {
-		if (params == null) {
-			return;
-		}
-		const startDate = params.getString("startDate");
-		const endDate = params.getString("endDate");
-		const checkRoomList = params.getString("checkRoomList")??"";
-		if(startDate!=null&&endDate!=null){
-			dateRange.value = [startDate, endDate];
-		}
-		
-		if(checkRoomList!=""&&checkRoomList!=null){
-		checkVal.value = checkRoomList.split(",");
-		}
-		
-		getRemainRoomList();
 	})
-	// uni.showToast({
-	// 	title: i18n.global.t("common.getData_fail",['剩余房间']),
-	// 	icon: "none"
-	// })
+	return list;
+})
 
+const onGroupChange = (values : string[]) => {
+}
+
+const tabClick = (e : TabsClickTab) => {
+	console.log('TabsClickTab', e)
+	if (e.value != null) {
+		active_id.value = e.value as string;
+	}
+};
+
+const filterRoomTypeList = computed<Array<remainRoomTypeBean>>(() => {
+	if (active_id.value == 'all') {
+		return remainRoomTypeList.value;
+	}
+	let list = remainRoomTypeList.value.filter((item : remainRoomTypeBean) => item._id == active_id.value);
+	return list;
+})
+
+const getRemainRoomList = async () => {
+	submitLoading.value=true;
+	//uni.showLoading({title:""});
+	let startTime = new Date(dayuts(dateRange.value[0]).format("YYYY-MM-DD 14:00:00")).getTime();
+	let endTime = new Date(dayuts(dateRange.value[1]).format("YYYY-MM-DD 12:00:00")).getTime();
+	try {
+		const list : Array<roomBean> = await OrderService.getRemainderRoomList(hotel_id.value, startTime, endTime);
+		remainRoomList.value = list;
+		submitLoading.value=false;
+		//uni.hideLoading();
+	} catch (e) {
+		submitLoading.value=false;
+		//uni.hideLoading();
+		uni.showToast({
+			title: i18n.global.t("common.getData_fail",[i18n.global.t("order.orderFilter")]),
+			icon: "none"
+		})
+	}
+}
+
+const setRoomSelect = () => {
+	uni.$emit("setRoomTypeList",checkVal.value);
+	uni.navigateBack();
+}
+
+onLoad(params => {
+	if (params == null) {
+		return;
+	}
+	const startDate = params.getString("startDate");
+	const endDate = params.getString("endDate");
+	const checkRoomList = params.getString("checkRoomList")??"";
+	if(startDate!=null&&endDate!=null){
+		dateRange.value = [startDate, endDate];
+	}
+	if(checkRoomList!=""&&checkRoomList!=null){
+		checkVal.value = checkRoomList.split(",");
+	}
+	getRemainRoomList();
+})
 </script>
 
-<style lang="scss">
-	.checkRoom {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
+<style scoped>
+/* 外层容器 */
+.checkRoom-wrap {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+}
+.tab-wrap {
+	padding: 8px 0;
+	background-color: #fff;
+	border-radius: 8px;
+}
+.scroll-main {
+	flex: 1;
+	width: 100%;
+}
 
-		.tab-container {
-			margin: 0 16px;
-			padding: 8px 0;
-			background-color: #fff;
-			border-radius: 8px;
-		}
-	}
+/* 房型区块 */
+.room-type-item {
+	padding: 16px;
+	box-sizing: border-box;
+	width: 100%;
+}
+.rt-head {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-bottom: 16px;
+}
+.rt-icon {
+	width: 16px;
+	height: 16px;
+	margin-right: 8px;
+}
+.rt-name {
+	color: #1d1e23;
+	font-size: 16px;
+	font-weight: 600;
+}
 
-	.roomType-container {
-		padding: 16px;
+/* 房间卡片流式布局 */
+.room-card-row {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: 100%;
+}
+.room-card-col {
+	min-width: 320px;
+	padding: 15px 0;
+	box-sizing: border-box;
+	flex: 1;
+}
+.room-card {
+	background-color: #fff;
+	border-radius: 12px;
+	padding: 16px;
+	width: 100%;
+	box-sizing: border-box;
+}
+.card-row {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+}
+.card-name-box {
+	flex-shrink: 1;
+}
+.card-name-txt {
+	font-size: 18px;
+	font-weight: 700;
+	color: #1d2129;
+}
+.card-check-box {
+	flex-shrink: 0;
+}
 
-		.rt-title {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			margin-bottom: 16px;
+/* 底部栏 */
+.bottom-bar {
+	padding: 16px;
+	background-color: #fff;
+	width: 100%;
+	box-sizing: border-box;
+}
+.bottom-inner {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+}
+.select-txt {
+	color: #969799;
+}
+.btn-box {
+	min-width: 100px;
+}
 
-			.txt {
-				color: #1d1e23;
-				font-size: 16px;
-				font-weight: 600;
-			}
-		}
-
-		.card-list {
-			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-
-			.card-list-item {
-				min-width: 360px;
-				padding: 15px 0;
-				flex: 1;
-
-				.card {
-
-
-					background-color: #fff;
-					border-radius: 12px;
-					padding: 16px;
-
-					.card-item {
-						display: flex;
-						flex-direction: row;
-						align-items: center;
-						justify-content: space-between;
-
-						.title {
-							.txt {
-								font-size: 18px;
-								font-weight: 700;
-								color: #1d2129;
-							}
-
-						}
-
-						.check-area {}
-
-					}
-
-					.title {
-						.txt {
-							font-size: 18px;
-							font-weight: 700;
-							color: #1d2129;
-						}
-
-					}
-
-
-				}
-			}
-		}
-	}
-
-	.bottom-area {
-		padding: 16px;
-		background-color: #fff;
-
-		.content {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			align-items: center;
-			.txt{
-				color:#969799
-			}
-		}
-	}
+/* 加载、空状态 */
+.loading-wrap {
+	margin-top: 68px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	width: 100%;
+}
+.empty-wrap {
+	margin-top: 68px;
+	width: 100%;
+}
 </style>

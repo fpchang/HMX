@@ -8,17 +8,8 @@
 
 			<!-- 选项卡 -->
 			<view class="tab-wrap">
-				<!-- <text class="tab {{ currentTab === 0 ? 'tab-on' : '' }}" @click="switchTab(0)">
-					账号密码
-				</text>
-				<text class="tab {{ currentTab === 1 ? 'tab-on' : '' }}" @click="switchTab(1)">
-					一键登录
-				</text>
-				<text class="tab {{ currentTab === 2 ? 'tab-on' : '' }}" @click="switchTab(2)">
-					短信验证
-				</text> -->
 				<rice-tabs v-model="currentTab" :list="list" @clickTab="tabClick" :shrink="false" style="flex: 1;"
-					bg-color="transparent" line-width="80%"></rice-tabs>
+					bg-color="transparent" line-width="75%"></rice-tabs>
 			</view>
 
 			<!-- 账号密码登录 -->
@@ -27,43 +18,34 @@
 			</view>
 
 			<!-- 一键登录 -->
-			<view class="form" v-if="currentTab === 1">
-				
+			<!-- <view class="form" v-if="currentTab === 1">
 				<loginByApp :isAgree="isAgree"></loginByApp>
-			<!-- 	<button class="btn-login" @click="oneKeyLogin">一键登录</button> -->
-			</view>
+			</view> -->
 
 			<!-- 短信验证码登录 -->
-			<view class="form" v-if="currentTab === 2">
+			<view class="form" v-if="currentTab === 1">
 				<loginBySmscodeComponent :isAgree="isAgree"></loginBySmscodeComponent>
 			</view>
 
 			<!-- 全局共用：用户协议 + 注册入口 -->
 			<view class="bottom-box">
-				<view class="up">
-					<view @click="agreeEvent" style="padding-right: 2px;">
-
-						<image v-show="!isAgree" src="/static/icons/circle.png" class="form-icon"></image>
-						<image v-show="isAgree" src="/static/icons/confirm_selcted.png" class="form-icon"></image>
-
+				<view class="up-box" style="padding-right: 2px;">
+					<image v-show="!isAgree"  @click="agreeEvent" src="/static/icons/circle.png" class="form-icon"></image>
+					<image v-show="isAgree"  @click="agreeEvent" src="/static/icons/confirm_selcted.png" class="form-icon"></image>
+					<view class="text-row">
+						<text class="ct-text">{{i18n.global.t('login.agreenTxt_one')}}</text>
+						<text class="btn-text"
+							@click="openUserAgreement">{{i18n.global.t('login.userAgreement')}}</text>
+						<text class="ct-text">{{i18n.global.t('login.agreenTxt_two')}}</text>
+						<text class="btn-text"
+							@click="openUserPrivacyPolicy">{{i18n.global.t('login.privacyPolicy')}}</text>
 					</view>
-					<view style="display: flex;flex-direction: row;flex-wrap:wrap">
-						<text class="ct">{{i18n.global.t('login.agreenTxt_one')}}</text>
-						<text class="ct-txt-btn" @click="openUserAgreement">{{i18n.global.t('login.userAgreement')}}</text>
-						<text class="ct">{{i18n.global.t('login.agreenTxt_two')}}</text>
-						<text class="ct-txt-btn" @click="openUserPrivacyPolicy">{{i18n.global.t('login.privacyPolicy')}}</text>
-
-
-						<!-- 	<text class="ct">我已阅读并同意</text> -->
-					</view>
-
 				</view>
 
-				<view class="register" @click="goRegister" v-if="currentTab==0">
+				<view class="register-box" @click="goRegister" v-if="currentTab==0">
 					<navigator url="/pages/register/register">
 						<text class="register-text">{{i18n.global.t('login.regitser_txt')}}</text>
 					</navigator>
-
 				</view>
 			</view>
 		</view>
@@ -78,60 +60,47 @@
 	import loginBySmscodeComponent from "./components/loginBySmscodeComponent.uvue"
 	import loginByApp from "./components/loginByApp.uvue"
 	import i18n from '@/i18n/index.uts';
-	//import { ref, onUnmounted } from 'vue';
 
-	// 选项卡
+	defineOptions({
+		styleIsolation: "isolated"
+	})
 	const currentTab = ref(0);
-
-	// 表单数据
 	const account = ref('');
 	const password = ref('');
 	const phone = ref('');
 	const smsPhone = ref('');
 	const smsCode = ref('');
-
-	// 协议
 	const isAgree = ref(false);
 
-
-
-	// 切换选项卡
+	const uniVerifyManager = ref(null as UniVerifyManager | null)
+	const slogan = ref('')
+	const privacyName = ref('')
+	const privacyUrl = ref('')
 	const switchTab = (index : number) => {
 		currentTab.value = index;
-		// clearTimer();
 	};
 	const list = ref<TabsOptions[]>([{
 		name: i18n.global.t('login.tab_acount'),
 		value: 0
-	}, {
-		name: i18n.global.t('login.tab_login_app'),
-		value: 1
-	}, {
+	},
+	// {
+	// 	name: i18n.global.t('login.tab_login_app'),
+	// 	value: 1
+	// },
+	{
 		name: i18n.global.t('login.tab_login_sms'),
-		value: 2
-	}
-	])
+		value: 1
+	}])
 	const tabClick = (e : TabsClickTab) => {
 		currentTab.value = e.index;
 	}
-	// 同意协议
 	const toggleAgree = () => {
 		isAgree.value = !isAgree.value;
 	};
-	
-	// 去注册
-	const goRegister = () => {
-		// uni.showToast({
-		// 	title: '跳转到注册页面',
-		// 	icon: 'none'
-		// });
-		// uni.navigateTo({ url: '/pages/register/register' });
-	};
-
-	// 账号密码登录
+	const goRegister = () => { };
 	const accountLogin = () => {
 		if (!isAgree.value) {
-			uni.showToast({ title:i18n.global.t('login.valid_agree'), icon: 'none' });
+			uni.showToast({ title: i18n.global.t('login.valid_agree'), icon: 'none' });
 			return;
 		}
 		if (account.value == "" || password.value == "") {
@@ -140,9 +109,6 @@
 		}
 		uni.showToast({ title: i18n.global.t('login.login_success'), icon: 'success' });
 	};
-
-	
-	
 	const agreeEvent = () => {
 		console.log(isAgree.value)
 		isAgree.value = !isAgree.value;
@@ -157,27 +123,89 @@
 			url: "/pages/common/privacyPolicy/privacyPolicy",
 		});
 	};
+
+	const preLogin = (callback : (() => void)) => {
+		uniVerifyManager.value?.preLogin({
+			success: (res) => {
+				phone.value = res.number;
+				slogan.value = res.slogan;
+				privacyName.value = res.privacyName;
+				privacyUrl.value = res.privacyUrl;
+				console.log("pre login success", res);
+				callback();
+			},
+			fail: (err) => {
+				console.error("pre login fail => " + JSON.stringify(err));
+				const hasCauseMessage = (err.cause?.cause?.message ?? '').length > 0
+				// uni.showModal({
+				// 	title: '预登录失败',
+				// 	content: hasCauseMessage ? JSON.parseObject(err.cause?.cause?.message ?? '')?.getString("errorDesc") : err.errMsg,
+				// 	showCancel: false
+				// });
+			}
+		});
+	}
+
+	const pushCustomPage = () => {
+		const url = '/pages/login/loginAppCustomer/loginAppCustomer?phone=' + phone.value + '&slogan=' + slogan.value + '&name=' + privacyName.value + '&link=' + privacyUrl.value;
+		uni.openDialogPage({
+			url: url,
+			animationType: 'slide-in-bottom',
+			success(res) {
+				console.log("成功打开自定义登录页面");
+			},
+			fail(err) {
+				console.log(err);
+			}
+		})
+	}
+
+	const customLoginIn = () => {
+		if ('production' === process.env.NODE_ENV && '__UNI__HelloUniAppX' === uni.getAppBaseInfo().appId) {
+			uni.showModal({
+				title: '提示',
+				content: '一键登录为收费功能，当前环境暂不支持。请在HBuilderX中新建Hello uni-app x项目真机运行体验！',
+				showCancel: false
+			})
+			return
+		}
+		const isPreLoginValid = uniVerifyManager.value?.isPreLoginValid() ?? false;
+		if (isPreLoginValid) {
+			pushCustomPage();
+		} else {
+			preLogin(() => {
+				pushCustomPage();
+			})
+		}
+	}
+	onLoad(() => {
+		uniVerifyManager.value = uni.getUniVerifyManager();
+		preLogin(() => { customLoginIn(); });
+	})
 	onShow(() => {
 		const accountstorage = uni.getStorageSync("account");
 		if (accountstorage != null) {
 			account.value = accountstorage as string;
 		}
 	})
-	
 </script>
 
-<style scoped lang="scss">
+<style>
 	.page {
 		background-color: #fff;
-		flex:1;
+		flex: 1;
 		padding: 0 24px;
+		display: flex;
+		justify-content: center;
+		flex-direction: row;
 	}
 
 	.wrap {
+		flex: 1;
+		max-width: 500px;
 		padding-top: 60px;
 	}
 
-	/* 标题 */
 	.head {
 		margin-bottom: 40px;
 	}
@@ -188,7 +216,6 @@
 		color: #1d1d1f;
 	}
 
-	/* 选项卡 */
 	.tab-wrap {
 		display: flex;
 		flex-direction: row;
@@ -196,11 +223,9 @@
 		margin-bottom: 12px;
 	}
 
-
-	/* 表单 */
 	.form {
 		width: 100%;
-		padding:0 14px;
+		padding: 0 14px;
 		box-sizing: border-box;
 	}
 
@@ -218,7 +243,6 @@
 		color: #1d1d1f;
 	}
 
-	/* 验证码 */
 	.code-row {
 		display: flex;
 		flex-direction: row;
@@ -238,25 +262,22 @@
 		padding: 0 8px;
 	}
 
-	.btn-code[disabled] {
+	.btn-code-disabled {
 		color: #8e8e93;
 	}
 
-	/* 自动注册提示 */
-	.tip {
-
+	.tip-box {
 		margin-bottom: 16px;
-
-		.txt {
-			font-size: 12px;
-			color: #8e8e93;
-			line-height: 1.4;
-			text-align: center;
-			padding-top: 12px;
-		}
 	}
 
-	/* 登录按钮 */
+	.tip-text {
+		font-size: 12px;
+		color: #8e8e93;
+		line-height: 1.4;
+		text-align: center;
+		padding-top: 12px;
+	}
+
 	.btn-login {
 		width: 100%;
 		height: 50px;
@@ -270,18 +291,17 @@
 		margin: 24px 0 12px 0;
 	}
 
-	/* 底部：协议 + 注册 */
 	.bottom-box {
 		width: 100%;
 	}
 
-	.agree {
+	.agree-box {
 		display: flex;
 		align-items: center;
 		margin-bottom: 16px;
 	}
 
-	.check {
+	.check-box {
 		width: 18px;
 		height: 18px;
 		border-radius: 4px;
@@ -289,14 +309,13 @@
 		margin-right: 8px;
 	}
 
-	.check-on {
+	.check-active {
 		background-color: #007aff;
 		border-color: #007aff;
 		position: relative;
 	}
 
-	.check-on::after {
-		content: "";
+	.check-icon {
 		position: absolute;
 		left: 5px;
 		top: 2px;
@@ -312,13 +331,12 @@
 		color: #8e8e93;
 	}
 
-	.link {
+	.link-text {
 		color: #007aff;
 	}
 
-	.register {
+	.register-box {
 		margin-top: 24px;
-
 	}
 
 	.register-text {
@@ -327,28 +345,34 @@
 		text-align: center;
 	}
 
-	.up {
+	.up-box {
 		margin: 12px 0 12px 0;
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;
+	}
 
-		.ct {
-			font-size: 13px;
-			color: gray;
+	.text-row {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+	}
 
+	.ct-text {
+		line-height: 22px;
+		font-size: 13px;
+		color: gray;
+	}
 
-		}
+	.btn-text {
+		color: #165dff;
+		font-size: 12px;
+	}
 
-		.ct-txt-btn {
-			color: #165dff;
-			font-size: 12px;
-		}
-
-		.form-icon {
-			width: 20px;
-			height: 20px;
-		}
+	.form-icon {
+		width: 20px;
+		height: 20px;
 	}
 </style>

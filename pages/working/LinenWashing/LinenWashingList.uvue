@@ -1,0 +1,753 @@
+<template>
+	<view style="display: flex;flex:1">
+		<rice-navbar title="" border>
+			<template #left>
+				<view style="display: flex;flex-direction: row;align-items: center;">
+					<navigator open-type="navigateBack">
+						<rice-icon name="arrow-left" size="22px" />
+					</navigator>
+
+					<image src="/static/icons/list.png"
+						style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+					<text
+						style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{ i18n.global.t('washingOrder.title') }}</text>
+				</view>
+			</template>
+			<template #right>
+				<view class="navbar-btn" @click="addLinen" v-if="!showDeatilPage">
+					<image src="/static/icons/operation/add.png?pageType=0" style="width:18px;height: 18px;"></image>
+					<text class="navbar-btn-txt">{{ i18n.global.t('washingOrder.btn_add_txt') }}</text>
+				</view>
+			</template>
+		</rice-navbar>
+
+		<!-- #ifdef APP -->
+		<scroll-view style="flex:1">
+		<!-- #endif -->
+			<view class="search-area-root">
+				<rice-search placeholder="请选择日期" :model-value="dateRange.join(' ~ ')" disabled height="40px"
+					input-align="center" shape="round" left-icon="" right-icon="calendar" right-icon-size="22"
+					@clickRightIcon="showCalendar=!showCalendar" />
+				<rice-tabs v-model="activeIndex" :list="list" @clickTab="selectStatus"></rice-tabs>
+			</view>
+			<view style="padding:14px;border-radius: 14px;">
+				<view style="border-radius: 14px;background-color: #fff;">
+
+					<rice-swipe-actions :accordion="true" ref="swipeControlRef">
+						<rice-swipe-actions-item :auto-close="true" v-for="linen of linenResult.linenList">
+							<view style="position:absolute;right:4px;top:4px;;z-index:1000">
+								<rice-tag plain-fill v-if="linen.status==0" type="primary"
+									:text="i18n.global.t('washingOrder.statusWashing')" size="small" />
+								<rice-tag plain-fill v-if="linen.status==1" type="success"
+									:text="i18n.global.t('washingOrder.statusCompleted')" size="small" />
+								<rice-tag plain-fill v-if="linen.status==9" type="error"
+									:text="i18n.global.t('washingOrder.statusError')" size="small" />
+								<rice-tag plain-fill v-if="linen.status==10" type="error"
+									:text="i18n.global.t('washingOrder.statusCancelled')" size="small" />
+							</view>
+							<rice-cell :label="`${formatDate(linen.createTime)}~${formatDate(linen.createTime)}`"
+								size="large" arrow arrow-direction="left" center :clickable="false">
+								<template #leftIcon>
+									<image mode="aspectFit" src="/static/icons/linen/linenlist.png"
+										style="margin-right:8px;width: 60px;height:60px;border-radius: 12px;"
+										class="cell-left-icon"></image>
+
+								</template>
+								<template #label>
+									<view class="order-card-simple">
+										<view class="order-card-simple-item"><text
+												class="order-card-simple-txt">{{ i18n.global.t('washingOrder.washing_date') }}：</text><text
+												class="order-card-simple-txt">{{formatDate(linen.createTime)}}</text>
+										</view>
+										<view class="order-card-simple-item"><text
+												class="order-card-simple-txt">{{ i18n.global.t('washingOrder.return_back_date') }}：</text><text
+												class="order-card-simple-txt">{{formatDate(linen.returnBackTime)}}</text>
+										</view>
+										<view class="order-card-simple-item">
+											<text
+												class="order-card-simple-txt">{{i18n.global.t("washingOrder.washing_num")}}：</text>
+											<text class="order-card-simple-txt"
+												style="padding:0 4px">{{washing_num(linen)}}</text>
+										</view>
+										<view class="order-card-simple-item"><text
+												class="order-card-simple-txt">{{ i18n.global.t('washingOrder.return_back_num') }}：</text><text
+												class="order-card-simple-txt">{{return_back_num(linen)}}</text>
+										</view>
+									</view>
+								</template>
+								<template #rightIcon>
+									<rice-icon name="double-left" style="margin-left: 15px;" />
+								</template>
+							</rice-cell>
+							<template #right>
+								<view class="swipe-menu-container">
+									<view class="menu-item-box menu-detail" @click="viewOrder(linen)">
+										<rice-icon name="eyes" color="#fff" />
+										<text
+											class="menu-item-text">{{i18n.global.t("common.btn_txt_details",[''])}}</text>
+									</view>
+									<view class="menu-item-box menu-edit" @click="editLinen(linen)"
+										v-if="linen.status==0">
+										<rice-icon name="edit" color="#fff" />
+										<text
+											class="menu-item-text">{{i18n.global.t("common.btn_txt_edit",[''])}}</text>
+									</view>
+									<view class="menu-item-box menu-control" @click="lockLinen(linen)"
+										v-if="linen.status==0">
+										<rice-icon name="bag" color="#fff" />
+										<text
+											class="menu-item-text">{{i18n.global.t("washingOrder.btn_lock_txt")}}</text>
+									</view>
+									<view class="menu-item-box menu-del" @click="deleteLinen(linen)"
+										v-if="linen.status==0">
+										<rice-icon name="delete" color="#fff" />
+										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_delete")}}</text>
+									</view>
+								</view>
+							</template>
+						</rice-swipe-actions-item>
+					</rice-swipe-actions>
+				</view>
+			</view>
+
+			<view v-if="submitLoading"
+				style="margin-top:68px;display: flex;flex-direction: row;justify-content: center;">
+				<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
+			</view>
+			<l-empty :description="i18n.global.t('common.noData',[''])"
+				v-if="!submitLoading&&linenResult.linenList.length<1" />
+		<!-- #ifdef APP -->
+		</scroll-view>
+		<!-- #endif -->
+		<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"
+			v-if="!submitLoading&&linenResult!=null&&linenResult.count>linenResult.pageSize">
+			<l-pagination v-model="linenResult.pageNo" :disabled="submitLoading" :total="linenResult?.count"
+				:page-size="linenResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
+		</view>
+		<rice-calendar :show="showCalendar" mode="range" :date="dateRange" @confirm="dateChange"></rice-calendar>
+		<page-container :show="showDeatilPage" position="right" :round="true" @afterleave="showDeatilPage=false"
+			custom-style="background-color: #f5f5f7;width:750rpx">
+			<scroll-view style="flex:1">
+				<view class="page-wrap-container" style="width:750rpx;">
+					<view
+						style="margin-top:80px;margin-bottom20px;padding: 14px;display: flex;flex-direction:row;justify-content: center;"
+						v-if="active_linen!=null">
+						<view
+							style="background-color: #fff;border-radius: 14px;padding:24px 14px;max-width: 500px;flex:1">
+							<rice-cell-group>
+								<rice-cell center :title=" i18n.global.t('washingOrder.service_provider')"
+									:value="active_linen?.service_provider" :clickable="false">
+
+								</rice-cell>
+								<rice-cell center :title=" i18n.global.t('washingOrder.flatsheet_max')"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.flatsheet_max_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.flatsheet_max_back_num}`"
+									:clickable="false">
+									<template #value>
+										<view class="value-content">
+											<view><text
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.flatsheet_max_num}}</text>
+											</view>
+											<view><text
+													:class="active_linen?.flatsheet_max_back_num!=active_linen?.flatsheet_max_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.flatsheet_max_back_num}}</text>
+											</view>
+										</view>
+									</template>
+								</rice-cell>
+								<rice-cell center :title=" i18n.global.t('washingOrder.flatsheet_mini')"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.flatsheet_mini_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.flatsheet_mini_back_num}`"
+									:clickable="false">
+									<template #value>
+										<view class="value-content">
+											<view><text
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.flatsheet_mini_num}}</text>
+											</view>
+											<view><text
+													:class="active_linen?.flatsheet_mini_back_num!=active_linen?.flatsheet_mini_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.flatsheet_mini_back_num}}</text>
+											</view>
+										</view>
+									</template>
+								</rice-cell>
+								<rice-cell center :title=" i18n.global.t('washingOrder.duvetCover_max')"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.duvetCover_max_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.duvetCover_max_back_num}`"
+									:clickable="false">
+									<template #value>
+										<view class="value-content">
+											<view><text
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.duvetCover_max_num}}</text>
+											</view>
+											<view><text
+													:class="active_linen?.duvetCover_max_back_num!=active_linen?.duvetCover_max_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.duvetCover_max_back_num}}</text>
+											</view>
+										</view>
+									</template>
+								</rice-cell>
+								<rice-cell center :title=" i18n.global.t('washingOrder.duvetCover_mini')"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.duvetCover_mini_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.duvetCover_mini_back_num}`"
+									:clickable="false">
+									<template #value>
+										<view class="value-content">
+											<view><text
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.duvetCover_mini_num}}</text>
+											</view>
+											<view><text
+													:class="active_linen?.duvetCover_mini_back_num!=active_linen?.duvetCover_mini_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.duvetCover_mini_back_num}}</text>
+											</view>
+										</view>
+									</template>
+								</rice-cell>
+								<rice-cell center :title=" i18n.global.t('washingOrder.pillowcase')"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.pillowcase_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.pillowcase_back_num}`"
+									:clickable="false">
+									<template #value>
+										<view class="value-content">
+											<view><text
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.pillowcase_num}}</text>
+											</view>
+											<view><text
+													:class="active_linen?.pillowcase_back_num!=active_linen?.pillowcase_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.pillowcase_back_num}}</text>
+											</view>
+										</view>
+									</template>
+								</rice-cell>
+								<rice-cell center :title=" i18n.global.t('washingOrder.bathTowel')"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.bathTowel_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.bathTowel_back_num}`"
+									:clickable="false">
+									<template #value>
+										<view class="value-content">
+											<view><text
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.bathTowel_num}}</text>
+											</view>
+											<view><text
+													:class="active_linen?.bathTowel_back_num!=active_linen?.bathTowel_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.bathTowel_back_num}}</text>
+											</view>
+										</view>
+									</template>
+								</rice-cell>
+								<rice-cell center :title=" i18n.global.t('washingOrder.faceTowel')"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.faceTowel_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.faceTowel_back_num}`"
+									:clickable="false">
+									<template #value>
+										<view class="value-content">
+											<view><text
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.faceTowel_num}}</text>
+											</view>
+											<view><text
+													:class="active_linen?.faceTowel_back_num!=active_linen?.faceTowel_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.faceTowel_back_num}}</text>
+											</view>
+										</view>
+									</template>
+								</rice-cell>
+								<rice-cell center :title=" i18n.global.t('washingOrder.floorTowel')"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.floorTowel_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.floorTowel_back_num}`"
+									:clickable="false">
+									<template #value>
+										<view class="value-content">
+											<view><text
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.floorTowel_num}}</text>
+											</view>
+											<view><text
+													:class="active_linen?.floorTowel_back_num!=active_linen?.floorTowel_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.floorTowel_back_num}}</text>
+											</view>
+										</view>
+									</template>
+								</rice-cell>
+
+								<rice-cell center :title=" i18n.global.t('washingOrder.bedRunner')"
+									:value="`${i18n.global.t('washingOrder.label_dispatch')}：${active_linen?.bedRunner_num} ~ ${i18n.global.t('washingOrder.label_return')}：${active_linen?.bedRunner_back_num}`"
+									:clickable="false">
+									<template #value>
+										<view class="value-content">
+											<view><text
+													class="value-txt">{{i18n.global.t('washingOrder.label_dispatch')}}：{{active_linen?.bedRunner_num}}</text>
+											</view>
+											<view><text
+													:class="active_linen?.bedRunner_back_num!=active_linen?.bedRunner_num?'value-txt value-txt-red':'value-txt'">{{i18n.global.t('washingOrder.label_return')}}：{{active_linen?.bedRunner_back_num}}</text>
+											</view>
+										</view>
+									</template>
+								</rice-cell>
+								<rice-cell center :title=" i18n.global.t('washingOrder.mark')" :value="active_linen?.mark"
+									:clickable="false"></rice-cell>
+							</rice-cell-group>
+							<view style="margin-top:20px">
+								<rice-row :gutter="8">
+									<rice-col :span="8"></rice-col>
+									<rice-col :span="6">
+										<view v-if="active_linen?.status==0">
+											<rice-button type="primary" size="small" plain-fill
+												:text="i18n.global.t('common.btn_txt_modify',[''])"
+												@click="editLinen(active_linen)"></rice-button>
+										</view>
+									</rice-col>
+									<rice-col :span="6">
+										<view v-if="active_linen?.status==0">
+											<rice-button type="error" size="small" plain-fill
+												:text="i18n.global.t('common.btn_txt_delete')"
+												@click="deleteLinen(active_linen)"></rice-button>
+										</view>
+									</rice-col>
+								</rice-row>
+							</view>
+						</view>
+					</view>
+				</view>
+			</scroll-view>
+
+		</page-container>
+	</view>
+</template>
+
+<script setup>
+	import { SwipeActionsMenu, SwipeActionsItemClick, SwipeActionsItemOpen, SwipeActionsItemClose } from '@/uni_modules/rice-ui'
+
+	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import { dayuts } from '@/uni_modules/lime-dayuts';
+	import { TIME, getMonthDateArray } from "@/static/utils/TIME";
+	import { ActionSheetAction } from "@/uni_modules/rice-ui";
+	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
+	import { LinenOrderService } from "@/services/LinenOrderService";
+	import { linenWashingType, linenDataListResult } from '@/bean/linenWashingBean.uts';
+	import { state } from "@/store/store";
+	import { comFunction } from "@/pages/index/ComFuc";
+	import { userBean } from "@/bean/userBean";
+	import { getGatherEvent } from "@/store/modules/orderStore";
+	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
+	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated"
+	})
+	let submitLoading = ref(false);
+	const showDeatilPage = ref(false);
+	const hotel_id = computed(() => {
+		return state.hotel_id;
+	});
+	const user = computed<userBean>(() => {
+		return state.user;
+	});
+	const permissionList = computed(() => {
+		return state.permissionList;
+	})
+	const currentPage = ref(1);
+	const linenStatus = ref<string | number>(0);
+	const dateRange = ref<string[]>(getMonthDateArray());
+	const active_id = ref("");
+	const activeIndex = ref(1);
+	const showCalendar = ref(false);
+	const swipeControlRef = ref<RiceSwipeActionsComponentPublicInstance | null>(null)
+	const list = ref<TabsOptions[]>([
+		{ name: i18n.global.t('washingOrder.statusAll'), value: "all" },
+		{ name: i18n.global.t('washingOrder.statusWashing'), value: 0 },
+		{ name: i18n.global.t('washingOrder.statusCompleted'), value: 1 },
+		{ name: i18n.global.t('washingOrder.statusError'), value: 9 },
+		{ name: i18n.global.t('washingOrder.statusCancelled'), value: 10 },
+	])
+	const linenResult = ref<linenDataListResult>({
+		count: 0,
+		pageNo: 1,
+		pageSize: 20,
+		linenList: []
+	})
+	const active_linen = computed<linenWashingType | null>(() => {
+		if (active_id.value == "") {
+			return null;
+		}
+		const target = linenResult.value.linenList.find(item => item._id == active_id.value);
+		if (target != null) {
+			return target;
+		}
+		return null;
+	});
+	const viewOrder = (order : linenWashingType) => {
+		active_id.value = order._id;
+		showDeatilPage.value = true;
+	}
+	const getlinenList = async () => {
+		submitLoading.value = true;
+		const linenRes = await LinenOrderService.getLinenListBySearch(hotel_id.value, dateRange.value, linenStatus.value, linenResult.value.pageNo, linenResult.value.pageSize)
+		linenResult.value = linenRes as linenDataListResult;
+		submitLoading.value = false;
+	}
+	const return_back_num = (linen : linenWashingType) => {
+		const num = linen.flatsheet_max_back_num +
+			linen.flatsheet_mini_back_num +
+			linen.duvetCover_max_back_num +
+			linen.duvetCover_mini_back_num +
+			linen.pillowcase_back_num +
+			linen.bathTowel_back_num +
+			linen.faceTowel_back_num +
+			linen.floorTowel_back_num +
+			linen.bedRunner_back_num;
+		return num;
+	}
+	const washing_num = (linen : linenWashingType) => {
+		const num = linen.flatsheet_max_num +
+			linen.flatsheet_mini_num +
+			linen.duvetCover_max_num +
+			linen.duvetCover_mini_num +
+			linen.bathTowel_num +
+			linen.faceTowel_num +
+			linen.floorTowel_num +
+			linen.bedRunner_num +
+			linen.pillowcase_num;
+		return num;
+	}
+	const dateChange = (range : string[]) => {
+		dateRange.value = range;
+		getlinenList();
+
+	}
+
+	const selectStatus = (e : TabsClickTab) => {
+		console.log(e)
+		linenStatus.value = e.value as number;
+		swipeControlRef.value!.closeAll!();
+		getlinenList();
+	}
+	const pageChange = (pn : number) => {
+		getlinenList();
+	}
+	const formatDate = (timestamp : number | null ) => {
+		if (timestamp == null  || timestamp == 0) {
+			return "--";
+		}
+		return dayuts(new Date(timestamp)).format("YYYY-MM-DD");
+	}
+
+	const addLinen = async () => {
+		if (!permissionList.value.includes(
+			"FM_CREATE"
+		)) {
+			showDialog({
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+		uni.$once("refrushlinenList", () => {
+			getlinenList();
+		})
+		uni.navigateTo({
+			url: `/pages/working/LinenWashing/createLinenWashing/createLinenWashing`
+		});
+	}
+
+	const editLinen = (linen : linenWashingType | null) => {
+		if(linen==null || submitLoading.value == true){
+			return;
+		}
+		uni.$once("refrushlinenList", () => {
+			swipeControlRef.value!.closeAll!()
+			getlinenList();
+		})
+		uni.navigateTo({
+			url: `/pages/working/LinenWashing/createLinenWashing/createLinenWashing?pageType=1&&linen_item=${encodeURIComponent(JSON.stringify(linen))}`,
+		});
+	}
+	const lockLinen = async (linen : linenWashingType) => {
+		if (!permissionList.value.includes(
+			"ORDER_DELETE"
+		)) {
+			showDialog({
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+		showDialog({
+			title: i18n.global.t('washingOrder.confirmLockOrder'),
+			message: i18n.global.t('washingOrder.lockOrderTip') + "?",
+			beforeClose: async () : Promise<boolean> => {
+				const flag = await LinenOrderService.lockLinen(linen._id);
+				console.log("3333", flag)
+				if (flag) {
+					getlinenList();
+					hideDialog();
+					swipeControlRef.value!.closeAll!()
+					return true;
+				}
+				return false;
+
+			},
+			confirm: () => {
+			}, cancel: () => {
+				hideDialog();
+			}
+
+		});
+
+	}
+	const deleteLinen = async (linen : linenWashingType | null) => {
+		if (linen == null || submitLoading.value == true) {
+			return;
+		}
+		if (!permissionList.value.includes(
+			"ORDER_DELETE"
+		)) {
+			showDialog({
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
+			return;
+		}
+		showDialog({
+			title: i18n.global.t('order.confirmDeleteOrder'),
+			message: i18n.global.t('order.deleteOrderTip') + "?",
+			beforeClose: async () : Promise<boolean> => {
+				showDeatilPage.value=false;
+				await LinenOrderService.deleteLinen(linen._id);
+				await getlinenList();
+				swipeControlRef.value!.closeAll!();
+				hideDialog();
+				return true;
+
+			},
+			confirm: () => {
+			}, cancel: () => {
+				hideDialog();
+			}
+
+		});
+	}
+	const init = () => {
+		getlinenList();
+	}
+	onPageShow(() => {
+	})
+	defineExpose({
+	});
+	init();
+</script>
+
+<style>
+	/* 顶部搜索区域 */
+	.search-area-root {}
+
+	.search-card {
+		background-color: #fff;
+		border-radius: 8px;
+		padding: 16px;
+	}
+
+	.search-card-item {
+		margin-bottom: 15px;
+	}
+
+	.empty-row {
+		margin-bottom: 0;
+	}
+
+	.title-row {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.title-txt {
+		padding-right: 8px;
+		font-size: 18px;
+		font-weight: 700;
+		color: #999;
+	}
+
+	.select-row {}
+
+	/* 订单列表外层容器 */
+	.order-list-root {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	.order-card-item {
+		min-width: 320px;
+		padding: 7.5px 15px;
+		flex: 1;
+	}
+
+	.order-card {
+		background-color: #fff;
+		border-radius: 12px;
+		position: relative;
+	}
+
+	.tag-wrap {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		padding: 10px 10px 0 0;
+	}
+
+	/* 卡片内容区域 */
+	.card-content-wrap {
+		padding: 24px;
+	}
+
+	.content-row {
+		margin-top: 15px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.no-bottom {
+		margin-top: 0;
+	}
+
+	.label-flex {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.label-text {
+		color: #1f2937;
+		font-size: 13px;
+		padding-left: 8px;
+	}
+
+	.value-text {
+		color: #1f2937;
+		font-size: 13px;
+	}
+
+	.flex-wrap-val {
+		color: #1f2937;
+		font-size: 13px;
+	}
+
+	.price-text {
+		font-size: 13px;
+	}
+
+	/* 底部操作按钮区域 */
+	.btn-control-wrap {
+		padding: 0 12px 12px 0;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		align-items: center;
+	}
+
+	.navbar-btn {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		padding: 12px 15px;
+		border-radius: 8px;
+	}
+
+	.navbar-btn-txt {
+		color: #007aff;
+		font-size: 15px;
+		padding-left: 4px;
+	}
+
+	/* 侧滑菜单外层 */
+	.swipe-menu-container {
+		display: flex;
+		flex-direction: row;
+		height: 100%;
+	}
+
+	/* 侧滑每个按钮项 */
+	.menu-item-box {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 70px;
+		height: 100%;
+	}
+
+	.menu-detail {
+		background-color: #007aff;
+	}
+
+	.menu-edit {
+		background-color: #ff7d00;
+	}
+
+	.menu-control {
+		background-color: green;
+	}
+
+	.menu-del {
+		background-color: #f53f3f;
+	}
+
+	/* 菜单文字 */
+	.menu-item-text {
+		color: #fff;
+		font-size: 12px;
+		margin-top: 4px;
+	}
+
+	.order-title {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.order-title-label {
+		color: #333;
+		font-size: 14px;
+		padding: 4px;
+	}
+
+	.order-card-simple {
+		display: flex;
+
+	}
+
+	.order-card-simple-item {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		padding: 4px;
+		flex-wrap: wrap;
+	}
+
+	.order-card-simple-txt {
+		font-size: 14px;
+		color: #666;
+	}
+
+	.order-card-simple-txt-price-text {
+		font-size: 16px;
+		color: #F56C6C;
+		font-weight: 600;
+	}
+
+	.value-content {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		flex:1;
+	}
+
+	.value-txt {
+		font-size: 12px;
+		color: #999;
+		padding: 4px;
+	}
+
+	.value-txt-red {
+		color: #ff0000;
+		padding: 4px;
+	}
+</style>

@@ -1,0 +1,228 @@
+<template>
+  <view class="uni-container">
+    <uni-forms ref="form" :model="formData" validate-trigger="submit" err-show-type="toast">
+      <uni-forms-item name="flatsheet20_num" label="2.0米床单数量">
+        <uni-easyinput type="number" v-model="formData.flatsheet20_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="flatsheet18_num" label="1.8米床单数量">
+        <uni-easyinput type="number" v-model="formData.flatsheet18_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="flatsheet15_num" label="1.5米床单数量">
+        <uni-easyinput type="number" v-model="formData.flatsheet15_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="flatsheet13_num" label="1.3米床单数量">
+        <uni-easyinput type="number" v-model="formData.flatsheet13_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="flatsheet12_num" label="1.2米床单数量">
+        <uni-easyinput type="number" v-model="formData.flatsheet12_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="duvetCoverMax_num" label="大被套数量">
+        <uni-easyinput type="number" v-model="formData.duvetCoverMax_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="duvetCoverMini_num" label="小被套数量">
+        <uni-easyinput type="number" v-model="formData.duvetCoverMini_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="bathTowel_num" label="浴巾数量">
+        <uni-easyinput type="number" v-model="formData.bathTowel_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="faceTowel_num" label="面巾数量">
+        <uni-easyinput type="number" v-model="formData.faceTowel_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="floorTowel_num" label="地巾数量">
+        <uni-easyinput type="number" v-model="formData.floorTowel_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="bedRunner_num" label="床尾巾数量">
+        <uni-easyinput type="number" v-model="formData.bedRunner_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="flatsheet20_back_num" label="返还2.0米床单数量">
+        <uni-easyinput type="number" v-model="formData.flatsheet20_back_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="flatsheet18_back_num" label="返还1.8米床单数量">
+        <uni-easyinput type="number" v-model="formData.flatsheet18_back_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="flatsheet15_back_num" label="返还1.5米床单数量">
+        <uni-easyinput type="number" v-model="formData.flatsheet15_back_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="flatsheet13_back_num" label="返还1.3米床单数量">
+        <uni-easyinput type="number" v-model="formData.flatsheet13_back_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="flatsheet12_back_num" label="返还1.2米床单数量">
+        <uni-easyinput type="number" v-model="formData.flatsheet12_back_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="duvetCoverMax_back_num" label="返还大被套数量">
+        <uni-easyinput type="number" v-model="formData.duvetCoverMax_back_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="duvetCoverMini_back_num" label="返还小被套数量">
+        <uni-easyinput type="number" v-model="formData.duvetCoverMini_back_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="bathTowel_back_num" label="返还浴巾数量">
+        <uni-easyinput type="number" v-model="formData.bathTowel_back_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="faceTowel_back_num" label="返还面巾数量">
+        <uni-easyinput type="number" v-model="formData.faceTowel_back_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="floorTowel_back_num" label="返还地巾数量">
+        <uni-easyinput type="number" v-model="formData.floorTowel_back_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="bedRunner_back_num" label="返还床尾巾数量">
+        <uni-easyinput type="number" v-model="formData.bedRunner_back_num"></uni-easyinput>
+      </uni-forms-item>
+      <uni-forms-item name="status" label="">
+        <uni-data-checkbox v-model="formData.status" :localdata="formOptions.status_localdata"></uni-data-checkbox>
+      </uni-forms-item>
+      <view class="uni-button-group">
+        <button type="primary" class="uni-button" @click="submit">提交</button>
+      </view>
+    </uni-forms>
+  </view>
+</template>
+
+<script>
+  import { validator } from '../../js_sdk/validator/hm-linen.js';
+
+  const db = uniCloud.database();
+  const dbCollectionName = 'hm-linen';
+
+  function getValidator(fields) {
+    let result = {}
+    for (let key in validator) {
+      if (fields.indexOf(key) > -1) {
+        result[key] = validator[key]
+      }
+    }
+    return result
+  }
+
+  
+
+  export default {
+    data() {
+      let formData = {
+        "flatsheet20_num": null,
+        "flatsheet18_num": null,
+        "flatsheet15_num": null,
+        "flatsheet13_num": null,
+        "flatsheet12_num": null,
+        "duvetCoverMax_num": null,
+        "duvetCoverMini_num": null,
+        "bathTowel_num": null,
+        "faceTowel_num": null,
+        "floorTowel_num": null,
+        "bedRunner_num": null,
+        "flatsheet20_back_num": null,
+        "flatsheet18_back_num": null,
+        "flatsheet15_back_num": null,
+        "flatsheet13_back_num": null,
+        "flatsheet12_back_num": null,
+        "duvetCoverMax_back_num": null,
+        "duvetCoverMini_back_num": null,
+        "bathTowel_back_num": null,
+        "faceTowel_back_num": null,
+        "floorTowel_back_num": null,
+        "bedRunner_back_num": null,
+        "status": null
+      }
+      return {
+        formData,
+        formOptions: {
+          "status_localdata": [
+            {
+              "value": 0,
+              "text": 0
+            },
+            {
+              "value": 1,
+              "text": 1
+            },
+            {
+              "value": 9,
+              "text": 9
+            }
+          ]
+        },
+        rules: {
+          ...getValidator(Object.keys(formData))
+        }
+      }
+    },
+    onReady() {
+      this.$refs.form.setRules(this.rules)
+    },
+    methods: {
+      
+      /**
+       * 验证表单并提交
+       */
+      submit() {
+        uni.showLoading({
+          mask: true
+        })
+        this.$refs.form.validate().then((res) => {
+          return this.submitForm(res)
+        }).catch(() => {
+        }).finally(() => {
+          uni.hideLoading()
+        })
+      },
+
+      /**
+       * 提交表单
+       */
+      submitForm(value) {
+        // 使用 clientDB 提交数据
+        return db.collection(dbCollectionName).add(value).then((res) => {
+          uni.showToast({
+            icon: 'none',
+            title: '新增成功'
+          })
+          this.getOpenerEventChannel().emit('refreshData')
+          setTimeout(() => uni.navigateBack(), 500)
+        }).catch((err) => {
+          uni.showModal({
+            content: err.message || '请求服务失败',
+            showCancel: false
+          })
+        })
+      }
+    }
+  }
+</script>
+
+<style>
+  .uni-container {
+    padding: 15px;
+  }
+
+  .uni-input-border,
+  .uni-textarea-border {
+    width: 100%;
+    font-size: 14px;
+    color: #666;
+    border: 1px #e5e5e5 solid;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  .uni-input-border {
+    padding: 0 10px;
+    height: 35px;
+
+  }
+
+  .uni-textarea-border {
+    padding: 10px;
+    height: 80px;
+  }
+
+  .uni-button-group {
+    margin-top: 50px;
+    /* #ifndef APP-NVUE */
+    display: flex;
+    /* #endif */
+    justify-content: center;
+  }
+
+  .uni-button {
+    width: 184px;
+  }
+</style>

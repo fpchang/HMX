@@ -2,34 +2,44 @@
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
 	<!-- #endif -->
-		<rice-dialog v-model:show="showMoreMessage" title="欢迎使用议宿管理系统" :show-cancel-button="true"
-			:show-confirm-button="true" cancel-button-text="拒绝并退出" confirm-button-text="同意并使用" @cancel="calcelEvent"
+		<rice-dialog v-model:show="showMoreMessage" :title="i18n.global.t('dialog.welcomeTitle')"
+			:show-cancel-button="true" :show-confirm-button="true"
+			:cancel-button-text="i18n.global.t('dialog.refuseExit')"
+			:confirm-button-text="i18n.global.t('dialog.agreeUse')" @cancel="calcelEvent" :before-close="beforeClose"
 			@confirm="confirmEvent" :use-dialog-page="true" :custom-style="{'padding':0}">
 			<slot>
-				<scroll-view class="message-content" :scroll-y="true">
+				<scroll-view class="message-content">
 					<view>
-						<text class="txt">
-							请你务必审慎阅读、充分理解“服务协议”和“隐私政策”各条款，包括但不限于：为了更好的向你提供服务，我们需要收集你的设备标识、操作日志等信息用于分析、优化应用性能
+						<text class="linktxt">
+							{{ i18n.global.t('dialog.tipRead') }}
 						</text>
 						<view class="row">
-							<text class="txt">你可阅读</text>
+							<text class="linktxt">{{ i18n.global.t('dialog.youCanRead') }}</text>
 							<navigator url="/pages/common/userAgreement/userAgreement">
-								<text class="txt href">《服务协议》</text>
+								<text class="linktxt linkhref">{{ i18n.global.t('dialog.serviceAgreement') }}</text>
 							</navigator>
 
-							<text class="txt">和</text>
+							<text class="linktxt">{{ i18n.global.t('dialog.and') }}</text>
 							<navigator url="/pages/common/privacyPolicy/privacyPolicy">
-								<text class="txt href">《隐私政策》</text>
+								<text class="linktxt linkhref">{{ i18n.global.t('dialog.privacyPolicy') }}</text>
 							</navigator>
-							
-							<text class="txt">了解详细信息。如果你同意，请点击下面按钮开始接受我们的服务。为了保证产品功能正常使用，需要征求你的允许，我们会收集你部分权限：</text>
 
+							<text class="linktxt">{{ i18n.global.t('dialog.tipContinue') }}</text>
 						</view>
-						<text class="txt" v-for="item of messages">{{item}}</text>
-
-
+						<text class="linktxt" v-for="item of messages">{{ item }}</text>
 					</view>
 				</scroll-view>
+				<view class="agreen-style">
+					<rice-checkbox v-model="agreen" />
+					<text class="agreen-style-txt">我已阅读并同意</text>
+					<navigator url="/pages/common/userAgreement/userAgreement">
+						<text class="linktxt linkhref">{{ i18n.global.t('dialog.serviceAgreement') }}</text>
+					</navigator>
+					<text class="linktxt">{{ i18n.global.t('dialog.and') }}</text>
+					<navigator url="/pages/common/privacyPolicy/privacyPolicy">
+						<text class="linktxt linkhref">{{ i18n.global.t('dialog.privacyPolicy') }}</text>
+					</navigator>
+				</view>
 			</slot>
 		</rice-dialog>
 	<!-- #ifdef APP -->
@@ -38,22 +48,76 @@
 </template>
 
 <script setup>
+	import { action_co } from "@/api/cloudApi.uts";
+	import { setToken, setViewWidth } from "@/store/store.uts";
+	import i18n from '@/i18n/index.uts';
+
 	const showMoreMessage = ref(true);
+	const agreen = ref(false);
 	const messages = [
-		"1：用户信息：在注册、登录及使用应用过程中，我们可能会收集您的昵称、头像、手机号等基本信息。",
-		"2：设备信息：我们产品集成第三方高德地图与第三方广告，可能会获取设备ID，mac地址，设备品牌及型号，设备屏幕分辨率等信息，地图SDK可能会获取矢量、加速度、压力、方向、地磁等传感器信息",
-		"3：定位：在注册店铺时会记录店铺位置，需要移动设备的定位权限",
-		"4：相册：店铺信息需要上传店铺房型房间的图片信息，并且会将app中的图片保存在本地，需要相册的读写权限",
-		"5：通讯权限：我们可能会直接拨打店铺展示页面上的电话，需要本地拨号权限",
-		"6：存储权限：我们可能会缓存一些基本app内部数据到本地",
-		"7：网络权限：我们产品依赖网络浏览与使用，需要网络访问权限",
+		i18n.global.t('dialog.msg1'),
+		i18n.global.t('dialog.msg2'),
+		i18n.global.t('dialog.msg3'),
+		i18n.global.t('dialog.msg4'),
+		i18n.global.t('dialog.msg5'),
+		i18n.global.t('dialog.msg6'),
+		i18n.global.t('dialog.msg7'),
+		// i18n.global.t('dialog.msg8'),
+		// i18n.global.t('dialog.msg9')
 	]
 	const calcelEvent = () => {
 		uni.exit();
 	}
+	const start = () => {
+		setTimeout(() => {
+			try {
+				// 调用云对象空/轻量方法，触发云端实例常驻，消除首次接口冷启动
+				action_co.preHeat()
+			} catch (e) {
+				// 预热失败不影响业务，静默捕获
+				// console.log('云对象预热静默失败', e)
+			}
+		}, 0)
+	}
+
+	const setLanuage = () => {
+
+		const sys = uni.getSystemInfoSync();
+		console.log('sys', sys);
+		const osLanguage = sys.osLanguage;
+		let local = 'zh-CN';
+		console.log(osLanguage != null)
+		if (osLanguage != null && !osLanguage.includes('zh-')) {
+			local = 'en-US';
+		}
+		i18n.global.locale.value = local;
+
+	}
+	const setViewWidthEvent = () => {
+		const win = uni.getWindowInfo();
+		setViewWidth(win.windowWidth);
+	}
+	const beforeClose = () : Promise<boolean> => {
+		return new Promise((resolve) => {
+			if (!agreen.value) {
+				uni.showToast({
+					title: i18n.global.t("login.valid_agree"),
+					icon: "none"
+				})
+				resolve(false);
+				return;
+			}
+			resolve(true);
+			uni.setStorageSync("showMoreMessage","0");
+			uni.closeDialogPage();
+			uni.reLaunch({
+				url:"/pages/indexAdvise/indexAdvise"
+			})
+		})
+	}
 	const confirmEvent = () => {
-		uni.setStorageSync("showMoreMessage","0");
-		uni.closeDialogPage();
+	
+
 	}
 </script>
 
@@ -67,16 +131,29 @@
 			flex-wrap: wrap;
 		}
 
-		.txt {
-			font-size: 14px;
+	
+	}
+	.linktxt {
+			font-size: 12px;
 			color: gray;
 			padding: 4px 0;
 
 		}
 
-		.href {
+		.linkhref {
 			color: #165dff;
-			font-size: 14px;
+			font-size: 12px;
 		}
+	.agreen-style {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		padding-top: 24px;
+	}
+
+	.agreen-style-txt {
+
+		font-size: 12px;
 	}
 </style>

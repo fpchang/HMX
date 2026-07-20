@@ -103,7 +103,6 @@
 	}
 
 	.chart-subtitle {
-		display: block;
 		font-size: 16px;
 		color: #606266;
 		margin-bottom: 12px;

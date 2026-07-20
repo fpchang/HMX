@@ -4,8 +4,8 @@
 	"permission": {
 		"read": true,
 		"create": true,
-		"update": true,
-		"delete": true
+				"update": true,
+				"delete": true
 	},
 	 // "fieldRules": [{
   //   "rule": "end_date == null || end_date != null && create_date < end_date", // 校验规则
@@ -108,7 +108,12 @@
 			"description": "开通在线付款订房，开通后可支持在线支付，未开通只能线下支付",
 			"bsonType": "bool",
 			"defaultValue":false
-		},		
+		},	
+		"currencyCode":{
+			"description": "货币码",
+			"bsonType": "string",
+			"defaultValue":"CNY"
+		},
 		"dataStatus":{
 			"description": "数据状态 0待上线，1上线 10删除",
 			"bsonType": "int",

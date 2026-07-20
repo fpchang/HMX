@@ -1,6 +1,6 @@
 {
 	"bsonType": "object",
-	"required": ["phone","orderStatus","rechargeConfig_id"],
+	"required": ["account_id","orderStatus","rechargeConfig_id"],
 	"permission": {
 		"read": true,
 		"create": true,
@@ -18,10 +18,10 @@
 				"$env": "now"
 			}
 		},
-		"phone":{
-			"description": "用户手机号",
+		"account_id":{
+			"description": "用户账号id",
 			"bsonType": "string",
-			"foreignKey": "hm-user.phone"
+			"foreignKey": "hm-user._id"
 		},
 		"rechargeConfig_id":{
 			"description": "配置id",

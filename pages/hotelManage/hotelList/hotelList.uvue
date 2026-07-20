@@ -5,73 +5,140 @@
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
-
 				<image src="/static/icons/list.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{i18n.global.t("hotel.hotel_list")}}</text>
+				<text
+					style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{i18n.global.t("hotel.hotel_list")}}</text>
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn">
+			<view class="nav-add-hotel-btn" @click="addHotel">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
-				
-					<text class="txt" @click="addHotel">{{i18n.global.t("common.btn_txt_create",[i18n.global.t("hotel.title")])}}</text>
-				
-
+				<text class="nav-btn-text">{{i18n.global.t("common.btn_txt_create",[i18n.global.t("hotel.title")])}}</text>
 			</view>
 		</template>
 	</rice-navbar>
 	<!-- #ifdef APP -->
 	<scroll-view style="flex:1" v-if="!submitLoading&&hotelList.length>0">
 	<!-- #endif -->
-		<view class="card-list">
-			<view class="card-list-item" v-for="hotel of hotelList">
-				<view class="card">
-					<view class="img-area">
-						<image :src="hotel.firstImages" v-if="hotel.firstImages!=''"
-							style="height: 100%;width: 100%;" mode="aspectFill">
+		<view class="hotel-list-wrap">
+			<view class="hotel-card-item" v-for="hotel of hotelList">
+				<view class="hotel-card-box">
+					<view class="card-img-block">
+						<image :src="hotel.firstImages" v-if="hotel.firstImages!=''" style="height: 100%;width: 100%;"
+							mode="aspectFill">
 						</image>
-						<image src="/static/images/noimg.png" v-if="hotel.firstImages==''"
-							style="height: 80%;width: 80%;" mode="aspectFit">
-						</image>
+					
+							<image
+								src="/static/images/nono-img.png" 
+								v-if="hotel?.firstImages==''"
+								style="height: 80%;width: 80%;" 
+								mode="aspectFit"
+							></image>
+						
 					</view>
-					<view class="card-title-group">
-						<view class="card-title-area">
-							<view class="card-title"><text class="txt">{{hotel.hotelName}}</text></view>
-							<view class="card-subtitle">
+					
+					<rice-swipe-actions :accordion="true" ref="swipeControlRef">
+						<rice-swipe-actions-item :auto-close="true">
+							<rice-cell 
+							:border="false"
+								size="large" arrow arrow-direction="left" center :clickable="false">
+								<!-- <template #leftIcon>
+									<image mode="aspectFill" :src="formatRommTypeImage(order.reservedRoomList[0])"
+										style="margin-right:8px;width: 100px;height:110px;border-radius: 12px;"
+										class="cell-left-icon"></image>
+								</template> -->
+								<!-- <template #title>
+									<view class="order-title">
+									
+									</view>
+								</template> -->
+								<template #label>
+									<view class="card-title-wrap">
+										<view class="card-title-inner">
+											<view class="card-name-row">
+												<text class="hotel-name-text">{{hotel.hotelName}}</text>
+											</view>
+											<view class="desc-row">
+												<image src="/static/icons/position_black.png"
+													style="width:18px;height:18px;margin-right: 4px;"></image>
+												<text class="desc-text">{{(hotel.hotelAddress as string | null) != null ? hotel.hotelAddress : '--'}}</text>
+											</view>
+											<view class="desc-row extra-top">
+												<image src="/static/icons/administrator.png"
+													style="width:18px;height:18px;margin-right: 4px;"></image>
+												<text class="desc-text">{{i18n.global.t("hotel.storekeeper")}}：{{belong(hotel.belong??"")}}</text>
+											</view>
+											<view class="desc-row">
+												<image src="/static/icons/role.png" style="width:18px;height:18px;margin-right: 4px;">
+												</image>
+												<text class="desc-text">{{i18n.global.t("hotel.role")}}：{{roleFormat(hotel.curRole ?? '')}}</text>
+											</view>
+										</view>
+										<view class="status-tag-wrap">
+											<text class="status-text">{{i18n.global.t('hotel.normal_operation')}}</text>
+										</view>
+									</view>
+								</template>
+								<template #rightIcon>
+									<rice-icon name="double-left" style="margin-left: 15px;" />
+								</template>
+							</rice-cell>
+							<template #right>
+								<view class="swipe-menu-container">
+									<view class="menu-item-box menu-detail" @click="viewDetail(hotel)">
+										<rice-icon name="eyes" color="#fff" />
+										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_details",[''])}}</text>
+									</view>
+									<view class="menu-item-box menu-edit" v-if="hotel.curRole == 'administrator'" @click="editHotel(hotel)">
+										<rice-icon name="edit" color="#fff" />
+										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_edit")}}</text>
+									</view>
+									<view class="menu-item-box menu-del" v-if="hotel.curRole == 'administrator'" @click="deleteHotel(hotel)">
+										<rice-icon name="delete" color="#fff" />
+										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_delete")}}</text>
+									</view>
+								</view>
+							</template>
+						</rice-swipe-actions-item>
+					</rice-swipe-actions>
+					<view class="card-title-wrap" v-if="false">
+						<view class="card-title-inner">
+							<view class="card-name-row">
+								<text class="hotel-name-text">{{hotel.hotelName}}</text>
+							</view>
+							<view class="desc-row">
 								<image src="/static/icons/position_black.png"
 									style="width:18px;height:18px;margin-right: 4px;"></image>
-								<text
-									class="txt">{{(hotel.hotelAddress as string | null) != null ? hotel.hotelAddress : '--'}}</text>
+								<text class="desc-text">{{(hotel.hotelAddress as string | null) != null ? hotel.hotelAddress : '--'}}</text>
 							</view>
-							<view class="card-subtitle" style="margin-top: 15px;">
+							<view class="desc-row extra-top">
 								<image src="/static/icons/administrator.png"
 									style="width:18px;height:18px;margin-right: 4px;"></image>
-								<text class="txt">{{i18n.global.t("hotel.storekeeper")}}：{{belong(hotel.belong??"")}}</text>
+								<text class="desc-text">{{i18n.global.t("hotel.storekeeper")}}：{{belong(hotel.belong??"")}}</text>
 							</view>
-							<view class="card-subtitle">
+							<view class="desc-row">
 								<image src="/static/icons/role.png" style="width:18px;height:18px;margin-right: 4px;">
 								</image>
-								<text class="txt">{{i18n.global.t("hotel.role")}}：{{roleFormat(hotel.curRole ?? '')}}</text>
+								<text class="desc-text">{{i18n.global.t("hotel.role")}}：{{roleFormat(hotel.curRole ?? '')}}</text>
 							</view>
-							
 						</view>
-						<view class="state">
-							<text class="txt">{{i18n.global.t('hotel.normal_operation')}}</text>
+						<view class="status-tag-wrap">
+							<text class="status-text">{{i18n.global.t('hotel.normal_operation')}}</text>
 						</view>
 					</view>
-
-					<view class="control">
-						<xt-control :showEdit="hotel.curRole == 'administrator'" :showDelete="hotel.curRole == 'administrator'" @del="deleteHotel(hotel)" @view="viewDetail(hotel)" @edit="editHotel(hotel)"></xt-control>
+					<view class="card-operate-wrap" v-if="false">
+						<xt-control :showEdit="hotel.curRole == 'administrator'"
+							:showDelete="hotel.curRole == 'administrator'" @del="deleteHotel(hotel)"
+							@view="viewDetail(hotel)" @edit="editHotel(hotel)"></xt-control>
 					</view>
 				</view>
 			</view>
-
 		</view>
 	<!-- #ifdef APP -->
-	</scroll-view>	
+	</scroll-view>
 	<!-- #endif -->
-<l-empty :description="i18n.global.t('common.noData',[''])" v-if="!submitLoading&&hotelList.length<1" />
+	<l-empty :description="i18n.global.t('common.noData',[''])" v-if="!submitLoading&&hotelList.length<1" />
 </template>
 
 <script setup>
@@ -80,15 +147,18 @@
 	import { emergency_phone_number } from "@/static/utils/telphone_transform.uts";
 	import { comFunction } from "@/pages/index/ComFuc.uts";
 	import { HotelService } from "@/services/HotelService.uts";
-	import {hotelBean} from "@/bean/hotelBean.uts"
+	import { hotelBean } from "@/bean/hotelBean.uts"
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated"
+	})
 	let submitLoading = ref(false);
 	const hotelList = computed<Array<hotelBean>>(() => {
 		return state.hotelList;
 	});
 	const topImg = (imgUrl : string | null) : string => {
 		if (imgUrl == null || imgUrl == '') {
-			return '/static/images/noimg.png';
+			return '/static/images/nono-img.png';
 		}
 		return imgUrl;
 	};
@@ -105,7 +175,6 @@
 	}
 	const editHotel = (hotel_item : hotelBean) => {
 		if (hotel_item.curRole != "administrator") {
-			//alert.alertNoPermisson();
 			return;
 		}
 		uni.navigateTo({
@@ -119,24 +188,23 @@
 		});
 	}
 	const deleteHotel = async (targetObj : hotelBean) => {
-		console.log("targetObj",targetObj);
+		console.log("targetObj", targetObj);
 		if (targetObj.curRole != "administrator") {
 			showDialog({
-										title: i18n.global.t('permission.noPermission'),
-										message: i18n.global.t('permission.contactAdmin'),
-										showCancelButton: false,
-										confirm: () => {
-											hideDialog();
-										}
-									})
+				title: i18n.global.t('permission.noPermission'),
+				message: i18n.global.t('permission.contactAdmin'),
+				showCancelButton: false,
+				confirm: () => {
+					hideDialog();
+				}
+			})
 			return;
 		}
-
 		showDialog({
 			title: i18n.global.t("common.confirmDelete"),
 			message: i18n.global.t("common.deleteOrderTip"),
-			cancelButtonText:i18n.global.t("common.btn_txt_cancel"),
-			confirmButtonText:i18n.global.t("common.btn_confirm"),
+			cancelButtonText: i18n.global.t("common.btn_txt_cancel"),
+			confirmButtonText: i18n.global.t("common.btn_confirm"),
 			beforeClose: async () : Promise<boolean> => {
 				try {
 					await HotelService.deleteHotel(targetObj._id as string);
@@ -155,141 +223,145 @@
 					return false;
 				}
 			},
-			confirm: () => {
-			}, cancel: () => {
+			confirm: () => {},
+			cancel: () => {
 				hideDialog();
 			}
-
 		});
 	}
 	const viewDetail = (hotel_item : hotelBean) => {
-		// this.type = 2;
-		//this.targetObj = JSON.parse(JSON.stringify(targetObj));
 		uni.navigateTo({
 			url: `/pages/hotelManage/createHotel/createHotel?pageType=2&&hotel_item=${encodeURIComponent(JSON.stringify(hotel_item))}`,
 		});
 	}
-
 </script>
 
-<style lang="scss">
-	.navbar-btn {
+<style>
+/* 导航新增酒店按钮 */
+.nav-add-hotel-btn {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	padding: 12px 15px;
+	border-radius: 8px;
+}
+.nav-btn-text {
+	color: #007aff;
+	font-size: 15px;
+	padding-left: 4px;
+}
+
+/* 酒店列表外层容器 */
+.hotel-list-wrap {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+/* 单个酒店卡片容器 */
+.hotel-card-item {
+	min-width: 320px;
+	padding: 15px;
+	flex: 1;
+}
+/* 卡片主体盒子 */
+.hotel-card-box {
+	background-color: #fff;
+	border-radius: 12px;
+}
+/* 图片区域 */
+.card-img-block {
+	height: 350rpx;
+	max-height: 200px;
+	background-color: #eee;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+/* 标题与状态外层 */
+.card-title-wrap {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	/* padding: 15px; */
+}
+/* 文字信息内部容器 */
+.card-title-inner {
+	flex:1;
+}
+/* 酒店名称行 */
+.card-name-row {
+	padding-right:8px;
+}
+.hotel-name-text {
+	color: rgb(30, 30, 30);
+	font-weight: 700;
+	font-size: 20px;
+	
+	white-space: pre-wrap;
+}
+/* 描述信息通用行 */
+.desc-row {
+	margin-top: 8px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+/* 带顶部外边距的描述行 */
+.extra-top {
+	margin-top: 15px;
+}
+/* 描述文字 */
+.desc-text {
+	color: rgb(144, 147, 153);
+	font-size: 14px;
+	padding-left: 4px;
+}
+/* 状态标签容器 */
+.status-tag-wrap {
+}
+.status-text {
+	background-color: rgba(255, 152, 0, 0.1);
+	color: rgb(255, 152, 0);
+	font-size: 14px;
+	padding: 8px;
+	border-radius: 4px;
+}
+/* 底部操作栏容器 */
+.card-operate-wrap {
+	display: flex;
+	flex-direction: row;
+	padding: 15px;
+}
+	/* 侧滑菜单外层 */
+	.swipe-menu-container {
 		display: flex;
 		flex-direction: row;
+		height: 100%;
+	}
+	/* 侧滑每个按钮项 */
+	.menu-item-box {
+		display: flex;
+		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		padding: 12px 15px;
-		border-radius: 8px;
-
-		.txt {
-			color: #007aff;
-			font-size: 15px;
-			padding-left: 4px;
-		}
+		width: 70px;
+		height: 100%;
 	}
-
-	.card-list {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-
-		.card-list-item {
-			min-width: 360px;
-			padding: 15px;
-			flex: 1;
-
-			.card {
-
-
-				background-color: #fff;
-				border-radius: 12px;
-
-				.img-area {
-					height: 350rpx;
-					max-height: 200px;
-					background-color: #eee;
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-					justify-content: center;
-				}
-
-				.card-title-group {
-					display: flex;
-					flex-direction: row;
-
-					justify-content: space-between;
-					padding: 15px;
-
-					.card-title-area {
-						.card-title {
-							.txt {
-								color: rgb(30, 30, 30);
-								font-weight: 700;
-								font-size: 20px;
-							}
-						}
-
-						.card-subtitle {
-							margin-top: 8px;
-							display: flex;
-							flex-direction: row;
-							align-items: center;
-
-							.txt {
-								color: rgb(144, 147, 153);
-								font-size: 14px;
-								padding-left: 4px;
-							}
-						}
-					}
-
-					.state {
-
-
-						.txt {
-							background-color: rgba(255, 152, 0, 0.1);
-							color: rgb(255, 152, 0);
-							font-size: 14px;
-							padding: 8px;
-							border-radius: 4px;
-						}
-					}
-				}
-
-				.control {
-					display: flex;
-					flex-direction: row;
-					padding: 15px;
-
-					.control-item {
-						display: flex;
-						flex-direction: row;
-						border-radius: 8px;
-
-						.control-btn {
-							flex: 1;
-							display: flex;
-							flex-direction: row;
-							align-items: center;
-							justify-content: center;
-
-							.control-btn-group {
-								display: flex;
-								flex-direction: row;
-								align-items: center;
-								padding: 10px;
-							}
-						}
-
-
-					}
-
-
-				}
-
-			}
-		}
-
-	}
+.menu-detail {
+	background-color: #007aff;
+}
+.menu-edit {
+	background-color: #ff7d00;
+}
+.menu-del {
+	background-color: #f53f3f;
+}
+/* 菜单文字 */
+.menu-item-text {
+	color: #fff;
+	font-size: 12px;
+	margin-top: 4px;
+}
 </style>

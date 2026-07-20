@@ -1,43 +1,45 @@
 <template>
-	<view class="page">
-		<view class="card">
-			<rice-form :model="emailForm" :rules="registerRule" ref="emailFormRef" label-width="100px"
-				class="demo-form">
+	<view class="email-verify-root">
+		<view class="form-card-wrap">
+			<rice-form :model="emailForm" :rules="registerRule" ref="emailFormRef" label-width="100px" class="demo-form">
 				<rice-form-item name="email" required label-position="top">
-					<rice-input v-model="emailForm['email']" placeholder="请输入邮箱" border="none" />
+					<rice-input v-model="emailForm['email']" :placeholder="i18n.global.t('register.pach_email')" border="none" />
 				</rice-form-item>
 				<rice-form-item name="emailCode" required label-position="top">
-					<view class="input-row">
+					<view class="code-input-row">
 						<view style="flex:1;display: flex;">
-							<rice-input v-model="emailForm['emailCode']" placeholder="邮箱验证码" border="none"
+							<rice-input v-model="emailForm['emailCode']" :placeholder="i18n.global.t('register.pach_email_code')" border="none"
 								:maxlength="4" type="number" />
 						</view>
 						<view style="display: flex;flex-direction: row;align-items: center;">
-							<text class="btn-code" @click="sendEmailCode">
+							<text class="code-get-text" @click="sendEmailCode">
 								{{ codeText }}
 							</text>
 						</view>
 					</view>
-
 				</rice-form-item>
 				<view>
-					<view class="tooltips">
-						<text class="txt">* 如收不到邮箱验证码，请检查垃圾邮箱箱中是否存在</text>
+					<view class="tip-wrap">
+						<text class="tip-text">{{i18n.global.t('register.email_tips')}}</text>
 					</view>
 				</view>
 			</rice-form>
 			<view style="margin-top: 24px;">
-				<rice-button type="primary" text="下一步" class="btn" shape="round" @click="nextEvent"
+				<rice-button type="primary" :text="i18n.global.t('register.btn_txt')" class="submit-full-btn" shape="round" @click="nextEvent"
 					:loading="submitLoading" />
 			</view>
 		</view>
 	</view>
 </template>
 
-<script setup lang="uts">
+<script setup>
 	import { FormRules, FormValidateErrors } from "@/uni_modules/rice-ui";
 	import { AccountService } from "@/services/AccountService";
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated"
+	})
 	const emit = defineEmits(["setEmailEvent"]);
 	const submitLoading = ref(false);
 	type emailFormType = {
@@ -50,14 +52,13 @@
 		emailCode: "",
 		emailCodeTk: ""
 	});
-
 	const emailFormRef = ref<RiceFormComponentPublicInstance | null>(null);
-	const codeText = ref('获取验证码');
+	const codeText = ref(i18n.global.t('login.btn_getVerificationCode'));
 	const codeDisabled = ref(false);
 	let timer = 0;
 	const emailvalidAccount = async (email : any | null) => {
 		if (email == null) {
-			return "邮箱不能为空";
+			return i18n.global.t('form.valid_required_email');
 		}
 		const flag = await AccountService.validRegisterByEmail(email.toString());
 		return !flag;
@@ -66,34 +67,31 @@
 		[
 			"email",
 			[
-				{ required: true, message: '请输入邮箱' },
-				{ min: 3, max: 25, message: '字数需为 3 至 25 位', trigger: 'blur' },
-				{ pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: '邮箱格式不正确' },
-				{ validator: emailvalidAccount, trigger: 'blur', message: "此邮箱关联账户不存在" }
+				{ required: true, message: i18n.global.t('form.valid_required_email') },
+				{ pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message:i18n.global.t('form.valid_email') },
+				{ validator: emailvalidAccount, trigger: 'blur', message:i18n.global.t('register.valid_email_emailNotRegister') }
 			]
 		],
 		[
 			"emailCode",
 			[
-				{ required: true, message: '请输入邮箱验证码' },
-				{ min: 4, max: 4, message: '字数需为 4 位', trigger: 'blur' }
+				{ required: true, message: i18n.global.t('form.valid_required_email') },
+				{ min: 4, max: 4, message:i18n.global.t('regitster.valid_email_num') , trigger: 'blur' }
 			]
 		]
 	])
-	// 清除定时器
 	const clearTimer = () => {
 		if (timer != 0) {
 			clearInterval(timer);
 			timer = 0;
 		}
-		codeText.value = '获取验证码';
+		codeText.value = i18n.global.t('login.btn_getSms') ;
 		codeDisabled.value = false;
 	};
 	const startTimeTask = () => {
 		codeDisabled.value = true;
 		let count = 60;
 		codeText.value = `${count}s`;
-
 		timer = setInterval(() => {
 			count--;
 			if (count <= 0) {
@@ -105,22 +103,16 @@
 	}
 	const sendEmailCode = async () => {
 		if (timer != 0) {
-			//console.log(`请在${timer}s 后再试`);
 			return;
 		}
-		const result = await emailFormRef.value!.validate();
+		const result = await emailFormRef.value!.validateFields(['email'])
 		if (result != true) {
-			const errsName = (result as FormValidateErrors[]).map(v => v.name)
-			console.log('校验失败的name合集', errsName)
-			if (errsName.includes("email")) {
-				uni.showToast({
-					title: "邮箱输入有误",
-					icon: "none"
-				})
-				return;
-			}
+			uni.showToast({
+				title: i18n.global.t('form.valid_email'),
+				icon: "none"
+			})
+			return;			
 		}
-		
 		try {
 			uni.showLoading();
 			const emailCodeTk = await AccountService.sendEmailCode(emailForm.value.email,"resetPassword");
@@ -130,27 +122,21 @@
 			startTimeTask();
 		} catch (error) {
 			uni.hideLoading();
-			// uni.showToast({
-			// 	title: error.message as string,
-			// 	icon: "none"
-			// })
 		}
 	}
-
 	const nextEvent = async () => {
 		if(submitLoading.value==true){
 			return;
 		}
+		submitLoading.value=true;
 		const result = await emailFormRef.value!.validate();
 		console.log("result", result);
-		//校验成功
 		if (result != true) {
 			console.log("校验失败");
+			submitLoading.value=false;
 			return;
 		}
-		//emit("setEmailEvent",emailForm.value.email,emailForm.value.emailCodeTk);
 		try {
-			submitLoading.value = true;
 			const flag = await AccountService.validEmailAndCode(emailForm.value.email, emailForm.value.emailCode, emailForm.value.emailCodeTk);
 			if (flag) {
 				emit("setEmailEvent", emailForm.value.email,emailForm.value.emailCode,emailForm.value.emailCodeTk);
@@ -158,101 +144,57 @@
 		} catch (err) {
 			submitLoading.value = false;
 		}
-
 	}
 </script>
-<style scoped lang="scss">
-	.page {
-		flex: 1;
-		// background: linear-gradient(180deg, #f2f5f9 0%, #e6ebf5 100%);
-		padding: 0 16px;
-		box-sizing: border-box;
-	}
 
-	.card {
-		background: #ffffff;
-		padding-top: 60px;
-		border-radius: 20px;
-		padding: 40px 20px;
-		// box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-	}
-
-	.title {
-
-		text-align: center;
-		margin-bottom: 40px;
-
-		.txt {
-			font-size: 32px;
-			font-weight: 600;
-			color: #1d1d1f;
-		}
-	}
-
-	.input-box {
-		margin-bottom: 20px;
-		border-bottom: 0.5px solid #e5e7eb;
-		background-color: #fff;
-		border-radius: 25px;
-	}
-
-	.input {
-		height: 50px;
-		padding: 0 16px;
-		font-size: 16px;
-		color: #1d1d1f;
-	}
-
-	.ph {
-		color: #8e8e93;
-	}
-
-	.btn-register {
-		margin-top: 35px;
-		width: 100%;
-		height: 50px;
-		line-height: 50px;
-		background: #007aff;
-		color: #fff;
-		border-radius: 25px;
-		font-size: 17px;
-		font-weight: 500;
-		border: none;
-	}
-
-	.input-row {
-
-		width: 100%;
-		height: 100%;
-		display: flex;
-		flex: 1;
-		flex-direction: row;
-		justify-content: space-between;
-
-		overflow: hidden;
-	}
-
-	.btn-code {
-		font-size: 14px;
-		color: #007aff;
-		background: #fff;
-		border: none;
-		outline: none;
-		padding: 0 8px;
-		margin: 0 4px;
-	}
-
-	.btn-code[disabled] {
-		color: #8e8e93;
-	}
-
-	.tooltips {
-		margin-top: 12px;
-
-		.txt {
-			color: rgb(134, 144, 156);
-			font-size: 13px;
-		}
-
-	}
+<style>
+/* 组件最外层容器 */
+.email-verify-root {
+	flex: 1;
+}
+/* 表单卡片容器 */
+.form-card-wrap {
+}
+/* 验证码输入整行容器 */
+.code-input-row {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex: 1;
+	flex-direction: row;
+	justify-content: space-between;
+	overflow: hidden;
+}
+/* 获取验证码文字按钮 */
+.code-get-text {
+	font-size: 14px;
+	color: #007aff;
+	background: #fff;
+	border: none;
+	outline: none;
+	padding: 0 8px;
+	margin: 0 4px;
+}
+/* 提示文字外层容器 */
+.tip-wrap {
+	margin-top: 12px;
+}
+/* 提示文字内容 */
+.tip-text {
+	color: rgb(134, 144, 156);
+	font-size: 13px;
+}
+/* 底部提交按钮 */
+.submit-full-btn {
+	margin-top: 35px;
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	background: #007aff;
+	color: #fff;
+	border-radius: 25px;
+	font-size: 17px;
+	font-weight: 500;
+	border: none;
+}
 </style>

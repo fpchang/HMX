@@ -1,4 +1,4 @@
-import{DB} from '@/api/DB';
+import{DB,dbJQL} from '@/api/DB';
 class LocationService{
 	constructor(){
         

@@ -6,6 +6,7 @@ export type ActionSheetAction = {
 	color ?: string,
 	icon ?: string,
 	iconSize ?: string | number,
+	iconFontFamily ?: string,
 	disabled ?: boolean,
 }
 

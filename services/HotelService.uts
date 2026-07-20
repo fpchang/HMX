@@ -1,4 +1,4 @@
-import { DB } from '../api/DB';
+import { DB,dbJQL } from '../api/DB';
 import { callFunctionRes } from "@/bean/DBBean";
 import { hotelBean } from '../bean/hotelBean';
 import { roomTypeBean, formatRoomTypeList } from "@/bean/roomTypeBean.uts";
@@ -6,6 +6,13 @@ import { employeeBean } from '@/bean/employeeBean';
 import { state } from '@/store/store.uts';
 import {facilityConfig_type} from "@/bean/facilityConfig_type.uts";
 import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
+import {action_co,RequestFailModal} from "@/api/cloudApi.uts";
+ //as { [key: string]: (...args: any[]) => Promise<UniCloudCallFunctionResult<UTSJSONObject>> };
+const _token=()=>{
+	return {
+		token:uni.getStorageSync("hm_token");
+	}
+}
 type employeeList_Res = {
 	code : number;
 	errCode : number;
@@ -50,7 +57,7 @@ class HotelServiceClass {
 		return list;
 	}
 	async getOpendbCityChina(type : number) : Promise<Array<UTSJSONObject>> {
-		const db = uniCloud.databaseForJQL();
+		const db = dbJQL;
 		//const res = await db.collection("opendb-city-china").field("code as value, name as text, eq(type, 2) as isleaf").get();
 		const res = await db.collection("opendb-city-china").where({ type }).get();
 		//return  DB.getCollection("opendb-city-china")
@@ -68,69 +75,50 @@ class HotelServiceClass {
 	 */
 	async createHotel(hotelObj : hotelBean) : Promise<boolean> {
 		try {
-			const res = await DB.callFunction("hm_createHotel", { hotelObj });
+			//const res = await DB.callFunction("hm_createHotel", { hotelObj });
 			//console.log("create hotel", res);
-			const result = res["result"] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				console.log("code error", code);
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(message);
-			}
-			
+			await action_co.hotel_createHotel(hotelObj);			
 			return true;
-		} catch (error) {
+		} catch (error:Error) {
 			//console.error(error);
-			throw new Error("创建失败");
+			//throw new Error("创建失败");
+				RequestFailModal(error.message);
+				return false;
 		}
 
 
 	}
 	async updateHotel(hotel_id : string, hotelObj : hotelBean) : Promise<boolean> {
-		console.log("UPDATE+++++===", hotelObj);
 		try {
-			const res = await DB.callFunction("hm_updateHotel", { hotel_id, hotelObj });
+			//const res = await DB.callFunction("hm_updateHotel", { hotel_id, hotelObj });
+			const res = await action_co.hotel_updateHotel(hotel_id, hotelObj);
 			console.log("update hotel", res);
-			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				console.log("code error", code);
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(message);
-			}
-			uni.showToast({
-				title: "更新成功",
-				icon: "none"
-			});
-
+			
 			return true;
-		} catch (error) {
-			throw new Error("更新失败");
+		} catch (error:Error) {
+			//throw new Error("更新失败");
+			RequestFailModal(error.message);
+			return false;
 		}
 	}
 
 	async deleteHotel(hotel_id : string) : Promise<boolean> {
 		try {
-			const res = await DB.callFunction("hm_deleteHotel", { hotel_id });
-			const result = res['result'] as UTSJSONObject;
-			const code = result.getNumber("code") ?? 0;
-			const message = result.getString("message") ?? "";
-			if (code != 0) {
-				console.log("code error", code);
-				uni.showToast({
-					title: message,
-					icon: "none"
-				});
-				throw new Error(message);
-			}			
+			// const res = await DB.callFunction("hm_deleteHotel", { hotel_id });
+			// const result = res['result'] as UTSJSONObject;
+			// const code = result.getNumber("code") ?? 0;
+			// const message = result.getString("message") ?? "";
+			// if (code != 0) {
+			// 	console.log("code error", code);
+			// 	uni.showToast({
+			// 		title: message,
+			// 		icon: "none"
+			// 	});
+			// 	throw new Error(message);
+			// }			
+			// return true;
+			const res = await action_co.hotel_deleteHotel(hotel_id);
+			console.log("delete hotel",res);
 			return true;
 		} catch (error) {
 			throw new Error("删除失败");
@@ -141,48 +129,60 @@ class HotelServiceClass {
 	 * 获取当前用户关联酒店列表(包括老板与用户)
 	*/
 	async getHotelList() : Promise<Array<hotelBean>> {
-		const res = await DB.callFunction("hm_getHotelList_x");
-		const result = res.result as UTSJSONObject;
-		const data = result.get('data') as Array<UTSJSONObject>;
-		let hotelList:Array<hotelBean>=[];
-		data.forEach(item=>{
-			const hotel:hotelBean={
-				_id:item.getString("_id")??"",
-				ownership_id:item.getString("ownership_id")??"",
-				 belong: item.getString("belong")??"",
-				 hotelCoordinate: item.getArray<number>("hotelCoordinate")??[],
-				 hotelIntroduction: item.getString("hotelIntroduction")??"",
-				 hotelName:  item.getString("hotelName")??"",
-				 firstImages:  item.getString("firstImages")??"" ,
-				  imagesList: item.getArray<string>("imagesList")??[] ,
-				 athleticFacility:item.getArray<string>("athleticFacility")??[] ,
-				 cateringServices: item.getArray<string>("cateringServices")??[],
-				 recreationFacility: item.getArray<string>("recreationFacility")??[],
-				 feature: item.getArray<string>("feature")??[],
-				 serviceTel:  item.getString("serviceTel")??"" ,
-				 wechat:  item.getString("wechat")??"" ,
-				 hotelAddress:  item.getString("hotelAddress")??"",
-				 hotelAddressArea:  item.getString("hotelAddressArea")??"" ,
-				 hotelAddressCode:  item.getString("hotelAddressCode")??"",
-				 baseFacility: item.getArray<string>("baseFacility")??[] ,
-				 curRole:item.getString("curRole")??""
-			}
-			hotelList.push(hotel)
-		})
-		return hotelList;
+		try {
+			const res =await action_co.hotel_getHotelList();
+			console.log("hotellist",res);
+			//const result = res.result as UTSJSONObject;
+			const data = res['data'] as Array<UTSJSONObject>;
+			let hotelList:Array<hotelBean>=[];
+			data.forEach(item=>{
+				const hotel:hotelBean={
+					_id:item.getString("_id")??"",
+					ownership_id:item.getString("ownership_id")??"",
+					 belong: item.getString("belong")??"",
+					 hotelCoordinate: item.getArray<number>("hotelCoordinate")??[],
+					 hotelIntroduction: item.getString("hotelIntroduction")??"",
+					 hotelName:  item.getString("hotelName")??"",
+					 firstImages:  item.getString("firstImages")??"" ,
+					  imagesList: item.getArray<string>("imagesList")??[] ,
+					 athleticFacility:item.getArray<string>("athleticFacility")??[] ,
+					 cateringServices: item.getArray<string>("cateringServices")??[],
+					 recreationFacility: item.getArray<string>("recreationFacility")??[],
+					 feature: item.getArray<string>("feature")??[],
+					 serviceTel:  item.getString("serviceTel")??"" ,
+					 wechat:  item.getString("wechat")??"" ,
+					 hotelAddress:  item.getString("hotelAddress")??"",
+					 hotelAddressArea:  item.getString("hotelAddressArea")??"" ,
+					 hotelAddressCode:  item.getString("hotelAddressCode")??"",
+					 baseFacility: item.getArray<string>("baseFacility")??[] ,
+					 curRole:item.getString("curRole")??""
+				}
+				hotelList.push(hotel)
+			})
+			return hotelList;
+		} catch (error:Error) {
+			// uni.showModal({
+			// 	title:error.message
+			// })
+			return [];
+		}
+		
 	}
 	/**
 	 *所属于 当前用户酒店
 	 */
 	getHotelListOfUser(phone : string) : Promise<UniCloudDBGetResult> {
-		return DB.getCollection("hm-hotel", { belong: phone })
+		const w = { belong: phone } as UTSJSONObject;
+		return DB.getCollection("hm-hotel",w )
 	}
 	/**
 	 * 根据id获取酒店信息
 	 */
 	async getHotelInfoById(hotel_id : string):Promise<hotelBean>{
+		const w = { _id: hotel_id };
+		console.log("ww",w)
 		try{
-			const res = await DB.getCollection("hm-hotel", { _id: hotel_id } as UTSJSONObject);
+			const res = await DB.getCollection("hm-hotel",w);
 			console.log("hotel::",res)
 			const data = res['data'] as Array<UTSJSONObject>;
 			const item = data[0] as UTSJSONObject;
@@ -265,8 +265,11 @@ class HotelServiceClass {
 
 	async deleteEmployee(_id : string) : Promise<boolean> {
 		try {
-			const res = await DB.callFunction("hm_deleteEmployee", { _id });
-			console.log("res", res);
+			// const res = await DB.callFunction("hm_deleteEmployee", { _id });
+			// console.log("res", res);
+			// return true;
+			const res = await action_co.employee_deleteEmployee(_id);
+			console.log("delete employee ",res);
 			return true;
 		} catch (error) {
 			//TODO handle the exception
@@ -276,27 +279,21 @@ class HotelServiceClass {
 	}
 	async addEmployee(employeeForm : employeeBean) : Promise<boolean> {
 		try {
-			const { employee_name, hotel_id,account, phone, role, mark } = employeeForm;			
-			const res = await DB.callFunction("hm_addEmployee", { employeeObj: {employee_name, hotel_id, phone,account, role, mark } });
-			console.log("eeeee",res);
+			const { employee_name, hotel_id,account, phone, role, mark } = employeeForm;
+			const employeeObj= {employee_name, hotel_id, phone,account, role, mark }；
+		//	const res = await DB.callFunction("hm_addEmployee", employeeObj);
+			// console.log("eeeee",res);
 			
-			const result = res['result'] as UTSJSONObject;
-			if(result.getNumber("errCode")!=0){
-				throw new Error(result.getString("errMsg")??"系统异常")；
-			}		
+			// const result = res['result'] as UTSJSONObject;
+			// if(result.getNumber("errCode")!=0){
+			// 	throw new Error(result.getString("errMsg")??"系统异常")；
+			// }	
+				const res = await action_co.employee_addEmployee(employeeObj);
+				console.log("add employee",res)
 			return true;
-		} catch (err) {
-			//const hasCauseMessage = (err.cause?.cause?.message ?? '').length > 0;
-			//const msg=hasCauseMessage ? JSON.parseObject(err.cause?.cause?.message ?? ''):'系统异常，添加失败';
-			
-			showDialog({
-				title: '添加失败',
-				message: err.message.toString(),
-				showCancelButton: false,
-				confirm: () => {
-					throw new Error(err.message.toString());
-				}
-			})
+		} catch (err:Error) {
+			RequestFailModal(err.message);
+			throw new Error(err.message)
 		}
 
 	}
@@ -304,26 +301,28 @@ class HotelServiceClass {
 		
 			try {
 				const {_id, employee_name, hotel_id,account, phone, role, mark } = employeeForm;
-				const res = await DB.callFunction("hm_editEmployee", {_id:_id ,employeeObj: { employee_name, hotel_id,account, phone, role, mark } });
-				const result = res['result'] as UTSJSONObject;
-				const code = result.getNumber("code") ?? 0;
-				const message = result.getString("message") ?? "";
-				if (code != 0) {
-					console.log("code error", code);
-					uni.showToast({
-						title: message,
-						icon: "none"
-					});
-					throw new Error(message);
-				}
-				uni.showToast({
-					title: "更新成功",
-					icon: "none"
-				});
+				//const res = await DB.callFunction("hm_editEmployee", {_id:_id ,employeeObj: { employee_name, hotel_id,account, phone, role, mark } });
+				// const result = res['result'] as UTSJSONObject;
+				// const code = result.getNumber("code") ?? 0;
+				// const message = result.getString("message") ?? "";
+				// if (code != 0) {
+				// 	console.log("code error", code);
+				// 	uni.showToast({
+				// 		title: message,
+				// 		icon: "none"
+				// 	});
+				// 	throw new Error(message);
+				// }
+				// uni.showToast({
+				// 	title: "更新成功",
+				// 	icon: "none"
+				// });
+				const obj = {_id, employee_name, hotel_id,account, phone, role, mark};
+				const res = await action_co.employee_editEmployee(obj);
 				return true;
-			} catch (error) {
+			} catch (error:Error) {
 				console.log(error)
-				throw new Error(error.message.toString());
+				throw new Error(error.message);
 			}
 	}
 	

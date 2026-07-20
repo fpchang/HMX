@@ -1,15 +1,34 @@
 <template>
-	<scroll-view style="flex: 1;" v-if="hotel_id!=''">
+	<rice-navbar :fixed="false" title="" border v-if="hotel_id!=''">
+		<template #left>
+			<view style="display: flex;flex-direction: row;align-items: center;">
+				<!-- s -->
+
+				<image src="/static/icons/tab-menu-blue.png"
+					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{ i18n.global.t('tab.function') }}
+				</text>
+			</view>
+		</template>
+
+	</rice-navbar>
+	<scroll-view style="flex: 1;" v-if="hotel_id!=''" :show-scrollbar="false">
 		<view class="homemenu">
 			<view class="card" v-for="item in menuList">
-				<view class="title">
-					<image :src="item.title_icon" class="icon-stye"></image>
+				<!-- 替换 class 为 card-title，消除层级依赖 -->
+				<view class="card-title">
+					<image :src="item.title_icon" class="icon-stye123"></image>
 					<text class="txt" :style="{'color':item.title_color}">{{item.title}}</text>
 				</view>
-				<!-- <view class="list">
-					<l-space :wrap="true" :size="14">
-						<view class="list-item" v-for="it in item.menu_item_list" :key="it.label">
-							<navigator :url="it.url" hover-class="none">
+				<view v-if=" i18n.global.locale.value == 'zh-CN'">
+					<rice-grid :column-num="columnNum" :border="false">
+						<rice-grid-item v-for="it in item.menu_item_list" :key="it.label" :icon="it.icon"
+							:text="it.label" :to="it.url" />
+					</rice-grid>
+					<!-- <l-space :wrap="true" :size="14">
+						<view v-for="it in item.menu_item_list" :key="it.label"
+							style=" background:green;">
+						
 								<view class="item-content">
 									<view class="groupIcon">
 										<image :src="it.icon" class="icon-style" mode="aspectFit"></image>
@@ -19,19 +38,19 @@
 									</view>
 								</view>
 
-							</navigator>
+							
 						</view>
-						<view class="list-item" style="width: 0;height:0;padding:0" v-for="item of 5"></view>
-					</l-space>
-				</view> -->
-								
-				<rice-cell-group >
+						
+					</l-space> -->
+				</view>
 
-					<rice-cell center size="medium"  :title="it.label" v-for="it in item.menu_item_list"
-						arrow :url="it.url" :border="false" >
+				<rice-cell-group v-if=" i18n.global.locale.value != 'zh-CN'">
+
+					<rice-cell center size="medium" :title="it.label" v-for="it in item.menu_item_list" arrow
+						:url="it.url" :border="false" :clickable="false">
 						<template #leftIcon>
 							<view style="padding-right: 8px;">
-								<image :src="it.icon" style="width: 20px;height: 20px;" mode="aspectFit"></image>
+								<image :src="it.icon" style="width: 40px;height:40px;" mode="aspectFit"></image>
 							</view>
 
 						</template>
@@ -39,18 +58,21 @@
 				</rice-cell-group>
 			</view>
 		</view>
+		<view style="height:70px"></view>
 	</scroll-view>
 	<view style="margin-top: 80px;" v-if="hotel_id==''">
 		<l-empty :description="i18n.global.t('common.noData',[''])" />
 	</view>
 </template>
-
 <script setup>
 	import { state } from "@/store/store";
 	import { roomTypeBean } from '@/bean/roomTypeBean';
 	import { roomBean } from '@/bean/roomBean';
 	import { hotelBean } from "@/bean/hotelBean";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	type menu = {
 		icon : string,
 		label : string,
@@ -79,28 +101,30 @@
 			title_icon: "/static/icons/homemenu/hotel-anage.png",
 			title_color: "rgb(30,30,30)",
 			menu_item_list: [{
-				icon: "/static/icons/homemenu/linestyle/room-type-line.png",
+				icon: "/static/icons/homemenu/room-type1.png",
 				label: i18n.global.t("function.btn_txt_room_type"),
 				bgColor: "rgba(22, 93, 255, 0.1)",
 				url: "/pages/hotelManage/roomTypeList/roomTypeList"
 			},
 			{
-				icon: "/static/icons/homemenu/linestyle/room-line.png",
+				icon: "/static/icons/homemenu/room1.png",
 				label: i18n.global.t("function.btn_txt_room"),
 				bgColor: "rgba(22, 93, 255, 0.1)",
 				url: "/pages/hotelManage/roomList/roomList"
 			},
 			{
-				icon: "/static/icons/homemenu/linestyle/employee-line.png",
+				icon: "/static/icons/homemenu/employee1.png",
 				label: i18n.global.t("function.btn_txt_room_employee"),
 				bgColor: "rgba(22, 93, 255, 0.1)",
 				url: "/pages/hotelManage/employeeList/employeeList"
 			},
 			{
-				icon: "/static/icons/homemenu/linestyle/preview-line.png",
+				icon: "/static/icons/homemenu/hotel2.png",
 				label: i18n.global.t("function.btn_txt_room_preview"),
 				bgColor: "rgba(22, 93, 255, 0.1)",
 				url: `/pages/hotelDisplay/hotelDisplay?hotel_id=${hotel.value?._id}`
+				//url: `/pages/hotelDisplay/list-news/list-news?hotel_id=${hotel.value?._id}`
+				
 			}],
 
 		},
@@ -109,7 +133,7 @@
 			title_icon: "/static/icons/homemenu/financia-green.png",
 			title_color: "rgb(30,30,30)",
 			menu_item_list: [{
-				icon: "/static/icons/homemenu/linestyle/income-line.png",
+				icon: "/static/icons/homemenu/income.png",
 				label: i18n.global.t("function.btn_txt_income_expense"),
 				bgColor: "rgba(72,187,120,0.1)",
 				url: "/pages/financialManagement/inExManage/inExManage"
@@ -121,7 +145,7 @@
 			// 	url: "/pages/financialManagement/expense/expense"
 			// },
 			{
-				icon: "/static/icons/homemenu/linestyle/financial-statistics-line.png",
+				icon: "/static/icons/homemenu/financial-statistics1.png",
 				label: i18n.global.t("function.btn_txt_fm_chart"),
 				bgColor: "rgba(72,187,120,0.1)",
 				url: "/pages/financialManagement/fmchart/fmchart"
@@ -134,21 +158,42 @@
 			title_icon: "/static/icons/homemenu/order-manage.png",
 			title_color: "rgb(30,30,30)",
 			menu_item_list: [{
-				icon: "/static/icons/homemenu/linestyle/order-line.png",
+				icon: "/static/icons/homemenu/order1.png",
 				label: i18n.global.t("function.btn_txt_order"),
 				bgColor: "rgba(237,137,54,0.1)",
 				url: "/pages/order/orderList/orderList"
 			},
 			{
-				icon: "/static/icons/homemenu/linestyle/order-add-line.png",
+				icon: "/static/icons/homemenu/order-add1.png",
 				label: i18n.global.t("function.btn_txt_create_order"),
 				bgColor: "rgba(237,137,54,0.1)",
 				url: "/pages/order/createOrder/createOrder"
 			}
 			]
 
+		},{
+			title:i18n.global.t("function.btn_txt_daily_routine"),
+			title_icon: "/static/icons/homemenu/order-manage.png",
+			title_color: "rgb(30,30,30)",
+			menu_item_list:[
+				{
+					icon: "/static/icons/homemenu/linen.png",
+					label: i18n.global.t("washingOrder.title"),
+					bgColor: "rgba(237,137,54,0.1)",
+					url: "/pages/working/LinenWashing/LinenWashingList"
+				}
+			]
 		}
 	]
+	const w= state.viewWidth;
+	const columnNum = computed(() => {
+		let num = 3;
+		const w = state.viewWidth;
+		if (w != 0) {
+			num = Math.floor((w - 30) / 80);
+		}
+		return num
+	})
 	onLoad(() => {
 		uni.setNavigationBarTitle({
 			title: i18n.global.t("function.title_navbar")
@@ -157,87 +202,87 @@
 </script>
 
 <style lang="scss">
+	.top-header {
+		width: 100%;
+		background: #1677ff;
+		padding: 60px 0 40px;
+		text-align: center;
+	}
+
+	.header-title {
+		font-size: 22px;
+		color: #fff;
+		font-weight: 500;
+		padding-left: 15px;
+	}
+
+	// 最外层卡片
 	.card {
-		margin: 15px;
-		padding: 14px;
+		margin: 14px;
+		padding: 15px;
 		background-color: #fff;
 		border-radius: 12px;
+	}
 
-		.title {
-			padding: 5px 5px 15px 5px;
-			color: #1f2937;
-			font-weight: 700;
-			font-size: 24px;
-			display: flex;
-			flex-direction: row;
-			align-items: flex-end;
+	// 标题区域（独立平级class，不再嵌套在.card内部）
+	.card-title {
+		padding: 5px 5px 15px 5px;
+		color: #1f2937;
+		font-weight: 700;
+		font-size: 24px;
+		display: flex;
+		flex-direction: row;
+		align-items: flex-end;
+	}
 
-			.icon-stye {
-				width: 18px;
-				height: 18px;
-				margin-right: 4px;
-			}
+	// 标题图标
+	.icon-stye123 {
+		width: 18px;
+		height: 18px;
+		margin-right: 4px;
+	}
 
-			.txt {
-				color: #1f2937;
-				font-weight: 700;
-				color: #1f2937;
-			}
-		}
+	// 标题文字
+	.txt {
+		color: #1f2937;
+		font-weight: 700;
+	}
 
-		.list {
-			padding: 0 14px;
+	// 单个功能项容器
+	.item-content {
+		max-height: 80px;
+		max-width: 80px;
+		min-width: 80px;
+		min-height: 80px;
+		overflow: hidden;
+		background-color: red;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
 
-			.list-item {
+	// 图标外层容器
+	.groupIcon {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		border-radius: 12px;
+	}
 
-				// flex: 1;
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-				padding: 8px 0;
-				// min-width: 80px;
-				// box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-				border-radius: 14px;
+	// 功能小图标
+	.icon-style {
+		width: 30px;
+		height: 30px;
+	}
 
-				.item-content {
-					// background-color: #fff;
-					// padding: 18px;
-					// border-radius: 12px;
-
-					display: flex;
-					flex-direction: row;
-					justify-content: center;
-					align-items: center;
-
-					.groupIcon {
-						width: 20px;
-						height: 20px;
-						margin-right: 14px;
-						display: flex;
-						flex-direction: row;
-						align-items: center;
-						justify-content: center;
-						border-radius: 12px;
-						//  background-color: #fff;
-						// box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-
-						.icon-style {
-							width: 20px;
-							height: 20px;
-						}
-					}
-
-					.label {
-						font-size: 14px;
-						// padding-top: 8px;
-						color: #64748b;
-						overflow: hidden;
-						text-align: center;
-
-					}
-				}
-
-			}
-		}
+	// 功能文字标签
+	.label {
+		font-size: 14px;
+		padding-top: 8px;
+		color: #64748b;
+		overflow: hidden;
+		text-align: center;
 	}
 </style>

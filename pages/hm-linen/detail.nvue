@@ -1,0 +1,188 @@
+<template>
+  <view class="container">
+    <unicloud-db ref="udb" v-slot:default="{data, loading, error, options}" :options="options" :collection="collectionList" field="flatsheet20_num,flatsheet18_num,flatsheet15_num,flatsheet13_num,flatsheet12_num,duvetCoverMax_num,duvetCoverMini_num,bathTowel_num,faceTowel_num,floorTowel_num,bedRunner_num,flatsheet20_back_num,flatsheet18_back_num,flatsheet15_back_num,flatsheet13_back_num,flatsheet12_back_num,duvetCoverMax_back_num,duvetCoverMini_back_num,bathTowel_back_num,faceTowel_back_num,floorTowel_back_num,bedRunner_back_num,status" :where="queryWhere" :getone="true" :manual="true">
+      <view v-if="error">{{error.message}}</view>
+      <view v-else-if="loading">
+        <uni-load-more :contentText="loadMore" status="loading"></uni-load-more>
+      </view>
+      <view v-else-if="data">
+        <view>
+          <text>2.0米床单数量</text>
+          <text>{{data.flatsheet20_num}}</text>
+        </view>
+        <view>
+          <text>1.8米床单数量</text>
+          <text>{{data.flatsheet18_num}}</text>
+        </view>
+        <view>
+          <text>1.5米床单数量</text>
+          <text>{{data.flatsheet15_num}}</text>
+        </view>
+        <view>
+          <text>1.3米床单数量</text>
+          <text>{{data.flatsheet13_num}}</text>
+        </view>
+        <view>
+          <text>1.2米床单数量</text>
+          <text>{{data.flatsheet12_num}}</text>
+        </view>
+        <view>
+          <text>大被套数量</text>
+          <text>{{data.duvetCoverMax_num}}</text>
+        </view>
+        <view>
+          <text>小被套数量</text>
+          <text>{{data.duvetCoverMini_num}}</text>
+        </view>
+        <view>
+          <text>浴巾数量</text>
+          <text>{{data.bathTowel_num}}</text>
+        </view>
+        <view>
+          <text>面巾数量</text>
+          <text>{{data.faceTowel_num}}</text>
+        </view>
+        <view>
+          <text>地巾数量</text>
+          <text>{{data.floorTowel_num}}</text>
+        </view>
+        <view>
+          <text>床尾巾数量</text>
+          <text>{{data.bedRunner_num}}</text>
+        </view>
+        <view>
+          <text>返还2.0米床单数量</text>
+          <text>{{data.flatsheet20_back_num}}</text>
+        </view>
+        <view>
+          <text>返还1.8米床单数量</text>
+          <text>{{data.flatsheet18_back_num}}</text>
+        </view>
+        <view>
+          <text>返还1.5米床单数量</text>
+          <text>{{data.flatsheet15_back_num}}</text>
+        </view>
+        <view>
+          <text>返还1.3米床单数量</text>
+          <text>{{data.flatsheet13_back_num}}</text>
+        </view>
+        <view>
+          <text>返还1.2米床单数量</text>
+          <text>{{data.flatsheet12_back_num}}</text>
+        </view>
+        <view>
+          <text>返还大被套数量</text>
+          <text>{{data.duvetCoverMax_back_num}}</text>
+        </view>
+        <view>
+          <text>返还小被套数量</text>
+          <text>{{data.duvetCoverMini_back_num}}</text>
+        </view>
+        <view>
+          <text>返还浴巾数量</text>
+          <text>{{data.bathTowel_back_num}}</text>
+        </view>
+        <view>
+          <text>返还面巾数量</text>
+          <text>{{data.faceTowel_back_num}}</text>
+        </view>
+        <view>
+          <text>返还地巾数量</text>
+          <text>{{data.floorTowel_back_num}}</text>
+        </view>
+        <view>
+          <text>返还床尾巾数量</text>
+          <text>{{data.bedRunner_back_num}}</text>
+        </view>
+        <view>
+          <text>status</text>
+          <text>{{options.status_valuetotext[data.status]}}</text>
+        </view>
+      </view>
+    </unicloud-db>
+    <view class="btns">
+      <button type="primary" @click="handleUpdate">修改</button>
+      <button type="warn" class="btn-delete" @click="handleDelete">删除</button>
+    </view>
+  </view>
+</template>
+
+<script>
+  // 由schema2code生成，包含校验规则和enum静态数据
+  import { enumConverter } from '../../js_sdk/validator/hm-linen.js'
+  const db = uniCloud.database()
+
+  export default {
+    data() {
+      return {
+        queryWhere: '',
+        collectionList: "hm-linen",
+        loadMore: {
+          contentdown: '',
+          contentrefresh: '',
+          contentnomore: ''
+        },
+        options: {
+          // 将scheme enum 属性静态数据中的value转成text
+          ...enumConverter
+        }
+      }
+    },
+    onLoad(e) {
+      this._id = e.id
+    },
+    onReady() {
+      if (this._id) {
+        this.queryWhere = '_id=="' + this._id + '"'
+      }
+    },
+    methods: {
+      handleUpdate() {
+        // 打开修改页面
+        uni.navigateTo({
+          url: './edit?id=' + this._id,
+          events: {
+            // 监听修改页面成功修改数据后, 刷新当前页面数据
+            refreshData: () => {
+              this.$refs.udb.loadData({
+                clear: true
+              })
+            }
+          }
+        })
+      },
+      handleDelete() {
+        this.$refs.udb.remove(this._id, {
+          success: (res) => {
+            // 删除数据成功后跳转到list页面
+            uni.navigateTo({
+              url: './list'
+            })
+          }
+        })
+      }
+    }
+  }
+</script>
+
+<style>
+  .container {
+    padding: 10px;
+  }
+
+  .btns {
+    margin-top: 10px;
+    /* #ifndef APP-NVUE */
+    display: flex;
+    /* #endif */
+    flex-direction: row;
+  }
+
+  .btns button {
+    flex: 1;
+  }
+
+  .btn-delete {
+    margin-left: 10px;
+  }
+</style>

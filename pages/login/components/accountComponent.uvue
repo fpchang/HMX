@@ -1,21 +1,23 @@
 <template>
 	<view>
 		<rice-form :model="userForm" :rules="accountRule" ref="userFormRef" label-width="100px" class="demo-form">
-			<rice-form-item name="account" label-position="top">
-				<rice-input v-model="userForm['account']" :placeholder="i18n.global.t('login.pach_account')" border="none" />
+			<rice-form-item name="account" label-position="top" :border-bottom="true">
+				<rice-input v-model="userForm['account']" :placeholder="i18n.global.t('login.pach_account')"
+					focus-border :clearable="true" border="none"/>
 			</rice-form-item>
-			<rice-form-item name="password" label-position="top" required>
-				<rice-input v-model="userForm['password']" :placeholder="i18n.global.t('login.pach_password')" border="none" type="password" />
+			<rice-form-item name="password" label-position="top" required :border-bottom="true">
+				<rice-input v-model="userForm['password']" :placeholder="i18n.global.t('login.pach_password')"
+					focus-border clearable type="password" border="none" />
 			</rice-form-item>
 		</rice-form>
-		<view class="btn-text-content"> 
-		<navigator url="/pages/set/resetPassword/resetPassword">
-			<text class="txt">{{i18n.global.t('login.btn_txt_password')}}</text>
-		</navigator>
-			
+		<view class="btn-text-content">
+			<navigator url="/pages/set/resetPassword/resetPassword">
+				<text class="text-right-txt">{{i18n.global.t('login.btn_txt_password')}}</text>
+			</navigator>
 		</view>
 		<view style="margin-top: 24px;">
-		<rice-button type="primary" :text="i18n.global.t('login.btn_txt')" class="btn" shape="round" @click="accountLogin" :loading="submitLoading"/>
+			<rice-button type="primary" :text="i18n.global.t('login.btn_txt')" class="btn" shape="round"
+				@click="accountLogin" :loading="submitLoading" />
 		</view>
 	</view>
 </template>
@@ -25,104 +27,99 @@
 	import { AccountService } from "@/services/AccountService";
 	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	const props = defineProps({
 		isAgree: {
 			type: Boolean,
 			default: false
 		}
 	});
-	const submitLoading =ref(false);
-	 type userFormType={
-		account: string,
-		password: string
+	const submitLoading = ref(false);
+	type userFormType = {
+		account : string,
+		password : string
 	}
 	const userForm = ref<userFormType>({
 		account: '',
 		password: ''
 	});
-	
+
 	const userFormRef = ref<RiceFormComponentPublicInstance | null>(null);
-	
-		//密码的校验函数
-		const passwordValidator = (value : any | null) => {
-			const val = value as string
-			if (val.length < 6) return i18n.global.t('login.valid_password_num')
-			//if (val.startsWith('123456')) return '密码开头不能为连续的123456'
-			//只有返回 true 才表示校验通过
-			return true
-		}
-		const accountRule = new Map<string, FormRules[]>([
+
+	//密码的校验函数
+	const passwordValidator = (value : any | null) => {
+		const val = value as string
+		if (val.length < 6) return i18n.global.t('login.valid_password_num')
+		//if (val.startsWith('123456')) return '密码开头不能为连续的123456'
+		//只有返回 true 才表示校验通过
+		return true
+	}
+	const accountRule = new Map<string, FormRules[]>([
+		[
+			"account",
 			[
-				"account",
-				[
-					{ required: true, message: i18n.global.t('login.valid_account') },
-					{ min: 3, max: 25, message:i18n.global.t('login.valid_account_num'), trigger: 'blur' }
-				]
-			],
-			[
-				"password",
-				[
-					{ required: true, message: i18n.global.t('form.valid_required') },
-					//函数校验
-					{ validator: passwordValidator },
-					//正则校验
-					{ pattern: /[a-zA-Z].*\d|\d.*[a-zA-Z]/, message:i18n.global.t('login.valid_password_comb')},
-				]
+				{ required: true, message: i18n.global.t('login.valid_account') },
+				{ min: 3, max: 25, message: i18n.global.t('login.valid_account_num'), trigger: 'blur' }
 			]
-		])
-	const accountLogin= async ()=>{
+		],
+		[
+			"password",
+			[
+				{ required: true, message: i18n.global.t('form.valid_required') },
+				//函数校验
+				{ validator: passwordValidator },
+				//正则校验
+				{ pattern: /[a-zA-Z].*\d|\d.*[a-zA-Z]/, message: i18n.global.t('login.valid_password_comb') },
+			]
+		]
+	])
+	const accountLogin = async () => {
 		const result = await userFormRef.value!.validate();
-		console.log("result",result);
+		console.log("result", result);
 		//校验成功
-		if(result!=true){
+		if (result != true) {
 			console.log("校验失败");
 			return;
 		}
-		if(!props.isAgree){
-			uni.showToast({ title:i18n.global.t('login.valid_agree'), icon: 'none' });
+		if (!props.isAgree) {
+			uni.showToast({ title: i18n.global.t('login.valid_agree'), icon: 'none' });
 			return;
 		}
-		
-		try {
-			const f = {
-				loginType:'account',
-				account:userForm.value.account,
-				password:userForm.value.password
-			}
-				submitLoading.value = true;
-				const flag = await AccountService.Login(f);
-				
-				if(flag){
-					uni.setStorageSync("account", userForm.value.account);
-					uni.reLaunch({
-						url: "/pages/index/index",
-					});
-				}
-			
-			
-		} catch (error) {
-			submitLoading.value = false;
-			throw new Error(error.message.toString());
+		const f = {
+			loginType: 'account',
+			account: userForm.value.account,
+			password: userForm.value.password
 		}
-		
+		submitLoading.value = true;
+		const flag = await AccountService.LoginByAccount(f);
+		console.log("ffflag",flag);
+		if (flag) {
+			uni.setStorageSync("account", userForm.value.account);
+			uni.reLaunch({
+				url: "/pages/index/index",
+			});
+		}
+		submitLoading.value = false;
+
 	}
-	onShow(()=>{
+	onShow(() => {
 		const acstorage = uni.getStorageSync("account");
-		if(acstorage!=null){
-			userForm.value.account= acstorage as string;
+		if (acstorage != null && acstorage != "") {
+			userForm.value.account = acstorage as string;
 		}
 	})
 </script>
 
-<style lang="scss">
-.btn-text-content{
-	padding:8px;
+<style>
+.btn-text-content {
+	padding: 8px;
 	margin-bottom: 14px;
-	.txt{
-		text-align: right;
-		font-size: 12px;
-		color: #3283ff;
-	}
-	
+}
+.text-right-txt {
+	text-align: right;
+	font-size: 12px;
+	color: #3283ff;
 }
 </style>

@@ -8,7 +8,7 @@
 
 				<image src="/static/icons/addpage.png"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">意见反馈</text>
+				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{i18n.global.t("setcontent.btn_txt_feedback")}}</text>
 			</view>
 		</template>
 		<template #right>
@@ -48,6 +48,9 @@
 	import { userBean } from "@/bean/userBean";
 	import { MineService } from "@/services/MineService.uts";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
 	const submitLoading = ref(false);
 	const user = computed<userBean>(() => {
 		return state.user;

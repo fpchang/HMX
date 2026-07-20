@@ -1,27 +1,25 @@
 <template>
-	<view class="xt-input-tab">
-		<view class="input-area">
-			<view v-if="showInput" style="flex: 1;;height: 100%;;padding-left: 8px;">
-				<input class="in-input-style" v-model="name_label" :placeholder="i18n.global.t('hotel.pach_add_feature')" />
+	<view class="input-tab-root">
+		<view class="input-wrap-row">
+			<view v-if="showInput" style="flex: 1;height: 100%;padding-left: 8px;">
+				<input class="tab-input-inner" v-model="name_label" :placeholder="i18n.global.t('hotel.pach_add_feature')" />
 			</view>
-			<view style="margin-left: 8px;"><button class="btn" :disabled="name_label==''"
-					@click="addtab">{{btnText}}</button></view>
-
+			<view style="margin-left: 8px;">
+				<!-- <button class="tab-add-btn" :disabled="name_label==''" @click="addtab">{{btnText}}</button> -->
+				<view class="tab-add-btn" @click="addtab"><text class="addtab-txt">{{btnText}}</text></view>
+			</view>
 		</view>
-		<view class="tab-area">
-			<view class="tab" v-for="(str,index) of tablist">
-				<text class="txt">{{str}}</text>
+		<view class="tag-container-row">
+			<view class="single-tag-item" v-for="(str,index) of tablist">
+				<!-- <text class="tag-text">{{str}}</text>
 				<view @click="deleteTab(index)">
 					<image src="./delete.png" style="width:16px;height: 16px;"></image>
-				</view>
-
+				</view> -->
+				<rice-tag closeable type="primary"  :text="str"  @close="deleteTab(index)" />
 			</view>
-
 		</view>
 	</view>
 </template>
-
-
 
 <script setup>
 	import i18n from '@/i18n/index.uts';
@@ -33,25 +31,19 @@
 		modelValue: {
 			type: Array<string>,
 			default:[]
-
 		},
-		
 		btnText: {
 			type: String,
 			default: "添加标签"
 		}
 	})
 	const emit = defineEmits(['update:modelValue'])
-
-
-	// /const showInput:boolean=props.showInput;
 	let name_label = ref<string>("");
 	let tablist = ref<Array<string>>([]);
 	if(props.modelValue!=null){
 		tablist.value = props.modelValue;
 	}
 	const onUPdate = () => {
-		// 更新
 		emit("update:modelValue", tablist.value);
 	}
 	const addtab = () => {
@@ -60,93 +52,86 @@
 			name_label.value = "";
 			onUPdate();
 		}
-
 	}
-
 	const deleteTab = (index : number) => {
 		tablist.value.splice(index, 1);
 		onUPdate();
 	}
 </script>
 
-
-<style lang="scss" scoped>
-	.xt-input-tab {
-		background-color: #fff;
-		width: auto;
-		height: auto;
-		border-radius: 12px;
-		border-width: 0px;
-		border-color: transparent;
-		margin: 0px 14px 14px;
-		padding: 14px;
-		border-style: solid;
-		border: 1px solid rgb(245, 245, 245);
-
-		.input-area {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			justify-content: space-between;
-			background-color: rgb(245, 245, 245);
-			border-radius: 8px;
-			height: 40px;
-
-			.in-input-style {
-				height: 100%;
-				line-height: 40px;
-				font-size: 12px;
-			}
-
-			.btn {
-
-				height: 40px;
-				line-height: 40px;
-				border: 0.5px solid rgb(0, 128, 240);
-				background-color: rgb(0, 136, 255);
-				// border-radius: 12px;
-				opacity: 1;
-				min-width: 100px;
-				max-width: 190px;
-				display: flex;
-		
-				align-items: center;
-				justify-content: center;
-				font-weight: normal;
-				color: rgb(255, 255, 255);
-				font-size: 12px;
-
-			}
-		}
-
-		.tab-area {
-			display: flex;
-			flex-direction: row;
-			margin-top: 16px;
-
-			.tab {
-
-				border-radius: 100px;
-				padding: 6px 8px;
-				background-color: #999;
-
-				margin-left: 12px;
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-
-				.txt {
-					line-height: 16px;
-					color: #4e5969;
-					font-size: 12px;
-					padding-right: 6px;
-				}
-			}
-
-			.tab:first-child {
-				margin-left: 0;
-			}
-		}
-
-	}
+<style>
+/* 最外层容器 */
+.input-tab-root {
+	background-color: #fff;
+	width: auto;
+	height: auto;
+	border-radius: 12px;
+	margin: 0px 14px 14px;
+	padding: 14px;
+	border: 1px solid rgb(245, 245, 245);
+}
+/* 输入框+按钮行 */
+.input-wrap-row {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	background-color: rgb(245, 245, 245);
+	border-radius: 8px;
+	height: 40px;
+}
+/* 内部input样式 */
+.tab-input-inner {
+	height: 100%;
+	line-height: 40px;
+	font-size: 12px;
+}
+/* 添加按钮 */
+.tab-add-btn {
+	height: 40px;
+	line-height: 40px;
+	border: 0.5px solid rgb(0, 128, 240);
+	background-color: rgb(0, 136, 255);
+	opacity: 1;
+	min-width: 100px;
+	max-width: 190px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: normal;
+	color: rgb(255, 255, 255);
+	font-size: 12px;
+}
+.addtab-txt{
+	color:#fff;
+	font-size: 13px;
+}
+/* 标签列表外层 */
+.tag-container-row {
+	display: flex;
+	flex-direction: row;
+	margin-top: 16px;
+}
+/* 单个标签项 */
+.single-tag-item {
+	margin-right:4px;
+	/* border-radius: 100px; */
+	/* padding: 6px 8px; */
+	/* background-color: #999; */
+	/* margin-left: 12px; */
+	/* display: flex;
+	flex-direction: row;
+	align-items: center; */
+}
+/* 标签文字 */
+.tag-text {
+	line-height: 16px;
+	color: #fff;
+	font-size: 12px;
+	padding-right: 6px;
+}
+/* 首标签无左外边距单独类 */
+.first-tag {
+	margin-left: 0;
+}
 </style>

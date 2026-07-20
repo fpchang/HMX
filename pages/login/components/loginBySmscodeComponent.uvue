@@ -1,37 +1,30 @@
 <template>
 	<view>
 		<rice-form :model="userForm" :rules="rule" ref="userFormRef" label-width="100px" class="demo-form">
-			<rice-form-item name="phone" label-position="top">
-				<view class="input-row" >
-					<view style="flex:1;display: flex;">
-				<rice-input v-model="userForm.phone" :placeholder="i18n.global.t('login.pach_phone')" border="none" :maxlength="11" />
-				</view>
+			<rice-form-item name="phone" label-position="top" :border-bottom="true">
+				<view style="flex:1;overflow: hidden;">
+					<rice-input v-model="userForm.phone" :placeholder="i18n.global.t('login.pach_phone')"  :maxlength="11"  focus-border  border="none" type="number"/>
 				</view>
 			</rice-form-item>
-			<rice-form-item name="smsCode"  required  label-position="top">
-				<!-- <rice-input v-model="userForm['smsCode']" placeholder="请输入验证码" border="none" :maxlength="4" /> -->
-				<view class="input-row" >
+			<rice-form-item name="smsCode"  required  label-position="top" :border-bottom="true">
+				<view  class="group-formitem" style="flex:1;overflow: hidden;">
 					<view style="flex:1;display: flex;">
-
-						<rice-input  :placeholder="i18n.global.t('login.pach_sms')" type="number" v-model="userForm.smsCode"
-							:maxlength="4" border="none" />
-
+						<rice-input style="width: 100%;"  :placeholder="i18n.global.t('login.pach_sms')" type="number" v-model="userForm.smsCode"
+							:maxlength="4" border="none"/>
 					</view>
-					<view style="display: flex;flex-direction: row;align-items: center;">
-						<text class="btn-code" @click="sendSmsCode">
-							{{ codeText }}
-						</text>
+					<view style="display: flex;flex-direction: row;align-items: center;" @click="sendSmsCode">
+						<!-- <rice-button  type="primary" :text="codeText"  @click="sendSmsCode" textColor="#fff" :loading="smsLoading"></rice-button>
+					 -->
+					 <text style="color:#1989fa;font-size: 13px;">{{codeText}}</text>
 					</view>
 				</view>
-
 			</rice-form-item>
-			<view><text class="ct">{{i18n.global.t('login.tips')}}</text></view>
+			<view><text class="ct-text">{{i18n.global.t('login.tips')}}</text></view>
 		</rice-form>
 		<view style="margin-top: 24px;">
 			<rice-button type="primary" :text="i18n.global.t('login.btn_txt')" class="btn" shape="round" @click="accountLogin"
 				:loading="submitLoading" />
 		</view>
-		
 	</view>
 </template>
 
@@ -44,6 +37,9 @@
 	import { userFormBean } from "@/bean/loginBean.uts";
 	import { userBean } from "@/bean/userBean";
 	import i18n from '@/i18n/index.uts';
+	defineOptions({
+		styleIsolation: "isolated"
+	})
 	const props = defineProps({
 		isAgree: {
 			type: Boolean,
@@ -59,18 +55,16 @@
 		smsCode: ''
 	});
 	const submitLoading = ref(false);
+	const smsLoading = ref(false);
 	const tk = ref("");
 	const codeText = ref(i18n.global.t('login.btn_getSms'));
 	const codeDisabled = ref(false);
 	let timer = 0;
 	const userFormRef = ref<RiceFormComponentPublicInstance | null>(null);
 
-	//密码的校验函数
 	const smsCodeValidator = (value : any | null) => {
 		const val = value as string
 		if (val.length < 4) return '验证码的长度不能小于4位'
-		//if (val.startsWith('123456')) return '密码开头不能为连续的123456'
-		//只有返回 true 才表示校验通过
 		return true
 	}
 	const rule = new Map<string, FormRules[]>([
@@ -78,6 +72,7 @@
 			"phone",
 			[
 				{ required: true, message: i18n.global.t('login.pach_phone') },
+				{ pattern: /^1[3-9]\d{9}$/, message: i18n.global.t("login.valid_phone"), trigger: 'all' },
 				{ min: 11, max: 11, message: i18n.global.t('login.valid_phone_num'), trigger: 'change' }
 			]
 		],
@@ -85,15 +80,12 @@
 			"smsCode",
 			[
 				{ required: true, message: i18n.global.t('form.valid_required') },
-				//函数校验
 				{ min: 4, max: 4, message: i18n.global.t('login.valid_sms_num'), trigger: 'change' },
-				//正则校验
 				{ pattern: /\d.*/, message: i18n.global.t('login.valid_sms') },
 			]
 		]
 	])
 
-	// 清除定时器
 	const clearTimer = () => {
 		if (timer != 0) {
 			clearInterval(timer);
@@ -116,60 +108,55 @@
 			codeText.value = `${count}s`;
 		}, 1000);
 	}
-	// 发送验证码
 	const sendSmsCode = async () => {
-		if (userForm.value.phone == "" || userForm.value.phone.length !== 11) {
-			uni.showToast({ title:i18n.global.t('login.pach_phone'), icon: 'none' });
+		// if (userForm.value.phone == "" || userForm.value.phone.length !== 11) {
+		// 	uni.showToast({ title:i18n.global.t('login.pach_phone'), icon: 'none' });
+		// 	return;
+		// }
+		if(smsLoading.value){
 			return;
 		}
 		if(timer!=0){
-			//console.log(`请在${timer}s 后再试`);
 			return;
 		}
-		uni.showLoading({ title: "" });
+		smsLoading.value=true;
+		const result = await userFormRef.value!.validateFields(['phone'])
+		if (result != true) {
+			smsLoading.value=false;
+			return;
+		}
+		
 		try {
-			const res = await AccountService.sendSmsCode(userForm.value.phone);
-			const data = res.result as UTSJSONObject;
-			console.log("res", res);
-			const tkstr = data.tk as string;
+			const tkstr = await AccountService.sendSmsCode(userForm.value.phone,"login");
 			tk.value = tkstr;
-			uni.setStorageSync("tk", tk);
-			uni.hideLoading();
+			uni.setStorageSync("tk", tkstr);
+			smsLoading.value=false;
 			startTimeTask();
 		} catch (error) {
-			console.error(error);
+			smsLoading.value=false;
 			uni.showToast({
 				title:i18n.global.t('login.send_sms_fail')
 			})
 		}
-
 	};
-	// 短信登录
 	const accountLogin = async () => {
-		const result = await userFormRef.value!.validate();
-		console.log("result",result);
-		//校验成功
-		if(result!=true){
-			console.log("校验失败");
+		if(submitLoading.value){
 			return;
 		}
 		if (!props.isAgree) {
 			uni.showToast({ title:i18n.global.t('login.valid_agree'), icon: 'none' });
 			return;
 		}
-		// if (userForm.value.phone == "" || userForm.value.phone.length !== 11) {
-		// 	uni.showToast({ title: '请输入正确手机号', icon: 'none' });
-		// 	return;
-		// }
-		// if (userForm.value.smsCode == "") {
-		// 	uni.showToast({ title: '请输入验证码', icon: 'none' });
-		// 	return;
-		// }
-
 		submitLoading.value = true;
-
+		const result = await userFormRef.value!.validate();
+		if(result!=true){
+			console.log("校验失败");
+			submitLoading.value = false;
+			return;
+		}
+		
 		try {
-			const flag = await AccountService.login({
+			const flag = await AccountService.LoginBySms({
 				loginType: 'code',
 				tk: tk.value,
 				smsCode: userForm.value.smsCode,
@@ -177,54 +164,42 @@
 			});
 			if(flag){
 				uni.setStorageSync("phone", userForm.value.phone);
-				//getUserInfo();
 				uni.reLaunch({
 					url: "/pages/index/index",
 				});
 			}
-			
 		} catch (error) {
 			console.log("登录失败", error);
 			submitLoading.value = false;
 		}
 	};
-	// 页面销毁
+	onShow(()=>{
+		const storage_phone = uni.getStorageSync("phone");
+		if(storage_phone!=null && storage_phone!=""){
+			userForm.value.phone=storage_phone as string;
+		}
+	})
 	onUnmounted(() => {
 		clearTimer();
 	});
 </script>
 
-<style lang="scss">
-	.input-row {
-		
-		width: 100%;
-		display: flex;
-		flex:1;
-		flex-direction: row;
-		justify-content: space-between;
-	
-		overflow: hidden;
-	}
-
-	.btn-code {
-		font-size: 14px;
-		color: #007aff;
-		background: #fff;
-		border: none;
-		outline: none;
-		padding: 0 8px;
-		margin: 0 4px;
-	}
-
-	.btn-code[disabled] {
-		color: #8e8e93;
-	}
-	.ct {
-		font-size: 12px;
-		color: gray;
-		padding-top: 8px;
-		text-align: center;
-		padding-top: 12px;
-	
-	}
+<style>
+.group-formitem {
+	display: flex;
+	flex:1;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.btn-code-disabled {
+	color: #8e8e93;
+}
+.ct-text {
+	font-size: 12px;
+	color: gray;
+	padding-top: 8px;
+	text-align: center;
+	padding-top: 12px;
+	line-height: 22px;
+}
 </style>

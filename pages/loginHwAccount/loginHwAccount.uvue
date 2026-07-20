@@ -1,0 +1,43 @@
+<template>
+	<view class="homeview">
+		
+	</view>
+</template>
+
+<script setup lang="uts">
+	const CLIENT_ID = "6917603310107784764";
+
+	import { login, createLoginOptions } from "@/uni_modules/XF-appleAuthUTS"
+	import type { AuthLoginFail, AuthLoginOptions, AuthLoginResult } from "@/uni_modules/XF-appleAuthUTS/utssdk/interface.uts"
+	
+	let options = createLoginOptions()
+	options.scopes = ["email", "fullName"]
+	options.googleWebClientId = "YOUR_WEB_CLIENT_ID.apps.googleusercontent.com"
+	options.huaweiClientId = "6917603310107784764"
+	options.nonce = "server-generated-nonce"
+	options.state = "server-generated-state"
+	options.success = (res : AuthLoginResult) => {
+	  console.log(res)
+	}
+	options.fail = (err : AuthLoginFail) => {
+	  console.log(err.errCode, err.errMsg)
+	}
+	options.complete = (res : any) => {
+	  console.log(res)
+	}
+	
+	login(options as AuthLoginOptions)
+</script>
+
+<style>
+	.homeview {
+		width: 100%;
+		height: 100%;
+		background-color: #f1f3f5;
+	}
+
+	.homecomponent {
+		width: 100%;
+		height: 99%;
+	}
+</style>

@@ -95,9 +95,9 @@
 	import { userBean } from "@/bean/userBean";
 	import { hotelBean } from "@/bean/hotelBean";
 	import i18n from '@/i18n/index.uts';
-	defineOptions({
-		styleIsolation: "isolated"
-	})
+	// defineOptions({
+	// 	styleIsolation: "isolated"
+	// })
 	const submitLoading = ref(false);
 	const showRange = ref(false);
 	const showPopup = ref(false);

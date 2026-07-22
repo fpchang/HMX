@@ -130,6 +130,9 @@
 	function handleChange(index : number) : void {
 		activeIndex.value = index
 		//syncNavigationBar(index)
+		uni.showToast({
+					title:"666666"
+				})
 		
 	}
 	const switchTabEvent = () => {

@@ -32,9 +32,10 @@
 	}
 	export default {
 		onLaunch: function () {
-					
+				console.log("app lunch")	
 			let showMoreMessage = uni.getStorageSync("showMoreMessage");
 			//#ifdef APP-IOS || H5
+			console.log('ios=====')
 				uni.setStorageSync("showMoreMessage",0)
 				showMoreMessage="0";
 			//#endif		
@@ -81,7 +82,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	@import "@/uni_modules/rice-ui/libs/style/index.css";
 	
 

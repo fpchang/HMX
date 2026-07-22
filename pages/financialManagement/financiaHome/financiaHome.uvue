@@ -189,9 +189,6 @@
 			title: i18n.global.t("finance.navbar_title")
 		})
 	})
-	onShow(() => {
-		console.log("98888")
-	})
 	function goToDetail(type : string) {
 
 	}

@@ -1,15 +1,10 @@
 <template>
-	<view style="display: flex;flex:1;">
-		
-		
-		
-		<rice-navbar :fixed="false" :safe-area-inset-top="true" bg-color="#007AFF" :left-arrow="false">
+		<rice-navbar :fixed="false"  bg-color="#007AFF" :left-arrow="false">
 			<template #title>
 				<view class="nav-header-wrap">
 					<view class="hotel-switch-row"  v-if="hotelList.length>0">					
 							<text class="hotel-name-text">{{hotel?.hotelName}}</text>						
-						<!-- <rice-icon name="arrow-down" color="#fff" size="22px" style="margin-left: 8px;" /> -->
-						<rice-button :custom-style="{padding:'0 15px 0 15px'}" shape="round" :text="i18n.global.t('common.btn_txt_switch')" size="small" color="rgba(255,255,255,0.5)" @click="showCheckHotel"></rice-button>
+					<rice-button :custom-style="{padding:'0 15px 0 15px'}" shape="round" :text="i18n.global.t('common.btn_txt_switch')" size="small" color="rgba(255,255,255,0.5)" @click="showCheckHotel"></rice-button>
 					</view>
 				</view>
 			</template>
@@ -84,7 +79,7 @@
 				</view>
 			</view>
 		</rice-popup>
-	</view>
+
 </template>
 
 <script setup>

@@ -1,13 +1,9 @@
 import App from './App.uvue';
 import { createSSRApp } from 'vue';
 import i18n from './i18n';
- //#ifdef H5
+ //#ifdef WEB
 	import "@/uni_modules/rice-ui/libs/style/index.css";
  // #endif
-
-//uni.setLocale('en');
-// main.uts
-//import i18n from './i18n';
 
 // 给所有云对象请求自动添加语言
 	export function createApp() {

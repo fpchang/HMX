@@ -5,9 +5,7 @@
 	"versionName": "3.0.8",
 	"versionCode": "308",
 	"uni-app-x": {
-		"styleIsolationVersion": "2",
-		"vapor": true,
-		"vapor-render-target": "bytecode"
+		"styleIsolationVersion": "2"
 	},
 	"app-plus": {
 		"ios": {

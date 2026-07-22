@@ -230,6 +230,7 @@
 	});
 	onLoad(() => {
 		const showMoreMessage = uni.getStorageSync("showMoreMessage");
+		console.log(1111,showMoreMessage);
 		if(showMoreMessage == "0"){
 			setLanuage();
 			setViewWidthEvent();

@@ -68,7 +68,7 @@
 			"style": {
 				
 				"navigationBarTitleText": "房态",
-				"disableScroll":true,
+				"enablePullDownRefresh" :false,
 				"navigationStyle": "custom"
 			}
 		},

@@ -1,5 +1,5 @@
 <template>
-	<rice-navbar :fixed="false" title="" border v-if="hotel_id!=''">
+	<rice-navbar :fixed="false" title=""  v-if="hotel_id!=''">
 		<template #left>
 			<view style="display: flex;flex-direction: row;align-items: center;">
 				<!-- s -->

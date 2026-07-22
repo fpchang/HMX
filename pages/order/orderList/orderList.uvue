@@ -1,6 +1,6 @@
 <template>
 	<view style="display: flex;flex:1">
-		<rice-navbar title="" border>
+		<rice-navbar title="">
 			<template #left>
 				<view style="display: flex;flex-direction: row;align-items: center;">
 					<navigator open-type="navigateBack">

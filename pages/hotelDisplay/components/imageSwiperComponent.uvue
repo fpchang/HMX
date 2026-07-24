@@ -70,18 +70,54 @@
 	const onChange = (e : UniSwiperChangeEvent) => {
 		current.value = e.detail.current
 	}
+	const shareIOS=(imgUrl:string,shareUrl:string)=>{
+		uni.downloadFile({
+		    url: imgUrl,
+		    success: async (res) => {
+		        // res.tempFilePath 本地临时路径
+		        uni.share({
+		        	provider: "weixin", //分享服务提供商（即weixin|qq|sinaweibo）
+		        	type: 0, //小程序
+		        	scene: "WXSceneSession", //provider 为 weixin 时必选 WXSceneSession分享到聊天界面，WXSceneTimeline分享到朋友圈，WXSceneFavorite分享到微信收藏
+		        	title: `${hotelObj.hotelName}`, //分享内容的标题
+		        	summary: `${hotelObj.hotelAddress}`, //分享内容的摘要
+		        	href: shareUrl,
+		        	imageUrl: `${res.tempFilePath}`, //图片地址，type 为 0、2、5 时必选
+		        	success(res) {
+		        		console.log("successs====");
+		        		console.log(res);
+		        		uni.hideLoading();
+		        	},
+		        	fail(e) {
+		        		console.log("fail ===",e)
+		        		  uni.hideLoading()
+		        		        uni.showToast({
+		        		          title: e.errMsg,
+		        				  icon:"none"
+		        		        })
+		        	},
+		        	complete(c){
+		        		console.log("complete",c)
+		        	}
+		        });
+		    },
+		    fail: (err) => {
+		        console.error("图片下载失败", err);
+		    }
+		})
+	}
 	const shareWx = () => {
-		console.log("11111")
-		let imgurl ='https://env-00jxhfhjd231.normal.cloudstatic.cn/HM/images/app.png';
-		 
+		let imgurl ='https://cdn.hotelsys.fun/HM/images/app.png';		 
 		if(hotelObj.firstImages!=""){
 			imgurl=hotelObj.firstImages.split("?")[0];
 		}
 		const hotelId = hotelObj['_id'];
 		const timeStamp = Date.now();
 		const shareUrl = `https://www.hotelsys.fun/index.html?_t=${timeStamp}#/pages/hotelDisplay/hotelDisplay?hotel_id=${hotelId}`;
-		console.log("shareUrl",shareUrl);
-		// #ifdef APP
+		//#ifdef APP-IOS
+			shareIOS(imgurl,shareUrl);
+		//#endif
+		// #ifdef APP-ANDROID || APP-HARMONY
 		uni.share({
 			provider: "weixin", //分享服务提供商（即weixin|qq|sinaweibo）
 			type: 0, //小程序
@@ -89,27 +125,23 @@
 			title: `${hotelObj.hotelName}`, //分享内容的标题
 			summary: `${hotelObj.hotelAddress}`, //分享内容的摘要
 			href: shareUrl,
-			// miniProgram: {
-			//   id: "gh_5557133bdd5e",
-			//   type: 0,
-			//   webUrl: "http://uniapp.dcloud.io",
-			//   path: `/pages_client/hotelHome/hotelHome?hotel_id=${hotel_id}`,
-			// },
 			imageUrl: `${imgurl}`, //图片地址，type 为 0、2、5 时必选
 			success(res) {
+				console.log("successs====");
 				console.log(res);
 				uni.hideLoading();
-				// uni.showToast({
-				// 	title: '分享成功'
-				// })
 			},
 			fail(e) {
-				console.log(e)
+				console.log("fail ===",e)
 				  uni.hideLoading()
 				        uni.showToast({
-				          title: e.errMsg
+				          title: e.errMsg,
+						  icon:"none"
 				        })
 			},
+			complete(c){
+				console.log("complete",c)
+			}
 		});
 
 
@@ -122,6 +154,7 @@
 		// #endif
 
 	}
+	
 </script>
 
 <style lang="scss">

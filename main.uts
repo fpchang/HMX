@@ -1,18 +1,61 @@
 import App from './App.uvue';
 import { createSSRApp } from 'vue';
 import i18n from './i18n';
- //#ifdef WEB
-	import "@/uni_modules/rice-ui/libs/style/index.css";
- // #endif
+import { action_co } from "@/api/cloudApi.uts";
+import { setToken, setViewWidth } from "@/store/store.uts";
 
-// 给所有云对象请求自动添加语言
-	export function createApp() {
-	
-		const app = createSSRApp(App);
-		 app.use(i18n.install);
-		
-		return {
-			app
+//#ifdef WEB
+import "@/uni_modules/rice-ui/libs/style/index.css";
+// #endif
+
+const start = () => {
+	setTimeout(() => {
+		try {
+			// 调用云对象空/轻量方法，触发云端实例常驻，消除首次接口冷启动
+			action_co.preHeat()
+		} catch (e) {
+			// 预热失败不影响业务，静默捕获
+			console.log('云对象预热静默失败', e)
 		}
-	}
+	}, 0)
+}
+const setLanuage = () => {
 
+	const sys = uni.getSystemInfoSync();
+	const osLanguage = sys.osLanguage;
+	let local = 'zh-CN';
+	if (osLanguage != null && !osLanguage.includes('zh-')) {
+		local = 'en-US';
+	}
+	i18n.global.locale.value = local;
+
+
+}
+// 给所有云对象请求自动添加语言
+export function createApp() {
+
+	const app = createSSRApp(App);
+	app.use(i18n.install);
+	try {
+		console.log("app lunch");
+		let showMoreMessage = uni.getStorageSync("showMoreMessage");
+		//#ifdef APP-IOS || H5
+		console.log('ios=====')
+		uni.setStorageSync("showMoreMessage", 0)
+		showMoreMessage = "0";
+		//#endif		
+		if (showMoreMessage != "0") {
+			uni.openDialogPage({
+				url: "/pages/common/androidPrivacy/androidPrivacy", animationType: 'none'
+			});
+		} else {
+			console.log("no android =====")
+			start();
+			setLanuage();
+
+		}
+	} catch (e) { }
+	return {
+		app
+	}
+}

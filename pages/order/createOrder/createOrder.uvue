@@ -17,6 +17,7 @@
 			</view>
 		</template>
 	</rice-navbar>
+	<scroll-view style="flex:1">
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
 			<xt-form-item :label="i18n.global.t('order.create_order.source')" tips="" required>
 				<rice-radio-group v-model="orderForm.orderSource" direction="row" @change="orderSourceChange">
@@ -73,7 +74,7 @@
 					v-model="orderForm.mark"></rice-textarea>
 			</xt-form-item>
 		</view>
-
+</scroll-view>
 	<rice-calendar v-model:show="showCalendar" mode="range" :min-date="initDateObj.minDate" :date="dateRange"
 		@confirm="rangeConfirm" :title="i18n.global.t('form.canendar_title')" :show-subtitle="true"></rice-calendar>
 </template>

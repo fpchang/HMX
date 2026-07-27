@@ -52,7 +52,7 @@
 							</view>
 							<rice-cell :title="order.userName"
 								:label="`${formatDate(order.checkInStartDateTimeStamp)}~${formatDate(order.checkInEndDateTimeStamp)}`"
-								size="large" arrow arrow-direction="left" center :clickable="false" @click="viewOrder(order)">
+								size="large" arrow arrow-direction="left" center :clickable="false">
 								<template #leftIcon>
 									<image mode="aspectFit" :src="formatRommTypeImage(order.reservedRoomList[0])"
 										style="margin-right:8px;width: 100px;height:110px;border-radius: 12px;"

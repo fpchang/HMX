@@ -1,10 +1,10 @@
 <template>
 	<!--#ifndef H5-->
-	<rice-navbar   bg-color="#ffffff" left-icon-color="#fff" :left-arrow="showLeftArrrow" :border="false" title-color="#fff" :safe-area-inset-top="false">
+	<rice-navbar   bg-color="#ffffff" left-icon-color="#fff" :left-arrow="false" :border="false" title-color="#fff" :safe-area-inset-top="false">
 	
 	</rice-navbar>
 	<!--#endif-->
-
+	<rice-float-fab v-if="showLeftArrrow" default-position="top-left" icon="arrow-left" width="30px" height="30px" icon-size="15px" @click="uni.navigateBack()"/>
 	<view class="nav-tab-wrap-container">
 		<rice-tabs v-model="activeIndex"  :shrink="true" :list="list" @clickTab="tabClick" line-color="#2a5d98"
 			title-inactive-color="#4b5563" title-active-color="#2a5d98"></rice-tabs>

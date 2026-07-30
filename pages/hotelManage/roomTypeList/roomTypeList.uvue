@@ -25,7 +25,7 @@
 					<view class="card-img-block">
 						<image v-if="roomType.firstImages!=''" :src="roomType.firstImages" style="height: 100%;width: 100%;" mode="aspectFill">
 						</image>
-						<image  v-if="roomType.firstImages==''"  src="/static/images/nono-img.png" style="height: 100%;width: 100%;" mode="aspectFit">
+						<image  v-if="roomType.firstImages==''"  src="/static/images/nono-img.png" style="height: 80%;width: 80%;" mode="aspectFit">
 						</image>
 					</view>
 					<rice-swipe-actions :accordion="true" ref="swipeControlRef">
@@ -306,7 +306,10 @@
 .card-img-block {
 	height: 350rpx;
 	max-height: 200px;
-	background-color: #eee;
+	background-color: #efefef;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 /* 标题内容外层 */
 .card-title-wrap {

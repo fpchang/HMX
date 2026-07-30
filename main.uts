@@ -45,9 +45,10 @@ export function createApp() {
 		showMoreMessage = "0";
 		//#endif		
 		if (showMoreMessage != "0") {
-			uni.openDialogPage({
-				url: "/pages/common/androidPrivacy/androidPrivacy", animationType: 'none'
-			});
+			//console.log("open dialog")
+			// uni.openDialogPage({
+			// 	url: "/pages/common/androidPrivacy/androidPrivacy", animationType: 'none'
+			// });
 		} else {
 			console.log("no android =====")
 			start();

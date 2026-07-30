@@ -39,7 +39,7 @@
 					<rice-swipe-actions-item :auto-close="true" v-for="fm of fmResult.fmList">
 						<rice-cell :title="`${formatTypeName(fm.type)}`" :label="formatDate(fm.ioeTime)"
 							:value="`${fm.billType=='income'?'+':'-'}${fm.amount}`" size="large" arrow
-							arrow-direction="left" center @click="viewFm(fm)">
+							arrow-direction="left" center>
 							<template #leftIcon>
 								<image v-if="fm.billType=='income'" src="/static/icons/fm/income-orange.png"
 									style="margin-right:8px;width: 40px;height:40px;" class="cell-left-icon"></image>

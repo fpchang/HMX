@@ -98,6 +98,7 @@
 	},
 	"app-ios": {
 		"distribute": {
+			"devices": ["iphone", "ipad"],
 			"modules": {
 				"uni-location": {
 					"system": {},

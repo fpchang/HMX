@@ -230,7 +230,6 @@
 	});
 	onLoad(() => {
 		const showMoreMessage = uni.getStorageSync("showMoreMessage");
-		console.log(1111,showMoreMessage=="",showMoreMessage==null);
 		if(showMoreMessage == "0"){
 			setLanuage();
 			setViewWidthEvent();
@@ -238,6 +237,9 @@
 			initData();
 		}else{
 			console.log("不能调用任何权限。。。。。")
+			uni.openDialogPage({
+				url: "/pages/common/androidPrivacy/androidPrivacy", animationType: 'none'
+			});
 		}
 	
 

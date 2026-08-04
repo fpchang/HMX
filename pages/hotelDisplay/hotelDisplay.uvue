@@ -4,7 +4,7 @@
 	
 	</rice-navbar>
 	<!--#endif-->
-	<rice-float-fab gap-top="20px" v-if="showLeftArrrow" default-position="top-left" icon="arrow-left" width="40px" height="40px" icon-size="20px" @click="uni.navigateBack()"/>
+	<rice-float-fab gap-top="50px" v-if="showLeftArrrow" default-position="top-left" icon="arrow-left" width="40px" height="40px" icon-size="20px" @click="uni.navigateBack()"/>
 	<view class="nav-tab-wrap-container">
 		<rice-tabs v-model="activeIndex"  :shrink="true" :list="list" @clickTab="tabClick" line-color="#2a5d98"
 			title-inactive-color="#4b5563" title-active-color="#2a5d98"></rice-tabs>

@@ -29,12 +29,17 @@
 			<view class="stats-card" v-if="activeIndex==0">
 				<view class="stats-item">
 					<text class="stats-label">{{ i18n.global.t("gather.checkInToday") }}</text>
+					<view class = "text-container">
+						<text class="stats-value">{{numOrderToday}}</text>
+					</view>
 					
-					<text class="stats-value" style="width: 100px;height:100px">{{numOrderToday}}</text>
 				</view>
 				<view class="stats-item">
 					<text class="stats-label">{{ i18n.global.t("gather.checkOutToday") }}</text>
-					<text class="stats-value" style="width: 100px;height:100px">{{numAccessOutToday}}</text>
+					<view class = "text-container">
+						<text class="stats-value">{{numAccessOutToday}}</text>
+					</view>
+				
 				</view>
 				<view class="stats-item">
 					<text class="stats-label">{{ i18n.global.t("gather.currentGuests") }}</text>
@@ -58,11 +63,16 @@
 			<view class="stats-card" v-if="activeIndex==1">
 				<view class="stats-item">
 					<text class="stats-label">{{ i18n.global.t("gather.checkInTomorrow") }}</text>
-					<text class="stats-value" style="width: 100px;height:100px">{{numOrderTommorow}}</text>
+					<view class = "text-container">
+						<text class="stats-value">{{numOrderTommorow}}</text>
+					</view>
+					
 				</view>
 				<view class="stats-item">
 					<text class="stats-label">{{ i18n.global.t("gather.checkOutTomorrow") }}</text>
-					<text class="stats-value" style="width: 100px;height:100px">{{numAccessOutTommorow}}</text>
+					<view class = "text-container">
+						<text class="stats-value">{{numAccessOutTommorow}}</text>
+					</view>
 				</view>
 				<view class="stats-item">
 					<text class="stats-label">{{ i18n.global.t("gather.currentGuests") }}</text>
@@ -346,7 +356,13 @@
 		color: #323233;
 		padding: 8px;
 	}
-
+	.text-container{
+		width:100px;
+		height:100px;
+		display:flex;
+		justify-content:center;
+		align-items: center;
+	}
 	.stats-value {
 		font-size: 24px;
 		font-weight: 600;

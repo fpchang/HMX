@@ -80,8 +80,8 @@
 						</view>
 						<view class="row" v-for="(list,index) of checkInOrderListFormat">
 							<view class="cell" v-for="(it,ind) of list">
-								<view :class="['cell-content', it.name!=''?'cell-content-red':'']">
-									<text class="cell-txt">{{it.name}}</text>
+								<view class="cell-content">
+									<text :class="['cell-txt', it.name!=''?'cell-content-red':'']">{{it.name}}</text>
 								</view>
 							</view>
 
@@ -322,8 +322,8 @@
 	}
 
 	.cell-txt {
-		color: #787878;
-		font-size: 12px;
+		color: #333;
+		font-size: 13px;
 		text-align: center;
 	}
 
@@ -335,18 +335,20 @@
 	}
 
 	.cell-txt-green {
-		color: green;
+		color: #27ae60;
 		font-size: 12px;
 		text-align: center;
 	}
 
 	.cell-content-red {
-		background-color: rgba(239, 68, 68, 0.1);
+		background-color: #e8f1fc;
+		padding:12px 0;
+		border-radius:10px;
 	}
 
 	.cell-th-cell-content {
 		height: 76px;
-		background-color: #f9fafb;
+		background-color: #e8f1fc;
 		display: flex;
 		flex-direction: row;
 	}

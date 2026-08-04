@@ -22,7 +22,7 @@
 		<view class="roomtype-list-wrap">
 			<view class="roomtype-card-item" v-for="(roomType,index) of roomTypeList">
 				<view class="roomtype-card-box">
-					<view class="card-img-block">
+					<view class="card-image-block">
 						<image v-if="roomType.firstImages!=''" :src="roomType.firstImages" style="height: 100%;width: 100%;" mode="aspectFill">
 						</image>
 						<image  v-if="roomType.firstImages==''"  src="/static/images/nono-img.png" style="height: 80%;width: 80%;" mode="aspectFit">
@@ -301,6 +301,11 @@
 .roomtype-card-box {
 	background-color: #fff;
 	border-radius: 8px;
+}
+.card-image-block {
+	height: 350rpx;
+	max-height: 200px;
+	background-color: #eee;
 }
 /* 图片区域 */
 .card-img-block {

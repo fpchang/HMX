@@ -161,10 +161,12 @@
 		// uni.setTabBarItem({ index: 3, text: i18n.global.t('tab.function') });
 		// uni.setTabBarItem({ index: 4, text: i18n.global.t('tab.mine') });
 	}
-	onLoad(() => {
+
+	onLoad(() => {		
 		init();
-		setTabBarI18n()
+		setTabBarI18n();
 	})
+	
 </script>
 
 <style>

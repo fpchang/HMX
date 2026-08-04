@@ -160,6 +160,7 @@
 			setTokenEvent();
 		}
 	})
+	
 </script>
 
 <style>

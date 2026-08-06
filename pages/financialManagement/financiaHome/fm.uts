@@ -36,7 +36,7 @@ export class FmClass {
 		const year = new Date().getFullYear().toString();
 		this.getExpensesCurrentMonth(month);
 		this.getIncomeCurrentMonth(month);
-		this.getIncomeAndExpensesCurrentYear(year,'income');
+		await this.getIncomeAndExpensesCurrentYear(year,'income');
 		await this.getIncomeAndExpensesCurrentYear(year,'expenses');		
 	}
 }

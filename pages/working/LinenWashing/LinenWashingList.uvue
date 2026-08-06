@@ -7,10 +7,10 @@
 						<rice-icon name="arrow-left" size="22px" />
 					</navigator>
 
-					<image src="/static/icons/list.png"
+					<image :src="titleImg"
 						style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
 					<text
-						style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{ i18n.global.t('washingOrder.title') }}</text>
+						style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{title }}</text>
 				</view>
 			</template>
 			<template #right>
@@ -318,6 +318,16 @@
 	})
 	let submitLoading = ref(false);
 	const showDeatilPage = ref(false);
+	const title = computed(() => {
+		if (showDeatilPage.value) {
+			return i18n.global.t("common.btn_txt_details", [i18n.global.t('washingOrder.btn_add_txt')]);
+		}
+		return i18n.global.t("washingOrder.washing_order_list");
+	});
+	const titleImg = computed<string>(() => {
+		
+		return showDeatilPage.value? "/static/icons/detailpage.png":"/static/icons/list.png" ;
+	});
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});

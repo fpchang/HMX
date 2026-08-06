@@ -12,7 +12,7 @@
                 "launchtype" : "local"
             },
             "h5" : {
-                "launchtype" : "local"
+                "launchtype" : "remote"
             },
             "mp-weixin" : {
                 "launchtype" : "remote"
@@ -43,8 +43,8 @@
         {
             "customPlaygroundType" : "device",
             "iOSProjectStandardBaseHistory" : {
-                "current" : "Pandora_simulator_debug_5.22.2026072503-alpha.app",
-                "previous" : "Pandora_simulator_debug_5.21.2026071110-alpha.app"
+                "current" : "Pandora_simulator_debug_5.23.2026080313-alpha.app",
+                "previous" : "Pandora_simulator_debug_5.22.2026072503-alpha.app"
             },
             "playground" : "standard",
             "type" : "uni-app:app-ios_simulator"

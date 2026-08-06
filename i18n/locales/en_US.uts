@@ -375,6 +375,7 @@ export default {
 	},
 	washingOrder: {
 		title: "Laundry Order",
+		washing_order_list:"Washing Order List",
 		btn_add_txt:"Laundry",
 		statusAll: "All",
 		statusWashing: "Pending",

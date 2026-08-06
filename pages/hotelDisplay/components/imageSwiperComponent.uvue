@@ -22,7 +22,7 @@
 					<!-- #endif -->
 				</view>
 			</view>
-			<swiper style="height: 422rpx;max-height: 225px;" :current="current" @change="onChange" :autoplay="true"
+			<swiper style="height: 422rpx;max-height: 576px;" :current="current" @change="onChange" :autoplay="true"
 				:interval="3000" :indicator-dots="true" :circular="true">
 				<swiper-item class="slide slide1" v-if="firstImages">
 					<image :src="firstImages" style="width: 100%;height: 100%;" mode="aspectFill"></image>

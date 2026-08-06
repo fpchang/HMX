@@ -387,7 +387,8 @@ export default {
 	},
 
 	washingOrder:{
-		title:"布草清洗"
+		title:"布草清洗",
+		washing_order_list:"清洗列表",
 		btn_add_txt:"清洗单",
 		statusAll: "全部",
 		statusWashing: "未完成",

@@ -1,5 +1,5 @@
 <template>
-	<scroll-view style="flex:1;background:#f5f7fa;" v-if="hotel_id!=''" :refresher-enabled="true"
+	<scroll-view style="flex:1;background:#f5f7fa;" v-if="!loading&&hotel_id!=''" :refresher-enabled="true"
 		:refresher-triggered="refreshState" @refresherrefresh="refreshData" :show-scrollbar="false">
 		<view class="top-header">
 			<text class="header-title">{{i18n.global.t('finance.navbar_title')}}</text>
@@ -81,9 +81,14 @@
 		</view>
 		<view style="height:70px"></view>
 	</scroll-view>
+	<view v-if="loading" style="margin-top:168px;display: flex;flex-direction: row;justify-content: center;">
+		<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
+	</view>
 	<view v-if="hotel_id==''" style="margin-top: 80px;">
 		<l-empty :description="i18n.global.t('common.noData',[''])" />
 	</view>
+	
+	
 </template>
 <script setup>
 	import { FMService } from "@/services/FMService";
@@ -100,6 +105,7 @@
 		styleIsolation: "isolated"
 	})
 	const refreshState = ref(false);
+	const loading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -158,8 +164,10 @@
 		return amount;
 	})
 	const init = async () => {
+		loading.value = true;
 		const fm = new FmClass(hotel_id.value);
 		await fm.init();
+		loading.value = false;
 	}
 	const columnNum = computed(() => {
 		let num = 2;

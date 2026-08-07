@@ -306,6 +306,9 @@
 	height: 350rpx;
 	max-height: 200px;
 	background-color: #eee;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 /* 图片区域 */
 .card-img-block {

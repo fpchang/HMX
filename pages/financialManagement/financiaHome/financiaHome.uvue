@@ -198,6 +198,10 @@
 		refreshState.value = false;
 
 	}
+	watch(hotel_id, async () => {
+		console.log("fina home hotel change")
+		init();
+	})
 </script>
 
 <style>

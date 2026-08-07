@@ -102,25 +102,25 @@
 				title_icon: "/static/icons/homemenu/hotel-anage.png",
 				title_color: "rgb(30,30,30)",
 				menu_item_list: [{
-					icon: "/static/icons/homemenu/room-type1.png",
+					icon: "/static/icons/homemenu/v2/room-type.png",
 					label: i18n.global.t("function.btn_txt_room_type"),
 					bgColor: "rgba(22, 93, 255, 0.1)",
 					url: "/pages/hotelManage/roomTypeList/roomTypeList"
 				},
 				{
-					icon: "/static/icons/homemenu/room1.png",
+					icon: "/static/icons/homemenu/v2/room.png",
 					label: i18n.global.t("function.btn_txt_room"),
 					bgColor: "rgba(22, 93, 255, 0.1)",
 					url: "/pages/hotelManage/roomList/roomList"
 				},
 				{
-					icon: "/static/icons/homemenu/employee1.png",
+					icon: "/static/icons/homemenu/v2/employee.png",
 					label: i18n.global.t("function.btn_txt_room_employee"),
 					bgColor: "rgba(22, 93, 255, 0.1)",
 					url: "/pages/hotelManage/employeeList/employeeList"
 				},
 				{
-					icon: "/static/icons/homemenu/hotel2.png",
+					icon: "/static/icons/homemenu/v2/view.png",
 					label: i18n.global.t("function.btn_txt_room_preview"),
 					bgColor: "rgba(22, 93, 255, 0.1)",
 					url: `/pages/hotelDisplay/hotelDisplay?hotel_id=${hotel_id.value}`
@@ -134,7 +134,7 @@
 				title_icon: "/static/icons/homemenu/financia-green.png",
 				title_color: "rgb(30,30,30)",
 				menu_item_list: [{
-					icon: "/static/icons/homemenu/income.png",
+					icon: "/static/icons/homemenu/v2/income.png",
 					label: i18n.global.t("function.btn_txt_income_expense"),
 					bgColor: "rgba(72,187,120,0.1)",
 					url: "/pages/financialManagement/inExManage/inExManage"
@@ -146,7 +146,7 @@
 				// 	url: "/pages/financialManagement/expense/expense"
 				// },
 				{
-					icon: "/static/icons/homemenu/financial-statistics1.png",
+					icon: "/static/icons/homemenu/v2/financial-statistics.png",
 					label: i18n.global.t("function.btn_txt_fm_chart"),
 					bgColor: "rgba(72,187,120,0.1)",
 					url: "/pages/financialManagement/fmchart/fmchart"
@@ -159,13 +159,13 @@
 				title_icon: "/static/icons/homemenu/order-manage.png",
 				title_color: "rgb(30,30,30)",
 				menu_item_list: [{
-					icon: "/static/icons/homemenu/order1.png",
+					icon: "/static/icons/homemenu/v2/order.png",
 					label: i18n.global.t("function.btn_txt_order"),
 					bgColor: "rgba(237,137,54,0.1)",
 					url: "/pages/order/orderList/orderList"
 				},
 				{
-					icon: "/static/icons/homemenu/order-add1.png",
+					icon: "/static/icons/homemenu/v2/order-add.png",
 					label: i18n.global.t("function.btn_txt_create_order"),
 					bgColor: "rgba(237,137,54,0.1)",
 					url: "/pages/order/createOrder/createOrder"
@@ -178,7 +178,7 @@
 				title_color: "rgb(30,30,30)",
 				menu_item_list: [
 					{
-						icon: "/static/icons/homemenu/linen.png",
+						icon: "/static/icons/homemenu/v2/linen.png",
 						label: i18n.global.t("washingOrder.title"),
 						bgColor: "rgba(237,137,54,0.1)",
 						url: "/pages/working/LinenWashing/LinenWashingList"

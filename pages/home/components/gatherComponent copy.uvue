@@ -2,16 +2,31 @@
 	<view class="container">
 		<view class="stats-section">
 			<view class="stats-tab">
-			<!-- 	<view :class="[activeIndex == 0?'tab-btn tab-btn-active':'tab-btn' ]" @click="tabClick(0)"
+				<view :class="[activeIndex == 0?'tab-btn tab-btn-active':'tab-btn' ]" @click="tabClick(0)"
 					style="margin-right:10px">
 					<text :class="activeIndex == 0?'tabtxt-active':'txt'"> {{ i18n.global.t("gather.today") }}</text>
 				</view>
 				<view :class="[activeIndex == 1?'tab-btn tab-btn-active':'tab-btn' ]" @click="tabClick(1)">
 					<text :class="activeIndex == 1?'tabtxt-active':'txt'"> {{ i18n.global.t("gather.tomorrow") }}</text>
-				</view> -->
+				</view>
+				<!--  <button 
+          class="tab-btn" 
+          :class="[activeIndex == 0?'active':'' ]"
+          @click="tabClick(0)"
+		  style="margin-right: 10px;"
+        >
+          {{ i18n.global.t("gather.today") }}
+        </button>
+        <button 
+          class="tab-btn" 
+          :class="[activeIndex == 1?'active':'' ]"
+          @click="tabClick(1)"
+        >
+     
+        </button> -->
 			</view>
 			<!-- 统计数据卡片 -->
-			<view class="stats-card" v-if="false||activeIndex==0">
+			<view class="stats-card" v-if="activeIndex==0">
 				<view class="stats-item">
 					<text class="stats-label">{{ i18n.global.t("gather.checkInToday") }}</text>
 					<view class = "text-container">
@@ -45,7 +60,7 @@
 				</view>
 			</view>
 			
-			<view class="stats-card" v-if="false||activeIndex==1">
+			<view class="stats-card" v-if="activeIndex==1">
 				<view class="stats-item">
 					<text class="stats-label">{{ i18n.global.t("gather.checkInTomorrow") }}</text>
 					<view class = "text-container">
@@ -277,9 +292,7 @@
 
 	/* 统计模块 */
 	.stats-section {
-		margin: 20px;
-		background:#fff;
-		border-radius:12px;
+		padding: 20px;
 	}
 
 	.stats-tab {

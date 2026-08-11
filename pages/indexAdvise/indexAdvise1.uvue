@@ -1,0 +1,40 @@
+<template>
+	<view class="page">
+		<!-- minItemWidth:200px，gap:12px -->
+		<xt-flex-wap-equal ref="wrapRef" :min-item-width="90" :gap="12" :itemsNum="list.length">
+			<template #item="{ index }">
+				<view style="background:#eee;border-radius:12px">
+						<view style="">11111</view>
+						<view>2222</view>
+				</view>
+			</template>
+			
+		</xt-flex-wap-equal>
+	</view>
+</template>
+
+<script setup lang="uts">
+	//import { ref, onMounted, nextTick } from 'vue'
+	//import xtFlexWrapEqual from './xtFlexWrapEqual.uvue'
+
+	const list = ref([
+		{ id: 1, text: 'item‑1' },
+		{ id: 2, text: 'item‑2' },
+		{ id: 3, text: '很长文本item‑3' },
+		{ id: 4, text: 'item‑4' },
+		{ id: 5, text: 'item‑5' }
+	])
+</script>
+
+<style>
+	.page {
+		padding: 20px;
+	}
+
+	.flex-wrap-item {
+		background: #409eff;
+		color: #ffffff;
+		padding: 14px;
+		border-radius: 8px;
+	}
+</style>

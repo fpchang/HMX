@@ -33,7 +33,7 @@ export default {
 		getData_success: "Get{0}data sucess",
 		getData_fail: "Get{0}data fail",
 		confirmDelete: "Confirm Delete",
-		confirmCancelAccount: "Confirm Cancellation"
+		confirmCancelAccount: "Confirm Cancellation",
 		deleteOrderTip: "Cannot be restored after deletion, confirm?",
 		"cancelTip": "Your account can be restored within 7 days after cancellation. All account data will be permanently deleted after the 7-day period.",
 

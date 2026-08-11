@@ -1,9 +1,9 @@
 <template>
 	<view class="page">
 		<!-- minItemWidth:200px，gap:12px -->
-		<xt-flex-wap-equal ref="wrapRef" :min-item-width="90" :gap="12" :itemsNum="list.length">
+		<xt-flex-wap-equal ref="wrapRef" :min-item-width="120" :gap="12" :itemsNum="list.length">
 			<template #item="{ index }">
-				<view style="background:#eee;border-radius:12px">
+				<view style="background:red;border-radius:12px">
 						<view style="">11111</view>
 						<view>2222</view>
 				</view>
@@ -29,6 +29,7 @@
 <style>
 	.page {
 		padding: 20px;
+		border:1px solid #000;
 	}
 
 	.flex-wrap-item {

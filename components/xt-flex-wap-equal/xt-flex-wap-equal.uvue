@@ -1,9 +1,10 @@
 <template>
-	<view id="myTarget" class="container"  :style="cssVars">		
-		<view class="flex-wrap-item" v-for="(item,index) in (itemsNum + 10)" :style="{'margin-left':getMarginLeft(index),'margin-top':getMarginTop(index),'height':getHeight(index)}">
+	<view id="xtflexwrapequal" class="flex-wrap-container" :style="cssVars">
+		<view class="flex-wrap-item" :id="`fwi${index}`" v-for="(item,index) in (itemsNum + rownums)"
+			:style="{'margin-left':marginLeft(index),'margin-top':marginTop(index),'height':index>itemsNum-1?'0':'auto'}">
 			<slot name="item" :index="index"></slot>
 		</view>
-		
+
 	</view>
 </template>
 
@@ -12,12 +13,17 @@
 
 
 	const props = defineProps({
-		itemsNum:{
+		itemsNum: {
 			type: Number,
 			default: 0
 		},
 		minItemWidth: {
 
+			type: Number,
+			default: 0
+		},
+		maxItemWidth: {
+		
 			type: Number,
 			default: 0
 		},
@@ -33,89 +39,86 @@
 			default: 10,
 		}
 	});
-	 const instance = getCurrentInstance()!.proxy!;
-	 const  containerWidth= ref(uni.getWindowInfo().windowWidth);
-	 const rownums=computed(()=>{
-		const nums = (containerWidth.value + props.gap)/(props.minItemWidth + props.gap);
-		return Math.floor(nums);
-	 })
-	 const itemWidth = computed(()=>{
-		  const w = containerWidth.value/rownums.value;
-		  return w;
-	 })
+	defineOptions({
+		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
+	})
+	const instance = getCurrentInstance()!.proxy!;
+	const containerWidth = ref(uni.getWindowInfo().windowWidth);
+
+	const rownums = computed(() => {
+		const nums = containerWidth.value / (props.minItemWidth + props.gap);
+		if(nums > props.itemsNum){
+			return props.itemsNum;
+		}
+		return Math.floor(nums)
+	})
+	const itemWidth = computed(() => {
+		return Math.floor((containerWidth.value - (rownums.value-1) *props.gap )/rownums.value);
+	})
 	async function getViewWidth() {
 		await nextTick();
-		const query = uni.createSelectorQuery().in(instance).select('#myTarget').boundingClientRect((ret) => {
-			console.log("ret",ret)
-			
-			        const nodeInfo = ret as NodeInfo;
-					containerWidth.value =  nodeInfo.width as number;
-					
+		const query = uni.createSelectorQuery().in(instance).select('#xtflexwrapequal').boundingClientRect((ret) => {
+			console.log("ret", ret)
+
+			const nodeInfo = ret as NodeInfo;
+			containerWidth.value = nodeInfo.width as number;
+
 		}).exec()
 	}
 
 	onMounted(() => {
-		 getViewWidth();
+		getViewWidth();
 		//uni.onWindowResize(getViewWidth)
 	})
-	const cssVars = computed(()=>{
-	  return {
-		'--min-width':(props.minItemWidth) + 'px',
-	    '--half-gap': (props.gap) + 'px',
-		'--margin-left': (props.gap) + 'px',
-		'--margin-top': (props.gap) + 'px',
-	    '--min-item-width': props.minItemWidth + 'px',
-		
-	  }
+	const cssVars = computed(() => {
+		return {
+			'--min-width': itemWidth.value + 'px',
+			'--max-item-width':props.maxItemWidth>0?props.maxItemWidth:( itemWidth.value + 'px'),
+			'--half-gap': (props.gap) + 'px',
+			'--margin-left': (props.gap) + 'px',
+			'--margin-top': (props.gap) + 'px',
+			'--min-item-width': props.minItemWidth + 'px',
+
+		}
 	})
-	const getMarginLeft=(index:number)=>{
-		if(index % rownums.value==0){
-			return 0
+	const marginLeft=(index:number)=>{
+		if(index==0|| index%rownums.value==0){
+			return 0;
 		}
-		return props.gap +'px'
+		if(index>rownums.value.length-1 ){
+			return 0;
+		}
+		return (props.gap+'px')
 	}
-	const getMarginTop=(index:number)=>{
-		if(index <rownums.value){
+	const marginTop=(index:number)=>{
+		if(index<rownums.value){
 			return 0;
 		}
 		if(index>props.itemsNum-1){
 			return 0;
 		}
-		return props.gap +'px'
-	}
-	const getHeight=(index:number)=>{
-		if(index>props.itemsNum-1){
-			return 0;
-		}
-		return 'auto'
+		return (props.gap+'px')
 	}
 </script>
 
-<style>
-	.container{
-		
-		display:flex;
+<style scoped lang="scss">
+	.flex-wrap-container {
+		/* border: 1px solid red; */
+		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
-		
-		
+		justify-content: space-between;
+
 	}
-	.flex-wrap-item{
-	  flex:1;
-	/*  margin-left:var(--half-gap);
+
+	.flex-wrap-item {
+		/* flex:1; */
+		/*  margin-left:var(--half-gap);
 	  margin-top:var(--half-gap); */
-	  min-width:var(--min-width);
-	   max-width:var(--max-item-width);
-	   height:100px;
-	
+		min-width: var(--min-width);
+		max-width: var(--max-item-width);
+
+
 	}
-	.container :deep (.flex-wrap-item){
-	  flex:1;
-	/*  margin-left:var(--half-gap);
-	  margin-top:var(--half-gap); */
-	  min-width:var(--min-width);
-	   max-width:var(--max-item-width);
-	   height:100px;
-	
-	}
+
 </style>

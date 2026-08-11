@@ -1,17 +1,51 @@
 <template>
 	<view class="container">
-		<view class="stats-section">
-			<view class="stats-tab">
-			<!-- 	<view :class="[activeIndex == 0?'tab-btn tab-btn-active':'tab-btn' ]" @click="tabClick(0)"
+		
+		<!-- 	<view class="stats-tab">
+				<view :class="[activeIndex == 0?'tab-btn tab-btn-active':'tab-btn' ]" @click="tabClick(0)"
 					style="margin-right:10px">
 					<text :class="activeIndex == 0?'tabtxt-active':'txt'"> {{ i18n.global.t("gather.today") }}</text>
 				</view>
 				<view :class="[activeIndex == 1?'tab-btn tab-btn-active':'tab-btn' ]" @click="tabClick(1)">
 					<text :class="activeIndex == 1?'tabtxt-active':'txt'"> {{ i18n.global.t("gather.tomorrow") }}</text>
-				</view> -->
-			</view>
+				</view>
+			</view> -->
 			<!-- 统计数据卡片 -->
-			<view class="stats-card" v-if="false||activeIndex==0">
+			<view class="tab-select">
+				<rice-subsection :list="list1" v-model="activeIndex"  style="padding:0"/>
+			</view>
+			<view class="card-container">
+				<xt-flex-wap-equal ref="wrapRef" :min-item-width="130" :gap="14" :itemsNum="4">
+					<template #item="{index}">
+						<view class="card"  v-if="index==0">
+								<text>{{ i18n.global.t("gather.checkInToday") }}</text>
+								<view>
+									<text>{{numOrderToday}}</text>
+								</view>
+						</view>
+						<view class="card"  v-if="index==1">
+								<text>333</text>
+								<view>
+									<text>{{numOrderToday}}</text>
+								</view>
+						</view>
+						<view class="card"  v-if="index==2">
+								<text>333</text>
+								<view>
+									<text>{{numOrderToday}}</text>
+								</view>
+						</view>
+						<view class="card"  v-if="index==3">
+								<text>333</text>
+								<view>
+									<text>{{numOrderToday}}</text>
+								</view>
+						</view>
+					</template>
+			
+				</xt-flex-wap-equal>
+			</view>
+			<view class="stats-card" v-if="false&&activeIndex==0">
 				<view class="stats-item">
 					<text class="stats-label">{{ i18n.global.t("gather.checkInToday") }}</text>
 					<view class = "text-container">
@@ -82,7 +116,6 @@
 					
 				</view>
 			</view>
-		</view>
 	</view>
 </template>
 
@@ -99,7 +132,9 @@
 	defineOptions({
 		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
 	})
+	 const list1 = ref<string[]>(['今日', '明日'])
 	const activeIndex = ref(0);
+	
 	const itemStyle = {
 		fontSize: "20px"
 	}
@@ -244,10 +279,24 @@
 <style scoped lang="scss">
 	/* 全局容器 */
 	.container {
-		width: 100%;
-		background-color: #f5f5f5;
+		background-color: #fff;
 		display: flex;
 		flex-direction: column;
+		margin:20px;
+		box-sizing: border-box;
+		border-radius: 14px;
+	}
+.tab-select{
+	margin-bottom: 14px;
+}
+	.card-container{
+		background-color: #fff;
+	}
+	
+	.card{
+		border-radius: 12px;
+		padding:12px;
+		background-color: silver;
 	}
 
 	/* 顶部导航栏 */

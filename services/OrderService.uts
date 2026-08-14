@@ -231,7 +231,7 @@ class OrderServiceClass {
 		let endTime = dayuts(datestr).valueOf();
 		let jql = `hotel_id=='${hotel_id}'&&orderStatus==1&&checkInEndDateTimeStamp==${endTime}`;
 
-
+	console.log("今日退房jql",jql)
 		try {
 			const res = await DB.getCollection("hm-order", jql);
 			const data = res['data'] as Array<UTSJSONObject>;

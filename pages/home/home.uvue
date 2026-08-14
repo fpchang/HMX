@@ -1,5 +1,5 @@
 <template>
-		<rice-navbar :fixed="false"  bg-color="#007AFF" :left-arrow="false">
+		<!-- <rice-navbar :fixed="false"  bg-color="#007AFF" :left-arrow="false">
 			<template #title>
 				<view class="nav-header-wrap">
 					<view class="hotel-switch-row"  v-if="hotelList.length>0">					
@@ -10,13 +10,46 @@
 			</template>
 			<template #right>
 			</template>
-		</rice-navbar>
+		</rice-navbar> -->
+		
 		<scroll-view v-if="dataReading&&hotel_id!=''" :refresher-enabled="true" :refresher-triggered="refreshState"
 			@refresherrefresh="refreshData" style="flex:1;background:#f5f5f5;display: flex;flex-direction: column"
-			:show-scrollbar="false">
-			<gatherComponent></gatherComponent>
-			<operation></operation>
-			<view style="height:70px"></view>
+			:show-scrollbar="false" refresher-background="#1264E8" refresher-default-style="white">
+			<view class="header">
+					<rice-cell :title="hotel?.hotelName" label="管理中心" :custom-style="{background:'rgba(255,255,255,0)'}" :title-text-style="{color:'#fff',fontSize:'20px',fontWeight:'bold'}" :label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
+					  <template #leftIcon>
+					    <image src="/static/icons/hotel-logo.png" class="left-cion" style="width:55px;height:55px;margin-right:8px"></image>
+					  </template>
+					 
+					  <template #value>
+						  <view style="display:flex;flex-direction:row;justify-content:flex-end;flex:1;">
+							  <view> 
+								<rice-button type="success" size="small" color="rgba(255,255,255,0.4)" shape="round" icon="switch" text="切换" @click="showCheckHotel"></rice-button>
+								
+							  </view>
+							 </view>
+					  </template>
+					</rice-cell>
+					<view> 
+					
+					<rice-cell :title="timestr" label="欢迎回来" :custom-style="{background:'rgba(255,255,255,0)'}" :title-text-style="{color:'#fff',color:'rgba(255,255,255,0.7)'}" :label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
+					 
+					 
+					  <template #value>
+						  <view style="display:flex;flex-direction:row;justify-content:flex-end;flex:1">
+							<rice-button type="success" size="mini" color="rgba(255,255,255,0.4)" shape="round"  text="营业中"></rice-button>
+						  </view>
+					  </template>
+					</rice-cell>
+					</view>
+				
+			</view>
+			<view class="container-content"> 
+				<gatherComponent></gatherComponent>
+				<operation></operation>
+				<view style="height:70px"></view>
+			</view>
+			
 		</scroll-view>
 		<view v-if="!dataReading" style="margin-top:168px;display: flex;flex-direction: row;justify-content: center;">
 			<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
@@ -83,6 +116,7 @@
 </template>
 
 <script setup>
+	import { dateuts } from '@/uni_modules/rice-ui';
 	import gatherComponent from "./components/gatherComponent";
 	import operation from "./components/operation";
 	import { state, setUser } from '@/store/store.uts';
@@ -97,6 +131,9 @@
 	const showRange = ref(false);
 	const showPopup = ref(false);
 	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"]);
+	const timestr=computed(()=>{
+		return dateuts(new Date()).format('YYYY年MM月DD日 dddd')
+	})
 	const rangeConfirm = (e : string[]) => { }
 	const showPickTime = () => {
 		showRange.value = true;
@@ -170,6 +207,19 @@
 </script>
 
 <style>
+	.header{
+		padding:60px 0 20px 0;
+		background:linear-gradient(to  bottom right, #1264E8, #3193F4);
+	}
+	.container-content{
+		background:rgb(241,245,254);
+		border-top-left-radius:20px;
+		border-top-right-radius:20px;
+		margin-top:-20px;
+		padding:14px;
+		box-sizing:border-box;
+		
+	}
 	/* 导航标题外层容器 */
 	.nav-header-wrap {
 		min-width:250px;

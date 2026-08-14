@@ -43,7 +43,8 @@
 		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
 	})
 	const instance = getCurrentInstance()!.proxy!;
-	const containerWidth = ref(uni.getWindowInfo().windowWidth);
+	const viewwidth = uni.getWindowInfo().windowWidth;
+	const containerWidth = ref(0);
 
 	const rownums = computed(() => {
 		const nums = containerWidth.value / (props.minItemWidth + props.gap);
@@ -57,11 +58,13 @@
 	})
 	async function getViewWidth() {
 		await nextTick();
-		const query = uni.createSelectorQuery().in(instance).select('#xtflexwrapequal').boundingClientRect((ret) => {
-			console.log("ret", ret)
-
-			const nodeInfo = ret as NodeInfo;
-			containerWidth.value = nodeInfo.width as number;
+		 uni.createSelectorQuery().in(instance).select('#xtflexwrapequal').boundingClientRect((ret) => {
+			 if(ret!=null){
+				 console.log("ret", ret)
+				 const nodeInfo = ret as NodeInfo;
+				 containerWidth.value = nodeInfo.width as number;
+			 }
+			
 
 		}).exec()
 	}
@@ -69,6 +72,14 @@
 	onMounted(() => {
 		getViewWidth();
 		//uni.onWindowResize(getViewWidth)
+	})
+	onResize(()=>{
+		console.log("onresize")
+		getViewWidth();
+	})
+	onUpdated(()=>{
+		console.log("onupdated")
+		getViewWidth();
 	})
 	const cssVars = computed(() => {
 		return {
@@ -85,7 +96,7 @@
 		if(index==0|| index%rownums.value==0){
 			return 0;
 		}
-		if(index>rownums.value.length-1 ){
+		if(index>rownums.value-1 ){
 			return 0;
 		}
 		return (props.gap+'px')
@@ -108,6 +119,7 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		justify-content: space-between;
+		box-sizing:border-box;
 
 	}
 

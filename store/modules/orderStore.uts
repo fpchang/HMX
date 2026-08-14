@@ -56,7 +56,7 @@ export const getOrderListTodayAfter = async (hotel_id : string):Promise<Array<or
 //今天退房订单
 export const getOrderListByCheckOutToday = async (hotel_id : string):Promise<Array<orderBean>> => {
 	const list = await OrderService.getOrderListByCheckOut(hotel_id, new Date().getTime());
-	//console.log("今日退房订单",list);
+	console.log("今日退房订单",list);
 	updateOrderListByCheckOutToday(list);
 	return list;
 }

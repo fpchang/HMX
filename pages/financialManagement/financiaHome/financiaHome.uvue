@@ -1,5 +1,8 @@
 <template>
-	<scroll-view style="flex:1;background:#f5f7fa;" v-if="!loading&&hotel_id!=''" :refresher-enabled="true"
+	<rice-navbar :fixed="false" :title="showNav?'财务中心':''" title-color="#fff"  bg-color="#1264E8" :border="false" :left-arrow="false" :safe-area-inset-top="false">
+	
+	</rice-navbar>
+	<scroll-view style="flex:1;background:#f5f7fa;" v-if="!loading&&hotel_id!=''" :refresher-enabled="true" @scroll="onScroll"
 		:refresher-triggered="refreshState" @refresherrefresh="refreshData" :show-scrollbar="false" refresher-background="#1264E8" refresher-default-style="white">
 		<view class="top-header">
 			<!-- <text class="header-title">{{i18n.global.t('finance.navbar_title')}}</text> -->
@@ -22,7 +25,7 @@
 			<!-- 头部总利润卡片 -->
 			<view class="profit-card">
 				<text class="profit-label">{{i18n.global.t('finance.annual_profit')}}</text>
-				<text class="profit-num item-profit">¥{{incomeYearAmount-expensesYearAmount}}</text>
+				<text class="profit-num item-profit">¥{{profit}}</text>
 			</view>
 			<!-- 核心指标4宫格 -->
 			<view class="kpi-grid">
@@ -89,7 +92,7 @@
 						<view class="tag-gold"></view><text
 							class="row-name">{{i18n.global.t('finance.annual_profit')}}</text>
 					</view>
-					<text class="row-money item-profit">¥{{incomeYearAmount-expensesYearAmount}}</text>
+					<text class="row-money item-profit">¥{{profit}}</text>
 				</view>
 			</view>
 		</view>
@@ -177,6 +180,11 @@
 		})
 		return amount;
 	})
+	//利润
+	const profit=computed(()=>{
+		const count =  (incomeYearAmount.value-expensesYearAmount.value).toFixed(2);
+		return count;
+	})
 	const init = async () => {
 		loading.value = true;
 		const fm = new FmClass(hotel_id.value);
@@ -220,6 +228,14 @@
 		refreshState.value = false;
 
 	}
+	const showNav = ref<boolean>(false)
+	const threshold = 50
+	
+	function onScroll(e : UniScrollEvent){
+	  const scrollTop : number = e.detail.scrollTop
+	  // 大于阈值显示；回到顶部则隐藏
+	  showNav.value = scrollTop > threshold
+	}
 	watch(hotel_id, async () => {
 		console.log("fina home hotel change")
 		init();
@@ -229,9 +245,10 @@
 <style>
 	.top-header {
 		width: 100%;
-		background:linear-gradient(to  bottom right, #1264E8, #3193F4);
-		padding: 60px 0 40px;
+		background:linear-gradient(to bottom, #1264E8, #3193F4);
+		padding: 8px 0 20px;
 		text-align: center;
+		
 	}
 
 	.header-title {

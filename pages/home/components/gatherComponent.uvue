@@ -4,72 +4,91 @@
 			<text style="color:#666;font-weight:bold">入住数据</text>
 		</view>
 		<view class="stats-tab">
-			<view :class="[activeIndex == 0?'tab-btn tab-btn-active':'tab-btn' ]" @click="tabClick(0)"
+			<!-- <view :class="[activeIndex == 0?'tab-btn tab-btn-active':'tab-btn' ]" @click="tabClick(0)"
 				style="margin-right:10px">
 				<text :class="activeIndex == 0?'tabtxt-active':'txt'"> {{ i18n.global.t("gather.today") }}</text>
 			</view>
 			<view :class="[activeIndex == 1?'tab-btn tab-btn-active':'tab-btn' ]" @click="tabClick(1)">
 				<text :class="activeIndex == 1?'tabtxt-active':'txt'"> {{ i18n.global.t("gather.tomorrow") }}</text>
-			</view>
-		</view>
-		<!-- 统计数据卡片 -->
-		<!-- 	<view class="tab-select">
-				
-				<text style="color:#666;font-weight:bold">今日概况</text>
 			</view> -->
+			<rice-tabs v-model="activeIndex" :list="menulist" line-mode="zoom" :shrink="true" />
+		</view>
+
 		<view class="card-container" v-if="activeIndex==0">
-			<xt-flex-wap-equal ref="wrapRef" :min-item-width="140" :gap="14" :itemsNum="4">
+			<xt-flex-wap-equal ref="wrapRef1" :pmWidth="56" :min-item-width="140" :gap="14" :itemsNum="4">
 				<template #item="{index}">
-					<view class="card" v-if="index==0">
-						<text class="card-title">{{ i18n.global.t("gather.checkInToday") }}</text>
-						<view class="card-content">
-							<text class="card-num">{{numOrderToday}}</text>
+				
+					
+						<view class="card" v-if="index==0">
+							<text class="card-title">{{ i18n.global.t("gather.checkInToday") }}</text>
+							<view class="card-content">
+								<view style="display:flex;flex-direction:row;align-items: flex-end;">
+									<text class="numlabel">{{numOrderToday}}</text>
+									<text class="card-num-unit-style">间</text>
+								</view>
+							</view>
 						</view>
-					</view>
-					<view class="card" v-if="index==1">
-						<text class="card-title">{{ i18n.global.t("gather.checkOutToday") }}</text>
-						<view class="card-content">
-							<text class="card-num">{{numAccessOutToday}}</text>
+						<view class="card" v-if="index==1">
+							<text class="card-title">{{ i18n.global.t("gather.checkOutToday") }}</text>
+							<view class="card-content">
+								<view style="display:flex;flex-direction:row;align-items: flex-end;">
+									<text class="numlabel">{{numAccessOutToday}}</text>
+									<text class="card-num-unit-style">间</text>
+								</view>
+					
+							</view>
 						</view>
-					</view>
-					<view class="card" v-if="index==2">
-						<text class="card-title">{{ i18n.global.t("gather.currentGuests") }}</text>
-						<view class="card-content">
-							<rice-progress-circle :percentage="numCustomerOrderToday_percent" color="green">
-								<text class="card-num">{{ numCustomerOrderToday }}</text>
-							</rice-progress-circle>
+						<view class="card" v-if="index==2">
+							<text class="card-title">{{ i18n.global.t("gather.currentGuests") }}</text>
+							<view class="card-content card-content-chart">
+								<rice-progress-circle :percentage="numCustomerOrderToday_percent" color="green">
+									<text class="card-num">{{ numCustomerOrderToday }}</text>
+								</rice-progress-circle>
+							</view>
 						</view>
-					</view>
-					<view class="card" v-if="index==3">
-						<text class="card-title">{{ i18n.global.t("gather.emptyRooms") }}</text>
-						<view class="card-content">
-							<rice-progress-circle :percentage="(100 - numCustomerOrderToday_percent)" color="orange">
-								<text class="card-num">{{ roomCount - numCustomerOrderToday }}</text>
-							</rice-progress-circle>
+						<view class="card" v-if="index==3">
+							<text class="card-title">{{ i18n.global.t("gather.emptyRooms") }}</text>
+							<view class="card-content card-content-chart">
+								<rice-progress-circle :percentage="(100 - numCustomerOrderToday_percent)" color="orange">
+									<text class="card-num">{{ roomCount - numCustomerOrderToday }}</text>
+								</rice-progress-circle>
+							</view>
 						</view>
-					</view>
+					
+			
+				
 				</template>
 
 			</xt-flex-wap-equal>
 		</view>
 		<view class="card-container" v-if="activeIndex==1">
-			<xt-flex-wap-equal ref="wrapRef" :min-item-width="140" :gap="14" :itemsNum="4">
+			<xt-flex-wap-equal ref="wrapRef2" :pmWidth="56" :min-item-width="140" :gap="14" :itemsNum="4">
 				<template #item="{index}">
 					<view class="card" v-if="index==0">
 						<text class="card-title">{{ i18n.global.t("gather.checkInTomorrow") }}</text>
 						<view class="card-content">
-							<text class="card-num">{{numOrderTommorow}}</text>
+							<view style="display:flex;flex-direction:row;align-items: flex-end;">
+								<text class="numlabel">{{numOrderTommorow}}</text>
+								<text class="card-num-unit-style">间</text>
+							</view>
+							
 						</view>
 					</view>
 					<view class="card" v-if="index==1">
 						<text class="card-title">{{ i18n.global.t("gather.checkOutTomorrow") }}</text>
 						<view class="card-content">
-							<text class="card-num">{{numAccessOutTommorow}}</text>
+							<view>
+								<view style="display:flex;flex-direction:row;align-items: flex-end;">
+									<text class="numlabel">{{numAccessOutTommorow}}</text>
+									<text class="card-num-unit-style">间</text>
+								</view>
+
+							</view>
 						</view>
 					</view>
 					<view class="card" v-if="index==2">
 						<text class="card-title">{{ i18n.global.t("gather.currentGuests") }}</text>
-						<view class="card-content">
+						<view class="card-content card-content-chart">
 							<rice-progress-circle :percentage="numCustomerOrderTommorw_percent" color="green">
 								<text class="card-num">{{ numCustomerOrderTommorw }}</text>
 							</rice-progress-circle>
@@ -77,14 +96,13 @@
 					</view>
 					<view class="card" v-if="index==3">
 						<text class="card-title">{{ i18n.global.t("gather.emptyRooms") }}</text>
-						<view class="card-content">
+						<view class="card-content card-content-chart">
 							<rice-progress-circle :percentage="(100 - numCustomerOrderTommorw_percent)" color="orange">
 								<text class="card-num">{{ roomCount - numCustomerOrderTommorw }}</text>
 							</rice-progress-circle>
 						</view>
 					</view>
 				</template>
-
 			</xt-flex-wap-equal>
 		</view>
 		<view class="percent-style">
@@ -95,77 +113,7 @@
 		</view>
 
 
-		<view class="stats-card" v-if="false&&activeIndex==0">
-			<view class="stats-item">
-				<text class="stats-label">{{ i18n.global.t("gather.checkInToday") }}</text>
-				<view class="text-container">
-					<text class="stats-value">{{numOrderToday}}</text>
-				</view>
-
-			</view>
-			<view class="stats-item">
-				<text class="stats-label">{{ i18n.global.t("gather.checkOutToday") }}</text>
-				<view class="text-container">
-					<text class="stats-value">{{numAccessOutToday}}</text>
-				</view>
-
-			</view>
-			<view class="stats-item">
-				<text class="stats-label">{{ i18n.global.t("gather.currentGuests") }}</text>
-
-				<rice-progress-circle :percentage="numCustomerOrderToday_percent" color="green">
-					<text class="stats-value">{{ numCustomerOrderToday }}</text>
-				</rice-progress-circle>
-			</view>
-			<view class="stats-item">
-				<text class="stats-label">{{ i18n.global.t("gather.emptyRooms") }}</text>
-				<!-- <l-circle :percent="(100 - numCustomerOrderToday_percent)" trailColor="#eee" size="100px"
-						strokeColor="orange" strokeWidth="12" trailWidth="12">
-						<text class="stats-value">{{ roomCount - numCustomerOrderToday}}</text>
-					</l-circle> -->
-				<rice-progress-circle :percentage="(100 - numCustomerOrderToday_percent)" color="orange">
-					<text class="stats-value">{{ roomCount - numCustomerOrderToday }}</text>
-				</rice-progress-circle>
-			</view>
-		</view>
-
-		<view class="stats-card" v-if="false&&activeIndex==1">
-			<view class="stats-item">
-				<text class="stats-label">{{ i18n.global.t("gather.checkInTomorrow") }}</text>
-				<view class="text-container">
-					<text class="stats-value">{{numOrderTommorow}}</text>
-				</view>
-
-			</view>
-			<view class="stats-item">
-				<text class="stats-label">{{ i18n.global.t("gather.checkOutTomorrow") }}</text>
-				<view class="text-container">
-					<text class="stats-value">{{numAccessOutTommorow}}</text>
-				</view>
-			</view>
-			<view class="stats-item">
-				<text class="stats-label">{{ i18n.global.t("gather.currentGuests") }}</text>
-				<!-- <l-circle :percent="numCustomerOrderTommorw_percent" size="100px" strokeColor="green"
-						strokeWidth="12" trailWidth="12">
-						<text class="stats-value">{{numCustomerOrderTommorw}}</text>
-					</l-circle> -->
-				<rice-progress-circle :percentage="numCustomerOrderTommorw_percent" color="green">
-					<text class="stats-value">{{ numCustomerOrderTommorw }}</text>
-				</rice-progress-circle>
-
-			</view>
-			<view class="stats-item">
-				<text class="stats-label">{{ i18n.global.t("gather.emptyRooms") }}</text>
-				<!-- <l-circle :percent="numEmptyRoom_percenty" size="100px" strokeColor="orange"
-						strokeWidth="12" trailWidth="12">
-						<text class="stats-value">{{numEmptyRoom_format()}}</text>
-					</l-circle> -->
-				<rice-progress-circle :percentage="(100 - numCustomerOrderTommorw_percent)" color="orange">
-					<text class="stats-value">{{ roomCount - numCustomerOrderTommorw }}</text>
-				</rice-progress-circle>
-
-			</view>
-		</view>
+		
 	</view>
 </template>
 
@@ -182,7 +130,7 @@
 	defineOptions({
 		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
 	})
-	const list1 = ref<string[]>(['今日', '明日'])
+	const menulist = ref<TabsOptions[]>([{ name: '今日' }, { name: '明日' }])
 	const activeIndex = ref(0);
 
 	const itemStyle = {
@@ -250,7 +198,7 @@
 		let num = getRoomCountFromOrderList(orderList);
 		return num;
 	});
-	console.log("999929299292===",orderState.orderListByCheckOutToday)
+	console.log("999929299292===", orderState.orderListByCheckOutToday)
 	//今日退房订单
 	const numAccessOutToday = computed(() : number => {
 		let orderList = orderState.orderListByCheckOutToday;
@@ -348,7 +296,7 @@
 	}
 
 	.title {
-		margin-bottom: 14px;
+		
 	}
 
 	.tab-select {
@@ -360,11 +308,15 @@
 	}
 
 	.card {
+		flex:1;
+		min-width: 120px;
 		border-radius: 12px;
-		padding: 18px;
+		padding: 14px;
+		box-sizing: border-box;
 		//background-color: #E8F2FF;
-		background-color:#f5f5f7;
+		background-color: rgba(39, 105, 183, 0.2);
 		// background-image: linear-gradient(145deg, #1769EE, #45A4F5);
+		
 
 	}
 
@@ -375,22 +327,40 @@
 	}
 
 	.card-content {
-		height: 100px;
-		margin-top: 12px;
+		flex:1;
+		padding-top: 12px;
 		display: flex;
-		align-items: center;
+		flex-direction: column;
 		justify-content: center;
 		text-align: center;
 	}
 
+	.card-content-chart {
+		height: 100px;
+		align-items: center;
+	}
+
+	.numlabel {
+		font-size: 32px;
+		color: #135DCC;
+		font-weight: 600;
+	}
+
 	.card-num {
-		font-size: 36px;
+		font-size: 32px;
 		color: #135DCC;
 		// color:#fff;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		text-align: center;
+		font-weight: 600;
+	}
+
+	.card-num-unit-style {
+		font-size: 14px;
+		margin-left: 8px;
+		color: #666;
 	}
 
 	.percent-style {
@@ -445,10 +415,10 @@
 	.stats-tab {
 		display: flex;
 		margin-bottom: 16px;
-		flex-direction: row;
+		// flex-direction: row;
 		max-width: 500px;
 		padding: 8px;
-		background: #f1f5fe;
+		// background: #f1f5fe;
 		border-radius: 12px;
 	}
 

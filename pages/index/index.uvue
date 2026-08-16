@@ -246,14 +246,14 @@
 
 	.tab-bar-style {
 		height: 52px;
-		background-color: rgba(255, 255, 255, 0.72);
-		border: 1rpx solid rgba(240, 240, 240, 0.9);
+		background-color: rgba(255, 255, 255, 0.9);
+		border: 1rpx solid rgba(240, 240, 240, 0.95);
 	/* 	box-shadow:0px 0px 18px 4px #4040400d; */
 }
 
 	.bar-class {
 		/* background: rgba(255, 255, 255, 0.96) !important; */
-		background: rgba(0, 122, 255, 0.1) !important;
+		background: rgba(0, 122, 255, 0.2) !important;
 	}
 	.item-class-style{
 		padding:4px 0;

@@ -13,6 +13,10 @@
 
 
 	const props = defineProps({
+		pmWidth:{
+			type: Number,
+			default: 0
+		},
 		itemsNum: {
 			type: Number,
 			default: 0
@@ -43,8 +47,10 @@
 		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
 	})
 	const instance = getCurrentInstance()!.proxy!;
-	const viewwidth = uni.getWindowInfo().windowWidth;
-	const containerWidth = ref(0);
+	const viewwidth = ref(uni.getWindowInfo().windowWidth);
+	const containerWidth = computed(()=>{
+		return viewwidth.value-props.pmWidth;
+	})
 
 	const rownums = computed(() => {
 		const nums = containerWidth.value / (props.minItemWidth + props.gap);
@@ -54,33 +60,29 @@
 		return Math.floor(nums)
 	})
 	const itemWidth = computed(() => {
-		return Math.floor((containerWidth.value - (rownums.value-1) *props.gap )/rownums.value);
+		return Math.floor((containerWidth.value- (rownums.value-1) *props.gap )/rownums.value);
 	})
-	async function getViewWidth() {
-		await nextTick();
-		 uni.createSelectorQuery().in(instance).select('#xtflexwrapequal').boundingClientRect((ret) => {
-			 if(ret!=null){
-				 console.log("ret", ret)
-				 const nodeInfo = ret as NodeInfo;
-				 containerWidth.value = nodeInfo.width as number;
-			 }
+	const getViewWidth=()=>{
+		viewwidth.value = uni.getWindowInfo().windowWidth;
+	}
+	// async function getViewWidth() {
+	// 	await nextTick();
+	// 	 uni.createSelectorQuery().in(instance).select('#xtflexwrapequal').boundingClientRect((ret) => {
+	// 		 if(ret!=null){
+	// 			 console.log("ret", ret)
+	// 			 const nodeInfo = ret as NodeInfo;
+	// 			 containerWidth = nodeInfo.width as number;
+	// 		 }
 			
 
-		}).exec()
-	}
-
-	onMounted(() => {
-		getViewWidth();
-		//uni.onWindowResize(getViewWidth)
-	})
-	onResize(()=>{
-		console.log("onresize")
-		getViewWidth();
-	})
-	onUpdated(()=>{
-		console.log("onupdated")
-		getViewWidth();
-	})
+	// 	}).exec()
+	// }
+const minwidthvalue=computed(()=>{
+	return itemWidth.value + 'px';
+})
+const maxwidthvalue=computed(()=>{
+	return props.maxItemWidth>0?props.maxItemWidth:( itemWidth.value + 'px');
+})	
 	const cssVars = computed(() => {
 		return {
 			'--min-width': itemWidth.value + 'px',
@@ -93,6 +95,9 @@
 		}
 	})
 	const marginLeft=(index:number)=>{
+		if(rownums.value==0){
+			return 0;
+		}
 		if(index==0|| index%rownums.value==0){
 			return 0;
 		}
@@ -110,6 +115,18 @@
 		}
 		return (props.gap+'px')
 	}
+	onMounted(() => {
+		//getViewWidth();
+		//uni.onWindowResize(getViewWidth)
+	})
+	onResize(()=>{
+		console.log("onresize")
+		getViewWidth();
+	})
+	onUpdated(()=>{
+		console.log("onupdated")
+	//	getViewWidth();
+	})
 </script>
 
 <style scoped lang="scss">
@@ -128,7 +145,7 @@
 		/*  margin-left:var(--half-gap);
 	  margin-top:var(--half-gap); */
 		min-width: var(--min-width);
-		max-width: var(--max-item-width);
+		// max-width: var(--max-item-width);
 
 
 	}

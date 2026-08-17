@@ -1,12 +1,12 @@
 <template>
-	<rice-navbar :fixed="false" :title="showNav?'财务中心':''" title-color="#fff"  bg-color="#1264E8" :border="false" :left-arrow="false" :safe-area-inset-top="false">
+	<rice-navbar :fixed="false" :title="showNav?i18n.global.t('finance.navbar_title'):''" title-color="#fff"  bg-color="#1264E8" :border="false" :left-arrow="false" :safe-area-inset-top="true">
 	
 	</rice-navbar>
 	<scroll-view style="flex:1;background:#f5f7fa;" v-if="!loading&&hotel_id!=''" :refresher-enabled="true" @scroll="onScroll"
 		:refresher-triggered="refreshState" @refresherrefresh="refreshData" :show-scrollbar="false" refresher-background="#1264E8" refresher-default-style="white">
 		<view class="top-header">
 			<!-- <text class="header-title">{{i18n.global.t('finance.navbar_title')}}</text> -->
-			<rice-cell :title="i18n.global.t('finance.navbar_title')" label="年度月度财务汇总" :custom-style="{background:'rgba(255,255,255,0)'}" :title-text-style="{color:'#fff',fontSize:'20px',fontWeight:'bold'}" :label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
+			<rice-cell :title="i18n.global.t('finance.navbar_title')" label="年度月度财务汇总" :custom-style="{background:'rgba(255,255,255,0)',paddingTop:'8px'}" :title-text-style="{color:'#fff',fontSize:'20px',fontWeight:'bold'}" :label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
 			  <template #leftIcon>
 			    <image src="/static/icons/fmhome.png" class="left-cion" style="width:55px;height:55px;margin-right:8px"></image>
 			  </template>
@@ -229,7 +229,7 @@
 
 	}
 	const showNav = ref<boolean>(false)
-	const threshold = 50
+	const threshold = 60
 	
 	function onScroll(e : UniScrollEvent){
 	  const scrollTop : number = e.detail.scrollTop
@@ -246,7 +246,7 @@
 	.top-header {
 		width: 100%;
 		background:linear-gradient(to bottom, #1264E8, #3193F4);
-		padding: 8px 0 20px;
+		padding: 0px 0 20px 0;
 		text-align: center;
 		
 	}

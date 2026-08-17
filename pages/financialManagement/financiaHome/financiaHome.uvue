@@ -2,7 +2,7 @@
 	<rice-navbar :fixed="false" :title="showNav?i18n.global.t('finance.navbar_title'):''" title-color="#fff"  bg-color="#1264E8" :border="false" :left-arrow="false" :safe-area-inset-top="true">
 	
 	</rice-navbar>
-	<scroll-view style="flex:1;background:#f5f7fa;" v-if="!loading&&hotel_id!=''" :refresher-enabled="true" @scroll="onScroll"
+	<scroll-view style="flex:1;background:#f1f5fe;" v-if="!loading&&hotel_id!=''" :refresher-enabled="true" @scroll="onScroll"
 		:refresher-triggered="refreshState" @refresherrefresh="refreshData" :show-scrollbar="false" refresher-background="#1264E8" refresher-default-style="white">
 		<view class="top-header">
 			<!-- <text class="header-title">{{i18n.global.t('finance.navbar_title')}}</text> -->

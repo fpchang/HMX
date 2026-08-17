@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="title">
-			<text style="color:#666;font-weight:bold">入住数据</text>
+			<text style="color:#666;font-weight:bold">{{ i18n.global.t("home.checkinData") }}</text>
 		</view>
 		<view class="stats-tab">
 			<!-- <view :class="[activeIndex == 0?'tab-btn tab-btn-active':'tab-btn' ]" @click="tabClick(0)"
@@ -24,7 +24,7 @@
 							<view class="card-content">
 								<view style="display:flex;flex-direction:row;align-items: flex-end;">
 									<text class="numlabel">{{numOrderToday}}</text>
-									<text class="card-num-unit-style">间</text>
+									<text class="card-num-unit-style">{{i18n.global.t("home.roomUnit")}}</text>
 								</view>
 							</view>
 						</view>
@@ -33,7 +33,7 @@
 							<view class="card-content">
 								<view style="display:flex;flex-direction:row;align-items: flex-end;">
 									<text class="numlabel">{{numAccessOutToday}}</text>
-									<text class="card-num-unit-style">间</text>
+									<text class="card-num-unit-style">{{i18n.global.t("home.roomUnit")}}</text>
 								</view>
 					
 							</view>
@@ -69,7 +69,7 @@
 						<view class="card-content">
 							<view style="display:flex;flex-direction:row;align-items: flex-end;">
 								<text class="numlabel">{{numOrderTommorow}}</text>
-								<text class="card-num-unit-style">间</text>
+								<text class="card-num-unit-style">{{i18n.global.t("home.roomUnit")}}</text>
 							</view>
 							
 						</view>
@@ -80,7 +80,7 @@
 							<view>
 								<view style="display:flex;flex-direction:row;align-items: flex-end;">
 									<text class="numlabel">{{numAccessOutTommorow}}</text>
-									<text class="card-num-unit-style">间</text>
+									<text class="card-num-unit-style">{{i18n.global.t("home.roomUnit")}}</text>
 								</view>
 
 							</view>
@@ -106,7 +106,7 @@
 			</xt-flex-wap-equal>
 		</view>
 		<view class="percent-style">
-			<view class="percent-style-text-container"><text class="percent-style-text">入住率</text><text
+			<view class="percent-style-text-container"><text class="percent-style-text">{{i18n.global.t("home.occupancyRate")}}</text><text
 					style="color:#969799;font-size: 14px;">{{checkInPercent}}%</text></view>
 			<rice-progress :percentage="checkInPercent" :show-text="false" />
 			<!-- <rice-slider v-model="checkInPercent" inactive-color="#E8F2FF"  :min="0" :max="100"></rice-slider> -->
@@ -130,7 +130,7 @@
 	defineOptions({
 		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
 	})
-	const menulist = ref<TabsOptions[]>([{ name: '今日' }, { name: '明日' }])
+	const menulist = ref<TabsOptions[]>([{ name: i18n.global.t("gather.today") }, { name: i18n.global.t("gather.tomorrow") }])
 	const activeIndex = ref(0);
 
 	const itemStyle = {
@@ -198,7 +198,6 @@
 		let num = getRoomCountFromOrderList(orderList);
 		return num;
 	});
-	console.log("999929299292===", orderState.orderListByCheckOutToday)
 	//今日退房订单
 	const numAccessOutToday = computed(() : number => {
 		let orderList = orderState.orderListByCheckOutToday;

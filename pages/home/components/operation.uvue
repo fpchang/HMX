@@ -43,7 +43,7 @@
 	const menuList : Array<menu> = [{
 		icon: "/static/icons/homemenu/v2/order-add.png",
 		title: i18n.global.t('common.btn_txt_create',[i18n.global.t('order.title_order')]),
-		label: "快速新建入住订单",
+		label:i18n.global.t("home.quickCreateCheckinOrder"),// "快速新建入住订单",
 		bgColor: "#165dff1a",
 		url: "/pages/order/createOrder/createOrder",
 		show: permissionList.value.includes("FM_CREATE")
@@ -51,7 +51,7 @@
 	{
 		icon: "/static/icons/homemenu/v2/income.png",
 		title:i18n.global.t("common.btn_txt_create",[i18n.global.t("finance.title_income_expense")]),
-		label:"记录账目与收支明细",
+		label:i18n.global.t("home.recordAccountsIncomeExpense"),//"记录账目与收支明细",
 		bgColor: "#722ed11a",
 		url: "/pages/financialManagement/inExManage/createIncomeAndExpense/createIncomeAndExpense?billType=income",
 		show: permissionList.value.includes("FM_CREATE")
@@ -59,7 +59,7 @@
 	{
 		icon: "/static/icons/homemenu/v2/order.png",//rgb(250 173 20 / var(--tw-text-opacity, 1))
 		title:i18n.global.t("order.orderManage") ,
-		label:"查看与管理全部订单" ,
+		label:i18n.global.t("home.viewManageAllOrders"),//"查看与管理全部订单" ,
 		bgColor: "#faad141a",
 		url: "/pages/order/orderList/orderList"
 	}

@@ -3,7 +3,7 @@
 
 	</rice-navbar>
 	<view v-if="dataReading&&hotel_id!=''" style="display;flex:1;display:flex;flex-direction:column;">
-		<rice-cell :title="hotel?.hotelName" label="管理中心" :custom-style="{background:'#1264E8',paddingTop:'4px'}"
+		<rice-cell :title="hotel?.hotelName" :label="i18n.global.t('home.adminCenter')" :custom-style="{background:'#1264E8',paddingTop:'4px'}"
 			:title-text-style="{color:'#fff',fontSize:'20px',fontWeight:'bold'}"
 			:label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
 			<template #leftIcon>
@@ -15,7 +15,7 @@
 				<view style="display:flex;flex-direction:row;justify-content:flex-end;flex:1;">
 					<view>
 						<rice-button type="success" size="small" color="rgba(255,255,255,0.4)" shape="round"
-							icon="switch" text="切换" @click="showCheckHotel"></rice-button>
+							icon="switch" :text="i18n.global.t('home.switch')" @click="showCheckHotel"></rice-button>
 
 					</view>
 				</view>
@@ -25,7 +25,7 @@
 			@refresherrefresh="refreshData" style="flex:1;display: flex;flex-direction: column"
 			:show-scrollbar="false" refresher-background="#1264E8" refresher-default-style="white">
 			<view class="header">
-				<rice-cell :title="timestr" label="欢迎回来" :custom-style="{background:'transparent'}"
+				<rice-cell :title="timestr" :label="i18n.global.t('home.welcomeBack')" :custom-style="{background:'transparent'}"
 					:title-text-style="{color:'#fff',color:'rgba(255,255,255,0.7)'}"
 					:label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
 		
@@ -53,7 +53,7 @@
 
 			<sticky-header>
 				<!-- <view style="height:45px;"></view>	 -->
-				<rice-cell :title="hotel?.hotelName" label="管理中心"
+				<rice-cell :title="hotel?.hotelName" :label="i18n.global.t('home.adminCenter')"
 					:custom-style="{background:'#1264E8',paddingTop:'4px'}"
 					:title-text-style="{color:'#fff',fontSize:'20px',fontWeight:'bold'}"
 					:label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
@@ -173,9 +173,11 @@
 	const submitLoading = ref(false);
 	const showRange = ref(false);
 	const showPopup = ref(false);
-	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"]);
 	const timestr = computed(() => {
-		return dateuts(new Date()).format('YYYY年MM月DD日 dddd')
+		if(i18n.global.locale.value == 'zh-CN'){
+			return dateuts(new Date()).format('YYYY年MM月DD日 dddd')
+		}
+		return dateuts(new Date()).format('YYYY-MM-DD')
 	})
 	const rangeConfirm = (e : string[]) => { }
 	const showPickTime = () => {

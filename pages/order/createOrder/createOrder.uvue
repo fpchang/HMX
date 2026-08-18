@@ -1,5 +1,5 @@
 <template>
-	<rice-navbar title="" border>
+	<rice-navbar title="">
 		<template #left>
 			<view style="display: flex;flex-direction: row;align-items: center;">
 				<navigator open-type="navigateBack">
@@ -17,9 +17,7 @@
 			</view>
 		</template>
 	</rice-navbar>
-	<!-- #ifdef APP -->
 	<scroll-view style="flex:1">
-	<!-- #endif -->
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
 			<xt-form-item :label="i18n.global.t('order.create_order.source')" tips="" required>
 				<rice-radio-group v-model="orderForm.orderSource" direction="row" @change="orderSourceChange">
@@ -54,11 +52,11 @@
 				</view>
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('order.create_order.customer_name')" tips="" required>
-				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('order.create_order.please_enter_wechat')"
+				<rice-input  placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('order.create_order.please_enter_wechat')"
 					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.userName"></rice-input>
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('order.create_order.contact_phone')" tips="">
-				<rice-input style="height: 40px;" placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('order.create_order.please_enter_phone')"
+				<rice-input  placeholderStyle="font-size:14px" classic :placeholder="i18n.global.t('order.create_order.please_enter_phone')"
 					borderColor="#dcdfe6" :disabled="pageType==2" v-model="orderForm.phone" :maxlength="11"
 					type="number"></rice-input>
 			</xt-form-item>
@@ -76,9 +74,7 @@
 					v-model="orderForm.mark"></rice-textarea>
 			</xt-form-item>
 		</view>
-	<!-- #ifdef APP -->
-	</scroll-view>
-	<!-- #endif -->
+</scroll-view>
 	<rice-calendar v-model:show="showCalendar" mode="range" :min-date="initDateObj.minDate" :date="dateRange"
 		@confirm="rangeConfirm" :title="i18n.global.t('form.canendar_title')" :show-subtitle="true"></rice-calendar>
 </template>
@@ -133,7 +129,7 @@
 	let submitLoading = ref(false);
 	const title = computed(() => {
 		if (pageType.value == 0) {
-			return i18n.global.t('order.create_order.addOrder');
+			return i18n.global.t('order.addOrder');
 		}
 		return pageType.value == 1 ? i18n.global.t('order.create_order.edit_order_info') : i18n.global.t('order.create_order.order_info');
 	});

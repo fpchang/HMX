@@ -1,29 +1,27 @@
 <template>
 	<view style="display: flex;flex:1">
-		<rice-navbar title="" border>
+		<rice-navbar title="">
 			<template #left>
 				<view style="display: flex;flex-direction: row;align-items: center;">
 					<navigator open-type="navigateBack">
 						<rice-icon name="arrow-left" size="22px" />
 					</navigator>
 
-					<image src="/static/icons/list.png"
+					<image :src="titleImg"
 						style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
 					<text
-						style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{ i18n.global.t('order.orderList') }}</text>
+						style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{ title }}</text>
 				</view>
 			</template>
 			<template #right>
-				<view class="navbar-btn" @click="addOrder">
+				<view class="navbar-btn" @click="addOrder" v-if="!showDeatilPage">
 					<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 					<text class="navbar-btn-txt">{{ i18n.global.t('order.title_order') }}</text>
 				</view>
 			</template>
 		</rice-navbar>
 
-		<!-- #ifdef APP -->
 		<scroll-view style="flex:1">
-		<!-- #endif -->
 			<view class="search-area-root">
 				<view class="search-card">
 					<view class="search-card-item title-row">
@@ -54,7 +52,7 @@
 							</view>
 							<rice-cell :title="order.userName"
 								:label="`${formatDate(order.checkInStartDateTimeStamp)}~${formatDate(order.checkInEndDateTimeStamp)}`"
-								size="large" arrow arrow-direction="left" center :clickable="false" @click="viewOrder(order)">
+								size="large" arrow arrow-direction="left" center :clickable="false">
 								<template #leftIcon>
 									<image mode="aspectFit" :src="formatRommTypeImage(order.reservedRoomList[0])"
 										style="margin-right:8px;width: 100px;height:110px;border-radius: 12px;"
@@ -128,9 +126,7 @@
 			</view>
 			<l-empty :description="i18n.global.t('common.noData',[''])"
 				v-if="!submitLoading&&orderResult.orderList.length<1" />
-		<!-- #ifdef APP -->
 		</scroll-view>
-		<!-- #endif -->
 		<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"
 			v-if="!submitLoading&&orderResult!=null&&orderResult.count>orderResult.pageSize">
 			<l-pagination v-model="orderResult.pageNo" :disabled="submitLoading" :total="orderResult?.count"
@@ -209,6 +205,16 @@
 	})
 	let submitLoading = ref(false);
 	const showDeatilPage = ref(false);
+	const title = computed(() => {
+		if (showDeatilPage.value) {
+			return i18n.global.t("common.btn_txt_details", [i18n.global.t('order.title_order')]);
+		}
+		return i18n.global.t("order.orderList");
+	})
+	const titleImg = computed<string>(() => {
+		
+		return showDeatilPage.value? "/static/icons/detailpage.png":"/static/icons/list.png" ;
+	})
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});

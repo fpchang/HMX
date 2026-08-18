@@ -181,6 +181,7 @@ class RoomTypeClass {
 					"room_type_id": item.room_type_id
 				})
 			});
+			console.log("add",list);
 			const res = await action_co.room_addRoom(list);
 			console.log("add room",res);
 			const code = res['code'] as number;
@@ -198,7 +199,7 @@ class RoomTypeClass {
 		try {
 			const roomObj={
 				_id:room._id,
-				hotel_id: room.hotel_id,
+				//hotel_id: room.hotel_id,
 				room_name: room.room_name,
 				room_type_id: room.room_type_id
 			}

@@ -1,5 +1,5 @@
 <template>
-	<rice-navbar title="" border>
+	<rice-navbar title>
 		<template #left>
 			<view style="display: flex;flex-direction: row;align-items: center;">
 				<navigator open-type="navigateBack">
@@ -91,7 +91,7 @@
 			return i18n.global.t("common.btn_txt_create", [i18n.global.t('hotel.title_room')]);
 		}
 		const modify_title = i18n.global.t("common.btn_txt_modify", [i18n.global.t('hotel.title_room')]);
-		const detail_title = i18n.global.t("common.btn_txt_eetails", [i18n.global.t('hotel.title_room')]);
+		const detail_title = i18n.global.t("common.btn_txt_details", [i18n.global.t('hotel.title_room')]);
 		return pageType.value == 1 ? modify_title : detail_title;
 	});
 	const titleImg = computed<string>(() => {

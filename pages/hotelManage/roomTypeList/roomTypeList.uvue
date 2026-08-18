@@ -1,5 +1,5 @@
 <template>
-	<rice-navbar title="" border>
+	<rice-navbar title="">
 		<template #left>
 			<view style="display: flex;flex-direction: row;align-items: center;">
 				<navigator open-type="navigateBack">
@@ -22,10 +22,10 @@
 		<view class="roomtype-list-wrap">
 			<view class="roomtype-card-item" v-for="(roomType,index) of roomTypeList">
 				<view class="roomtype-card-box">
-					<view class="card-img-block">
+					<view class="card-image-block">
 						<image v-if="roomType.firstImages!=''" :src="roomType.firstImages" style="height: 100%;width: 100%;" mode="aspectFill">
 						</image>
-						<image  v-if="roomType.firstImages==''"  src="/static/images/nono-img.png" style="height: 100%;width: 100%;" mode="aspectFit">
+						<image  v-if="roomType.firstImages==''"  src="/static/images/nono-img.png" style="height: 80%;width: 80%;" mode="aspectFit">
 						</image>
 					</view>
 					<rice-swipe-actions :accordion="true" ref="swipeControlRef">
@@ -302,11 +302,22 @@
 	background-color: #fff;
 	border-radius: 8px;
 }
+.card-image-block {
+	height: 350rpx;
+	max-height: 200px;
+	background-color: #eee;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 /* 图片区域 */
 .card-img-block {
 	height: 350rpx;
 	max-height: 200px;
-	background-color: #eee;
+	background-color: #efefef;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 /* 标题内容外层 */
 .card-title-wrap {

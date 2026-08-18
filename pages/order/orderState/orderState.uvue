@@ -1,7 +1,6 @@
 <template>
-	<view style="display: flex;flex:1"> 
-	
-	<rice-navbar :fixed="false" title="" border v-if="hotel_id!=''">
+
+	<rice-navbar title="" :fixed="false"  v-if="hotel_id!=''">
 		<template #left>
 			<view style="display: flex;flex-direction: row;align-items: center;">
 				<!-- s -->
@@ -22,23 +21,21 @@
 			</view>
 		</template>
 	</rice-navbar>
-	<scroll-view style="flex:1" v-if="hotel_id!=''&&roomList.length>0" :refresher-enabled="true"
+		<scroll-view style="flex:1" v-if="hotel_id!=''&&roomList.length>0" :refresher-enabled="true"
 		:refresher-triggered="refreshState" @refresherrefresh="refreshData" :show-scrollbar="false">
 		<view style="display: flex;flex-direction: row;">
 			<view>
 				<view class="table-container">
 					<view class="table">
 						<view class="row">
-							<view class="cell"
-								style="border-left: 1px solid #e5e7eb;">
-								<view class="cell-content cell-th-cell-content"
-									style="padding:0;">
+							<view class="cell" style="border-left: 1px solid #e5e7eb;">
+								<view class="cell-content cell-th-cell-content" style="padding:0;">
 									<!-- <text class="txt" style="color:#1f2937;font-size: 16px;">房间/日期</text> -->
-									  <view class="slash-wrap">
-								          <text class="slash-left">{{ i18n.global.t('order.room') }}  </text>
-								          <text class="slash-line"></text>
-								          <text class="slash-right">{{ i18n.global.t('order.date') }} </text>
-								        </view>
+									<view class="slash-wrap">
+										<text class="slash-left">{{ i18n.global.t('order.room') }} </text>
+										<text class="slash-line"></text>
+										<text class="slash-right">{{ i18n.global.t('order.date') }} </text>
+									</view>
 								</view>
 							</view>
 
@@ -83,8 +80,8 @@
 						</view>
 						<view class="row" v-for="(list,index) of checkInOrderListFormat">
 							<view class="cell" v-for="(it,ind) of list">
-								<view :class="['cell-content', it.name!=''?'cell-content-red':'']">
-									<text class="cell-txt">{{it.name}}</text>
+								<view class="cell-content">
+									<text :class="['cell-txt', it.name!=''?'cell-content-red':'']">{{it.name}}</text>
 								</view>
 							</view>
 
@@ -96,14 +93,15 @@
 			</view>
 		</view>
 		<view style="height:75px"></view>
+		<view style="margin-top: 168px;" v-if="hotel_id==''|| roomList.length<1">
+			<l-empty :description="hotel_id==''?i18n.global.t('order.noData')   :i18n.global.t('order.noRoom')" />
+		</view>
 
 
-	</scroll-view>
-	<view style="margin-top: 168px;" v-if="hotel_id==''|| roomList.length<1">
-		<l-empty :description="hotel_id==''?i18n.global.t('order.noData')   :i18n.global.t('order.noRoom')" />
-	</view>
 
-</view>
+		</scroll-view>
+
+
 
 
 
@@ -282,10 +280,14 @@
 		refreshState.value = false;
 
 	}
+	// onPullDownRefresh(async ()=>{
+	// 	console.log(22222)
+	// 	await getGatherEvent(hotel_id.value);
+	// 	uni.stopPullDownRefresh();
+	// })
 </script>
 
 <style lang="scss">
-	
 	.table-container {
 		flex: 1;
 		box-sizing: border-box;
@@ -320,8 +322,8 @@
 	}
 
 	.cell-txt {
-		color: #787878;
-		font-size: 12px;
+		color: #333;
+		font-size: 13px;
 		text-align: center;
 	}
 
@@ -333,43 +335,45 @@
 	}
 
 	.cell-txt-green {
-		color: green;
+		color: #27ae60;
 		font-size: 12px;
 		text-align: center;
 	}
 
 	.cell-content-red {
-		background-color: rgba(239, 68, 68, 0.1);
+		background-color: #e8f1fc;
+		padding:12px 0;
+		border-radius:10px;
 	}
 
 	.cell-th-cell-content {
-		height: 70px;
-		background-color: #f9fafb;
+		height: 76px;
+		background-color: #e8f1fc;
 		display: flex;
 		flex-direction: row;
 	}
 
 	.row-first-child-cell {
 		border-top: 1px solid #e5e7eb;
-		
+
 	}
 
 	.slash-wrap {
 		position: relative;
 		box-sizing: border-box;
 		min-width: 80px;
-		height: 70px;
-		flex:1;
+		height: 76px;
+		flex: 1;
 	}
 
 	.slash-line {
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: 114px;
+		width: 118px;
 		height: 1px;
 		background-color: #e5e7eb;
-		transform: rotate(38deg);
+		transform: rotate(40deg);
 		transform-origin: top left;
 		color: #787878;
 	}
@@ -391,6 +395,7 @@
 		color: #787878;
 		font-size: 13px;
 	}
+
 	.nav-add-hotel-btn {
 		display: flex;
 		flex-direction: row;
@@ -399,6 +404,7 @@
 		padding: 12px 15px;
 		border-radius: 8px;
 	}
+
 	.nav-btn-text {
 		color: #007aff;
 		font-size: 15px;

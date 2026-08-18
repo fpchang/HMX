@@ -58,7 +58,7 @@ export let formatRoomTypeBean=(parsed:UTSJSONObject):roomTypeBean=>{
 			const rm: roomBean = {
 				_id: rItem.getString("_id") ?? "",
 				data_status: rItem.getNumber("data_status"),
-				hotel_id:  rItem.getString("_id") ?? "",
+				hotel_id:  rItem.getString("hotel_id") ?? "",
 				room_name:  rItem.getString("room_name") ?? "",
 				room_type_id:  rItem.getString("room_type_id") ?? ""
 			}

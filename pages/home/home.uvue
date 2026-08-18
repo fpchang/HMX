@@ -1,93 +1,165 @@
 <template>
-	<view style="display: flex;flex:1;">
-		
-		
-		
-		<rice-navbar :fixed="false" :safe-area-inset-top="true" bg-color="#007AFF" :left-arrow="false">
-			<template #title>
-				<view class="nav-header-wrap">
-					<view class="hotel-switch-row"  v-if="hotelList.length>0">					
-							<text class="hotel-name-text">{{hotel?.hotelName}}</text>						
-						<!-- <rice-icon name="arrow-down" color="#fff" size="22px" style="margin-left: 8px;" /> -->
-						<rice-button :custom-style="{padding:'0 15px 0 15px'}" shape="round" :text="i18n.global.t('common.btn_txt_switch')" size="small" color="rgba(255,255,255,0.5)" @click="showCheckHotel"></rice-button>
+	<rice-navbar :fixed="false" bg-color="#1264E8" :border="false" :left-arrow="false" :safe-area-inset-top="false">
+
+	</rice-navbar>
+	<view v-if="dataReading&&hotel_id!=''" style="display;flex:1;display:flex;flex-direction:column;">
+		<rice-cell :title="hotel?.hotelName" :label="i18n.global.t('home.adminCenter')" :custom-style="{background:'#1264E8',paddingTop:'4px'}"
+			:title-text-style="{color:'#fff',fontSize:'20px',fontWeight:'bold'}"
+			:label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
+			<template #leftIcon>
+				<image src="/static/icons/hotel-logo.png" class="left-cion"
+					style="width:55px;height:55px;margin-right:8px"></image>
+			</template>
+
+			<template #value>
+				<view style="display:flex;flex-direction:row;justify-content:flex-end;flex:1;">
+					<view>
+						<rice-button type="success" size="small" color="rgba(255,255,255,0.4)" shape="round"
+							icon="switch" :text="i18n.global.t('home.switch')" @click="showCheckHotel"></rice-button>
+
 					</view>
 				</view>
 			</template>
-			<template #right>
-			</template>
-		</rice-navbar>
+		</rice-cell>
 		<scroll-view v-if="dataReading&&hotel_id!=''" :refresher-enabled="true" :refresher-triggered="refreshState"
-			@refresherrefresh="refreshData" style="flex:1;background:#f5f5f5;display: flex;flex-direction: column"
-			:show-scrollbar="false">
-			<gatherComponent></gatherComponent>
-			<operation></operation>
-			<view style="height:70px"></view>
-		</scroll-view>
-		<view v-if="!dataReading" style="margin-top:168px;display: flex;flex-direction: row;justify-content: center;">
-			<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
-		</view>
-		<view style="margin-top: 68px;" v-if="dataReading&&hotel_id==''">
-			<l-empty :description="i18n.global.t('common.noData',[i18n.global.t('hotel.title')])" />
-			<view style="display: flex;flex-direction: row;align-items: center;justify-content: center;">
-				<rice-button type="primary" icon="plus"
-					:text="i18n.global.t('common.btn_txt_create',[i18n.global.t('hotel.title')])"
-					@click="createHotel"></rice-button>
+			@refresherrefresh="refreshData" style="flex:1;display: flex;flex-direction: column"
+			:show-scrollbar="false" refresher-background="#1264E8" refresher-default-style="white">
+			<view class="header">
+				<rice-cell :title="timestr" :label="i18n.global.t('home.welcomeBack')" :custom-style="{background:'transparent'}"
+					:title-text-style="{color:'#fff',color:'rgba(255,255,255,0.7)'}"
+					:label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
+		
+				</rice-cell>
+		
+		
 			</view>
+			<view class="container-content">
+				<gatherComponent></gatherComponent>
+				<operation></operation>
+				<view style="height:70px"></view>
+			</view>
+		
+		</scroll-view>
+		
+		
+		
+	</view>
+	<list-view v-if="false&&dataReading&&hotel_id!=''" :scroll-y="true" :refresher-enabled="true"
+		:refresher-triggered="refreshState" @refresherrefresh="refreshData"
+		style="flex:1;;display: flex;background-color:#1264E8" :show-scrollbar="false" refresher-background="#1264E8"
+		refresher-default-style="white" :bounces="false">
+
+		<sticky-section>
+
+			<sticky-header>
+				<!-- <view style="height:45px;"></view>	 -->
+				<rice-cell :title="hotel?.hotelName" :label="i18n.global.t('home.adminCenter')"
+					:custom-style="{background:'#1264E8',paddingTop:'4px'}"
+					:title-text-style="{color:'#fff',fontSize:'20px',fontWeight:'bold'}"
+					:label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
+					<template #leftIcon>
+						<image src="/static/icons/hotel-logo.png" class="left-cion"
+							style="width:55px;height:55px;margin-right:8px"></image>
+					</template>
+
+					<template #value>
+						<view style="display:flex;flex-direction:row;justify-content:flex-end;flex:1;">
+							<view>
+								<rice-button type="success" size="small" color="rgba(255,255,255,0.4)" shape="round"
+									icon="switch" text="切换" @click="showCheckHotel"></rice-button>
+
+							</view>
+						</view>
+					</template>
+				</rice-cell>
+			</sticky-header>
+			<list-item>
+
+				<rice-cell :title="timestr" label="欢迎回来" :custom-style="{background:'transparent'}"
+					:title-text-style="{color:'#fff',color:'rgba(255,255,255,0.7)'}"
+					:label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
+
+				</rice-cell>
+			</list-item>
+			<list-item style="flex:1;background:red">
+				<view class="container-content">
+
+					<operation></operation>
+					<view style="height:70px"></view>
+				</view>
+
+			</list-item>
+		</sticky-section>
+
+	</list-view>
+
+	
+	<view v-if="!dataReading" style="margin-top:168px;display: flex;flex-direction: row;justify-content: center;">
+		<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
+	</view>
+	<view style="margin-top: 68px;" v-if="dataReading&&hotel_id==''">
+		<l-empty :description="i18n.global.t('common.noData',[i18n.global.t('hotel.title')])" />
+		<view style="display: flex;flex-direction: row;align-items: center;justify-content: center;">
+			<rice-button type="primary" icon="plus"
+				:text="i18n.global.t('common.btn_txt_create',[i18n.global.t('hotel.title')])"
+				@click="createHotel"></rice-button>
 		</view>
-		<rice-popup v-model:show="showPopup" position="bottom" :closeable="true" radius="15px" @closed="closePupop">
-			<view class="popup-main-container">
-				<view style="flex: 1; min-height: 330px">
-					<view class="popup-top-blank"></view>
-					<view class="popup-title-bar">
-						<view>
-							<rice-icon name="bars" size="32px" color="#007AFF"></rice-icon>
-						</view>
-						<view class="bar-title-text-wrap">
-							<text class="bar-title">{{i18n.global.t('hotel.hotel_list')}}</text>
-						</view>
-						<navigator url="/pages/hotelManage/hotelList/hotelList" hover-class="none">
-							<view class="manage-btn-box"><text
-									class="manage-btn-text">{{i18n.global.t('hotel.btn_txt_manage')}}</text></view>
-						</navigator>
+	</view>
+	<rice-popup v-model:show="showPopup" position="bottom" :closeable="true" radius="15px" @closed="closePupop">
+		<view class="popup-main-container">
+			<view style="flex: 1; min-height: 330px">
+				<view class="popup-top-blank"></view>
+				<view class="popup-title-bar">
+					<view>
+						<rice-icon name="bars" size="32px" color="#007AFF"></rice-icon>
 					</view>
-					<scroll-view style="background:#fff;height:500px">
-						<view style="display: flex;flex-wrap:wrap;flex-direction: row;">
-							<view v-for="item of hotelList" style="padding: 10px;flex:1;min-width:320px;"
-								@click="checkHotel((item._id as string))">
-								<view class="hotel-card-box" :class="item._id==hotel_id?'hotel-card-active':''">
-									<view class="card-img-block">
-										<image :src="item.firstImages" v-if="item.firstImages!=''"
-											style="height: 100%;width: 100%;" mode="aspectFill"></image>
-										<image src="/static/images/nono-img.png" v-if="item.firstImages==''"
-											style="height: 80%;width: 80%;" mode="aspectFit"></image>
-									</view>
-									<view style="padding: 15px 10px" class="card-text-wrap">
-										<view class="card-text-row">
-											<view class="card-name-row"><text
-													class="card-name-text">{{item?.hotelName}}</text>
-											</view>
+					<view class="bar-title-text-wrap">
+						<text class="bar-title">{{i18n.global.t('hotel.hotel_list')}}</text>
+					</view>
+					<navigator url="/pages/hotelManage/hotelList/hotelList" hover-class="none">
+						<view class="manage-btn-box"><text
+								class="manage-btn-text">{{i18n.global.t('hotel.btn_txt_manage')}}</text></view>
+					</navigator>
+				</view>
+				<scroll-view style="background:#fff;height:500px">
+					<view style="display: flex;flex-wrap:wrap;flex-direction: row;">
+						<view v-for="item of hotelList" style="padding: 10px;flex:1;min-width:320px;"
+							@click="checkHotel((item._id as string))">
+							<view class="hotel-card-box" :class="item._id==hotel_id?'hotel-card-active':''">
+								<view class="card-img-block">
+									<image :src="item.firstImages" v-if="item.firstImages!=''"
+										style="height: 100%;width: 100%;" mode="aspectFill"></image>
+									<image src="/static/images/nono-img.png" v-if="item.firstImages==''"
+										style="height: 80%;width: 80%;" mode="aspectFit"></image>
+								</view>
+								<view style="padding: 15px 10px" class="card-text-wrap">
+									<view class="card-text-row">
+										<view class="card-name-row"><text
+												class="card-name-text">{{item?.hotelName}}</text>
 										</view>
-										<view class="card-text-row">
-											<view class="card-addr-row"><text
-													class="card-addr-text">{{item.hotelAddress}}</text></view>
-										</view>
 									</view>
-									<view class="card-select-icon-box">
-										<rice-icon v-if="item._id==hotel_id" name="checked-circle-fill" size="25px"
-											color="#007aff"></rice-icon>
+									<view class="card-text-row">
+										<view class="card-addr-row"><text
+												class="card-addr-text">{{item.hotelAddress}}</text></view>
 									</view>
 								</view>
+								<view class="card-select-icon-box">
+									<rice-icon v-if="item._id==hotel_id" name="checked-circle-fill" size="25px"
+										color="#007aff"></rice-icon>
+								</view>
 							</view>
-							<view v-for="item in 5" style="height: 0;min-width:360px;padding:0 10px;flex:1"></view>
 						</view>
-					</scroll-view>
-				</view>
+						<view v-for="item in 5" style="height: 0;min-width:360px;padding:0 10px;flex:1"></view>
+					</view>
+				</scroll-view>
 			</view>
-		</rice-popup>
-	</view>
+		</view>
+	</rice-popup>
+
 </template>
 
 <script setup>
+	import { dateuts } from '@/uni_modules/rice-ui';
 	import gatherComponent from "./components/gatherComponent";
 	import operation from "./components/operation";
 	import { state, setUser } from '@/store/store.uts';
@@ -95,13 +167,18 @@
 	import { userBean } from "@/bean/userBean";
 	import { hotelBean } from "@/bean/hotelBean";
 	import i18n from '@/i18n/index.uts';
-	defineOptions({
-		styleIsolation: "isolated"
-	})
+	// defineOptions({
+	// 	styleIsolation: "isolated"
+	// })
 	const submitLoading = ref(false);
 	const showRange = ref(false);
 	const showPopup = ref(false);
-	const dateRange = ref<string[]>(["2025-9-03", "2025-9-20"]);
+	const timestr = computed(() => {
+		if(i18n.global.locale.value == 'zh-CN'){
+			return dateuts(new Date()).format('YYYY年MM月DD日 dddd')
+		}
+		return dateuts(new Date()).format('YYYY-MM-DD')
+	})
 	const rangeConfirm = (e : string[]) => { }
 	const showPickTime = () => {
 		showRange.value = true;
@@ -166,18 +243,37 @@
 		// uni.setTabBarItem({ index: 3, text: i18n.global.t('tab.function') });
 		// uni.setTabBarItem({ index: 4, text: i18n.global.t('tab.mine') });
 	}
+
 	onLoad(() => {
 		init();
-		setTabBarI18n()
+		setTabBarI18n();
 	})
 </script>
 
 <style>
+	.header {
+		padding: 0px 0 20px 0;
+		background:#1264E8;
+	}
+
+	.container-content {
+
+		background: rgb(241, 245, 254);
+		border-top-left-radius: 20px;
+		border-top-right-radius: 20px;
+		padding: 14px;
+		box-sizing: border-box;
+		display:flex;
+		flex-direction:column;
+		margin-top:-20px;
+
+	}
+
 	/* 导航标题外层容器 */
 	.nav-header-wrap {
-		min-width:250px;
-		max-width:250px;
-		flex:1;
+		min-width: 250px;
+		max-width: 250px;
+		flex: 1;
 		background-color: #007AFF;
 		display: flex;
 		flex-direction: row;
@@ -187,20 +283,20 @@
 
 	/* 酒店名称下拉切换行 */
 	.hotel-switch-row {
-/* 		min-width: 200px;
+		/* 		min-width: 200px;
 		max-width:245px;
 	 */
 		flex: 1;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		justify-content:center;
+		justify-content: center;
 	}
 
 	/* 酒店标题文字 */
 	.hotel-name-text {
 		flex: 1;
-		overflow:hidden;
+		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		font-size: 18px;

@@ -1,14 +1,31 @@
 <template>
-	<scroll-view style="flex:1;background:#f5f7fa;" v-if="hotel_id!=''" :refresher-enabled="true"
-		:refresher-triggered="refreshState" @refresherrefresh="refreshData" :show-scrollbar="false">
+	<rice-navbar :fixed="false" :title="showNav?i18n.global.t('finance.navbar_title'):''" title-color="#fff"  bg-color="#1264E8" :border="false" :left-arrow="false" :safe-area-inset-top="true">
+	
+	</rice-navbar>
+	<scroll-view style="flex:1;background:#f1f5fe;" v-if="!loading&&hotel_id!=''" :refresher-enabled="true" @scroll="onScroll"
+		:refresher-triggered="refreshState" @refresherrefresh="refreshData" :show-scrollbar="false" refresher-background="#1264E8" refresher-default-style="white">
 		<view class="top-header">
-			<text class="header-title">{{i18n.global.t('finance.navbar_title')}}</text>
+			<!-- <text class="header-title">{{i18n.global.t('finance.navbar_title')}}</text> -->
+			<rice-cell :title="i18n.global.t('finance.navbar_title')" :label="i18n.global.t('finance.annualMonthlyFinancialSummary')" :custom-style="{background:'rgba(255,255,255,0)',paddingTop:'8px'}" :title-text-style="{color:'#fff',fontSize:'20px',fontWeight:'bold'}" :label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
+			  <template #leftIcon>
+			    <image src="/static/icons/fmhome.png" class="left-cion" style="width:55px;height:55px;margin-right:8px"></image>
+			  </template>
+			 
+			<!--  <template #value>
+				  <view style="display:flex;flex-direction:row;justify-content:flex-end;flex:1;">
+					  <view> 
+						<rice-button type="success" size="small" color="rgba(255,255,255,0.4)" shape="round" icon="switch" text="切换" @click="showCheckHotel"></rice-button>
+						
+					  </view>
+					 </view>
+			  </template> -->
+			</rice-cell>
 		</view>
 		<view class="wrap-content">
 			<!-- 头部总利润卡片 -->
 			<view class="profit-card">
 				<text class="profit-label">{{i18n.global.t('finance.annual_profit')}}</text>
-				<text class="profit-num item-profit">¥{{incomeYearAmount-expensesYearAmount}}</text>
+				<text class="profit-num item-profit">¥{{profit}}</text>
 			</view>
 			<!-- 核心指标4宫格 -->
 			<view class="kpi-grid">
@@ -75,15 +92,20 @@
 						<view class="tag-gold"></view><text
 							class="row-name">{{i18n.global.t('finance.annual_profit')}}</text>
 					</view>
-					<text class="row-money item-profit">¥{{incomeYearAmount-expensesYearAmount}}</text>
+					<text class="row-money item-profit">¥{{profit}}</text>
 				</view>
 			</view>
 		</view>
 		<view style="height:70px"></view>
 	</scroll-view>
+	<view v-if="loading" style="margin-top:168px;display: flex;flex-direction: row;justify-content: center;">
+		<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
+	</view>
 	<view v-if="hotel_id==''" style="margin-top: 80px;">
 		<l-empty :description="i18n.global.t('common.noData',[''])" />
 	</view>
+	
+	
 </template>
 <script setup>
 	import { FMService } from "@/services/FMService";
@@ -100,6 +122,7 @@
 		styleIsolation: "isolated"
 	})
 	const refreshState = ref(false);
+	const loading = ref(false);
 	const hotel_id = computed(() => {
 		return state.hotel_id;
 	});
@@ -157,9 +180,16 @@
 		})
 		return amount;
 	})
+	//利润
+	const profit=computed(()=>{
+		const count =  (incomeYearAmount.value-expensesYearAmount.value).toFixed(2);
+		return count;
+	})
 	const init = async () => {
+		loading.value = true;
 		const fm = new FmClass(hotel_id.value);
 		await fm.init();
+		loading.value = false;
 	}
 	const columnNum = computed(() => {
 		let num = 2;
@@ -189,9 +219,6 @@
 			title: i18n.global.t("finance.navbar_title")
 		})
 	})
-	onShow(() => {
-		console.log("98888")
-	})
 	function goToDetail(type : string) {
 
 	}
@@ -201,14 +228,27 @@
 		refreshState.value = false;
 
 	}
+	const showNav = ref<boolean>(false)
+	const threshold = 60
+	
+	function onScroll(e : UniScrollEvent){
+	  const scrollTop : number = e.detail.scrollTop
+	  // 大于阈值显示；回到顶部则隐藏
+	  showNav.value = scrollTop > threshold
+	}
+	watch(hotel_id, async () => {
+		console.log("fina home hotel change")
+		init();
+	})
 </script>
 
 <style>
 	.top-header {
 		width: 100%;
-		background: #1677ff;
-		padding: 60px 0 40px;
+		background:linear-gradient(to bottom, #1264E8, #3193F4);
+		padding: 0px 0 20px 0;
 		text-align: center;
+		
 	}
 
 	.header-title {

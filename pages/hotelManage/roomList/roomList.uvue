@@ -1,5 +1,5 @@
 <template>
-	<rice-navbar title="" border>
+	<rice-navbar title="">
 		<template #left>
 			<view style="display: flex;flex-direction: row;align-items: center;">
 				<navigator open-type="navigateBack">
@@ -253,6 +253,24 @@
 			url: `/pages/hotelManage/editRoom/editRoom?pageType=1&&room=${encodeURIComponent(JSON.stringify(room))}`,
 		});
 	}
+	// const reform = async ()=>{
+	// 	console.log("000000")
+	// 	if(hotel_id.value!=""){
+	// 		const db = uniCloud.databaseForJQL();
+	// 		const res = await db.collection("hm-room").get();
+	// 		console.log("roomlist===",res);
+	// 		res.data.forEach(async item=>{
+	// 			//console.log(item);
+	// 			const room_type_id = item.room_type_id;
+	// 			const roomTypeRes = await db.collection("hm-roomType").where({_id:room_type_id}).get();
+	// 			console.log("roomType==",roomTypeRes);
+	// 			const hotelId = roomTypeRes.data[0].hotel_id;
+	// 			console.log("hotelId",hotelId);
+	// 			await db.collection("hm-room").doc(item._id).update({hotel_id:hotelId});
+	// 		})
+	// 	}
+		
+	// }
 	onLoad(params => {
 		try {
 			const roomType_id = params.getString("roomType_id") ?? "";

@@ -235,12 +235,12 @@ onLoad(params => {
 /* 房间卡片流式布局 */
 .room-card-row {
 	display: flex;
-	flex-direction: row;
+	/* flex-direction: row; */
 	flex-wrap: wrap;
 	width: 100%;
 }
 .room-card-col {
-	min-width: 320px;
+	/* min-width: 320px; */
 	padding: 15px 0;
 	box-sizing: border-box;
 	flex: 1;

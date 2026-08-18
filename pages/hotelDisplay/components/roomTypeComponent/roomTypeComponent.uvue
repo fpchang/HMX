@@ -3,7 +3,10 @@
 		<view class="single-room-card-item" v-for="(roomType,index) of roomTypeList">
 			<view class="room-card-box">
 				<view class="card-image-block">
-					<image :src="topImg(roomType.firstImages)" style="height: 100%;width: 100%;" mode="aspectFill"></image>
+					<image v-if="roomType.firstImages!=''" :src="roomType.firstImages" style="height: 100%;width: 100%;" mode="aspectFill">
+					</image>
+					<image  v-if="roomType.firstImages==''"  src="/static/images/nono-img.png" style="height: 80%;width: 80%;" mode="aspectFit">
+					</image>
 				</view>
 				<view class="card-info-row">
 					<view class="card-text-container">
@@ -111,6 +114,9 @@
 	height: 350rpx;
 	max-height: 200px;
 	background-color: #eee;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 /* 卡片文字信息整行容器 */
 .card-info-row {

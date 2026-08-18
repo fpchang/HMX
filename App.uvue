@@ -32,22 +32,24 @@
 	}
 	export default {
 		onLaunch: function () {
-					
-			let showMoreMessage = uni.getStorageSync("showMoreMessage");
-			//#ifdef APP-IOS || H5
-				uni.setStorageSync("showMoreMessage",0)
-				showMoreMessage="0";
-			//#endif		
-			if (showMoreMessage != "0") {
-				uni.openDialogPage({
-					url: "/pages/common/androidPrivacy/androidPrivacy", animationType: 'none'
-				});
-			}else{
-				console.log("no android =====")
-				start();
-				setLanuage();
+			// 	console.log("app lunch");
+			// let showMoreMessage = uni.getStorageSync("showMoreMessage");
+			// //#ifdef APP-IOS || H5
+			// console.log('ios=====')
+			// 	uni.setStorageSync("showMoreMessage",0)
+			// 	showMoreMessage="0";
+			// //#endif		
+			// if (showMoreMessage != "0") {
+			// 	uni.openDialogPage({
+			// 		url: "/pages/common/androidPrivacy/androidPrivacy", animationType: 'none'
+			// 	});
+			// }else{
+			// 	console.log("no android =====")
+			// 	start();
+			// 	setLanuage();
 				
-			}			
+			// }	
+				
 		},
 		onShow: function () {
 			console.log('App Show');
@@ -81,15 +83,16 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	@import "@/uni_modules/rice-ui/libs/style/index.css";
+	
 
 	/*每个页面公共css */
-	.uni-row {
-		flex-direction: row;
-	}
+	// .uni-row {
+	// 	flex-direction: row;
+	// }
 
-	.uni-column {
-		flex-direction: column;
-	}
+	// .uni-column {
+	// 	flex-direction: column;
+	// }
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<rice-navbar :fixed="false" title="" border v-if="hotel_id!=''">
+	<rice-navbar :fixed="false" title="" v-if="hotel_id!=''">
 		<template #left>
 			<view style="display: flex;flex-direction: row;align-items: center;">
 				<!-- s -->
@@ -95,97 +95,99 @@
 	const hotelList = computed(() => {
 		return state.hotelList;
 	});
-	const menuList : Array<MenuItem> = [
-		{
-			title: i18n.global.t("function.title_set"),
-			title_icon: "/static/icons/homemenu/hotel-anage.png",
-			title_color: "rgb(30,30,30)",
-			menu_item_list: [{
-				icon: "/static/icons/homemenu/room-type1.png",
-				label: i18n.global.t("function.btn_txt_room_type"),
-				bgColor: "rgba(22, 93, 255, 0.1)",
-				url: "/pages/hotelManage/roomTypeList/roomTypeList"
-			},
+	const menuList = computed<Array<MenuItem>>(() => {
+		return [
 			{
-				icon: "/static/icons/homemenu/room1.png",
-				label: i18n.global.t("function.btn_txt_room"),
-				bgColor: "rgba(22, 93, 255, 0.1)",
-				url: "/pages/hotelManage/roomList/roomList"
-			},
-			{
-				icon: "/static/icons/homemenu/employee1.png",
-				label: i18n.global.t("function.btn_txt_room_employee"),
-				bgColor: "rgba(22, 93, 255, 0.1)",
-				url: "/pages/hotelManage/employeeList/employeeList"
-			},
-			{
-				icon: "/static/icons/homemenu/hotel2.png",
-				label: i18n.global.t("function.btn_txt_room_preview"),
-				bgColor: "rgba(22, 93, 255, 0.1)",
-				url: `/pages/hotelDisplay/hotelDisplay?hotel_id=${hotel.value?._id}`
-				//url: `/pages/hotelDisplay/list-news/list-news?hotel_id=${hotel.value?._id}`
-				
-			}],
-
-		},
-		{
-			title: i18n.global.t("function.title_fm"),
-			title_icon: "/static/icons/homemenu/financia-green.png",
-			title_color: "rgb(30,30,30)",
-			menu_item_list: [{
-				icon: "/static/icons/homemenu/income.png",
-				label: i18n.global.t("function.btn_txt_income_expense"),
-				bgColor: "rgba(72,187,120,0.1)",
-				url: "/pages/financialManagement/inExManage/inExManage"
-			},
-			// {
-			// 	icon: "/static/icons/homemenu/expense1.png",
-			// 	label: "支出管理",
-			// 	bgColor: "rgba(72,187,120,0.1)",
-			// 	url: "/pages/financialManagement/expense/expense"
-			// },
-			{
-				icon: "/static/icons/homemenu/financial-statistics1.png",
-				label: i18n.global.t("function.btn_txt_fm_chart"),
-				bgColor: "rgba(72,187,120,0.1)",
-				url: "/pages/financialManagement/fmchart/fmchart"
-			}
-			]
-
-		},
-		{
-			title: i18n.global.t("function.title_order"),
-			title_icon: "/static/icons/homemenu/order-manage.png",
-			title_color: "rgb(30,30,30)",
-			menu_item_list: [{
-				icon: "/static/icons/homemenu/order1.png",
-				label: i18n.global.t("function.btn_txt_order"),
-				bgColor: "rgba(237,137,54,0.1)",
-				url: "/pages/order/orderList/orderList"
-			},
-			{
-				icon: "/static/icons/homemenu/order-add1.png",
-				label: i18n.global.t("function.btn_txt_create_order"),
-				bgColor: "rgba(237,137,54,0.1)",
-				url: "/pages/order/createOrder/createOrder"
-			}
-			]
-
-		},{
-			title:i18n.global.t("function.btn_txt_daily_routine"),
-			title_icon: "/static/icons/homemenu/order-manage.png",
-			title_color: "rgb(30,30,30)",
-			menu_item_list:[
+				title: i18n.global.t("function.title_set"),
+				title_icon: "/static/icons/homemenu/hotel-anage.png",
+				title_color: "rgb(30,30,30)",
+				menu_item_list: [{
+					icon: "/static/icons/homemenu/v2/room-type.png",
+					label: i18n.global.t("function.btn_txt_room_type"),
+					bgColor: "rgba(22, 93, 255, 0.1)",
+					url: "/pages/hotelManage/roomTypeList/roomTypeList"
+				},
 				{
-					icon: "/static/icons/homemenu/linen.png",
-					label: i18n.global.t("washingOrder.title"),
-					bgColor: "rgba(237,137,54,0.1)",
-					url: "/pages/working/LinenWashing/LinenWashingList"
+					icon: "/static/icons/homemenu/v2/room.png",
+					label: i18n.global.t("function.btn_txt_room"),
+					bgColor: "rgba(22, 93, 255, 0.1)",
+					url: "/pages/hotelManage/roomList/roomList"
+				},
+				{
+					icon: "/static/icons/homemenu/v2/employee.png",
+					label: i18n.global.t("function.btn_txt_room_employee"),
+					bgColor: "rgba(22, 93, 255, 0.1)",
+					url: "/pages/hotelManage/employeeList/employeeList"
+				},
+				{
+					icon: "/static/icons/homemenu/v2/view.png",
+					label: i18n.global.t("function.btn_txt_room_preview"),
+					bgColor: "rgba(22, 93, 255, 0.1)",
+					url: `/pages/hotelDisplay/hotelDisplay?hotel_id=${hotel_id.value}`
+					//url: `/pages/hotelDisplay/list-news/list-news?hotel_id=${hotel.value?._id}`
+
+				}],
+
+			},
+			{
+				title: i18n.global.t("function.title_fm"),
+				title_icon: "/static/icons/homemenu/financia-green.png",
+				title_color: "rgb(30,30,30)",
+				menu_item_list: [{
+					icon: "/static/icons/homemenu/v2/income.png",
+					label: i18n.global.t("function.btn_txt_income_expense"),
+					bgColor: "rgba(72,187,120,0.1)",
+					url: "/pages/financialManagement/inExManage/inExManage"
+				},
+				// {
+				// 	icon: "/static/icons/homemenu/expense1.png",
+				// 	label: "支出管理",
+				// 	bgColor: "rgba(72,187,120,0.1)",
+				// 	url: "/pages/financialManagement/expense/expense"
+				// },
+				{
+					icon: "/static/icons/homemenu/v2/financial-statistics.png",
+					label: i18n.global.t("function.btn_txt_fm_chart"),
+					bgColor: "rgba(72,187,120,0.1)",
+					url: "/pages/financialManagement/fmchart/fmchart"
 				}
-			]
-		}
-	]
-	const w= state.viewWidth;
+				]
+
+			},
+			{
+				title: i18n.global.t("function.title_order"),
+				title_icon: "/static/icons/homemenu/order-manage.png",
+				title_color: "rgb(30,30,30)",
+				menu_item_list: [{
+					icon: "/static/icons/homemenu/v2/order.png",
+					label: i18n.global.t("function.btn_txt_order"),
+					bgColor: "rgba(237,137,54,0.1)",
+					url: "/pages/order/orderList/orderList"
+				},
+				{
+					icon: "/static/icons/homemenu/v2/order-add.png",
+					label: i18n.global.t("function.btn_txt_create_order"),
+					bgColor: "rgba(237,137,54,0.1)",
+					url: "/pages/order/createOrder/createOrder"
+				}
+				]
+
+			}, {
+				title: i18n.global.t("function.btn_txt_daily_routine"),
+				title_icon: "/static/icons/homemenu/order-manage.png",
+				title_color: "rgb(30,30,30)",
+				menu_item_list: [
+					{
+						icon: "/static/icons/homemenu/v2/linen.png",
+						label: i18n.global.t("washingOrder.title"),
+						bgColor: "rgba(237,137,54,0.1)",
+						url: "/pages/working/LinenWashing/LinenWashingList"
+					}
+				]
+			}
+		]
+	})
+	const w = state.viewWidth;
 	const columnNum = computed(() => {
 		let num = 3;
 		const w = state.viewWidth;

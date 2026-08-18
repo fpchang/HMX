@@ -19,8 +19,12 @@ class RoomAction {
 		if (!_id) {
 			throw new Error("缺少_id")
 		}
+		const roomObj ={
+			room_name: room.room_name,
+			room_type_id: room.room_type_id
+		}
 		const dbJQL = uniCloud.database();
-		 await dbJQL.collection('hm-room').doc(_id).update(room);
+		 await dbJQL.collection('hm-room').doc(_id).update(roomObj);
 		return {code:0,errMsg:"",errCode:0,update:1};
 	}
 	async getRemainderRoomList(params) {

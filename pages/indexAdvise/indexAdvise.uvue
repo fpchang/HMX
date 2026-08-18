@@ -29,9 +29,9 @@
 							<rice-grid-item v-for="item  of funcList" :custom-style="{alignItems:'baseline',display:'flex',flexDirection:'row'}">
 								<template #default>
 									<view style="flex:1;"> 
-									<rice-cell :title="item.title" :label="item.info" center>
+									<rice-cell :title="item.title" :label="item.info" center :clickable="false">
 									  <template #leftIcon>
-									    <image :src="item.img" class="left-cion" style="width:40px;height:40px;margin-right:8px;border-radius: 20px;"></image>
+									    <image :src="item.img" class="left-cion" style="width:54px;height:54px;margin-right:8px;;"></image>
 									  </template>
 									 
 									  <!-- <template #value>
@@ -172,28 +172,28 @@
 		const list : Array<funType> = [
 			{
 				title: i18n.global.t('indexAdvise.coreFunction.orderManage'),
-				img: "/static/icons/homemenu/order1.png",
+				img: "/static/icons/homemenu/v2/order.png",
 				info: i18n.global.t('indexAdvise.coreFunction.orderManage_content'),
 			},
 			{
 				title: i18n.global.t('indexAdvise.coreFunction.stateManage'),
-				img: "/static/icons/order-blue.png",
+				img: "/static/icons/homemenu/v2/orderstate.png",
 				info: i18n.global.t('indexAdvise.coreFunction.stateManage_content'),
 			}, {
 				title: i18n.global.t('indexAdvise.coreFunction.hotelRoomType'),
-				img: "/static/icons/homemenu/room-type1.png",
+				img: "/static/icons/homemenu/v2/room-type.png",
 				info: i18n.global.t('indexAdvise.coreFunction.hotelRoomType_content'),
 			}, {
 				title: i18n.global.t('indexAdvise.coreFunction.financialManagement'),
-				img: "/static/icons/homemenu/income.png",
+				img: "/static/icons/homemenu/v2/income.png",
 				info: i18n.global.t('indexAdvise.coreFunction.financialManagement_content'),
 			}, {
 				title: i18n.global.t('indexAdvise.coreFunction.employeeAccount'),
-				img: "/static/icons/homemenu/employee1.png",
+				img: "/static/icons/homemenu/v2/employee.png",
 				info: i18n.global.t('indexAdvise.coreFunction.employeeAccount_content'),
 			}, {
 				title: i18n.global.t('indexAdvise.coreFunction.hotelDisplay'),
-				img: "/static/icons/homemenu/hotel2.png",
+				img: "/static/icons/homemenu/v2/view.png",
 				info: i18n.global.t('indexAdvise.coreFunction.hotelDisplay_content'),
 			}
 		];
@@ -237,12 +237,15 @@
 			initData();
 		}else{
 			console.log("不能调用任何权限。。。。。")
+			uni.openDialogPage({
+				url: "/pages/common/androidPrivacy/androidPrivacy", animationType: 'none'
+			});
 		}
 	
 
 	})
 	onMounted(() => {
-	});
+	});	
 </script>
 
 <style scoped lang="scss">
@@ -276,7 +279,8 @@
 		width: 100%;
 		padding: 60px 20px 30px;
 		// background-image: linear-gradient(135deg, #4096ff, #2078f5);
-		background: linear-gradient(to bottom right, #4096ff, #2078f5);
+		// background: linear-gradient(to bottom right, #4096ff, #2078f5);
+			background:linear-gradient(to  bottom right, #1264E8, #3193F4);
 		border-bottom-left-radius: 20px;
 		border-bottom-right-radius: 20px;
 		margin-bottom: 15px;

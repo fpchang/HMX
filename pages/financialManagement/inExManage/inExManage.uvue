@@ -1,18 +1,18 @@
 <template>
-	<rice-navbar title="" border>
+	<rice-navbar title="">
 		<template #left>
 			<view style="display: flex;flex-direction: row;align-items: center;">
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
-				<image src="/static/icons/list.png"
+				<image :src="titleImg"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
 				<text
-					style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{i18n.global.t("finance.income_expense_list")}}</text>
+					style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn-root" @click="addFm">
+			<view class="navbar-btn-root" @click="addFm" v-if="!showDeatilPage">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 				<text class="navbar-text">{{billType=='income'?i18n.global.t("finance.income"):i18n.global.t("finance.expense")}}</text>
 			</view>
@@ -39,7 +39,7 @@
 					<rice-swipe-actions-item :auto-close="true" v-for="fm of fmResult.fmList">
 						<rice-cell :title="`${formatTypeName(fm.type)}`" :label="formatDate(fm.ioeTime)"
 							:value="`${fm.billType=='income'?'+':'-'}${fm.amount}`" size="large" arrow
-							arrow-direction="left" center @click="viewFm(fm)">
+							arrow-direction="left" center>
 							<template #leftIcon>
 								<image v-if="fm.billType=='income'" src="/static/icons/fm/income-orange.png"
 									style="margin-right:8px;width: 40px;height:40px;" class="cell-left-icon"></image>
@@ -159,6 +159,7 @@
 	const permissionList = computed(() => {
 		return state.permissionList;
 	})
+	
 	const currentPage = ref(1);
 	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
 		return state.roomTypeList;
@@ -217,6 +218,16 @@
 		}
 		return null;
 	});
+	const title = computed(() => {
+		if (showDeatilPage.value) {
+			return i18n.global.t("common.btn_txt_details", [i18n.global.t('finance.title_income_expense')]);
+		}
+		return i18n.global.t("finance.income_expense_list");
+	})
+	const titleImg = computed<string>(() => {
+		
+		return showDeatilPage.value? "/static/icons/detailpage.png":"/static/icons/list.png" ;
+	})
 	const dateChange = (range : string[]) => {
 		dateRange.value = range;
 		getFmList();

@@ -161,8 +161,9 @@ class OrderServiceClass {
 				`${startTime}<=checkInStartDateTimeStamp&&${endTime}>=checkInEndDateTimeStamp)`;
 			//console.log("jql", jql);
 			const orderListRes = await db.collection('hm-order').where(jql).get();
-			//console.log("orderlist", orderListRes);
+			console.log("orderlist", orderListRes);
 			const roomListRes = await db.collection('hm-room').where(`hotel_id=='${hotel_id}'`).get();
+			console.log("roomListRes",roomListRes)
 			const orderList = orderListRes.data;
 			let hasUseRoomList = new Set<string>([]);
 			let remainRoomList : Array<roomBean> = [];
@@ -230,7 +231,7 @@ class OrderServiceClass {
 		let endTime = dayuts(datestr).valueOf();
 		let jql = `hotel_id=='${hotel_id}'&&orderStatus==1&&checkInEndDateTimeStamp==${endTime}`;
 
-
+	console.log("今日退房jql",jql)
 		try {
 			const res = await DB.getCollection("hm-order", jql);
 			const data = res['data'] as Array<UTSJSONObject>;

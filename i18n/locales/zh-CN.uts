@@ -8,7 +8,7 @@ export default {
 		modal_title: "提示",
 		select_txt: "请选择",
 		search_txt: "请输入关键字",
-		btn_txt_switch:"切换",
+		btn_txt_switch: "切换",
 		btn_txt_search: "搜索",
 		btn_txt_next: "下一步",
 		btn_txt_create: "创建{0}",
@@ -111,6 +111,17 @@ export default {
 
 
 	},
+	home: {
+		"checkinData": "入住数据",
+		"roomUnit": "间",
+		"occupancyRate": "入住率",
+		"adminCenter": "管理中心",
+		"switch": "切换",
+		"welcomeBack": "欢迎回来",
+		"quickCreateCheckinOrder": "快速新建入住订单",
+		"recordAccountsIncomeExpense": "记录账目与收支明细",
+		"viewManageAllOrders": "查看与管理全部订单"
+	},
 	login: {
 		title: "登录",
 		tab_acount: "账号密码",
@@ -153,9 +164,9 @@ export default {
 		tips_login_regitser: "该手机号未注册，将自动为您创建议宿账号",
 		modal_title: "提示",
 		tips: "未注册的手机号验证后自动创建议宿账号",
-		login_agreen_txt:"登录即同意"，
+		login_agreen_txt: "登录即同意",
 		"other_login_methods": "其他登录方式",
-		valid_phone:"请输入正确手机号"
+		valid_phone: "请输入正确手机号"
 	},
 	register: {
 		title: "注册",
@@ -163,7 +174,7 @@ export default {
 		pach_email: "请输入邮箱",
 		pach_email_code: "请输入邮箱验证码",
 		valid_email_hanused: "此邮箱已注册",
-		 valid_email_emailNotRegister: "此邮箱未注册",
+		valid_email_emailNotRegister: "此邮箱未注册",
 		valid_email_num: "邮箱验证码为 4 位",
 		valid_password_again: "请再次输入密码",
 		valid_account_require: "账号不能为空",
@@ -176,9 +187,9 @@ export default {
 		register_success: "注册成功",
 		oldPassword: "旧密码",
 		tipNoNeedFill: "无则不填",
-		bind_email:"绑定邮箱",
-		bind_phone:"绑定手机号",
-		phone_has_used:"此手机号已经被注册"
+		bind_email: "绑定邮箱",
+		bind_phone: "绑定手机号",
+		phone_has_used: "此手机号已经被注册"
 	},
 	hotel: {
 		title: "酒店",
@@ -273,7 +284,7 @@ export default {
 	},
 
 	setcontent: {
-		 "companyName": "湖州玄天科技有限公司",
+		"companyName": "湖州玄天科技有限公司",
 		btn_txt_sys_set: "设置",
 		btn_txt_feedback: "意见反馈",
 		accountSecurity: "账号安全",
@@ -347,7 +358,7 @@ export default {
 		contactAdmin: "请联系负责人",
 		confirmDeleteOrder: "确认删除此订单",
 		deleteOrderTip: "删除后将无法恢复，确认删除吗？",
-		
+
 		// 按钮
 		next: "下一步",
 		completeRegister: "完成注册",
@@ -386,90 +397,92 @@ export default {
 		}
 	},
 
-	washingOrder:{
-		title:"布草清洗"
-		btn_add_txt:"清洗单",
+	washingOrder: {
+		title: "布草清洗",
+		washing_order_list: "清洗列表",
+		btn_add_txt: "清洗单",
 		statusAll: "全部",
 		statusWashing: "未完成",
 		statusError: "异常单",
 		statusCompleted: "已完成",
 		statusCancelled: "已撤销",
-		washing_date:"清洗日期",
-		return_back_date:"返还日期",
-		washing_num:"清洗数量",
-		return_back_num:"返回数量",
-		searchPlaceholder:"请输入",
-		btn_control_txt:"验收",
-		btn_lock_txt:"锁定",
+		washing_date: "清洗日期",
+		return_back_date: "返还日期",
+		washing_num: "清洗数量",
+		return_back_num: "返回数量",
+		searchPlaceholder: "请输入",
+		btn_control_txt: "验收",
+		btn_lock_txt: "锁定",
 		confirmLockOrder: "确认锁定此单",
 		lockOrderTip: "锁定后将无法修改，确认锁定吗？",
-		  "createTime": "创建时间",
-		  "returnBackTime": "归还时间",
-		  "service_provider": "服务商",
-		  	"flatsheet_max": "大床单",
-		  	"flatsheet_mini": "小床单",
-		  	"duvetCover_max": "大被套",
-		  	"duvetCover_mini": "小被套",
-		  	"pillowcase": "枕套",
-		  	"bathTowel": "浴巾",
-		  	"faceTowel": "面巾",
-		  	"floorTowel": "地巾",
-		  	"bedRunner": "床尾巾",
-		  
-		  "flatsheet_max_num": "大床单数量",
-		  "flatsheet_mini_num": "小床单数量",
-		  "duvetCover_max_num": "大被套数量",
-		  "duvetCover_mini_num": "小被套数量",
-		  "pillowcase_num": "枕套数量",
-		  "bathTowel_num": "浴巾数量",
-		  "faceTowel_num": "面巾数量",
-		  "floorTowel_num": "地巾数量",
-		  "bedRunner_num": "床尾巾数量",
-		  "flatsheet_max_back_num": "返还大床单数量",
-		  "flatsheet_mini_back_num": "返还小床单数量",
-		  "duvetCover_max_back_num": "返还大被套数量",
-		  "duvetCover_mini_back_num": "返还小被套数量",
-		  "pillowcase_back_num": "返还枕套数量",
-		  "bathTowel_back_num": "返还浴巾数量",
-		  "faceTowel_back_num": "返还面巾数量",
-		  "floorTowel_back_num": "返还地巾数量",
-		  "bedRunner_back_num": "返还床尾巾数量",
-		  "unit": "单位",
-		  "mark": "备注",
-		  label_dispatch:"送洗",
-		  label_return:"返还",
-		   "form": {
-			   form_title_add:"添加清洗单",
-			   form_title_edit:"修改清洗单",
-			   form_title_view:"查看清洗单",
-		      "pach_remark": "请输入备注信息",
-		      "placeholder": {
-		        "service_provider": "请输入服务商",
-		        "flatsheet_max_num": "请输入大床单数量",
-		        "flatsheet_max_back_num": "请输入归还大床单数量",
-		        "flatsheet_mini_num": "请输入小床单数量",
-		        "flatsheet_mini_back_num": "请输入归还小床单数量",
-		        "duvetCover_max_num": "请输入大被套数量",
-		        "duvetCover_max_back_num": "请输入归还大被套数量",
-		        "duvetCover_mini_num": "请输入小被套数量",
-		        "duvetCover_mini_back_num": "请输入归还小被套数量",
-		        "pillowcase_num": "请输入枕套数量",
-		        "pillowcase_back_num": "请输入归还枕套数量",
-		        "bathTowel_num": "请输入浴巾数量",
-		        "bathTowel_back_num": "请输入归还浴巾数量",
-		        "faceTowel_num": "请输入面巾数量",
-		        "faceTowel_back_num": "请输入归还面巾数量",
-		        "floorTowel_num": "请输入地巾数量",
-		        "floorTowel_back_num": "请输入归还地巾数量",
-		        "bedRunner_num": "请输入床尾巾数量",
-		        "bedRunner_back_num": "请输入归还床尾巾数量"
-		      }
-		    }
+		"createTime": "创建时间",
+		"returnBackTime": "归还时间",
+		"service_provider": "服务商",
+		"flatsheet_max": "大床单",
+		"flatsheet_mini": "小床单",
+		"duvetCover_max": "大被套",
+		"duvetCover_mini": "小被套",
+		"pillowcase": "枕套",
+		"bathTowel": "浴巾",
+		"faceTowel": "面巾",
+		"floorTowel": "地巾",
+		"bedRunner": "床尾巾",
+
+		"flatsheet_max_num": "大床单数量",
+		"flatsheet_mini_num": "小床单数量",
+		"duvetCover_max_num": "大被套数量",
+		"duvetCover_mini_num": "小被套数量",
+		"pillowcase_num": "枕套数量",
+		"bathTowel_num": "浴巾数量",
+		"faceTowel_num": "面巾数量",
+		"floorTowel_num": "地巾数量",
+		"bedRunner_num": "床尾巾数量",
+		"flatsheet_max_back_num": "返还大床单数量",
+		"flatsheet_mini_back_num": "返还小床单数量",
+		"duvetCover_max_back_num": "返还大被套数量",
+		"duvetCover_mini_back_num": "返还小被套数量",
+		"pillowcase_back_num": "返还枕套数量",
+		"bathTowel_back_num": "返还浴巾数量",
+		"faceTowel_back_num": "返还面巾数量",
+		"floorTowel_back_num": "返还地巾数量",
+		"bedRunner_back_num": "返还床尾巾数量",
+		"unit": "单位",
+		"mark": "备注",
+		label_dispatch: "送洗",
+		label_return: "返还",
+		"form": {
+			form_title_add: "添加清洗单",
+			form_title_edit: "修改清洗单",
+			form_title_view: "查看清洗单",
+			"pach_remark": "请输入备注信息",
+			"placeholder": {
+				"service_provider": "请输入服务商",
+				"flatsheet_max_num": "请输入大床单数量",
+				"flatsheet_max_back_num": "请输入归还大床单数量",
+				"flatsheet_mini_num": "请输入小床单数量",
+				"flatsheet_mini_back_num": "请输入归还小床单数量",
+				"duvetCover_max_num": "请输入大被套数量",
+				"duvetCover_max_back_num": "请输入归还大被套数量",
+				"duvetCover_mini_num": "请输入小被套数量",
+				"duvetCover_mini_back_num": "请输入归还小被套数量",
+				"pillowcase_num": "请输入枕套数量",
+				"pillowcase_back_num": "请输入归还枕套数量",
+				"bathTowel_num": "请输入浴巾数量",
+				"bathTowel_back_num": "请输入归还浴巾数量",
+				"faceTowel_num": "请输入面巾数量",
+				"faceTowel_back_num": "请输入归还面巾数量",
+				"floorTowel_num": "请输入地巾数量",
+				"floorTowel_back_num": "请输入归还地巾数量",
+				"bedRunner_num": "请输入床尾巾数量",
+				"bedRunner_back_num": "请输入归还床尾巾数量"
+			}
+		}
 	},
 	finance: {
 		navbar_title: "财务中心",
 		income: "收入",
 		expense: "支出",
+		  "annualMonthlyFinancialSummary": "年度月度财务汇总",
 		title_financial_chart: "财务统计分析",
 		title_Yearly_Trend: "当年收支趋势",
 		title_income_expense: "收支",
@@ -479,7 +492,7 @@ export default {
 		monthly_income_details: '本月收入财务详情',
 		monthly_expense_details: '本月支出详情',
 		annual_financial_overview: '本年财务概览',
-
+		
 		// 指标标签
 		monthly_income_expense_percent: '本月收支占比',
 		monthly_income_percent: '本月收入占比',
@@ -496,14 +509,14 @@ export default {
 		transaction_date: "收支日期",
 		amount: "金额",
 		patch_enter_amount: "请输入金额",
-		valid_form_amount:"请输入金额",
-		valid_form_type:"请选择收支类型"
+		valid_form_amount: "请输入金额",
+		valid_form_type: "请选择收支类型"
 
 	},
 	//功能页面
 	function: {
 		title_navbar: "功能",
-		common_functions:"常用功能",
+		common_functions: "常用功能",
 		title_set: "酒店设置",
 		title_fm: "财务管理",
 		title_order: "订单",
@@ -627,7 +640,7 @@ export default {
 		msg6: '6：存储权限：我们可能会缓存一些基本app内部数据到本地',
 		msg7: '7：网络权限：我们产品依赖网络浏览与使用，需要网络访问权限',
 		msg8: '8：本应用集成了三方SDK，这些SDK也会采集数据，具体见下:',
-		msg9:'本应用基于DCloud App引擎（uni-app x）开发，为了优化引擎的质量，需要收集报错堆栈信息，这些信息会包含：‘设备信息（设备品牌及型号、CPU类型、屏幕参数、操作系统名称及版本、网络类型、IP地址、User Agent信息、设备语言、时区、设备是否为模拟器或已经被root、匿名设备标识符），应用信息（应用名、应用包名、版本、AppId、包含的SDK信息、报错堆栈）’使用目的：排查在不同情况下的故障，提升引擎质量‘收集方式：SDK自行采集，不涉及数据共享’第三方主体：数字天堂(北京)网络技术有限公司‘隐私政策链接：DCloud App引擎隐私政策'
+		msg9: '本应用基于DCloud App引擎（uni-app x）开发，为了优化引擎的质量，需要收集报错堆栈信息，这些信息会包含：‘设备信息（设备品牌及型号、CPU类型、屏幕参数、操作系统名称及版本、网络类型、IP地址、User Agent信息、设备语言、时区、设备是否为模拟器或已经被root、匿名设备标识符），应用信息（应用名、应用包名、版本、AppId、包含的SDK信息、报错堆栈）’使用目的：排查在不同情况下的故障，提升引擎质量‘收集方式：SDK自行采集，不涉及数据共享’第三方主体：数字天堂(北京)网络技术有限公司‘隐私政策链接：DCloud App引擎隐私政策'
 	}
 
 };

@@ -1,13 +1,13 @@
 <template>
 	<view>
 		<rice-form :model="userForm" :rules="accountRule" ref="userFormRef" label-width="100px" class="demo-form">
-			<rice-form-item name="account" label-position="top" :border-bottom="true">
+			<rice-form-item name="account" label-position="top" :border-bottom="false">
 				<rice-input v-model="userForm['account']" :placeholder="i18n.global.t('login.pach_account')"
-					focus-border :clearable="true" border="none"/>
+					focus-border :clearable="true" border="none"  bg-color="#eeeeee94" shape="round" height="45px" :iput-style="{paddingLeft:'14px'}"/>
 			</rice-form-item>
-			<rice-form-item name="password" label-position="top" required :border-bottom="true">
+			<rice-form-item name="password" label-position="top" required :border-bottom="false">
 				<rice-input v-model="userForm['password']" :placeholder="i18n.global.t('login.pach_password')"
-					focus-border clearable type="password" border="none" />
+					focus-border clearable type="password" border="none" bg-color="#eeeeee94" shape="round" height="45px" :iput-style="{paddingLeft:'14px'}"/>
 			</rice-form-item>
 		</rice-form>
 		<view class="btn-text-content">
@@ -114,7 +114,7 @@
 
 <style>
 .btn-text-content {
-	padding: 8px;
+	padding:0  8px 8px 0;
 	margin-bottom: 14px;
 }
 .text-right-txt {

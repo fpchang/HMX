@@ -16,10 +16,12 @@
 				"navigationBarTitleText": "",
 				"disableScroll": true,
 				"enablePullDownRefresh": false,
-				"navigationBarBackgroundColor": "#ffffff",
-				"navigationStyle": "custom",
-				"transparentTitle": "auto"
-			}
+			
+				"navigationStyle": "custom"
+			
+				
+				
+			}	
 		},
 		{
 			"path": "pages/index/index",
@@ -60,7 +62,8 @@
 			"style": {
 				"navigationBarTitleText": "",
 				"navigationBarTextStyle": "black",
-				"transparentTitle": "always"
+				"transparentTitle": "always",
+				"navigationStyle": "custom"
 			}
 		},
 		{

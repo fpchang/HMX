@@ -1,6 +1,7 @@
 <template>
+<!-- 	{{viewwidth}},{{cssVars}} -->
 	<view id="xtflexwrapequal" class="flex-wrap-container" :style="cssVars">
-		<view class="flex-wrap-item" :id="`fwi${index}`" v-for="(item,index) in (itemsNum + rownums)"
+		<view class="flex-wrap-item" :id="`fwi${index}`" v-for="(item,index) in (itemsNum)"
 			:style="{'margin-left':marginLeft(index),'margin-top':marginTop(index),'height':index>itemsNum-1?'0':'auto'}">
 			<slot name="item" :index="index"></slot>
 		</view>
@@ -51,16 +52,22 @@
 	const containerWidth = computed(()=>{
 		return viewwidth.value-props.pmWidth;
 	})
-
+	//每行最多数量,最小1
 	const rownums = computed(() => {
+		if((props.minItemWidth + props.gap)==0){
+			return 1;
+		}
 		const nums = containerWidth.value / (props.minItemWidth + props.gap);
 		if(nums > props.itemsNum){
 			return props.itemsNum;
 		}
-		return Math.floor(nums)
+		return Math.max(Math.floor(nums),1) 
 	})
+	//实际宽度
 	const itemWidth = computed(() => {
-		return Math.floor((containerWidth.value- (rownums.value-1) *props.gap )/rownums.value);
+		const w= ((containerWidth.value+props.gap)/rownums.value)-props.gap;
+		return  Math.floor(w);
+		//return Math.floor((containerWidth.value- (rownums.value-1) *props.gap )/rownums.value);
 	})
 	const getViewWidth=()=>{
 		viewwidth.value = uni.getWindowInfo().windowWidth;
@@ -85,8 +92,10 @@ const maxwidthvalue=computed(()=>{
 })	
 	const cssVars = computed(() => {
 		return {
-			'--min-width': itemWidth.value + 'px',
-			'--max-item-width':props.maxItemWidth>0?props.maxItemWidth:( itemWidth.value + 'px'),
+			'containerwidth':containerWidth.value,
+			'rownums':rownums.value,
+			// '--min-width':minwidthvalue.value ,
+			'--max-item-width':maxwidthvalue.value,
 			'--half-gap': (props.gap) + 'px',
 			'--margin-left': (props.gap) + 'px',
 			'--margin-top': (props.gap) + 'px',
@@ -141,11 +150,11 @@ const maxwidthvalue=computed(()=>{
 	}
 
 	.flex-wrap-item {
-		/* flex:1; */
+		flex:1;
 		/*  margin-left:var(--half-gap);
-	  margin-top:var(--half-gap); */
-		min-width: var(--min-width);
-		// max-width: var(--max-item-width);
+		margin-top:var(--half-gap); */
+		min-width: var(--min-item-width);
+		max-width: var(--max-item-width);
 
 
 	}

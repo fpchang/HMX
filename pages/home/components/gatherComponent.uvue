@@ -15,7 +15,7 @@
 		</view>
 
 		<view class="card-container" v-if="activeIndex==0">
-			<xt-flex-wap-equal ref="wrapRef1" :pmWidth="56" :min-item-width="140" :gap="14" :itemsNum="4">
+			<xt-flex-wap-equal ref="wrapRef1" :pmWidth="56" :min-item-width="130" :gap="14" :itemsNum="4">
 				<template #item="{index}">
 				
 					
@@ -62,7 +62,7 @@
 			</xt-flex-wap-equal>
 		</view>
 		<view class="card-container" v-if="activeIndex==1">
-			<xt-flex-wap-equal ref="wrapRef2" :pmWidth="56" :min-item-width="140" :gap="14" :itemsNum="4">
+			<xt-flex-wap-equal ref="wrapRef2" :pmWidth="56" :min-item-width="130" :gap="14" :itemsNum="4">
 				<template #item="{index}">
 					<view class="card" v-if="index==0">
 						<text class="card-title">{{ i18n.global.t("gather.checkInTomorrow") }}</text>

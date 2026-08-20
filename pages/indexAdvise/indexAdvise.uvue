@@ -1,5 +1,5 @@
 <template>
-	<scroll-view class="indexAdvise-page" :refresher-enabled="false" v-if="isReading" :show-scrollbar="false">
+	<scroll-view class="indexAdvise-page" :bounces="false" :refresher-enabled="false" v-if="isReading" :show-scrollbar="false" refresher-background="#1264E8" style="flex:1">
 		<!-- <rice-button text="测试" @click=test()></rice-button> -->
 		<!-- 顶部渐变标题栏 -->
 		<view class="top-banner">

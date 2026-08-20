@@ -43,8 +43,8 @@
         {
             "customPlaygroundType" : "device",
             "iOSProjectStandardBaseHistory" : {
-                "current" : "Pandora_simulator_debug_vapor_5.23.2026080313-alpha.app",
-                "previous" : "Pandora_simulator_debug_5.23.2026080313-alpha.app"
+                "current" : "Pandora_simulator_debug_5.23.2026080313-alpha.app",
+                "previous" : "Pandora_simulator_debug_vapor_5.23.2026080313-alpha.app"
             },
             "playground" : "standard",
             "type" : "uni-app:app-ios_simulator"

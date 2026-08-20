@@ -1,5 +1,7 @@
 <template>
 	<view class="page">
+		<rice-float-fab gap-top="50px" bg-color="#eeeeee94" icon-color="#999"  default-position="top-left" icon="arrow-left" width="30px" height="30px" icon-size="20px" @click="uni.navigateBack()"/>
+		
 		<view class="wrap">
 			<!-- 标题 -->
 			<view class="head">
@@ -198,20 +200,22 @@
 		display: flex;
 		justify-content: center;
 		flex-direction: row;
+		/* background-image:url("/static/images/bg1.webp") */
 	}
 
 	.wrap {
 		flex: 1;
 		max-width: 500px;
-		padding-top: 60px;
+		padding-top: 90px;
 	}
 
 	.head {
-		margin-bottom: 40px;
+		margin:34px 0;
+		
 	}
 
 	.title {
-		font-size: 34px;
+		font-size: 26px;
 		font-weight: 600;
 		color: #1d1d1f;
 	}

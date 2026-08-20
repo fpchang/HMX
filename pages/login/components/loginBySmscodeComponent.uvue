@@ -1,21 +1,21 @@
 <template>
 	<view>
 		<rice-form :model="userForm" :rules="rule" ref="userFormRef" label-width="100px" class="demo-form">
-			<rice-form-item name="phone" label-position="top" :border-bottom="true">
+			<rice-form-item name="phone" label-position="top" :border-bottom="false">
 				<view style="flex:1;overflow: hidden;">
-					<rice-input v-model="userForm.phone" :placeholder="i18n.global.t('login.pach_phone')"  :maxlength="11"  focus-border  border="none" type="number"/>
+					<rice-input v-model="userForm.phone" :placeholder="i18n.global.t('login.pach_phone')"  :maxlength="11"  focus-border  border="none" type="number" bg-color="#eeeeee94" shape="round" height="45px" :iput-style="{paddingLeft:'14px'}"/>
 				</view>
 			</rice-form-item>
-			<rice-form-item name="smsCode"  required  label-position="top" :border-bottom="true">
+			<rice-form-item name="smsCode"  required  label-position="top" :border-bottom="false">
 				<view  class="group-formitem" style="flex:1;overflow: hidden;">
 					<view style="flex:1;display: flex;">
 						<rice-input style="width: 100%;"  :placeholder="i18n.global.t('login.pach_sms')" type="number" v-model="userForm.smsCode"
-							:maxlength="4" border="none"/>
+							:maxlength="4" border="none" :iput-style="{paddingLeft:'14px'}" height="45px"/>
 					</view>
 					<view style="display: flex;flex-direction: row;align-items: center;" @click="sendSmsCode">
 						<!-- <rice-button  type="primary" :text="codeText"  @click="sendSmsCode" textColor="#fff" :loading="smsLoading"></rice-button>
 					 -->
-					 <text style="color:#1989fa;font-size: 13px;">{{codeText}}</text>
+					 <text style="color:#1989fa;font-size: 13px;padding-right:14px">{{codeText}}</text>
 					</view>
 				</view>
 			</rice-form-item>
@@ -190,6 +190,10 @@
 	flex:1;
 	flex-direction: row;
 	justify-content: space-between;
+	background:#eeeeee94;
+	height:45px;
+	border-radius:22.5px;
+	
 }
 .btn-code-disabled {
 	color: #8e8e93;

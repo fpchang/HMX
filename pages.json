@@ -1,5 +1,11 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://doc.dcloud.net.cn/uni-app-x/collocation/pagesjson.html
+		// {
+		// 	"path": "pages/tt/tt",
+		// 	"style": {
+		// 		"navigationBarTitleText": ""
+		// 	}
+		// },
 		//#ifdef H5
 		// {
 		// 	"path": "pages/common/website/website",
@@ -367,6 +373,7 @@
 		"navigationStyle": "custom"
 	}
 }
+
 
 // ,{
 //     "path": "uni_modules/uni-id-pages-x/pages/login/login",

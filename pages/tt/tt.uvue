@@ -1,0 +1,76 @@
+<template>
+	<!-- #ifdef APP -->
+	<scroll-view style="flex:1">
+	<!-- #endif -->
+		<view class="page">
+			<view class="container" :style="cssVars">
+				<view class="item"></view>
+				<view class="item"></view>
+				<view class="item"></view>
+				<view class="item"></view>
+				<view class="item"></view>
+
+
+
+				<!-- fill数量等于单行最大列数（7个），仅做占位，不显示 -->
+				<view class="fill"></view>
+				<view class="fill"></view>
+				<view class="fill"></view>
+				<view class="fill"></view>
+				<view class="fill"></view>
+				<view class="fill"></view>
+				<view class="fill"></view>
+			</view>
+		</view>
+	<!-- #ifdef APP -->
+	</scroll-view>
+	<!-- #endif -->
+</template>
+
+<script setup>
+	const cssVars = computed(() => {
+		return {
+			"--minItemWidth": `max(150px,calc((750rpx - 48px + 12px) / 5 - 12px))`,
+			"--margin--": `6px`,
+			"--conatinerMargin": `-6px`
+		}
+	})
+</script>
+
+<style lang="scss">
+	.page {
+		padding: 24px;
+		background: #ddd;
+	}
+
+	.container {
+
+		background: green;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: stretch;
+		margin: var(--conatinerMargin);
+		/* 抵消子元素margin，容器边缘对齐，替代gap */
+	}
+
+	.item {
+		flex: 1;
+		/* 最小宽度控制：小于该宽度就自动换行；不设置max-width，允许被拉大占满行 */
+		// min-width: max(150px,calc(calc(750rpx - 48px + 12px) / 5 - 12px));
+		min-width: var(--minItemWidth);
+		height: 150px;
+		background: red;
+		margin: var(--margin--);
+		border-radius: 6px;
+	}
+
+	/* fill占位：flex:1，和item相同margin，高度0、透明，只占弹性空间，防止最后一行布局bug */
+	.fill {
+		flex: 1;
+		min-width: var(--minItemWidth);
+		margin: 0 var(--margin--);
+		height: 0;
+		visibility: hidden;
+	}
+</style>

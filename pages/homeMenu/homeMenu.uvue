@@ -21,10 +21,10 @@
 					<text class="txt" :style="{'color':item.title_color}">{{item.title}}</text>
 				</view>
 				<view v-if=" i18n.global.locale.value == 'zh-CN'">
-					<rice-grid :column-num="columnNum" :border="false">
+					<!-- <rice-grid :column-num="columnNum" :border="false">
 						<rice-grid-item v-for="it in item.menu_item_list" :key="it.label" :icon="it.icon"
 							:text="it.label" :to="it.url" />
-					</rice-grid>
+					</rice-grid> -->
 					<!-- <l-space :wrap="true" :size="14">
 						<view v-for="it in item.menu_item_list" :key="it.label"
 							style=" background:green;">
@@ -42,6 +42,23 @@
 						</view>
 						
 					</l-space> -->
+					<view class="item-container" :style="cssVars">
+						<view class="item" v-for="it in item.menu_item_list" :key="it.label">
+						
+								<view class="item-content" @click="navEvent(it.url)">
+									<view class="groupIcon">
+										<image :src="it.icon" class="icon-style" mode="aspectFit"></image>
+									</view>
+									<view>
+										<text class="label">{{it.label}}</text>
+									</view>
+								</view>
+						
+							
+						</view>
+							<view class="item fill"  v-for="it in 10" ></view>
+					</view>
+					
 				</view>
 
 				<rice-cell-group v-if=" i18n.global.locale.value != 'zh-CN'">
@@ -196,10 +213,23 @@
 		}
 		return num
 	})
+	const navEvent=(url:string)=>{
+		uni.navigateTo({
+			url:url
+		})
+	}
 	onLoad(() => {
 		uni.setNavigationBarTitle({
 			title: i18n.global.t("function.title_navbar")
 		})
+	})
+	const cssVars = computed(() => {
+		return {
+			"--minItemWidth": `80px`,
+			"--maxItemWidth": `120px`,
+			"--margin--": `7px`,
+			"--conatinerMargin": `-7px`
+		}
 	})
 </script>
 
@@ -215,13 +245,13 @@
 		font-size: 22px;
 		color: #fff;
 		font-weight: 500;
-		padding-left: 15px;
+		padding-left: 14px;
 	}
 
 	// 最外层卡片
 	.card {
 		margin: 14px;
-		padding: 15px;
+		padding: 14px;
 		background-color: #fff;
 		border-radius: 12px;
 	}
@@ -249,15 +279,33 @@
 		color: #1f2937;
 		font-weight: 700;
 	}
-
+	.item-container{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: stretch;
+		margin: var(--conatinerMargin);
+	}
+	.item{
+		 flex:1;
+		min-width: var(--minItemWidth);
+		// height: 150px;
+		// background: red;
+		margin: var(--margin--);
+		// border-radius: 6px;
+	}
+	.fill {
+		flex: 1;
+		min-width: var(--minItemWidth);
+		margin: 0 var(--margin--);
+		height: 0;
+		visibility: hidden;
+	}
 	// 单个功能项容器
 	.item-content {
-		max-height: 80px;
-		max-width: 80px;
-		min-width: 80px;
-		min-height: 80px;
+		
 		overflow: hidden;
-		background-color: red;
+		// background-color: red;
 		flex: 1;
 		display: flex;
 		flex-direction: column;

@@ -63,7 +63,7 @@
 			<xt-form-item :label="i18n.global.t('hotel.form.catering_facilities')" tips="">
 				<rice-checkbox-group @change="cateringCheckboxChange" direction="row"
 					v-model="hotelForm.cateringServices">
-					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+					<view style="display: flex;flex-direction: row;margin-right: 8px;margin-bottom: 12px;"
 						v-for="item in facilityConfig_catering">
 						<rice-checkbox :disabled="pageType==2" :value="item ['_id']" :label="item.name" />
 					</view>
@@ -71,7 +71,7 @@
 			</xt-form-item>
 			<xt-form-item :label="i18n.global.t('hotel.form.basic_facilities')" tips="">
 				<rice-checkbox-group @change="baseCheckboxChange" direction="row" v-model="hotelForm.baseFacility">
-					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+					<view style="display: flex;flex-direction: row;margin-right: 8px;margin-bottom: 12px;"
 						v-for="item in facilityConfig_base">
 						<rice-checkbox :disabled="pageType==2" :value="item ['_id']" :label="item.name" />
 					</view>
@@ -80,7 +80,7 @@
 			<xt-form-item :label="i18n.global.t('hotel.form.recreation_facilities')" tips="">
 				<rice-checkbox-group @change="recreationCheckboxChange" direction="row"
 					v-model="hotelForm.recreationFacility">
-					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+					<view style="display: flex;flex-direction: row;margin-right: 8px;margin-bottom: 12px;"
 						v-for="item in facilityConfig_recreation">
 						<rice-checkbox :disabled="pageType==2" :value="item ['_id']" :label="item.name" />
 					</view>
@@ -89,7 +89,7 @@
 			<xt-form-item :label="i18n.global.t('hotel.form.athleticFacility_facilities')" tips="">
 				<rice-checkbox-group @change="athleticFacilityCheckboxChange" direction="row"
 					v-model="hotelForm.athleticFacility">
-					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+					<view style="display: flex;flex-direction: row;margin-right: 8px;margin-bottom: 12px;"
 						v-for="item in facilityConfig_athleticFacility">
 						<rice-checkbox :disabled="pageType==2" :value="item ['_id']" :label="item.name" />
 					</view>

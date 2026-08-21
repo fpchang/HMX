@@ -33,7 +33,7 @@
 			</view>
 		</view>
 
-		<view style="padding:14px;border-radius: 14px;">
+		<view style="padding:14px;border-radius: 14px;" v-if="!submitLoading">
 			<view style="border-radius: 14px;background-color: #fff;">
 				<rice-swipe-actions :accordion="true" ref="swipeControlRef">
 					<rice-swipe-actions-item :auto-close="true" v-for="fm of fmResult.fmList">

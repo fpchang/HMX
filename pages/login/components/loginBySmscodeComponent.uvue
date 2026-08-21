@@ -15,7 +15,7 @@
 					<view style="display: flex;flex-direction: row;align-items: center;" @click="sendSmsCode">
 						<!-- <rice-button  type="primary" :text="codeText"  @click="sendSmsCode" textColor="#fff" :loading="smsLoading"></rice-button>
 					 -->
-					 <text style="color:#1989fa;font-size: 13px;padding-right:14px">{{codeText}}</text>
+					 <text style="color:#1989fa;font-size: 12px;padding-right:14px">{{codeText}}</text>
 					</view>
 				</view>
 			</rice-form-item>

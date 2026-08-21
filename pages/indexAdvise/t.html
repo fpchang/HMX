@@ -1,0 +1,63 @@
+<html>
+<head>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+		.page{
+			padding:24px;
+			background:#eee;
+		}
+        .container {
+			background:green;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            border: 1px solid #000;
+            margin: -6px; /* 抵消子元素margin，容器边缘对齐，替代gap */
+        }
+        .item {
+            flex: 1;
+            /* 最小宽度控制：小于该宽度就自动换行；不设置max-width，允许被拉大占满行 */
+            min-width: 100px;
+            height: 150px;
+            background: red;
+            margin: 6px;
+            border-radius: 6px;
+        }
+        /* fill占位：flex:1，和item相同margin，高度0、透明，只占弹性空间，防止最后一行布局bug */
+        .fill {
+            flex: 1;
+            min-width: 100px;
+            margin: 6px;
+            height: 0;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+	<div class="page">
+		<div class="container">
+		    <div class="item"></div>
+		    <div class="item"></div>
+		    <div class="item"></div>
+		    <div class="item"></div>
+		    <div class="item"></div>
+		    <div class="item"></div>
+		    <div class="item"></div>
+		    <div class="item"></div>
+		    <div class="item"></div>
+		
+		    <!-- fill数量等于单行最大列数（7个），仅做占位，不显示 -->
+		    <div class="fill"></div>
+		    <div class="fill"></div>
+		    <div class="fill"></div>
+		    <div class="fill"></div>
+		    <div class="fill"></div>
+		    <div class="fill"></div>
+		    <div class="fill"></div>
+		</div>
+	</div>
+   
+</body>
+</html>

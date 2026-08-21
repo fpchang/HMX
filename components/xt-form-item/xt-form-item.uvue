@@ -53,7 +53,7 @@ const label = props.label;
 }
 /* 标签文字 */
 .label-txt {
-	color: rgba(0,0,0,0.88);
+	color: #666;
 	font-size: 14px;
 	line-height: 32px;
 }

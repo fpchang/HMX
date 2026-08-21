@@ -47,7 +47,7 @@
 			<xt-form-item :label="i18n.global.t('hotel.form.bed_configuration')" tips="" required>
 
 				<view class="checkbox-group">
-					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+					<view style="display: flex;flex-direction: row;margin-right: 8px;margin-bottom: 12px;"
 						v-for="item of bedTypeList">
 						<rice-checkbox :disabled="pageType==2" :value="item ['name']" :label="item.name"
 							v-model="item.checked" />
@@ -68,7 +68,7 @@
 			<xt-form-item :label="i18n.global.t('hotel.form.facilities_amenities')" tips="" required>
 
 				<rice-checkbox-group @change="recreationCheckboxChange" direction="row" v-model="roomTypeForm.facility">
-					<view style="display: flex;flex-direction: row;margin-right: 20px;margin-bottom: 20px;"
+					<view style="display: flex;flex-direction: row;margin-right: 8px;margin-bottom: 12px;;"
 						v-for="item in facilityConfig_roomType">
 						<rice-checkbox :disabled="pageType==2" :value="item ['_id']" :label="item.name" />
 					</view>

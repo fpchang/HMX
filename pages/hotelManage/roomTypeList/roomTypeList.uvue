@@ -18,8 +18,8 @@
 			</view>
 		</template>
 	</rice-navbar>
-	<scroll-view style="flex:1" @scroll="scrollPage" v-if="roomTypeList.length>0">
-		<view class="roomtype-list-wrap">
+	<scroll-view style="flex:1;padding:0 14px;" @scroll="scrollPage" v-if="roomTypeList.length>0">
+		<view class="roomtype-list-wrap" :style="cssVars">
 			<view class="roomtype-card-item" v-for="(roomType,index) of roomTypeList">
 				<view class="roomtype-card-box">
 					<view class="card-image-block">
@@ -118,6 +118,7 @@
 				
 				
 			</view>
+			<view class="roomtype-card-item fill" v-for="i in 6"></view>
 		</view>
 	</scroll-view>
 	<view style="margin-top:80px" v-if="roomTypeList.length<1">
@@ -267,6 +268,14 @@
 		let { scrollTop } = event.detail;
 		scrollTop_val.value = scrollTop
 	}
+	const cssVars =computed(()=>{
+		return  {
+		"--minItemWidth":`max(320px,calc((750rpx - 28px + 16px) / ${roomTypeList.value.length} - 16px))`,
+		//"--minItemWidth":`${props.minWidth}${props.unit}`,
+		"--margin--":`8px`,
+		"--conatinerMargin":`-8px`
+	}
+	})
 </script>
 
 <style>
@@ -287,16 +296,24 @@
 
 /* 房型列表外层容器 */
 .roomtype-list-wrap {
+	 margin: var(--conatinerMargin); 
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 }
 /* 单个卡片容器 */
 .roomtype-card-item {
-	min-width: 320px;
-	padding: 15px;
+	 min-width: var(--minItemWidth);
+	 margin:var(--margin--);
 	flex: 1;
 }
+.fill {
+	    flex: 1;
+	    min-width: var(--minItemWidth);
+	    margin: 0  var(--margin--);
+	    height: 0;
+	    visibility: hidden;
+	}
 /* 卡片主体盒子 */
 .roomtype-card-box {
 	background-color: #fff;

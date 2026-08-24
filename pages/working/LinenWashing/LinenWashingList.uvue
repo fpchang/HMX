@@ -20,21 +20,19 @@
 				</view>
 			</template>
 		</rice-navbar>
-
-		<!-- #ifdef APP -->
+		<view class="search-area-root">
+			<rice-search placeholder="请选择日期" :model-value="dateRange.join(' ~ ')" disabled height="40px"
+				input-align="center" shape="round" left-icon="" right-icon="calendar" right-icon-size="22"
+				@clickRightIcon="showCalendar=!showCalendar"  @clickInput="showCalendar=!showCalendar"/>
+			<rice-tabs v-model="activeIndex" :list="list" @clickTab="selectStatus"></rice-tabs>
+		</view>
 		<scroll-view style="flex:1">
-		<!-- #endif -->
-			<view class="search-area-root">
-				<rice-search placeholder="请选择日期" :model-value="dateRange.join(' ~ ')" disabled height="40px"
-					input-align="center" shape="round" left-icon="" right-icon="calendar" right-icon-size="22"
-					@clickRightIcon="showCalendar=!showCalendar" />
-				<rice-tabs v-model="activeIndex" :list="list" @clickTab="selectStatus"></rice-tabs>
-			</view>
+		
 			<view style="padding:14px;border-radius: 14px;">
-				<view style="border-radius: 14px;background-color: #fff;">
+				<view style="border-radius: 14px;background-color: #fff;margin-bottom:12px"  v-for="linen of linenResult.linenList">
 
-					<rice-swipe-actions :accordion="true" ref="swipeControlRef">
-						<rice-swipe-actions-item :auto-close="true" v-for="linen of linenResult.linenList">
+					<rice-swipe-actions  ref="swipeControlRef">
+						<rice-swipe-actions-item :auto-close="true">
 							<view style="position:absolute;right:4px;top:4px;;z-index:1000">
 								<rice-tag plain-fill v-if="linen.status==0" type="primary"
 									:text="i18n.global.t('washingOrder.statusWashing')" size="small" />
@@ -116,15 +114,13 @@
 			</view>
 			<l-empty :description="i18n.global.t('common.noData',[''])"
 				v-if="!submitLoading&&linenResult.linenList.length<1" />
-		<!-- #ifdef APP -->
 		</scroll-view>
-		<!-- #endif -->
 		<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"
 			v-if="!submitLoading&&linenResult!=null&&linenResult.count>linenResult.pageSize">
 			<l-pagination v-model="linenResult.pageNo" :disabled="submitLoading" :total="linenResult?.count"
 				:page-size="linenResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
 		</view>
-		<rice-calendar :show="showCalendar" mode="range" :date="dateRange" @confirm="dateChange"></rice-calendar>
+		<rice-calendar :show="showCalendar" mode="range" :date="dateRange" @confirm="dateChange" @close="showCalendar=false"></rice-calendar>
 		<page-container :show="showDeatilPage" position="right" :round="true" @afterleave="showDeatilPage=false"
 			custom-style="background-color: #f5f5f7;width:750rpx">
 			<scroll-view style="flex:1">
@@ -409,8 +405,8 @@
 
 	const selectStatus = (e : TabsClickTab) => {
 		console.log(e)
-		linenStatus.value = e.value as number;
-		swipeControlRef.value!.closeAll!();
+		linenStatus.value = e.value as number | string;
+		//swipeControlRef.value!.closeAll!();
 		getlinenList();
 	}
 	const pageChange = (pn : number) => {

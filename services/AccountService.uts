@@ -345,7 +345,7 @@ class AccountServiceClass {
 		return DB.update("hm-user", _id, { userName } as UTSJSONObject);
 	}
 	getRechargeConfig() : Promise<UniCloudDBGetResult> {
-		return DB.getCollection("hm-rechargeConfig", { status: true });
+		return DB.getCollection("hm-rechargeConfig", { status: true } as UTSJSONObject);
 	}
 	// createRechargeOrder(rechargeConfig_id : string) : Promise<UniCloudCallFunctionResult<UTSJSONObject>> {
 	// 	return DB.callFunction("hm_createRechargeOrder", { rechargeConfig_id });

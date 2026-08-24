@@ -218,7 +218,7 @@ export default {
 			slelect_address: "Select Address",
 			hotel_feature: "Hotel Features",
 			catering_facilities: "Catering Facilities",
-			basic_facilities: "Basic Facilities", // 这里你写错了，我帮你修正为“基础设施”
+			basic_facilities: "Basic Facilities", // 这里你写错了,我帮你修正为“基础设施”
 			recreation_facilities: "Recreation Facilities",
 			athleticFacility_facilities: "Sports Facilities",
 			customer_service_hotline: "Customer Service Hotline",
@@ -433,7 +433,7 @@ export default {
 		"floorTowel_back_num": "Returned Floor Mats",
 		"bedRunner_back_num": "Returned Bed Runners",
 		"unit": "Unit",
-		"mark": "Remarks"，
+		"mark": "Remarks",
 		label_dispatch: "Dispatch",
 		label_return: "Return",
 		"form": {

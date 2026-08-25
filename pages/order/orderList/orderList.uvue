@@ -7,10 +7,9 @@
 						<rice-icon name="arrow-left" size="22px" />
 					</navigator>
 
-					<image :src="titleImg"
-						style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-					<text
-						style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{ title }}</text>
+					<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;">
+					</image>
+					<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{ title }}</text>
 				</view>
 			</template>
 			<template #right>
@@ -21,9 +20,9 @@
 			</template>
 		</rice-navbar>
 		<view class="search-area-root">
-			<rice-search  disabled height="40px" :placeholder="dateRange.join(' ~ ')"  placeholder-style="color:#666"
+			<rice-search disabled height="40px" :placeholder="dateRange.join(' ~ ')" placeholder-style="color:#666"
 				input-align="center" shape="round" left-icon="" right-icon="calendar" right-icon-size="22"
-				@clickRightIcon="showCalendar=!showCalendar"  @clickInput="showCalendar=!showCalendar"/>
+				@clickRightIcon="showCalendar=!showCalendar" @clickInput="showCalendar=!showCalendar" />
 			<rice-tabs v-model="activeIndex" :list="list" @clickTab="selectStatus"></rice-tabs>
 		</view>
 		<scroll-view style="flex:1">
@@ -31,7 +30,8 @@
 				<view class="search-card">
 					<view class="search-card-item title-row">
 						<text class="title-txt">{{ i18n.global.t('order.orderFilter') }}</text>
-						<l-tag variant="light">{{ i18n.global.t('common.totalCount',[orderResult.count.toString()]) }}</l-tag>
+						<l-tag
+							variant="light">{{ i18n.global.t('common.totalCount',[orderResult.count.toString()]) }}</l-tag>
 					</view>
 					<view class="search-card-item select-row">
 						<orderSearchComponent :columns="columns" :initDateRange="dateRange"
@@ -44,38 +44,90 @@
 
 			</view>
 			<view style="padding:14px;border-radius: 14px;">
-				<view style="border-radius: 14px;background-color: #fff;margin-bottom:12px;" v-for="order of orderResult.orderList">
-					<rice-swipe-actions  ref="swipeControlRef">
-						<rice-swipe-actions-item :auto-close="true" >
-							<view style="position:absolute;right:4px;top:4px;;z-index:1000">
+				<view style="border-radius: 14px;background-color: #fff;margin-bottom:12px;"
+					v-for="order of orderResult.orderList">
+					<rice-swipe-actions ref="swipeControlRef">
+						<rice-swipe-actions-item :auto-close="true">
+							<!-- <view style="position:absolute;right:4px;top:4px;;z-index:1000">
 								<rice-tag plain-fill v-if="order.orderStatus==1" type="primary"
 									:text="i18n.global.t('order.statusCheckInPending')" size="small" />
 								<rice-tag plain-fill v-if="order.orderStatus==5" type="success"
 									:text="i18n.global.t('order.statusCompleted')" size="small" />
 								<rice-tag plain-fill v-if="order.orderStatus==10" type="error"
 									:text="i18n.global.t('order.statusCancelled')" size="small" />
+							</view> -->
+
+
+							<rice-cell :title="order.userName" :label="order.orderSouce_Zn" center>
+								<template #leftIcon>
+									<!-- <image src="/static/images/administrator.png" class="left-cion"
+										style="width:40px;height:40px;margin-right:12px;border-radius:50%;"></image> -->
+									<view
+										style="height:40px;width:40px;border-radius:12px;margin-right:8px;background:#007aff;display:flex;align-items:center;justify-content:center">
+										<text
+											style="color:#fff;font-weight:bold;font-size:16px">{{order.userName.substring(0,1).toUpperCase()}}</text>
+									</view>
+								</template>
+								<!-- <template #rightIcon>
+							    <rice-icon name="search" />
+							  </template> -->
+								<template #value>
+									<view style="display:flex;flex-direction:row;justify-content:flex-end">
+										<rice-tag  v-if="order.orderStatus==1" type="primary"
+											:text="i18n.global.t('order.statusCheckInPending')" size="small" />
+										<rice-tag  v-if="order.orderStatus==5" type="success"
+											:text="i18n.global.t('order.statusCompleted')" size="small" />
+										<rice-tag  v-if="order.orderStatus==10" type="error"
+											:text="i18n.global.t('order.statusCancelled')" size="small" />
+									</view>
+								</template>
+							</rice-cell>
+							<view style="display:flex;flex-direction:row;align-items:center;padding:14px">
+								<view style="margin-right:8px;padding:4px;border-radius:50%;background:rgba(0,122,255,0.1)">
+									<l-icon name="login" size="14" color="#007aff"/>
+								</view>
+								<view>
+									<text style="font-size:12px;color:#999">入住</text>
+									<text style="font-size:12px;color:#999">{{formatDate(order.checkInStartDateTimeStamp)}}</text>
+								</view>
+								<view style="flex:1;display:flex;flex-direction:row;align-items:center;padding:0 8px">
+									<view style="flex:1;border-bottom: 2px dotted #607196;"></view>
+									<view style="padding:0 4px"><rice-tag  color="#dce7ff" text-color="#607196" size="small" :text="`${dayNum(order.checkInStartDateTimeStamp,order.checkInEndDateTimeStamp)}晚`" /></view>
+									
+									<view style="flex:1;border-bottom: 2px dotted #607196;"></view>
+								</view>
+								<view style="margin-right:8px;padding:4px;border-radius:50%;background:rgb(53, 169, 127,0.1)">
+									<l-icon name="logout" size="14" color="#35a97f"/>
+								</view>
+								<view>
+									<text style="font-size:12px;color:#999">退房</text>
+									<text style="font-size:12px;color:#999">{{formatDate(order.checkInEndDateTimeStamp)}}</text>
+								</view>
+								
 							</view>
-							<rice-cell :title="order.userName"
+							<view style="display:flex;flex-direction:row;align-items:center;padding:14px;flex-wrap:wrap">
+								<!--#607196 -->
+								<rice-icon name="/static/icons/bed.png" size="16px"></rice-icon>
+								<text style="color:#607196;padding-left:4px">房间：</text>
+								<!-- <text class="order-card-simple-txt"
+									v-for="item of formatRoomList(order.reservedRoomList)"
+									style="padding:0 4px">{{item}}</text> -->
+									<rice-tag style="margin-right:4px;border-radius:12px" v-for="item of formatRoomList(order.reservedRoomList)" color="#dce7ff" text-color="#607196" size="small" :text="item" />
+							</view>
+
+							<rice-cell v-if="false" :title="order.userName"
 								:label="`${formatDate(order.checkInStartDateTimeStamp)}~${formatDate(order.checkInEndDateTimeStamp)}`"
 								size="large" arrow arrow-direction="left" center :clickable="false">
 								<template #leftIcon>
 									<image mode="aspectFit" :src="formatRommTypeImage(order.reservedRoomList[0])"
 										style="margin-right:8px;width: 100px;height:110px;border-radius: 12px;"
 										class="cell-left-icon"></image>
-									
+
 								</template>
 								<template #title>
 									<view class="order-title">
 										<text
 											class="order-title-label">{{i18n.global.t('order.guest') }}：{{order.userName}}</text>
-										<!-- <view>
-											<rice-tag plain-fill v-if="order.orderStatus==1" type="primary"
-												:text="i18n.global.t('order.statusCheckInPending')" size="small" />
-											<rice-tag plain-fill v-if="order.orderStatus==5" type="success"
-												:text="i18n.global.t('order.statusCompleted')" size="small" />
-											<rice-tag plain-fill v-if="order.orderStatus==10" type="error"
-												:text="i18n.global.t('order.statusCancelled')" size="small" />
-										</view> -->
 									</view>
 								</template>
 								<template #label>
@@ -108,7 +160,8 @@
 								<view class="swipe-menu-container">
 									<view class="menu-item-box menu-detail" @click="viewOrder(order)">
 										<rice-icon name="eyes" color="#fff" />
-										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_details",[''])}}</text>
+										<text
+											class="menu-item-text">{{i18n.global.t("common.btn_txt_details",[''])}}</text>
 									</view>
 									<!-- <view class="menu-item-box menu-edit" @click="editOrder(order)">
 										<rice-icon name="edit" color="#fff" />
@@ -148,50 +201,53 @@
 								center :title=" i18n.global.t('order.guest')" :value="active_order?.userName"
 								:clickable="false" />
 
-							<rice-cell icon="/static/icons/fm/time.png" :title-style="{'paddingLeft':'4px'}"
-								center :title=" i18n.global.t('order.checkInTime')" :value="formatDate(active_order?.checkInStartDateTimeStamp as number)"
+							<rice-cell icon="/static/icons/fm/time.png" :title-style="{'paddingLeft':'4px'}" center
+								:title=" i18n.global.t('order.checkInTime')"
+								:value="formatDate(active_order?.checkInStartDateTimeStamp as number)"
 								:clickable="false" />
-							<rice-cell icon="/static/icons/fm/time.png" :title-style="{'paddingLeft':'4px'}"
-								center :title=" i18n.global.t('order.checkOutTime')" :value="formatDate(active_order?.checkInEndDateTimeStamp as number)"
+							<rice-cell icon="/static/icons/fm/time.png" :title-style="{'paddingLeft':'4px'}" center
+								:title=" i18n.global.t('order.checkOutTime')"
+								:value="formatDate(active_order?.checkInEndDateTimeStamp as number)"
 								:clickable="false" />
-							<rice-cell icon="/static/icons/roomReserve.png" :title-style="{'paddingLeft':'4px'}"
-								center :title=" i18n.global.t('order.room')" :value="roomListStr(active_order?.reservedRoomList ?? [])"
-								:clickable="false" />
+							<rice-cell icon="/static/icons/roomReserve.png" :title-style="{'paddingLeft':'4px'}" center
+								:title=" i18n.global.t('order.room')"
+								:value="roomListStr(active_order?.reservedRoomList ?? [])" :clickable="false" />
 							<rice-cell icon="/static/icons/hotelcustomer.png" :title-style="{'paddingLeft':'4px'}"
 								center :title=" i18n.global.t('order.remark')" :value="active_order?.mark"
 								:clickable="false" />
-							
-							</rice-cell-group>
-							<view style="margin-top:20px">
-								<rice-row :gutter="8">
-									<rice-col :span="16"></rice-col>
-									<!-- <rice-col :span="6">
+
+						</rice-cell-group>
+						<view style="margin-top:20px">
+							<rice-row :gutter="8">
+								<rice-col :span="16"></rice-col>
+								<!-- <rice-col :span="6">
 										<view>
 											<rice-button type="primary" size="small" plain-fill
 												:text="i18n.global.t('common.btn_txt_modify',[''])"
 												@click="editOrder(active_order)"></rice-button>
 										</view>
 									</rice-col> -->
-									<rice-col :span="6">
-										<view>
-											<rice-button type="error" size="small" plain-fill
-												:text="i18n.global.t('common.btn_txt_delete')"
-												@click="deleteOrder(active_order)"></rice-button>
-										</view>
-									</rice-col>
-								</rice-row>
-							</view>
+								<rice-col :span="6">
+									<view>
+										<rice-button type="error" size="small" plain-fill
+											:text="i18n.global.t('common.btn_txt_delete')"
+											@click="deleteOrder(active_order)"></rice-button>
+									</view>
+								</rice-col>
+							</rice-row>
+						</view>
 					</view>
 				</view>
 			</view>
 		</page-container>
-		<rice-calendar :show="showCalendar" mode="range" :date="dateRange" @confirm="dateChange" @close="showCalendar=false"></rice-calendar>
+		<rice-calendar :show="showCalendar" mode="range" :date="dateRange" @confirm="dateChange"
+			@close="showCalendar=false"></rice-calendar>
 	</view>
 </template>
 
 <script setup>
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
-		import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
+	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import { TIME, getMonthDateArray } from "@/static/utils/TIME";
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
@@ -219,8 +275,8 @@
 		return i18n.global.t("order.orderList");
 	})
 	const titleImg = computed<string>(() => {
-		
-		return showDeatilPage.value? "/static/icons/detailpage.png":"/static/icons/list.png" ;
+
+		return showDeatilPage.value ? "/static/icons/detailpage.png" : "/static/icons/list.png";
 	})
 	const hotel_id = computed(() => {
 		return state.hotel_id;
@@ -270,7 +326,7 @@
 	});
 
 	const active_id = ref("");
-	
+
 	const orderResult = ref<OrderDataListResult>({
 		count: 0,
 		pageNo: 1,
@@ -287,10 +343,10 @@
 		}
 		return null;
 	});
-		const viewOrder = (order : orderBean) => {
-			active_id.value = order._id;
-			showDeatilPage.value = true;
-		}
+	const viewOrder = (order : orderBean) => {
+		active_id.value = order._id;
+		showDeatilPage.value = true;
+	}
 	const getOrderList = async () => {
 		submitLoading.value = true;
 		const fmr = await OrderService.getOrderListBySearch(hotel_id.value, dateRange.value, orderStatus.value, keyword.value, orderResult.value.pageNo, orderResult.value.pageSize);
@@ -334,7 +390,7 @@
 		return val;
 	}
 	const formatRommTypeImage = (roomId : string) : string => {
-		let src:string = "/static/images/nono-img.png";
+		let src : string = "/static/images/nono-img.png";
 		if (roomTypeList.value == null) {
 			return src;
 		}
@@ -345,10 +401,10 @@
 			for (let j = 0; j < roomList.length; j++) {
 				const room = roomList[j];
 				if (room._id == roomId) {
-					if(typeItem.firstImages!=""){
+					if (typeItem.firstImages != "") {
 						src = typeItem.firstImages;
 					}
-					
+
 				}
 			}
 		}
@@ -386,6 +442,9 @@
 
 		return result.join("，");
 	}
+	const dayNum=(startime:number,endtime:number)=> {
+				return Math.ceil((endtime - startime) / (1000 * 60 * 60 * 24))
+			};
 	const addOrder = async () => {
 		if (!permissionList.value.includes(
 			"FM_CREATE"
@@ -408,7 +467,7 @@
 		});
 	}
 	const deleteOrder = async (order : orderBean | null) => {
-		if (order ==null || submitLoading.value == true) {
+		if (order == null || submitLoading.value == true) {
 			return;
 		}
 		if (!permissionList.value.includes(
@@ -470,8 +529,8 @@
 <style>
 	/* 顶部搜索区域 */
 	.search-area-root {
-		background:#fff;
-		padding-bottom:8px;
+		background: #fff;
+		padding-bottom: 8px;
 	}
 
 	.search-card {
@@ -602,6 +661,7 @@
 		flex-direction: row;
 		height: 100%;
 	}
+
 	/* 侧滑每个按钮项 */
 	.menu-item-box {
 		display: flex;
@@ -611,21 +671,26 @@
 		width: 70px;
 		height: 100%;
 	}
-.menu-detail {
-	background-color: #007aff;
-}
-.menu-edit {
-	background-color: #ff7d00;
-}
-.menu-del {
-	background-color: #f53f3f;
-}
-/* 菜单文字 */
-.menu-item-text {
-	color: #fff;
-	font-size: 12px;
-	margin-top: 4px;
-}
+
+	.menu-detail {
+		background-color: #007aff;
+	}
+
+	.menu-edit {
+		background-color: #ff7d00;
+	}
+
+	.menu-del {
+		background-color: #f53f3f;
+	}
+
+	/* 菜单文字 */
+	.menu-item-text {
+		color: #fff;
+		font-size: 12px;
+		margin-top: 4px;
+	}
+
 	.order-title {
 		display: flex;
 		flex-direction: row;

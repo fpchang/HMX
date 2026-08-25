@@ -164,7 +164,7 @@
 		fromClient: false,
 		hotel_id: hotel_id.value,
 		orderSouce_Zn: "线下",
-		orderSource: 1,
+		orderSource: 0,
 		orderStatus: 1,
 		orderType: "normal",
 		payType: "",

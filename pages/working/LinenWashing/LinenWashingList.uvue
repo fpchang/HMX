@@ -21,7 +21,7 @@
 			</template>
 		</rice-navbar>
 		<view class="search-area-root">
-			<rice-search placeholder="请选择日期" :model-value="dateRange.join(' ~ ')" disabled height="40px"
+			<rice-search placeholder="请选择日期" :model-value="dateRange.join(' ~ ')" placeholder-style="color:#666" disabled height="40px"
 				input-align="center" shape="round" left-icon="" right-icon="calendar" right-icon-size="22"
 				@clickRightIcon="showCalendar=!showCalendar"  @clickInput="showCalendar=!showCalendar"/>
 			<rice-tabs v-model="activeIndex" :list="list" @clickTab="selectStatus"></rice-tabs>

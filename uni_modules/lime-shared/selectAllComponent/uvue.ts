@@ -8,8 +8,8 @@ type SelectOptions = {
 }
 
 export function selectAllComponent(selector : string, options : UTSJSONObject) : ComponentPublicInstance[]|null {
-	const context = options.get('context')! as ComponentPublicInstance;
-	let needAll = options.get('needAll') as  boolean;
+	const context = options['context']! as ComponentPublicInstance;
+	let needAll = options['needAll'] as  boolean;
 	let result:ComponentPublicInstance[] = []
 	
 	if(needAll == null) { needAll = true };

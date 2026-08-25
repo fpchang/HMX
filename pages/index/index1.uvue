@@ -1,0 +1,286 @@
+<template>
+	<uni-tab style="flex: 1" :active-index="activeIndex" :tab-content-height-full="tabContentHeightFull"
+		@change="handleChange">
+		<!-- 内容区域 -->
+		<uni-tab-content>
+			<home></home>
+		</uni-tab-content>
+		<uni-tab-content>
+			<orderState></orderState>
+		</uni-tab-content>
+		<uni-tab-content>
+			<fm></fm>
+		</uni-tab-content>
+		<uni-tab-content>
+			<homeMenu></homeMenu>
+		</uni-tab-content>
+		<uni-tab-content>
+			<mine></mine>
+		</uni-tab-content>
+
+		<!-- 底部选项卡 -->
+		<uni-tab-bar style="background:#fff">
+			<!-- 图标高度24，文字字号10px，文字高度是12~14px，角标不能在图标的正右上角，需要向下偏移1px，避免角标画出tab-list之外) -->
+
+			<!-- <uni-tab-item v-for="(item , index) of tabBarList" >
+				<image :src="activeIndex == index ?item.selectedIconPath:item.iconPath" class="tab-icon-image"></image>
+				<text class="tab-label" :class="activeIndex == index ? 'tab-label-active' : ''">{{item.text}}</text>
+			</uni-tab-item> -->
+			<view style="flex:1">
+				
+			
+			<rice-subsection class="tab-bar-style" :list="listTabName" v-model="activeIndex" shape="round"
+				bar-class="bar-class" active-text-class="active-text-class" @clickSub="switchTabEvent"
+				item-class="item-class-style">
+				<template #default="{index,subname}">
+					<view class="slot-item-class">
+						<image style="width:20px;height:20px" v-if="activeIndex==index" class="slot-icon"
+							:src="tabBarList[index].selectedIconPath"></image>
+						<image style="width:20px;height:20px" v-else class="slot-icon"
+							:src="tabBarList[index].iconPath"></image>
+						<text :class="activeIndex==index?'active-text-class slot-text':'slot-text'">{{subname}}</text>
+					</view>
+
+				</template>
+			</rice-subsection>
+			</view>
+		</uni-tab-bar>
+	</uni-tab>
+</template>
+
+<script setup lang="uts">
+	import { state } from "@/store/store";
+	import { setToken, setViewWidth } from "@/store/store.uts";
+	import home from "@/pages/home/home.uvue";
+	import orderState from "@/pages/order/orderState/orderState.uvue";
+	import fm from "@/pages/financialManagement/financiaHome/financiaHome";
+	import homeMenu from "@/pages/homeMenu/homeMenu.uvue";
+	import mine from "@/pages/mine/mine.uvue";
+	import i18n from '@/i18n/index.uts';
+	const TAB_CONTENT1_SCROLL_EVENT = 'uni-tab-bar-tab-content1-scroll'
+	const TAB_CONTENT1_SWITCH_OFFSET = 100 // 当 tab-content1 滚动超过这个距离（单位px）时显示回到顶部按钮，如需调节请自行定义
+	const TAB_CONTENT2_INDEX = 1
+	const tabContent1Ref = ref<ComponentPublicInstance | null>(null)
+	let tabContentHeightFull = false
+	// #ifdef MP
+	tabContentHeightFull = true
+	// #endif
+	const tabBarList : Array<TabBarItem> = [{
+		"pagePath": "pages/index/index",
+		"iconPath": "/static/icons/tabbar/home-black.png",
+		"selectedIconPath": "/static/icons/tabbar/home-blue.png",
+		"text": i18n.global.t('tab.home')// "首页"
+	},
+	{
+		"pagePath": "pages/order/orderState/orderState",
+		"iconPath": "/static/icons/tabbar/ft-black.png",
+		"selectedIconPath": "/static/icons/tabbar/ft-blue.png",
+		"text": i18n.global.t('tab.roomStatus')//"房态"
+	},
+	{
+		"pagePath": "pages/financialManagement/financiaHome/financiaHome",
+		"iconPath": "/static/icons/tabbar/fm-black.png",
+		"selectedIconPath": "/static/icons/tabbar/fm-blue.png",
+		"text": i18n.global.t('tab.finance')// "财务"
+	},
+
+	{
+		"pagePath": "pages/homeMenu/homeMenu",
+		"iconPath": "/static/icons/tabbar/fun-black.png",
+		"selectedIconPath": "/static/icons/tabbar/fun-blue.png",
+		"text": i18n.global.t('tab.function')// "功能"
+	},
+	{
+		"pagePath": "pages/mine/mine",
+		"iconPath": "/static/icons/tabbar/mine-black.png",
+		"selectedIconPath": "/static/icons/tabbar/mine-blue.png",
+		"text": i18n.global.t('tab.mine')//"我的"
+	}
+	]
+	const listTabName = computed<Array<string>>(() => {
+		const result : Array<string> = [];
+		tabBarList.forEach((item : TabBarItem) => {
+			result.push(item.text);
+		});
+		return result;
+	});
+	const switchTabEvent = () => {
+		uni.vibrateShort({
+			type: 'light',
+			success: () => {
+				// updateStatus(`${getShortTypeLabel(type)}调用成功`)
+				// console.log('vib success')
+			},
+			fail: (err) => {
+				// console.log(err)
+				//updateStatus(`短振动调用失败：${err.errMsg}`)
+			}
+		})
+	}
+	// 当前激活的索引
+	const activeIndex = ref<number>(0)
+	const showBackToTop = ref<boolean>(false)
+	const apiTabBadgeText = ref<string>('99+')
+	const apiTabBadgeClass = ref<string.ClassString>('')
+	let lastTabContent1ScrollTop = 0
+
+	function updateTabContent2Badge(text : string, badgeClass : string.ClassString) : void {
+		apiTabBadgeText.value = text
+		apiTabBadgeClass.value = badgeClass
+	}
+
+	function setTabContent2BadgeNumber() : void {
+		updateTabContent2Badge('8', '')
+	}
+
+	function setTabContent2BadgeDot() : void {
+		updateTabContent2Badge('', '')
+	}
+
+	function clearTabContent2Badge() : void {
+		updateTabContent2Badge('0', '')
+	}
+
+	function setTabContent2BadgeClass() : void {
+		updateTabContent2Badge('NEW', 'api-tab-badge-custom')
+	}
+
+	function handleTabContent1Scroll(scrollTop : number) : void {
+		lastTabContent1ScrollTop = scrollTop
+		if (activeIndex.value == 0) {
+			showBackToTop.value = scrollTop > TAB_CONTENT1_SWITCH_OFFSET
+		}
+	}
+
+	function handleFirstTabClick() : void {
+		if (activeIndex.value == 0 && showBackToTop.value) {
+			const tabContent1Instance = tabContent1Ref.value
+			if (tabContent1Instance != null) {
+				tabContent1Instance.$callMethod('scrollToTop')
+			}
+		}
+	}
+
+	// 处理 tab 的切换
+	function handleChange(index : number) : void {
+		activeIndex.value = index
+		if (index == 0) {
+			showBackToTop.value = lastTabContent1ScrollTop > TAB_CONTENT1_SWITCH_OFFSET
+		} else {
+			showBackToTop.value = false
+		}
+		switch (index) {
+			case 0:
+				uni.setNavigationBarTitle({ title: '组件' })
+				break
+			case 1:
+				uni.setNavigationBarTitle({ title: 'API' })
+				break
+			case 2:
+				uni.setNavigationBarTitle({ title: 'CSS' })
+				break
+			case 3:
+				uni.setNavigationBarTitle({ title: '模板' })
+				break
+		}
+	}
+
+	onLoad(() => {
+		uni.$on(TAB_CONTENT1_SCROLL_EVENT, handleTabContent1Scroll)
+	})
+
+	onUnload(() => {
+		uni.$off(TAB_CONTENT1_SCROLL_EVENT, handleTabContent1Scroll)
+	})
+
+	// provide('tabContent2Index', TAB_CONTENT2_INDEX)
+	// provide('tabContent2SetBadgeNumber', setTabContent2BadgeNumber)
+	// provide('tabContent2SetBadgeDot', setTabContent2BadgeDot)
+	// provide('tabContent2ClearBadge', clearTabContent2Badge)
+	// provide('tabContent2SetBadgeClass', setTabContent2BadgeClass)
+</script>
+
+<style>
+	.api-tab-badge-custom {
+		background-color: #1f6feb;
+		color: #ffffff;
+	}
+
+	.first-tab-button {
+		width: 100%;
+		height: 100%;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.first-tab-animator {
+		width: 100%;
+		height: 100%;
+		position: relative;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.first-tab-face {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		left: 0;
+		top: 0;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		transition-property: opacity, transform;
+		transition-duration: 220ms;
+		transition-timing-function: ease;
+	}
+
+	.first-tab-default-visible {
+		opacity: 1;
+		transform: translateY(0px);
+	}
+
+	.first-tab-default-hidden {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+
+	.first-tab-backtop-visible {
+		opacity: 1;
+		transform: translateY(0px);
+	}
+
+	.first-tab-backtop-hidden {
+		opacity: 0;
+		transform: translateY(-8px);
+	}
+
+	.tab-icon-image {
+		height: 24px;
+		width: 24px;
+	}
+
+	.tab-arrow-icon {
+		line-height: 20px;
+		margin-bottom: 2px;
+	}
+
+	.tab-arrow-icon-active {
+		color: #007aff;
+	}
+
+	.tab-label {
+		font-size: 10px;
+		color: rgb(122, 126, 131);
+	}
+
+	.tab-label-active {
+		color: #007aff;
+	}
+
+	.blue-dot {
+		background-color: #1f6feb;
+	}
+</style>

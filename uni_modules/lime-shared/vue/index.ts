@@ -12,6 +12,7 @@ export * from '@vue/composition-api';
 // #ifdef VUE2
 export * from '@vue/composition-api';
 import * as _vue from '@vue/composition-api';
+
 export function toValue(source) {
 	// 处理函数
 	if (typeof source === 'function') {
@@ -30,6 +31,16 @@ export function toValue(source) {
 // #endif
 
 // #ifdef VUE2 && APP
+/**
+ * 在 Vue 2 中模拟 onScopeDispose
+ * 原理：利用组件的 beforeDestroy 钩子来执行清理函数
+ */
+// export function onScopeDispose(fn) {
+// 	if(_vue.onScopeDispose) {
+// 		_vue.onScopeDispose(fn)
+// 	}
+// }
+
 // vue2 app computed无法响应
 export function computed(getterOrOptions) {
 	const isGetter = typeof getterOrOptions === 'function';
@@ -61,7 +72,7 @@ export function computed(getterOrOptions) {
 			},
 			set(newValue) {
 				internalValue.value = newValue
-				if(setter){
+				if (setter) {
 					setter(newValue)
 				}
 				trigger()
@@ -74,9 +85,12 @@ export function computed(getterOrOptions) {
 		internalValue.value = newValue
 	})
 	
-	_vue.onScopeDispose(() => {
-		stop();
-	});
+	if(_vue.getCurrentScope()){
+		_vue.onScopeDispose(() => {
+			stop();
+		});
+	}
+	
 	return result;
 }
 // #endif

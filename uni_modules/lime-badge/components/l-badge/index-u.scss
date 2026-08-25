@@ -1,9 +1,5 @@
 @import '~@/uni_modules/lime-style/index.scss';
 
-/* #ifdef  uniVersion >= 4.75 */ 
-$use-css-var: true;
-/* #endif */
-
 $badge-size: create-var(badge-size , $spacer);
 $badge-color: create-var(badge-color , white);
 // $badge-padding: create-var(badge-padding, 0 4px);

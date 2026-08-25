@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * BEM 配置类型定义
  * @description 定义 BEM 命名规范中的命名空间和分隔符配置
@@ -28,7 +29,7 @@ const defaultBem : BemConfig = {
  * 条件类型，用于判断是否需要生成类名
  * @description 支持布尔值、数字、字符串和 null 类型
  */
-type IsType = boolean | number | string | null
+type IsType = boolean | number | string | null// | undefined
 
 /**
  * BEM 类
@@ -40,7 +41,7 @@ type IsType = boolean | number | string | null
  * bem.m('primary') // 'l-button--primary'
  * bem.em('text', 'small') // 'l-button__text--small'
  */
-class Bem {
+export class Bem {
 	/** 命名空间 */
 	private namespace : string
 	/** Block 分隔符 */
@@ -59,7 +60,7 @@ class Bem {
 	 */
 	constructor(
 		config : BemConfig,
-		block : string | number,
+		block : string,
 	) {
 		this.namespace = config.namespace
 		this.blockSeparator = config.blockSeparator
@@ -99,7 +100,7 @@ class Bem {
 	/**
 	 * 生成 Element 类名
 	 * @description 生成 Block__Element 格式的类名，当 is 参数为 false、0 或空字符串时返回空字符串，当 element 为 null 时返回 Block 类名
-	 * @param element Element 名称，可以是字符串或数字，为 null 时返回 Block 类名
+	 * @param element Element 名称，可以是字符串，为 null 时返回 Block 类名
 	 * @param is 条件参数，默认为 true，当为 false、0 或空字符串时不生成类名
 	 * @returns Element 类名字符串或空字符串
 	 * @example
@@ -110,7 +111,7 @@ class Bem {
 	 * bem.e('text', 0) // ''
 	 * bem.e(null) // 'l-button'
 	 */
-	e(element : string | number | null, is : IsType = true) : string {
+	e(element : string | null, is : IsType = true) : string {
 		if (!this.shouldGenerate(is)) {
 			return ''
 		}
@@ -147,7 +148,7 @@ class Bem {
 	/**
 	 * 生成 Element-Modifier 类名
 	 * @description 生成 Block__Element--modifier 格式的类名，当 is 参数为 false、0 或空字符串时返回空字符串，当 modifier 为 null 时返回 Element 类名
-	 * @param element Element 名称，可以是字符串或数字
+	 * @param element Element 名称，可以是字符串
 	 * @param modifier Modifier 名称，可以是字符串或数字，为 null 时返回 Element 类名
 	 * @param is 条件参数，默认为 true，当为 false、0 或空字符串时不生成类名
 	 * @returns Element-Modifier 类名字符串或空字符串
@@ -160,14 +161,14 @@ class Bem {
 	 * bem.em('text', null) // 'l-button__text'
 	 */
 	em(
-		element : string | number,
+		element : string,
 		modifier : string | number | null,
 		is : IsType = true,
 	) : string {
 		if (!this.shouldGenerate(is)) {
 			return ''
 		}
-		if (modifier == null) {
+		if (modifier == null || modifier == '') {
 			return this.prefix + this.elementSeparator + element
 		}
 		return (
@@ -176,10 +177,57 @@ class Bem {
 	}
 
 	/**
+	 * 生成变体 Modifier 类名
+	 * @description 生成 Block--modifier1-modifier2 格式的类名，当 is 参数为 false、0 或空字符串时返回空字符串
+	 * @param modifiers Modifier 名称数组，可以是字符串或数字
+	 * @param is 条件参数，默认为 true，当为 false、0 或空字符串时不生成类名
+	 * @returns Modifier 类名字符串或空字符串
+	 * @example
+	 * const bem = createBem('button')
+	 * bem.v(['active', 'primary']) // 'l-button--active-primary'
+	 * bem.v(['active', 'primary'], true) // 'l-button--active-primary'
+	 * bem.v(['active', 'primary'], false) // ''
+	 */
+	v(modifiers : Array<string|number>, is : IsType = true) : string {
+		if (!this.shouldGenerate(is) || modifiers.length == 0) {
+			return ''
+		}
+		const joinedModifier = modifiers.join('-')
+		return this.prefix + this.modifierSeparator + joinedModifier
+	}
+
+	/**
+	 * 生成变体 Element-Modifier 类名
+	 * @description 生成 Block__Element--modifier1-modifier2 格式的类名，当 is 参数为 false、0 或空字符串时返回空字符串
+	 * @param element Element 名称，可以是字符串
+	 * @param modifiers Modifier 名称数组，可以是字符串或数字
+	 * @param is 条件参数，默认为 true，当为 false、0 或空字符串时不生成类名
+	 * @returns Element-Modifier 类名字符串或空字符串
+	 * @example
+	 * const bem = createBem('button')
+	 * bem.ev('text', ['active', 'small']) // 'l-button__text--active-small'
+	 * bem.ev('text', ['active', 'small'], true) // 'l-button__text--active-small'
+	 * bem.ev('text', ['active', 'small'], false) // ''
+	 */
+	ev(
+		element : string,
+		modifiers : Array<string|number>,
+		is : IsType = true,
+	) : string {
+		if (!this.shouldGenerate(is) || modifiers.length == 0) {
+			return ''
+		}
+		const joinedModifier = modifiers.join('-')
+		return (
+			this.prefix + this.elementSeparator + element + this.modifierSeparator + joinedModifier
+		)
+	}
+
+	/**
 	 * 生成完整的 BEM 类名（Block-Element-Modifier）
 	 * @description 生成完整的 BEM 类名，支持 Block、Block__Element、Block--modifier、Block__Element--modifier 四种格式
 	 * @param block Block 名称，可以是字符串或数字
-	 * @param element Element 名称，可以是字符串或数字，为 null 时不拼接
+	 * @param element Element 名称，可以是字符串，为 null 时不拼接
 	 * @param modifier Modifier 名称，可以是字符串或数字，为 null 时不拼接
 	 * @param is 条件参数，默认为 true，当为 false、0 或空字符串时不生成类名
 	 * @returns BEM 类名字符串或空字符串
@@ -192,8 +240,8 @@ class Bem {
 	 * bem.bem('button', 'text', 'small', false) // ''
 	 */
 	bem(
-		block : string | number,
-		element : string | number | null,
+		block : string,
+		element : string | null,
 		modifier : string | number | null,
 		is : boolean | number | string | null = true,
 	) : string {
@@ -222,8 +270,8 @@ class Bem {
  * const bem = createBem('button')
  * bem.b() // 'l-button'
  */
-export function createBemStruct(config : BemConfig) : (block : string | number) => Bem {
-	return (block : string | number) => {
+export function createBemStruct(config : BemConfig) : (block : string) => Bem {
+	return (block : string) => {
 		return new Bem(config, block)
 	}
 }

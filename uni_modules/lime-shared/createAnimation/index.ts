@@ -1,11 +1,11 @@
 // @ts-nocheck
 // #ifndef UNI-APP-X
-export * from './type.ts'
+export * from './type'
 // export * from './vue.ts'
-export { createAnimation } from './vue.ts'
+export { createAnimation } from './vue'
 // #endif
 
 // #ifdef UNI-APP-X
-// export * from './uvue.ts'
-export { createAnimation } from './uvue.uts' 
+// export * from './uvue'
+export { createAnimation } from './uvue' 
 // #endif

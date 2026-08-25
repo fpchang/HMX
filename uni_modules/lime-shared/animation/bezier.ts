@@ -1,3 +1,4 @@
+// @ts-nocheck
 export function cubicBezier(p1x : number, p1y : number, p2x : number, p2y : number):(x: number)=> number {
 	const ZERO_LIMIT = 1e-6;
 	// Calculate the polynomial coefficients,

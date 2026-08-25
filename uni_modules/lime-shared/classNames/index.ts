@@ -27,6 +27,7 @@ export type ClassProp =
  * classNames('foo', null, 'bar') // 'foo bar'
  * classNames({ foo: true, bar: false, baz: true }) // 'foo baz'
  */
+// export function classNames(args:ClassProp[]): string
 export function classNames(...args : ClassProp[]) : string {
 	return classNamesArray(args)
 }
@@ -37,7 +38,7 @@ export function classNames(...args : ClassProp[]) : string {
  * @param args 类名数组
  * @returns 拼接后的类名字符串
  */
-function classNamesArray(args : ClassProp[]) : string {
+export function classNamesArray(args : ClassProp[]) : string {
 	const result : string[] = []
 
 	for (let i = 0; i < args.length; i++) {
@@ -47,16 +48,16 @@ function classNamesArray(args : ClassProp[]) : string {
 		}
 
 		if (typeof arg == 'string') {
-			const trimmed = arg.trim()
+			const trimmed = (arg as string).trim()
 			if (trimmed != '') {
 				result.push(trimmed)
 			}
 		} else if (typeof arg == 'number') {
-			if (isFinite(arg)) {
+			if (isFinite(arg as number)) {
 				result.push(`${arg}`)
 			}
 		} else if (Array.isArray(arg)) {
-			if (arg.length > 0) {
+			if ((arg as ClassProp[]).length > 0) {
 				const className = classNamesArray(arg)
 				if (className != '') {
 					result.push(className)
@@ -72,11 +73,21 @@ function classNamesArray(args : ClassProp[]) : string {
 			}
 			// #endif
 			// #ifdef UNI-APP-X && APP
-			(arg as UTSJSONObject).toMap().forEach((value, key) => {
+			// #ifdef VUE3-VAPOR
+			for (const key in arg) {
+				const value = arg[key]
+				if (value == true) {
+					result.push(key)
+				}
+			}
+			// #endif
+			// #ifndef VUE3-VAPOR
+			UTSJSONObject.assign({}, arg as UTSJSONObject).toMap().forEach((value, key) => {
 				if (value == true) {
 					result.push(key)
 				}
 			})
+			// #endif
 			// #endif
 		}
 	}

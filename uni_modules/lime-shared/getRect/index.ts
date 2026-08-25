@@ -1,10 +1,10 @@
 // @ts-nocheck
-// #ifdef UNI-APP-X && APP
+// #ifdef UNI-APP-X 
 export { getRect, getAllRect } from './uvue'
 // #endif
 
 
-// #ifndef UNI-APP-X && APP
+// #ifndef UNI-APP-X
 export { getRect, getAllRect } from './vue'
 // #endif
 

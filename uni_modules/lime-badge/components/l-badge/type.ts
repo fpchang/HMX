@@ -8,12 +8,7 @@ export interface BadgeProps {
   /**
    * 徽标内容
    */
-  // #ifndef APP-ANDROID
-  content?: string|number;
-  // #endif
-  // #ifdef APP-ANDROID
-  content?: any;
-  // #endif
+   content?: string|number;
   /**
    * 是否为红点
    */
@@ -26,12 +21,7 @@ export interface BadgeProps {
   /**
    * 设置状态点的位置偏移，示例：[-10, 20] 或 ['10rpx', '8rpx']
    */
-  // #ifndef APP-ANDROID
-  offset?: Array<string | number>;
-  // #endif
-  // #ifdef APP-ANDROID
-  offset?: any[];
-  // #endif
+	offset?: Array<string | number>;
   position: string;
   /**
    * 形状 未实现

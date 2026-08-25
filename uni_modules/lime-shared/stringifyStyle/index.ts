@@ -6,8 +6,15 @@
  */
 function toKebabCase(str : string) : string {
 	return str
-		.replace(/^[A-Z]/, (m : string, _a : number, _b : string) => m.toLowerCase())
-		.replace(/[A-Z]/g, (m : string, _a : number, _b : string) => '-' + m.toLowerCase())
+		// 1. 字母+数字+连续大写视为整体："e2XL" → "e-2XL"
+		.replace(/([a-z])(\d+[A-Z]{2,})/g, '$1-$2')
+		// 2. 字母+连续大写视为整体："eSM" → "e-SM", "sXS" → "s-XS"
+		.replace(/([a-z])([A-Z]{2,})/g, '$1-$2')
+		// 3. 小写+大写常规边界："tS" → "t-S", "eB" → "e-B"
+		.replace(/([a-z])([A-Z])/g, '$1-$2')
+		// 4. 字母+数字边界："y50" → "y-50"
+		.replace(/([a-zA-Z])(\d+)/g, '$1-$2')
+		.toLowerCase()
 }
 
 // #ifndef UNI-APP-X
@@ -40,13 +47,13 @@ export function stringifyStyle(...args : StyleProp[]) : string {
 
 function isValidStyleValue(value : StyleProp) : boolean {
 	if (value == null) return false; 	// 排除 null/undefined
+	if (typeof value == 'boolean') return false // 排除所有布尔值
+	if (value == 0) return true
 	if (value == '') return false; 		// 排除空字符串
 	if (typeof value == 'number') {
 		return isFinite(value as number);  		// 允许有效数字，排除 NaN/Infinity
 	}
-	if (typeof value == 'boolean') {
-		return false 					// 排除所有布尔值
-	}
+	
 	return true;  						// 字符串和其他情况
 }
 
@@ -59,21 +66,20 @@ function isValidStyleValue(value : StyleProp) : boolean {
  */
 function stringifyStyleArray(args : StyleProp[]) : string {
 	const result : string[] = []
-
 	for (let i = 0; i < args.length; i++) {
 		const arg = args[i]
 		if (!isValidStyleValue(arg)) continue
 		if (typeof arg == 'string') {
-			result.push(arg)
+			result.push(arg as string)
 		} else if (Array.isArray(arg)) {
-			if (arg.length > 0) {
+			if ((arg as StyleProp[]).length > 0) {
 				const style = stringifyStyleArray(arg)
 				if (style != '') {
 					result.push(style)
 				}
 			}
 		} else if (typeof arg == 'object') {
-			// #ifndef APP-ANDROID || APP-IOS
+			// #ifndef APP-ANDROID
 			for (const key in arg) {
 				const value = arg[key]
 				if (isValidStyleValue(value)) {
@@ -81,12 +87,22 @@ function stringifyStyleArray(args : StyleProp[]) : string {
 				}
 			}
 			// #endif
-			// #ifdef APP-ANDROID || APP-IOS 
+			// #ifdef APP-ANDROID 
+			// #ifdef VUE3-VAPOR
+			for (const key in arg) {
+				const value = arg[key]
+				if (isValidStyleValue(value)) {
+					result.push(`${toKebabCase(key)}:${value}`)
+				}
+			}
+			// #endif
+			// #ifndef VUE3-VAPOR
 			(arg as UTSJSONObject).toMap().forEach((value, key) => {
 				if (isValidStyleValue(value)) {
 					result.push(`${toKebabCase(key)}:${value}`)
 				}
 			})
+			// #endif
 			// #endif
 		}
 	}
@@ -104,7 +120,7 @@ export function toCssVars(obj : UTSJSONObject, prefix = '--l-') : string {
 	const cssVars : string[] = [];
 
 	if (typeof obj == 'object') {
-		// #ifndef APP-ANDROID || APP-IOS
+		// #ifndef APP-ANDROID
 		for (const key in obj) {
 			const value = obj[key]
 			if (isValidStyleValue(value)) {
@@ -114,13 +130,25 @@ export function toCssVars(obj : UTSJSONObject, prefix = '--l-') : string {
 
 		}
 		// #endif
-		// #ifdef APP-ANDROID || APP-IOS 
+		// #ifdef APP-ANDROID 
+		// #ifdef VUE3-VAPOR
+		for (const key in obj) {
+			const value = obj[key]
+			if (isValidStyleValue(value)) {
+				const cssVarName = prefix + toKebabCase(key);
+				cssVars.push(`${cssVarName}:${value}`)
+			}
+		
+		}
+		// #endif
+		// #ifndef VUE3-VAPOR
 		(obj as UTSJSONObject).toMap().forEach((value, key) => {
 			if (isValidStyleValue(value)) {
 				const cssVarName = prefix + toKebabCase(key);
 				cssVars.push(`${cssVarName}:${value}`)
 			}
 		})
+		// #endif
 		// #endif
 
 	}

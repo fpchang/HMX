@@ -1,3 +1,24 @@
+## 2.0.3（2026-08-03）
+- fix: 恢复obj2css
+## 2.0.2（2026-08-03）
+- fix: 恢复旧版css2obj
+## 2.0.1（2026-07-29）
+- fix: 恢复useVModel
+## 2.0.0（2026-07-21）
+- refactor: 全面兼容 uni-app x 蒸汽模式（uvue/uts）
+- feat: 新增 `useTransition`、`Timeline`、`Animation` 动画过渡能力
+- feat: 新增 `createCanvasContextAsync` 统一 Canvas 上下文创建
+- feat: 新增 `selectElement`、`findClosestElementWithStyle` DOM 查询工具
+- feat: 新增 `getDeviceInfo`、`getWindowInfo` 平台信息获取
+- feat: 新增 `obj2url`、`guid`、`uniqid`、`coalesce`、`merge` 等工具函数
+- feat: 新增 `isIP`、`isByteLength`、`isRegExp`、`isURL`、`isValidDomain` 等验证器
+- feat: 新增 `areaData` 中国省市区数据及级联选择器数据
+- feat: 新增 `Bem` 类与 `stringifyStyle`、`parseStyle`、`classNames` 样式工具
+- feat: 新增 `arrayEqual`、`findLastIndex`、`assignAtIndex`、`fillArray`、`toArray` 等数组工具
+- feat: 新增 `addSeparator`、`characterLimit`、`toBoolean` 等字符串/类型工具
+- refactor: `getRect` 重构为支持节点查询、视口滚动、滚动定位计算
+- refactor: `selectComponent`/`selectAllComponent` 支持 class/id/ref/component 多种选择器
+- docs: 文档按插件文档规范重构
 ## 0.4.8（2026-03-05）
 - feat: 更新uniappx vue的实现
 ## 0.4.7（2025-12-27）

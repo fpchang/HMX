@@ -5,33 +5,31 @@
 const dom = uni.requireNativePlugin('dom')
 // #endif
 
-/** 
+/**
  * 获取节点信息
  * @param selector 选择器字符串
- * @param context ComponentInternalInstance 对象
+ * @param context ComponentInternalInstance 对象，传 null 时自动使用页面级查询
  * @param node 是否获取node
  * @returns 包含节点信息的 Promise 对象
  */
-export function getRect(selector : string, context : ComponentInternalInstance|ComponentPublicInstance, node: boolean = false) {
-	// 之前是个对象，现在改成实例，防止旧版会报错
-	if(context== null) {
-		return Promise.reject('context is null')
+export function getRect(selector : string, context : ComponentInternalInstance|ComponentPublicInstance|null = null, node: boolean = false) {
+	if(context != null) {
+		if(context.context){
+			context = context.context
+		}
+		// #ifdef MP || VUE2
+		if (context.proxy) context = context.proxy
+		// #endif
 	}
-	if(context.context){
-		context = context.context
-	}
-	// #ifdef MP || VUE2
-	if (context.proxy) context = context.proxy
-	// #endif
-	
+
 	return new Promise<UniNamespace.NodeInfo>((resolve, reject) => {
 		// #ifndef APP-NVUE
-		const dom = uni.createSelectorQuery()
-		
-		.in(context) // 抖音virtualHost时使用this无法拿到真正的尺寸
+		let dom = context != null
+			? uni.createSelectorQuery().in(context)
+			: uni.createSelectorQuery();
 		// #ifndef MP-TOUTIAO
 		// #endif
-		.select(selector);
+		dom = dom.select(selector);
 		const result = (rect: UniNamespace.NodeInfo) => {
 			if (rect) {
 				resolve(rect)
@@ -39,7 +37,7 @@ export function getRect(selector : string, context : ComponentInternalInstance|C
 				reject('no rect')
 			}
 		}
-		
+
 		if (!node) {
 			dom.boundingClientRect(result).exec()
 		} else {
@@ -51,6 +49,10 @@ export function getRect(selector : string, context : ComponentInternalInstance|C
 		}
 		// #endif
 		// #ifdef APP-NVUE
+		if (context == null) {
+			reject('context is null')
+			return
+		}
 		const refs = context.refs || context.$refs
 		if (/#|\./.test(selector) && refs) {
 			selector = selector.replace(/#|\./, '')
@@ -73,16 +75,17 @@ export function getRect(selector : string, context : ComponentInternalInstance|C
 };
 
 
-export function getAllRect(selector : string, context: ComponentInternalInstance|ComponentPublicInstance, node:boolean = false) {
-	if(context== null) {
-		return Promise.reject('context is null')
+export function getAllRect(selector : string, context: ComponentInternalInstance|ComponentPublicInstance|null = null, node:boolean = false) {
+	if(context != null) {
+		// #ifdef MP || VUE2
+		if (context.proxy) context = context.proxy
+		// #endif
 	}
-	// #ifdef MP || VUE2
-	if (context.proxy) context = context.proxy
-	// #endif
 	return new Promise<UniNamespace.NodeInfo>((resolve, reject) => {
 		// #ifndef APP-NVUE
-		const dom = uni.createSelectorQuery().in(context).selectAll(selector);
+		const dom = context != null
+			? uni.createSelectorQuery().in(context).selectAll(selector)
+			: uni.createSelectorQuery().selectAll(selector);
 		const result = (rect: UniNamespace.NodeInfo[]) => {
 			if (rect) {
 				resolve(rect)
@@ -101,6 +104,10 @@ export function getAllRect(selector : string, context: ComponentInternalInstance
 		}
 		// #endif
 		// #ifdef APP-NVUE
+		if (context == null) {
+			reject('context is null')
+			return
+		}
 		let { context } = options
 		if (/#|\./.test(selector) && context.refs) {
 			selector = selector.replace(/#|\./, '')

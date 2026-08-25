@@ -7,6 +7,10 @@ function isImage(extension : string) {
 	const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "svg"];
 	return imageExtensions.includes(extension.toLowerCase());
 }
+function isVideo(extension : string) {
+	const videoExtensions = ["mp4", "webm", "mov", "avi", "mkv", "flv", "wmv", "3gp", "ogg", "m4v"];
+	return videoExtensions.includes(extension.toLowerCase());
+}
 // #ifdef H5
 function getSVGFromURL(url: string) {
 	return new Promise((resolve, reject) => {
@@ -39,19 +43,20 @@ export function pathToBase64(path : string) : Promise<string> {
 	if (/^data:/.test(path)) return path
 	let extension = path.substring(path.lastIndexOf('.') + 1);
 	const isImageFile = isImage(extension)
+	const isVideoFile = isVideo(extension)
 	let prefix = ''
 	if (isImageFile) {
 		prefix = 'image/';
 		if(extension == 'svg') {
 			extension += '+xml'
 		}
+	} else if (isVideoFile) {
+		prefix = 'video/';
 	} else if (extension === 'pdf') {
 		prefix = 'application/pdf';
 	} else if (extension === 'txt') {
 		prefix = 'text/plain';
 	} else {
-		// 添加更多文件类型的判断
-		// 如果不是图片、PDF、文本等类型，可以设定默认的前缀或采取其他处理
 		prefix = 'application/octet-stream';
 	}
 	return new Promise((resolve, reject) => {
@@ -79,9 +84,25 @@ export function pathToBase64(path : string) : Promise<string> {
 					reject(error);
 				};
 			}
-			
 		} else {
-			reject('not image');
+			// 通用文件处理：使用 fetch + blob + FileReader
+			fetch(path)
+				.then(response => {
+					if (!response.ok) {
+						throw new Error('HTTP error ' + response.status);
+					}
+					return response.blob();
+				})
+				.then(blob => {
+					return new Promise((resolve2, reject2) => {
+						const reader = new FileReader();
+						reader.onload = () => resolve2(reader.result);
+						reader.onerror = reject2;
+						reader.readAsDataURL(blob);
+					});
+				})
+				.then(resolve)
+				.catch(reject);
 		}
 
 		// #endif

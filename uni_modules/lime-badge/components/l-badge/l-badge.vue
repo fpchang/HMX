@@ -38,12 +38,8 @@
 	import { isDef } from '@/uni_modules/lime-shared/isDef'
 	import { getClassStr } from '@/uni_modules/lime-shared/getClassStr'
 	import { getOffsetWithMinusString } from './utils'
-	const name = 'l-badge'
-	interface CSSProperties {
-		[key : string] : string | number | undefined;
-	}
+	
 	export default defineComponent({
-		name,
 		props: badgeProps,
 		setup(props) {
 			const context = getCurrentInstance()
@@ -56,7 +52,7 @@
 				})
 			})
 			const styles = computed(() => {
-				const style : CSSProperties = {
+				const style = {
 					background: props.color,
 				};
 				if (props.offset) {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * 将字符串转换为 camelCase 或 PascalCase 风格的命名约定
  * @param str 要转换的字符串

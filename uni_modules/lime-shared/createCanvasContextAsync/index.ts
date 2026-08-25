@@ -4,27 +4,15 @@
  * 包含创建Canvas上下文时返回的各个组件
  */
 export type LimeCanvasInstance = {
-	/** 
-	 * uni-app的CanvasContext对象
-	 * 在uni-app X中为uni.createCanvasContextAsync返回的对象
-	 * 在非uni-app X中可能是Canvas元素本身或模拟对象
-	 */
-	context : CanvasContext,
-
-	/** 
-	 * Canvas的DOM元素
-	 * 注意：在非uni-app X且无法获取DOM元素时可能为null
-	 */
+	canvasContext : CanvasContext,
 	node : UniCanvasElement,
-
-	/** 
-	 * Canvas 2D渲染上下文
-	 * 用于执行实际的绘图操作（如drawImage, fillRect等）
-	 */
-	ctx : CanvasRenderingContext2D,
+	renderContext : CanvasRenderingContext2D,
 	isCanvas2d : boolean,
 	width : number,
-	height : number
+	height : number,
+	toDataURL : (type?: string, quality?: number) => Promise<string>,
+	flush : (reserve?: boolean) => Promise<void>,
+	getImageData : (x: number, y: number, width: number, height: number) => Promise<ImageData>
 }
 
 
@@ -61,12 +49,31 @@ export function createCanvasContextAsync(
 					const width = node.offsetWidth;
 					const height = node.offsetHeight;
 					resolve({
-						context: canvasContext,
+						canvasContext: canvasContext,
 						node,
-						ctx,
+						renderContext: ctx,
 						isCanvas2d: true,
 						width,
 						height,
+						toDataURL: (type?: string, quality?: number) : Promise<string> => {
+							return new Promise((resolve) => {
+								const dataURL = canvasContext.toDataURL(type ?? 'image/png', quality ?? 1.0)
+								resolve(dataURL)
+							})
+						},
+						flush: (_reserve?: boolean):Promise<void> => {
+							return Promise.resolve()
+						},
+						getImageData: (x: number, y: number, w: number, h: number) : Promise<ImageData> => {
+							return new Promise((resolve, reject) => {
+								try {
+									const imageData = ctx.getImageData(x, y, w, h)
+									resolve(imageData)
+								} catch (error) {
+									reject(error)
+								}
+							})
+						}
 					} as LimeCanvasInstance)
 				},
 				fail(error) {
@@ -96,7 +103,7 @@ export function createCanvasContextAsync(
 				// 成功查询到Canvas节点
 				if (queryResult.node && queryResult.node.getContext) {
 					// 获取Canvas的2D渲染上下文
-					const ctx = queryResult.node.getContext('2d')!;
+					const renderContext = queryResult.node.getContext('2d')!;
 
 					let isCanvas2d = true;
 
@@ -104,85 +111,178 @@ export function createCanvasContextAsync(
 					isCanvas2d = ![...queryResult.node.classList].includes('uni-canvas-canvas')
 					// #endif
 					
-					const context = {
+					const canvasContext = {
 						createImage: () => {
 							if(queryResult.node.createImage) {
 								return queryResult.node.createImage()
 							}
 							return new LimeCanvasImage()
 						},
-						
+						requestAnimationFrame: (callback: (time: number) => void) : number => {
+							// #ifdef WEB
+							return requestAnimationFrame(callback)
+							// #endif
+							// #ifndef WEB
+							if (queryResult.node.requestAnimationFrame) {
+								return queryResult.node.requestAnimationFrame(callback)
+							}
+							return setTimeout(callback, Math.floor(1000 / 60)) as unknown as number
+							// #endif
+						},
+						cancelAnimationFrame: (id: number) : void => {
+							// #ifdef WEB
+							cancelAnimationFrame(id)
+							// #endif
+							// #ifndef WEB
+							if (queryResult.node.cancelAnimationFrame) {
+								queryResult.node.cancelAnimationFrame(id)
+							} else {
+								clearTimeout(id)
+							}
+							// #endif
+						}
 					}
 					
 					resolve({
-						ctx,
-						node: queryResult.node,  // 返回实际的Canvas DOM元素
-						context,        // 在小程序中，Canvas元素本身作为context
+						renderContext,
+						node: queryResult.node,
+						canvasContext,
 						isCanvas2d,
-						width: queryResult.node.width,
-						height: queryResult.node.height,
+						width: queryResult.width,
+						height: queryResult.height,
+						toDataURL: (type?: string, quality?: number) : Promise<string> => {
+							return new Promise((resolve) => {
+								if (queryResult.node != null && typeof queryResult.node.toDataURL == 'function') {
+									const dataURL = queryResult.node.toDataURL(type ?? 'image/png', quality ?? 1.0)
+									resolve(dataURL)
+								} else {
+									uni.canvasToTempFilePath({
+										canvas: queryResult.node,
+										success: (res) => {
+											resolve(res.tempFilePath)
+										},
+										fail: () => {
+											resolve('')
+										}
+									})
+								}
+							})
+						},
+						flush: (_reserve?: boolean) => {
+							return Promise.resolve()
+						},
+						getImageData: (x: number, y: number, w: number, h: number) : Promise<ImageData> => {
+							return new Promise((resolve, reject) => {
+								try {
+									const result = renderContext.getImageData(x, y, w, h)
+									if (result && typeof result.then === 'function') {
+										result.then((imageData : ImageData) => {
+											resolve(imageData)
+										}).catch(reject)
+									} else {
+										resolve(result as ImageData)
+									}
+								} catch(e) {
+									reject(e)
+								}
+							})
+						}
 					} as LimeCanvasInstance)
 				} else {
 					// 未能获取到Canvas节点，回退到旧的API
 					// 使用uni.createCanvasContext创建绘图上下文
-					const ctx = uni.createCanvasContext(canvasId, component)
-					if (!ctx._drawImage) {
-						ctx._drawImage = ctx.drawImage
-						ctx.drawImage = function (...args) {
+					const renderContext = uni.createCanvasContext(canvasId, component)
+					if (!renderContext._drawImage) {
+						renderContext._drawImage = renderContext.drawImage
+						renderContext.drawImage = function (...args) {
 							const {path} = args.shift();
-							ctx._drawImage(path, ...args)
+							renderContext._drawImage(path, ...args)
 						}
-					}
-					if (!ctx.getImageData) {
-						// ctx.getImageData = function () {
-						// 	return new Promise((resolve, reject) => {
-						// 		uni.canvasGetImageData({
-						// 			canvasId,
-						// 			x: parseInt(arguments[0]),
-						// 			y: parseInt(arguments[1]),
-						// 			width: parseInt(arguments[2]),
-						// 			height: parseInt(arguments[3]),
-						// 			success(res) {
-						// 				resolve(res)
-						// 			},
-						// 			fail(err) {
-						// 				reject(err)
-						// 			}
-						// 		}, context)
-						// 	})
-						// }
 					}
 
 					// 创建模拟的CanvasContext对象以保持接口一致
-					const context = {
+					const canvasContext = {
 						/**
 						 * 模拟CanvasContext的getContext方法
 						 * 在旧版本API中返回绘图上下文
 						 */
 						getContext(type : string) {
-							return ctx
+							return renderContext
 						},
 						createImage(){
 							return new LimeCanvasImage()
 						},
+						requestAnimationFrame: (callback: (time: number) => void) : number => {
+							// #ifdef WEB
+							return requestAnimationFrame(callback)
+							// #endif
+							// #ifndef WEB
+							return setTimeout(callback, Math.floor(1000 / 60)) as unknown as number
+							// #endif
+						},
+						cancelAnimationFrame: (id: number) : void => {
+							// #ifdef WEB
+							cancelAnimationFrame(id)
+							// #endif
+							// #ifndef WEB
+							clearTimeout(id)
+							// #endif
+						}
 					}
 					const node = {
-						...context,
-						// toBlob(){},
-						// toDataURL(){},
-						// createImage(){},
-						// createPath2D(){},
-						// requestAnimationFrame(){},
-						// cancelAnimationFrame(){},
+						...canvasContext,
 					}
 					// 在回退方案中，无法获取到Canvas DOM元素
 					resolve({
-						ctx,
+						renderContext,
 						node,
-						context,
+						canvasContext,
 						isCanvas2d: false,
 						width: queryResult.width || 300,
 						height: queryResult.height || 150,
+						toDataURL: (type?: string, quality?: number) : Promise<string> => {
+							return new Promise((resolve) => {
+								renderContext.draw(true, () => {
+									const fileType = type == 'image/jpeg' ? 'jpg' : 'png'
+									uni.canvasToTempFilePath({
+										canvasId: canvasId,
+										fileType: fileType,
+										quality: quality ?? 1.0,
+										success: (res) => {
+											resolve(res.tempFilePath)
+										},
+										fail: (err) => {
+											console.log('[createCanvasContextAsync]:生成图片失败', err)
+											resolve('')
+										}
+									}, component)
+								})
+							})
+						},
+						flush: (reserve?: boolean) => {
+							return new Promise((resolve)=> {
+								renderContext.draw(reserve ?? true, resolve)
+							})
+						},
+						getImageData: (x: number, y: number, w: number, h: number) : Promise<ImageData> => {
+							return new Promise((resolve, reject) => {
+								renderContext.draw(true, () => {
+									uni.canvasGetImageData({
+										canvasId: canvasId,
+										x: Math.round(x),
+										y: Math.round(y),
+										width: Math.round(w),
+										height: Math.round(h),
+										success(res : any) {
+											resolve(res as ImageData)
+										},
+										fail(err : any) {
+											reject(err)
+										}
+									}, component)
+								})
+							})
+						}
 					} as LimeCanvasInstance)
 				}
 			}).exec()  // 执行查询
@@ -213,26 +313,19 @@ class LimeCanvasImage {
 		}
 		src = src.replace(/^@\//,'/')
 		this.currentSrc = src
-		this.path = src
+		// this.path = src
 		// uniapp 好像不需要下载
-		this.onload()
-		// uni.getImageInfo({
-		// 	src,
-		// 	success: (res) => {
-		// 		const localReg = /^\.|^\/(?=[^\/])/;
-		// 		// #ifdef MP-WEIXIN || MP-BAIDU || MP-QQ || MP-TOUTIAO
-		// 		res.path = localReg.test(src) ?  `/${res.path}` : res.path;
-		// 		// #endif
-		// 		this.complete = true
-		// 		this.path = res.path
-		// 		this.naturalWidth = this.width = res.width
-		// 		this.naturalHeight = this.height = res.height
-		// 		this.onload()
-		// 	},
-		// 	fail: () => {
-		// 		this.onerror()
-		// 	}
-		// })
+		// this.onload()
+		uni.getImageInfo({
+			src,
+			success: (res: any) => {
+				this.path = res.path
+				this.naturalWidth = this.width = res.width
+				this.naturalHeight = this.height = res.height
+				this.onload()
+			},
+			fail: () => { this.onerror() }
+		})
 	}
 	get src() {
 		return this.currentSrc

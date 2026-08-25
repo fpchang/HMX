@@ -1,11 +1,11 @@
 // @ts-nocheck
 // #ifndef UNI-APP-X && APP
-// export * from './vue.ts'
-export { exif } from './vue.ts'
+// export * from './vue'
+export { exif } from './vue'
 // #endif
 
 
 // #ifdef UNI-APP-X && APP
 // export * from './uvue.uts'
-export { exif } from './uvue.uts'
+export { exif } from './uvue'
 // #endif

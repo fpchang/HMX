@@ -33,7 +33,12 @@ export function cloneDeep<T>(obj : any) : T {
 	}
 
 	if (typeof obj == 'object') {
+		// #ifdef VUE3-VAPOR
+		return Object.assign<T>({}, toRaw(obj))! 
+		// #endif
+		// #ifndef VUE3-VAPOR
 		return UTSJSONObject.assign<T>({}, toRaw(obj))! 
+		// #endif
 	}
 	return obj as T
 }

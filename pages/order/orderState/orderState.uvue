@@ -341,14 +341,14 @@
 	}
 
 	.cell-content-red {
-		background-color: #e8f1fc;
+		background-color: rgb(220, 231, 255);
 		padding:12px 0;
 		border-radius:10px;
 	}
 
 	.cell-th-cell-content {
 		height: 76px;
-		background-color: #e8f1fc;
+		background-color: rgb(220, 231, 255);
 		display: flex;
 		flex-direction: row;
 	}

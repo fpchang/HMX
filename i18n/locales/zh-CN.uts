@@ -480,6 +480,7 @@ export default {
 	},
 	finance: {
 		navbar_title: "财务中心",
+		statusAll:"全部",
 		income: "收入",
 		expense: "支出",
 		  "annualMonthlyFinancialSummary": "年度月度财务汇总",

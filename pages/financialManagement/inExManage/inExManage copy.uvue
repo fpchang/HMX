@@ -5,14 +5,14 @@
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
-				<image src="/static/icons/list.png"
+				<image :src="titleImg"
 					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
 				<text
-					style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{i18n.global.t("finance.income_expense_list")}}</text>
+					style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
 			</view>
 		</template>
 		<template #right>
-			<view class="navbar-btn-root" @click="addFm">
+			<view class="navbar-btn-root" @click="addFm" v-if="!showDeatilPage">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
 				<text class="navbar-text">{{billType=='income'?i18n.global.t("finance.income"):i18n.global.t("finance.expense")}}</text>
 			</view>
@@ -33,7 +33,7 @@
 			</view>
 		</view>
 
-		<view style="padding:14px;border-radius: 14px;">
+		<view style="padding:14px;border-radius: 14px;" v-if="!submitLoading">
 			<view style="border-radius: 14px;background-color: #fff;">
 				<rice-swipe-actions :accordion="true" ref="swipeControlRef">
 					<rice-swipe-actions-item :auto-close="true" v-for="fm of fmResult.fmList">
@@ -77,13 +77,12 @@
 		<view v-if="!submitLoading&&fmResult.fmList.length<1">
 			<l-empty :description="i18n.global.t('common.noData',[''])" />
 		</view>
-		
 	</scroll-view>
 
 	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"
 		v-if="!submitLoading&&fmResult!=null&&fmResult.count>fmResult.pageSize">
 		<l-pagination v-model="fmResult.pageNo" :disabled="submitLoading" :total="fmResult?.count"
-			:page-size="fmResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
+			:page-size="fmResult?.pageSize" :pager-count="4" :hideOnSinglePage="true" @change="pageChange" />
 	</view>
 	<page-container :show="showDeatilPage" position="right" :round="true" @afterleave="showDeatilPage=false"
 		custom-style="background-color: #f5f5f7;width:750rpx">
@@ -160,6 +159,7 @@
 	const permissionList = computed(() => {
 		return state.permissionList;
 	})
+	
 	const currentPage = ref(1);
 	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
 		return state.roomTypeList;
@@ -218,6 +218,16 @@
 		}
 		return null;
 	});
+	const title = computed(() => {
+		if (showDeatilPage.value) {
+			return i18n.global.t("common.btn_txt_details", [i18n.global.t('finance.title_income_expense')]);
+		}
+		return i18n.global.t("finance.income_expense_list");
+	})
+	const titleImg = computed<string>(() => {
+		
+		return showDeatilPage.value? "/static/icons/detailpage.png":"/static/icons/list.png" ;
+	})
 	const dateChange = (range : string[]) => {
 		dateRange.value = range;
 		getFmList();

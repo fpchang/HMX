@@ -466,6 +466,7 @@ export default {
 	},
 	finance: {
 		navbar_title: "Financial Center",
+		statusAll:"All",
 		income: "income",
 		expense: "expense",
 		"annualMonthlyFinancialSummary": "Annual & Monthly Financial Summary",

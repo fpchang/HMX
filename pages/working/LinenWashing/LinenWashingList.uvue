@@ -24,7 +24,7 @@
 			<rice-search placeholder="请选择日期" :model-value="dateRange.join(' ~ ')" placeholder-style="color:#666" disabled height="40px"
 				input-align="center" shape="round" left-icon="" right-icon="calendar" right-icon-size="22"
 				@clickRightIcon="showCalendar=!showCalendar"  @clickInput="showCalendar=!showCalendar"/>
-			<rice-tabs v-model="activeIndex" :list="list" @clickTab="selectStatus"></rice-tabs>
+			<rice-tabs :list="list" @clickTab="selectStatus"></rice-tabs>
 		</view>
 		<scroll-view style="flex:1">
 		
@@ -118,7 +118,7 @@
 		<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"
 			v-if="!submitLoading&&linenResult!=null&&linenResult.count>linenResult.pageSize">
 			<l-pagination v-model="linenResult.pageNo" :disabled="submitLoading" :total="linenResult?.count"
-				:page-size="linenResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
+				:page-size="linenResult?.pageSize" :pager-count="4" :hideOnSinglePage="true" @change="pageChange" />
 		</view>
 		<rice-calendar :show="showCalendar" mode="range" :date="dateRange" @confirm="dateChange" @close="showCalendar=false"></rice-calendar>
 		<page-container :show="showDeatilPage" position="right" :round="true" @afterleave="showDeatilPage=false"
@@ -340,13 +340,16 @@
 	const activeIndex = ref(1);
 	const showCalendar = ref(false);
 	const swipeControlRef = ref<RiceSwipeActionsComponentPublicInstance | null>(null)
-	const list = ref<TabsOptions[]>([
-		{ name: i18n.global.t('washingOrder.statusAll'), value: "all" },
-		{ name: i18n.global.t('washingOrder.statusWashing'), value: 0 },
-		{ name: i18n.global.t('washingOrder.statusCompleted'), value: 1 },
-		{ name: i18n.global.t('washingOrder.statusError'), value: 9 },
-		{ name: i18n.global.t('washingOrder.statusCancelled'), value: 10 },
-	])
+	const list = computed<TabsOptions[]>(()=>{
+		
+		return [
+		{ name: i18n.global.t('washingOrder.statusAll'), value: "all",disabled:submitLoading.value==true },
+		{ name: i18n.global.t('washingOrder.statusWashing'), value: 0,disabled:submitLoading.value==true },
+		{ name: i18n.global.t('washingOrder.statusCompleted'), value: 1 ,disabled:submitLoading.value==true},
+		{ name: i18n.global.t('washingOrder.statusError'), value: 9 ,disabled:submitLoading.value==true},
+		{ name: i18n.global.t('washingOrder.statusCancelled'), value: 10 ,disabled:submitLoading.value==true},
+	]
+	})
 	const linenResult = ref<linenDataListResult>({
 		count: 0,
 		pageNo: 1,
@@ -404,7 +407,10 @@
 	}
 
 	const selectStatus = (e : TabsClickTab) => {
-		console.log(e)
+		if(e.disabled){
+					return;
+				}
+				activeIndex.value = e.index;
 		linenStatus.value = e.value as number | string;
 		//swipeControlRef.value!.closeAll!();
 		getlinenList();

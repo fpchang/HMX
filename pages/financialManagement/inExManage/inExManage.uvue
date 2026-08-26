@@ -18,8 +18,14 @@
 			</view>
 		</template>
 	</rice-navbar>
+	<view class="search-area-root">
+		<rice-search disabled height="40px" :placeholder="dateRange.join(' ~ ')" placeholder-style="color:#666"
+			input-align="center" shape="round" left-icon="" right-icon="calendar" right-icon-size="22"
+			@clickRightIcon="showCalendar=!showCalendar" @clickInput="showCalendar=!showCalendar" />
+		<rice-tabs v-model="activeIndex" :list="list" @clickTab="selectStatus"></rice-tabs>
+	</view>
 	<scroll-view style="flex:1">
-		<view class="search-wrap-root">
+		<view class="search-wrap-root" v-if="false">
 			<view class="search-card-box">
 				<view class="search-card-row title-row">
 					<text class="title-text">{{i18n.global.t("finance.income_expense_filter")}}</text>
@@ -71,7 +77,7 @@
 			</view>
 		</view>
 
-		<view v-if="submitLoading" style="display: flex;flex-direction: row;justify-content: center;">
+		<view v-if="submitLoading" style="padding-top:24px;display: flex;flex-direction: row;justify-content: center;">
 			<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
 		</view>
 		<view v-if="!submitLoading&&fmResult.fmList.length<1">
@@ -82,7 +88,7 @@
 	<view style="padding:15px 5px;background-color: #fff;display: flex;flex-direction: row;justify-content: center;"
 		v-if="!submitLoading&&fmResult!=null&&fmResult.count>fmResult.pageSize">
 		<l-pagination v-model="fmResult.pageNo" :disabled="submitLoading" :total="fmResult?.count"
-			:page-size="fmResult?.pageSize" :pager-count="5" :hideOnSinglePage="true" @change="pageChange" />
+			:page-size="fmResult?.pageSize" :pager-count="4" :hideOnSinglePage="true" @change="pageChange" />
 	</view>
 	<page-container :show="showDeatilPage" position="right" :round="true" @afterleave="showDeatilPage=false"
 		custom-style="background-color: #f5f5f7;width:750rpx">
@@ -127,9 +133,12 @@
 			</view>
 		</view>
 	</page-container>
+	<rice-calendar :show="showCalendar" mode="range" :date="dateRange" @confirm="dateChange"
+		@close="showCalendar=false"></rice-calendar>
 </template>
 
 <script setup>
+	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import { TIME, getMonthDateArray } from "@/static/utils/TIME";
@@ -169,11 +178,13 @@
 	let _search_key = ref("");
 	const billType = ref("income");
 	const keyword = ref("");
+	const showCalendar = ref(false);
+	const activeIndex = ref(0);
 	const dateRange = ref<string[]>(getMonthDateArray());
 	const columns = computed<Array<Array<PickerOption>>>(() => {
 		let result : Array<Array<PickerOption>> = [[
 			{ text: i18n.global.t('finance.income'), value: 'income' },
-			{ text: i18n.global.t('finance.expense'), value: 'expense' }
+			{ text: i18n.global.t('finance.expense'), value: 'expenses' }
 		]];
 		return result;
 	});
@@ -230,6 +241,16 @@
 	})
 	const dateChange = (range : string[]) => {
 		dateRange.value = range;
+		getFmList();
+	}
+	const list = ref<TabsOptions[]>([
+		// { name: i18n.global.t('finance.statusAll'), value: "all" },
+		{ name: i18n.global.t('finance.income'), value: 'income' },
+		{ name: i18n.global.t('finance.expense'), value: 'expenses' }
+	])
+	const selectStatus = (e : TabsClickTab) => {
+		console.log(e)
+		billType.value = e.value as number | string;
 		getFmList();
 	}
 	const searchInputChange = (k : string) => {

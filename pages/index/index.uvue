@@ -20,12 +20,12 @@
 		<uni-tab-bar class="custom-tab-list-shell custom-tab-list-root">
 			
 			 <view class="menu-container-style">
-				 <l-tabbar v-model="activeIndex" activeColor="#007aff">
-				 	<l-tabbar-item icon="home-filled">{{i18n.global.t('tab.home')}}</l-tabbar-item>
-				 	<l-tabbar-item icon="calendar-1-filled">{{i18n.global.t('tab.roomStatus')}}</l-tabbar-item>
-				 	<l-tabbar-item icon="chart-area-filled">{{i18n.global.t('tab.finance')}}</l-tabbar-item>
-					<l-tabbar-item icon="app-filled">{{i18n.global.t('tab.function')}}</l-tabbar-item>
-				 	<l-tabbar-item icon="user-1-filled">{{i18n.global.t('tab.mine')}}</l-tabbar-item>
+				 <l-tabbar v-model="activeTabIndex" activeColor="#007aff">
+				 	<l-tabbar-item icon="home-filled" value="0">{{i18n.global.t('tab.home')}}</l-tabbar-item>
+				 	<l-tabbar-item icon="calendar-1-filled" value="1">{{i18n.global.t('tab.roomStatus')}}</l-tabbar-item>
+				 	<l-tabbar-item icon="chart-area-filled" value="2">{{i18n.global.t('tab.finance')}}</l-tabbar-item>
+					<l-tabbar-item icon="app-filled" value="3">{{i18n.global.t('tab.function')}}</l-tabbar-item>
+				 	<l-tabbar-item icon="user-1-filled" value="4">{{i18n.global.t('tab.mine')}}</l-tabbar-item>
 				 </l-tabbar>
 				<!-- <rice-subsection :list="listTabName" v-model="activeIndex" /> -->
 				<!-- <rice-subsection class="tab-bar-style" :list="listTabName" v-model="activeIndex" shape="round"
@@ -57,7 +57,11 @@
 	import homeMenu from "@/pages/homeMenu/homeMenu.uvue";
 	import mine from "@/pages/mine/mine.uvue";
 	import i18n from '@/i18n/index.uts';
-	const activeIndex = ref<number>(0);
+	
+	const activeTabIndex = ref("0");
+	const activeIndex = computed(()=>{
+		return parseInt(activeTabIndex.value);
+	})
 	type TabBarItem = {
 		pagePath : string,
 		iconPath : string,

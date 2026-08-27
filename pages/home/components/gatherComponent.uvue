@@ -1,8 +1,9 @@
 <template>
+	<view class="title">
+		<text style="color:#666;font-weight:bold;padding:8px;">{{ i18n.global.t("home.checkinData") }}</text>
+	</view>
 	<view class="container">
-		<view class="title">
-			<text style="color:#666;font-weight:bold">{{ i18n.global.t("home.checkinData") }}</text>
-		</view>
+		
 		<view class="stats-tab">
 			<!-- <view :class="[activeIndex == 0?'tab-btn tab-btn-active':'tab-btn' ]" @click="tabClick(0)"
 				style="margin-right:10px">
@@ -295,7 +296,7 @@
 	}
 
 	.title {
-		
+		margin-bottom:8px;
 	}
 
 	.tab-select {
@@ -416,7 +417,7 @@
 		margin-bottom: 16px;
 		// flex-direction: row;
 		max-width: 500px;
-		padding: 8px;
+		// padding: 8px;
 		// background: #f1f5fe;
 		border-radius: 12px;
 	}

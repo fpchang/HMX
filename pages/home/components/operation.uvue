@@ -5,10 +5,10 @@
 		</view>
 		<!-- 快速操作入口 -->
 		<view class="quick-actions">
-			<view style="background-color: #fff;border-radius: 14px;padding: 0 14px 14px 14px">
+			<view class="menu-item"   v-for="it in menuList" >
 			<rice-cell-group >
 				
-			  <rice-cell   :clickable="false" center size="medium"  :icon="it.icon" :title="it.title" :label='it.label'   v-for="it in menuList"  arrow :url="it.url" :border="true">
+			  <rice-cell   :clickable="false" center size="medium"  :icon="it.icon" :title="it.title" :label='it.label'   arrow :url="it.url" :border="true">
 				   <template #leftIcon>
 					   <view style="padding-right: 14px;"> 
 					     <rice-icon :name="it.icon" size="45" color="#007AFF"></rice-icon>
@@ -68,7 +68,7 @@
 
 <style lang="scss">
 	.operation{
-		background:#fff;
+		
 		border-radius:12px;
 		margin-top:14px;
 	}
@@ -114,5 +114,9 @@
 		color: #333;
 		padding: 8px;
 		text-align: center;
+	}
+	.menu-item{
+		background-color: #fff;border-radius: 12px;
+		margin-bottom:8px;
 	}
 </style>

@@ -23,17 +23,17 @@
 			<view class="roomtype-card-item" v-for="(roomType,index) of roomTypeList">
 				<view class="roomtype-card-box">
 					<view class="card-image-block">
-						<image v-if="roomType.firstImages!=''" :src="roomType.firstImages" style="height: 100%;width: 100%;" mode="aspectFill">
+						<image v-if="roomType.firstImages!=''" :src="roomType.firstImages"
+							style="height: 100%;width: 100%;" mode="aspectFill">
 						</image>
-						<image  v-if="roomType.firstImages==''"  src="/static/images/nono-img.png" style="height: 80%;width: 80%;" mode="aspectFit">
+						<image v-if="roomType.firstImages==''" src="/static/images/nono-img.png"
+							style="height: 80%;width: 80%;" mode="aspectFit">
 						</image>
 					</view>
 					<rice-swipe-actions :accordion="true" ref="swipeControlRef">
 						<rice-swipe-actions-item :auto-close="true">
-							<rice-cell :title="roomType.name"
-							:border="false"
-								:label="`123`"
-								size="large" arrow arrow-direction="left" center :clickable="false">
+							<rice-cell :title="roomType.name" :border="false" :label="`123`" size="large" arrow
+								arrow-direction="left" center :clickable="false">
 								<!-- <template #leftIcon>
 									<image mode="aspectFill" :src="formatRommTypeImage(order.reservedRoomList[0])"
 										style="margin-right:8px;width: 100px;height:110px;border-radius: 12px;"
@@ -41,27 +41,30 @@
 								</template> -->
 								<template #title>
 									<view class="order-title">
-									
+
 									</view>
 								</template>
 								<template #label>
-									<view class="card-title-wrap" >
+									<view class="card-title-wrap">
 										<view class="card-title-inner">
 											<view class="card-name-price-row">
 												<text class="type-name-text">{{roomType.name}}</text>
 												<text class="price-num-text">¥{{roomType.priceBase}}</text>
 											</view>
-											<view >
-												
-												</view>
-											<view class="tag-group-row" style="justify-content: flex-start;margin-bottom: 16px;" @click="viewDetail(roomType)">
+											<view>
+
+											</view>
+											<view class="tag-group-row"
+												style="justify-content: flex-start;margin-bottom: 16px;"
+												@click="viewDetail(roomType)">
 												<view>
-													<rice-tag :text="`${roomType.area}㎡`" text-color="#4e5969" color="#f2f3f5"
-														:round="true" />
+													<rice-tag :text="`${roomType.area}㎡`" text-color="#4e5969"
+														color="#f2f3f5" :round="true" />
 												</view>
 												<view style="margin-left: 8px;" v-for="it of roomType.bedList">
-													<rice-tag :text="`${it['name']}*${it['count']}`" text-color="#4e5969"
-														color="#f2f3f5" text-size="12px" :round="true" />
+													<rice-tag :text="`${it['name']}*${it['count']}`"
+														text-color="#4e5969" color="#f2f3f5" text-size="12px"
+														:round="true" />
 												</view>
 											</view>
 											<view class="room-count-operate-row">
@@ -93,7 +96,8 @@
 								<view class="swipe-menu-container">
 									<view class="menu-item-box menu-detail" @click="viewDetail(roomType)">
 										<rice-icon name="eyes" color="#fff" />
-										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_details",[''])}}</text>
+										<text
+											class="menu-item-text">{{i18n.global.t("common.btn_txt_details",[''])}}</text>
 									</view>
 									<view class="menu-item-box menu-edit" @click="editRoomType(roomType)">
 										<rice-icon name="edit" color="#fff" />
@@ -107,16 +111,18 @@
 							</template>
 						</rice-swipe-actions-item>
 					</rice-swipe-actions>
-					<rice-cell  :clickable="false" :border="false" :title="i18n.global.t('hotel.room_count')" :value="roomType.roomList.length" :arrow="true" :url="`/pages/hotelManage/roomList/roomList?roomType_id=${roomType._id}`"></rice-cell>
+					<rice-cell :clickable="false" :border="false" :title="i18n.global.t('hotel.room_count')"
+						:value="roomType.roomList.length" :arrow="true"
+						:url="`/pages/hotelManage/roomList/roomList?roomType_id=${roomType._id}`"></rice-cell>
 					<view class="empty-control-block"></view>
 				</view>
-				
-				
-				
-				
-				
-				
-				
+
+
+
+
+
+
+
 			</view>
 			<view class="roomtype-card-item fill" v-for="i in 6"></view>
 		</view>
@@ -252,7 +258,7 @@
 					return false;
 				}
 			},
-			confirm: () => {},
+			confirm: () => { },
 			cancel: () => {
 				hideDialog();
 			}
@@ -268,129 +274,143 @@
 		let { scrollTop } = event.detail;
 		scrollTop_val.value = scrollTop
 	}
-	const cssVars =computed(()=>{
-		return  {
-		"--minItemWidth":`max(320px,calc((750rpx - 28px + 16px) / ${roomTypeList.value.length} - 16px))`,
-		//"--minItemWidth":`${props.minWidth}${props.unit}`,
-		"--margin--":`8px`,
-		"--conatinerMargin":`-8px`
-	}
+	const cssVars = computed(() => {
+		return {
+			"--minItemWidth": `max(320px,calc((750rpx - 28px + 16px) / ${roomTypeList.value.length} - 16px))`,
+			//"--minItemWidth":`${props.minWidth}${props.unit}`,
+			"--margin--": `8px`,
+			"--conatinerMargin": `-8px`
+		}
 	})
 </script>
 
 <style>
-/* 导航栏新增房型按钮 */
-.nav-add-roomtype-btn {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	padding: 12px 15px;
-	border-radius: 8px;
-}
-.nav-btn-text {
-	color: #007aff;
-	font-size: 15px;
-	padding-left: 4px;
-}
-
-/* 房型列表外层容器 */
-.roomtype-list-wrap {
-	 margin: var(--conatinerMargin); 
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-}
-/* 单个卡片容器 */
-.roomtype-card-item {
-	 min-width: var(--minItemWidth);
-	 margin:var(--margin--);
-	flex: 1;
-}
-.fill {
-	    flex: 1;
-	    min-width: var(--minItemWidth);
-	    margin: 0  var(--margin--);
-	    height: 0;
-	    visibility: hidden;
+	/* 导航栏新增房型按钮 */
+	.nav-add-roomtype-btn {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		padding: 12px 15px;
+		border-radius: 8px;
 	}
-/* 卡片主体盒子 */
-.roomtype-card-box {
-	background-color: #fff;
-	border-radius: 8px;
-}
-.card-image-block {
-	height: 350rpx;
-	max-height: 200px;
-	background-color: #eee;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-/* 图片区域 */
-.card-img-block {
-	height: 350rpx;
-	max-height: 200px;
-	background-color: #efefef;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-/* 标题内容外层 */
-.card-title-wrap {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-/* 	padding: 15px; */
-}
-/* 标题内部容器 */
-.card-title-inner {
-	flex: 1;
-}
-/* 房型名称+价格行 */
-.card-name-price-row {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 12px;
-}
-/* 房型名称文字 */
-.type-name-text {
-	color: #1d2129;
-	font-weight: 700;
-	font-size: 18px;
-}
-/* 价格文字 */
-.price-num-text {
-	color: #165dff;
-	font-size: 20px;
-	font-weight: 700;
-}
-/* 标签组行 */
-.tag-group-row {
-	margin-top: 8px;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-}
-/* 房间数量+操作行 */
-.room-count-operate-row {
-	margin-top: 8px;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-}
-/* 房间数量数字 */
-.room-count-text {
-	color: rgb(144, 147, 153);
-	font-size: 14px;
-	padding-left: 4px;
-}
-/* 底部空白占位 */
-.empty-control-block {
-}
+
+	.nav-btn-text {
+		color: #007aff;
+		font-size: 15px;
+		padding-left: 4px;
+	}
+
+	/* 房型列表外层容器 */
+	.roomtype-list-wrap {
+		margin: var(--conatinerMargin);
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	/* 单个卡片容器 */
+	.roomtype-card-item {
+		min-width: 300px;
+		margin: var(--margin--);
+		flex: 1;
+	}
+
+	.fill {
+		flex: 1;
+		min-width: 300px;
+		margin: 0 var(--margin--);
+		height: 0;
+		visibility: hidden;
+	}
+
+	/* 卡片主体盒子 */
+	.roomtype-card-box {
+		background-color: #fff;
+		border-radius: 8px;
+	}
+
+	.card-image-block {
+		height: 350rpx;
+		max-height: 200px;
+		background-color: #eee;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	/* 图片区域 */
+	.card-img-block {
+		height: 350rpx;
+		max-height: 200px;
+		background-color: #efefef;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	/* 标题内容外层 */
+	.card-title-wrap {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		/* 	padding: 15px; */
+	}
+
+	/* 标题内部容器 */
+	.card-title-inner {
+		flex: 1;
+	}
+
+	/* 房型名称+价格行 */
+	.card-name-price-row {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 12px;
+	}
+
+	/* 房型名称文字 */
+	.type-name-text {
+		color: #1d2129;
+		font-weight: 700;
+		font-size: 18px;
+	}
+
+	/* 价格文字 */
+	.price-num-text {
+		color: #165dff;
+		font-size: 20px;
+		font-weight: 700;
+	}
+
+	/* 标签组行 */
+	.tag-group-row {
+		margin-top: 8px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	/* 房间数量+操作行 */
+	.room-count-operate-row {
+		margin-top: 8px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	/* 房间数量数字 */
+	.room-count-text {
+		color: rgb(144, 147, 153);
+		font-size: 14px;
+		padding-left: 4px;
+	}
+
+	/* 底部空白占位 */
+	.empty-control-block {}
 
 
 	/* 底部操作按钮区域 */
@@ -423,6 +443,7 @@
 		flex-direction: row;
 		height: 100%;
 	}
+
 	/* 侧滑每个按钮项 */
 	.menu-item-box {
 		display: flex;
@@ -432,19 +453,23 @@
 		width: 70px;
 		height: 100%;
 	}
-.menu-detail {
-	background-color: #007aff;
-}
-.menu-edit {
-	background-color: #ff7d00;
-}
-.menu-del {
-	background-color: #f53f3f;
-}
-/* 菜单文字 */
-.menu-item-text {
-	color: #fff;
-	font-size: 12px;
-	margin-top: 4px;
-}
+
+	.menu-detail {
+		background-color: #007aff;
+	}
+
+	.menu-edit {
+		background-color: #ff7d00;
+	}
+
+	.menu-del {
+		background-color: #f53f3f;
+	}
+
+	/* 菜单文字 */
+	.menu-item-text {
+		color: #fff;
+		font-size: 12px;
+		margin-top: 4px;
+	}
 </style>

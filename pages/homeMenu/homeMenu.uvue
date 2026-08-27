@@ -225,7 +225,7 @@
 	})
 	const cssVars = computed(() => {
 		return {
-			"--minItemWidth": `80px`,
+			"--minItemWidth": `65px`,
 			"--maxItemWidth": `120px`,
 			"--margin--": `7px`,
 			"--conatinerMargin": `-7px`

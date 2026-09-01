@@ -1,5 +1,5 @@
 <template>
-	<uni-tab style="flex: 1" :active-index="activeIndex" :tab-bar-height="40" :tabContentHeightFull="false"
+	<uni-tab style="flex: 1" :active-index="activeIndex" :tab-bar-height="35" :tabContentHeightFull="false"
 		@change="handleChange">
 		<uni-tab-content>
 			<home></home>
@@ -221,7 +221,8 @@
 	}
 
 	.custom-tab-list-root {
-		background-color: green;
+		height:35px;
+		background-color: #fff;
 		/* background: linear-gradient(to right, #f7d9a8, #c6ece3); */
 		/* height: 50px; */
 		border-top-width: 0px;
@@ -234,7 +235,7 @@
 		overflow:hidden;
 	}
 	.menu-container-style{
-		/* background:green; */
+	/* 	background:green; */
 		/* flex:1; */
 		width:750rpx;
 		max-width:450px;
@@ -244,7 +245,7 @@
 	
 	.tab-bar-style {
 		/* height: 50px; */
-		background-color: red;
+	/* 	background-color: red; */
 		/* border: 1rpx solid rgba(240, 240, 240, 0.95); */
 	/* 	box-shadow:0px 0px 18px 4px #4040400d; */
 }

@@ -47,7 +47,7 @@
 				</view>
 			</view> -->
 		<view class="detail-card">
-			
+				<text class="card-main-title">{{i18n.global.t('finance.core_financial_indicators')}}</text>
 				<view class="container-list" :style="cssVars">
 					<view class="card income-box">
 						<text class="card-title">{{ i18n.global.t('finance.monthly_income') }}</text>
@@ -139,7 +139,7 @@
 				</view>
 			</view>
 		</view>
-		<view style="height:70px"></view>
+		
 	</scroll-view>
 	<view v-if="loading" style="margin-top:168px;display: flex;flex-direction: row;justify-content: center;">
 		<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
@@ -382,10 +382,10 @@
 	}
 
 	.card-main-title {
-		font-size: 17px;
+		font-size: 16px;
 		font-weight: 500;
 		margin-bottom: 14px;
-		color: #333;
+		color: #666;
 	}
 
 	.detail-row {

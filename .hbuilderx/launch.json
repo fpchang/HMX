@@ -33,8 +33,8 @@
             "certificateProfileFile" : "/Volumes/hanfeng/工作资料/ios开发者证书/hanfengcfpoutlookcom.mobileprovision",
             "customPlaygroundType" : "local",
             "iOSProjectStandardBaseHistory" : {
-                "current" : "iOS_debug_5.23.2026080313-alpha.ipa",
-                "previous" : "iOS_debug_5.22.2026072503-alpha.ipa"
+                "current" : "iOS_debug_5.25.2026082902-alpha.ipa",
+                "previous" : "iOS_debug_5.23.2026080313-alpha.ipa"
             },
             "playground" : "standard",
             "runSignStatus" : 0,

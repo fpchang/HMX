@@ -35,7 +35,7 @@ type menu = {
 	url : string
 }
 const columnNum= computed(()=>{
-		let num = 3;
+		let num = 4;
 		const w = state.viewWidth;
 		if(w!=0){
 			 num = Math.floor((w-30)/80);

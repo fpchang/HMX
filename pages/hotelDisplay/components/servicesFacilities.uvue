@@ -73,7 +73,6 @@
 		console.log("hotel====",hotel.value)		
 	}
 	initData();
-	console.log("1111", servicesFacilities_data.value)
 </script>
 
 <style>

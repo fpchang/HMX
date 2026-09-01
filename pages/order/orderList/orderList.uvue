@@ -169,6 +169,7 @@
 									<rice-icon name="double-left" style="margin-left: 15px;" />
 								</template>
 							</rice-cell>
+					
 							<template #right>
 								<view class="swipe-menu-container">
 									<view class="menu-item-box menu-detail" @click="viewOrder(order)">
@@ -180,7 +181,8 @@
 										<rice-icon name="edit" color="#fff" />
 										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_edit")}}</text>
 									</view> -->
-									<view class="menu-item-box menu-del" @click="deleteOrder(order)">
+								
+									<view class="menu-item-box menu-del" v-if="order.orderStatus!=10"  @click="deleteOrder(order)">
 										<rice-icon name="delete" color="#fff" />
 										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_delete")}}</text>
 									</view>
@@ -242,7 +244,7 @@
 									</rice-col> -->
 								<rice-col :span="6">
 									<view>
-										<rice-button type="error" size="small" plain-fill
+										<rice-button v-if="active_order.orderStatus!=10"  type="error" size="small" plain-fill
 											:text="i18n.global.t('common.btn_txt_delete')"
 											@click="deleteOrder(active_order)"></rice-button>
 									</view>
@@ -508,6 +510,7 @@
 			beforeClose: async () : Promise<boolean> => {
 				await OrderService.deleteOrder(order._id);
 				await getOrderList();
+				showDeatilPage.value=false;
 				getGatherEvent(hotel_id.value);
 				hideDialog();
 				return true;

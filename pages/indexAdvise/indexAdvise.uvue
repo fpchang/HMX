@@ -1,5 +1,5 @@
 <template>
-	<scroll-view class="indexAdvise-page" :bounces="false" :refresher-enabled="false" v-if="isReading" :show-scrollbar="false" refresher-background="#1264E8" style="flex:1">
+	<scroll-view v-if="isReading" class="indexAdvise-page" :bounces="false" :refresher-enabled="false"  :show-scrollbar="false" refresher-background="#1264E8" style="flex:1">
 		<!-- <rice-button text="测试" @click=test()></rice-button> -->
 		<!-- 顶部渐变标题栏 -->
 		<view class="top-banner">
@@ -218,6 +218,7 @@
 		try {
 			console.log("验证token");
 			const flag = await loginEvent() as boolean;
+			console.log(flag)
 			if (flag) {
 				accessin();
 			} else {

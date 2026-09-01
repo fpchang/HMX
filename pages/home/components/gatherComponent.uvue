@@ -16,56 +16,48 @@
 		</view>
 
 		<view class="card-container" v-if="activeIndex==0">
-			<xt-flex-wap-equal ref="wrapRef1" :pmWidth="56" :min-item-width="130" :gap="14" :itemsNum="4">
-				<template #item="{index}">
-				
-					
-						<view class="card" v-if="index==0">
-							<text class="card-title">{{ i18n.global.t("gather.checkInToday") }}</text>
-							<view class="card-content">
-								<view style="display:flex;flex-direction:row;align-items: flex-end;">
-									<text class="numlabel">{{numOrderToday}}</text>
-									<text class="card-num-unit-style">{{i18n.global.t("home.roomUnit")}}</text>
-								</view>
-							</view>
+			<view class="container-list" :style="cssVars">
+				<view class="card">
+					<text class="card-title">{{ i18n.global.t("gather.checkInToday") }}</text>
+					<view class="card-content">
+						<view style="display:flex;flex-direction:row;align-items: flex-end;">
+							<text class="numlabel">{{numOrderToday}}</text>
+							<text class="card-num-unit-style">{{i18n.global.t("home.roomUnit")}}</text>
 						</view>
-						<view class="card" v-if="index==1">
-							<text class="card-title">{{ i18n.global.t("gather.checkOutToday") }}</text>
-							<view class="card-content">
-								<view style="display:flex;flex-direction:row;align-items: flex-end;">
-									<text class="numlabel">{{numAccessOutToday}}</text>
-									<text class="card-num-unit-style">{{i18n.global.t("home.roomUnit")}}</text>
-								</view>
-					
-							</view>
+					</view>
+				</view>
+				<view class="card">
+					<text class="card-title">{{ i18n.global.t("gather.checkOutToday") }}</text>
+					<view class="card-content">
+						<view style="display:flex;flex-direction:row;align-items: flex-end;">
+							<text class="numlabel">{{numAccessOutToday}}</text>
+							<text class="card-num-unit-style">{{i18n.global.t("home.roomUnit")}}</text>
 						</view>
-						<view class="card" v-if="index==2">
-							<text class="card-title">{{ i18n.global.t("gather.currentGuests") }}</text>
-							<view class="card-content card-content-chart">
-								<rice-progress-circle :percentage="numCustomerOrderToday_percent" color="green">
-									<text class="card-num">{{ numCustomerOrderToday }}</text>
-								</rice-progress-circle>
-							</view>
-						</view>
-						<view class="card" v-if="index==3">
-							<text class="card-title">{{ i18n.global.t("gather.emptyRooms") }}</text>
-							<view class="card-content card-content-chart">
-								<rice-progress-circle :percentage="(100 - numCustomerOrderToday_percent)" color="orange">
-									<text class="card-num">{{ roomCount - numCustomerOrderToday }}</text>
-								</rice-progress-circle>
-							</view>
-						</view>
-					
-			
-				
-				</template>
-
-			</xt-flex-wap-equal>
+									
+					</view>
+				</view>
+				<view class="card">
+					<text class="card-title">{{ i18n.global.t("gather.currentGuests") }}</text>
+					<view class="card-content card-content-chart">
+						<rice-progress-circle :percentage="numCustomerOrderToday_percent" color="green">
+							<text class="card-num">{{ numCustomerOrderToday }}</text>
+						</rice-progress-circle>
+					</view>
+				</view>
+				<view class="card">
+					<text class="card-title">{{ i18n.global.t("gather.emptyRooms") }}</text>
+					<view class="card-content card-content-chart">
+						<rice-progress-circle :percentage="(100 - numCustomerOrderToday_percent)" color="orange">
+							<text class="card-num">{{ roomCount - numCustomerOrderToday }}</text>
+						</rice-progress-circle>
+					</view>
+				</view>
+			</view>
 		</view>
 		<view class="card-container" v-if="activeIndex==1">
-			<xt-flex-wap-equal ref="wrapRef2" :pmWidth="56" :min-item-width="130" :gap="14" :itemsNum="4">
-				<template #item="{index}">
-					<view class="card" v-if="index==0">
+			<!-- <xt-flex-wap-equal ref="wrapRef2" :pmWidth="56" :min-item-width="130" :gap="14" :itemsNum="4"> -->
+				<view class="container-list" :style="cssVars">
+					<view class="card">
 						<text class="card-title">{{ i18n.global.t("gather.checkInTomorrow") }}</text>
 						<view class="card-content">
 							<view style="display:flex;flex-direction:row;align-items: flex-end;">
@@ -75,7 +67,7 @@
 							
 						</view>
 					</view>
-					<view class="card" v-if="index==1">
+					<view class="card">
 						<text class="card-title">{{ i18n.global.t("gather.checkOutTomorrow") }}</text>
 						<view class="card-content">
 							<view>
@@ -83,11 +75,11 @@
 									<text class="numlabel">{{numAccessOutTommorow}}</text>
 									<text class="card-num-unit-style">{{i18n.global.t("home.roomUnit")}}</text>
 								</view>
-
+					
 							</view>
 						</view>
 					</view>
-					<view class="card" v-if="index==2">
+					<view class="card">
 						<text class="card-title">{{ i18n.global.t("gather.currentGuests") }}</text>
 						<view class="card-content card-content-chart">
 							<rice-progress-circle :percentage="numCustomerOrderTommorw_percent" color="green">
@@ -95,7 +87,7 @@
 							</rice-progress-circle>
 						</view>
 					</view>
-					<view class="card" v-if="index==3">
+					<view class="card">
 						<text class="card-title">{{ i18n.global.t("gather.emptyRooms") }}</text>
 						<view class="card-content card-content-chart">
 							<rice-progress-circle :percentage="(100 - numCustomerOrderTommorw_percent)" color="orange">
@@ -103,8 +95,8 @@
 							</rice-progress-circle>
 						</view>
 					</view>
-				</template>
-			</xt-flex-wap-equal>
+					</view>
+				
 		</view>
 		<view class="percent-style">
 			<view class="percent-style-text-container"><text class="percent-style-text">{{i18n.global.t("home.occupancyRate")}}</text><text
@@ -118,7 +110,7 @@
 	</view>
 </template>
 
-<script setup lang="ts">
+<script setup lang="uts">
 	import { ref, watch } from 'vue';
 	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
 	import { dayuts } from '@/uni_modules/lime-dayuts';
@@ -280,6 +272,14 @@
 		initEchart();
 	});
 	init();
+	const cssVars = computed(() => {
+		return {
+			//"--minItemWidth": `max(150px,calc((750rpx - 48px + 12px) / 5 - 12px))`,
+			"--minItemWidth": `130px`,
+			"--margin--": `7px`,
+			"--conatinerMargin": `-7px`
+		}
+	})
 </script>
 
 <style scoped lang="scss">
@@ -306,10 +306,17 @@
 	.card-container {
 		background-color: #fff;
 	}
-
+	.container-list{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: stretch;
+		margin: var(--conatinerMargin);
+	}
 	.card {
 		flex:1;
-		min-width: 120px;
+		margin: var(--margin--);
+		min-width: var(--minItemWidth);
 		border-radius: 12px;
 		padding: 14px;
 		box-sizing: border-box;

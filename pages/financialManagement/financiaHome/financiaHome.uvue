@@ -28,7 +28,7 @@
 				<text class="profit-num item-profit">¥{{profit}}</text>
 			</view>
 			<!-- 核心指标4宫格 -->
-			<view class="kpi-grid">
+			<!-- <view class="kpi-grid">
 				<view class="kpi-box income-box" :style="{'margin-left':marginLeft(0)}">
 					<text class="kpi-txt">{{i18n.global.t('finance.monthly_income')}}</text>
 					<text class="kpi-money kpi-money-green">¥{{incomeAmount}}</text>
@@ -45,7 +45,50 @@
 					<text class="kpi-txt">{{i18n.global.t('finance.annual_expense')}}</text>
 					<text class="kpi-money">¥{{expensesYearAmount}}</text>
 				</view>
-			</view>
+			</view> -->
+		<view class="detail-card">
+			
+				<view class="container-list" :style="cssVars">
+					<view class="card income-box">
+						<text class="card-title">{{ i18n.global.t('finance.monthly_income') }}</text>
+						<view class="card-content">
+							<view style="display:flex;flex-direction:row;align-items: flex-end;">
+								<text class="numlabel kpi-money kpi-money-green">¥{{incomeAmount}}</text>
+								
+							</view>
+						</view>
+					</view>
+					
+					<view class="card expense-box">
+						<text class="card-title">{{ i18n.global.t('finance.monthly_expense') }}</text>
+						<view class="card-content">
+							<view style="display:flex;flex-direction:row;align-items: flex-end;">
+								<text class="numlabel kpi-money">¥{{expensesAmount}}</text>
+								
+							</view>
+						</view>
+					</view>
+					<view class="card income-box">
+						<text class="card-title">{{ i18n.global.t('finance.annual_income') }}</text>
+						<view class="card-content">
+							<view style="display:flex;flex-direction:row;align-items: flex-end;">
+								<text class="numlabel kpi-money kpi-money-green">¥{{incomeYearAmount}}</text>
+								
+							</view>
+						</view>
+					</view>
+					<view class="card expense-box">
+						<text class="card-title">{{ i18n.global.t('finance.annual_expense') }}</text>
+						<view class="card-content">
+							<view style="display:flex;flex-direction:row;align-items: flex-end;">
+								<text class="numlabel kpi-money">¥{{expensesYearAmount}}</text>
+								
+							</view>
+						</view>
+					</view>
+				</view>
+	</view>	
+			
 			<!-- 本月收入明细 -->
 			<view class="detail-card">
 				<text class="card-main-title">{{i18n.global.t('finance.monthly_income_details')}}</text>
@@ -240,9 +283,17 @@
 		console.log("fina home hotel change")
 		init();
 	})
+	const cssVars = computed(() => {
+		return {
+			//"--minItemWidth": `max(150px,calc((750rpx - 48px + 12px) / 5 - 12px))`,
+			"--minItemWidth": `130px`,
+			"--margin--": `7px`,
+			"--conatinerMargin": `-7px`
+		}
+	})
 </script>
 
-<style>
+<style lang="scss">
 	.top-header {
 		width: 100%;
 		background:linear-gradient(to bottom, #1264E8, #3193F4);
@@ -325,8 +376,8 @@
 	.detail-card {
 		background: #fff;
 		border-radius: 12px;
-		padding: 18px;
-		margin-bottom: 16px;
+		padding: 14px;
+		margin-bottom: 14px;
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
 	}
 
@@ -396,5 +447,47 @@
 
 	.item-profit {
 		color: #f39c12;
+	}
+	
+	.container-list{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: stretch;
+		margin: var(--conatinerMargin);
+	
+	}
+	.card {
+		flex:1;
+		margin: var(--margin--);
+		min-width: var(--minItemWidth);
+		border-radius: 12px;
+		padding: 14px;
+		box-sizing: border-box;
+		//background-color: #E8F2FF;
+		background-color: rgb(220, 231, 255);
+		// background-image: linear-gradient(145deg, #1769EE, #45A4F5);
+		
+	
+	}
+	
+	.card-title {
+		color: #666;
+		// color:#fff;
+		font-size: 14px;
+	}
+	
+	.card-content {
+		flex:1;
+		padding-top: 12px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		text-align: center;
+	}
+	
+	.card-content-chart {
+		height: 100px;
+		align-items: center;
 	}
 </style>

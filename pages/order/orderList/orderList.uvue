@@ -1,4 +1,5 @@
 <template>
+	
 	<view style="display: flex;flex:1">
 		<rice-navbar title="">
 			<template #left>
@@ -25,29 +26,9 @@
 				@clickRightIcon="showCalendar=!showCalendar" @clickInput="showCalendar=!showCalendar" />
 			<rice-tabs v-model="activeIndex"  :list="list" @clickTab="selectStatus"></rice-tabs>
 		</view>
-		<view>
-			
-		</view>
 		<scroll-view style="flex:1">
-			<view class="search-area-root" v-if="false">
-				<view class="search-card">
-					<view class="search-card-item title-row">
-						<text class="title-txt">{{ i18n.global.t('order.orderFilter') }}</text>
-						<l-tag
-							variant="light">{{ i18n.global.t('common.totalCount',[orderResult.count.toString()]) }}</l-tag>
-					</view>
-					<view class="search-card-item select-row">
-						<orderSearchComponent :columns="columns" :initDateRange="dateRange"
-							@searchInputChange="searchInputChange" @selectAction="selectStatus" @dateChange="dateChange"
-							@searchAction="getOrderList" :placeholder="i18n.global.t('order.searchPlaceholder')">
-						</orderSearchComponent>
-					</view>
-					<view class="search-card-item empty-row"></view>
-				</view>
-
-			</view>
 			<view v-if="!submitLoading" style="padding:14px;border-radius: 14px;">
-				<view style="border-radius: 14px;background-color: #fff;margin-bottom:12px;padding:8px;"
+				<view style="border-radius: 14px;background-color: #fff;margin-bottom:12px;box-sizing: border-box;"
 					v-for="order of orderResult.orderList">
 					<rice-cell :title="order.userName" :label="order.orderSouce_Zn" center>
 						<template #leftIcon>
@@ -76,7 +57,7 @@
 					<rice-swipe-actions ref="swipeControlRef">
 						<rice-swipe-actions-item :auto-close="true">
 
-							<view style="display:flex;flex-direction:row;align-items:center;padding:14px">
+							<view style="display:flex;flex-direction:row;align-items:center;padding:14px;">
 								<view
 									style="margin-right:8px;padding:6px;border-radius:50%;background:rgba(0,122,255,0.1)">
 									<l-icon name="login" size="14" color="#007aff" />
@@ -128,48 +109,7 @@
 								</view>
 							</view>
 
-							<rice-cell v-if="false" :title="order.userName"
-								:label="`${formatDate(order.checkInStartDateTimeStamp)}~${formatDate(order.checkInEndDateTimeStamp)}`"
-								size="large" arrow arrow-direction="left" center :clickable="false">
-								<template #leftIcon>
-									<image mode="aspectFit" :src="formatRommTypeImage(order.reservedRoomList[0])"
-										style="margin-right:8px;width: 100px;height:110px;border-radius: 12px;"
-										class="cell-left-icon"></image>
-
-								</template>
-								<template #title>
-									<view class="order-title">
-										<text
-											class="order-title-label">{{i18n.global.t('order.guest') }}：{{order.userName}}</text>
-									</view>
-								</template>
-								<template #label>
-									<view class="order-card-simple">
-										<view class="order-card-simple-item"><text
-												class="order-card-simple-txt">{{ i18n.global.t('order.checkInTime') }}：</text><text
-												class="order-card-simple-txt">{{formatDate(order.checkInStartDateTimeStamp)}}</text>
-										</view>
-										<view class="order-card-simple-item"><text
-												class="order-card-simple-txt">{{ i18n.global.t('order.checkOutTime') }}：</text><text
-												class="order-card-simple-txt">{{formatDate(order.checkInEndDateTimeStamp)}}</text>
-										</view>
-										<view class="order-card-simple-item">
-											<text class="order-card-simple-txt">{{i18n.global.t("order.room")}}：</text>
-											<text class="order-card-simple-txt"
-												v-for="item of formatRoomList(order.reservedRoomList)"
-												style="padding:0 4px">{{item}}</text>
-										</view>
-										<view class="order-card-simple-item"><text
-												class="order-card-simple-txt">{{ i18n.global.t('order.roomPrice') }}：</text><text
-												class="order-card-simple-txt order-card-simple-txt-price-text">￥{{order.totalAmount}}</text>
-										</view>
-									</view>
-								</template>
-								<template #rightIcon>
-									<rice-icon name="double-left" style="margin-left: 15px;" />
-								</template>
-							</rice-cell>
-					
+						
 							<template #right>
 								<view class="swipe-menu-container">
 									<view class="menu-item-box menu-detail" @click="viewOrder(order)">
@@ -244,7 +184,7 @@
 									</rice-col> -->
 								<rice-col :span="6">
 									<view>
-										<rice-button v-if="active_order.orderStatus!=10"  type="error" size="small" plain-fill
+										<rice-button v-if="active_order?.orderStatus!=10"  type="error" size="small" plain-fill
 											:text="i18n.global.t('common.btn_txt_delete')"
 											@click="deleteOrder(active_order)"></rice-button>
 									</view>

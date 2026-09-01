@@ -137,7 +137,7 @@
 		@close="showCalendar=false"></rice-calendar>
 </template>
 
-<script setup>
+<script setup lang="uts">
 	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
@@ -249,8 +249,7 @@
 		{ name: i18n.global.t('finance.expense'), value: 'expenses' }
 	])
 	const selectStatus = (e : TabsClickTab) => {
-		console.log(e)
-		billType.value = e.value as number | string;
+		billType.value = e.value as string;
 		getFmList();
 	}
 	const searchInputChange = (k : string) => {

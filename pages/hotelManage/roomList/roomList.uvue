@@ -18,10 +18,12 @@
 			</view>
 		</template>
 	</rice-navbar>
-	<!-- #ifdef APP -->
+	<view class="search-area-root">
+
+		<rice-tabs v-model="activeIndex" :list="list"></rice-tabs>
+	</view>
 	<scroll-view style="flex:1">
-	<!-- #endif -->
-		<view class="search-wrap-root">
+		<!-- <view class="search-wrap-root">
 			<view class="search-card-box">
 				<view class="search-card-row title-row">
 					<text class="title-text">{{i18n.global.t("hotel.room_filter")}}</text>
@@ -35,58 +37,49 @@
 				</view>
 				<view class="search-card-row last-row"></view>
 			</view>
-		</view>
+		</view> -->
 		<view style="padding:14px;border-radius: 14px;">
-			<view style="border-radius: 14px;background-color: #fff;">
-			  <rice-swipe-actions :accordion="true" ref="swipeControlRef">
-			    <rice-swipe-actions-item  :auto-close="true" v-for="room of filterRoomList">
-			      <rice-cell :title="room.room_name" :label="getRoomTypeName(room.room_type_id)" size="large" arrow arrow-direction="left"  center :clickable="false" >
-					   <template #leftIcon>
-					     <image src="/static/icons/roomReserve2.png" style="width: 50px;height:50px;margin-right:8px" class="cell-left-icon"></image>
-					   </template>
-					  <template #rightIcon>
-						  <rice-icon name="double-left"  style="margin-left: 15px;"/>
-					  </template>
-				  </rice-cell>
-			      <template #right>
-			        <view class="swipe-menu-wrap">
-						<view class="menu-btn-box menu-edit" @click="editRoom(room)">
-						  <rice-icon name="edit" color="#fff" />
-						  <text class="menu-btn-text">编辑</text>
-						</view>
-			          <view class="menu-btn-box menu-del" @click="deleteRoom(room)">
-			            <rice-icon name="delete" color="#fff" />
-			            <text class="menu-btn-text">删除</text>
-			          </view>
-			        </view>
-			      </template>
-			    </rice-swipe-actions-item>
-			  </rice-swipe-actions>
-			</view>
-		</view>
-		<!-- 注释隐藏列表，仅保留class做兼容，样式全部移除 -->
-		<view class="room-card-list-wrap" v-if="false">
-			<view class="room-card-item" v-for="room of filterRoomList">
-				<view class="room-card-box">
-					<view class="room-card-row title-row">
-						<text class="room-title-text">{{room.room_name}}</text>
-					</view>
-					<view class="room-card-row sub-row">
-						<text class="sub-text">{{getRoomTypeName(room.room_type_id)}}</text>
-					</view>
-					<view class="room-card-row last-row">
-						<xt-control @del="deleteRoom(room)" @edit="editRoom(room)" :show-view="false"></xt-control>
-					</view>
+			<view class="list-container-style" :style="cssVars">
+				<view class="list-item-style" v-for="room of filterRoomList">
+					<rice-swipe-actions :accordion="true" ref="swipeControlRef">
+						<rice-swipe-actions-item :auto-close="true">
+							<rice-cell :title="room.room_name" :label="getRoomTypeName(room.room_type_id)" size="large"
+								arrow arrow-direction="left" center :clickable="false">
+								<template #leftIcon>
+									<image src="/static/icons/roomReserve2.png"
+										style="width: 50px;height:50px;margin-right:8px" class="cell-left-icon"></image>
+								</template>
+								<template #rightIcon>
+									<rice-icon name="double-left" style="margin-left: 15px;" />
+								</template>
+							</rice-cell>
+							<template #right>
+								<view class="swipe-menu-wrap">
+									<view class="menu-btn-box menu-edit" @click="editRoom(room)">
+										<rice-icon name="edit" color="#fff" />
+										<text class="menu-btn-text">编辑</text>
+									</view>
+									<view class="menu-btn-box menu-del" @click="deleteRoom(room)">
+										<rice-icon name="delete" color="#fff" />
+										<text class="menu-btn-text">删除</text>
+									</view>
+								</view>
+							</template>
+						</rice-swipe-actions-item>
+					</rice-swipe-actions>
 				</view>
+				<view class="list-item-style fill" v-for="i in 5"></view>
 			</view>
 		</view>
+		
+		<!-- 注释隐藏列表，仅保留class做兼容，样式全部移除 -->
+		
 		<l-empty :description="i18n.global.t('common.noData',[''])" v-if="!submitLoading&&filterRoomList.length<1" />
-	<!-- #ifdef APP -->
 	</scroll-view>
-	<!-- #endif -->
 </template>
 
 <script setup>
+	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 	import { ActionSheetAction } from "@/uni_modules/rice-ui";
 	import { PickerOption, PickerEvent } from "@/uni_modules/rice-ui/index";
@@ -114,7 +107,8 @@
 	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
 		return state.roomTypeList;
 	});
-	const selectId = ref("all");
+	const activeIndex = ref(0);
+
 	const search_key = ref("");
 	const columns = computed<Array<Array<PickerOption>>>(() => {
 		if (roomTypeList.value == null) {
@@ -128,6 +122,24 @@
 		result.push(list);
 		return result;
 	});
+	const list = computed<TabsOptions[]>(() => {
+		if (roomTypeList.value == null) {
+			return []
+		}
+		let list : Array<TabsOptions> = [{ name: i18n.global.t("hotel.all_roomType"), value: "all" }];
+		roomTypeList.value.forEach(item => {
+			list.push({ name: item.name, value: item._id } as TabsOptions);
+		});
+		return list;
+	})
+	const selectId = computed(() => {
+		let val = 'all';
+		const obj = list.value[activeIndex.value];
+		if (obj != null) {
+			val = obj.value;
+		}
+		return val;
+	})
 	let filterRoomList = computed<Array<roomBean>>(() => {
 		if (roomTypeList.value == null) {
 			return []
@@ -161,9 +173,9 @@
 		}
 		return "-"
 	}
-	const swipeControlRef  = ref<RiceSwipeActionsComponentPublicInstance  | null>(null)
+	const swipeControlRef = ref<RiceSwipeActionsComponentPublicInstance | null>(null)
 	const closeSwiper = () => {
-	  swipeControlRef.value!.closeAll!();
+		swipeControlRef.value!.closeAll!();
 	}
 	const addRoom = async () => {
 		if (!permissionList.value.includes("ROOMTYPE_CREATE")) {
@@ -211,7 +223,7 @@
 			beforeClose: async () : Promise<boolean> => {
 				try {
 					const flag = await roomTypeService.deleteRoom(room._id);
-					if(flag){
+					if (flag) {
 						await comFunction.getRoomTypeList(hotel_id.value);
 						hideDialog();
 						uni.showToast({
@@ -230,7 +242,7 @@
 					return false;
 				}
 			},
-			confirm: () => {},
+			confirm: () => { },
 			cancel: () => {
 				hideDialog();
 			}
@@ -269,7 +281,7 @@
 	// 			await db.collection("hm-room").doc(item._id).update({hotel_id:hotelId});
 	// 		})
 	// 	}
-		
+
 	// }
 	onLoad(params => {
 		try {
@@ -279,118 +291,165 @@
 			}
 		} catch (e) { }
 	})
+
+	const cssVars = computed(() => {
+		return {
+			"--minItemWidth": `300px`,
+			//"--minItemWidth":`${props.minWidth}${props.unit}`,
+			"--margin--": `7px`,
+			"--conatinerMargin": `-7px`
+		}
+	})
 </script>
 
 <style>
-/* 顶部筛选区域外层 */
-.search-wrap-root {
-	padding: 18px;
-}
-/* 筛选卡片容器 */
-.search-card-box {
-	background-color: #fff;
-	border-radius: 8px;
-	padding: 16px;
-}
-/* 卡片通用行 */
-.search-card-row {
-	margin-bottom: 15px;
-}
-/* 最后一行取消底部间距 */
-.last-row {
-	margin-bottom: 0;
-}
-/* 标题行布局 */
-.title-row {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-}
-/* 标题文字 */
-.title-text {
-	padding-right: 8px;
-	font-size: 18px;
-	font-weight: 700;
-	color: #999;
-}
-/* 筛选下拉行 */
-.select-row {
-}
+	.list-container-style {
+		margin: var(--conatinerMargin);
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
 
-/* 导航栏新增按钮 */
-.nav-add-room-btn {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-}
-.nav-btn-text {
-	margin-left: 4px;
-	font-size: 15px;
-	color: #007aff;
-}
+	/* 单个卡片容器 */
+	.list-item-style {
+		min-width: 300px;
+		margin: var(--margin--);
+		flex: 1;
+		border-radius: 12px;
 
-/* 侧滑菜单外层容器 */
-.swipe-menu-wrap {
-	display: flex;
-	flex-direction: row;
-	height: 100%;
-}
-/* 侧滑单个按钮 */
-.menu-btn-box {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	padding:0 15px;
-	height: 100%;
-}
-/* 菜单文字 */
-.menu-btn-text {
-	color:#fff;
-	font-size: 14px;
-	padding-left: 4px;
-}
-/* 编辑按钮背景 */
-.menu-edit {
-	background-color: #409EFF ;
-}
-/* 删除按钮背景 */
-.menu-del {
-	background-color: #F56C6C ;
-}
+	}
 
-/* 列表左侧图标 */
-.cell-left-icon {
-}
+	.fill {
+		flex: 1;
+		min-width: 300px;
+		margin: 0 var(--margin--);
+		height: 0;
+		visibility: hidden;
+	}
 
-/* 下方备用卡片列表外层（页面注释隐藏） */
-.room-card-list-wrap {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-}
-.room-card-item {
-	min-width: 320px;
-	padding: 15px;
-	flex: 1;
-}
-.room-card-box {
-	background-color: #fff;
-	border-radius: 12px;
-	padding: 16px;
-}
-.room-card-row {
-	margin-bottom: 12px;
-}
-/* 卡片标题文字 */
-.room-title-text {
-	font-size: 18px;
-	font-weight: 700;
-	color: #1d2129;
-}
-/* 副标题文字 */
-.sub-text {
-	color: #6b7280;
-	font-size: 14px;
-}
+	/* 顶部筛选区域外层 */
+	.search-wrap-root {
+		padding: 18px;
+	}
+
+	/* 筛选卡片容器 */
+	.search-card-box {
+		background-color: #fff;
+		border-radius: 8px;
+		padding: 16px;
+	}
+
+	/* 卡片通用行 */
+	.search-card-row {
+		margin-bottom: 15px;
+	}
+
+	/* 最后一行取消底部间距 */
+	.last-row {
+		margin-bottom: 0;
+	}
+
+	/* 标题行布局 */
+	.title-row {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	/* 标题文字 */
+	.title-text {
+		padding-right: 8px;
+		font-size: 18px;
+		font-weight: 700;
+		color: #999;
+	}
+
+	/* 筛选下拉行 */
+	.select-row {}
+
+	/* 导航栏新增按钮 */
+	.nav-add-room-btn {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.nav-btn-text {
+		margin-left: 4px;
+		font-size: 15px;
+		color: #007aff;
+	}
+
+	/* 侧滑菜单外层容器 */
+	.swipe-menu-wrap {
+		display: flex;
+		flex-direction: row;
+		height: 100%;
+	}
+
+	/* 侧滑单个按钮 */
+	.menu-btn-box {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		padding: 0 15px;
+		height: 100%;
+	}
+
+	/* 菜单文字 */
+	.menu-btn-text {
+		color: #fff;
+		font-size: 14px;
+		padding-left: 4px;
+	}
+
+	/* 编辑按钮背景 */
+	.menu-edit {
+		background-color: #409EFF;
+	}
+
+	/* 删除按钮背景 */
+	.menu-del {
+		background-color: #F56C6C;
+	}
+
+	/* 列表左侧图标 */
+	.cell-left-icon {}
+
+	/* 下方备用卡片列表外层（页面注释隐藏） */
+	.room-card-list-wrap {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	.room-card-item {
+		min-width: 320px;
+		padding: 15px;
+		flex: 1;
+	}
+
+	.room-card-box {
+		background-color: #fff;
+		border-radius: 12px;
+		padding: 16px;
+	}
+
+	.room-card-row {
+		margin-bottom: 12px;
+	}
+
+	/* 卡片标题文字 */
+	.room-title-text {
+		font-size: 18px;
+		font-weight: 700;
+		color: #1d2129;
+	}
+
+	/* 副标题文字 */
+	.sub-text {
+		color: #6b7280;
+		font-size: 14px;
+	}
 </style>

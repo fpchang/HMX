@@ -236,8 +236,8 @@
 	}
 	const list = ref<TabsOptions[]>([
 		// { name: i18n.global.t('finance.statusAll'), value: "all" },
-		{ name: i18n.global.t('finance.income'), value: 'income' },
-		{ name: i18n.global.t('finance.expense'), value: 'expenses' }
+		{ name: i18n.global.t('finance.income'), value: 'income',disabled: submitLoading.value == true },
+		{ name: i18n.global.t('finance.expense'), value: 'expenses',disabled: submitLoading.value == true }
 	])
 	const selectStatus = (e : TabsClickTab) => {
 		billType.value = e.value as string;

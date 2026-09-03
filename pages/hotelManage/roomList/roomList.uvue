@@ -41,7 +41,7 @@
 		<view style="padding:14px;border-radius: 14px;">
 			<view class="list-container-style" :style="cssVars">
 				<view class="list-item-style" v-for="room of filterRoomList">
-					<rice-swipe-actions :accordion="true" ref="swipeControlRef">
+					<rice-swipe-actions  ref="swipeControlRef">
 						<rice-swipe-actions-item :auto-close="true">
 							<rice-cell :title="room.room_name" :label="getRoomTypeName(room.room_type_id)" size="large"
 								arrow arrow-direction="left" center :clickable="false">
@@ -136,7 +136,7 @@
 		let val = 'all';
 		const obj = list.value[activeIndex.value];
 		if (obj != null) {
-			val = obj.value;
+			val = obj.value as string;
 		}
 		return val;
 	})
@@ -175,7 +175,7 @@
 	}
 	const swipeControlRef = ref<RiceSwipeActionsComponentPublicInstance | null>(null)
 	const closeSwiper = () => {
-		swipeControlRef.value!.closeAll!();
+		//swipeControlRef.value!.closeAll!();
 	}
 	const addRoom = async () => {
 		if (!permissionList.value.includes("ROOMTYPE_CREATE")) {

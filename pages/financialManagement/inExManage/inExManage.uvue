@@ -5,16 +5,15 @@
 				<navigator open-type="navigateBack">
 					<rice-icon name="arrow-left" size="22px" />
 				</navigator>
-				<image :src="titleImg"
-					style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
-				<text
-					style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
+				<image :src="titleImg" style="width: 22px;height: 22px;margin-left: 15px;margin-right: 4px;"></image>
+				<text style="font-size: 16px;font-weight: 700;color:rgb(29,33,41);">{{title}}</text>
 			</view>
 		</template>
 		<template #right>
 			<view class="navbar-btn-root" @click="addFm" v-if="!showDeatilPage">
 				<image src="/static/icons/operation/add.png" style="width:18px;height: 18px;"></image>
-				<text class="navbar-text">{{billType=='income'?i18n.global.t("finance.income"):i18n.global.t("finance.expense")}}</text>
+				<text
+					class="navbar-text">{{billType=='income'?i18n.global.t("finance.income"):i18n.global.t("finance.expense")}}</text>
 			</view>
 		</template>
 	</rice-navbar>
@@ -25,55 +24,45 @@
 		<rice-tabs v-model="activeIndex" :list="list" @clickTab="selectStatus"></rice-tabs>
 	</view>
 	<scroll-view style="flex:1">
-		<view class="search-wrap-root" v-if="false">
-			<view class="search-card-box">
-				<view class="search-card-row title-row">
-					<text class="title-text">{{i18n.global.t("finance.income_expense_filter")}}</text>
-					<l-tag variant="light">{{ i18n.global.t('common.totalCount',[fmResult.count.toString()]) }}</l-tag>
+		<view v-if="!submitLoading" style="padding:14px;border-radius: 14px;">
+			<view class="list-container-style" :style="cssVars">
+				<view class="list-item-style"  v-for="fm of fmResult.fmList">
+					<rice-swipe-actions :accordion="true" ref="swipeControlRef">
+							<rice-swipe-actions-item :auto-close="true">
+								<rice-cell :title="`${formatTypeName(fm.type)}`" :label="formatDate(fm.ioeTime)"
+									:value="`${fm.billType=='income'?'+':'-'}${fm.amount}`" size="large" arrow
+									arrow-direction="left" center :clickable="false" :value-text-style="{'color':'#165dff'}">
+									<template #leftIcon>
+										<image v-if="fm.billType=='income'" src="/static/icons/fm/income-orange.png"
+											style="margin-right:8px;width: 40px;height:40px;" class="cell-left-icon"></image>
+										<image v-if="fm.billType=='expenses'" src="/static/icons/fm/expense-orange.png"
+											style="margin-right:8px;width: 40px;height:40px;" class="cell-left-icon"></image>
+									</template>
+									<template #rightIcon>
+										<rice-icon name="double-left" color="#909399" style="margin-left: 15px;" />
+									</template>
+								</rice-cell>
+								<template #right>
+									<view class="swipe-menu-container">
+										<view class="menu-item-box menu-detail" @click="viewFm(fm)">
+											<rice-icon name="eyes" color="#fff" />
+											<text class="menu-item-text">{{i18n.global.t("common.btn_txt_details",[''])}}</text>
+										</view>
+										<view class="menu-item-box menu-edit" @click="editFm(fm)">
+											<rice-icon name="edit" color="#fff" />
+											<text class="menu-item-text">{{i18n.global.t("common.btn_txt_edit")}}</text>
+										</view>
+										<view class="menu-item-box menu-del" @click="deleteFm(fm)">
+											<rice-icon name="delete" color="#fff" />
+											<text class="menu-item-text">{{i18n.global.t("common.btn_txt_delete")}}</text>
+										</view>
+									</view>
+								</template>
+							</rice-swipe-actions-item>
+						</rice-swipe-actions>
+					
 				</view>
-				<view class="search-card-row select-row">
-					<fmSearchComponent :columns="columns" :initDateRange="dateRange"
-						@searchInputChange="searchInputChange" @selectAction="selectFm" @dateChange="dateChange"
-						@searchAction="getFmList" :placeholder="i18n.global.t('form.pach_remark')"></fmSearchComponent>
-				</view>
-			</view>
-		</view>
-
-		<view style="padding:14px;border-radius: 14px;" v-if="!submitLoading">
-			<view style="border-radius: 14px;background-color: #fff;">
-				<rice-swipe-actions :accordion="true" ref="swipeControlRef">
-					<rice-swipe-actions-item :auto-close="true" v-for="fm of fmResult.fmList">
-						<rice-cell :title="`${formatTypeName(fm.type)}`" :label="formatDate(fm.ioeTime)"
-							:value="`${fm.billType=='income'?'+':'-'}${fm.amount}`" size="large" arrow
-							arrow-direction="left" center>
-							<template #leftIcon>
-								<image v-if="fm.billType=='income'" src="/static/icons/fm/income-orange.png"
-									style="margin-right:8px;width: 40px;height:40px;" class="cell-left-icon"></image>
-								<image v-if="fm.billType=='expenses'" src="/static/icons/fm/expense-orange.png"
-									style="margin-right:8px;width: 40px;height:40px;" class="cell-left-icon"></image>
-							</template>
-							<template #rightIcon>
-								<rice-icon name="double-left" color="#909399" style="margin-left: 15px;" />
-							</template>
-						</rice-cell>
-						<template #right>
-							<view class="swipe-menu-container">
-								<view class="menu-item-box menu-detail" @click="viewFm(fm)">
-									<rice-icon name="eyes" color="#fff" />
-									<text class="menu-item-text">{{i18n.global.t("common.btn_txt_details",[''])}}</text>
-								</view>
-								<view class="menu-item-box menu-edit" @click="editFm(fm)">
-									<rice-icon name="edit" color="#fff" />
-									<text class="menu-item-text">{{i18n.global.t("common.btn_txt_edit")}}</text>
-								</view>
-								<view class="menu-item-box menu-del" @click="deleteFm(fm)">
-									<rice-icon name="delete" color="#fff" />
-									<text class="menu-item-text">{{i18n.global.t("common.btn_txt_delete")}}</text>
-								</view>
-							</view>
-						</template>
-					</rice-swipe-actions-item>
-				</rice-swipe-actions>
+				<view class="list-item-style fill" v-for="i in 5"></view>
 			</view>
 		</view>
 
@@ -117,13 +106,15 @@
 							<rice-col :span="10"></rice-col>
 							<rice-col :span="6">
 								<view>
-									<rice-button type="primary" size="small" plain-fill :text="i18n.global.t('common.btn_txt_modify',[''])"
+									<rice-button type="primary" size="small" plain-fill
+										:text="i18n.global.t('common.btn_txt_modify',[''])"
 										@click="editFm(active_fm)"></rice-button>
 								</view>
 							</rice-col>
 							<rice-col :span="6">
 								<view>
-									<rice-button type="error" size="small" plain-fill :text="i18n.global.t('common.btn_txt_delete')"
+									<rice-button type="error" size="small" plain-fill
+										:text="i18n.global.t('common.btn_txt_delete')"
 										@click="deleteFm(active_fm)"></rice-button>
 								</view>
 							</rice-col>
@@ -168,7 +159,7 @@
 	const permissionList = computed(() => {
 		return state.permissionList;
 	})
-	
+
 	const currentPage = ref(1);
 	const roomTypeList = computed<Array<roomTypeBean> | null>(() => {
 		return state.roomTypeList;
@@ -236,8 +227,8 @@
 		return i18n.global.t("finance.income_expense_list");
 	})
 	const titleImg = computed<string>(() => {
-		
-		return showDeatilPage.value? "/static/icons/detailpage.png":"/static/icons/list.png" ;
+
+		return showDeatilPage.value ? "/static/icons/detailpage.png" : "/static/icons/list.png";
 	})
 	const dateChange = (range : string[]) => {
 		dateRange.value = range;
@@ -332,11 +323,11 @@
 					} else {
 						return false;
 					}
-				} catch (error:Error) {
+				} catch (error : Error) {
 					return false;
 				}
 			},
-			confirm: () => {},
+			confirm: () => { },
 			cancel: () => {
 				hideDialog();
 			}
@@ -370,94 +361,137 @@
 		await getIncomeAndExpensesConfigList();
 		getFmList();
 	}
-	onPageShow(() => {})
+	onPageShow(() => { })
 	init();
+	const cssVars = computed(() => {
+		return {
+			"--minItemWidth": `300px`,
+			//"--minItemWidth":`${props.minWidth}${props.unit}`,
+			"--margin--": `7px`,
+			"--conatinerMargin": `-7px`
+		}
+	})
 </script>
 
-<style>
-/* 顶部搜索外层容器 */
-.search-wrap-root {
-	padding: 18px;
-}
-/* 搜索卡片容器 */
-.search-card-box {
-	background-color: #fff;
-	border-radius: 8px;
-	padding: 16px;
-}
-/* 卡片通用行 */
-.search-card-row {
-	margin-bottom: 15px;
-}
-/* 最后一行无底部间距 */
-.search-row-last {
-	margin-bottom: 0;
-}
-/* 标题行布局 */
-.title-row {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-}
-/* 标题文字 */
-.title-text {
-	padding-right: 8px;
-	font-size: 18px;
-	font-weight: 700;
-}
-/* 下拉筛选行 */
-.select-row {
-}
+<style lang="scss">
+	.list-container-style {
+		margin: var(--conatinerMargin);
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	
+	/* 单个卡片容器 */
+	.list-item-style {
+		min-width: 300px;
+		margin: var(--margin--);
+		flex: 1;
+		border-radius: 12px;
+		background:#fff;
+	
+	}
+	
+	.fill {
+		flex: 1;
+		min-width: 300px;
+		margin: 0 var(--margin--);
+		height: 0;
+		visibility: hidden;
+	}
+	/* 顶部搜索外层容器 */
+	.search-wrap-root {
+		padding: 18px;
+	}
 
-/* 导航栏右侧新增按钮 */
-.navbar-btn-root {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	padding: 12px 15px;
-	border-radius: 8px;
-}
-.navbar-text {
-	color: #007aff;
-	font-size: 15px;
-	padding-left: 4px;
-}
+	/* 搜索卡片容器 */
+	.search-card-box {
+		background-color: #fff;
+		border-radius: 8px;
+		padding: 16px;
+	}
 
-/* 侧滑菜单外层 */
-.swipe-menu-container {
-	display: flex;
-	flex-direction: row;
-	height: 100%;
-}
-/* 侧滑每个按钮项 */
-.menu-item-box {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	width: 70px;
-	height: 100%;
-}
-.menu-detail {
-	background-color: #007aff;
-}
-.menu-edit {
-	background-color: #ff7d00;
-}
-.menu-del {
-	background-color: #f53f3f;
-}
-/* 菜单文字 */
-.menu-item-text {
-	color: #fff;
-	font-size: 12px;
-	margin-top: 4px;
-}
-/* 列表左侧图标 */
-.cell-left-icon {
-}
-/* 右侧弹窗外层 */
-.page-wrap-container {
-}
+	/* 卡片通用行 */
+	.search-card-row {
+		margin-bottom: 15px;
+	}
+
+	/* 最后一行无底部间距 */
+	.search-row-last {
+		margin-bottom: 0;
+	}
+
+	/* 标题行布局 */
+	.title-row {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	/* 标题文字 */
+	.title-text {
+		padding-right: 8px;
+		font-size: 18px;
+		font-weight: 700;
+	}
+
+	/* 下拉筛选行 */
+	.select-row {}
+
+	/* 导航栏右侧新增按钮 */
+	.navbar-btn-root {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		padding: 12px 15px;
+		border-radius: 8px;
+	}
+
+	.navbar-text {
+		color: #007aff;
+		font-size: 15px;
+		padding-left: 4px;
+	}
+
+	/* 侧滑菜单外层 */
+	.swipe-menu-container {
+		display: flex;
+		flex-direction: row;
+		height: 100%;
+	}
+
+	/* 侧滑每个按钮项 */
+	.menu-item-box {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 70px;
+		height: 100%;
+	}
+
+	.menu-detail {
+		background-color: #007aff;
+	}
+
+	.menu-edit {
+		background-color: #ff7d00;
+	}
+
+	.menu-del {
+		background-color: #f53f3f;
+	}
+
+	/* 菜单文字 */
+	.menu-item-text {
+		color: #fff;
+		font-size: 12px;
+		margin-top: 4px;
+	}
+
+	/* 列表左侧图标 */
+	.cell-left-icon {}
+
+	/* 右侧弹窗外层 */
+	.page-wrap-container {}
 </style>

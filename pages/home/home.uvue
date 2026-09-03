@@ -22,7 +22,7 @@
 			</template>
 		</rice-cell>
 		<scroll-view v-if="dataReading&&hotel_id!=''" :refresher-enabled="true" :refresher-triggered="refreshState"
-			@refresherrefresh="refreshData" style="flex:1;display: flex;flex-direction: column;background: rgb(241, 245, 254);"
+			@refresherrefresh="refreshData" style="flex:1;display: flex;flex-direction: column;"
 			:show-scrollbar="false" refresher-background="#1264E8" refresher-default-style="white">
 			<view class="header">
 				<rice-cell :title="timestr" :label="i18n.global.t('home.welcomeBack')" :custom-style="{background:'transparent'}"
@@ -258,7 +258,8 @@
 
 	.container-content {
 
-		background: rgb(241, 245, 254);
+		/* background: rgb(241, 245, 254); */
+		background: #f5f5f7;
 		border-top-left-radius: 20px;
 		border-top-right-radius: 20px;
 		padding:20px 14px;

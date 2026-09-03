@@ -1,5 +1,5 @@
 <template>
-	
+
 	<view style="display: flex;flex:1">
 		<rice-navbar title="">
 			<template #left>
@@ -24,20 +24,134 @@
 			<rice-search disabled height="40px" :placeholder="dateRange.join(' ~ ')" placeholder-style="color:#666"
 				input-align="center" shape="round" left-icon="" right-icon="calendar" right-icon-size="22"
 				@clickRightIcon="showCalendar=!showCalendar" @clickInput="showCalendar=!showCalendar" />
-			<rice-tabs v-model="activeIndex"  :list="list" @clickTab="selectStatus"></rice-tabs>
+			<rice-tabs v-model="activeIndex" :list="list" @clickTab="selectStatus"></rice-tabs>
 		</view>
 		<scroll-view style="flex:1">
 			<view v-if="!submitLoading" style="padding:14px;border-radius: 14px;">
+				<view class="list-container-style" :style="cssVars">
+					<view class="list-item-style" v-for="order of orderResult.orderList">
+						<rice-cell :title="order.userName" :label="order.orderSouce_Zn" center>
+							<template #leftIcon>
+								<!-- <image src="/static/images/administrator.png" class="left-cion"
+										style="width:40px;height:40px;margin-right:12px;border-radius:50%;"></image> -->
+
+								<view
+									style="height:40px;width:40px;border-radius:12px;margin-right:8px;background:#007aff;display:flex;align-items:center;justify-content:center">
+
+									<text
+										style="color:#fff;font-weight:bold;font-size:16px">{{order.userName.trim().substring(0,1).toUpperCase()}}</text>
+								</view>
+							</template>
+
+							<template #value>
+								<view style="display:flex;flex-direction:row;justify-content:flex-end">
+									<rice-tag v-if="order.orderStatus==1" type="primary"
+										:text="i18n.global.t('order.statusCheckInPending')" size="small" />
+									<rice-tag v-if="order.orderStatus==5" type="success"
+										:text="i18n.global.t('order.statusCompleted')" size="small" />
+									<rice-tag v-if="order.orderStatus==10" type="error"
+										:text="i18n.global.t('order.statusCancelled')" size="small" />
+								</view>
+							</template>
+						</rice-cell>
+						<rice-swipe-actions ref="swipeControlRef">
+							<rice-swipe-actions-item :auto-close="true">
+
+								<view style="display:flex;flex-direction:row;align-items:center;padding:14px;">
+									<view
+										style="margin-right:8px;padding:6px;border-radius:50%;background:rgba(0,122,255,0.1)">
+										<l-icon name="login" size="14" color="#007aff" />
+									</view>
+									<view>
+										<text style="font-size:12px;color:#999">入住</text>
+										<text
+											style="font-size:12px;color:#999">{{formatDate(order.checkInStartDateTimeStamp)}}</text>
+									</view>
+									<view
+										style="flex:1;display:flex;flex-direction:row;align-items:center;padding:0 8px">
+										<view style="flex:1;border-bottom: 2px dotted #607196;"></view>
+										<view style="padding:0 4px"><rice-tag color="#dce7ff" text-color="#607196"
+												size="small"
+												:text="`${dayNum(order.checkInStartDateTimeStamp,order.checkInEndDateTimeStamp)}晚`" />
+										</view>
+
+										<view style="flex:1;border-bottom: 2px dotted #607196;"></view>
+									</view>
+									<view
+										style="margin-right:8px;padding:6px;border-radius:50%;background:rgba(53, 169, 127,0.1)">
+										<l-icon name="logout" size="14" color="#35a97f" />
+									</view>
+									<view>
+										<text style="font-size:12px;color:#999">退房</text>
+										<text
+											style="font-size:12px;color:#999">{{formatDate(order.checkInEndDateTimeStamp)}}</text>
+									</view>
+
+								</view>
+								<view style="display:flex;flex-direction:row;padding:14px">
+									<view
+										style="flex:1;display:flex;flex-direction:row;align-items:center;;flex-wrap:wrap">
+										<!--#607196 -->
+										<rice-icon name="/static/icons/bed.png" size="16px"></rice-icon>
+										<text style="color:#607196;padding-left:4px">房间：</text>
+										<!-- <text class="order-card-simple-txt"
+													v-for="item of formatRoomList(order.reservedRoomList)"
+													style="padding:0 4px">{{item}}</text> -->
+										<rice-tag style="margin-right:4px;border-radius:12px"
+											v-for="item of formatRoomList(order.reservedRoomList)" color="#dce7ff"
+											text-color="#607196" size="small" :text="item" />
+
+									</view>
+									<view style="display:flex;align-items:center;justify-content:center">
+										<text
+											class="order-card-simple-txt order-card-simple-txt-price-text">￥{{order.totalAmount}}</text>
+									</view>
+									<view
+										style="display:flex;align-items:center;justify-content:center;padding-left:8px">
+										<rice-icon name="double-left" />
+									</view>
+								</view>
+
+
+								<template #right>
+									<view class="swipe-menu-container">
+										<view class="menu-item-box menu-detail" @click="viewOrder(order)">
+											<rice-icon name="eyes" color="#fff" />
+											<text
+												class="menu-item-text">{{i18n.global.t("common.btn_txt_details",[''])}}</text>
+										</view>
+										<!-- <view class="menu-item-box menu-edit" @click="editOrder(order)">
+												<rice-icon name="edit" color="#fff" />
+												<text class="menu-item-text">{{i18n.global.t("common.btn_txt_edit")}}</text>
+											</view> -->
+
+										<view class="menu-item-box menu-del" v-if="order.orderStatus!=10"
+											@click="deleteOrder(order)">
+											<rice-icon name="delete" color="#fff" />
+											<text
+												class="menu-item-text">{{i18n.global.t("common.btn_txt_delete")}}</text>
+										</view>
+									</view>
+								</template>
+							</rice-swipe-actions-item>
+						</rice-swipe-actions>
+
+					</view>
+					<view class="list-item-style fill" v-for="i in 5"></view>
+				</view>
+				
+			</view>
+			<view v-if="false&&!submitLoading" style="padding:14px;border-radius: 14px;">
 				<view style="border-radius: 14px;background-color: #fff;margin-bottom:12px;box-sizing: border-box;"
 					v-for="order of orderResult.orderList">
 					<rice-cell :title="order.userName" :label="order.orderSouce_Zn" center>
 						<template #leftIcon>
 							<!-- <image src="/static/images/administrator.png" class="left-cion"
 								style="width:40px;height:40px;margin-right:12px;border-radius:50%;"></image> -->
-								
+
 							<view
 								style="height:40px;width:40px;border-radius:12px;margin-right:8px;background:#007aff;display:flex;align-items:center;justify-content:center">
-								
+
 								<text
 									style="color:#fff;font-weight:bold;font-size:16px">{{order.userName.trim().substring(0,1).toUpperCase()}}</text>
 							</view>
@@ -105,11 +219,11 @@
 										class="order-card-simple-txt order-card-simple-txt-price-text">￥{{order.totalAmount}}</text>
 								</view>
 								<view style="display:flex;align-items:center;justify-content:center;padding-left:8px">
-								<rice-icon name="double-left"/>
+									<rice-icon name="double-left" />
 								</view>
 							</view>
 
-						
+
 							<template #right>
 								<view class="swipe-menu-container">
 									<view class="menu-item-box menu-detail" @click="viewOrder(order)">
@@ -121,8 +235,9 @@
 										<rice-icon name="edit" color="#fff" />
 										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_edit")}}</text>
 									</view> -->
-								
-									<view class="menu-item-box menu-del" v-if="order.orderStatus!=10"  @click="deleteOrder(order)">
+
+									<view class="menu-item-box menu-del" v-if="order.orderStatus!=10"
+										@click="deleteOrder(order)">
 										<rice-icon name="delete" color="#fff" />
 										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_delete")}}</text>
 									</view>
@@ -184,8 +299,8 @@
 									</rice-col> -->
 								<rice-col :span="6">
 									<view>
-										<rice-button v-if="active_order?.orderStatus!=10"  type="error" size="small" plain-fill
-											:text="i18n.global.t('common.btn_txt_delete')"
+										<rice-button v-if="active_order?.orderStatus!=10" type="error" size="small"
+											plain-fill :text="i18n.global.t('common.btn_txt_delete')"
 											@click="deleteOrder(active_order)"></rice-button>
 									</view>
 								</rice-col>
@@ -257,14 +372,14 @@
 	const orderStatus = ref<string | number>(1);
 	const keyword = ref("");
 	const dateRange = ref<string[]>(getMonthDateArray());
-	const list = computed<TabsOptions[]>(()=>{
-		
+	const list = computed<TabsOptions[]>(() => {
+
 		return [
-		{ name: i18n.global.t('order.statusAll'), value: "all",disabled:submitLoading.value==true },
-		{ name: i18n.global.t('order.statusCheckInPending'), value: 1,disabled:submitLoading.value==true  },
-		{ name: i18n.global.t('order.statusCompleted'), value: 5,disabled:submitLoading.value==true  },
-		{ name: i18n.global.t('order.statusCancelled'), value: 10 ,disabled:submitLoading.value==true },
-	]
+			{ name: i18n.global.t('order.statusAll'), value: "all", disabled: submitLoading.value == true },
+			{ name: i18n.global.t('order.statusCheckInPending'), value: 1, disabled: submitLoading.value == true },
+			{ name: i18n.global.t('order.statusCompleted'), value: 5, disabled: submitLoading.value == true },
+			{ name: i18n.global.t('order.statusCancelled'), value: 10, disabled: submitLoading.value == true },
+		]
 	})
 	// ref<TabsOptions[]>([
 	// 	{ name: i18n.global.t('washingOrder.statusAll'), value: "all" },
@@ -320,7 +435,7 @@
 		keyword.value = k;
 	}
 	const selectStatus = (e : TabsClickTab) => {
-		if(e.disabled){
+		if (e.disabled) {
 			return;
 		}
 		activeIndex.value = e.index;
@@ -450,7 +565,7 @@
 			beforeClose: async () : Promise<boolean> => {
 				await OrderService.deleteOrder(order._id);
 				await getOrderList();
-				showDeatilPage.value=false;
+				showDeatilPage.value = false;
 				getGatherEvent(hotel_id.value);
 				hideDialog();
 				return true;
@@ -486,6 +601,14 @@
 	defineExpose({
 	});
 	init();
+	const cssVars = computed(() => {
+		return {
+			"--minItemWidth": `300px`,
+			//"--minItemWidth":`${props.minWidth}${props.unit}`,
+			"--margin--": `7px`,
+			"--conatinerMargin": `-7px`
+		}
+	})
 </script>
 
 <style>
@@ -688,5 +811,30 @@
 		font-size: 18px;
 		color: #1656f4;
 		font-weight: 600;
+	}
+
+	.list-container-style {
+		margin: var(--conatinerMargin);
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	/* 单个卡片容器 */
+	.list-item-style {
+		min-width: 300px;
+		margin: var(--margin--);
+		flex: 1;
+		border-radius: 12px;
+		background:#fff;
+
+	}
+
+	.fill {
+		flex: 1;
+		min-width: 300px;
+		margin: 0 var(--margin--);
+		height: 0;
+		visibility: hidden;
 	}
 </style>

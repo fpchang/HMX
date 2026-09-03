@@ -26,41 +26,45 @@
 	<scroll-view style="flex:1">
 		<view v-if="!submitLoading" style="padding:14px;border-radius: 14px;">
 			<view class="list-container-style" :style="cssVars">
-				<view class="list-item-style"  v-for="fm of fmResult.fmList">
+				<view class="list-item-style" v-for="fm of fmResult.fmList">
 					<rice-swipe-actions :accordion="true" ref="swipeControlRef">
-							<rice-swipe-actions-item :auto-close="true">
-								<rice-cell :title="`${formatTypeName(fm.type)}`" :label="formatDate(fm.ioeTime)"
-									:value="`${fm.billType=='income'?'+':'-'}${fm.amount}`" size="large" arrow
-									arrow-direction="left" center :clickable="false" :value-text-style="{'color':'#165dff'}">
-									<template #leftIcon>
-										<image v-if="fm.billType=='income'" src="/static/icons/fm/income-orange.png"
-											style="margin-right:8px;width: 40px;height:40px;" class="cell-left-icon"></image>
-										<image v-if="fm.billType=='expenses'" src="/static/icons/fm/expense-orange.png"
-											style="margin-right:8px;width: 40px;height:40px;" class="cell-left-icon"></image>
-									</template>
-									<template #rightIcon>
-										<rice-icon name="double-left" color="#909399" style="margin-left: 15px;" />
-									</template>
-								</rice-cell>
-								<template #right>
-									<view class="swipe-menu-container">
-										<view class="menu-item-box menu-detail" @click="viewFm(fm)">
-											<rice-icon name="eyes" color="#fff" />
-											<text class="menu-item-text">{{i18n.global.t("common.btn_txt_details",[''])}}</text>
-										</view>
-										<view class="menu-item-box menu-edit" @click="editFm(fm)">
-											<rice-icon name="edit" color="#fff" />
-											<text class="menu-item-text">{{i18n.global.t("common.btn_txt_edit")}}</text>
-										</view>
-										<view class="menu-item-box menu-del" @click="deleteFm(fm)">
-											<rice-icon name="delete" color="#fff" />
-											<text class="menu-item-text">{{i18n.global.t("common.btn_txt_delete")}}</text>
-										</view>
-									</view>
+						<rice-swipe-actions-item :auto-close="true">
+							<rice-cell :title="`${formatTypeName(fm.type)}`" :label="formatDate(fm.ioeTime)"
+								:value="`${fm.billType=='income'?'+':'-'}${fm.amount}`" size="large" arrow
+								arrow-direction="left" center :clickable="false"
+								:value-text-style="{'color':'#165dff'}">
+								<template #leftIcon>
+									<image v-if="fm.billType=='income'" src="/static/icons/fm/income-orange.png"
+										style="margin-right:8px;width: 40px;height:40px;" class="cell-left-icon">
+									</image>
+									<image v-if="fm.billType=='expenses'" src="/static/icons/fm/expense-orange.png"
+										style="margin-right:8px;width: 40px;height:40px;" class="cell-left-icon">
+									</image>
 								</template>
-							</rice-swipe-actions-item>
-						</rice-swipe-actions>
-					
+								<template #rightIcon>
+									<rice-icon name="double-left" color="#909399" style="margin-left: 15px;" />
+								</template>
+							</rice-cell>
+							<template #right>
+								<view class="swipe-menu-container">
+									<view class="menu-item-box menu-detail" @click="viewFm(fm)">
+										<rice-icon name="eyes" color="#fff" />
+										<text
+											class="menu-item-text">{{i18n.global.t("common.btn_txt_details",[''])}}</text>
+									</view>
+									<view class="menu-item-box menu-edit" @click="editFm(fm)">
+										<rice-icon name="edit" color="#fff" />
+										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_edit")}}</text>
+									</view>
+									<view class="menu-item-box menu-del" @click="deleteFm(fm)">
+										<rice-icon name="delete" color="#fff" />
+										<text class="menu-item-text">{{i18n.global.t("common.btn_txt_delete")}}</text>
+									</view>
+								</view>
+							</template>
+						</rice-swipe-actions-item>
+					</rice-swipe-actions>
+
 				</view>
 				<view class="list-item-style fill" v-for="i in 5"></view>
 			</view>
@@ -234,11 +238,13 @@
 		dateRange.value = range;
 		getFmList();
 	}
-	const list = ref<TabsOptions[]>([
-		// { name: i18n.global.t('finance.statusAll'), value: "all" },
-		{ name: i18n.global.t('finance.income'), value: 'income',disabled: submitLoading.value == true },
-		{ name: i18n.global.t('finance.expense'), value: 'expenses',disabled: submitLoading.value == true }
-	])
+	const list = computed<TabsOptions[]>(() => {
+		return [
+			{ name: i18n.global.t('finance.income'), value: 'income', disabled: submitLoading.value == true },
+			{ name: i18n.global.t('finance.expense'), value: 'expenses', disabled: submitLoading.value == true }
+		]
+	})
+
 	const selectStatus = (e : TabsClickTab) => {
 		billType.value = e.value as string;
 		getFmList();
@@ -380,17 +386,17 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 	}
-	
+
 	/* 单个卡片容器 */
 	.list-item-style {
 		min-width: 300px;
 		margin: var(--margin--);
 		flex: 1;
 		border-radius: 12px;
-		background:#fff;
-	
+		background: #fff;
+
 	}
-	
+
 	.fill {
 		flex: 1;
 		min-width: 300px;
@@ -398,6 +404,7 @@
 		height: 0;
 		visibility: hidden;
 	}
+
 	/* 顶部搜索外层容器 */
 	.search-wrap-root {
 		padding: 18px;

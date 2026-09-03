@@ -67,7 +67,7 @@
 		[
 			"password",
 			[
-				{ required: true, message: i18n.global.t('form.pach_password') },
+				{ required: true, message: i18n.global.t('login.pach_password') },
 				//函数校验
 				{ validator: passwordValidator },
 				//正则校验

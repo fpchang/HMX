@@ -21,7 +21,7 @@
 		</template>
 	</rice-navbar>
 	<!-- #ifdef APP -->
-	<scroll-view style="flex:1">
+	<scroll-view style="flex:1;background-color: #fff;">
 	<!-- #endif -->
 		<view style="padding:15px;border-radius: 12px;background-color: #fff;">
 			<xt-form-item label="标题" tips="" required>

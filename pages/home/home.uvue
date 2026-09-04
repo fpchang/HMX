@@ -1,35 +1,48 @@
 <template>
+	<!-- #ifndef WEB -->
 	<rice-navbar :fixed="false" bg-color="#1264E8" :border="false" :left-arrow="false" :safe-area-inset-top="false">
-
+	
 	</rice-navbar>
+	<!--#endif -->
+	
 	<view v-if="dataReading&&hotel_id!=''" style="flex:1;display:flex;flex-direction:column;">
-		<rice-cell :title="hotel?.hotelName" :label="i18n.global.t('home.adminCenter')" :custom-style="{background:'#1264E8',paddingTop:'4px'}"
-			:title-text-style="{color:'#fff',fontSize:'20px',fontWeight:'bold'}"
-			:label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
-			<template #leftIcon>
-				<image src="/static/icons/hotel-logo.png" class="left-cion"
-					style="width:55px;height:55px;margin-right:8px"></image>
-			</template>
-
-			<template #value>
-				<view style="display:flex;flex-direction:row;justify-content:flex-end;flex:1;">
-					<view>
-						<rice-button type="success" size="small" color="rgba(255,255,255,0.4)" shape="round"
-							icon="switch" :text="i18n.global.t('home.switch')" @click="showCheckHotel"></rice-button>
-
-					</view>
-				</view>
-			</template>
-		</rice-cell>
+		
 		<scroll-view v-if="dataReading&&hotel_id!=''" :refresher-enabled="true" :refresher-triggered="refreshState"
 			@refresherrefresh="refreshData" style="flex:1;display: flex;flex-direction: column;"
 			:show-scrollbar="false" refresher-background="#1264E8" refresher-default-style="white">
 			<view class="header">
-				<rice-cell :title="timestr" :label="i18n.global.t('home.welcomeBack')" :custom-style="{background:'transparent'}"
-					:title-text-style="{color:'#fff',color:'rgba(255,255,255,0.7)'}"
-					:label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
-		
-				</rice-cell>
+				<view class="header-item">
+					<rice-cell  center :title="hotel?.hotelName" :label="i18n.global.t('home.adminCenter')" :custom-style="{background:'#1264E8',paddingTop:'4px'}"
+						:title-text-style="{color:'#fff',fontSize:'20px',fontWeight:'bold'}"
+						:label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
+						<template #leftIcon>
+							<image src="/static/icons/hotel-logo.png" class="left-cion"
+								style="width:55px;height:55px;margin-right:8px"></image>
+						</template>
+					
+						<template #value>
+							<view style="display:flex;flex-direction:row;justify-content:flex-end;flex:1;">
+								<view>
+									<rice-button type="success" size="small" color="rgba(255,255,255,0.4)" shape="round"
+										icon="switch" :text="i18n.global.t('home.switch')" @click="showCheckHotel"></rice-button>
+					
+								</view>
+							</view>
+						</template>
+					</rice-cell>
+				</view>
+				<view class="header-item" v-if="false">
+					<view>
+						<rice-cell :title="timestr" :label="i18n.global.t('home.welcomeBack')" :custom-style="{background:'transparent'}"
+							:title-text-style="{color:'#fff',color:'rgba(255,255,255,0.7)'}"
+							:label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
+								
+						</rice-cell>
+					</view>
+					
+				</view>
+				
+				
 		
 		
 			</view>
@@ -254,7 +267,16 @@
 	.header {
 		padding: 0px 0 20px 0;
 		background:#1264E8;
+		display:flex;
+		flex-direction:row;
+		align-items:center;
+		flex-wrap:wrap;
 	}
+	.header-item{
+		flex:1;
+	
+	}
+	
 
 	.container-content {
 

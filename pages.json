@@ -450,6 +450,7 @@
 		"rpxCalcBaseDeviceWidth": 1024,
 		"rpxCalcIncludeWidth": 750,
 		"resizable": true
+		
 	},
 	// "tabBar": {
 	// 	"color": "#787878",

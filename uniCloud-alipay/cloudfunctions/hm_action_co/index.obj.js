@@ -36,7 +36,7 @@ module.exports = {
 	_before: function() {
 		const clientInfo = this.getClientInfo();
 		const lang = utils.getLanuage(clientInfo);
-		console.log('客户端语言', lang);
+		console.log('客户端语言', lang,clientInfo);
 		this.$t = getI18nMsg(lang);
 		const methodName = this.getMethodName();
 		console.log("方法", methodName);
@@ -65,6 +65,21 @@ module.exports = {
 		}
 	},
 	preHeat() {
+		// console.log("preheat",this.getClientInfo());
+		const clientinfo = this.getClientInfo();
+		const db = uniCloud.databaseForJQL();
+		const obj ={
+			function_no:'hm001',
+			//createTime:new Date().getTime(),
+			deviceModel:clientinfo.deviceModel,
+			deviceType:clientinfo.deviceType,
+			deviceId:clientinfo.deviceId,
+			osName:clientinfo.osName,
+			osVersion:clientinfo.osVersion,
+			appVersion:clientinfo.appVersion
+			
+		}
+		db.collection("hm-feature_statistics").add(obj)
 		return {
 			errCode: 0,
 			errMsg: "",

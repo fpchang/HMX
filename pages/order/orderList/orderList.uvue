@@ -315,7 +315,7 @@
 	</view>
 </template>
 
-<script setup>
+<script setup lang="uts">
 	import { showDialog, hideDialog } from "@/uni_modules/rice-ui";
 	import { TabsOptions, TabsClickTab, TabsChange } from '@/uni_modules/rice-ui';
 	import { dayuts } from '@/uni_modules/lime-dayuts';

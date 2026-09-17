@@ -175,7 +175,7 @@
 	
 </script>
 
-<style>
+<style lang="scss">
 	.custom-panel {
 		flex: 1;
 		padding-top: 28px;

@@ -1,0 +1,52 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": ["function_no","create_time"],
+	"permission": {
+		"read": false,
+		"create": true,
+		"update": false,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"function_no": {
+			"description": "功能点编号",
+			"bsonType": "string"
+		},
+		"createTime": {
+			"description": "创建时间",
+			"bsonType": "timestamp",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		},
+		"deviceModel": {
+			"description": "设备",
+			"bsonType": "string"
+		},
+		"deviceType": {
+			"description": "设备类型",
+			"bsonType": "string"
+		},
+		"deviceId": {
+			"description": "设备id",
+			"bsonType": "string"
+		},
+		"osName": {
+			"description": "系统名称",
+			"bsonType": "string"
+		},
+		"osVersion": {
+			"description": "系统版本",
+			"bsonType": "string"
+		},
+		"appVersion": {
+			"description": "app版本",
+			"bsonType": "string"
+		}
+		
+	}
+}

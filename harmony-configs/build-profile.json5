@@ -1,0 +1,69 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "release",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "/Users/sky/工作资料/项目资料/hm/app打包/鸿蒙证书/v2/hmxpublish.cer",
+          "keyAlias": "v2",
+          "keyPassword": "00000018037EC8928852E44CFA0CB0B2CF95145166DF120014975839D711F058FE109C8D7B11F58C",
+          "profile": "/Users/sky/工作资料/项目资料/hm/app打包/鸿蒙证书/v2/hmxprofileRelease.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "/Users/sky/工作资料/项目资料/hm/app打包/鸿蒙证书/v2/hmxv2.p12",
+          "storePassword": "00000018F07967EDB90C3202D040B687F1146B82E7CA8987843E2C2A3770EC2D22464AD9D881DDE4"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+		"compatibleSdkVersionStage": "beta6",
+        "compatibleSdkVersion": "5.0.1(13)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      },
+      {
+        "name": "release",
+        "signingConfig": "release",
+        "compatibleSdkVersion": "5.0.1(13)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug"
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default",
+            "release"
+          ]
+        }
+      ]
+    }
+  ]
+}

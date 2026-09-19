@@ -190,13 +190,21 @@
 		return arr;
 	});
 	const checkInOrderListFormat = computed<table_td[][]>(() => {
-		if (
-			checkInOrderList.value.length < 1 ||
-			roomList.value.length < 1
-		) {
-			return [];
-		}
 		let result : table_td[][] = [];
+		// if (
+		// 	checkInOrderList.value.length < 1 ||
+		// 	roomList.value.length < 1
+		// ) {
+		// 	let rowList : table_td[] = [];
+		// 	orderDateRange.value.forEach(time => {
+		// 		rowList.push({
+		// 			name: ""
+		// 		})
+		// 	})
+		// 	result.push(rowList);
+		// 	return result;
+		// }
+		
 		roomList.value.forEach(room => {
 			let rowList : table_td[] = [];
 			orderDateRange.value.forEach(time => {

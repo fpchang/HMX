@@ -1,17 +1,28 @@
 <template>
-	<rice-navbar :fixed="false" :title="showNav?i18n.global.t('finance.navbar_title'):''" title-color="#fff"  bg-color="#1264E8" :border="false" :left-arrow="false" :safe-area-inset-top="true">
+	<!-- <rice-navbar :fixed="false" :title="showNav?i18n.global.t('finance.navbar_title'):''" title-color="#fff"  bg-color="#1264E8" :border="false" :left-arrow="false" :safe-area-inset-top="true">
 	
-	</rice-navbar>
-	<scroll-view style="flex:1;background:#f1f5fe;" v-if="!loading&&hotel_id!=''" :refresher-enabled="true" @scroll="onScroll"
-		:refresher-triggered="refreshState" @refresherrefresh="refreshData" :show-scrollbar="false" refresher-background="#1264E8" refresher-default-style="white">
+	</rice-navbar> -->
+	<scroll-view style="flex:1;background:#f1f5fe;" v-if="!loading&&hotel_id!=''" :refresher-enabled="true"
+		@scroll="onScroll" :refresher-triggered="refreshState" @refresherrefresh="refreshData" :show-scrollbar="false"
+		refresher-background="#1264E8" refresher-default-style="white">
+		<!-- #ifndef WEB -->
+		<rice-navbar :fixed="false" bg-color="#1264E8" :border="false" :left-arrow="false" :safe-area-inset-top="false">
+
+		</rice-navbar>
+		<!--#endif -->
 		<view class="top-header">
 			<!-- <text class="header-title">{{i18n.global.t('finance.navbar_title')}}</text> -->
-			<rice-cell :title="i18n.global.t('finance.navbar_title')" :label="i18n.global.t('finance.annualMonthlyFinancialSummary')" :custom-style="{background:'rgba(255,255,255,0)',paddingTop:'8px'}" :title-text-style="{color:'#fff',fontSize:'20px',fontWeight:'bold'}" :label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
-			  <template #leftIcon>
-			    <image src="/static/icons/fmhome.png" class="left-cion" style="width:55px;height:55px;margin-right:8px"></image>
-			  </template>
-			 
-			<!--  <template #value>
+			<rice-cell :title="i18n.global.t('finance.navbar_title')"
+				:label="i18n.global.t('finance.annualMonthlyFinancialSummary')"
+				:custom-style="{background:'rgba(255,255,255,0)',paddingTop:'8px'}"
+				:title-text-style="{color:'#fff',fontSize:'20px',fontWeight:'bold'}"
+				:label-style="{color:'rgba(255,255,255,0.6)'}" :border="false" :clickable="false">
+				<template #leftIcon>
+					<image src="/static/icons/fmhome.png" class="left-cion"
+						style="width:55px;height:55px;margin-right:8px"></image>
+				</template>
+
+				<!--  <template #value>
 				  <view style="display:flex;flex-direction:row;justify-content:flex-end;flex:1;">
 					  <view> 
 						<rice-button type="success" size="small" color="rgba(255,255,255,0.4)" shape="round" icon="switch" text="切换" @click="showCheckHotel"></rice-button>
@@ -46,7 +57,7 @@
 					<text class="kpi-money">¥{{expensesYearAmount}}</text>
 				</view>
 			</view> -->
-		<view class="detail-card">
+			<view class="detail-card">
 				<text class="card-main-title">{{i18n.global.t('finance.core_financial_indicators')}}</text>
 				<view class="container-list" :style="cssVars">
 					<view class="card income-box">
@@ -54,17 +65,17 @@
 						<view class="card-content">
 							<view style="display:flex;flex-direction:row;align-items: flex-end;">
 								<text class="numlabel kpi-money kpi-money-green">¥{{incomeAmount}}</text>
-								
+
 							</view>
 						</view>
 					</view>
-					
+
 					<view class="card expense-box">
 						<text class="card-title">{{ i18n.global.t('finance.monthly_expense') }}</text>
 						<view class="card-content">
 							<view style="display:flex;flex-direction:row;align-items: flex-end;">
 								<text class="numlabel kpi-money">¥{{expensesAmount}}</text>
-								
+
 							</view>
 						</view>
 					</view>
@@ -73,7 +84,7 @@
 						<view class="card-content">
 							<view style="display:flex;flex-direction:row;align-items: flex-end;">
 								<text class="numlabel kpi-money kpi-money-green">¥{{incomeYearAmount}}</text>
-								
+
 							</view>
 						</view>
 					</view>
@@ -82,13 +93,13 @@
 						<view class="card-content">
 							<view style="display:flex;flex-direction:row;align-items: flex-end;">
 								<text class="numlabel kpi-money">¥{{expensesYearAmount}}</text>
-								
+
 							</view>
 						</view>
 					</view>
 				</view>
-	</view>	
-			
+			</view>
+
 			<!-- 本月收入明细 -->
 			<view class="detail-card">
 				<text class="card-main-title">{{i18n.global.t('finance.monthly_income_details')}}</text>
@@ -139,7 +150,7 @@
 				</view>
 			</view>
 		</view>
-		
+
 	</scroll-view>
 	<view v-if="loading" style="margin-top:168px;display: flex;flex-direction: row;justify-content: center;">
 		<rice-loading color="#787878" :text="i18n.global.t('common.loading')" />
@@ -147,8 +158,8 @@
 	<view v-if="hotel_id==''" style="margin-top: 80px;">
 		<l-empty :description="i18n.global.t('common.noData',[''])" />
 	</view>
-	
-	
+
+
 </template>
 <script setup>
 	import { FMService } from "@/services/FMService";
@@ -158,9 +169,9 @@
 	import { DateTimePickerExtend } from "@/uni_modules/rice-ui";
 	import { dayuts } from '@/uni_modules/lime-dayuts';
 	import i18n from '@/i18n/index.uts';
-	import { fmState} from "@/store/modules/fmStore.uts";
-	
-	import {FmClass} from "./fm.uts"
+	import { fmState } from "@/store/modules/fmStore.uts";
+
+	import { FmClass } from "./fm.uts"
 	defineOptions({
 		styleIsolation: "isolated"
 	})
@@ -185,16 +196,16 @@
 	// const expensesMonthList = ref<Array<charPietItem>>([]);
 	// const incomeYearList = ref<Array<Array<number | string>>>([]);
 	// const expensesYearList = ref<Array<Array<number | string>>>([]);
-	const incomeMonthList = computed<Array<charPietItem>>(()=>{
+	const incomeMonthList = computed<Array<charPietItem>>(() => {
 		return fmState.incomeMonthList;
 	});
-	const expensesMonthList = computed<Array<charPietItem>>(()=>{
+	const expensesMonthList = computed<Array<charPietItem>>(() => {
 		return fmState.expensesMonthList;
 	});
-	const incomeYearList = computed<Array<Array<number | string>>>(()=>{
+	const incomeYearList = computed<Array<Array<number | string>>>(() => {
 		return fmState.incomeYearList;
 	});
-	const expensesYearList = computed<Array<Array<number | string>>>(()=>{
+	const expensesYearList = computed<Array<Array<number | string>>>(() => {
 		return fmState.expensesYearList;
 	});
 	//月收入金额
@@ -224,8 +235,8 @@
 		return amount;
 	})
 	//利润
-	const profit=computed(()=>{
-		const count =  (incomeYearAmount.value-expensesYearAmount.value).toFixed(2);
+	const profit = computed(() => {
+		const count = (incomeYearAmount.value - expensesYearAmount.value).toFixed(2);
 		return count;
 	})
 	const init = async () => {
@@ -273,11 +284,11 @@
 	}
 	const showNav = ref<boolean>(false)
 	const threshold = 60
-	
-	function onScroll(e : UniScrollEvent){
-	  const scrollTop : number = e.detail.scrollTop
-	  // 大于阈值显示；回到顶部则隐藏
-	  showNav.value = scrollTop > threshold
+
+	function onScroll(e : UniScrollEvent) {
+		const scrollTop : number = e.detail.scrollTop
+		// 大于阈值显示；回到顶部则隐藏
+		showNav.value = scrollTop > threshold
 	}
 	watch(hotel_id, async () => {
 		console.log("fina home hotel change")
@@ -296,10 +307,10 @@
 <style lang="scss">
 	.top-header {
 		width: 100%;
-		background:linear-gradient(to bottom, #1264E8, #3193F4);
+		background: linear-gradient(to bottom, #1264E8, #3193F4);
 		padding: 0px 0 20px 0;
 		text-align: center;
-		
+
 	}
 
 	.header-title {
@@ -310,7 +321,7 @@
 	}
 
 	.wrap-content {
-		padding: 16px;
+		padding: 16px 16px 32px 16px;
 		margin-top: -20px;
 	}
 
@@ -448,17 +459,18 @@
 	.item-profit {
 		color: #f39c12;
 	}
-	
-	.container-list{
+
+	.container-list {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
 		align-items: stretch;
 		margin: var(--conatinerMargin);
-	
+
 	}
+
 	.card {
-		flex:1;
+		flex: 1;
 		margin: var(--margin--);
 		min-width: var(--minItemWidth);
 		border-radius: 12px;
@@ -467,25 +479,25 @@
 		//background-color: #E8F2FF;
 		background-color: rgb(220, 231, 255);
 		// background-image: linear-gradient(145deg, #1769EE, #45A4F5);
-		
-	
+
+
 	}
-	
+
 	.card-title {
 		color: #666;
 		// color:#fff;
 		font-size: 14px;
 	}
-	
+
 	.card-content {
-		flex:1;
+		flex: 1;
 		padding-top: 12px;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		text-align: center;
 	}
-	
+
 	.card-content-chart {
 		height: 100px;
 		align-items: center;

@@ -1,0 +1,4 @@
+class HotelAction{
+	constructor(){}
+	
+}

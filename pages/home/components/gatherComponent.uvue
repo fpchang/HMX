@@ -17,7 +17,7 @@
 
 		<view class="card-container" v-if="activeIndex==0">
 			<view class="container-list" :style="cssVars">
-				<view class="card">
+				<view class="card" @click="navToOrder">
 					<text class="card-title">{{ i18n.global.t("gather.checkInToday") }}</text>
 					<view class="card-content">
 						<view style="display:flex;flex-direction:row;align-items: flex-end;">
@@ -26,7 +26,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="card">
+				<view class="card"  @click="navToOrder">
 					<text class="card-title">{{ i18n.global.t("gather.checkOutToday") }}</text>
 					<view class="card-content">
 						<view style="display:flex;flex-direction:row;align-items: flex-end;">
@@ -36,7 +36,7 @@
 									
 					</view>
 				</view>
-				<view class="card">
+				<view class="card"  @click="navToOrder">
 					<text class="card-title">{{ i18n.global.t("gather.currentGuests") }}</text>
 					<view class="card-content card-content-chart">
 						<rice-progress-circle :percentage="numCustomerOrderToday_percent" color="green">
@@ -44,7 +44,7 @@
 						</rice-progress-circle>
 					</view>
 				</view>
-				<view class="card">
+				<view class="card"  @click="navToOrder">
 					<text class="card-title">{{ i18n.global.t("gather.emptyRooms") }}</text>
 					<view class="card-content card-content-chart">
 						<rice-progress-circle :percentage="(100 - numCustomerOrderToday_percent)" color="orange">
@@ -57,7 +57,7 @@
 		<view class="card-container" v-if="activeIndex==1">
 			<!-- <xt-flex-wap-equal ref="wrapRef2" :pmWidth="56" :min-item-width="130" :gap="14" :itemsNum="4"> -->
 				<view class="container-list" :style="cssVars">
-					<view class="card">
+					<view class="card"  @click="navToOrder">
 						<text class="card-title">{{ i18n.global.t("gather.checkInTomorrow") }}</text>
 						<view class="card-content">
 							<view style="display:flex;flex-direction:row;align-items: flex-end;">
@@ -67,7 +67,7 @@
 							
 						</view>
 					</view>
-					<view class="card">
+					<view class="card"  @click="navToOrder">
 						<text class="card-title">{{ i18n.global.t("gather.checkOutTomorrow") }}</text>
 						<view class="card-content">
 							<view>
@@ -79,7 +79,7 @@
 							</view>
 						</view>
 					</view>
-					<view class="card">
+					<view class="card"  @click="navToOrder">
 						<text class="card-title">{{ i18n.global.t("gather.currentGuests") }}</text>
 						<view class="card-content card-content-chart">
 							<rice-progress-circle :percentage="numCustomerOrderTommorw_percent" color="green">
@@ -87,7 +87,7 @@
 							</rice-progress-circle>
 						</view>
 					</view>
-					<view class="card">
+					<view class="card"  @click="navToOrder">
 						<text class="card-title">{{ i18n.global.t("gather.emptyRooms") }}</text>
 						<view class="card-content card-content-chart">
 							<rice-progress-circle :percentage="(100 - numCustomerOrderTommorw_percent)" color="orange">
@@ -251,6 +251,11 @@
 		}
 		return Math.round(numCustomerOrderTommorw_percent.value)
 	})
+	 const navToOrder=()=>{
+		 uni.navigateTo({
+			 url:"/pages/order/orderList/orderList"
+		 })
+	 }
 	watch(activeIndex, (indexNew : number, indexOld : number) : void => {
 		if (indexNew == 1) {
 			swiperx.value = '-50%';

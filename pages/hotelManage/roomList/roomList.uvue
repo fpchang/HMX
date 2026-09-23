@@ -20,7 +20,7 @@
 	</rice-navbar>
 	<view class="search-area-root">
 
-		<rice-tabs v-model="activeIndex" :list="list"></rice-tabs>
+		<rice-tabs v-model="activeIndex" :list="list" title-active-color="#1989fa" line-height="0"></rice-tabs>
 	</view>
 	<scroll-view style="flex:1">
 		<!-- <view class="search-wrap-root">

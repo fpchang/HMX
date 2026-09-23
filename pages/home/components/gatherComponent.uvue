@@ -13,6 +13,7 @@
 				<text :class="activeIndex == 1?'tabtxt-active':'txt'"> {{ i18n.global.t("gather.tomorrow") }}</text>
 			</view> -->
 			<!-- <rice-tabs v-model="activeIndex" :list="menulist" line-mode="zoom" :shrink="true" /> -->
+			<!-- <rice-subsection :list="list1" v-model="activeIndex" shape="round" bar-class="bar-class" /> -->
 			<view style="width:140px">
 				 <rice-subsection :list="list1" v-model="activeIndex" shape="round" bar-class="bar-class" />
 			</view>
@@ -294,7 +295,7 @@
 	})
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 	/* 全局容器 */
 	.container {
 
@@ -530,18 +531,7 @@
 		color: #333;
 	}
 	
-	.text-class {
-	  font-size: 13px  !important;
-	}  
-	.active-text-class {
-	  color: #fff  !important;
-	  transform: scale(1.03)  !important;
-	  font-weight: bold;
-	}
-	.inactive-text-class {
-	  color: var(--app-text-color-2);
-	  transform: scale(1);
-	}
+	
 	.bar-class {
 	  background-color: #1989fa !important;
 	}

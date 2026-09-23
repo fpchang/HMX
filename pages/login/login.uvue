@@ -1,4 +1,6 @@
 <template>
+	<scroll-view  :bounces="false" :refresher-enabled="false"  :show-scrollbar="false" style="flex:1;background:#fff">
+	
 	<view class="page">
 		<rice-float-fab gap-top="50px" bg-color="#eeeeee94" icon-color="#999"  default-position="top-left" icon="arrow-left" width="30px" height="30px" icon-size="20px" @click="uni.navigateBack()"/>
 		
@@ -52,6 +54,7 @@
 			</view>
 		</view>
 	</view>
+</scroll-view>
 </template>
 
 <script setup>
@@ -194,8 +197,8 @@
 
 <style>
 	.page {
-		background-color: #fff;
-		flex: 1;
+		/* background-color: #bbb; */
+		/* flex: 1; */
 		padding: 0 24px;
 		display: flex;
 		justify-content: center;

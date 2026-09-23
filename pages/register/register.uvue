@@ -1,4 +1,5 @@
 <template>
+	<scroll-view  :bounces="false" :refresher-enabled="false"  :show-scrollbar="false" style="flex:1;background:#fff">
 	<view class="register-root-page">
 		<view class="register-card-box">
 			<view class="page-title-wrap">
@@ -12,6 +13,7 @@
 			</view>
 		</view>
 	</view>
+	</scroll-view>
 </template>
 
 <script setup>
@@ -92,10 +94,13 @@
 <style>
 /* 页面最外层容器 */
 .register-root-page {
-	flex: 1;
-	background-color: #fff;
+/* 	flex: 1;
+	background-color: #fff; */
 	padding: 10px 14px;
 	box-sizing: border-box;
+	max-width:380px;
+	margin:auto;
+	margin-top:0;
 }
 /* 注册卡片容器 */
 .register-card-box {

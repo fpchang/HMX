@@ -1,5 +1,10 @@
 <template>
-  <view v-if="loading" v-bind="$attrs" class="rice-skeleton" :class="ns.theme()">
+    <!-- #ifdef MP -->
+    <view v-if="loading" v-bind="$attrs" class="rice-skeleton" :class="ns.theme()">
+    <!-- #endif -->
+    <!-- #ifndef MP -->
+    <view v-if="loading"  class="rice-skeleton" :class="ns.theme()">
+    <!-- #endif -->
     <slot name="skeleton">
       <rice-skeleton-item v-if="showTitle" class="rice-skeleton__title" />
       <rice-skeleton-item v-for="(row,rowIndex) in rows" :key="row" type="p"

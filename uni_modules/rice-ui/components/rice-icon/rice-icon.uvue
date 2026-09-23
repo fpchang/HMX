@@ -1,10 +1,20 @@
 <template>
+  <!-- #ifdef MP -->
   <text v-if="!isImage" v-bind="$attrs" class="rice-icon" :class="iconClass" :style="[iconStyle,customStyle]"
     @click="iconClick">
     <slot>{{iconCode}}</slot>
   </text>
   <image v-else v-bind="$attrs" :src="name" class="rice-icon__image" :style="[imageStyle,customStyle]"
     @click="iconClick"></image>
+  <!-- #endif -->
+  <!-- #ifndef MP -->
+  <text v-if="!isImage" class="rice-icon" :class="iconClass" :style="[iconStyle,customStyle]"
+    @click="iconClick">
+    <slot>{{iconCode}}</slot>
+  </text>
+  <image v-else :src="name" class="rice-icon__image" :style="[imageStyle,customStyle]"
+    @click="iconClick"></image>
+  <!-- #endif -->
 </template>
 
 <script setup>

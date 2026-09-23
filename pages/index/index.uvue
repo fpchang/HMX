@@ -175,7 +175,7 @@
 	
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.custom-panel {
 		flex: 1;
 		padding-top: 28px;
@@ -252,30 +252,22 @@
 
 	.bar-class {
 		/* background: rgba(255, 255, 255, 0.96) !important; */
-		background: rgba(0, 122, 255, 0.2) !important;
+		// background: rgba(0, 122, 255, 0.2) !important;
 	}
 	.item-class-style{
-		/* padding:4px 0; */
 	}
 
 	.active-text-class {
-		/* color: #007aff !important;
-		transform: scale(1.03) !important;
-		font-weight: bold; */
+
 	}
 
 	.slot-item-class {
 		
-	/* 	display: flex;
-		justify-content: center;
-		align-items: center;
-		 */
+
 
 	}
 
 	.slot-text {
-		/* text-align: center;
-		font-size: 12px;
-		padding-top: 2px */
+
 	}
 </style>

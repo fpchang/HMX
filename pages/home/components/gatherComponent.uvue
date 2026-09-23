@@ -12,7 +12,12 @@
 			<view :class="[activeIndex == 1?'tab-btn tab-btn-active':'tab-btn' ]" @click="tabClick(1)">
 				<text :class="activeIndex == 1?'tabtxt-active':'txt'"> {{ i18n.global.t("gather.tomorrow") }}</text>
 			</view> -->
-			<rice-tabs v-model="activeIndex" :list="menulist" line-mode="zoom" :shrink="true" />
+			<!-- <rice-tabs v-model="activeIndex" :list="menulist" line-mode="zoom" :shrink="true" /> -->
+			<view style="width:140px">
+				 <rice-subsection :list="list1" v-model="activeIndex" shape="round" bar-class="bar-class" />
+			</view>
+			
+			
 		</view>
 
 		<view class="card-container" v-if="activeIndex==0">
@@ -123,6 +128,8 @@
 	defineOptions({
 		styleIsolation: "isolated" // 默认隔离；外部覆盖改为 app-and-page
 	})
+	 const list1 = ref<string[]>([ i18n.global.t("gather.today"),  i18n.global.t("gather.tomorrow") ])
+	  const current = ref(0)
 	const menulist = ref<TabsOptions[]>([{ name: i18n.global.t("gather.today") }, { name: i18n.global.t("gather.tomorrow") }])
 	const activeIndex = ref(0);
 
@@ -430,10 +437,11 @@
 		display: flex;
 		margin-bottom: 16px;
 		// flex-direction: row;
-		max-width: 500px;
 		// padding: 8px;
 		// background: #f1f5fe;
 		border-radius: 12px;
+	
+		
 	}
 
 	.tab-btn {
@@ -520,5 +528,21 @@
 		font-size: 24px;
 		font-weight: 600;
 		color: #333;
+	}
+	
+	.text-class {
+	  font-size: 13px  !important;
+	}  
+	.active-text-class {
+	  color: #fff  !important;
+	  transform: scale(1.03)  !important;
+	  font-weight: bold;
+	}
+	.inactive-text-class {
+	  color: var(--app-text-color-2);
+	  transform: scale(1);
+	}
+	.bar-class {
+	  background-color: #1989fa !important;
 	}
 </style>

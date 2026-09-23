@@ -1,21 +1,12 @@
 <template>
 	<view class="operation">
-		
-		<!-- <l-space :wrap="true" :size="24" direction="horizontal">
-			
-				<navigator v-for="item of menuList" :url="item.url">
-				<view  class="menu-item">				
-						<image :src="item.icon" class="img"></image>
-						<text class="txt">{{item.label}}</text>
-					
-				</view>
-				</navigator>
-			
-		
-		</l-space> -->
-		<rice-grid :column-num="columnNum" :border="false" :custom-style="{backgroundColor:'#f5f5f7'}">
+		<!-- <rice-grid :column-num="columnNum" :border="false" :custom-style="{backgroundColor:'#f5f5f7'}">
 		  <rice-grid-item :custom-style="{backgroundColor:'#f5f5f7'}" v-for="it in menuList" :key="it.label" :icon="it.icon" :text="it.label" :to="it.url"/>
-		</rice-grid>
+		</rice-grid> -->
+		<view class="menu-item" v-for="it in menuList" @click="navto(it.url)">
+			<rice-icon :name="it.icon" size="32px"></rice-icon>
+			<text class="txt">{{it.label}}</text>
+		</view>
 	</view>
 </template>
 
@@ -58,23 +49,37 @@ const menuList : Array<menu> = [
 		url: "/pages/mine/feedback/feedback"
 	}
 ]
+const navto=(urlstr:string)=>{
+	uni.navigateTo({
+		url:urlstr
+	})
+}
 </script>
 <style lang="scss">
 // 外层容器
 .operation {
-	background-color: #fff;
+	// background-color: #fff;
 	border-radius: 14px;
 	// padding: 24px;
+	display:flex;
+	flex-direction: row;
 }
 
 // 单个功能项
 .menu-item {
+	width:80px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	padding:14px;
+	border-radius: 8px;;
+	cursor:pointer;
+	
 }
-
+.menu-item:hover{
+	background-color: #eee;
+}
 // 图标
 .img {
 	width: 45px;
@@ -86,5 +91,6 @@ const menuList : Array<menu> = [
 .txt {
 	font-size: 13px;
 	color: #64748b;
+	margin-top:4px;
 }
 </style>

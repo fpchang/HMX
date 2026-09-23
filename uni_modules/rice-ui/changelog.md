@@ -1,3 +1,5 @@
+## 1.2.1（2026-08-30）
+- [修复] 修复1.2.0版本引起 Icon 在APP端无法显示图片的问题
 ## 1.2.0（2026-08-23）
 - [新增] Skeleton 骨架屏组件 [文档](https://riceui.cn/components/skeleton.html)
 - [新增] Text 文本组件 [文档](https://riceui.cn/components/text.html)

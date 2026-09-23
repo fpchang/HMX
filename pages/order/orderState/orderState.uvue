@@ -319,7 +319,7 @@
 	}
 
 	.cell-content {
-		padding: 8px;
+		padding: 5px;
 		height: 60px;
 		width: 90px;
 		box-sizing: border-box;

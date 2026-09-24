@@ -2,19 +2,19 @@
 	<view class="account-verify-root">
 		<view class="form-card-wrap">
 			<rice-form :model="userForm" :rules="registerRule" ref="userFormRef" label-width="100px" class="demo-form">
-				<rice-form-item name="account" label-position="top" :border-bottom="true">
-					<rice-input v-model="userForm['account']" :placeholder="i18n.global.t('login.valid_account') " :focus-border="true"  border="none"/>
+				<rice-form-item name="account" label-position="top" :border-bottom="false">
+					<rice-input v-model="userForm['account']" :placeholder="i18n.global.t('login.valid_account') " :focus-border="true"  border="none" bg-color="#eeeeee94" shape="round" height="45px" :iput-style="{paddingLeft:'14px'}"/>
 				</rice-form-item>
-				<rice-form-item name="password"  label-position="top" :border-bottom="true">
-					<rice-input v-model="userForm['password']" :placeholder="i18n.global.t('login.pach_password')"  type="password"  :focus-border="true"  border="none"/>
+				<rice-form-item name="password"  label-position="top" :border-bottom="false">
+					<rice-input v-model="userForm['password']" :placeholder="i18n.global.t('login.pach_password')"  type="password"  :focus-border="true"  border="none" bg-color="#eeeeee94" shape="round" height="45px" :iput-style="{paddingLeft:'14px'}"/>
 				</rice-form-item>
-				<rice-form-item name="confirmPassword"  label-position="top" :border-bottom="true">
+				<rice-form-item name="confirmPassword"  label-position="top" :border-bottom="false">
 					<rice-input v-model="userForm['confirmPassword']" :placeholder="i18n.global.t('register.valid_password_again') "
-						type="password"  :focus-border="true"/>
+						type="password"  :focus-border="false" bg-color="#eeeeee94" shape="round" height="45px" :iput-style="{paddingLeft:'14px'}"/>
 				</rice-form-item>
 			</rice-form>
 			<view style="margin-top: 24px;">
-				<rice-button type="primary" :text="i18n.global.t('register.btn_txt_complete')" class="submit-full-btn" shape="round" @click="accountEvent"
+				<rice-button type="primary" :text="i18n.global.t('register.btn_txt_complete')"  shape="round" @click="accountEvent"
 					:loading="submitLoading" />
 			</view>
 		</view>

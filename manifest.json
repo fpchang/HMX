@@ -2,7 +2,7 @@
     "name" : "议宿",
     "appid" : "__UNI__6CB5534",
     "description" : "酒店与民宿管理",
-    "versionName" : "3.0.12",
+    "versionName" : "3.0.13",
     "versionCode" : "313",
     "uni-app-x" : {
         "styleIsolationVersion" : "2"
@@ -46,7 +46,10 @@
                 }
             },
             "modules" : {
-                "uni-ad" : {}
+                "uni-ad" : {
+                    "gdt" : {},
+                    "gm" : {}
+                }
             }
         }
     },
@@ -54,6 +57,10 @@
         "permissions" : [ "<uses-permission android:name=\"android.permission.VIBRATE\"/>" ],
         "distribute" : {
             "modules" : {
+                "uni-ad" : {
+                    "gm" : {},
+                    "gdt" : {}
+                },
                 "uni-location" : {
                     "tencent" : {
                         "key" : "I6DBZ-AY3CC-XHY2K-AJFAN-WAZ7K-XXBWU"
@@ -93,6 +100,10 @@
         "distribute" : {
             "devices" : [ "iphone", "ipad" ],
             "modules" : {
+                "uni-ad" : {
+                    "gm" : {},
+                    "gdt" : {}
+                },
                 "uni-location" : {
                     "system" : {},
                     "tencent" : {

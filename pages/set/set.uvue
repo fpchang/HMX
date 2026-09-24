@@ -3,9 +3,9 @@
 	<scroll-view style="flex:1">
 	<!-- #endif -->
 		<rice-cell-group border>
-			<rice-cell :title="i18n.global.t('setcontent.accountSecurity')" url="/pages/set/accountSafe/accountSafe" :arrow="true" />
-			<rice-cell :title="i18n.global.t('setcontent.clearCache')" :clickable="true" @click="clearCache" />
-			<rice-cell :title="i18n.global.t('setcontent.aboutYisu')" url="/pages/set/aboutYisu/aboutYisu" :arrow="true" />
+			<rice-cell size="medium" :title="i18n.global.t('setcontent.accountSecurity')" url="/pages/set/accountSafe/accountSafe" :arrow="true" />
+			<rice-cell size="medium" :title="i18n.global.t('setcontent.clearCache')" :clickable="true" @click="clearCache" />
+			<rice-cell size="medium" :title="i18n.global.t('setcontent.aboutYisu')" url="/pages/set/aboutYisu/aboutYisu" :arrow="true" />
 		</rice-cell-group>
 		<view style="margin-top:20px">
 			<rice-cell-group border>
@@ -14,7 +14,7 @@
 			</rice-cell-group>
 		</view>
 		<view style="margin-top: 20px;">
-			<rice-button :text="i18n.global.t('setcontent.logout')" @click="loginOutEvent"></rice-button>
+			<rice-button :text="i18n.global.t('setcontent.logout')" @click="loginOutEvent" style="height: 50px;line-height: 50px;"></rice-button>
 		</view>
 	<!-- #ifdef APP -->
 	</scroll-view>

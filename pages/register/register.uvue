@@ -1,18 +1,18 @@
 <template>
 	<scroll-view  :bounces="false" :refresher-enabled="false"  :show-scrollbar="false" style="flex:1;background:#fff">
-	<view class="register-root-page">
-		<view class="register-card-box">
-			<view class="page-title-wrap">
-				<text class="title-text">{{i18n.global.t('register.register_account')}}</text>
-			</view>
-			<view v-if="showEmailComponent">
-				<verifyEmailComponent key="verifyEmailComponent" @setEmailEvent="setEmailEvent" ></verifyEmailComponent>
-			</view>
-			<view  v-if="showAccountComponent">
-				<verifyAccountComponent key="verifyAccountComponent" @setAccountEvent="setAccountEvent"></verifyAccountComponent>
+		<view class="register-root-page">
+			<view class="register-card-box">
+				<view class="page-title-wrap">
+					<text class="title-text">{{i18n.global.t('register.register_account')}}</text>
+				</view>
+				<view v-if="showEmailComponent">
+					<verifyEmailComponent key="verifyEmailComponent" @setEmailEvent="setEmailEvent" ></verifyEmailComponent>
+				</view>
+				<view  v-if="showAccountComponent">
+					<verifyAccountComponent key="verifyAccountComponent" @setAccountEvent="setAccountEvent"></verifyAccountComponent>
+				</view>
 			</view>
 		</view>
-	</view>
 	</scroll-view>
 </template>
 
@@ -94,18 +94,17 @@
 <style>
 /* 页面最外层容器 */
 .register-root-page {
-/* 	flex: 1;
-	background-color: #fff; */
-	padding: 10px 14px;
-	box-sizing: border-box;
-	max-width:380px;
-	margin:auto;
-	margin-top:0;
+display:flex;
+flex-direction:row;
+justify-content: center;
 }
 /* 注册卡片容器 */
 .register-card-box {
 	border-radius: 20px;
-	padding: 40px 8px;
+	padding:40px 28px;
+	max-width:380px;
+	box-sizing:border-box;
+	overflow:hidden;
 }
 /* 标题外层容器 */
 .page-title-wrap {

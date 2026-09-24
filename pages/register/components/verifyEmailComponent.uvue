@@ -1,19 +1,23 @@
 <template>
-	<view class="email-verify-root">
-		<view class="form-card-box">
+	<view class="vec-style">
+		<view>
 			<rice-form :model="emailForm" :rules="registerRule" ref="emailFormRef" label-width="100px"
 				class="demo-form">
-				<rice-form-item name="email" required label-position="top" :border-bottom="true">
-					<rice-input v-model="emailForm['email']" :placeholder="i18n.global.t('register.pach_email')" :focus-border="true" border="none"/>
+				<rice-form-item name="email" required label-position="top" :border-bottom="false">
+					<rice-input v-model="emailForm['email']" :placeholder="i18n.global.t('register.pach_email')" :focus-border="true" border="none" bg-color="#eeeeee94" shape="round" height="45px" :iput-style="{paddingLeft:'14px'}"/>
 				</rice-form-item>
-				<rice-form-item name="emailCode" required label-position="top" :border-bottom="true">
-					<view class="code-input-row">
-						<view style="flex:1;display: flex;padding:0 8px;">
+				<rice-form-item name="emailCode" required label-position="top" :border-bottom="false">
+					<view class="code-input-row group-formitem">
+						<view style="flex:1;display: flex;">
 							<rice-input v-model="emailForm['emailCode']" :placeholder="i18n.global.t('register.pach_email_code')" border="none"
-								:maxlength="4" type="number" />
+								:maxlength="4" type="number" height="45px" :iput-style="{paddingLeft:'14px'}"/>
 						</view>
-						<view style="display: flex;flex-direction: row;align-items: center;">
+						<!-- <view style="display: flex;flex-direction: row;align-items: center;">
 							<rice-button  type="primary" :text="codeText"  @click="sendEmailCode" textColor="#fff" :loading="smsLoading"></rice-button>
+						</view> -->
+						<view style="display: flex;flex-direction: row;align-items: center;" @click="sendEmailCode">
+							
+						 <text style="color:#1989fa;font-size: 12px;padding-right:14px">{{codeText}}</text>
 						</view>
 					</view>
 				</rice-form-item>
@@ -24,7 +28,7 @@
 				</view>
 			</rice-form>
 			<view style="margin-top: 24px;">
-				<rice-button type="primary" :text="i18n.global.t('register.btn_txt')" class="submit-round-btn" shape="round" @click="nextEvent"
+				<rice-button type="primary" :text="i18n.global.t('register.btn_txt')"  shape="round" @click="nextEvent"
 					:loading="submitLoading" />
 			</view>
 		</view>
@@ -147,10 +151,8 @@
 
 <style>
 /* 组件最外层容器 */
-.email-verify-root {
-}
-/* 表单卡片盒子 */
-.form-card-box {
+.vec-style{
+	overflw:hidden;
 }
 /* 验证码输入行容器 */
 .code-input-row {
@@ -182,5 +184,15 @@
 	font-size: 17px;
 	font-weight: 500;
 	border: none;
+}
+.group-formitem {
+	display: flex;
+	flex:1;
+	flex-direction: row;
+	justify-content: space-between;
+	background:#eeeeee94;
+	height:45px;
+	border-radius:22.5px;
+	
 }
 </style>

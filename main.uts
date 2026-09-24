@@ -39,8 +39,7 @@ export function createApp() {
 	try {
 		console.log("app lunch");
 		let showMoreMessage = uni.getStorageSync("showMoreMessage");
-		//#ifdef APP-IOS || H5
-		console.log('ios=====')
+		//#ifdef  H5
 		uni.setStorageSync("showMoreMessage", 0)
 		showMoreMessage = "0";
 		//#endif		
